@@ -1327,6 +1327,35 @@
       document.getElementById('btn-teacher-login-cancel').addEventListener('click', () => document.getElementById('modal-teacher-login').classList.add('hidden'));
       document.getElementById('teacher-pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') Teacher.submitLogin(); });
       document.getElementById('btn-start').addEventListener('click', () => { workshopMode = 'legacy'; this._start(false); });
+      // ============================================
+// گام ۲: مدیریت دکمه بازی انفرادی
+// ============================================
+document.getElementById('btn-solo').addEventListener('click', () => {
+  const active = ProfileManager.getActive();
+  
+  if (!active) {
+    alert('هنوز پروفایلی نساخته‌اید. لطفاً اول یک پروفایل بسازید.');
+    return;
+  }
+  
+  const choice = prompt(
+    'سلام ' + active.avatar + ' ' + active.displayName + '!\n\n' +
+    'کدام بخش را تمرین کنی؟\n' +
+    '۱ - دسته‌های کوچک\n' +
+    '۲ - دو، چهار و پنج\n' +
+    '۳ - دسته‌های شلوغ‌تر\n\n' +
+    'عدد را وارد کن (۱ تا ۳):'
+  );
+  
+  const sector = parseInt(choice, 10);
+  if (sector >= 1 && sector <= 3) {
+    const nameInput = document.getElementById('player-name');
+    const classInput = document.getElementById('player-class');
+    if (nameInput) nameInput.value = active.displayName;
+    if (classInput) classInput.value = '';
+    openCore(sector);
+  }
+});
       document.getElementById('btn-core-1').addEventListener('click', () => openCore(1));
       document.getElementById('btn-core-2').addEventListener('click', () => openCore(2));
       document.getElementById('btn-core-3').addEventListener('click', () => openCore(3));
