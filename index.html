@@ -119,26 +119,23 @@
   <div id="modal-start" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2>🛰️ کارگاه ایستگاه فضایی</h2>
-      <p>هر جواب درست، یک قطعه به ایستگاه فضایی‌ات اضافه می‌کند. با کاوه با هم ایستگاه را بسازیم!</p>
-      <label for="player-name" class="field-label">نام و نام خانوادگی مهندس:</label>
-      <input id="player-name" class="input-field" type="text" maxlength="30" placeholder="مثال: سارا احمدی" autocomplete="off">
-      <label for="player-class" class="field-label">کلاس / گروه:</label>
-      <input id="player-class" class="input-field" type="text" maxlength="20" placeholder="مثال: سوم ۱" autocomplete="off">
-      <div class="start-buttons">
-        <button id="btn-core-1" class="action-btn">بخش ۱ — دسته‌های کوچک</button>
-        <button id="btn-core-2" class="action-btn btn-secondary">بخش ۲ — نشست جدا</button>
-        <button id="btn-core-3" class="action-btn btn-secondary">بخش ۳ — نشست جدا</button>
+      <p>هر جواب درست، یک قطعه به ایستگاه فضایی‌ات اضافه می‌کند.</p>
+      
+      <div class="start-buttons" style="flex-direction:column; gap:10px; margin-top:20px;">
+        <button id="btn-solo" class="action-btn" style="width:100%; font-size:1rem; padding:14px;">
+          🎮 بازی انفرادی
+        </button>
+        <button id="btn-class" class="action-btn btn-secondary" style="width:100%; padding:12px;" disabled>
+          🏫 حالت کلاس (به‌زودی)
+        </button>
+        <button id="btn-teacher" class="action-btn btn-teacher" style="width:100%; padding:12px;" disabled>
+          👨‍🏫 ورود معلم (به‌زودی)
+        </button>
       </div>
-      <p class="field-label">مسیرهای قبلی، برای مقایسه</p>
-      <div class="start-buttons">
-        <button id="btn-start" class="action-btn btn-secondary">آغاز کارگاه (یادگیری)</button>
-        <button id="btn-slice-25" class="action-btn btn-secondary">آزمایش ۲×۵</button>
-        <button id="btn-start-assessment" class="action-btn btn-secondary">حالت سنجش</button>
-      </div>
-      <p class="field-label">معلم</p>
-      <div class="start-buttons">
-        <button id="btn-open-teacher-login" class="action-btn btn-teacher">بایگانی نسخهٔ قبلی</button>
-      </div>
+      
+      <p style="font-size:0.75rem; color:var(--muted); margin-top:16px;">
+        نسخه ۶.۰ — نسخه در حال توسعه
+      </p>
     </div>
   </div>
   <section id="slice-25" class="hidden" aria-label="آزمایش ۲ در ۵">
