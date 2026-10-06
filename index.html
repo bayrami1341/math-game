@@ -45,6 +45,7 @@
     .field-label { display: block; text-align: right; font-size: 0.82rem; color: var(--cyan); margin-bottom: 5px; }
     .input-field { width: 100%; background: #0b1329; border: 1.5px solid var(--cyan); border-radius: 8px; padding: 9px 12px; color: #fff; font-size: 0.95rem; text-align: center; margin-bottom: 12px; outline: none; font-family: inherit; user-select: text; -webkit-user-select: text; }
     .input-field:focus { border-color: var(--gold); box-shadow: 0 0 8px rgba(255, 183, 3, 0.4); }
+    #modal-teacher-login .input-field { font-size: 1.4rem; padding: 14px; letter-spacing: 0.4em; text-align: center; }
     .start-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
     .action-btn { background: linear-gradient(180deg, var(--cyan), #0099b8); border: none; border-radius: 8px; color: #02040a; font-size: 0.9rem; font-weight: 700; padding: 9px 16px; cursor: pointer; min-height: 40px; transition: transform 0.1s; font-family: inherit; }
     .action-btn:active { transform: scale(0.97); }
@@ -88,6 +89,39 @@
     .slice-pad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: min(100%, 360px); margin: 0 auto; }
     .slice-pad button { min-height: 48px; font-size: 1.15rem; font-weight: 800; border-radius: 10px; border: 1px solid rgba(0, 243, 255, 0.35); background: #0b1329; color: #fff; font-family: inherit; }
     .slice-piece-cap { text-align: center; min-height: 1.4em; color: #ffb703; font-weight: 800; }
+    /* ============ Core Board — طراحی جدید (۴ گزینه) ============ */
+    #core-board { padding: 10px; gap: 10px; overflow: hidden; }
+    #core-board .core-top { display: flex; justify-content: space-between; gap: 8px; flex-shrink: 0; }
+    #core-board .core-chip { background: var(--card); border: 1.5px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 6px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; }
+    #core-board .core-main { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; overflow-y: auto; padding: 4px; }
+    #core-board .core-prompt { font-size: clamp(1.1rem, 4.5vw, 1.55rem); font-weight: 900; text-align: center; color: #fff; }
+    #core-board .core-groups-wrap { display: flex; justify-content: center; max-width: 100%; overflow-x: auto; padding: 4px; }
+    #core-board .core-groups { display: grid; gap: 5px; width: max-content; }
+    #core-board .core-groups .slice-cell { min-width: 32px; min-height: 32px; border-radius: 6px; }
+    #core-board .core-question { font-size: 0.95rem; color: var(--muted); text-align: center; font-weight: 700; }
+    #core-board .core-choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: min(100%, 420px); }
+    #core-board .core-choice { min-height: 64px; font-size: clamp(1.3rem, 5.5vw, 1.9rem); font-weight: 900; background: #0b1329; border: 2px solid var(--cyan); border-radius: 14px; color: #fff; cursor: pointer; font-family: inherit; transition: all 0.15s; }
+    #core-board .core-choice:hover:not(:disabled) { background: rgba(0, 243, 255, 0.1); }
+    #core-board .core-choice:active:not(:disabled) { transform: scale(0.96); }
+    #core-board .core-choice.correct { background: rgba(6, 214, 160, 0.2); border-color: var(--green); color: var(--green); }
+    #core-board .core-choice.wrong { background: rgba(255, 51, 102, 0.2); border-color: var(--red); color: var(--red); }
+    #core-board .core-choice:disabled { cursor: default; opacity: 0.7; }
+    #core-board .core-companion { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(13, 22, 45, 0.95); border: 1.5px solid var(--cyan); border-radius: 12px; flex-shrink: 0; }
+    #core-board .core-companion-avatar { font-size: 1.5rem; flex-shrink: 0; }
+    #core-board .core-companion-text { font-size: 0.85rem; color: #fff; line-height: 1.5; }
+    #core-board .core-bottom { display: flex; gap: 10px; flex-shrink: 0; }
+    #core-board .core-bottom .action-btn { flex: 1; }
+    /* ============ Teacher Summary Card ============ */
+    .summary-card { text-align: right; background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 4px; }
+    .summary-row { padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; line-height: 1.6; }
+    .summary-row.good { background: rgba(6, 214, 160, 0.1); border: 1px solid rgba(6, 214, 160, 0.3); }
+    .summary-row.warn { background: rgba(255, 183, 3, 0.1); border: 1px solid rgba(255, 183, 3, 0.3); }
+    .summary-row.danger { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); }
+    .summary-row .title { font-weight: 800; margin-bottom: 4px; }
+    .summary-row.good .title { color: var(--green); }
+    .summary-row.warn .title { color: var(--gold); }
+    .summary-row.danger .title { color: var(--red); }
+    .summary-empty { text-align: center; padding: 20px; color: var(--muted); font-size: 0.9rem; }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
       #companion-figure { animation: none; }
@@ -116,6 +150,8 @@
     <div class="fb-sub" id="fb-sub"></div>
   </div>
   <div id="badge-area"></div>
+
+  <!-- ============ صفحه شروع ============ -->
   <div id="modal-start" class="modal-overlay" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2>🛰️ کارگاه ایستگاه فضایی</h2>
@@ -137,7 +173,6 @@
         نسخه ۶.۰ — نسخه در حال توسعه
       </p>
       
-      <!-- عناصر مخفی برای سازگاری با کد قدیمی -->
       <input id="player-name" type="hidden" value="">
       <input id="player-class" type="hidden" value="">
       <button id="btn-start" style="display:none;"></button>
@@ -149,6 +184,8 @@
       <button id="btn-start-assessment" style="display:none;"></button>
     </div>
   </div>
+
+  <!-- ============ آزمایش ۲×۵ (legacy) ============ -->
   <section id="slice-25" class="hidden" aria-label="آزمایش ۲ در ۵">
     <div class="slice-prompt" id="slice-prompt">۲ دستهٔ ۵تایی</div>
     <div class="slice-groups" id="slice-groups"></div>
@@ -173,31 +210,33 @@
     <button type="button" id="slice-back" class="action-btn btn-secondary">بازگشت</button>
     <button type="button" id="slice-teacher" class="action-btn btn-secondary">گزارش هسته</button>
   </section>
+
+  <!-- ============ Core Board — طراحی جدید (۴ گزینه) ============ -->
   <section id="core-board" class="hidden" aria-label="بخش هسته">
-    <div class="core-progress" id="core-progress"></div>
-    <div class="slice-prompt" id="core-prompt"></div>
-    <div class="core-groups-wrap"><div class="core-groups" id="core-groups"></div></div>
-    <div class="slice-msg" id="core-msg"></div>
-    <div class="slice-entry" id="core-entry"></div>
-    <div class="slice-pad" id="core-pad">
-      <button type="button" data-digit="1">۱</button>
-      <button type="button" data-digit="2">۲</button>
-      <button type="button" data-digit="3">۳</button>
-      <button type="button" data-digit="4">۴</button>
-      <button type="button" data-digit="5">۵</button>
-      <button type="button" data-digit="6">۶</button>
-      <button type="button" data-digit="7">۷</button>
-      <button type="button" data-digit="8">۸</button>
-      <button type="button" data-digit="9">۹</button>
-      <button type="button" id="core-del">پاک</button>
-      <button type="button" data-digit="0">۰</button>
-      <button type="button" id="core-ok">تأیید</button>
+    <div class="core-top">
+      <span class="core-chip" id="core-sector">بخش ۱</span>
+      <span class="core-chip" id="core-progress">روان: ۰ از ۷</span>
     </div>
-    <div class="slice-piece" id="core-piece"></div>
-    <div class="slice-piece-cap" id="core-piece-cap"></div>
-    <button type="button" id="core-back" class="action-btn btn-secondary">بازگشت</button>
-    <button type="button" id="core-teacher" class="action-btn btn-secondary">گزارش هسته</button>
+    
+    <div class="core-main">
+      <div class="core-prompt" id="core-prompt"></div>
+      <div class="core-groups-wrap"><div class="core-groups" id="core-groups"></div></div>
+      <div class="core-question">حاصل چند است؟</div>
+      <div class="core-choices" id="core-choices"></div>
+    </div>
+    
+    <div class="core-companion">
+      <div class="core-companion-avatar">🤖</div>
+      <div class="core-companion-text" id="core-companion-text">سلام! بیا با هم بشماریم!</div>
+    </div>
+    
+    <div class="core-bottom">
+      <button type="button" id="core-back" class="action-btn btn-secondary">خروج</button>
+      <button type="button" id="core-teacher" class="action-btn btn-secondary">گزارش</button>
+    </div>
   </section>
+
+  <!-- ============ پرونده آزمایش ============ -->
   <section id="slice-record" class="hidden" aria-label="پرونده آزمایش">
     <p id="slice-pin-msg"></p>
     <input id="slice-pin" type="password" autocomplete="off" placeholder="رمز">
@@ -209,17 +248,21 @@
     </div>
     <div id="slice-rows"></div>
   </section>
+
+  <!-- ============ ورود معلم ============ -->
   <div id="modal-teacher-login" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card" style="max-width:380px">
       <h2 style="color:#a78bfa">🔐 ورود معلم</h2>
       <p>رمز عبور را وارد کنید.</p>
-      <input type="password" id="teacher-pin-input" class="input-field" placeholder="رمز عبور" maxlength="20" autocomplete="off">
+      <input type="password" id="teacher-pin-input" class="input-field" placeholder="● ● ● ●" maxlength="20" autocomplete="off" inputmode="numeric">
       <div class="start-buttons">
         <button id="btn-teacher-login-ok" class="action-btn btn-teacher">ورود به پنل</button>
         <button id="btn-teacher-login-cancel" class="action-btn btn-secondary">انصراف</button>
       </div>
     </div>
   </div>
+
+  <!-- ============ بررسی خطا ============ -->
   <div id="modal-correct" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card" style="border-color:var(--gold)">
       <h2 style="color:var(--gold)">بیا با هم بررسی کنیم 🔍</h2>
@@ -227,6 +270,8 @@
       <button id="btn-continue" class="action-btn" style="background:var(--gold);color:#02040a">متوجه شدم، ادامه ساخت</button>
     </div>
   </div>
+
+  <!-- ============ انتقال بخش ============ -->
   <div id="modal-sector" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2 id="sector-title">انتقال بخش</h2>
@@ -234,6 +279,8 @@
       <button id="btn-sector-next" class="action-btn">ورود به بخش بعدی</button>
     </div>
   </div>
+
+  <!-- ============ کارنامه ============ -->
   <div id="modal-report" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2>📊 کارنامهٔ ساخت ایستگاه</h2>
@@ -250,6 +297,8 @@
       </div>
     </div>
   </div>
+
+  <!-- ============ پنل معلم ============ -->
   <div id="modal-teacher" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2 style="color:#a78bfa">🎓 میزکار و بازخورد معلم</h2>
@@ -259,13 +308,19 @@
       </div>
       <div id="tab-students" class="tab-content">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-          <span style="font-size:0.75rem;color:var(--muted)">پرونده‌های ثبت‌شده</span>
-          <button class="action-btn btn-secondary" id="btn-export-csv" style="font-size:0.75rem;color:var(--green);border-color:var(--green)">خروجی اکسل (CSV) 📊</button>
+          <span style="font-size:0.75rem;color:var(--muted)">خلاصهٔ کلاس</span>
+          <button class="action-btn btn-secondary" id="btn-export-csv" style="font-size:0.75rem;color:var(--green);border-color:var(--green)">خروجی CSV 📊</button>
         </div>
-        <table class="styled-table">
-          <thead><tr><th>دانش‌آموز</th><th>کلاس</th><th>تاریخ</th><th>قطعه</th><th>تسلط</th><th>عملیات</th></tr></thead>
-          <tbody id="teacher-students-rows"></tbody>
-        </table>
+        <div id="teacher-summary-card"></div>
+        <details style="margin-top:14px;">
+          <summary style="cursor:pointer; color:var(--cyan); font-size:0.85rem; font-weight:700; text-align:right; padding:8px 0; outline:none;">
+            نمایش جدول کامل ▾
+          </summary>
+          <table class="styled-table" style="margin-top:8px;">
+            <thead><tr><th>دانش‌آموز</th><th>کلاس</th><th>تاریخ</th><th>قطعه</th><th>تسلط</th><th></th></tr></thead>
+            <tbody id="teacher-students-rows"></tbody>
+          </table>
+        </details>
       </div>
       <div id="tab-class" class="tab-content hidden">
         <div id="teacher-class-stats" class="diagnostic-box"></div>
@@ -297,13 +352,7 @@
   const ERROR_CODES = { SUM: 'SUM', LESS: 'LESS', MORE: 'MORE', SWAP: 'SWAP', TABLE: 'TABLE', RANDOM: 'RANDOM' };
   const LEITNER_BOXES = [{ box: 1, delay: 2 }, { box: 2, delay: 4 }, { box: 3, delay: 8 }, { box: 4, delay: 15 }, { box: 5, delay: 25 }];
   const STORAGE_KEYS = { RECORDS: 'sw_student_dossiers_v60', SETTINGS: 'sw_teacher_settings_v60', SESSION: 'sw_current_session_v60', BADGES: 'sw_student_badges_v60' };
-  const SUCCESS_MSGS = [
-    'آفرین! قطعه‌ات وصل شد 🔧',
-    'عالی! ایستگاه بزرگ‌تر شد 🚀',
-    'دمت گرم! قطعه جدید ✨',
-    'فوق‌العاده! ادامه بده 🌟',
-    'آفرین مهندس! 💪'
-  ];
+  const SUCCESS_MSGS = ['آفرین! قطعه‌ات وصل شد 🔧','عالی! ایستگاه بزرگ‌تر شد 🚀','دمت گرم! قطعه جدید ✨','فوق‌العاده! ادامه بده 🌟','آفرین مهندس! 💪'];
   const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
   var sharedSound = null;
   function toFa(n) { return String(n).replace(/[0-9]/g, d => FA_DIGITS[d]); }
@@ -754,56 +803,123 @@
     return { n: n, total: facts.length, facts: facts };
   }
   var corePlay = null;
+  // ============================================
+  // paintCore — نسخه جدید با ۴ گزینه (بدون ماشین‌حساب)
+  // ============================================
   function paintCorePieces(docked) {
     var piece = document.getElementById('core-piece');
-    var cap = document.getElementById('core-piece-cap');
+    if (!piece) return;
     piece.innerHTML = '';
     piece.style.gridTemplateColumns = '';
-    if (!docked) { cap.textContent = ''; return; }
+    if (!docked) return;
     piece.style.gridTemplateColumns = 'repeat(' + docked.cols + ', 44px)';
     var total = docked.rows * docked.cols;
     for (var i = 0; i < total; i++) { var bit = document.createElement('i'); bit.className = 'slice-cell'; piece.appendChild(bit); }
-    cap.textContent = docked.fluent ? 'روان' : (docked.assisted ? 'با راهنما — هنوز روان نیست' : 'قطعه جوش خورد');
   }
+  
+  function renderCoreChoices(choices, correct, onPick) {
+    var box = document.getElementById('core-choices');
+    if (!box) return;
+    box.innerHTML = '';
+    choices.forEach(function (val) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'core-choice';
+      btn.textContent = toFa(val);
+      btn.addEventListener('click', function () { onPick(val, btn); });
+      box.appendChild(btn);
+    });
+  }
+  
   function paintCore(speak) {
     var play = corePlay;
+    if (!play) return;
     var counts = fluentCount(play.core, play.session, play.sectorId);
-    document.getElementById('core-progress').textContent = 'روان: ' + toFa(counts.n) + ' از ' + toFa(counts.total);
+    var sectorEl = document.getElementById('core-sector');
+    var progressEl = document.getElementById('core-progress');
+    if (sectorEl) sectorEl.textContent = 'بخش ' + toFa(play.sectorId);
+    if (progressEl) progressEl.textContent = 'روان: ' + toFa(counts.n) + ' از ' + toFa(counts.total);
+    
     var groups = document.getElementById('core-groups');
+    var promptEl = document.getElementById('core-prompt');
+    var companionEl = document.getElementById('core-companion-text');
+    var choicesBox = document.getElementById('core-choices');
     var step = play.step;
+    
+    // === حالت پایان بخش ===
     if (!step || step.type !== 'ask') {
       var report = play.core.presentation.report(counts.facts);
       var shaky = counts.facts.some(function (fact) { return fact.shaky; });
-      document.getElementById('core-prompt').textContent = 'این بخش تمام شد';
-      document.getElementById('core-msg').textContent = shaky
+      if (promptEl) promptEl.textContent = 'این بخش تمام شد';
+      if (companionEl) companionEl.textContent = shaky
         ? 'این زنگ تمام شد؛ بعضی‌ها را بعداً دوباره می‌بینیم. ' + report.line
         : report.line;
-      document.getElementById('core-msg').classList.remove('ok');
-      groups.innerHTML = '';
-      document.getElementById('core-entry').textContent = '';
-      document.getElementById('core-pad').hidden = true;
-      paintCorePieces(null);
-      if (speak) announceSr(document.getElementById('core-prompt').textContent + ' ' + document.getElementById('core-msg').textContent);
+      if (groups) groups.innerHTML = '';
+      if (choicesBox) choicesBox.innerHTML = '';
+      if (speak && companionEl) announceSr(promptEl.textContent + ' ' + companionEl.textContent);
       return;
     }
+    
+    // === حالت سؤال ===
     var frame = play.core.presentation.frame(play.session, step, play.phase);
-    document.getElementById('core-prompt').textContent = frame.prompt;
-    var msgEl = document.getElementById('core-msg');
+    if (promptEl) promptEl.textContent = frame.prompt;
+    
+    // پیام همراه کاوه
     var note = play.message || '';
-    msgEl.textContent = [note, frame.hint].filter(Boolean).join(' ');
-    msgEl.classList.toggle('ok', note.indexOf('جوش') >= 0 || note.indexOf('روان شد') >= 0);
-    groups.style.gridTemplateColumns = 'repeat(' + frame.cols + ', 44px)';
-    groups.innerHTML = '';
-    var total = frame.rows * frame.cols;
-    for (var i = 0; i < total; i++) { var cell = document.createElement('i'); cell.className = 'slice-cell'; groups.appendChild(cell); }
-    document.getElementById('core-entry').textContent = play.entry ? toFa(play.entry) : '';
-    document.getElementById('core-pad').hidden = false;
-    paintCorePieces(play.docked);
-    if (speak) announceSr(frame.prompt + ' ' + msgEl.textContent);
+    if (companionEl) {
+      var combined = [note, frame.hint].filter(Boolean).join(' ');
+      companionEl.textContent = combined || 'سلام! بیا با هم بشماریم!';
+    }
+    
+    // رسم دسته‌ها
+    if (groups) {
+      groups.style.gridTemplateColumns = 'repeat(' + frame.cols + ', 32px)';
+      groups.innerHTML = '';
+      var total = frame.rows * frame.cols;
+      for (var i = 0; i < total; i++) { var cell = document.createElement('i'); cell.className = 'slice-cell'; groups.appendChild(cell); }
+    }
+    
+    // گزینه‌ها
+    play.locked = false;
+    renderCoreChoices(
+      play.currentChoices,
+      frame.rows * frame.cols,
+      function (val, btn) {
+        if (play.locked) return;
+        play.locked = true;
+        var allBtns = document.querySelectorAll('#core-choices .core-choice');
+        var correct = frame.rows * frame.cols;
+        
+        if (val === correct) {
+          btn.classList.add('correct');
+          if (sharedSound) sharedSound.playCorrectNote(1);
+          setTimeout(function () { submitCoreChoice(val); }, 600);
+        } else {
+          btn.classList.add('wrong');
+          if (sharedSound) sharedSound.playReview();
+          // نشان دادن گزینهٔ درست
+          allBtns.forEach(function (b) {
+            if (parseInt(b.textContent.replace(/[۰-۹]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d); }), 10) === correct) {
+              b.classList.add('correct');
+            }
+            b.disabled = true;
+          });
+          setTimeout(function () {
+            submitCoreChoice(val);
+          }, 1400);
+        }
+      }
+    );
+    
+    if (speak) announceSr(frame.prompt);
   }
+  
+  // ============================================
+  // openCore — با گزینه‌های جدید
+  // ============================================
   function openCore(sectorId) {
     if (typeof WorkshopCore === 'undefined') {
-      alert('هسته در دسترس نیست. مطمئن شوید فایل workshop-core.js در کنار این صفحه است.');
+      alert('هسته در دسترس نیست.');
       return;
     }
     workshopMode = 'core';
@@ -819,29 +935,49 @@
     });
     corePlay = {
       core: core, session: session, step: core.scheduler.next(session),
-      phase: 'answer', entry: '', message: '', sectorId: sectorId, docked: null
+      phase: 'answer', entry: '', message: '', sectorId: sectorId, docked: null,
+      currentChoices: [], locked: false
     };
+    prepareCoreStep();
     paintCore(true);
   }
+  
+  function prepareCoreStep() {
+    if (!corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
+    // تولید ۴ گزینه
+    var f1 = corePlay.step.f1, f2 = corePlay.step.f2;
+    var correct = f1 * f2;
+    var choices = generateChoices(f1, f2, correct);
+    corePlay.currentChoices = choices;
+    corePlay.locked = false;
+  }
+  
   function closeCore() {
     workshopMode = 'legacy'; corePlay = null;
     document.getElementById('core-board').classList.add('hidden');
     document.getElementById('modal-start').classList.remove('hidden');
   }
-  function submitCore() {
+  
+  function submitCoreChoice(given) {
     if (workshopMode !== 'core' || !corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
-    var given = entryNumber(corePlay.entry);
-    if (given === null) return;
     var view = reduceStep(corePlay.core, corePlay, given);
     if (view.refused) return;
-    corePlay.session = view.session; corePlay.phase = view.phase;
-    corePlay.message = view.message; corePlay.docked = view.docked;
-    corePlay.entry = ''; corePlay.step = view.step;
-    if (!view.step || view.step.type !== 'ask') corePlay.session = corePlay.core.session.finish(corePlay.session);
+    corePlay.session = view.session;
+    corePlay.phase = view.phase;
+    corePlay.message = view.message;
+    corePlay.docked = view.docked;
+    corePlay.step = view.step;
+    if (!view.step || view.step.type !== 'ask') {
+      corePlay.session = corePlay.core.session.finish(corePlay.session);
+    }
     try { corePlay.core.record.save(corePlay.session); } catch (e) {}
-    if (sharedSound) { if (view.docked) sharedSound.playCorrectNote(1); else sharedSound.playReview(); }
+    prepareCoreStep();
     paintCore(true);
   }
+  
+  // ============================================
+  // GameController (legacy — دست‌نخورده)
+  // ============================================
   class GameController {
     constructor(c) {
       this.canvas = c; this.ctx = c.getContext('2d'); this.pedagogy = new PedagogyEngine();
@@ -1079,7 +1215,108 @@
         } else { i.value = ''; i.focus(); alert(`رمز نادرست. تلاش ${toFa(this.failedAttempts)} از ۳`); }
       }
     },
-    renderPanel() { this.renderStudentsTable(); this.renderClassStats(); },
+    renderPanel() { this.renderSummaryCard(); this.renderStudentsTable(); this.renderClassStats(); },
+    
+    // ============================================
+    // خلاصهٔ کلاس — کارت متنی به جای جدول عددی
+    // ============================================
+    renderSummaryCard() {
+      const box = document.getElementById('teacher-summary-card');
+      if (!box) return;
+      const list = Storage.getAll();
+      if (!list.length) {
+        box.innerHTML = '<div class="summary-empty">هنوز داده‌ای ثبت نشده است.<br>وقتی دانش‌آموزان بازی کنند، اینجا خلاصه ظاهر می‌شود.</div>';
+        return;
+      }
+      
+      // آخرین پرونده هر دانش‌آموز
+      const latest = {};
+      list.forEach(row => {
+        if (!latest[row.name]) latest[row.name] = row;
+      });
+      const students = Object.values(latest);
+      
+      // دسته‌بندی
+      const good = [];
+      const warn = [];
+      const danger = [];
+      const notPlayed = [];
+      
+      students.forEach(st => {
+        const mastery = st.successRate || 0;
+        const attempts = (st.details || []).reduce((s, d) => s + (d.attempts || 0), 0);
+        const wrongs = (st.details || []).filter(d => (d.wrongAnswers || []).length > 0);
+        
+        if (attempts === 0) {
+          notPlayed.push(st);
+        } else if (mastery >= 80) {
+          good.push(st);
+        } else if (mastery >= 50) {
+          warn.push(st);
+        } else {
+          danger.push(st);
+        }
+      });
+      
+      // ضعیف‌ترین ضرب‌های کلاس
+      const factWrongs = {};
+      students.forEach(st => {
+        (st.details || []).forEach(d => {
+          if ((d.wrongAnswers || []).length > 0) {
+            const key = (d.f1 || '') + '×' + (d.f2 || '');
+            factWrongs[key] = (factWrongs[key] || 0) + 1;
+          }
+        });
+      });
+      const weakFacts = Object.keys(factWrongs)
+        .map(k => [k, factWrongs[k]])
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+      
+      let html = '<div class="summary-card">';
+      
+      // خلاصهٔ کلی
+      html += '<div class="summary-row" style="background:rgba(0,243,255,0.05); border:1px solid rgba(0,243,255,0.2);">';
+      html += '<div class="title" style="color:var(--cyan)">📋 خلاصهٔ کلاس</div>';
+      html += '<div>👥 ' + toFa(students.length) + ' دانش‌آموز در سیستم</div>';
+      html += '</div>';
+      
+      // آماده برای درس جدید
+      if (good.length) {
+        html += '<div class="summary-row good">';
+        html += '<div class="title">✅ آماده برای درس جدید (' + toFa(good.length) + ' نفر)</div>';
+        html += '<div>' + good.map(s => s.name).join('، ') + '</div>';
+        html += '</div>';
+      }
+      
+      // نیاز به تمرین
+      if (warn.length) {
+        html += '<div class="summary-row warn">';
+        html += '<div class="title">⚠️ نیاز به تمرین بیشتر (' + toFa(warn.length) + ' نفر)</div>';
+        html += '<div>' + warn.map(s => s.name).join('، ') + '</div>';
+        html += '</div>';
+      }
+      
+      // نیاز به کمک فوری
+      if (danger.length) {
+        html += '<div class="summary-row danger">';
+        html += '<div class="title">❌ نیاز به توجه فوری (' + toFa(danger.length) + ' نفر)</div>';
+        html += '<div>' + danger.map(s => s.name).join('، ') + '</div>';
+        html += '</div>';
+      }
+      
+      // پیشنهاد برای فردا
+      if (weakFacts.length) {
+        html += '<div class="summary-row" style="background:rgba(139,92,246,0.1); border:1px solid rgba(139,92,246,0.3);">';
+        html += '<div class="title" style="color:var(--purple)">🎯 پیشنهاد برای مرور در کلاس</div>';
+        html += '<div>' + weakFacts.map(w => 'ضرب ' + w[0]).join('، ') + '</div>';
+        html += '</div>';
+      }
+      
+      html += '</div>';
+      box.innerHTML = html;
+    },
+    
     renderStudentsTable() {
       const tb = document.getElementById('teacher-students-rows'); if (!tb) return; tb.innerHTML = '';
       const list = Storage.getAll();
@@ -1132,6 +1369,7 @@
       document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     }
   };
+  
   class UIController {
     constructor(g) {
       this.game = g; this.sound = new SoundSystem(); sharedSound = this.sound;
@@ -1268,14 +1506,13 @@
       });
       window.addEventListener('keydown', e => {
         if (e.key === 'Escape') { this._esc(); return; }
+        // کیبورد در core
         if (!document.getElementById('core-board').classList.contains('hidden')) {
-          if (!corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
-          if (e.key === 'Enter') { submitCore(); return; }
-          if (e.key === 'Backspace') { corePlay.entry = corePlay.entry.slice(0, -1); paintCore(); return; }
-          var typed = { '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9' }[e.key] || (/^\d$/.test(e.key) ? e.key : '');
-          if (!typed || corePlay.entry.length >= 2) return;
-          corePlay.entry += typed;
-          paintCore();
+          if (e.key >= '1' && e.key <= '4') {
+            const idx = parseInt(e.key, 10) - 1;
+            const btns = document.querySelectorAll('#core-choices .core-choice');
+            if (btns[idx]) btns[idx].click();
+          }
           return;
         }
         if (!document.getElementById('slice-25').classList.contains('hidden')) {
@@ -1332,17 +1569,13 @@
       document.getElementById('teacher-pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') Teacher.submitLogin(); });
       document.getElementById('btn-start').addEventListener('click', () => { workshopMode = 'legacy'; this._start(false); });
       
-      // ============================================
-      // گام ۲: دکمه بازی انفرادی
-      // ============================================
+      // دکمه بازی انفرادی
       document.getElementById('btn-solo').addEventListener('click', () => {
         const active = ProfileManager.getActive();
-        
         if (!active) {
           alert('هنوز پروفایلی نساخته‌اید. لطفاً اول یک پروفایل بسازید.');
           return;
         }
-        
         const choice = prompt(
           'سلام ' + active.avatar + ' ' + active.displayName + '!\n\n' +
           'کدام بخش را تمرین کنی؟\n' +
@@ -1351,7 +1584,6 @@
           '۳ - دسته‌های شلوغ‌تر\n\n' +
           'عدد را وارد کن (۱ تا ۳):'
         );
-        
         const sector = parseInt(choice, 10);
         if (sector >= 1 && sector <= 3) {
           const nameInput = document.getElementById('player-name');
@@ -1367,20 +1599,6 @@
       document.getElementById('btn-core-3').addEventListener('click', () => openCore(3));
       document.getElementById('core-back').addEventListener('click', () => closeCore());
       document.getElementById('core-teacher').addEventListener('click', () => openSliceRecord());
-      document.getElementById('core-ok').addEventListener('click', () => submitCore());
-      document.getElementById('core-del').addEventListener('click', () => {
-        if (workshopMode !== 'core' || !corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
-        corePlay.entry = corePlay.entry.slice(0, -1);
-        paintCore();
-      });
-      document.querySelectorAll('#core-pad [data-digit]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          if (workshopMode !== 'core' || !corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
-          if (corePlay.entry.length >= 2) return;
-          corePlay.entry += btn.dataset.digit;
-          paintCore();
-        });
-      });
       document.getElementById('btn-slice-25').addEventListener('click', () => openSlice25());
       document.getElementById('slice-back').addEventListener('click', () => closeSlice25());
       document.getElementById('slice-teacher').addEventListener('click', () => openSliceRecord());
@@ -1471,6 +1689,7 @@
       return t;
     }
   }
+  
   window.addEventListener('load', () => {
     const canvas = document.getElementById('stage');
     const game = new GameController(canvas);
