@@ -132,13 +132,21 @@
           👨‍🏫 ورود معلم (به‌زودی)
         </button>
       </div>
+      
       <p style="font-size:0.75rem; color:var(--muted); margin-top:16px;">
         نسخه ۶.۰ — نسخه در حال توسعه
       </p>
       
-            <!-- عناصر پنهان برای سازگاری با کد قدیمی -->
+      <!-- عناصر مخفی برای سازگاری با کد قدیمی -->
       <input id="player-name" type="hidden" value="">
       <input id="player-class" type="hidden" value="">
+      <button id="btn-start" style="display:none;"></button>
+      <button id="btn-core-1" style="display:none;"></button>
+      <button id="btn-core-2" style="display:none;"></button>
+      <button id="btn-core-3" style="display:none;"></button>
+      <button id="btn-open-teacher-login" style="display:none;"></button>
+      <button id="btn-slice-25" style="display:none;"></button>
+      <button id="btn-start-assessment" style="display:none;"></button>
     </div>
   </div>
   <section id="slice-25" class="hidden" aria-label="آزمایش ۲ در ۵">
@@ -271,7 +279,7 @@
   </div>
 </div>
 <script src="workshop-core.js"></script>
-  <script src="profile-manager.js"></script>
+<script src="profile-manager.js"></script>
 <script>
 (function () {
   'use strict';
@@ -313,7 +321,6 @@
       if (el) el.classList.add('hidden');
     });
   }
-  // FIX: entryNumber now rejects 0 and "00"
   function entryNumber(text) {
     if (typeof text !== 'string' || !/^\d{1,2}$/.test(text)) return null;
     var n = Number(text);
@@ -631,7 +638,7 @@
   }
   function openSlice25() {
     if (typeof WorkshopCore === 'undefined') {
-      document.getElementById('slice-msg').textContent = 'آزمایش در این پوشه در دسترس نیست. (workshop-core.js یافت نشد)';
+      document.getElementById('slice-msg').textContent = 'آزمایش در این پوشه در دسترس نیست.';
       return;
     }
     workshopMode = 'slice';
@@ -663,7 +670,6 @@
     slice25.message = view.message; slice25.docked = view.docked;
     slice25.finished = view.finished; slice25.entry = '';
     try { slice25.core.record.save(slice25.session); } catch (e) {}
-    // FIX: play sound in slice mode too
     if (sharedSound) { if (view.docked) sharedSound.playCorrectNote(1); else sharedSound.playReview(); }
     paintSlice25(view);
   }
@@ -833,7 +839,6 @@
     corePlay.entry = ''; corePlay.step = view.step;
     if (!view.step || view.step.type !== 'ask') corePlay.session = corePlay.core.session.finish(corePlay.session);
     try { corePlay.core.record.save(corePlay.session); } catch (e) {}
-    // FIX: play sound in core mode too
     if (sharedSound) { if (view.docked) sharedSound.playCorrectNote(1); else sharedSound.playReview(); }
     paintCore(true);
   }
@@ -1273,7 +1278,6 @@
           paintCore();
           return;
         }
-        // FIX: keyboard support in slice-25 mode
         if (!document.getElementById('slice-25').classList.contains('hidden')) {
           if (!slice25 || slice25.finished) return;
           if (e.key === 'Enter') { submitSlice25(); return; }
@@ -1327,35 +1331,37 @@
       document.getElementById('btn-teacher-login-cancel').addEventListener('click', () => document.getElementById('modal-teacher-login').classList.add('hidden'));
       document.getElementById('teacher-pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') Teacher.submitLogin(); });
       document.getElementById('btn-start').addEventListener('click', () => { workshopMode = 'legacy'; this._start(false); });
+      
       // ============================================
-// گام ۲: مدیریت دکمه بازی انفرادی
-// ============================================
-document.getElementById('btn-solo').addEventListener('click', () => {
-  const active = ProfileManager.getActive();
-  
-  if (!active) {
-    alert('هنوز پروفایلی نساخته‌اید. لطفاً اول یک پروفایل بسازید.');
-    return;
-  }
-  
-  const choice = prompt(
-    'سلام ' + active.avatar + ' ' + active.displayName + '!\n\n' +
-    'کدام بخش را تمرین کنی؟\n' +
-    '۱ - دسته‌های کوچک\n' +
-    '۲ - دو، چهار و پنج\n' +
-    '۳ - دسته‌های شلوغ‌تر\n\n' +
-    'عدد را وارد کن (۱ تا ۳):'
-  );
-  
-  const sector = parseInt(choice, 10);
-  if (sector >= 1 && sector <= 3) {
-    const nameInput = document.getElementById('player-name');
-    const classInput = document.getElementById('player-class');
-    if (nameInput) nameInput.value = active.displayName;
-    if (classInput) classInput.value = '';
-    openCore(sector);
-  }
-});
+      // گام ۲: دکمه بازی انفرادی
+      // ============================================
+      document.getElementById('btn-solo').addEventListener('click', () => {
+        const active = ProfileManager.getActive();
+        
+        if (!active) {
+          alert('هنوز پروفایلی نساخته‌اید. لطفاً اول یک پروفایل بسازید.');
+          return;
+        }
+        
+        const choice = prompt(
+          'سلام ' + active.avatar + ' ' + active.displayName + '!\n\n' +
+          'کدام بخش را تمرین کنی؟\n' +
+          '۱ - دسته‌های کوچک\n' +
+          '۲ - دو، چهار و پنج\n' +
+          '۳ - دسته‌های شلوغ‌تر\n\n' +
+          'عدد را وارد کن (۱ تا ۳):'
+        );
+        
+        const sector = parseInt(choice, 10);
+        if (sector >= 1 && sector <= 3) {
+          const nameInput = document.getElementById('player-name');
+          const classInput = document.getElementById('player-class');
+          if (nameInput) nameInput.value = active.displayName;
+          if (classInput) classInput.value = '';
+          openCore(sector);
+        }
+      });
+      
       document.getElementById('btn-core-1').addEventListener('click', () => openCore(1));
       document.getElementById('btn-core-2').addEventListener('click', () => openCore(2));
       document.getElementById('btn-core-3').addEventListener('click', () => openCore(3));
@@ -1382,7 +1388,6 @@ document.getElementById('btn-solo').addEventListener('click', () => {
       document.getElementById('slice-pin-set').addEventListener('click', () => setSlicePin());
       document.getElementById('slice-csv').addEventListener('click', () => downloadSliceCsv());
       document.getElementById('slice-record-back').addEventListener('click', () => closeSliceRecord());
-      // FIX: Enter in slice PIN input
       document.getElementById('slice-pin').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitSlicePin(); } });
       document.getElementById('slice-ok').addEventListener('click', () => submitSlice25());
       document.getElementById('slice-del').addEventListener('click', () => {
