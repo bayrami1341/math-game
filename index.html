@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>نبرد ضرب‌ها — نسخهٔ کلاسی و تشخیصی</title>
+  <style>
+    :root {
+      --font-main: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+      --bg-space: #030712;
+      --card-bg: rgba(13, 22, 45, 0.95);
+      --accent-cyan: #00f3ff;
+      --accent-gold: #ffb703;
+      --accent-red: #ff3366;
+      --accent-green: #06d6a0;
+      --text-white: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+    }
+
+    body {
+      background-color: var(--bg-space);
+      color: var(--text-white);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      max-width: 960px;
+      max-height: 720px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      border-radius: 12px;
+      box-shadow: 0 0 45px rgba(0, 0, 0, 0.85);
+      background: #02040a;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: crosshair;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #hud-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(2, 4, 10, 0.95) 0%, rgba(2, 4, 10, 0) 100%);
+      pointer-events: none;
+    }
+
+    .hud-element {
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: var(--accent-cyan);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      pointer-events: auto;
+    }
+
+    .btn-audio {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    #progress-container {
+      position: absolute;
+      top: 52px;
+      left: 12%;
+      width: 76%;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    #progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold));
+      transition: width 0.3s ease;
+    }
+
+    #question-card {
+      position: absolute;
+      top: 66px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(10, 16, 35, 0.92);
+      border: 1.5px solid var(--accent-cyan);
+      padding: 6px 22px;
+      border-radius: 20px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ffffff;
+      box-shadow: 0 0 18px rgba(0, 243, 255, 0.25);
+      pointer-events: none;
+    }
+
+    #keyboard-hints {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.8rem;
+      pointer-events: none;
+    }
+
+    .modal-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 25;
+      background: rgba(3, 7, 18, 0.92);
+      backdrop-filter: blur(6px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .hidden { display: none !important; }
+
+    .modal-card {
+      background: var(--card-bg);
+      border: 2px solid var(--accent-cyan);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 540px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 0 35px rgba(0, 243, 255, 0.25);
+    }
+
+    .modal-card h2 {
+      color: var(--accent-gold);
+      margin-bottom: 12px;
+      font-size: 1.6rem;
+    }
+
+    .modal-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 18px;
+    }
+
+    .action-btn {
+      background: linear-gradient(180deg, var(--accent-cyan), #0099b8);
+      border: none;
+      border-radius: 8px;
+      color: #02040a;
+      font-size: 0.95rem;
+      font-weight: bold;
+      padding: 10px 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 243, 255, 0.3);
+      transition: transform 0.1s;
+    }
+
+    .action-btn:active { transform: scale(0.96); }
+
+    .array-container {
+      margin: 12px auto;
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 10px;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .dot-grid {
+      display: grid;
+      gap: 5px;
+      justify-content: center;
+    }
+
+    .dot-item {
+      width: 15px;
+      height: 15px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      box-shadow: 0 0 6px var(--accent-gold);
+    }
+
+    .grouped-block-box {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .grouped-group {
+      border: 1px solid var(--accent-cyan);
+      border-radius: 6px;
+      padding: 4px 8px;
+      background: rgba(0, 243, 255, 0.08);
+      font-size: 0.85rem;
+      font-weight: bold;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 6px 0;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .report-table th, .report-table td {
+      padding: 6px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .report-table th { color: var(--accent-cyan); }
+    .badge-pass { color: var(--accent-green); font-weight: bold; }
+    .badge-improving { color: var(--accent-gold); font-weight: bold; }
+    .badge-fail { color: var(--accent-red); font-weight: bold; }
+
+    .report-disclaimer {
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="game-container">
+    <canvas id="gameCanvas"></canvas>
+    <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- HUD -->
+    <div id="hud-top">
+      <div class="hud-element" id="hud-score">امتیاز: ۰</div>
+      <div class="hud-element" id="hud-streak">زنجیره: ۰ 🔥</div>
+      <div class="hud-element" id="hud-hp">سپر: ❤️❤️❤️</div>
+      <button class="btn-audio" id="btn-sound" title="قطع/وصل صدا">🔊</button>
+    </div>
+
+    <div id="progress-container"><div id="progress-fill"></div></div>
+    <div id="question-card">در حال آماده‌سازی عملیات...</div>
+    <div id="keyboard-hints">کلیدهای ۱ تا ۴ کیبورد از راست به چپ منطبق بر موقعیت شناورهاست</div>
+
+    <!-- مودال شروع -->
+    <div id="modal-start" class="modal-overlay">
+      <div class="modal-card">
+        <h2>🚀 نبرد ضرب‌ها — پرواز کلاسی</h2>
+        <p>ناوگان‌های متخاصم حامل حاصل‌ضرب هستند. با کلیک، لمس یا کلیدهای عددی ۱ تا ۴ (از راست به چپ) به هدف درست شلیک کن. ضرب‌هایی که اشتباه شوند، با تحلیل هندسی تکرار خواهند شد تا تسلط حاصل شود!</p>
+        <button class="action-btn" id="btn-start-game">آغاز مأموریت</button>
+      </div>
+    </div>
+
+    <!-- مودال تحلیل خطا -->
+    <div id="modal-correction" class="modal-overlay hidden">
+      <div class="modal-card" style="border-color: var(--accent-gold);">
+        <h2 style="color: var(--accent-gold);">⚠️ اصابت به سپر! تحلیل مفهومی:</h2>
+        <p id="correction-lead" style="font-size: 1.1rem; font-weight: bold; color: #fff;"></p>
+        <div id="pedagogy-view" class="array-container"></div>
+        <p id="correction-tip" style="font-size: 0.85rem; color: #94a3b8;"></p>
+        <button class="action-btn" id="btn-retry-fact" style="background: var(--accent-gold);">تمرین مجدد این ضرب</button>
+      </div>
+    </div>
+
+    <!-- مودال تغییر مرحله -->
+    <div id="modal-sector" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2 id="sector-title">انتقال موقعیت</h2>
+        <p id="sector-desc"></p>
+        <button class="action-btn" id="btn-sector-next">ورود به منطقه</button>
+      </div>
+    </div>
+
+    <!-- مودال کارنامه تشخیصی -->
+    <div id="modal-report" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2>📊 کارنامهٔ تشخیصی عملیات</h2>
+        <div id="report-summary" style="margin-bottom: 12px; font-size: 0.95rem;"></div>
+        
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>عملیات</th>
+              <th>وضعیت مهارت</th>
+              <th>خطاهای ثبت‌شده</th>
+            </tr>
+          </thead>
+          <tbody id="report-rows"></tbody>
+        </table>
+        
+        <div class="report-disclaimer">
+          برچسب‌ها تنها نمایانگر عملکرد در این مأموریت هستند و به معنای تسلط بلندمدت نیستند.
+        </div>
+
+        <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:6px;">
+          <button class="action-btn" id="btn-copy-report">کپی متن کارنامه 📋</button>
+          <button class="action-btn" id="btn-download-report" style="background: #2563eb; color:#fff;">دانلود فایل کارنامه (.txt) 📥</button>
+          <button class="action-btn" id="btn-replay" style="background: var(--accent-gold);">مأموریت جدید 🔁</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const toFa = (n) => String(n).replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function announceSr(text) {
+      const el = document.getElementById('sr-announcer');
+      if (el) el.textContent = text;
+    }
+
+    /* ۱. موتور صوتی Web Audio API */
+    class SoundSystem {
+      constructor() {
+        this.ctx = null;
+        this.muted = false;
+      }
+      init() {
+        if (!this.ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AC();
+        }
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+      }
+      toggleMute() {
+        this.muted = !this.muted;
+        return this.muted;
+      }
+      playLaser() {
+        if (this.muted || !this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(100, this.ctx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.14);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.15);
+      }
+      playExplosion() {
+        if (this.muted || !this.ctx) return;
+        const bSize = this.ctx.sampleRate * 0.25;
+        const buffer = this.ctx.createBuffer(1, bSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bSize; i++) data[i] = Math.random() * 2 - 1;
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(650, this.ctx.currentTime);
+        filter.frequency.linearRampToValueAtTime(30, this.ctx.currentTime + 0.25);
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+        noise.connect(filter); filter.connect(gain); gain.connect(this.ctx.destination);
+        noise.start();
+      }
+      playHit() {
+        if (this.muted || !this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+        osc.frequency.linearRampToValueAtTime(35, this.ctx.currentTime + 0.2);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
+        osc.connect(gain); gain.connect(this.ctx.destination);
+        osc.start(); osc.stop(this.ctx.currentTime + 0.21);
+      }
+    }
+
+    /* ۲. منطق ارزیابی مهارت و پداگوژی */
+    function getMasteryEvaluation(rec) {
+      const h = rec.history || [];
+      const hasWrong = h.includes('W');
+      const twoStreakEnd = h.length >= 2 && h[h.length - 1] === 'C' && h[h.length - 2] === 'C';
+
+      if (!hasWrong && rec.correctCount >= 2 && twoStreakEnd) {
+        return { 
+          status: 'mastered', 
+          label: 'پایدار در این مأموریت ✅', 
+          css: 'badge-pass' 
+        };
+      }
+      if (hasWrong && twoStreakEnd) {
+        return {
+          status: 'remediated',
+          label: 'تثبیت‌شده پس از خطا 🟡',
+          css: 'badge-improving'
+        };
+      }
+      return { 
+        status: 'needs_practice', 
+        label: 'هنوز ناپایدار ❌', 
+        css: 'badge-fail' 
+      };
+    }
+
+    class PedagogyEngine {
+      constructor() {
+        this.diagnosticHistory = new Map();
+      }
+
+      reset() {
+        this.diagnosticHistory.clear();
+      }
+
+      generateDistractors(f1, f2) {
+        const correct = f1 * f2;
+        const pool = new Set();
+
+        if (f1 > 1) pool.add((f1 - 1) * f2);
+        if (f1 < 9) pool.add((f1 + 1) * f2);
+        if (f2 > 1) pool.add(f1 * (f2 - 1));
+        if (f2 < 9) pool.add(f1 * (f2 + 1));
+        pool.add(f1 + f2);
+
+        const str = String(correct);
+        if (str.length === 2 && str[0] !== str[1]) {
+          pool.add(parseInt(str[1] + str[0], 10));
+        }
+
+        const validCandidates = Array.from(pool).filter(n => n > 0 && n <= 81 && n !== correct);
+        shuffleArray(validCandidates);
+
+        const choices = [correct];
+        for (let cand of validCandidates) {
+          if (choices.length < 4) choices.push(cand);
+        }
+
+        let offset = 2;
+        while (choices.length < 4) {
+          const fallback = correct + (Math.random() > 0.5 ? offset : -offset);
+          if (fallback > 0 && fallback <= 81 && !choices.includes(fallback)) {
+            choices.push(fallback);
+          }
+          offset += 2;
+        }
+
+        return shuffleArray(choices);
+      }
+
+      logAttempt(f1, f2, chosen, isCorrect) {
+        const key = `${f1}×${f2}`;
+        if (!this.diagnosticHistory.has(key)) {
+          this.diagnosticHistory.set(key, {
+            f1, f2,
+            attempts: 0,
+            correctCount: 0,
+            wrongAnswers: [],
+            history: []
+          });
+        }
+        const record = this.diagnosticHistory.get(key);
+        record.attempts++;
+        if (isCorrect) {
+          record.correctCount++;
+          record.history.push('C');
+        } else {
+          record.history.push('W');
+          if (!record.wrongAnswers.includes(chosen)) {
+            record.wrongAnswers.push(chosen);
+          }
+        }
+      }
+
+      getReportData() {
+        return Array.from(this.diagnosticHistory.values()).map(rec => {
+          const evalRes = getMasteryEvaluation(rec);
+          return { ...rec, ...evalRes };
+        });
+      }
+    }
+
+    /* ۳. تنظیمات مناطق بازی */
+    const SECTORS = [
+      {
+        id: 1,
+        title: 'مدار مقدماتی (ضرب‌های ۲ تا ۴)',
+        desc: 'اسکادران گشتی با فاکتورهای پایه نزدیک می‌شوند. سامانه‌های لیزری را فعال کن!',
+        factors: [2, 3, 4],
+        bgTop: '#040714', bgBottom: '#0c1a3a',
+        starColor: '#ffffff',
+        accentColor: '#00f3ff'
+      },
+      {
+        id: 2,
+        title: 'طوفان مریخ (ضرب‌های ۵ تا ۶)',
+        desc: 'شدت بادهای خورشیدی افزایش یافته؛ تمرکز روی فاکتورهای میانی جدول ضرب!',
+        factors: [5, 6],
+        bgTop: '#190606', bgBottom: '#420d0d',
+        starColor: '#fca5a5',
+        accentColor: '#ff7043'
+      },
+      {
+        id: 3,
+        title: 'سحابی شفق (ضرب‌های ۷ تا ۹)',
+        desc: 'ناوگان سنگین فرماندهی! آزمون نهایی فاکتورهای حساس جدول ضرب.',
+        factors: [7, 8, 9],
+        bgTop: '#021815', bgBottom: '#054738',
+        starColor: '#a7f3d0',
+        accentColor: '#10b981'
+      }
+    ];
+
+    /* ۴. حلقه مرکزی و کنترل بازی */
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const sounds = new SoundSystem();
+    const pedagogy = new PedagogyEngine();
+
+    let cssW = 800, cssH = 600;
+    let dpr = 1;
+
+    function resizeCanvas() {
+      const rect = document.getElementById('game-container').getBoundingClientRect();
+      cssW = rect.width;
+      cssH = rect.height;
+      dpr = window.devicePixelRatio || 1;
+
+      canvas.width = cssW * dpr;
+      canvas.height = cssH * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      initStars();
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+    let gameState = 'STOPPED';
+    let sectorIdx = 0;
+    let currentWave = 1;
+    const TOTAL_WAVES_PER_SECTOR = 5;
+
+    let score = 0;
+    let streak = 0;
+    let shields = 3;
+
+    let retryQueue = [];
+    let retryCountTracker = new Map();
+    const MAX_RETRIES_PER_FACT = 2;
+
+    let currentFact = null;
+    let enemyShips = [];
+    let activeMissile = null;
+    let heroX = cssW / 2;
+
+    let particles = [];
+    let shockwaves = [];
+    let floatingTexts = [];
+    let stars = [];
+    let screenShake = 0;
+    let hitStop = 0;
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 65; i++) {
+        stars.push({
+          x: Math.random() * cssW,
+          y: Math.random() * cssH,
+          speed: Math.random() * 1.5 + 0.4,
+          r: Math.random() * 1.6 + 0.5
+        });
+      }
+    }
+
+    function spawnNextQuestion() {
+      let f1, f2, isRetry = false;
+
+      if (retryQueue.length > 0) {
+        const item = retryQueue.shift();
+        f1 = item.f1;
+        f2 = item.f2;
+        isRetry = true;
+      } else {
+        const allowed = SECTORS[sectorIdx].factors;
+        f1 = allowed[Math.floor(Math.random() * allowed.length)];
+        f2 = Math.floor(Math.random() * 9) + 1;
+      }
+
+      const answer = f1 * f2;
+      const choices = pedagogy.generateDistractors(f1, f2);
+      currentFact = { f1, f2, answer, choices, isRetry };
+
+      const qCard = document.getElementById('question-card');
+      const qText = `شلیک به حاصل:  ${toFa(f1)} × ${toFa(f2)}${isRetry ? ' (تکرار جهت تثبیت)' : ''}`;
+      qCard.textContent = qText;
+      qCard.style.borderColor = isRetry ? 'var(--accent-gold)' : 'var(--accent-cyan)';
+      announceSr(`سؤال جدید: ضرب ${f1} در ${f2}. گزینه‌ها: ${choices.join('، ')}`);
+
+      enemyShips = [];
+      const colW = cssW / 4;
+      for (let i = 0; i < 4; i++) {
+        enemyShips.push({
+          xIndex: i,
+          baseX: colW * i + colW / 2,
+          baseY: 155 + (i % 2) * 45,
+          x: colW * i + colW / 2,
+          y: -60,
+          targetY: 155 + (i % 2) * 45,
+          val: choices[i],
+          phase: i * 1.4,
+          alive: true
+        });
+      }
+
+      const sortedByXDesc = [...enemyShips].sort((a, b) => b.baseX - a.baseX);
+      sortedByXDesc.forEach((ship, idx) => {
+        ship.keyNumber = idx + 1;
+      });
+
+      const progress = ((currentWave - 1) / TOTAL_WAVES_PER_SECTOR) * 100;
+      document.getElementById('progress-fill').style.width = `${progress}%`;
+    }
+
+    function fireAtShip(ship) {
+      if (!ship.alive || activeMissile || gameState !== 'PLAYING') return;
+
+      const isCorrect = (ship.val === currentFact.answer);
+      pedagogy.logAttempt(currentFact.f1, currentFact.f2, ship.val, isCorrect);
+
+      if (isCorrect) {
+        streak++;
+        const gain = 100 * (streak >= 4 ? 2 : 1);
+        score += gain;
+        sounds.playLaser();
+        announceSr('پاسخ درست! موشک به هدف اصابت کرد.');
+
+        activeMissile = {
+          x: heroX, y: cssH - 80,
+          targetShip: ship,
+          progress: 0,
+          gain: gain
+        };
+      } else {
+        streak = 0;
+        shields--;
+        sounds.playHit();
+        screenShake = 12;
+        updateHUD();
+        announceSr('پاسخ اشتباه! سپر دفاعی آسیب دید.');
+
+        const factKey = `${currentFact.f1}×${currentFact.f2}`;
+        const priorCount = retryCountTracker.get(factKey) || 0;
+        const reachedCap = priorCount >= MAX_RETRIES_PER_FACT;
+
+        if (!reachedCap) {
+          retryQueue.push({ f1: currentFact.f1, f2: currentFact.f2 });
+          retryCountTracker.set(factKey, priorCount + 1);
+        }
+
+        if (shields <= 0) {
+          endGame();
+        } else {
+          showCorrectionModal(currentFact.f1, currentFact.f2, currentFact.answer, ship.val, reachedCap);
+        }
+      }
+    }
+
+    function showCorrectionModal(f1, f2, ans, wrongChosen, reachedCap) {
+      gameState = 'PAUSED';
+      const modal = document.getElementById('modal-correction');
+      const lead = document.getElementById('correction-lead');
+      const tip = document.getElementById('correction-tip');
+      const view = document.getElementById('pedagogy-view');
+      const btn = document.getElementById('btn-retry-fact');
+
+      if (reachedCap) {
+        btn.textContent = 'ادامه پرواز (پایان سقف تکرار این ضرب)';
+      } else {
+        btn.textContent = 'تمرین مجدد این ضرب';
+      }
+
+      lead.textContent = `${toFa(f1)} دستهٔ ${toFa(f2)} تایی برابر است با: ${toFa(ans)}`;
+      view.innerHTML = '';
+
+      if (ans <= 25) {
+        const grid = document.createElement('div');
+        grid.className = 'dot-grid';
+        grid.style.gridTemplateColumns = `repeat(${f2}, 16px)`;
+        for (let i = 0; i < ans; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'dot-item';
+          grid.appendChild(dot);
+        }
+        view.appendChild(grid);
+      } else {
+        const blockBox = document.createElement('div');
+        blockBox.className = 'grouped-block-box';
+        for (let i = 0; i < f1; i++) {
+          const grp = document.createElement('div');
+          grp.className = 'grouped-group';
+          grp.textContent = `${toFa(f2)}تایی`;
+          blockBox.appendChild(grp);
+        }
+        view.appendChild(blockBox);
+      }
+
+      if (wrongChosen === f1 + f2) {
+        tip.textContent = 'نکته: شما دو عدد را با هم جمع زدید، در حالی که ضرب یعنی تکرار دسته‌ها.';
+      } else if (wrongChosen === (f1 - 1) * f2 || wrongChosen === f1 * (f2 - 1)) {
+        tip.textContent = 'خیلی نزدیک بود! یک دسته کمتر از مقدار واقعی محاسبه شد.';
+      } else if (wrongChosen === (f1 + 1) * f2 || wrongChosen === f1 * (f2 + 1)) {
+        tip.textContent = 'خیلی نزدیک بود! یک دسته بیشتر از مقدار واقعی محاسبه شد.';
+      } else {
+        tip.textContent = 'الگوی تکرار دسته‌ها را به خاطر بسپار و این ضرب را دوباره تمرین کن.';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function proceedToNextWave() {
+      if (retryQueue.length === 0) {
+        currentWave++;
+      }
+      if (currentWave > TOTAL_WAVES_PER_SECTOR) {
+        if (sectorIdx < SECTORS.length - 1) {
+          sectorIdx++;
+          currentWave = 1;
+          showSectorModal();
+        } else {
+          endGame();
+        }
+      } else {
+        spawnNextQuestion();
+        updateHUD();
+      }
+    }
+
+    function showSectorModal() {
+      gameState = 'PAUSED';
+      const modal = document.getElementById('modal-sector');
+      const sec = SECTORS[sectorIdx];
+      document.getElementById('sector-title').textContent = sec.title;
+      document.getElementById('sector-desc').textContent = sec.desc;
+      modal.classList.remove('hidden');
+    }
+
+    function updateHUD() {
+      document.getElementById('hud-score').textContent = `امتیاز: ${toFa(score)}`;
+      document.getElementById('hud-streak').textContent = `زنجیره: ${toFa(streak)} 🔥`;
+      let hearts = '';
+      for (let i = 0; i < 3; i++) hearts += (i < shields) ? '❤️' : '🖤';
+      document.getElementById('hud-hp').textContent = `سپر: ${hearts}`;
+    }
+
+    function endGame() {
+      gameState = 'STOPPED';
+      const modal = document.getElementById('modal-report');
+      const summary = document.getElementById('report-summary');
+      const tbody = document.getElementById('report-rows');
+
+      const data = pedagogy.getReportData();
+      const totalFacts = data.length;
+      const stableCount = data.filter(d => d.status === 'mastered' || d.status === 'remediated').length;
+      const stabilityIndex = totalFacts > 0 ? Math.round((stableCount / totalFacts) * 100) : 0;
+
+      let bestScore = score;
+      try {
+        const stored = parseInt(localStorage.getItem('sky_ace_best') || '0', 10);
+        bestScore = Math.max(score, isNaN(stored) ? 0 : stored);
+        localStorage.setItem('sky_ace_best', bestScore);
+      } catch (err) {
+        console.warn('عدم دسترسی به localStorage:', err);
+      }
+
+      summary.innerHTML = `امتیاز مأموریت: <b>${toFa(score)}</b> (بهترین رکورد: <b>${toFa(bestScore)}</b>)<br>شاخص پایداری این مأموریت: <b>${toFa(stabilityIndex)}٪</b>`;
+
+      tbody.innerHTML = '';
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        const wrongs = item.wrongAnswers.length > 0 ? item.wrongAnswers.map(toFa).join('، ') : '—';
+        tr.innerHTML = `<td><b>${toFa(item.f1)} × ${toFa(item.f2)}</b></td><td><span class="${item.css}">${item.label}</span></td><td>${wrongs}</td>`;
+        tbody.appendChild(tr);
+      });
+
+      modal.classList.remove('hidden');
+    }
+
+    function generateReportText() {
+      const data = pedagogy.getReportData();
+      const totalFacts = data.length;
+      const stableCount = data.filter(d => d.status === 'mastered' || d.status === 'remediated').length;
+      const stabilityIndex = totalFacts > 0 ? Math.round((stableCount / totalFacts) * 100) : 0;
+
+      let txt = `==============================\n`;
+      txt += `گزارش تمرین جدول ضرب (نبرد ضرب‌ها)\n`;
+      txt += `تاریخ: ${new Date().toLocaleDateString('fa-IR')}\n`;
+      txt += `امتیاز مأموریت: ${score}\n`;
+      txt += `شاخص پایداری این مأموریت: ${stabilityIndex}٪\n`;
+      txt += `توجه: برچسب‌ها تنها نمایانگر عملکرد در این مأموریت هستند و به معنای تسلط بلندمدت نیستند.\n`;
+      txt += `==============================\n\n`;
+      data.forEach(d => {
+        txt += `• ${d.f1} × ${d.f2}: ${d.label} | خطاهای ثبت‌شده: ${d.wrongAnswers.join('، ') || 'هیچ'}\n`;
+      });
+      return txt;
+    }
+
+    /* ۵. ترسیم گرافیک بوم (Canvas) */
+    function drawHeroShip(x, y, t) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      const flame = 18 + Math.sin(t * 0.03) * 6;
+      ctx.beginPath();
+      ctx.moveTo(-8, 25);
+      ctx.lineTo(0, 25 + flame);
+      ctx.lineTo(8, 25);
+      ctx.fillStyle = streak >= 4 ? '#ffb703' : '#00f3ff';
+      ctx.fill();
+
+      ctx.fillStyle = '#1e293b';
+      ctx.strokeStyle = '#00f3ff';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(0, -32);
+      ctx.lineTo(32, 18);
+      ctx.lineTo(12, 22);
+      ctx.lineTo(0, 14);
+      ctx.lineTo(-12, 22);
+      ctx.lineTo(-32, 18);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.ellipse(0, -6, 5, 10, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawEnemyUnit(ship, t, sec) {
+      ctx.save();
+      ctx.translate(ship.x, ship.y);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.strokeStyle = sec.accentColor;
+      ctx.lineWidth = 2.5;
+
+      ctx.beginPath();
+      ctx.moveTo(-32, 0);
+      ctx.lineTo(0, -22);
+      ctx.lineTo(32, 0);
+      ctx.lineTo(18, 20);
+      ctx.lineTo(-18, 20);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 20px ' + getComputedStyle(document.body).fontFamily;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(toFa(ship.val), 0, 2);
+
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.font = '12px ' + getComputedStyle(document.body).fontFamily;
+      ctx.fillText(`[${toFa(ship.keyNumber)}]`, 0, -28);
+
+      ctx.restore();
+    }
+
+    let lastFrameTime = performance.now();
+    function gameLoop(now) {
+      lastFrameTime = now;
+
+      if (hitStop > 0) {
+        hitStop--;
+        requestAnimationFrame(gameLoop);
+        return;
+      }
+
+      let ox = 0, oy = 0;
+      if (screenShake > 0) {
+        ox = (Math.random() - 0.5) * screenShake;
+        oy = (Math.random() - 0.5) * screenShake;
+        screenShake *= 0.88;
+        if (screenShake < 0.4) screenShake = 0;
+      }
+
+      ctx.save();
+      ctx.translate(ox, oy);
+
+      const sec = SECTORS[sectorIdx];
+      const grad = ctx.createLinearGradient(0, 0, 0, cssH);
+      grad.addColorStop(0, sec.bgTop);
+      grad.addColorStop(1, sec.bgBottom);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, cssW, cssH);
+
+      ctx.fillStyle = sec.starColor;
+      for (let s of stars) {
+        s.y += s.speed;
+        if (s.y > cssH) { s.y = 0; s.x = Math.random() * cssW; }
+        ctx.fillRect(s.x, s.y, s.r, s.r);
+      }
+
+      if (gameState === 'PLAYING') {
+        for (let s of enemyShips) {
+          if (!s.alive) continue;
+          if (s.y < s.targetY) s.y += 3.5;
+          s.x = s.baseX + Math.sin(now * 0.003 + s.phase) * 16;
+          s.y = s.targetY + Math.cos(now * 0.0025 + s.phase) * 7;
+          drawEnemyUnit(s, now, sec);
+        }
+
+        if (activeMissile) {
+          activeMissile.progress += 0.09;
+          const tgt = activeMissile.targetShip;
+          activeMissile.x += (tgt.x - activeMissile.x) * 0.25;
+          activeMissile.y += (tgt.y - activeMissile.y) * 0.25;
+
+          ctx.fillStyle = '#ffb703';
+          ctx.beginPath();
+          ctx.arc(activeMissile.x, activeMissile.y, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (activeMissile.progress >= 1 || Math.hypot(tgt.x - activeMissile.x, tgt.y - activeMissile.y) < 15) {
+            hitStop = 4;
+            screenShake = 10;
+            sounds.playExplosion();
+
+            for (let i = 0; i < 28; i++) {
+              const ang = Math.random() * Math.PI * 2;
+              const spd = Math.random() * 5 + 2;
+              particles.push({
+                x: tgt.x, y: tgt.y,
+                vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd,
+                alpha: 1, decay: 0.03, color: sec.accentColor
+              });
+            }
+
+            shockwaves.push({ x: tgt.x, y: tgt.y, r: 10, alpha: 1, color: sec.accentColor });
+            floatingTexts.push({ x: tgt.x, y: tgt.y, text: `+${toFa(activeMissile.gain)}`, alpha: 1, vy: -1.6 });
+
+            tgt.alive = false;
+            activeMissile = null;
+            setTimeout(proceedToNextWave, 400);
+          }
+        }
+      }
+
+      drawHeroShip(heroX, cssH - 75, now);
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        p.alpha -= p.decay;
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      for (let i = shockwaves.length - 1; i >= 0; i--) {
+        const sw = shockwaves[i];
+        sw.r += 3.5;
+        sw.alpha -= 0.04;
+        if (sw.alpha <= 0) {
+          shockwaves.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.strokeStyle = sw.color;
+          ctx.lineWidth = 2.5;
+          ctx.globalAlpha = sw.alpha;
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      for (let i = floatingTexts.length - 1; i >= 0; i--) {
+        const ft = floatingTexts[i];
+        ft.y += ft.vy;
+        ft.alpha -= 0.025;
+        if (ft.alpha <= 0) {
+          floatingTexts.splice(i, 1);
+        } else {
+          ctx.save();
+          ctx.fillStyle = '#ffb703';
+          ctx.globalAlpha = ft.alpha;
+          ctx.font = 'bold 22px ' + getComputedStyle(document.body).fontFamily;
+          ctx.textAlign = 'center';
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+        }
+      }
+
+      ctx.restore();
+      requestAnimationFrame(gameLoop);
+    }
+
+    /* ۶. تعاملات کاربر */
+    function resolveHit(px, py) {
+      if (gameState !== 'PLAYING') return;
+
+      let closest = null;
+      let minDist = 55;
+
+      for (let ship of enemyShips) {
+        if (!ship.alive) continue;
+        const d = Math.hypot(px - ship.x, py - ship.y);
+        if (d < minDist) {
+          minDist = d;
+          closest = ship;
+        }
+      }
+
+      if (closest) fireAtShip(closest);
+    }
+
+    canvas.addEventListener('pointerdown', (e) => {
+      sounds.init();
+      const rect = canvas.getBoundingClientRect();
+      const px = e.clientX - rect.left;
+      const py = e.clientY - rect.top;
+      heroX = px;
+      resolveHit(px, py);
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      heroX = e.clientX - rect.left;
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (gameState !== 'PLAYING') return;
+      sounds.init();
+      const keyVal = parseInt(e.key, 10);
+      if (keyVal >= 1 && keyVal <= 4) {
+        const targetShip = enemyShips.find(s => s.keyNumber === keyVal);
+        if (targetShip) fireAtShip(targetShip);
+      }
+    });
+
+    document.getElementById('btn-sound').addEventListener('click', () => {
+      sounds.init();
+      const isMuted = sounds.toggleMute();
+      document.getElementById('btn-sound').textContent = isMuted ? '🔇' : '🔊';
+    });
+
+    document.getElementById('btn-start-game').addEventListener('click', () => {
+      sounds.init();
+      document.getElementById('modal-start').classList.add('hidden');
+      gameState = 'PLAYING';
+      sectorIdx = 0;
+      currentWave = 1;
+      score = 0;
+      streak = 0;
+      shields = 3;
+      retryQueue = [];
+      retryCountTracker.clear();
+      pedagogy.reset();
+      heroX = cssW / 2;
+      updateHUD();
+      spawnNextQuestion();
+    });
+
+    document.getElementById('btn-retry-fact').addEventListener('click', () => {
+      document.getElementById('modal-correction').classList.add('hidden');
+      gameState = 'PLAYING';
+      spawnNextQuestion();
+    });
+
+    document.getElementById('btn-sector-next').addEventListener('click', () => {
+      document.getElementById('modal-sector').classList.add('hidden');
+      gameState = 'PLAYING';
+      spawnNextQuestion();
+    });
+
+    document.getElementById('btn-replay').addEventListener('click', () => {
+      document.getElementById('modal-report').classList.add('hidden');
+      gameState = 'PLAYING';
+      sectorIdx = 0;
+      currentWave = 1;
+      score = 0;
+      streak = 0;
+      shields = 3;
+      retryQueue = [];
+      retryCountTracker.clear();
+      pedagogy.reset();
+      updateHUD();
+      spawnNextQuestion();
+    });
+
+    document.getElementById('btn-copy-report').addEventListener('click', () => {
+      const txt = generateReportText();
+      const reportBtn = document.getElementById('btn-copy-report');
+
+      const doFallback = () => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = txt;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.select();
+          const ok = document.execCommand('copy');
+          document.body.removeChild(ta);
+          if (ok) {
+            reportBtn.textContent = 'کپی شد! ✅';
+            setTimeout(() => reportBtn.textContent = 'کپی متن کارنامه 📋', 2000);
+          } else {
+            alert('مرورگر اجازه کپی خودکار نداد. از دکمه «دانلود فایل کارنامه» استفاده کنید.');
+          }
+        } catch {
+          alert('کپی خودکار ناموفق بود. از دکمه «دانلود فایل کارنامه» استفاده کنید.');
+        }
+      };
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(txt).then(() => {
+          reportBtn.textContent = 'کپی شد! ✅';
+          setTimeout(() => reportBtn.textContent = 'کپی متن کارنامه 📋', 2000);
+        }).catch(doFallback);
+      } else {
+        doFallback();
+      }
+    });
+
+    document.getElementById('btn-download-report').addEventListener('click', () => {
+      const txt = generateReportText();
+      const blob = new Blob([txt], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `کارنامه_نبرد_ضربها_${new Date().toISOString().slice(0,10)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+
+    window.addEventListener('load', () => {
+      resizeCanvas();
+      heroX = cssW / 2;
+      requestAnimationFrame(gameLoop);
+    });
+  </script>
+</body>
+</html>
