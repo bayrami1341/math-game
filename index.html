@@ -2265,7 +2265,12 @@
         this.renderMessages();
         return;
       }
-      const conv = SocialCore.messages.getConversation(this.currentChatStudent, 'teacher');
+            const activeClass2 = Storage.getActiveClass();
+      const teacherId2 = activeClass2 ? ('teacher_' + activeClass2) : 'teacher';
+      const conv1 = SocialCore.messages.getConversation(this.currentChatStudent, 'teacher');
+      const conv2 = SocialCore.messages.getConversation(this.currentChatStudent, teacherId2);
+      const conv = conv1.concat(conv2.filter(m => !conv1.includes(m)))
+        .sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
       if (conv.length === 0) {
         chat.innerHTML = '<div class="chat-empty">هنوز پیامی رد و بدل نشده.</div>';
       } else {
@@ -2986,7 +2991,25 @@
       document.getElementById('chat-input').addEventListener('keydown', e => {
         if (e.key === 'Enter') { e.preventDefault(); MessagesUI.send(); }
       });
-
+      // دکمه ارسال معلم
+      document.getElementById('btn-teacher-chat-send').addEventListener('click', () => {
+        const input = document.getElementById('teacher-chat-input');
+        if (!input) return;
+        const text = (input.value || '').trim();
+        if (!text) return;
+        if (!TeacherV3.currentChatStudent) { alert('ابتدا یک دانش‌آموز را انتخاب کنید.'); return; }
+        const activeClass = Storage.getActiveClass();
+        const teacherId = activeClass ? ('teacher_' + activeClass) : 'teacher';
+        SocialCore.messages.send(teacherId, TeacherV3.currentChatStudent, text, {
+          classCode: activeClass || '',
+          fromTeacher: true
+        });
+        input.value = '';
+        TeacherV3.renderMessages();
+      });
+      document.getElementById('teacher-chat-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); document.getElementById('btn-teacher-chat-send').click(); }
+      });
       // دکمه خروج
       document.getElementById('btn-exit').addEventListener('click', () => {
         if (!confirm('از کارگاه خارج می‌شوی؟ پیشرفتت ذخیره می‌شود.')) return;
