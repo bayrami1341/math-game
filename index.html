@@ -308,6 +308,33 @@
   </div>
 
   <!-- ============ انتخاب بخش ============ -->
+    <!-- ============ ساخت پروفایل ============ -->
+  <div id="modal-profile" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>👋 خوش آمدی!</h2>
+      <p>قبل از شروع، اسم و آواتارت را انتخاب کن.</p>
+      <label class="field-label">آواتارت را انتخاب کن:</label>
+      <div class="heroes-grid" id="profile-avatars" style="grid-template-columns: repeat(4, 1fr); gap:8px; margin:10px 0;">
+        <button class="hero-card" data-avatar="🦊" style="font-size:2rem; padding:12px;">🦊</button>
+        <button class="hero-card" data-avatar="🐼" style="font-size:2rem; padding:12px;">🐼</button>
+        <button class="hero-card" data-avatar="🦁" style="font-size:2rem; padding:12px;">🦁</button>
+        <button class="hero-card" data-avatar="🐧" style="font-size:2rem; padding:12px;">🐧</button>
+        <button class="hero-card" data-avatar="🐻" style="font-size:2rem; padding:12px;">🐻</button>
+        <button class="hero-card" data-avatar="🦉" style="font-size:2rem; padding:12px;">🦉</button>
+        <button class="hero-card" data-avatar="🐸" style="font-size:2rem; padding:12px;">🐸</button>
+        <button class="hero-card" data-avatar="🦄" style="font-size:2rem; padding:12px;">🦄</button>
+        <button class="hero-card" data-avatar="🐯" style="font-size:2rem; padding:12px;">🐯</button>
+        <button class="hero-card" data-avatar="🐨" style="font-size:2rem; padding:12px;">🐨</button>
+        <button class="hero-card" data-avatar="🦅" style="font-size:2rem; padding:12px;">🦅</button>
+        <button class="hero-card" data-avatar="🐢" style="font-size:2rem; padding:12px;">🐢</button>
+      </div>
+      <label class="field-label">اسمت چیه؟</label>
+      <input type="text" id="profile-name-input" class="input-field" placeholder="مثال: مینا" maxlength="20" autocomplete="off">
+      <div class="start-buttons">
+        <button class="action-btn" id="btn-profile-create" style="width:100%; padding:14px; background:linear-gradient(180deg, var(--green), #049f76); color:#02040a;">شروع بازی 🚀</button>
+      </div>
+    </div>
+  </div>
   <div id="modal-sector-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2 id="picker-greeting">سلام!</h2>
@@ -3045,9 +3072,15 @@
       });
 
       // دکمه‌های صفحه شروع
-      document.getElementById('btn-solo').addEventListener('click', () => {
+            document.getElementById('btn-solo').addEventListener('click', () => {
         const active = ProfileManager.getActive();
-        if (!active) { alert('هنوز پروفایلی نساخته‌اید.'); return; }
+        if (!active) {
+          // نمایش فرم ساخت پروفایل
+          document.getElementById('modal-start').classList.add('hidden');
+          document.getElementById('modal-profile').classList.remove('hidden');
+          return;
+        }
+        // اگر پروفایل دارد، مسیر عادی
         if (!Storage.hasSeenStory()) {
           document.getElementById('modal-start').classList.add('hidden');
           Story.open(() => {
@@ -3059,6 +3092,47 @@
           const greetEl = document.getElementById('picker-greeting');
           if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
           document.getElementById('modal-start').classList.add('hidden');
+          document.getElementById('modal-sector-picker').classList.remove('hidden');
+        }
+      });
+
+      // ============ ساخت پروفایل ============
+      let selectedAvatar = '🦊';
+      document.querySelectorAll('#profile-avatars .hero-card').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#profile-avatars .hero-card').forEach(b => b.classList.remove('owned'));
+          btn.classList.add('owned');
+          selectedAvatar = btn.dataset.avatar;
+        });
+      });
+      document.querySelector('#profile-avatars .hero-card').classList.add('owned');
+
+      document.getElementById('btn-profile-create').addEventListener('click', () => {
+        const nameInput = document.getElementById('profile-name-input');
+        const name = (nameInput.value || '').trim();
+        if (!name) {
+          alert('لطفاً اسمت را وارد کن.');
+          nameInput.focus();
+          return;
+        }
+        const res = ProfileManager.create(selectedAvatar, name);
+        if (!res.ok) {
+          alert(res.error || 'خطا در ساخت پروفایل.');
+          return;
+        }
+        // پروفایل ساخته شد → بستن مودال و ادامه
+        document.getElementById('modal-profile').classList.add('hidden');
+        nameInput.value = '';
+        const active = ProfileManager.getActive();
+        if (!Storage.hasSeenStory()) {
+          Story.open(() => {
+            const greetEl = document.getElementById('picker-greeting');
+            if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
+            document.getElementById('modal-sector-picker').classList.remove('hidden');
+          });
+        } else {
+          const greetEl = document.getElementById('picker-greeting');
+          if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
           document.getElementById('modal-sector-picker').classList.remove('hidden');
         }
       });
@@ -3205,6 +3279,12 @@
       if (st && !st.classList.contains('hidden')) { document.getElementById('story-skip').click(); return; }
       const p = document.getElementById('modal-sector-picker');
       if (p && !p.classList.contains('hidden')) {
+              const pr = document.getElementById('modal-profile');
+      if (pr && !pr.classList.contains('hidden')) {
+        pr.classList.add('hidden');
+        document.getElementById('modal-start').classList.remove('hidden');
+        return;
+      }
         p.classList.add('hidden');
         document.getElementById('modal-start').classList.remove('hidden');
         return;
