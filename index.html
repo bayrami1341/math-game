@@ -46,18 +46,11 @@
     .input-field { width: 100%; background: #0b1329; border: 1.5px solid var(--cyan); border-radius: 8px; padding: 9px 12px; color: #fff; font-size: 0.95rem; text-align: center; margin-bottom: 12px; outline: none; font-family: inherit; user-select: text; -webkit-user-select: text; }
     .input-field:focus { border-color: var(--gold); box-shadow: 0 0 8px rgba(255, 183, 3, 0.4); }
     #modal-teacher-login .input-field { font-size: 1.8rem; padding: 16px; letter-spacing: 0.6em; text-align: center; direction: ltr; font-family: monospace; }
-    #slice-pin.input-field { font-size: 1.4rem; padding: 12px; letter-spacing: 0.4em; text-align: center; direction: ltr; font-family: monospace; max-width: 320px; margin: 0 auto 12px; }
     .start-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
     .action-btn { background: linear-gradient(180deg, var(--cyan), #0099b8); border: none; border-radius: 8px; color: #02040a; font-size: 0.9rem; font-weight: 700; padding: 9px 16px; cursor: pointer; min-height: 40px; transition: transform 0.1s; font-family: inherit; }
     .action-btn:active { transform: scale(0.97); }
     .btn-secondary { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); }
     .btn-teacher { background: linear-gradient(180deg, var(--purple), #6d28d9); color: #fff; border: 1px solid #a78bfa; }
-    .styled-table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 0.82rem; text-align: center; }
-    .styled-table th, .styled-table td { padding: 6px 4px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-    .styled-table th { color: var(--cyan); font-weight: 700; }
-    .diagnostic-box { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 8px; padding: 10px; margin: 8px 0; font-size: 0.84rem; text-align: right; line-height: 1.8; user-select: text; -webkit-user-select: text; }
-    .mini-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #fff; border-radius: 6px; padding: 3px 8px; cursor: pointer; font-size: 0.85rem; margin: 0 2px; font-family: inherit; }
-    .mini-btn:active { transform: scale(0.94); }
     #companion { position: absolute; bottom: 12px; left: 12px; z-index: 15; display: flex; align-items: flex-end; gap: 8px; pointer-events: none; max-width: 55%; }
     #companion-figure { animation: bob 3s ease-in-out infinite; filter: drop-shadow(0 0 8px rgba(0, 243, 255, 0.4)); flex-shrink: 0; }
     @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
@@ -73,21 +66,6 @@
     #slice-record { z-index: 40; }
     #slice-25.hidden, #slice-record.hidden, #core-board.hidden { display: none !important; }
     #slice-rows { white-space: pre-wrap; font-size: 0.78rem; text-align: right; line-height: 1.8; user-select: text; -webkit-user-select: text; font-family: monospace; padding: 6px; background: rgba(0,0,0,0.3); border-radius: 6px; }
-    .core-groups-wrap { overflow-x: auto; width: 100%; }
-    .core-groups { display: grid; gap: 8px; width: max-content; margin: 0 auto; }
-    .core-progress { text-align: center; font-weight: 800; color: #00f3ff; }
-    .slice-prompt { font-size: 1.35rem; font-weight: 900; text-align: center; }
-    .slice-groups { display: grid; grid-template-columns: repeat(5, minmax(44px, 1fr)); gap: 8px; width: min(100%, 320px); margin: 0 auto; }
-    .slice-piece { display: grid; gap: 6px; width: max-content; max-width: 100%; margin: 8px auto 0; overflow-x: auto; padding: 4px; }
-    .slice-cell { min-width: 44px; min-height: 44px; border-radius: 8px; background: #ffb703; display: block; }
-    .slice-entry { text-align: center; font-size: 1.6rem; font-weight: 900; min-height: 1.6em; }
-    .slice-msg { text-align: center; min-height: 3.2em; line-height: 1.6; color: #f8fafc; }
-    .slice-msg.ok { color: #06d6a0; }
-    .slice-pad { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; width: min(100%, 360px); margin: 0 auto; }
-    .slice-pad button { min-height: 48px; font-size: 1.15rem; font-weight: 800; border-radius: 10px; border: 1px solid rgba(0, 243, 255, 0.35); background: #0b1329; color: #fff; font-family: inherit; }
-    .slice-piece-cap { text-align: center; min-height: 1.4em; color: #ffb703; font-weight: 800; }
-
-    /* ============ Core Board ============ */
     #core-board { padding: 10px; gap: 10px; overflow: hidden; }
     #core-board .core-top { display: flex; justify-content: space-between; gap: 8px; flex-shrink: 0; }
     #core-board .core-chip { background: var(--card); border: 1.5px solid rgba(0, 243, 255, 0.3); color: var(--cyan); padding: 6px 12px; border-radius: 10px; font-size: 0.8rem; font-weight: 700; }
@@ -109,8 +87,7 @@
     #core-board .core-companion-text { font-size: 0.85rem; color: #fff; line-height: 1.5; }
     #core-board .core-bottom { display: flex; gap: 10px; flex-shrink: 0; }
     #core-board .core-bottom .action-btn { flex: 1; }
-
-    /* ============ Core Toast ============ */
+    .slice-cell { min-width: 44px; min-height: 44px; border-radius: 8px; background: #ffb703; display: block; }
     .core-toast { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) scale(0.4); z-index: 100; padding: 20px 40px; border-radius: 24px; font-size: clamp(1.6rem, 7vw, 2.6rem); font-weight: 900; opacity: 0; pointer-events: none; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); text-align: center; white-space: nowrap; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .core-toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
     .core-toast.correct-1 { background: rgba(6, 214, 160, 0.95); color: #02040a; box-shadow: 0 0 60px rgba(6, 214, 160, 0.7); }
@@ -125,26 +102,159 @@
     .picker-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s; }
     .picker-btn:hover::before { left: 100%; }
 
-    /* ============ Teacher Summary (قدیمی — نگه‌داشته شده) ============ */
-    .summary-card { text-align: right; background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 4px; }
-    .summary-row { padding: 10px 12px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; line-height: 1.6; }
-    .summary-row.good { background: rgba(6, 214, 160, 0.1); border: 1px solid rgba(6, 214, 160, 0.3); }
-    .summary-row.warn { background: rgba(255, 183, 3, 0.1); border: 1px solid rgba(255, 183, 3, 0.3); }
-    .summary-row.danger { background: rgba(255, 51, 102, 0.1); border: 1px solid rgba(255, 51, 102, 0.3); }
-    .summary-row.info { background: rgba(0, 243, 255, 0.05); border: 1px solid rgba(0, 243, 255, 0.2); }
-    .summary-row .title { font-weight: 800; margin-bottom: 4px; }
-    .summary-row.good .title { color: var(--green); }
-    .summary-row.warn .title { color: var(--gold); }
-    .summary-row.danger .title { color: var(--red); }
-    .summary-row.info .title { color: var(--cyan); }
-    .summary-empty { text-align: center; padding: 20px; color: var(--muted); font-size: 0.9rem; }
+    /* ============ داستان ورق‌زن ============ */
+    #story-app {
+      position: absolute; inset: 0; z-index: 35;
+      background: #02040a;
+      display: flex; flex-direction: column;
+    }
+    #story-app.hidden { display: none !important; }
+    .story-slide {
+      position: absolute; inset: 0;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .story-slide.active { opacity: 1; pointer-events: auto; }
+    .story-bg {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center;
+      animation: kenBurns 8s ease-out forwards;
+    }
+    @keyframes kenBurns {
+      from { transform: scale(1); }
+      to { transform: scale(1.06); }
+    }
+    .story-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg,
+        rgba(2,4,10,0) 35%,
+        rgba(2,4,10,0.75) 75%,
+        rgba(2,4,10,0.98) 100%);
+    }
+    .story-content {
+      position: absolute;
+      left: 0; right: 0;
+      bottom: 80px;
+      display: flex; flex-direction: column;
+      align-items: center;
+      padding: 0 20px;
+      gap: 12px;
+      z-index: 3;
+    }
+    .story-character {
+      max-height: 45vh;
+      max-width: 60%;
+      object-fit: contain;
+      filter: drop-shadow(0 0 20px rgba(0, 243, 255, 0.3));
+      animation: bob 3s ease-in-out infinite;
+    }
+    .story-text-box {
+      background: rgba(13, 22, 45, 0.92);
+      border: 1.5px solid var(--cyan);
+      border-radius: 14px;
+      padding: 12px 20px;
+      max-width: 90%;
+      text-align: center;
+      animation: fadeInUp 0.6s ease-out;
+      backdrop-filter: blur(8px);
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .story-text-box p {
+      font-size: clamp(0.95rem, 2.8vw, 1.25rem);
+      font-weight: 800;
+      line-height: 1.7;
+      color: #fff;
+      margin: 0;
+    }
+    .story-controls {
+      position: absolute;
+      bottom: 16px; left: 16px; right: 16px;
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 10px;
+      z-index: 10;
+    }
+    .story-nav-btn {
+      background: rgba(13, 22, 45, 0.95);
+      border: 1.5px solid rgba(0, 243, 255, 0.5);
+      color: var(--cyan);
+      padding: 10px 22px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+      min-width: 90px;
+    }
+    .story-nav-btn:hover:not(:disabled) {
+      background: rgba(0, 243, 255, 0.15);
+      border-color: var(--cyan);
+    }
+    .story-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .story-indicator {
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(13, 22, 45, 0.95);
+      padding: 6px 16px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .story-skip {
+      position: absolute; top: 14px; left: 14px;
+      background: rgba(13, 22, 45, 0.95);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .story-skip:hover { background: rgba(255,255,255,0.1); }
+    .story-replay {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(13, 22, 45, 0.95);
+      border: 1.5px solid rgba(0, 243, 255, 0.4);
+      color: var(--cyan);
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .story-replay:hover { background: rgba(0, 243, 255, 0.1); }
+    .story-name-input {
+      width: min(100%, 320px);
+      background: #0b1329;
+      border: 2px solid var(--cyan);
+      border-radius: 10px;
+      padding: 12px 16px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1.05rem;
+      text-align: center;
+      outline: none;
+      margin-top: 8px;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .story-name-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px rgba(255, 183, 3, 0.4);
+    }
 
-    /* ============ 🆕 پنل معلم v2 — صفحه‌های جدید ============ */
+    /* ============ پنل معلم ============ */
     #modal-teacher-v2 { padding: 0 !important; }
     .teacher-panel { width: 100%; height: 100%; display: flex; flex-direction: column; background: #030712; overflow: hidden; border-radius: 12px; }
     .teacher-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: linear-gradient(180deg, rgba(2,4,10,0.98), rgba(2,4,10,0.85)); border-bottom: 1px solid rgba(0,243,255,0.2); flex-shrink: 0; gap: 8px; }
     .teacher-header h2 { color: var(--cyan); font-size: 1rem; margin: 0; flex: 1; text-align: center; }
-    .teacher-header-actions { display: flex; gap: 6px; }
     .teacher-back-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 700; }
     .teacher-back-btn.hidden { visibility: hidden; }
     .teacher-page { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
@@ -153,52 +263,35 @@
     .kawh-avatar { font-size: 1.8rem; flex-shrink: 0; }
     .kawh-text { color: #fff; font-size: 0.88rem; line-height: 1.65; }
     .summary-card-v2 { background: rgba(13, 22, 45, 0.95); border: 1.5px solid rgba(0, 243, 255, 0.2); border-radius: 14px; overflow: hidden; }
-    .summary-card-v2.suggestion { border-color: rgba(255, 183, 3, 0.4); background: rgba(255, 183, 3, 0.05); }
-    .summary-header { padding: 10px 14px; background: rgba(0, 243, 255, 0.06); font-weight: 800; color: var(--cyan); font-size: 0.88rem; border-bottom: 1px solid rgba(0,243,255,0.15); display: flex; justify-content: space-between; align-items: center; }
-    .summary-card-v2.suggestion .summary-header { background: rgba(255, 183, 3, 0.08); color: var(--gold); border-bottom-color: rgba(255,183,3,0.2); }
+    .summary-header { padding: 10px 14px; background: rgba(0, 243, 255, 0.06); font-weight: 800; color: var(--cyan); font-size: 0.88rem; border-bottom: 1px solid rgba(0,243,255,0.15); }
     .summary-body { padding: 10px 14px; }
     .stat-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; color: #fff; }
     .stat-line:last-child { border-bottom: none; }
     .stat-line.clickable { cursor: pointer; margin: 0 -14px; padding: 9px 14px; transition: background 0.2s; }
     .stat-line.clickable:hover { background: rgba(0,243,255,0.05); }
-    .stat-line .expando-icon { color: var(--cyan); font-size: 0.72rem; margin-right: auto; padding-right: 8px; transition: transform 0.2s; }
-    .stat-line .expando-icon.open { transform: rotate(180deg); }
+    .expando-icon { color: var(--cyan); font-size: 0.72rem; margin-left: 8px; transition: transform 0.2s; }
+    .expando-icon.open { transform: rotate(180deg); }
     .expando-content { background: rgba(0,0,0,0.25); border-radius: 8px; padding: 10px 12px; margin: 4px 0 8px; font-size: 0.82rem; color: #cbd5e1; line-height: 1.7; display: none; }
     .expando-content.show { display: block; animation: expandoOpen 0.25s ease-out; }
     @keyframes expandoOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-    .expando-content .student-line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
-    .expando-content .student-line:last-child { border-bottom: none; }
-    .expando-content .student-line .line-name { color: #fff; font-weight: 700; }
-    .expando-content .student-line .line-note { color: var(--muted); font-size: 0.75rem; }
-    .teacher-filter { display: flex; gap: 6px; flex-wrap: wrap; padding-bottom: 4px; flex-shrink: 0; }
-    .filter-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: var(--muted); padding: 6px 12px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 0.78rem; font-weight: 700; transition: all 0.15s; }
-    .filter-btn.active { background: var(--cyan); color: #02040a; border-color: var(--cyan); }
+    .student-line { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px dashed rgba(255,255,255,0.08); }
+    .student-line:last-child { border-bottom: none; }
+    .line-name { color: #fff; font-weight: 700; }
+    .line-note { color: var(--muted); font-size: 0.75rem; }
     .student-list { display: flex; flex-direction: column; gap: 8px; }
     .student-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: rgba(13, 22, 45, 0.95); border: 1.5px solid rgba(0, 243, 255, 0.15); border-radius: 12px; cursor: pointer; transition: all 0.15s; }
     .student-row:hover { border-color: rgba(0, 243, 255, 0.5); transform: translateX(-3px); }
     .student-avatar { font-size: 1.7rem; flex-shrink: 0; }
     .student-info { flex: 1; min-width: 0; }
-    .student-name { color: #fff; font-weight: 800; font-size: 0.92rem; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .student-name { color: #fff; font-weight: 800; font-size: 0.92rem; margin-bottom: 2px; }
     .student-sub { font-size: 0.72rem; color: var(--muted); }
     .student-status { font-size: 1.4rem; flex-shrink: 0; }
     .student-percent { font-weight: 800; color: var(--cyan); font-size: 0.88rem; flex-shrink: 0; margin-right: 6px; }
-    .suggestion-text { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: #fff; line-height: 1.5; }
-    .suggestion-reason { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; line-height: 1.6; }
-    .student-detail-header { text-align: center; padding: 16px 0; }
-    .student-detail-header .big-avatar { font-size: 3.4rem; margin-bottom: 6px; }
-    .student-detail-header .big-name { font-size: 1.25rem; font-weight: 900; color: #fff; }
-    .student-detail-header .big-class { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
-    .detail-section { background: rgba(13, 22, 45, 0.95); border: 1.5px solid rgba(0, 243, 255, 0.15); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
-    .detail-section h3 { color: var(--cyan); font-size: 0.88rem; margin-bottom: 10px; font-weight: 800; }
-    .detail-stat { display: flex; justify-content: space-between; padding: 6px 0; font-size: 0.85rem; color: #fff; }
-    .detail-stat .value { font-weight: 800; color: var(--cyan); }
-    .fact-list-item { padding: 8px 10px; border-radius: 8px; background: rgba(0,0,0,0.2); margin-bottom: 6px; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; color: #fff; }
-    .fact-list-item.fluent { border-right: 3px solid var(--green); }
-    .fact-list-item.shaky { border-right: 3px solid var(--red); }
+    .summary-empty { text-align: center; padding: 20px; color: var(--muted); font-size: 0.9rem; }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-      #companion-figure { animation: none; }
+      #companion-figure, .story-character { animation: none; }
     }
   </style>
 </head>
@@ -206,6 +299,7 @@
 <div id="app">
   <canvas id="stage" aria-label="کارگاه ایستگاه فضایی"></canvas>
   <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  
   <header id="hud" role="banner">
     <div class="hud-item" id="hud-player">مهندس: —</div>
     <div class="hud-item" id="hud-progress">بخش ۱ از ۳</div>
@@ -225,21 +319,73 @@
   </div>
   <div id="badge-area"></div>
 
+  <!-- ============ داستان ورق‌زن ============ -->
+  <div id="story-app" class="hidden" aria-label="داستان">
+    <!-- اسلاید ۱ -->
+    <div class="story-slide active" data-slide="0">
+      <div class="story-bg" id="story-bg-0"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-0" alt="" style="display:none;">
+        <div class="story-text-box">
+          <p id="story-text-0">در مداری دور زمین، ایستگاهی درخشان بود.</p>
+        </div>
+      </div>
+    </div>
+    <!-- اسلاید ۲ -->
+    <div class="story-slide" data-slide="1">
+      <div class="story-bg" id="story-bg-1"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-1" alt="" style="display:none;">
+        <div class="story-text-box">
+          <p id="story-text-1">یک شب، طوفان کیهانی از راه رسید.</p>
+        </div>
+      </div>
+    </div>
+    <!-- اسلاید ۳ -->
+    <div class="story-slide" data-slide="2">
+      <div class="story-bg" id="story-bg-2"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-2" alt="" style="display:none;">
+        <div class="story-text-box">
+          <p id="story-text-2">ایستگاه شکست. قطعه‌ها پراکنده شدند.</p>
+        </div>
+      </div>
+    </div>
+    <!-- اسلاید ۴ — تعاملی -->
+    <div class="story-slide" data-slide="3">
+      <div class="story-bg" id="story-bg-3"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-3" alt="" style="display:none;">
+        <div class="story-text-box">
+          <p id="story-text-3">تو کمک‌کننده‌ای. اسمت چیه؟</p>
+          <input type="text" class="story-name-input" id="story-name-input" placeholder="نام خود را وارد کن..." maxlength="20" autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <button class="story-skip" id="story-skip">رد کردن ⏭</button>
+    <button class="story-replay" id="story-replay" title="تکرار نریشن">🔊</button>
+
+    <div class="story-controls">
+      <button class="story-nav-btn" id="story-next">بعدی ←</button>
+      <span class="story-indicator" id="story-indicator">۱ از ۴</span>
+      <button class="story-nav-btn" id="story-prev" disabled>→ قبلی</button>
+    </div>
+  </div>
+
   <!-- ============ انتخاب بخش ============ -->
   <div id="modal-sector-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2 id="picker-greeting">سلام!</h2>
       <p style="margin-bottom:20px;">کدام بخش را تمرین کنی؟</p>
       <div class="start-buttons" style="flex-direction:column; gap:12px;">
-        <button class="action-btn picker-btn" data-sector="1" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #00f3ff, #0099b8);">
-          🌱 بخش ۱ — دسته‌های کوچک
-        </button>
-        <button class="action-btn picker-btn" data-sector="2" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #ff7043, #c44a1f);">
-          ⚡ بخش ۲ — دو، چهار و پنج
-        </button>
-        <button class="action-btn picker-btn" data-sector="3" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #10b981, #047857);">
-          🏆 بخش ۳ — دسته‌های شلوغ‌تر
-        </button>
+        <button class="action-btn picker-btn" data-sector="1" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #00f3ff, #0099b8);">🌱 بخش ۱ — دسته‌های کوچک</button>
+        <button class="action-btn picker-btn" data-sector="2" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #ff7043, #c44a1f);">⚡ بخش ۲ — دو، چهار و پنج</button>
+        <button class="action-btn picker-btn" data-sector="3" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #10b981, #047857);">🏆 بخش ۳ — دسته‌های شلوغ‌تر</button>
       </div>
       <div style="margin-top:16px;">
         <button class="action-btn btn-secondary picker-cancel" style="width:100%;">↩ بازگشت</button>
@@ -270,31 +416,6 @@
     </div>
   </div>
 
-  <!-- ============ آزمایش ۲×۵ ============ -->
-  <section id="slice-25" class="hidden" aria-label="آزمایش ۲ در ۵">
-    <div class="slice-prompt" id="slice-prompt">۲ دستهٔ ۵تایی</div>
-    <div class="slice-groups" id="slice-groups"></div>
-    <div class="slice-msg" id="slice-msg"></div>
-    <div class="slice-entry" id="slice-entry"></div>
-    <div class="slice-pad" id="slice-pad">
-      <button type="button" data-digit="1">۱</button>
-      <button type="button" data-digit="2">۲</button>
-      <button type="button" data-digit="3">۳</button>
-      <button type="button" data-digit="4">۴</button>
-      <button type="button" data-digit="5">۵</button>
-      <button type="button" data-digit="6">۶</button>
-      <button type="button" data-digit="7">۷</button>
-      <button type="button" data-digit="8">۸</button>
-      <button type="button" data-digit="9">۹</button>
-      <button type="button" id="slice-del">پاک</button>
-      <button type="button" data-digit="0">۰</button>
-      <button type="button" id="slice-ok">تأیید</button>
-    </div>
-    <div class="slice-piece" id="slice-piece"></div>
-    <div class="slice-piece-cap" id="slice-piece-cap"></div>
-    <button type="button" id="slice-back" class="action-btn btn-secondary">بازگشت</button>
-  </section>
-
   <!-- ============ Core Board ============ -->
   <section id="core-board" class="hidden" aria-label="بخش هسته">
     <div class="core-top">
@@ -308,28 +429,16 @@
       <div class="core-choices" id="core-choices"></div>
     </div>
     <div class="core-companion">
-      <div class="core-companion-avatar">🤖</div>
+      <div class="core-companion-avatar" id="core-companion-avatar">🐿️</div>
       <div class="core-companion-text" id="core-companion-text">سلام! بیا با هم بشماریم!</div>
     </div>
     <div class="core-bottom">
+      <button type="button" id="core-home" class="action-btn btn-secondary">🏠 خانه</button>
       <button type="button" id="core-back" class="action-btn btn-secondary">خروج</button>
     </div>
   </section>
 
-  <!-- ============ پرونده آزمایش ============ -->
-  <section id="slice-record" class="hidden" aria-label="پرونده آزمایش">
-    <p id="slice-pin-msg"></p>
-    <input id="slice-pin" type="password" autocomplete="off" placeholder="● ● ● ●" inputmode="numeric">
-    <div class="start-buttons">
-      <button type="button" id="slice-pin-ok" class="action-btn">ورود</button>
-      <button type="button" id="slice-pin-set" class="action-btn btn-secondary">تعیین رمز</button>
-      <button type="button" id="slice-csv" class="action-btn btn-secondary">دریافت جدول</button>
-      <button type="button" id="slice-record-back" class="action-btn btn-secondary">بستن</button>
-    </div>
-    <div id="slice-rows"></div>
-  </section>
-
-  <!-- ============ ورود معلم (رمز) ============ -->
+  <!-- ============ ورود معلم ============ -->
   <div id="modal-teacher-login" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card" style="max-width:380px">
       <h2 style="color:#a78bfa">🔐 ورود معلم</h2>
@@ -342,28 +451,25 @@
     </div>
   </div>
 
-  <!-- ============ 🆕 پنل معلم v2 — سه صفحه ============ -->
+  <!-- ============ پنل معلم v2 ============ -->
   <div id="modal-teacher-v2" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="teacher-panel">
       <div class="teacher-header">
         <button class="teacher-back-btn hidden" id="teacher-back-v2">← بازگشت</button>
         <h2 id="teacher-title-v2">🏠 امروز</h2>
-        <div class="teacher-header-actions">
-          <button class="teacher-back-btn" id="teacher-close-v2" title="بستن">✕</button>
-        </div>
+        <button class="teacher-back-btn" id="teacher-close-v2" title="بستن">✕</button>
       </div>
 
-      <!-- صفحه ۱: امروز -->
       <div class="teacher-page" id="page-today">
         <div class="kawh-message">
-          <div class="kawh-avatar">🤖</div>
+          <div class="kawh-avatar" id="teacher-companion-avatar">🐿️</div>
           <div class="kawh-text" id="kawh-text-today">در حال آماده‌سازی...</div>
         </div>
         <div class="summary-card-v2">
           <div class="summary-header">🌟 وضعیت کلاس</div>
           <div class="summary-body" id="today-status-body"></div>
         </div>
-        <div class="summary-card-v2 suggestion">
+        <div class="summary-card-v2">
           <div class="summary-header">🎯 پیشنهاد امروز</div>
           <div class="summary-body" id="today-suggestion-body"></div>
         </div>
@@ -373,44 +479,17 @@
         </div>
       </div>
 
-      <!-- صفحه ۲: دانش‌آموزان -->
       <div class="teacher-page hidden" id="page-students">
-        <div class="teacher-filter">
-          <button class="filter-btn active" data-filter="all">همه</button>
-          <button class="filter-btn" data-filter="good">✅ آماده</button>
-          <button class="filter-btn" data-filter="warn">⚠️ نیاز به تمرین</button>
-          <button class="filter-btn" data-filter="danger">❌ نیاز به توجه</button>
-        </div>
         <div class="student-list" id="student-list-v2"></div>
       </div>
 
-      <!-- صفحه ۳: جزئیات یک دانش‌آموز -->
       <div class="teacher-page hidden" id="page-detail">
-        <div class="student-detail-header">
-          <div class="big-avatar" id="detail-avatar">🦊</div>
-          <div class="big-name" id="detail-name">—</div>
-          <div class="big-class" id="detail-class"></div>
-        </div>
-        <div class="detail-section">
-          <h3>📊 پیشرفت این هفته</h3>
-          <div class="detail-stat"><span>ضرب‌های روان</span><span class="value" id="detail-fluent">۰</span></div>
-          <div class="detail-stat"><span>دقت</span><span class="value" id="detail-accuracy">۰٪</span></div>
-          <div class="detail-stat"><span>میانگین زمان</span><span class="value" id="detail-time">—</span></div>
-        </div>
-        <div class="detail-section">
-          <h3>✅ ضرب‌هایی که یاد گرفت</h3>
-          <div id="detail-learned-list"></div>
-        </div>
-        <div class="detail-section">
-          <h3>⚠️ ضرب‌هایی که می‌لرزند</h3>
-          <div id="detail-shaky-list"></div>
-        </div>
+        <div id="detail-content"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ============ بررسی خطا (legacy) ============ -->
+  <!-- ============ بررسی خطا ============ -->
   <div id="modal-correct" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card" style="border-color:var(--gold)">
       <h2 style="color:var(--gold)">بیا با هم بررسی کنیم 🔍</h2>
@@ -434,13 +513,8 @@
       <h2>📊 کارنامهٔ ساخت ایستگاه</h2>
       <div id="report-summary" style="text-align:right;line-height:1.8;margin-bottom:10px"></div>
       <div id="report-badges" class="badges-grid"></div>
-      <table class="styled-table">
-        <thead><tr><th>ضرب</th><th>سطح تسلط</th><th>درست</th><th>تلاش</th><th>میانگین زمان</th></tr></thead>
-        <tbody id="report-details"></tbody>
-      </table>
       <div class="start-buttons" style="margin-top:14px">
-        <button id="btn-copy-report" class="action-btn" style="background:#2563eb;color:#fff">کپی گزارش برای معلم 📋</button>
-        <button id="btn-download-report" class="action-btn btn-secondary">دانلود کارنامه (.txt) 📥</button>
+        <button id="btn-download-report" class="action-btn btn-secondary">دانلود کارنامه 📥</button>
         <button id="btn-replay" class="action-btn" style="background:var(--gold);color:#02040a">ساخت ایستگاه جدید 🔁</button>
       </div>
     </div>
@@ -451,6 +525,10 @@
 <script>
 (function () {
   'use strict';
+
+  // ============================================
+  // ثابت‌ها
+  // ============================================
   const SECTORS = [
     { id: 1, title: 'بخش پایه — ساخت اسکلت ایستگاه', desc: 'قطعه‌های فاکتورهای ۲ و ۳ را به ایستگاه وصل کن.', factors: [2, 3], bg: ['#040714', '#0c1a3a'], accent: '#00f3ff' },
     { id: 2, title: 'بخش میانی — قطعه‌های انرژی', desc: 'قطعه‌های فاکتورهای ۴ و ۵ را برای تأمین سوخت نصب کن.', factors: [4, 5], bg: ['#190606', '#420d0d'], accent: '#ff7043' },
@@ -462,12 +540,16 @@
     LEARNING: { level: 2, name: 'در حال یادگیری' }, BASIC: { level: 3, name: 'تسلط پایه' },
     STABLE: { level: 4, name: 'تسلط پایدار' }, FLUENT: { level: 5, name: 'تسلط سیال' }
   };
-  const ERROR_CODES = { SUM: 'SUM', LESS: 'LESS', MORE: 'MORE', SWAP: 'SWAP', TABLE: 'TABLE', RANDOM: 'RANDOM' };
   const LEITNER_BOXES = [{ box: 1, delay: 2 }, { box: 2, delay: 4 }, { box: 3, delay: 8 }, { box: 4, delay: 15 }, { box: 5, delay: 25 }];
-  const STORAGE_KEYS = { RECORDS: 'sw_student_dossiers_v60', SETTINGS: 'sw_teacher_settings_v60', SESSION: 'sw_current_session_v60', BADGES: 'sw_student_badges_v60' };
+  const STORAGE_KEYS = { RECORDS: 'sw_student_dossiers_v60', SETTINGS: 'sw_teacher_settings_v60', SESSION: 'sw_current_session_v60', BADGES: 'sw_student_badges_v60', STORY_SEEN: 'sw_story_seen_v1' };
   const SUCCESS_MSGS = ['آفرین! قطعه‌ات وصل شد 🔧','عالی! ایستگاه بزرگ‌تر شد 🚀','دمت گرم! قطعه جدید ✨','فوق‌العاده! ادامه بده 🌟','آفرین مهندس! 💪'];
   const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+
   var sharedSound = null;
+
+  // ============================================
+  // توابع کمکی
+  // ============================================
   function toFa(n) { return String(n).replace(/[0-9]/g, d => FA_DIGITS[d]); }
   function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
   function escapeCsv(v) { const s = String(v == null ? '' : v); const d = /^[=+\-@\t\r]/.test(s); const e = s.replace(/"/g, '""'); return d ? `"'${e}"` : `"${e}"`; }
@@ -489,6 +571,10 @@
     if (!isFinite(n) || n <= 0) return null;
     return n;
   }
+
+  // ============================================
+  // ذخیره‌سازی
+  // ============================================
   const Storage = {
     getSettings() { try { return Object.assign({ teacherPin: '1234' }, JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || {}); } catch { return { teacherPin: '1234' }; } },
     getAll() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.RECORDS)) || []; } catch { return []; } },
@@ -497,8 +583,14 @@
     getLastIdentity() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.SESSION)) || { name: '', className: '' }; } catch { return { name: '', className: '' }; } },
     saveIdentity(n, c) { try { localStorage.setItem(STORAGE_KEYS.SESSION, JSON.stringify({ name: n || '', className: c || '' })); } catch {} },
     getBadges(n) { if (!n) return []; try { const a = JSON.parse(localStorage.getItem(STORAGE_KEYS.BADGES)) || {}; return a[n] || []; } catch { return []; } },
-    saveBadges(n, b) { if (!n) return; try { const a = JSON.parse(localStorage.getItem(STORAGE_KEYS.BADGES)) || {}; a[n] = Array.isArray(b) ? b : []; localStorage.setItem(STORAGE_KEYS.BADGES, JSON.stringify(a)); } catch {} }
+    saveBadges(n, b) { if (!n) return; try { const a = JSON.parse(localStorage.getItem(STORAGE_KEYS.BADGES)) || {}; a[n] = Array.isArray(b) ? b : []; localStorage.setItem(STORAGE_KEYS.BADGES, JSON.stringify(a)); } catch {} },
+    hasSeenStory() { try { return localStorage.getItem(STORAGE_KEYS.STORY_SEEN) === '1'; } catch { return false; } },
+    markStorySeen() { try { localStorage.setItem(STORAGE_KEYS.STORY_SEEN, '1'); } catch {} }
   };
+
+  // ============================================
+  // سیستم صدا
+  // ============================================
   class SoundSystem {
     constructor() { this.ctx = null; this.muted = false; }
     init() { if (!this.ctx) { const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return; try { this.ctx = new AC(); } catch {} } if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {}); }
@@ -517,10 +609,13 @@
     playNote(s) { if (this.muted || !this.ctx) return; const f = 261.63 * Math.pow(2, s / 12); this._beep({ freq: f, endFreq: f * 0.98, type: 'triangle', duration: 0.3, gain: 0.1 }); }
     playCorrectNote(st) { const p = [0, 2, 4, 7, 9]; this.playNote(p[Math.max(0, Math.min((st || 1) - 1, 4)) % 5]); }
     playSectorFanfare() { if (this.muted || !this.ctx) return; [0, 4, 7, 12].forEach((n, i) => setTimeout(() => this.playNote(n), i * 110)); }
-    playDock() { this._beep({ freq: 520, endFreq: 780, type: 'triangle', duration: 0.18, gain: 0.18 }); }
-    playCelebration() { if (this.muted || !this.ctx) return; var notes = [4, 7, 12]; notes.forEach((n, i) => setTimeout(() => this.playNote(n), i * 90)); }
-    playDockSpark() { if (this.muted || !this.ctx) return; this._beep({ freq: 1200, endFreq: 400, type: 'triangle', duration: 0.25, gain: 0.15 }); }
+    playCelebration() { if (this.muted || !this.ctx) return; [4, 7, 12].forEach((n, i) => setTimeout(() => this.playNote(n), i * 90)); }
+    playDockSpark() { this._beep({ freq: 1200, endFreq: 400, type: 'triangle', duration: 0.25, gain: 0.15 }); }
   }
+
+  // ============================================
+  // ارزیابی تسلط و طبقه‌بندی خطا
+  // ============================================
   function evaluateMastery(r) {
     if (!r || r.attempts === 0) return MASTERY.NOVICE;
     if (r.maxConsecutiveCorrect >= 3 && r.avgCorrectTimeMs > 0 && r.avgCorrectTimeMs < 4000) return MASTERY.FLUENT;
@@ -530,27 +625,45 @@
     if (r.correctCount >= 1) return MASTERY.FAMILIAR;
     return MASTERY.NOVICE;
   }
+
   function classifyError(f1, f2, c) {
     const corr = f1 * f2; if (c === corr) return null;
-    if (c === f1 + f2) return ERROR_CODES.SUM;
-    if (c === (f1 - 1) * f2 || c === f1 * (f2 - 1)) return ERROR_CODES.LESS;
-    if (c === (f1 + 1) * f2 || c === f1 * (f2 + 1)) return ERROR_CODES.MORE;
+    if (c === f1 + f2) return 'SUM';
+    if (c === (f1 - 1) * f2 || c === f1 * (f2 - 1)) return 'LESS';
+    if (c === (f1 + 1) * f2 || c === f1 * (f2 + 1)) return 'MORE';
     const s = String(corr);
-    if (s.length === 2 && s[0] !== s[1] && c === parseInt(s[1] + s[0], 10)) return ERROR_CODES.SWAP;
+    if (s.length === 2 && s[0] !== s[1] && c === parseInt(s[1] + s[0], 10)) return 'SWAP';
     const isTable = [2, 3, 4, 5, 6, 7, 8, 9].some(n => (n !== f2 && n * f1 === c) || (n !== f1 && n * f2 === c));
-    if (isTable) return ERROR_CODES.TABLE;
-    return ERROR_CODES.RANDOM;
+    if (isTable) return 'TABLE';
+    return 'OTHER';
   }
-  function errorMessage(code) {
+
+  // پیام‌های بهبود یافته — سه‌گانه (چه شد + چه باید + چه کن)
+  function errorMessage(code, f1, f2) {
     switch (code) {
-      case ERROR_CODES.SUM: return 'ضرب یعنی چند دسته یکسان. نه جمع دو عدد.';
-      case ERROR_CODES.LESS: return 'یک دسته کم شمردی. دوباره بشمار.';
-      case ERROR_CODES.MORE: return 'یک دسته زیاد شمردی. دوباره بشمار.';
-      case ERROR_CODES.SWAP: return 'اعداد جابه‌جا شدن. دهگان و یکان را نگاه کن.';
-      case ERROR_CODES.TABLE: return 'این جواب مال ضرب دیگری است. دسته‌های این یکی را بشمار.';
-      default: return 'بیا با هم دسته‌ها را بشماریم.';
+      case 'SUM': return 'تو ' + toFa(f1) + ' و ' + toFa(f2) + ' را جمع کردی. اما ضرب یعنی ' + toFa(f2) + ' را ' + toFa(f1) + ' بار کنار هم بچینی. حاصل خیلی بیشتر از ' + toFa(f1 + f2) + ' است.';
+      case 'LESS': return 'یک دسته کمتر شمردی. تو ' + toFa(f2) + ' دسته داری، نه ' + toFa(f2 - 1) + ' دسته. دوباره با دقت بشمار.';
+      case 'MORE': return 'یک دسته بیشتر شمردی. تو ' + toFa(f2) + ' دسته داری، نه ' + toFa(f2 + 1) + ' دسته. دوباره با دقت بشمار.';
+      case 'SWAP': return 'ارقام را جابه‌جا کردی. حاصل این ضرب ' + toFa(f1 * f2) + ' است، نه ' + toFa(parseInt(String(f1 * f2).split('').reverse().join(''), 10)) + '. با دقت نگاه کن.';
+      case 'TABLE': return 'این حاصلِ ضرب دیگری است. ' + toFa(f1) + '×' + toFa(f2) + ' یعنی ' + toFa(f2) + ' تا دستهٔ ' + toFa(f1) + 'تایی. دسته‌های این یکی را بشمار.';
+      default: return 'بیا با هم دوباره بشماریم. ' + toFa(f1) + ' دستهٔ ' + toFa(f2) + 'تایی داری. با انگشتت بشمار.';
     }
   }
+
+  // پیام‌های راهنما — سه‌گانه
+  function hintMessage(phase, f1, f2) {
+    switch (phase) {
+      case 'hint-group': return '👀 به یک دسته نگاه کن. ' + toFa(f2) + ' خانه در آن هست. پس هر دسته = ' + toFa(f2) + '.';
+      case 'hint-sum': return '🧮 ' + toFa(f1) + ' دسته داری که در هرکدام ' + toFa(f2) + ' خانه هست. یعنی ' + Array(f1).fill(toFa(f2)).join(' + ') + '.';
+      case 'count': return '👆 حالا همهٔ خانه‌ها را با انگشتت از ۱ تا آخر بشمار و جواب را وارد کن.';
+      case 'reveal': return '✨ حاصل این ضرب ' + toFa(f1 * f2) + ' است. حالا ' + toFa(f1 * f2) + ' را وارد کن تا سؤال بعدی بیاید.';
+      default: return '';
+    }
+  }
+
+  // ============================================
+  // تولید گزینه‌ها
+  // ============================================
   function generateChoices(f1, f2, correct) {
     const pool = new Set();
     if (f1 > 1) pool.add((f1 - 1) * f2);
@@ -583,6 +696,10 @@
     }
     return choices.sort(() => Math.random() - 0.5);
   }
+
+  // ============================================
+  // کلاس Leitner (برای legacy)
+  // ============================================
   class Leitner {
     constructor() { this.facts = new Map(); this.questionIndex = 0; }
     reset() { this.facts.clear(); this.questionIndex = 0; }
@@ -603,6 +720,10 @@
       return false;
     }
   }
+
+  // ============================================
+  // PedagogyEngine
+  // ============================================
   class PedagogyEngine {
     constructor() { this.history = new Map(); this.leitner = new Leitner(); }
     reset() { this.history.clear(); this.leitner.reset(); }
@@ -651,39 +772,10 @@
       return { weakestFactor: weakest, strongFactors: strong, totalEvaluated: data.length };
     }
   }
-  const COMPANION_MESSAGES = {
-    greeting: ['سلام! من کاوه‌ام. بیا ایستگاه بسازیم!', 'خوش اومدی مهندس! بیا قطعه‌ها را وصل کنیم.'],
-    correct: ['آفرین! قطعه‌ات وصل شد.', 'عالی بود! ایستگاه بزرگ‌تر شد.', 'دمت گرم مهندس!'],
-    wrong: ['اشکالی نداره، بیا با هم درستش کنیم.', 'نزدیک بود! دوباره با آرامش نگاه کن.'],
-    streak3: ['سه تا پشت‌سرهم درست! عالیه 🔥'],
-    streak5: ['پنج تا پشت‌سرهم بدون اشتباه! تو قهرمانی ⭐'],
-    sectorDone: ['تبریک! این بخش کامل شد.'],
-    gameDone: ['شاهکار کردی! ایستگاهت آماده‌ست 🌟']
-  };
-  class Companion {
-    constructor() { this.bubble = null; this.hideTimer = null; }
-    mount() {
-      if (document.getElementById('companion')) return;
-      const w = document.createElement('div'); w.id = 'companion'; w.setAttribute('aria-hidden', 'true');
-      w.innerHTML = `<div id="companion-bubble" class="hidden"></div><div id="companion-figure"><svg viewBox="0 0 60 60" width="52" height="52"><rect x="14" y="20" width="32" height="28" rx="6" fill="#1e293b" stroke="#00f3ff" stroke-width="2"/><line x1="30" y1="20" x2="30" y2="10" stroke="#00f3ff" stroke-width="2"/><circle cx="30" cy="8" r="3" fill="#ffb703"/><circle cx="23" cy="32" r="3" fill="#00f3ff"/><circle cx="37" cy="32" r="3" fill="#00f3ff"/><path d="M 24 41 Q 30 45 36 41" stroke="#06d6a0" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="20" y="48" width="6" height="6" rx="2" fill="#1e293b" stroke="#00f3ff" stroke-width="1.5"/><rect x="34" y="48" width="6" height="6" rx="2" fill="#1e293b" stroke="#00f3ff" stroke-width="1.5"/></svg></div>`;
-      const app = document.getElementById('app'); if (app) app.appendChild(w);
-      this.bubble = document.getElementById('companion-bubble');
-    }
-    say(t, d = 2600) {
-      if (!this.bubble) return;
-      clearTimeout(this.hideTimer);
-      this.bubble.textContent = t; this.bubble.classList.remove('hidden');
-      announceSr(t);
-      this.hideTimer = setTimeout(() => { if (this.bubble) this.bubble.classList.add('hidden'); }, d);
-    }
-    greet() { this.say(COMPANION_MESSAGES.greeting[Math.floor(Math.random() * 2)]); }
-    onCorrect() { this.say(COMPANION_MESSAGES.correct[Math.floor(Math.random() * 3)], 1800); }
-    onWrong() { this.say(COMPANION_MESSAGES.wrong[Math.floor(Math.random() * 2)], 2600); }
-    onStreak3() { this.say(COMPANION_MESSAGES.streak3[0], 2400); }
-    onStreak5() { this.say(COMPANION_MESSAGES.streak5[0], 2800); }
-    onSectorDone() { this.say(COMPANION_MESSAGES.sectorDone[0], 3000); }
-    onGameDone() { this.say(COMPANION_MESSAGES.gameDone[0], 4000); }
-  }
+
+  // ============================================
+  // سیستم نشان‌ها
+  // ============================================
   const BADGES = [
     { id: 'first_module', icon: '🔧', name: 'اولین قطعه', desc: 'اولین پاسخ درست', check: s => s.totalCorrect >= 1 },
     { id: 'explorer_2', icon: '🛸', name: 'کاوشگر ۲', desc: 'تسلط پایه در ضرب ۲', check: s => (s.factorMastery[2] || 0) >= 3 },
@@ -724,6 +816,7 @@
     setTimeout(() => t.classList.add('show'), 30);
     setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 350); }, 2800);
   }
+
   let feedbackTimer = null;
   function showFeedbackBar(title, sub, duration = 1800) {
     const bar = document.getElementById('feedback-bar');
@@ -737,14 +830,124 @@
     announceSr(title + (sub ? ' ' + sub : ''));
     feedbackTimer = setTimeout(() => bar.classList.remove('show'), duration);
   }
-  let dispatchLog = { count: 0 };
+
+  // ============================================
+  // Core Play — ذخیره‌سازی core
+  // ============================================
+  function sliceStore(db) {
+    var key = 'sw_core_v1';
+    return {
+      load: function () { try { var parsed = JSON.parse(db.getItem(key) || '[]'); return Array.isArray(parsed) ? parsed : []; } catch (e) { return []; } },
+      save: function (rows) { db.setItem(key, JSON.stringify(rows)); }
+    };
+  }
+  function slicePin(db) { var value = db.getItem('sw_pin_v1'); return value == null ? '' : String(value); }
+  function sliceCore(db) { return WorkshopCore.create({ storage: sliceStore(db), pin: slicePin(db) }); }
+
+  function reduceStep(core, state, given) {
+    if (typeof given !== 'number' || !isFinite(given)) {
+      return { session: state.session, step: state.step, phase: state.phase, message: state.message || '', docked: state.docked || null, finished: false, refused: true };
+    }
+    var judgment = core.judge.answer(state.step, given, core.presentation.assisted(state.phase));
+    var session = core.session.apply(state.session, state.step, judgment);
+    if (core.presentation.stays(state.phase, judgment)) {
+      return { session: session, step: state.step, phase: core.presentation.afterWrong(state.phase), message: judgment.message, docked: state.docked || null, finished: false, refused: false };
+    }
+    var fact = core.scheduler.fold(session.events)[state.step.key];
+    var fluent = !!(judgment.correct && fact && fact.fluent && !judgment.assisted);
+    return {
+      session: session,
+      step: core.scheduler.next(session),
+      phase: 'answer',
+      message: judgment.correct
+        ? (fluent ? 'این یکی روان شد.' : (judgment.assisted ? 'با راهنما جوش خورد؛ هنوز روان نیست.' : 'قطعه جوش خورد.'))
+        : hintMessage(state.phase, state.step.f1, state.step.f2) || judgment.message,
+      docked: judgment.correct ? { fluent: fluent, assisted: judgment.assisted, rows: state.step.f1, cols: state.step.f2 } : null,
+      finished: false, refused: false
+    };
+  }
+
+  function fluentCount(core, session, sectorId) {
+    var facts = core.scheduler.summarizeSector(session, sectorId);
+    var n = 0; facts.forEach(function (fact) { if (fact.fluent) n += 1; });
+    return { n: n, total: facts.length, facts: facts };
+  }
+
+  // ============================================
+  // پل core → پنل معلم (نوشتن در sw_student_dossiers_v60)
+  // ============================================
+  function bridgeCoreToDossier(session, profileId, sectorId, accuracy, avgTime) {
+    try {
+      const list = Storage.getAll();
+      const name = session.name || 'مهندس';
+      const className = session.className || '';
+      // پیدا کردن رکورد موجود برای همین profile/sector
+      const id = 'CORE_' + (profileId || name) + '_s' + sectorId;
+      const details = [];
+      // خواندن از scheduler
+      const facts = [];
+      for (let sid = 1; sid <= SECTORS.length; sid++) {
+        const summary = WorkshopCore ? [] : [];
+      }
+      // ساخت details از events
+      const eventByKey = {};
+      (session.events || []).forEach(ev => {
+        if (ev.filler) return;
+        const key = Math.min(ev.f1, ev.f2) + '×' + Math.max(ev.f1, ev.f2);
+        if (!eventByKey[key]) eventByKey[key] = { f1: Math.min(ev.f1, ev.f2), f2: Math.max(ev.f1, ev.f2), key, attempts: 0, correctCount: 0, wrongAnswers: [], history: [], errorCodes: [], maxConsecutiveCorrect: 0, consecutiveCorrect: 0, avgCorrectTimeMs: 0, _correctTimeSum: 0 };
+        const r = eventByKey[key];
+        r.attempts++;
+        if (ev.correct) {
+          r.correctCount++; r.history.push('C'); r.consecutiveCorrect++;
+          if (r.consecutiveCorrect > r.maxConsecutiveCorrect) r.maxConsecutiveCorrect = r.consecutiveCorrect;
+        } else {
+          r.history.push('W'); r.consecutiveCorrect = 0;
+          if (ev.given != null && !r.wrongAnswers.includes(ev.given)) r.wrongAnswers.push(ev.given);
+        }
+      });
+      Object.keys(eventByKey).forEach(k => {
+        const r = eventByKey[k];
+        const m = evaluateMastery(r);
+        r.masteryLevel = m.level;
+        r.masteryName = m.name;
+        r.isPositive = m.level >= 3;
+        details.push(r);
+      });
+
+      const record = {
+        id: id,
+        name: name,
+        className: className,
+        profileId: profileId || '',
+        date: todayFa(),
+        sector: sectorId,
+        modulesAttached: (session.events || []).filter(e => e.correct).length,
+        successRate: accuracy || 0,
+        avgTime: avgTime || 0,
+        details: details,
+        fromCore: true
+      };
+
+      const at = list.findIndex(x => x.id === id);
+      if (at >= 0) list[at] = record;
+      else list.unshift(record);
+      Storage.saveAll(list);
+    } catch (e) { console.warn('bridgeCoreToDossier error:', e); }
+  }
+
+  // ============================================
+  // حالت‌های سراسری
+  // ============================================
   var workshopMode = 'legacy';
+  var corePlay = null;
+
+  // dispatchAnswer (legacy)
   function dispatchAnswer(input) {
     if (workshopMode !== 'legacy') return;
     if (!input || input.engine !== 'v6') return;
-    dispatchLog.count += 1;
     return legacyShoot(input);
   }
+
   function legacyShoot(input) {
     const game = input.game;
     const ship = input.ship;
@@ -775,99 +978,9 @@
       game._emit('answer', { correct: false, timeMs: ms, ship: ship, chosen: given, correctValue: correct, f1: f1, f2: f2 });
     }
   }
-  if (typeof window !== 'undefined') window.__swDispatch = dispatchLog;
-  var slice25 = null;
-  var sliceRecord = null;
-  function sliceStore(db) {
-    var key = 'sw_core_v1';
-    return {
-      load: function () { try { var parsed = JSON.parse(db.getItem(key) || '[]'); return Array.isArray(parsed) ? parsed : []; } catch (e) { return []; } },
-      save: function (rows) { db.setItem(key, JSON.stringify(rows)); }
-    };
-  }
-  function slicePin(db) { var value = db.getItem('sw_pin_v1'); return value == null ? '' : String(value); }
-  function sliceCore(db) { return WorkshopCore.create({ storage: sliceStore(db), pin: slicePin(db) }); }
-  function openSliceRecord() {
-    sliceRecord = null;
-    document.getElementById('slice-pin').value = '';
-    document.getElementById('slice-pin-msg').textContent = '';
-    document.getElementById('slice-rows').textContent = '';
-    document.getElementById('slice-record').classList.remove('hidden');
-  }
-  function closeSliceRecord() {
-    sliceRecord = null;
-    document.getElementById('slice-pin').value = '';
-    document.getElementById('slice-record').classList.add('hidden');
-  }
-  function setSlicePin() {
-    var typed = document.getElementById('slice-pin').value;
-    if (slicePin(localStorage)) { document.getElementById('slice-pin-msg').textContent = 'رمز از قبل تعیین شده.'; return; }
-    if (!typed) { document.getElementById('slice-pin-msg').textContent = 'رمز تعیین نشده.'; return; }
-    localStorage.setItem('sw_pin_v1', typed);
-    document.getElementById('slice-pin').value = '';
-    document.getElementById('slice-pin-msg').textContent = 'رمز ذخیره شد.';
-  }
-  function submitSlicePin() {
-    var typed = document.getElementById('slice-pin').value;
-    var core = sliceCore(localStorage);
-    if (!core.record.pinOk(typed)) {
-      sliceRecord = null;
-      document.getElementById('slice-rows').textContent = '';
-      document.getElementById('slice-pin-msg').textContent = slicePin(localStorage) ? 'رمز نادرست است.' : 'رمز تعیین نشده.';
-      return;
-    }
-    sliceRecord = core;
-    var head = ['نام', 'کلاس', 'وضعیت', 'بخش', 'روان', 'لرزان', 'جمع', 'کم', 'زیاد', 'جابه‌جایی'];
-    var lines = [head.join(' | ')];
-    core.record.all().forEach(function (row) {
-      var firm = 0, shaky = 0, sum = 0, less = 0, more = 0, swap = 0;
-      (row.facts || []).forEach(function (fact) {
-        if (fact.fluent) firm += 1; if (fact.shaky) shaky += 1;
-        var errors = fact.errors || {};
-        sum += errors.SUM || 0; less += errors.LESS || 0; more += errors.MORE || 0; swap += errors.SWAP || 0;
-      });
-      lines.push([row.name, row.className, row.status, row.sector, firm, shaky, sum, less, more, swap].join(' | '));
-    });
-    document.getElementById('slice-rows').textContent = lines.join('\n');
-    document.getElementById('slice-pin-msg').textContent = '';
-    document.getElementById('slice-pin').value = '';
-  }
-  function downloadSliceCsv() {
-    if (!sliceRecord) return;
-    var blob = new Blob([sliceRecord.record.csv()], { type: 'text/csv;charset=utf-8' });
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a'); a.href = url; a.download = 'slice-25.csv'; a.click();
-    URL.revokeObjectURL(url);
-  }
-  function reduceStep(core, state, given) {
-    if (typeof given !== 'number' || !isFinite(given)) {
-      return { session: state.session, step: state.step, phase: state.phase, message: state.message || '', docked: state.docked || null, finished: false, refused: true };
-    }
-    var judgment = core.judge.answer(state.step, given, core.presentation.assisted(state.phase));
-    var session = core.session.apply(state.session, state.step, judgment);
-    if (core.presentation.stays(state.phase, judgment)) {
-      return { session: session, step: state.step, phase: core.presentation.afterWrong(state.phase), message: judgment.message, docked: state.docked || null, finished: false, refused: false };
-    }
-    var fact = core.scheduler.fold(session.events)[state.step.key];
-    var fluent = !!(judgment.correct && fact && fact.fluent && !judgment.assisted);
-    return {
-      session: session,
-      step: core.scheduler.next(session),
-      phase: 'answer',
-      message: judgment.correct
-        ? (fluent ? 'این یکی روان شد.' : (judgment.assisted ? 'با راهنما جوش خورد؛ هنوز روان نیست.' : 'قطعه جوش خورد.'))
-        : judgment.message,
-      docked: judgment.correct ? { fluent: fluent, assisted: judgment.assisted, rows: state.step.f1, cols: state.step.f2 } : null,
-      finished: false, refused: false
-    };
-  }
-  function fluentCount(core, session, sectorId) {
-    var facts = core.scheduler.summarizeSector(session, sectorId);
-    var n = 0; facts.forEach(function (fact) { if (fact.fluent) n += 1; });
-    return { n: n, total: facts.length, facts: facts };
-  }
-  var corePlay = null;
-
+  // ============================================
+  // Core Board
+  // ============================================
   function showCoreToast(type, text) {
     let toast = document.getElementById('core-toast');
     if (!toast) {
@@ -944,6 +1057,15 @@
     });
   }
 
+  // پیام‌های کاوه/پشمک در core — با سه‌گانه
+  function getCoreCompanionMessage(step, phase) {
+    // اولویت: پیام hint
+    if (phase !== 'answer') {
+      return hintMessage(phase, step.f1, step.f2);
+    }
+    return 'سلام! بیا با هم بشماریم!';
+  }
+
   function paintCore(speak) {
     var play = corePlay;
     if (!play) return;
@@ -972,6 +1094,15 @@
       if (groups) groups.innerHTML = '';
       if (choicesBox) choicesBox.innerHTML = '';
       if (sharedSound) sharedSound.playSectorFanfare();
+
+      // پل به پرونده معلم
+      try {
+        const totalAtt = (play.session.events || []).length;
+        const totalCorrect = (play.session.events || []).filter(e => e.correct).length;
+        const accuracy = totalAtt > 0 ? Math.round(totalCorrect / totalAtt * 100) : 0;
+        bridgeCoreToDossier(play.session, play.profileId, play.sectorId, accuracy, 0);
+      } catch (e) {}
+
       if (speak && companionEl) announceSr(promptEl.textContent + ' ' + companionEl.textContent);
       return;
     }
@@ -982,7 +1113,7 @@
     var note = play.message || '';
     if (companionEl) {
       var combined = [note, frame.hint].filter(Boolean).join(' ');
-      companionEl.textContent = combined || 'سلام! بیا با هم بشماریم!';
+      companionEl.textContent = combined || getCoreCompanionMessage(step, play.phase);
     }
 
     if (groups) {
@@ -1036,10 +1167,11 @@
     document.getElementById('modal-sector-picker').classList.add('hidden');
     document.getElementById('core-board').classList.remove('hidden');
     var core = sliceCore(localStorage);
-    var name = (document.getElementById('player-name').value || '').trim() || 'مهندس';
+    var profile = ProfileManager.getActive();
+    var name = profile ? profile.displayName : ((document.getElementById('player-name').value || '').trim() || 'مهندس');
     var className = (document.getElementById('player-class').value || '').trim();
     var session = core.session.start({
-      id: 'core-s' + sectorId + '-' + name,
+      id: 'core-s' + sectorId + '-' + (profile ? profile.profileId : name),
       name: name, className: className, sector: sectorId,
       focus: core.record.focusKeys(name, sectorId)
     });
@@ -1047,7 +1179,8 @@
       core: core, session: session, step: core.scheduler.next(session),
       phase: 'answer', entry: '', message: '', sectorId: sectorId, docked: null,
       currentChoices: [], locked: false,
-      _lastFluentCount: 0
+      _lastFluentCount: 0,
+      profileId: profile ? profile.profileId : ''
     };
     prepareCoreStep();
     paintCore(true);
@@ -1081,11 +1214,21 @@
       corePlay.session = corePlay.core.session.finish(corePlay.session);
     }
     try { corePlay.core.record.save(corePlay.session); } catch (e) {}
+
+    // پل هر پاسخ به پرونده معلم
+    try {
+      const totalAtt = (corePlay.session.events || []).length;
+      const totalCorrect = (corePlay.session.events || []).filter(e => e.correct).length;
+      const accuracy = totalAtt > 0 ? Math.round(totalCorrect / totalAtt * 100) : 0;
+      bridgeCoreToDossier(corePlay.session, corePlay.profileId, corePlay.sectorId, accuracy, 0);
+    } catch (e) {}
+
     prepareCoreStep();
     paintCore(true);
   }
+
   // ============================================
-  // GameController (legacy — بدون تغییر)
+  // GameController (legacy)
   // ============================================
   class GameController {
     constructor(c) {
@@ -1301,26 +1444,21 @@
     _emit(e, p) { if (this._listeners[e]) try { this._listeners[e](p); } catch {} }
     on(e, cb) { this._listeners[e] = cb; }
   }
-
   // ============================================
-  // 🆕 Teacher Panel v2 — سه صفحه
+  // Teacher Panel v2
   // ============================================
   const TeacherV2 = {
     data: { students: [], latest: {}, totals: {} },
-    currentFilter: 'all',
     currentDetail: null,
 
     open() {
       const list = Storage.getAll();
-      // آخرین پرونده هر دانش‌آموز
       const latest = {};
       list.forEach(row => { if (!latest[row.name]) latest[row.name] = row; });
       this.data.students = Object.values(latest);
       this.data.latest = latest;
 
-      // محاسبات کل
       let sumAcc = 0, cnt = 0, allFacts = {};
-      let totalFluent = 0, totalAttempts = 0;
       this.data.students.forEach(st => {
         sumAcc += (st.successRate || 0); cnt++;
         (st.details || []).forEach(d => {
@@ -1328,24 +1466,16 @@
           if (!allFacts[k]) allFacts[k] = { fluent: 0, shaky: 0, wrong: 0 };
           if (d.masteryLevel >= 3) allFacts[k].fluent++;
           if (d.shaky) allFacts[k].shaky++;
-          totalAttempts += (d.attempts || 0);
-          totalFluent += (d.correctCount || 0);
+          if ((d.wrongAnswers || []).length > 0) allFacts[k].wrong++;
         });
       });
       const avgAcc = cnt ? Math.round(sumAcc / cnt) : 0;
-      // ضعیف‌ترین ضرب
       let weakest = null, maxWrong = 0;
       Object.keys(allFacts).forEach(k => {
         if (allFacts[k].wrong > maxWrong) { maxWrong = allFacts[k].wrong; weakest = k; }
       });
-      this.data.totals = {
-        count: this.data.students.length,
-        avgAcc: avgAcc,
-        weakest: weakest,
-        allFacts: allFacts
-      };
+      this.data.totals = { count: this.data.students.length, avgAcc: avgAcc, weakest: weakest, allFacts: allFacts };
 
-      this.currentFilter = 'all';
       document.getElementById('modal-teacher-v2').classList.remove('hidden');
       this.goTo('today');
     },
@@ -1376,39 +1506,24 @@
       }
     },
 
-    // ============================================
-    // کاوه — پیام زمان‌محور
-    // ============================================
     getKawhMessage() {
       const h = new Date().getHours();
       const cnt = this.data.students.length;
-      if (cnt === 0) {
-        return 'هنوز کسی بازی نکرده. وقتی اولین دانش‌آموز بازی کند، اینجا گزارش می‌دهم.';
-      }
+      if (cnt === 0) return 'هنوز کسی بازی نکرده. وقتی اولین دانش‌آموز بازی کند، اینجا گزارش می‌دهم.';
       const good = this.data.students.filter(s => (s.successRate || 0) >= 80).length;
       const warn = this.data.students.filter(s => (s.successRate || 0) >= 50 && (s.successRate || 0) < 80).length;
       const danger = this.data.students.filter(s => (s.successRate || 0) < 50).length;
-
       if (h >= 5 && h < 12) {
-        return `${toFa(cnt)} دانش‌آموز در سیستم داریم. ${good > 0 ? toFa(good) + ' نفر آماده، ' : ''}${warn > 0 ? toFa(warn) + ' نفر نیاز به تمرین، ' : ''}${danger > 0 ? toFa(danger) + ' نفر نیاز به توجه.' : 'همه خوب.'}`;
+        return toFa(cnt) + ' دانش‌آموز در سیستم داریم. ' + (good > 0 ? toFa(good) + ' نفر آماده، ' : '') + (warn > 0 ? toFa(warn) + ' نفر نیاز به تمرین، ' : '') + (danger > 0 ? toFa(danger) + ' نفر نیاز به توجه.' : 'همه خوب.');
       }
-      if (h >= 12 && h < 18) {
-        return `${toFa(cnt)} دانش‌آموز بازی کردند. ${good > 0 ? toFa(good) + ' نفر پیشرفت کردند.' : 'امروز منتظر پیشرفت هستیم.'}`;
-      }
-      return `${toFa(cnt)} دانش‌آموز در سیستم هستند. یک نگاه به لیست بینداز.`;
+      if (h >= 12 && h < 18) return toFa(cnt) + ' دانش‌آموز بازی کردند. ' + (good > 0 ? toFa(good) + ' نفر پیشرفت کردند.' : 'امروز منتظر پیشرفت هستیم.');
+      return toFa(cnt) + ' دانش‌آموز در سیستم هستند. یک نگاه به لیست بینداز.';
     },
 
-    // ============================================
-    // صفحه امروز
-    // ============================================
     renderToday() {
-      // کاوه
       document.getElementById('kawh-text-today').textContent = this.getKawhMessage();
 
-      // === کارت وضعیت کلاس ===
-      const good = [];
-      const warn = [];
-      const danger = [];
+      const good = [], warn = [], danger = [];
       this.data.students.forEach(st => {
         const acc = st.successRate || 0;
         if (acc >= 80) good.push(st);
@@ -1420,7 +1535,6 @@
       if (this.data.students.length === 0) {
         statusHTML = '<div class="summary-empty">هنوز داده‌ای نیست.</div>';
       } else {
-        // خط ۱: پیشرفت کنندگان (کلیک‌پذیر)
         statusHTML += '<div class="stat-line clickable" data-expando="good">';
         statusHTML += '<span class="expando-icon" data-icon="good">▼</span>';
         statusHTML += '<span>✅ آماده (' + toFa(good.length) + ')</span>';
@@ -1428,11 +1542,12 @@
         statusHTML += '<div class="expando-content" id="expando-good">';
         if (good.length === 0) statusHTML += '<div>هنوز کسی به ۸۰٪ نرسیده.</div>';
         else good.forEach(st => {
-          statusHTML += '<div class="student-line"><span class="line-name">' + (ProfileManager.getById(st.profileId) ? ProfileManager.getById(st.profileId).avatar : '👤') + ' ' + escapeHtml(st.name) + '</span><span class="line-note">' + toFa(st.successRate || 0) + '٪</span></div>';
+          const profile = ProfileManager.getById(st.profileId);
+          const av = profile ? profile.avatar : '👤';
+          statusHTML += '<div class="student-line"><span class="line-name">' + av + ' ' + escapeHtml(st.name) + '</span><span class="line-note">' + toFa(st.successRate || 0) + '٪</span></div>';
         });
         statusHTML += '</div>';
 
-        // خط ۲: نیاز به تمرین
         statusHTML += '<div class="stat-line clickable" data-expando="warn">';
         statusHTML += '<span class="expando-icon" data-icon="warn">▼</span>';
         statusHTML += '<span>⚠️ نیاز به تمرین (' + toFa(warn.length) + ')</span>';
@@ -1444,7 +1559,6 @@
         });
         statusHTML += '</div>';
 
-        // خط ۳: نیاز به توجه
         statusHTML += '<div class="stat-line clickable" data-expando="danger">';
         statusHTML += '<span class="expando-icon" data-icon="danger">▼</span>';
         statusHTML += '<span>❌ نیاز به توجه (' + toFa(danger.length) + ')</span>';
@@ -1456,7 +1570,6 @@
         });
         statusHTML += '</div>';
 
-        // خط ۴: رفتن به لیست کامل
         statusHTML += '<div class="stat-line clickable" id="today-go-students">';
         statusHTML += '<span class="expando-icon">›</span>';
         statusHTML += '<span>👥 مشاهده لیست کامل دانش‌آموزان</span>';
@@ -1464,7 +1577,6 @@
       }
       document.getElementById('today-status-body').innerHTML = statusHTML;
 
-      // === کارت پیشنهاد ===
       let suggestionHTML = '';
       const weakest = this.data.totals.weakest;
       if (weakest) {
@@ -1473,23 +1585,18 @@
         const wrongList = [];
         this.data.students.forEach(st => {
           (st.details || []).forEach(d => {
-            if ((d.f1 === f1 && d.f2 === f2) && (d.wrongAnswers || []).length > 0) {
-              wrongList.push(st.name);
-            }
+            if ((d.f1 === f1 && d.f2 === f2) && (d.wrongAnswers || []).length > 0) wrongList.push(st.name);
           });
         });
-        suggestionHTML = '<div class="suggestion-text">۷ دقیقه مرور ضرب ' + toFa(f1) + '×' + toFa(f2) + '</div>';
-        suggestionHTML += '<div class="suggestion-reason">' + toFa(wrongList.length) + ' دانش‌آموز در این ضرب خطا کردند.';
-        suggestionHTML += wrongList.length ? ' (' + wrongList.slice(0, 3).join('، ') + (wrongList.length > 3 ? ' و...' : '') + ')' : '';
-        suggestionHTML += '</div>';
+        suggestionHTML = '<div style="font-size:1rem; font-weight:700; margin-bottom:6px; color:#fff;">۷ دقیقه مرور ضرب ' + toFa(f1) + '×' + toFa(f2) + '</div>';
+        suggestionHTML += '<div style="font-size:0.82rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">' + toFa(wrongList.length) + ' دانش‌آموز در این ضرب خطا کردند.</div>';
         suggestionHTML += '<button class="action-btn" style="width:100%;" id="today-go-students-btn">ببین جزئیات</button>';
       } else {
-        suggestionHTML = '<div class="suggestion-text">امروز تمرین خاصی پیشنهاد نمی‌شود.</div>';
-        suggestionHTML += '<div class="suggestion-reason">وقتی دانش‌آموزان بازی کنند، اینجا پیشنهاد ظاهر می‌شود.</div>';
+        suggestionHTML = '<div style="font-size:1rem; font-weight:700; margin-bottom:6px; color:#fff;">امروز تمرین خاصی پیشنهاد نمی‌شود.</div>';
+        suggestionHTML += '<div style="font-size:0.82rem; color:var(--muted);">وقتی دانش‌آموزان بازی کنند، اینجا پیشنهاد ظاهر می‌شود.</div>';
       }
       document.getElementById('today-suggestion-body').innerHTML = suggestionHTML;
 
-      // === کارت کلاس در یک نگاه ===
       let overviewHTML = '';
       overviewHTML += '<div class="stat-line"><span>👥 دانش‌آموزان</span><span style="font-weight:800; color:var(--cyan);">' + toFa(this.data.totals.count) + '</span></div>';
       overviewHTML += '<div class="stat-line clickable" data-expando="avg">';
@@ -1498,7 +1605,7 @@
       overviewHTML += '<span style="font-weight:800; color:var(--green);">' + toFa(this.data.totals.avgAcc) + '٪</span>';
       overviewHTML += '</div>';
       overviewHTML += '<div class="expando-content" id="expando-avg">';
-      this.data.students.sort((a, b) => (b.successRate || 0) - (a.successRate || 0)).forEach(st => {
+      this.data.students.slice().sort((a, b) => (b.successRate || 0) - (a.successRate || 0)).forEach(st => {
         overviewHTML += '<div class="student-line"><span class="line-name">' + escapeHtml(st.name) + '</span><span class="line-note">' + toFa(st.successRate || 0) + '٪</span></div>';
       });
       overviewHTML += '</div>';
@@ -1522,7 +1629,6 @@
       }
       document.getElementById('today-overview-body').innerHTML = overviewHTML;
 
-      // بایندینگ‌ها
       this._bindExpando();
       const goBtn = document.getElementById('today-go-students');
       if (goBtn) goBtn.addEventListener('click', () => this.goTo('students'));
@@ -1548,21 +1654,13 @@
       });
     },
 
-    // ============================================
-    // صفحه دانش‌آموزان
-    // ============================================
     renderStudentList() {
       const list = document.getElementById('student-list-v2');
       let students = this.data.students.slice();
-      // فیلتر
-      if (this.currentFilter === 'good') students = students.filter(s => (s.successRate || 0) >= 80);
-      else if (this.currentFilter === 'warn') students = students.filter(s => (s.successRate || 0) >= 50 && (s.successRate || 0) < 80);
-      else if (this.currentFilter === 'danger') students = students.filter(s => (s.successRate || 0) < 50);
-      // مرتب‌سازی
       students.sort((a, b) => (a.successRate || 0) - (b.successRate || 0));
 
       if (students.length === 0) {
-        list.innerHTML = '<div class="summary-empty">هیچ دانش‌آموزی در این دسته نیست.</div>';
+        list.innerHTML = '<div class="summary-empty">هیچ دانش‌آموزی ثبت نشده.</div>';
         return;
       }
       list.innerHTML = '';
@@ -1571,10 +1669,8 @@
         let statusIcon = '✅';
         if (acc < 50) statusIcon = '❌';
         else if (acc < 80) statusIcon = '⚠️';
-
         const profile = ProfileManager.getById(st.profileId);
         const avatar = profile ? profile.avatar : '👤';
-
         const row = document.createElement('div');
         row.className = 'student-row';
         row.innerHTML = '<div class="student-avatar">' + avatar + '</div>' +
@@ -1584,75 +1680,55 @@
                         '</div>' +
                         '<div class="student-status">' + statusIcon + '</div>' +
                         '<div class="student-percent">' + toFa(acc) + '٪</div>';
-        row.addEventListener('click', () => {
-          this.currentDetail = st;
-          this.goTo('detail');
-        });
+        row.addEventListener('click', () => { this.currentDetail = st; this.goTo('detail'); });
         list.appendChild(row);
-      });
-
-      // بایند فیلترها
-      document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.filter === this.currentFilter);
-        btn.onclick = () => {
-          this.currentFilter = btn.dataset.filter;
-          this.renderStudentList();
-        };
       });
     },
 
-    // ============================================
-    // صفحه جزئیات دانش‌آموز
-    // ============================================
     renderDetail() {
       const st = this.currentDetail;
       if (!st) return;
       const profile = ProfileManager.getById(st.profileId);
       const avatar = profile ? profile.avatar : '👤';
-
-      document.getElementById('detail-avatar').textContent = avatar;
-      document.getElementById('detail-name').textContent = st.name || '—';
-      document.getElementById('detail-class').textContent = st.className || '';
-
-      // محاسبات
       const details = st.details || [];
-      let fluentCount = 0, sumTime = 0, timeCnt = 0;
-      details.forEach(d => {
-        if (d.masteryLevel >= 3) fluentCount++;
-        if (d.avgCorrectTimeMs > 0) { sumTime += d.avgCorrectTimeMs; timeCnt++; }
-      });
-      const avgTime = timeCnt ? (sumTime / timeCnt / 1000).toFixed(1) : '—';
 
-      document.getElementById('detail-fluent').textContent = toFa(fluentCount) + ' از ' + toFa(details.length);
-      document.getElementById('detail-accuracy').textContent = toFa(st.successRate || 0) + '٪';
-      document.getElementById('detail-time').textContent = avgTime === '—' ? '—' : toFa(avgTime) + ' ث';
+      let fluentCount = 0;
+      details.forEach(d => { if (d.masteryLevel >= 3) fluentCount++; });
 
-      // ضرب‌های یاد گرفته
+      let html = '';
+      html += '<div style="text-align:center; padding:16px 0;">';
+      html += '<div style="font-size:3.4rem; margin-bottom:6px;">' + avatar + '</div>';
+      html += '<div style="font-size:1.25rem; font-weight:900; color:#fff;">' + escapeHtml(st.name) + '</div>';
+      html += '<div style="font-size:0.82rem; color:var(--muted); margin-top:4px;">' + (st.className ? escapeHtml(st.className) : '') + '</div>';
+      html += '</div>';
+
+      html += '<div style="background:rgba(13,22,45,0.95); border:1.5px solid rgba(0,243,255,0.15); border-radius:12px; padding:12px 14px; margin-bottom:10px;">';
+      html += '<h3 style="color:var(--cyan); font-size:0.88rem; margin-bottom:10px; font-weight:800;">📊 پیشرفت این هفته</h3>';
+      html += '<div style="display:flex; justify-content:space-between; padding:6px 0; font-size:0.85rem; color:#fff;"><span>ضرب‌های روان</span><span style="font-weight:800; color:var(--cyan);">' + toFa(fluentCount) + ' از ' + toFa(details.length) + '</span></div>';
+      html += '<div style="display:flex; justify-content:space-between; padding:6px 0; font-size:0.85rem; color:#fff;"><span>دقت</span><span style="font-weight:800; color:var(--cyan);">' + toFa(st.successRate || 0) + '٪</span></div>';
+      html += '</div>';
+
       const learned = details.filter(d => d.masteryLevel >= 3);
-      const learnedBox = document.getElementById('detail-learned-list');
-      if (learned.length === 0) {
-        learnedBox.innerHTML = '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">هنوز ضربی روان نشده.</div>';
-      } else {
-        learnedBox.innerHTML = learned.map(d =>
-          '<div class="fact-list-item fluent"><span>' + toFa(d.f1) + '×' + toFa(d.f2) + '</span><span style="color:var(--green); font-weight:700;">روان</span></div>'
-        ).join('');
-      }
+      html += '<div style="background:rgba(13,22,45,0.95); border:1.5px solid rgba(0,243,255,0.15); border-radius:12px; padding:12px 14px; margin-bottom:10px;">';
+      html += '<h3 style="color:var(--cyan); font-size:0.88rem; margin-bottom:10px; font-weight:800;">✅ ضرب‌هایی که یاد گرفت</h3>';
+      if (learned.length === 0) html += '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">هنوز ضربی روان نشده.</div>';
+      else learned.forEach(d => {
+        html += '<div style="padding:8px 10px; border-radius:8px; background:rgba(0,0,0,0.2); margin-bottom:6px; font-size:0.82rem; display:flex; justify-content:space-between; align-items:center; color:#fff; border-right:3px solid var(--green);"><span>' + toFa(d.f1) + '×' + toFa(d.f2) + '</span><span style="color:var(--green); font-weight:700;">روان</span></div>';
+      });
+      html += '</div>';
 
-      // ضرب‌های لرزان
       const shaky = details.filter(d => d.shaky || ((d.masteryLevel < 3) && (d.wrongAnswers || []).length > 0));
-      const shakyBox = document.getElementById('detail-shaky-list');
-      if (shaky.length === 0) {
-        shakyBox.innerHTML = '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">همه ضرب‌ها محکم هستند.</div>';
-      } else {
-        shakyBox.innerHTML = shaky.map(d =>
-          '<div class="fact-list-item shaky"><span>' + toFa(d.f1) + '×' + toFa(d.f2) + '</span><span style="color:var(--red); font-weight:700;">' + toFa((d.wrongAnswers || []).length) + ' خطا</span></div>'
-        ).join('');
-      }
+      html += '<div style="background:rgba(13,22,45,0.95); border:1.5px solid rgba(0,243,255,0.15); border-radius:12px; padding:12px 14px; margin-bottom:10px;">';
+      html += '<h3 style="color:var(--cyan); font-size:0.88rem; margin-bottom:10px; font-weight:800;">⚠️ ضرب‌هایی که می‌لرزند</h3>';
+      if (shaky.length === 0) html += '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">همه ضرب‌ها محکم هستند.</div>';
+      else shaky.forEach(d => {
+        html += '<div style="padding:8px 10px; border-radius:8px; background:rgba(0,0,0,0.2); margin-bottom:6px; font-size:0.82rem; display:flex; justify-content:space-between; align-items:center; color:#fff; border-right:3px solid var(--red);"><span>' + toFa(d.f1) + '×' + toFa(d.f2) + '</span><span style="color:var(--red); font-weight:700;">' + toFa((d.wrongAnswers || []).length) + ' خطا</span></div>';
+      });
+      html += '</div>';
+
+      document.getElementById('detail-content').innerHTML = html;
     },
 
-    // ============================================
-    // ورود معلم
-    // ============================================
     failedAttempts: 0,
     lockUntil: 0,
 
@@ -1691,22 +1767,160 @@
   };
 
   // ============================================
+  // Story Slide
+  // ============================================
+  const Story = {
+    current: 0,
+    slides: [
+      {
+        text: 'در مداری دور زمین، ایستگاهی درخشان بود.',
+        narration: 'در مداری دور زمین، ایستگاهی درخشان بود. خانه‌ای برای نسل‌های مهندس.',
+        bg: 'assets/backgrounds/bg-01-deep-space.webp',
+        char: 'assets/characters/hooshak.png'
+      },
+      {
+        text: 'یک شب، طوفان کیهانی از راه رسید.',
+        narration: 'یک شب، طوفان کیهانی از راه رسید. طوفانی که هیچ‌کس انتظارش را نداشت.',
+        bg: 'assets/backgrounds/bg-01-deep-space.webp',
+        char: ''
+      },
+      {
+        text: 'ایستگاه شکست. قطعه‌ها پراکنده شدند.',
+        narration: 'ایستگاه شکست. قطعه‌های طلایی، در فضای بی‌پایان پراکنده شدند.',
+        bg: 'assets/backgrounds/bg-01-deep-space.webp',
+        char: 'assets/characters/hooshak.png'
+      },
+      {
+        text: 'تو کمک‌کننده‌ای. اسمت چیه؟',
+        narration: 'کمک‌کننده پیدا شد. اسمت چیه، مهندس؟',
+        bg: 'assets/backgrounds/bg-01-deep-space.webp',
+        char: 'assets/characters/hooshak.png',
+        interactive: true
+      }
+    ],
+
+    open(onComplete) {
+      this.onComplete = onComplete || function () {};
+      this.current = 0;
+      document.getElementById('story-app').classList.remove('hidden');
+      this._loadSlide(0);
+      this._bindControls();
+    },
+
+    close() {
+      document.getElementById('story-app').classList.add('hidden');
+      Storage.markStorySeen();
+    },
+
+    _loadSlide(i) {
+      // تنظیم بک‌گراند
+      const bgEl = document.getElementById('story-bg-' + i);
+      if (bgEl && this.slides[i].bg) {
+        bgEl.style.backgroundImage = 'url(' + this.slides[i].bg + ')';
+      }
+      // تنظیم تصویر شخصیت
+      const charEl = document.getElementById('story-char-' + i);
+      if (charEl && this.slides[i].char) {
+        charEl.src = this.slides[i].char;
+        charEl.style.display = 'block';
+        charEl.onerror = function () { charEl.style.display = 'none'; };
+      }
+      // تنظیم متن
+      const textEl = document.getElementById('story-text-' + i);
+      if (textEl) textEl.textContent = this.slides[i].text;
+    },
+
+    _bindControls() {
+      const nextBtn = document.getElementById('story-next');
+      const prevBtn = document.getElementById('story-prev');
+      const skipBtn = document.getElementById('story-skip');
+      const replayBtn = document.getElementById('story-replay');
+      const indicator = document.getElementById('story-indicator');
+
+      const updateUI = () => {
+        document.querySelectorAll('.story-slide').forEach((s, idx) => {
+          s.classList.toggle('active', idx === this.current);
+        });
+        indicator.textContent = toFa(this.current + 1) + ' از ' + toFa(this.slides.length);
+        prevBtn.disabled = this.current === 0;
+        nextBtn.textContent = this.current === this.slides.length - 1 ? 'شروع بازی ✓' : 'بعدی ←';
+      };
+
+      // حذف event listenerهای قبلی با clone
+      const newNext = nextBtn.cloneNode(true);
+      nextBtn.parentNode.replaceChild(newNext, nextBtn);
+      const newPrev = prevBtn.cloneNode(true);
+      prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+      const newSkip = skipBtn.cloneNode(true);
+      skipBtn.parentNode.replaceChild(newSkip, skipBtn);
+      const newReplay = replayBtn.cloneNode(true);
+      replayBtn.parentNode.replaceChild(newReplay, replayBtn);
+
+      newNext.addEventListener('click', () => {
+        if (this.current < this.slides.length - 1) {
+          this.current++;
+          updateUI();
+        } else {
+          // اسلاید آخر — ذخیره نام و شروع بازی
+          const nameInput = document.getElementById('story-name-input');
+          const name = (nameInput && nameInput.value.trim()) || 'مهندس';
+          const active = ProfileManager.getActive();
+          if (active) {
+            ProfileManager.update(active.profileId, { displayName: name });
+          }
+          document.getElementById('player-name').value = name;
+          this.close();
+          this.onComplete();
+        }
+      });
+
+      newPrev.addEventListener('click', () => {
+        if (this.current > 0) { this.current--; updateUI(); }
+      });
+
+      newSkip.addEventListener('click', () => {
+        this.close();
+        this.onComplete();
+      });
+
+      newReplay.addEventListener('click', () => {
+        const s = this.slides[this.current];
+        if ('speechSynthesis' in window && s.narration) {
+          window.speechSynthesis.cancel();
+          const u = new SpeechSynthesisUtterance(s.narration);
+          u.lang = 'fa-IR';
+          window.speechSynthesis.speak(u);
+        }
+      });
+
+      // بارگذاری اولیه
+      updateUI();
+    }
+  };
+  // ============================================
   // UIController
   // ============================================
   class UIController {
     constructor(g) {
-      this.game = g; this.sound = new SoundSystem(); sharedSound = this.sound;
-      this.companion = new Companion(); this.companion.mount();
-      this.earnedBadges = []; this.assessmentMode = false; this.lastReport = null; this.hasGreeted = false; this._isAdvancing = false;
-      this._bindGame(); this._bindUI();
+      this.game = g;
+      this.sound = new SoundSystem();
+      sharedSound = this.sound;
+      this.earnedBadges = [];
+      this.assessmentMode = false;
+      this.lastReport = null;
+      this.hasGreeted = false;
+      this._isAdvancing = false;
+      this._bindGame();
+      this._bindUI();
     }
+
     _bindGame() {
       this.game.on('question', f => this._renderQ(f));
       this.game.on('answer', r => this._renderA(r));
       this.game.on('sector', s => this._renderS(s));
       this.game.on('done', r => this._renderR(r));
-      this.game.on('docked', () => { this.sound.playDock(); this._updHUD(); });
     }
+
     _renderQ(f) {
       const q = document.getElementById('question-text');
       if (q) q.textContent = 'ساخت قطعه: ' + toFa(f.f1) + ' × ' + toFa(f.f2) + (f.isRetry ? ' (مرور)' : '');
@@ -1714,25 +1928,23 @@
       if (p) p.style.borderColor = f.isRetry ? 'var(--gold)' : 'var(--cyan)';
       const sorted = this.game.ships.slice().sort((a, b) => a.keyNumber - b.keyNumber);
       announceSr('سؤال: ' + f.f1 + ' ضربدر ' + f.f2 + '. گزینه‌ها: ' + sorted.map((s, i) => (i + 1) + ': ' + s.val).join('، '));
-      if (!this.hasGreeted) { this.hasGreeted = true; this.companion.greet(); }
       this._updHUD();
     }
+
     _renderA(r) {
-      if (this.assessmentMode) { setTimeout(() => this._adv(), 280); return; }
       if (r.correct) {
         this.sound.playCorrectNote(this.game.streak);
         const msg = SUCCESS_MSGS[Math.floor(Math.random() * SUCCESS_MSGS.length)];
         showFeedbackBar(msg, 'زمان: ' + toFa((r.timeMs / 1000).toFixed(1)) + ' ث', 1700);
-        if (this.game.streak === 3) this.companion.onStreak3();
-        else if (this.game.streak === 5) this.companion.onStreak5();
-        else this.companion.onCorrect();
         this._chkBadges();
         setTimeout(() => this._adv(), 720);
       } else {
-        this.sound.playReview(); this.companion.onWrong(); this._showCorr(r);
+        this.sound.playReview();
+        this._showCorr(r);
       }
       this._updHUD();
     }
+
     _chkBadges() {
       const cur = Storage.getBadges(this.game.playerName);
       const res = evaluateBadges(this.game, cur);
@@ -1742,11 +1954,15 @@
         res.newlyEarned.forEach((b, i) => setTimeout(() => showBadgeToast(b), i * 600));
       }
     }
+
     _showCorr(r) {
-      const m = document.getElementById('modal-correct'), b = document.getElementById('correct-body');
+      const m = document.getElementById('modal-correct');
+      const b = document.getElementById('correct-body');
       const { f1, f2, correctValue, chosen } = r;
-      const code = classifyError(f1, f2, chosen), msg = errorMessage(code);
-      const sz = correctValue <= 30 ? 14 : 8, gp = correctValue <= 30 ? 5 : 3;
+      const code = classifyError(f1, f2, chosen);
+      const msg = errorMessage(code, f1, f2);
+      const sz = correctValue <= 30 ? 14 : 8;
+      const gp = correctValue <= 30 ? 5 : 3;
       let g = '<div style="display:grid;grid-template-columns:repeat(' + f2 + ',' + sz + 'px);gap:' + gp + 'px;justify-content:center;margin:12px 0">';
       for (let i = 0; i < correctValue; i++) g += '<div style="width:' + sz + 'px;height:' + sz + 'px;background:var(--gold);border-radius:50%"></div>';
       g += '</div>';
@@ -1754,79 +1970,97 @@
       m.classList.remove('hidden');
       setTimeout(() => { const btn = document.getElementById('btn-continue'); if (btn) btn.focus(); }, 50);
     }
+
     _renderS(s) {
       document.getElementById('sector-title').textContent = s.title;
       document.getElementById('sector-desc').textContent = s.desc;
       document.getElementById('progress-fill').style.width = '0%';
-      this.companion.onSectorDone(); this.sound.playSectorFanfare();
+      this.sound.playSectorFanfare();
       try {
         const rep = this.game.getFinalReport();
-        Storage.addDossier({ name: rep.name, className: rep.className, modulesAttached: rep.modulesAttached, successRate: rep.successRate, details: rep.details, insights: rep.insights, partial: true });
+        Storage.addDossier({
+          name: rep.name, className: rep.className,
+          modulesAttached: rep.modulesAttached, successRate: rep.successRate,
+          details: rep.details, insights: rep.insights,
+          partial: true, note: 'ذخیره میانی — پایان بخش'
+        });
       } catch (e) {}
       document.getElementById('modal-sector').classList.remove('hidden');
       setTimeout(() => document.getElementById('btn-sector-next').focus(), 50);
     }
+
     _renderR(rep) {
-      const sum = document.getElementById('report-summary'), det = document.getElementById('report-details'), bg = document.getElementById('report-badges');
+      const sum = document.getElementById('report-summary');
+      const bg = document.getElementById('report-badges');
       if (sum) sum.innerHTML = '<p>مهندس: <b style="color:var(--gold)">' + escapeHtml(rep.name) + '</b>' + (rep.className ? ' (کلاس: ' + escapeHtml(rep.className) + ')' : '') + '</p><p>قطعه‌های متصل‌شده: <b style="color:var(--cyan)">' + toFa(rep.modulesAttached) + '</b></p><p>درصد تسلط پایه: <b style="color:var(--green)">' + toFa(rep.successRate) + '٪</b></p>';
-      if (det) {
-        det.innerHTML = '';
-        rep.details.forEach(d => {
-          const tr = document.createElement('tr');
-          tr.innerHTML = '<td><b>' + toFa(d.f1) + '×' + toFa(d.f2) + '</b></td><td>' + escapeHtml(d.masteryName) + '</td><td>' + toFa(d.correctCount) + '</td><td>' + toFa(d.attempts) + '</td><td>' + (d.avgCorrectTimeMs > 0 ? toFa((d.avgCorrectTimeMs / 1000).toFixed(1)) + ' ث' : '—') + '</td>';
-          det.appendChild(tr);
-        });
-      }
       this.earnedBadges = Storage.getBadges(rep.name);
       const ev = evaluateBadges(this.game, this.earnedBadges);
-      this.earnedBadges = ev.all; Storage.saveBadges(rep.name, ev.all);
+      this.earnedBadges = ev.all;
+      Storage.saveBadges(rep.name, ev.all);
       if (bg) {
         bg.innerHTML = '';
         BADGES.forEach(b => {
           const o = this.earnedBadges.includes(b.id);
-          const d = document.createElement('div'); d.className = 'badge-card' + (o ? ' owned' : '');
-          d.innerHTML = '<span class="badge-icon">' + b.icon + '</span><span class="badge-name">' + escapeHtml(b.name) + '</span>'; d.title = b.desc;
+          const d = document.createElement('div');
+          d.className = 'badge-card' + (o ? ' owned' : '');
+          d.innerHTML = '<span class="badge-icon">' + b.icon + '</span><span class="badge-name">' + escapeHtml(b.name) + '</span>';
+          d.title = b.desc;
           bg.appendChild(d);
         });
       }
       Storage.addDossier({ name: rep.name, className: rep.className, modulesAttached: rep.modulesAttached, successRate: rep.successRate, details: rep.details, insights: rep.insights });
-      this.lastReport = rep; this.companion.onGameDone();
+      this.lastReport = rep;
       document.getElementById('modal-report').classList.remove('hidden');
     }
+
     _updHUD() {
-      const g = this.game, w = WAVES_PER_SECTOR[g.sectorIdx] || 4;
+      const g = this.game;
+      const w = WAVES_PER_SECTOR[g.sectorIdx] || 4;
       document.getElementById('hud-player').textContent = 'مهندس: ' + escapeHtml(g.playerName || '—');
       document.getElementById('hud-progress').textContent = 'بخش ' + toFa(g.sectorIdx + 1) + ' از ' + toFa(SECTORS.length);
       document.getElementById('hud-modules').textContent = 'قطعه: ' + toFa(g.modulesAttached);
       document.getElementById('hud-streak').textContent = 'پشت‌سرهم: ' + toFa(g.streak);
       document.getElementById('progress-fill').style.width = Math.min(100, g.mainCount / w * 100) + '%';
     }
+
     _adv() {
       if (this._isAdvancing) return;
       this._isAdvancing = true;
       try { this.game.proceed(); } finally { setTimeout(() => { this._isAdvancing = false; }, 280); }
     }
+
     _bindUI() {
       const c = document.getElementById('stage');
+
       c.addEventListener('pointerdown', e => {
         if (!document.getElementById('modal-teacher-login').classList.contains('hidden') ||
             !document.getElementById('modal-teacher-v2').classList.contains('hidden') ||
             !document.getElementById('modal-correct').classList.contains('hidden') ||
             !document.getElementById('modal-sector').classList.contains('hidden') ||
             !document.getElementById('modal-report').classList.contains('hidden') ||
-            !document.getElementById('slice-25').classList.contains('hidden') ||
             !document.getElementById('core-board').classList.contains('hidden') ||
-            !document.getElementById('modal-sector-picker').classList.contains('hidden')) return;
+            !document.getElementById('modal-sector-picker').classList.contains('hidden') ||
+            !document.getElementById('story-app').classList.contains('hidden')) return;
         this.sound.init();
-        const r = c.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
-        this.game.setHeroX(x); const s = this._pick(x, y); if (s) this.game.shoot(s);
+        const r = c.getBoundingClientRect();
+        const x = e.clientX - r.left;
+        const y = e.clientY - r.top;
+        this.game.setHeroX(x);
+        const s = this._pick(x, y);
+        if (s) this.game.shoot(s);
       });
+
       c.addEventListener('pointermove', e => {
         if (!document.getElementById('modal-teacher-login').classList.contains('hidden')) return;
-        const r = c.getBoundingClientRect(); this.game.setHeroX(e.clientX - r.left);
+        const r = c.getBoundingClientRect();
+        this.game.setHeroX(e.clientX - r.left);
       });
+
+      // کیبورد
       window.addEventListener('keydown', e => {
         if (e.key === 'Escape') { this._esc(); return; }
+
+        // در core — اعداد ۱ تا ۴
         if (!document.getElementById('core-board').classList.contains('hidden')) {
           if (e.key >= '1' && e.key <= '4') {
             const idx = parseInt(e.key, 10) - 1;
@@ -1835,12 +2069,16 @@
           }
           return;
         }
-        if (!document.getElementById('slice-25').classList.contains('hidden')) {
-          if (!slice25 || slice25.finished) return;
-          if (e.key === 'Enter') { submitSlice25(); return; }
+        // در story
+        if (!document.getElementById('story-app').classList.contains('hidden')) {
+          if (e.key === 'ArrowLeft' || e.key === ' ') { e.preventDefault(); document.getElementById('story-next').click(); }
+          else if (e.key === 'ArrowRight') { e.preventDefault(); document.getElementById('story-prev').click(); }
+          else if (e.key === 'Escape') { document.getElementById('story-skip').click(); }
           return;
         }
-        if (!document.getElementById('modal-teacher-login').classList.contains('hidden')) return;
+        // در legacy
+        if (!document.getElementById('modal-teacher-login').classList.contains('hidden') ||
+            !document.getElementById('modal-teacher-v2').classList.contains('hidden')) return;
         if (this.game.state !== 'QUESTION' || this.game.isInputLocked) return;
         this.sound.init();
         const fd = { '۱': 1, '۲': 2, '۳': 3, '۴': 4, '1': 1, '2': 2, '3': 3, '4': 4 };
@@ -1851,42 +2089,53 @@
           else if (e.code === 'Digit3' || e.code === 'Numpad3') k = 3;
           else if (e.code === 'Digit4' || e.code === 'Numpad4') k = 4;
         }
-        if (k >= 1 && k <= 4) { const s = this.game.ships.find(x => x.keyNumber === k); if (s) this.game.shoot(s); }
+        if (k >= 1 && k <= 4) {
+          const s = this.game.ships.find(x => x.keyNumber === k);
+          if (s) this.game.shoot(s);
+        }
       });
+
+      // دکمه صدا
       document.getElementById('btn-sound').addEventListener('click', () => {
-        this.sound.init(); document.getElementById('btn-sound').textContent = this.sound.toggleMute() ? '🔇' : '🔊';
+        this.sound.init();
+        document.getElementById('btn-sound').textContent = this.sound.toggleMute() ? '🔇' : '🔊';
       });
+
+      // دکمه خروج
       const exitBtn = document.getElementById('btn-exit');
       if (exitBtn) exitBtn.addEventListener('click', () => {
         if (!confirm('از کارگاه خارج می‌شوی؟ پیشرفتت ذخیره می‌شود.')) return;
         try {
           if (this.game && this.game.playerName && this.game.state !== 'IDLE') {
             const rep = this.game.getFinalReport();
-            Storage.addDossier({ name: rep.name, className: rep.className, modulesAttached: rep.modulesAttached, successRate: rep.successRate, details: rep.details, insights: rep.insights, partial: true });
+            Storage.addDossier({
+              name: rep.name, className: rep.className,
+              modulesAttached: rep.modulesAttached, successRate: rep.successRate,
+              details: rep.details, insights: rep.insights,
+              partial: true, note: 'خروج میانی'
+            });
           }
         } catch (err) {}
         this.game.state = 'IDLE';
-        ['modal-correct','modal-sector','modal-report'].forEach(id => {
-          const el = document.getElementById(id); if (el) el.classList.add('hidden');
+        ['modal-correct','modal-sector','modal-report','modal-teacher','modal-teacher-login','modal-teacher-v2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('hidden');
         });
         document.getElementById('modal-start').classList.remove('hidden');
         this.hasGreeted = false;
       });
 
-      // دکمه ورود معلم
+      // دکمه معلم
       document.getElementById('btn-teacher').addEventListener('click', () => TeacherV2.openLogin());
       document.getElementById('btn-teacher-hud').addEventListener('click', () => TeacherV2.openLogin());
       document.getElementById('btn-teacher-login-ok').addEventListener('click', () => TeacherV2.submitLogin());
       document.getElementById('btn-teacher-login-cancel').addEventListener('click', () => document.getElementById('modal-teacher-login').classList.add('hidden'));
       document.getElementById('teacher-pin-input').addEventListener('keydown', e => { if (e.key === 'Enter') TeacherV2.submitLogin(); });
 
-      // پنل معلم v2 — دکمه بازگشت
+      // پنل معلم — بازگشت
       document.getElementById('teacher-back-v2').addEventListener('click', () => {
-        if (!document.getElementById('page-detail').classList.contains('hidden')) {
-          TeacherV2.goTo('students');
-        } else {
-          TeacherV2.goTo('today');
-        }
+        if (!document.getElementById('page-detail').classList.contains('hidden')) TeacherV2.goTo('students');
+        else TeacherV2.goTo('today');
       });
       document.getElementById('teacher-close-v2').addEventListener('click', () => TeacherV2.close());
 
@@ -1897,18 +2146,29 @@
           alert('هنوز پروفایلی نساخته‌اید.');
           return;
         }
-        const greetEl = document.getElementById('picker-greeting');
-        if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
-        document.getElementById('modal-start').classList.add('hidden');
-        document.getElementById('modal-sector-picker').classList.remove('hidden');
+        // اگر داستان دیده نشده — اول داستان
+        if (!Storage.hasSeenStory()) {
+          document.getElementById('modal-start').classList.add('hidden');
+          Story.open(() => {
+            // بعد از داستان → صفحه انتخاب بخش
+            const greetEl = document.getElementById('picker-greeting');
+            if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
+            document.getElementById('modal-sector-picker').classList.remove('hidden');
+          });
+        } else {
+          const greetEl = document.getElementById('picker-greeting');
+          if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
+          document.getElementById('modal-start').classList.add('hidden');
+          document.getElementById('modal-sector-picker').classList.remove('hidden');
+        }
       });
 
-      // انتخاب بخش با onclick مستقیم
+      // انتخاب بخش
       document.querySelectorAll('.picker-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const sector = parseInt(btn.dataset.sector, 10);
           const active = ProfileManager.getActive();
-          if (!active || !sector || sector < 1 || sector > 3) { alert('خطا'); return; }
+          if (!active || !sector || sector < 1 || sector > 3) return;
           const nameInput = document.getElementById('player-name');
           const classInput = document.getElementById('player-class');
           if (nameInput) nameInput.value = active.displayName;
@@ -1922,63 +2182,85 @@
         document.getElementById('modal-start').classList.remove('hidden');
       });
 
+      // دکمه‌های مخفی (legacy)
       document.getElementById('btn-start').addEventListener('click', () => { workshopMode = 'legacy'; this._start(false); });
       document.getElementById('btn-core-1').addEventListener('click', () => openCore(1));
       document.getElementById('btn-core-2').addEventListener('click', () => openCore(2));
       document.getElementById('btn-core-3').addEventListener('click', () => openCore(3));
+
+      // دکمه خانه در core
+      document.getElementById('core-home').addEventListener('click', () => {
+        workshopMode = 'legacy';
+        corePlay = null;
+        document.getElementById('core-board').classList.add('hidden');
+        const active = ProfileManager.getActive();
+        if (active) {
+          const greetEl = document.getElementById('picker-greeting');
+          if (greetEl) greetEl.textContent = 'سلام ' + active.avatar + ' ' + active.displayName + '!';
+        }
+        document.getElementById('modal-sector-picker').classList.remove('hidden');
+      });
+
+      // دکمه خروج در core
       document.getElementById('core-back').addEventListener('click', () => closeCore());
-      document.getElementById('btn-slice-25').addEventListener('click', () => {});
-      document.getElementById('slice-back').addEventListener('click', () => { document.getElementById('slice-25').classList.add('hidden'); document.getElementById('modal-start').classList.remove('hidden'); });
-      document.getElementById('slice-pin-ok').addEventListener('click', () => submitSlicePin());
-      document.getElementById('slice-pin-set').addEventListener('click', () => setSlicePin());
-      document.getElementById('slice-csv').addEventListener('click', () => downloadSliceCsv());
-      document.getElementById('slice-record-back').addEventListener('click', () => closeSliceRecord());
-      document.getElementById('slice-pin').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitSlicePin(); } });
-      document.getElementById('slice-ok').addEventListener('click', () => {});
-      document.getElementById('slice-del').addEventListener('click', () => {});
-      document.getElementById('btn-start-assessment').addEventListener('click', () => this._start(true));
-      document.getElementById('btn-continue').addEventListener('click', () => { document.getElementById('modal-correct').classList.add('hidden'); this._adv(); });
+
+      // مودال‌های قدیمی
+      document.getElementById('btn-continue').addEventListener('click', () => {
+        document.getElementById('modal-correct').classList.add('hidden');
+        this._adv();
+      });
       document.getElementById('btn-sector-next').addEventListener('click', () => {
         document.getElementById('modal-sector').classList.add('hidden');
-        this.game.continueFromSector(); this._updHUD();
+        this.game.continueFromSector();
+        this._updHUD();
       });
       document.getElementById('btn-replay').addEventListener('click', () => {
         document.getElementById('modal-report').classList.add('hidden');
-        this.hasGreeted = false; this.game.start(this.game.playerName, this.game.playerClass);
-      });
-      document.getElementById('btn-copy-report').addEventListener('click', () => {
-        if (!this.lastReport) return;
-        navigator.clipboard.writeText(this._genTxt(this.lastReport)).then(() => alert('گزارش کپی شد!')).catch(() => alert('کپی ممکن نشد.'));
+        this.hasGreeted = false;
+        this.game.start(this.game.playerName, this.game.playerClass);
       });
       document.getElementById('btn-download-report').addEventListener('click', () => {
         if (!this.lastReport) return;
         const blob = new Blob([this._genTxt(this.lastReport)], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a'); a.href = url; a.download = 'کارنامه_' + safeFileName(this.lastReport.name) + '.txt';
-        document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'کارنامه_' + safeFileName(this.lastReport.name) + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
       });
     }
+
     _esc() {
       const c = document.getElementById('modal-correct');
       if (c && !c.classList.contains('hidden')) { c.classList.add('hidden'); this._adv(); return; }
       const l = document.getElementById('modal-teacher-login');
-      if (l && !l.classList.contains('hidden')) l.classList.add('hidden');
+      if (l && !l.classList.contains('hidden')) { l.classList.add('hidden'); return; }
       const tv2 = document.getElementById('modal-teacher-v2');
-      if (tv2 && !tv2.classList.contains('hidden')) TeacherV2.close();
+      if (tv2 && !tv2.classList.contains('hidden')) { TeacherV2.close(); return; }
+      const st = document.getElementById('story-app');
+      if (st && !st.classList.contains('hidden')) { document.getElementById('story-skip').click(); return; }
       const p = document.getElementById('modal-sector-picker');
       if (p && !p.classList.contains('hidden')) {
         p.classList.add('hidden');
         document.getElementById('modal-start').classList.remove('hidden');
       }
     }
+
     _start(a) {
       this.sound.init();
       const n = (document.getElementById('player-name').value || '').trim() || 'مهندس ناشناس';
       const cl = (document.getElementById('player-class').value || '').trim();
-      Storage.saveIdentity(n, cl); this.assessmentMode = !!a; this.hasGreeted = false;
+      Storage.saveIdentity(n, cl);
+      this.assessmentMode = !!a;
+      this.hasGreeted = false;
       document.getElementById('modal-start').classList.add('hidden');
-      this.game.start(n, cl); this._updHUD();
+      this.game.start(n, cl);
+      this._updHUD();
     }
+
     _pick(px, py) {
       let best = null, bd = 100;
       this.game.ships.forEach(s => {
@@ -1988,24 +2270,32 @@
       });
       return best;
     }
+
     _genTxt(rep) {
       let t = '================================\nگزارش کارگاه ایستگاه فضایی (v6.0)\nمهندس: ' + rep.name + '\n';
       if (rep.className) t += 'کلاس: ' + rep.className + '\n';
       t += 'تاریخ: ' + todayFa() + '\nقطعه‌ها: ' + toFa(rep.modulesAttached) + '\nتسلط: ' + toFa(rep.successRate) + '٪\n--------------------------------\n';
-      rep.details.forEach(d => { t += '• ' + toFa(d.f1) + '×' + toFa(d.f2) + ': ' + d.masteryName + ' | درست: ' + toFa(d.correctCount) + ' | تلاش: ' + toFa(d.attempts) + '\n'; });
+      rep.details.forEach(d => {
+        t += '• ' + toFa(d.f1) + '×' + toFa(d.f2) + ': ' + d.masteryName + ' | درست: ' + toFa(d.correctCount) + ' | تلاش: ' + toFa(d.attempts) + '\n';
+      });
       return t;
     }
   }
 
+  // ============================================
+  // init
+  // ============================================
   window.addEventListener('load', () => {
     const canvas = document.getElementById('stage');
     const game = new GameController(canvas);
     new UIController(game);
     game.startRenderLoop();
+
     const last = Storage.getLastIdentity();
     if (last.name) document.getElementById('player-name').value = last.name;
     if (last.className) document.getElementById('player-class').value = last.className;
   });
+
 })();
 </script>
 </body>
