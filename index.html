@@ -3268,7 +3268,7 @@
       document.getElementById('btn-core-3').addEventListener('click', () => openCore(3));
     }
 
-    _esc() {
+        _esc() {
       const c = document.getElementById('modal-correct');
       if (c && !c.classList.contains('hidden')) { c.classList.add('hidden'); this._adv(); return; }
       const l = document.getElementById('modal-teacher-login');
@@ -3277,14 +3277,14 @@
       if (tv2 && !tv2.classList.contains('hidden')) { TeacherV3.close(); return; }
       const st = document.getElementById('story-app');
       if (st && !st.classList.contains('hidden')) { document.getElementById('story-skip').click(); return; }
-      const p = document.getElementById('modal-sector-picker');
-      if (p && !p.classList.contains('hidden')) {
-              const pr = document.getElementById('modal-profile');
+      const pr = document.getElementById('modal-profile');
       if (pr && !pr.classList.contains('hidden')) {
         pr.classList.add('hidden');
         document.getElementById('modal-start').classList.remove('hidden');
         return;
       }
+      const p = document.getElementById('modal-sector-picker');
+      if (p && !p.classList.contains('hidden')) {
         p.classList.add('hidden');
         document.getElementById('modal-start').classList.remove('hidden');
         return;
