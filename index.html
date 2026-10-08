@@ -1107,15 +1107,11 @@ function پردازش_صف() {
   // ============================================
   // Toast پهلوان جدید
   // ============================================
-  function showHeroToast(hero) {
-    const area = document.getElementById('badge-area');
-    if (!area) return;
-    const t = document.createElement('div');
-    t.className = 'badge-toast';
-    t.innerHTML = '<div class="badge-toast-icon">' + hero.emoji + '</div><div><div class="badge-toast-title" style="color:var(--gold);">پهلوان جدید!</div><div class="badge-toast-name">' + escapeHtml(hero.name) + '</div><div class="badge-toast-desc">' + escapeHtml(hero.title) + '</div></div>';
-    area.appendChild(t);
-    setTimeout(() => t.classList.add('show'), 30);
-    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 350); }, 4500);
+    function showHeroToast(hero) {
+    صف_پیام(
+      '<div class="badge-toast-icon">' + hero.emoji + '</div><div><div class="badge-toast-title" style="color:var(--gold);">پهلوان جدید!</div><div class="badge-toast-name">' + escapeHtml(hero.name) + '</div><div class="badge-toast-desc">' + escapeHtml(hero.title) + '</div></div>',
+      2500
+    );
   }
 
   let feedbackTimer = null;
@@ -1360,7 +1356,7 @@ function پردازش_صف() {
         const stats = buildHeroStats(play);
         const res = HeroesCore.checkAndAward(play.profileId, stats);
         if (res.newlyAwarded && res.newlyAwarded.length) {
-          res.newlyAwarded.forEach((h, i) => setTimeout(() => showHeroToast(h), i * 800));
+         res.newlyAwarded.forEach(h => showHeroToast(h));
         }
       } catch (e) {}
 
@@ -2877,7 +2873,7 @@ function پردازش_صف() {
       if (res.newlyEarned.length) {
         this.earnedBadges = res.all;
         Storage.saveBadges(this.game.playerName, res.all);
-        res.newlyEarned.forEach((b, i) => setTimeout(() => showBadgeToast(b), i * 600));
+        res.newlyEarned.forEach(b => showBadgeToast(b));
       }
       // پهلوان جدید legacy
       try {
@@ -2899,7 +2895,7 @@ function پردازش_صف() {
           };
           const heroRes = HeroesCore.checkAndAward(profile.profileId, stats);
           if (heroRes.newlyAwarded && heroRes.newlyAwarded.length) {
-            heroRes.newlyAwarded.forEach((h, i) => setTimeout(() => showHeroToast(h), i * 800));
+           heroRes.newlyAwarded.forEach(h => showHeroToast(h));
           }
         }
       } catch (e) {}
