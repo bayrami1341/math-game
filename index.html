@@ -1730,11 +1730,7 @@
       }
       ctx.save();
       ctx.translate(ox, oy);
-      const g = ctx.createLinearGradient(0, 0, 0, this.cssH);
-      g.addColorStop(0, sec.bg[0]);
-      g.addColorStop(1, sec.bg[1]);
-      ctx.fillStyle = g;
-      ctx.fillRect(0, 0, this.cssW, this.cssH);
+            // پس‌زمینه شفاف — تصویر CSS از پشت بوم دیده می‌شود
       ctx.fillStyle = '#fff';
       this.stars.forEach(s => {
         s.y += s.speed;
