@@ -1,5 +1,5 @@
 /* ProfileManager — مدیریت پروفایل‌های دانش‌آموزان — نسخه 1.0 */
-const ProfileManager = (function () {
+window.ProfileManager = (function () {
   'use strict';
   const STORAGE_KEY = 'sw_profiles_v1';
   const ACTIVE_KEY = 'sw_active_profile_v1';
