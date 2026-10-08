@@ -592,6 +592,8 @@
     getActiveGroup() { try { return localStorage.getItem(STORAGE_KEYS.ACTIVE_GROUP) || null; } catch { return null; } },
     setActiveGroup(code) { try { localStorage.setItem(STORAGE_KEYS.ACTIVE_GROUP, code || ''); } catch {} }
   };
+    window.AppStorage = Storage;
+  window.toFa = toFa;
 
   // ============================================
   // سیستم صدا
