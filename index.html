@@ -15,22 +15,33 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); user-select: none; -webkit-user-select: none; }
     html, body { height: 100%; background: var(--bg); color: var(--text); overflow: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
     body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    #app { 
-  position: relative; 
-  width: 100vw; 
-  height: 100vh; 
-  max-width: 960px; 
-  max-height: 820px; 
-  border: 1px solid rgba(0, 243, 255, 0.3); 
-  border-radius: 12px; 
-  overflow: hidden; 
+    #app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: 960px;
+  max-height: 820px;
+  border: 1px solid rgba(0, 243, 255, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
   background-color: #02040a;
-  background-image: url('assets/bg-01-deep-space.webp');
+  background-image: url('assets/bg-main.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 0 45px rgba(0, 0, 0, 0.85); 
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.85);
 }
+
+/* حالت‌های مختلف پس‌زمینه */
+#app.mode-cockpit      { background-image: url('assets/bg-cockpit.png'); }
+#app.mode-moon         { background-image: url('assets/bg-moon.png'); }
+#app.mode-deep-space   { background-image: url('assets/bg-deep-space.png'); }
+#app.mode-team         { background-image: url('assets/bg-team.png'); }
+#app.mode-teacher      { background-image: url('assets/bg-teacher.png'); }
+#app.mode-celebration  { background-image: url('assets/bg-celebration.png'); }
+
+/* کلاس قدیمی برای سازگاری */
+#app.celebration-mode  { background-image: url('assets/bg-celebration.png'); }
 
 /* حالت جشن — هنگام برد و کارنامه */
 #app.celebration-mode {
