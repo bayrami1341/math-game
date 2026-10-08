@@ -3,7 +3,7 @@
  * کاملاً آفلاین — بدون نیاز به سرور
  * نسخه 1.0
  */
-const SocialCore = (function () {
+window.SocialCore = (function () {
   'use strict';
 
   const KEYS = {
