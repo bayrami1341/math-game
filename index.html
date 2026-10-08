@@ -15,7 +15,27 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font); user-select: none; -webkit-user-select: none; }
     html, body { height: 100%; background: var(--bg); color: var(--text); overflow: hidden; touch-action: manipulation; -webkit-text-size-adjust: 100%; }
     body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-    #app { position: relative; width: 100vw; height: 100vh; max-width: 960px; max-height: 820px; border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 12px; overflow: hidden; background: #02040a; box-shadow: 0 0 45px rgba(0, 0, 0, 0.85); }
+    #app { 
+  position: relative; 
+  width: 100vw; 
+  height: 100vh; 
+  max-width: 960px; 
+  max-height: 820px; 
+  border: 1px solid rgba(0, 243, 255, 0.3); 
+  border-radius: 12px; 
+  overflow: hidden; 
+  background-color: #02040a;
+  background-image: url('assets/bg-01-deep-space.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 0 45px rgba(0, 0, 0, 0.85); 
+}
+
+/* حالت جشن — هنگام برد و کارنامه */
+#app.celebration-mode {
+  background-image: url('assets/bg-03-celebration.webp');
+}
     #stage { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; cursor: pointer; display: block; }
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
     #hud { position: absolute; top: 0; left: 0; right: 0; z-index: 10; padding: 6px 10px; display: flex; flex-wrap: wrap; gap: 6px; justify-content: space-between; align-items: center; background: linear-gradient(180deg, rgba(2, 4, 10, 0.95), rgba(2, 4, 10, 0)); pointer-events: none; }
