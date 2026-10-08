@@ -698,11 +698,31 @@
   </div>
 
 </div>
-<script src="workshop-core.js"></script>
-<script src="profile-manager.js"></script>
-<script src="heroes-core.js"></script>
-<script src="social-core.js"></script>
+<!-- لایه پایه — باید اول بارگذاری شود -->
+<script src="errors.js" defer></script>
+<script src="storage.js" defer></script>
+
+<!-- هسته‌ها — به ترتیب وابستگی -->
+<script src="workshop-core.js" defer></script>
+<script src="profile-manager.js" defer></script>
+<script src="heroes-core.js" defer></script>
+<script src="social-core.js" defer></script>
 <script>
+  window.addEventListener('DOMContentLoaded', function () {
+  var لازم = ['Storage', 'HeroesCore', 'WorkshopCore', 'ProfileManager', 'SocialCore'];
+  var گمشده = لازم.filter(function (نام) { return typeof window[نام] === 'undefined'; });
+  if (گمشده.length > 0) {
+    console.error('⛔ ماژول‌های بارگذاری‌نشده:', گمشده.join('، '));
+    var پیام = document.createElement('div');
+    پیام.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#b00;color:#fff;padding:12px;z-index:9999;text-align:center;font-family:Tahoma';
+    پیام.textContent = 'خطا در بارگذاری برنامه. لطفاً صفحه را دوباره باز کنید.';
+    document.body.appendChild(پیام);
+    return;
+  }
+  console.log('✅ همه ماژول‌ها بارگذاری شدند');
+  var وضعیت = window.Storage.بررسی_نسخه();
+  console.log('📦 نسخه ساختار:', وضعیت);
+});
 (function () {
   'use strict';
 
