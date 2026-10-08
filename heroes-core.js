@@ -1,4 +1,4 @@
-const HeroesCore = (function () {
+window.HeroesCore = (function () {
   'use strict';
   const STORAGE_KEY = 'sw_heroes_v1';
   const HEROES = [
