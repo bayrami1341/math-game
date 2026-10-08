@@ -1066,17 +1066,43 @@
     BADGES.forEach(b => { if (!owned.has(b.id) && b.check(stats)) { owned.add(b.id); neu.push(b); } });
     return { all: Array.from(owned), newlyEarned: neu };
   }
+// ============================================
+// سیستم صف پیام‌ها — یکی‌یکی نمایش داده می‌شوند
+// ============================================
+var toastQueue = [];
+var toastBusy = false;
+
+function صف_پیام(html, مدت) {
+  toastQueue.push({ html: html, duration: مدت || 2000 });
+  if (!toastBusy) پردازش_صف();
+}
+
+function پردازش_صف() {
+  if (toastQueue.length === 0) { toastBusy = false; return; }
+  toastBusy = true;
+  var item = toastQueue.shift();
+  var area = document.getElementById('badge-area');
+  if (!area) { toastBusy = false; return; }
+  var t = document.createElement('div');
+  t.className = 'badge-toast';
+  t.innerHTML = item.html;
+  area.appendChild(t);
+  setTimeout(function () { t.classList.add('show'); }, 30);
+  setTimeout(function () {
+    t.classList.remove('show');
+    setTimeout(function () {
+      t.remove();
+      پردازش_صف();
+    }, 350);
+  }, item.duration);
+}
 
   function showBadgeToast(b) {
-    const area = document.getElementById('badge-area');
-    if (!area) return;
-    const t = document.createElement('div');
-    t.className = 'badge-toast';
-    t.innerHTML = '<div class="badge-toast-icon">' + b.icon + '</div><div><div class="badge-toast-title">افتخار جدید!</div><div class="badge-toast-name">' + escapeHtml(b.name) + '</div><div class="badge-toast-desc">' + escapeHtml(b.desc) + '</div></div>';
-    area.appendChild(t);
-    setTimeout(() => t.classList.add('show'), 30);
-    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 350); }, 2800);
-  }
+  صف_پیام(
+    '<div class="badge-toast-icon">' + b.icon + '</div><div><div class="badge-toast-title">افتخار جدید!</div><div class="badge-toast-name">' + escapeHtml(b.name) + '</div><div class="badge-toast-desc">' + escapeHtml(b.desc) + '</div></div>',
+    2000
+  );
+}
 
   // ============================================
   // Toast پهلوان جدید
