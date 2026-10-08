@@ -2246,75 +2246,76 @@
       });
     },
 
-    renderMessages() {
-      const picker = document.getElementById('teacher-msg-picker');
-      const chat = document.getElementById('teacher-chat-container');
-      if (!picker || !chat) return;
-      const list = Storage.getAll();
-      const latest = {};
-      list.forEach(row => { if (!latest[row.name]) latest[row.name] = row; });
-      const students = Object.values(latest);
-      if (students.length === 0) {
-        picker.innerHTML = '<div class="summary-empty">هنوز دانش‌آموزی ثبت نشده.</div>';
-        chat.innerHTML = '<div class="chat-empty">هنوز دانش‌آموزی نیست.</div>';
-        return;
-      }
-      picker.innerHTML = '';
-      students.forEach(st => {
-        const profile = ProfileManager.getById(st.profileId);
-        const av = profile ? profile.avatar : '👤';
-        const chip = document.createElement('button');
-        chip.className = 'msg-student-chip' + (this.currentChatStudent === st.profileId ? ' active' : '');
-        chip.textContent = av + ' ' + st.name;
-        chip.onclick = () => {
-          this.currentChatStudent = st.profileId;
-          this.renderMessages();
-        };
-        picker.appendChild(chip);
-      });
-         if (!this.currentChatStudent) {
-        const firstStudent = students[0];
-        this.currentChatStudent = firstStudent.profileId || firstStudent.name || 'guest';
-        const activeClassA = Storage.getActiveClass();
-        const teacherIdA = activeClassA ? ('teacher_' + activeClassA) : 'teacher';
-        const convA = SocialCore.messages.getConversation(this.currentChatStudent, 'teacher')
-          .concat(SocialCore.messages.getConversation(this.currentChatStudent, teacherIdA))
-          .sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
-        if (convA.length === 0) {
-          chat.innerHTML = '<div class="chat-empty">هنوز پیامی رد و بدل نشده.</div>';
-        } else {
-          chat.innerHTML = '';
-          convA.forEach(m => {
-            const isMine = m.from === 'teacher' || m.from.indexOf('teacher_') === 0;
-            const b = document.createElement('div');
-            b.className = 'chat-bubble ' + (isMine ? 'from-me' : 'from-them');
-            b.innerHTML = escapeHtml(m.text) + '<span class="chat-time">' + timeFa(m.sentAt) + '</span>';
-            chat.appendChild(b);
-          });
-          chat.scrollTop = chat.scrollHeight;
-        }
-        return;
-      }
-            const activeClass2 = Storage.getActiveClass();
-      const teacherId2 = activeClass2 ? ('teacher_' + activeClass2) : 'teacher';
-      const conv1 = SocialCore.messages.getConversation(this.currentChatStudent, 'teacher');
-      const conv2 = SocialCore.messages.getConversation(this.currentChatStudent, teacherId2);
-      const conv = conv1.concat(conv2.filter(m => !conv1.includes(m)))
-        .sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
-      if (conv.length === 0) {
-        chat.innerHTML = '<div class="chat-empty">هنوز پیامی رد و بدل نشده.</div>';
-      } else {
-        chat.innerHTML = '';
-        conv.forEach(m => {
-          const isMine = m.from === 'teacher';
-          const b = document.createElement('div');
-          b.className = 'chat-bubble ' + (isMine ? 'from-me' : 'from-them');
-          b.innerHTML = escapeHtml(m.text) + '<span class="chat-time">' + timeFa(m.sentAt) + '</span>';
-          chat.appendChild(b);
-        });
-        chat.scrollTop = chat.scrollHeight;
-      }
-    },
+  renderMessages() {
+  const picker = document.getElementById('teacher-msg-picker');
+  const chat = document.getElementById('teacher-chat-container');
+  if (!picker || !chat) return;
+
+  // ۱. فهرست دانش‌آموزان
+  const list = Storage.getAll();
+  const latest = {};
+  list.forEach(row => { if (!latest[row.name]) latest[row.name] = row; });
+  const students = Object.values(latest);
+
+  if (students.length === 0) {
+    picker.innerHTML = '<div class="summary-empty">هنوز دانش‌آموزی ثبت نشده.</div>';
+    chat.innerHTML = '<div class="chat-empty">هنوز دانش‌آموزی نیست.</div>';
+    return;
+  }
+
+  // ۲. تعیین دانش‌آموز فعال (قبل از ساخت دکمه‌ها)
+  const ids = students.map(st => st.profileId || st.name || 'guest');
+  if (!this.currentChatStudent || !ids.includes(this.currentChatStudent)) {
+    this.currentChatStudent = ids[0];
+  }
+
+  // ۳. ساخت دکمه‌های دانش‌آموز
+  picker.innerHTML = '';
+  students.forEach(st => {
+    const id = st.profileId || st.name || 'guest';
+    const profile = ProfileManager.getById(st.profileId);
+    const av = profile ? profile.avatar : '👤';
+    const chip = document.createElement('button');
+    chip.className = 'msg-student-chip' + (this.currentChatStudent === id ? ' active' : '');
+    chip.textContent = av + ' ' + st.name;
+    chip.onclick = () => {
+      this.currentChatStudent = id;
+      this.renderMessages();
+    };
+    picker.appendChild(chip);
+  });
+
+  // ۴. خواندن گفتگو با هر دو شناسه معلم
+  const activeClass = Storage.getActiveClass();
+  const teacherId = activeClass ? ('teacher_' + activeClass) : 'teacher';
+  const convA = SocialCore.messages.getConversation(this.currentChatStudent, 'teacher');
+  const convB = SocialCore.messages.getConversation(this.currentChatStudent, teacherId);
+  const seen = new Set();
+  const conv = convA.concat(convB)
+    .filter(m => {
+      const key = (m.id || (m.sentAt + '|' + m.text));
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
+
+  // ۵. رسم حباب‌های گفتگو
+  if (conv.length === 0) {
+    chat.innerHTML = '<div class="chat-empty">هنوز پیامی رد و بدل نشده.</div>';
+    return;
+  }
+
+  chat.innerHTML = '';
+  conv.forEach(m => {
+    const isMine = m.from === 'teacher' || (typeof m.from === 'string' && m.from.indexOf('teacher_') === 0);
+    const b = document.createElement('div');
+    b.className = 'chat-bubble ' + (isMine ? 'from-me' : 'from-them');
+    b.innerHTML = escapeHtml(m.text) + '<span class="chat-time">' + timeFa(m.sentAt) + '</span>';
+    chat.appendChild(b);
+  });
+  chat.scrollTop = chat.scrollHeight;
+},
 
     renderSettings() {
       const s = Storage.getSettings();
