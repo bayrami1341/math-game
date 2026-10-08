@@ -18,7 +18,7 @@
   border-radius: 12px;
   overflow: hidden;
   background-color: #02040a;
-  background-image: url('assets/bg-main.png');
+  background-image: url('../assets/bg-main.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -26,12 +26,12 @@
 }
 
 /* حالت‌های مختلف پس‌زمینه */
-#app.mode-cockpit      { background-image: url('assets/bg-cockpit.png'); }
-#app.mode-moon         { background-image: url('assets/bg-moon.png'); }
-#app.mode-deep-space   { background-image: url('assets/bg-deep-space.png'); }
-#app.mode-team         { background-image: url('assets/bg-team.png'); }
-#app.mode-teacher      { background-image: url('assets/bg-teacher.png'); }
-#app.mode-celebration  { background-image: url('assets/bg-celebration.png'); }
+#app.mode-cockpit      { background-image: url('../assets/bg-cockpit.png'); }
+#app.mode-moon         { background-image: url('../assets/bg-moon.png'); }
+#app.mode-deep-space   { background-image: url('../assets/bg-deep-space.png'); }
+#app.mode-team         { background-image: url('../assets/bg-team.png'); }
+#app.mode-teacher      { background-image: url('../assets/bg-teacher.png'); }
+#app.mode-celebration  { background-image: url('../assets/bg-celebration.png'); }
 
 /* کلاس قدیمی برای سازگاری */
 #app.celebration-mode  { background-image: url('assets/bg-celebration.png'); }
