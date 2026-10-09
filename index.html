@@ -687,9 +687,8 @@ function پردازش_صف() {
   // Core Play (حالت یادگیری)
   // ============================================
  window.workshopMode = 'legacy';
-  var corePlay = null;
-  var legacyGame = null;
-
+   var corePlay = null;
+   window.legacyGame = null;
   function sliceStore(db) {
     var key = 'sw_core_v1';
     return {
@@ -1200,14 +1199,14 @@ function پردازش_صف() {
       legacyGame.start(name, className);
     }
   }
-
+  window.legacyStart = legacyStart;
   // ============================================
   // UIController
   // ============================================
   class UIController {
     constructor(g) {
       this.game = g;
-      legacyGame = g;
+      window.legacyGame = g;
       this.sound = new SoundSystem();
       sharedSound = this.sound;
       this.earnedBadges = [];
