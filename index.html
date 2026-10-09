@@ -1376,9 +1376,9 @@ function پردازش_صف() {
 
     _updHUD() {
       const g = this.game;
-      const w = WAVES_PER_SECTOR[g.sectorIdx] || 4;
+      const w = window.WAVES_PER_SECTOR[g.sectorIdx] || 4;
       document.getElementById('hud-player').textContent = 'مهندس: ' + escapeHtml(g.playerName || '—');
-      document.getElementById('hud-progress').textContent = 'بخش ' + toFa(g.sectorIdx + 1) + ' از ' + toFa(SECTORS.length);
+      document.getElementById('hud-progress').textContent = 'بخش ' + toFa(g.sectorIdx + 1) + ' از ' + toFa(window.SECTORS.length);
       document.getElementById('hud-modules').textContent = 'قطعه: ' + toFa(g.modulesAttached);
       document.getElementById('hud-streak').textContent = 'پشت‌سرهم: ' + toFa(g.streak);
       document.getElementById('progress-fill').style.width = Math.min(100, g.mainCount / w * 100) + '%';
