@@ -1,10 +1,13 @@
 /* bottleneck.js — تشخیص گلوگاه، فاز ۱ نسخهٔ ۷ */
-(function (root, factory) {
-  var api = factory(root.GraphData);
-  if (typeof module === 'object' && module) module.exports = api;
-  if (root) root.Bottleneck = api;
-})(typeof globalThis !== 'undefined' ? globalThis : this, function (GraphData) {
+(function () {
   'use strict';
+
+  if (!window.GraphData) {
+    console.error('⛔ bottleneck.js: GraphData موجود نیست.');
+    return;
+  }
+
+  var GraphData = window.GraphData;
 
   var CONFIG = {
     minFactsToName: 2,
@@ -74,6 +77,15 @@
       if (event.correct === false || event.sawAsNew === true) keys[key] = true;
     });
     return Object.keys(keys);
+  }
+
+  function unique(list) {
+    var seen = {};
+    var out = [];
+    list.forEach(function (item) {
+      if (!seen[item]) { seen[item] = true; out.push(item); }
+    });
+    return out;
   }
 
   function diagnoseStudent(events, profileId) {
@@ -170,14 +182,12 @@
     return { shared: shared, primaryBottleneck: named.length ? named[0] : null, noPattern: named.length === 0 };
   }
 
-  function unique(list) {
-    var seen = {};
-    var out = [];
-    list.forEach(function (item) {
-      if (!seen[item]) { seen[item] = true; out.push(item); }
-    });
-    return out;
-  }
+  window.Bottleneck = {
+    CONFIG: CONFIG,
+    classify: classify,
+    diagnoseStudent: diagnoseStudent,
+    diagnoseClass: diagnoseClass
+  };
 
-  return { CONFIG: CONFIG, classify: classify, diagnoseStudent: diagnoseStudent, diagnoseClass: diagnoseClass };
-});
+  console.log('✅ Bottleneck بارگذاری شد.');
+})();
