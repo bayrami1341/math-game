@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>تست فاز ۱ — تشخیص گلوگاه</title>
+<style>
+  body { font-family: Tahoma, sans-serif; background: #0a0e1a; color: #e2e8f0; padding: 20px; max-width: 900px; margin: 0 auto; }
+  h1 { color: #00f3ff; }
+  h2 { color: #ffb703; font-size: 1.1rem; margin-top: 24px; }
+  .case { background: #0d1626; border: 1px solid #1e293b; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .case h3 { margin: 0 0 10px; color: #fff; }
+  .case.pass { border-color: #06d6a0; }
+  .case.fail { border-color: #ff3366; }
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.82rem; font-weight: 700; margin-left: 8px; }
+  .badge.pass { background: #06d6a0; color: #02040a; }
+  .badge.fail { background: #ff3366; color: #fff; }
+  .detail { font-size: 0.85rem; color: #94a3b8; line-height: 1.8; margin-top: 8px; }
+  .detail b { color: #cbd5e1; }
+  pre { background: #030712; padding: 10px; border-radius: 6px; font-size: 0.78rem; overflow-x: auto; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<h1>🧪 تست فاز ۱ — تشخیص گلوگاه</h1>
+<p>سه سناریو روی کد Grok. هدف: تأیید صحت تشخیص و یافتن باگ‌های پنهان.</p>
+
+<div id="results"></div>
+
+<script src="../src/core/graph-data.js"></script>
+<script src="../src/core/bottleneck.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var results = document.getElementById('results');
+
+  function keyOf(f1, f2) {
+    return Math.min(f1, f2) + '×' + Math.max(f1, f2);
+  }
+
+  function ev(f1, f2, given, correct) {
+    return { f1: f1, f2: f2, given: given, correct: !!correct, assisted: false, filler: false };
+  }
+
+  function runCase(title, events, expectation) {
+    var diagnosis = Bottleneck.diagnoseStudent(events, 'test-profile');
+    var bottleneckId = diagnosis.primaryBottleneck ? diagnosis.primaryBottleneck.id : null;
+    var bottleneckName = diagnosis.primaryBottleneck ? diagnosis.primaryBottleneck.name : '(هیچ)';
+    var passed = expectation.check(diagnosis);
+
+    var div = document.createElement('div');
+    div.className = 'case ' + (passed ? 'pass' : 'fail');
+    div.innerHTML =
+      '<h3>' + title +
+        '<span class="badge ' + (passed ? 'pass' : 'fail') + '">' +
+          (passed ? '✅ قبول' : '❌ رد') +
+        '</span>' +
+      '</h3>' +
+      '<div class="detail">' +
+        '<b>انتظار:</b> ' + expectation.label + '<br>' +
+        '<b>گلوگاه تشخیص داده‌شده:</b> ' + (bottleneckId ? (bottleneckId + ' — ' + bottleneckName) : '(هیچ گلوگاهی نام نگرفت)') + '<br>' +
+        '<b>تعداد ضرب‌های تحلیل‌شده:</b> ' + Object.keys(diagnosis.facts || {}).length + '<br>' +
+        '<b>ضرب‌های شکننده:</b> ' + (diagnosis.primaryBottleneck ? diagnosis.primaryBottleneck.facts.join(' ، ') : '—') +
+      '</div>' +
+      '<pre>' + JSON.stringify({
+        primaryBottleneck: diagnosis.primaryBottleneck ? {
+          id: diagnosis.primaryBottleneck.id,
+          facts: diagnosis.primaryBottleneck.facts
+        } : null,
+        candidates: diagnosis.candidates ? diagnosis.candidates.map(function (c) { return { id: c.id, facts: c.facts }; }) : []
+      }, null, 2) + '</pre>';
+
+    results.appendChild(div);
+    return passed;
+  }
+
+  var allPassed = true;
+
+  // ─── سناریو ۱: مینا — ارزش مکانی
+  allPassed = runCase(
+    'مینا — انتظار: گلوگاه ارزش مکانی (P)',
+    [
+      ev(4, 6, 42, false),
+      ev(6, 7, 24, false)
+    ],
+    {
+      label: 'گلوگاه P (ارزش مکانی)',
+      check: function (d) {
+        return d.primaryBottleneck && d.primaryBottleneck.id === 'P';
+      }
+    }
+  ) && allPassed;
+
+  // ─── سناریو ۲: آرمین — گروه‌های برابر
+  allPassed = runCase(
+    'آرمین — انتظار: گلوگاه گروه‌های برابر (G)',
+    [
+      ev(2, 5, 7, false),
+      ev(3, 4, 7, false),
+      ev(3, 5, 8, false)
+    ],
+    {
+      label: 'گلوگاه G (گروه‌های برابر)',
+      check: function (d) {
+        return d.primaryBottleneck && d.primaryBottleneck.id === 'G';
+      }
+    }
+  ) && allPassed;
+
+  // ─── سناریو ۳: شاگرد سالم
+  allPassed = runCase(
+    'شاگرد سالم — انتظار: هیچ گلوگاهی',
+    [
+      ev(2, 5, 10, true),
+      ev(3, 4, 12, true),
+      ev(4, 5, 20, true),
+      ev(5, 6, 30, true)
+    ],
+    {
+      label: 'هیچ گلوگاهی نام نگیرد (dataEnough = false)',
+      check: function (d) {
+        return d.primaryBottleneck === null || d.primaryBottleneck === undefined;
+      }
+    }
+  ) && allPassed;
+
+  // ─── سناریو ۴: باگ احتمالی دوبرابر کردن
+  allPassed = runCase(
+    'دوبرابر کردن — انتظار: گلوگاه D',
+    [
+      ev(2, 4, 8, true),   // 2×4 روان
+      ev(4, 4, 8, false)    // 4×4 اشتباه با حاصل مبدأ
+    ],
+    {
+      label: 'گلوگاه D (دوبرابر کردن)',
+      check: function (d) {
+        return d.primaryBottleneck && d.primaryBottleneck.id === 'D';
+      }
+    }
+  ) && allPassed;
+
+  // ─── سناریو ۵: تست باگ report-panel (فقط برای آگاهی)
+  var panelNote = document.createElement('div');
+  panelNote.className = 'case';
+  panelNote.innerHTML = '<h3>📌 یادداشت باگ فاز ۲ (report-panel)</h3>' +
+    '<div class="detail">این تست باگ <b>eventsFromStudent</b> را نشان می‌دهد: ' +
+    'تابع فعلی فقط پاسخ‌های غلط را تبدیل می‌کند، پس اگر دانش‌آموز در ضرب‌های پیش‌نیاز <b>پاسخ درست</b> داده باشد، ' +
+    'گلوگاه «دوبرابر کردن» هرگز تشخیص داده نمی‌شود. این تست فاز ۱ را رد نمی‌کند — فقط یک یادآوری است.</div>';
+  results.appendChild(panelNote);
+
+  // ─── نتیجه نهایی
+  var summary = document.createElement('div');
+  summary.style.cssText = 'margin-top: 24px; padding: 16px; border-radius: 10px; text-align: center; font-weight: 700; font-size: 1.1rem;';
+  if (allPassed) {
+    summary.style.background = 'rgba(6, 214, 160, 0.15)';
+    summary.style.border = '2px solid #06d6a0';
+    summary.style.color = '#06d6a0';
+    summary.textContent = '🎉 همه تست‌ها قبول شدند — فاز ۱ درست کار می‌کند';
+  } else {
+    summary.style.background = 'rgba(255, 51, 102, 0.15)';
+    summary.style.border = '2px solid #ff3366';
+    summary.style.color = '#ff3366';
+    summary.textContent = '⚠️ بعضی تست‌ها رد شدند — فاز ۱ نیاز به بررسی دارد';
+  }
+  results.appendChild(summary);
+
+  console.log('✅ تست فاز ۱ انجام شد. نتیجه:', allPassed ? 'PASS' : 'FAIL');
+})();
+</script>
+</body>
+</html>
