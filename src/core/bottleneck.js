@@ -10,11 +10,12 @@
   var GraphData = window.GraphData;
 
   var CONFIG = {
-    minFactsToName: 2,
-    minStudentsToName: 3,
-    minFactsPerStudent: 2,
-    priority: ['G', 'P', 'N', 'D', 'A', 'S', 'C']
-  };
+  minFactsToName: 2,
+  minFactsToName_D: 1,
+  minStudentsToName: 3,
+  minFactsPerStudent: 2,
+  priority: ['G', 'P', 'N', 'D', 'A', 'S', 'C']
+};
 
   function keyOf(f1, f2) {
     var a = Number(f1);
