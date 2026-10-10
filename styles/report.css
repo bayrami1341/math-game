@@ -1,11 +1,14 @@
-/* report.css — استایل کارت گلوگاه در پنل معلم */
-.report-card { margin-bottom: 12px; }
+/* report.css — استایل کارت گلوگاه در پنل معلم (نسخه تیره) */
+.report-card {
+  margin-bottom: 12px;
+}
 
 .report-line {
   margin: 0;
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.7;
+  color: #ffffff;
 }
 
 .report-tomorrow,
@@ -13,27 +16,34 @@
   margin: 6px 0 0;
   font-size: 0.86rem;
   line-height: 1.7;
-  color: var(--muted, #a8a29e);
+  color: #cbd5e1;
 }
 
 .report-open {
   margin-top: 8px;
   background: transparent;
-  color: inherit;
-  border: 1px solid currentColor;
+  color: var(--cyan, #00f3ff);
+  border: 1px solid var(--cyan, #00f3ff);
   border-radius: 8px;
   padding: 4px 10px;
   font: inherit;
   cursor: pointer;
 }
 
-.report-names { margin-top: 8px; }
+.report-open:hover {
+  background: rgba(0, 243, 255, 0.15);
+}
+
+.report-names {
+  margin-top: 8px;
+}
 
 .report-name {
   display: flex;
   justify-content: space-between;
   gap: 8px;
   padding: 6px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   font-size: 0.86rem;
+  color: #e2e8f0;
 }
