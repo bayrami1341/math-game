@@ -103,12 +103,28 @@ window.TeacherV3 = {
 
   renderToday() {
           // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
+            // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
       if (window.ReportPanel) {
         try {
           ReportPanel.mountToday();
           var bottleneckHost = document.getElementById('today-bottleneck');
           if (bottleneckHost) {
             ReportPanel.renderToday(bottleneckHost, this.data.students);
+            // استایل مستقیم (به‌جای اتکا به CSS)
+            var lineEl = bottleneckHost.querySelector('.report-line');
+            if (lineEl) { lineEl.style.color = '#ffffff'; lineEl.style.fontWeight = '700'; }
+            var factsEls = bottleneckHost.querySelectorAll('.report-facts, .report-tomorrow');
+            factsEls.forEach(function (el) { el.style.color = '#cbd5e1'; });
+            var btn = bottleneckHost.querySelector('.report-open');
+            if (btn) {
+              btn.style.color = '#00f3ff';
+              btn.style.border = '1px solid #00f3ff';
+              btn.style.background = 'transparent';
+              btn.style.borderRadius = '8px';
+              btn.style.padding = '4px 10px';
+              btn.style.cursor = 'pointer';
+              btn.style.marginTop = '8px';
+            }
           }
         } catch (err) {
           console.warn('ReportPanel error:', err);
