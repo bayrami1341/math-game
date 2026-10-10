@@ -102,6 +102,18 @@ window.TeacherV3 = {
   },
 
   renderToday() {
+          // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
+      if (window.ReportPanel) {
+        try {
+          ReportPanel.mountToday();
+          var bottleneckHost = document.getElementById('today-bottleneck');
+          if (bottleneckHost) {
+            ReportPanel.renderToday(bottleneckHost, this.data.students);
+          }
+        } catch (err) {
+          console.warn('ReportPanel error:', err);
+        }
+      }
     const kawhEl = document.getElementById('kawh-text-today');
     if (kawhEl) kawhEl.textContent = this.getKawhMessage();
 
