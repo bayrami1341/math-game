@@ -135,7 +135,10 @@
       { id: 'A', facts: unique(array) },
       { id: 'S', facts: unique(skip) },
       { id: 'C', facts: unique(bag.SHAPE) }
-    ].filter(function (item) { return item.facts.length >= CONFIG.minFactsToName; });
+     ].filter(function (item) {
+      var threshold = (item.id === 'D') ? CONFIG.minFactsToName_D : CONFIG.minFactsToName;
+      return item.facts.length >= threshold;
+    });
     candidates.sort(function (a, b) {
       return CONFIG.priority.indexOf(a.id) - CONFIG.priority.indexOf(b.id);
     });
