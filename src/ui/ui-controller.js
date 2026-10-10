@@ -662,7 +662,7 @@
         var existing = JSON.parse(localStorage.getItem('sw_student_dossiers_v60') || '[]');
         existing = testRecords.concat(existing);
         localStorage.setItem('sw_student_dossiers_v60', JSON.stringify(existing));
-        localStorage.setItem('sw_test_data_v1', 'yes');
+        
         console.log('🧪 داده‌ی آزمایشی اضافه شد: ۳ دانش‌آموز');
       } catch (e) { console.warn('test data error:', e); }
     }
