@@ -632,10 +632,11 @@
 
   window.UIController = UIController;
 
-  // ============================================
+   // ============================================
   // init
   // ============================================
-     localStorage.removeItem('sw_student_dossiers_v60');
+  window.addEventListener('load', () => {
+    localStorage.removeItem('sw_student_dossiers_v60');
     try {
       var testRecords = [
         { name: 'مینا آزمون', profileId: 'test_mina', className: 'کلاس آزمایشی',
