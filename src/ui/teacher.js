@@ -10,6 +10,7 @@ window.TeacherV3 = {
     const latest = {};
     list.forEach(row => { if (!latest[row.name]) latest[row.name] = row; });
     this.data.students = Object.values(latest);
+    this._mergeCoreEvents();
     this.data.latest = latest;
 
     let sumAcc = 0, cnt = 0, allFacts = {};
