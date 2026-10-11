@@ -169,7 +169,7 @@
     .kawh-message { display: flex; gap: 10px; padding: 12px 14px; background: rgba(0, 243, 255, 0.08); border: 1.5px solid rgba(0, 243, 255, 0.3); border-radius: 12px; align-items: center; }
     .kawh-avatar { font-size: 1.8rem; flex-shrink: 0; }
     .kawh-text { color: #fff; font-size: 0.88rem; line-height: 1.65; }
-    .summary-card-v2 { background: rgba(13, 22, 45, 0.95); border: 1.5px solid rgba(0, 243, 255, 0.2); border-radius: 14px; overflow: hidden; }
+    .summary-card-v2 { background: rgba(13, 22, 45, 0.95); border: 1.5px solid rgba(0, 243, 255, 0.2); border-radius: 14px; overflow: visible; }
     .summary-header { padding: 10px 14px; background: rgba(0, 243, 255, 0.06); font-weight: 800; color: var(--cyan); font-size: 0.88rem; border-bottom: 1px solid rgba(0,243,255,0.15); }
     .summary-body { padding: 10px 14px; }
     .stat-line { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.88rem; color: #fff; }
