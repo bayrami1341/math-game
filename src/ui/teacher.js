@@ -103,29 +103,13 @@ window.TeacherV3 = {
 
   renderToday() {
           // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
-            // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
+        // ─── اتصال گزارش گلوگاه (فاز ۲ نسخه ۷) ───
+      var report = null;
       if (window.ReportPanel) {
         try {
           ReportPanel.mountToday();
           var bottleneckHost = document.getElementById('today-bottleneck');
-          if (bottleneckHost) {
-            ReportPanel.renderToday(bottleneckHost, this.data.students);
-            // استایل مستقیم (به‌جای اتکا به CSS)
-            var lineEl = bottleneckHost.querySelector('.report-line');
-            if (lineEl) { lineEl.style.color = '#ffffff'; lineEl.style.fontWeight = '700'; }
-            var factsEls = bottleneckHost.querySelectorAll('.report-facts, .report-tomorrow');
-            factsEls.forEach(function (el) { el.style.color = '#cbd5e1'; });
-            var btn = bottleneckHost.querySelector('.report-open');
-            if (btn) {
-              btn.style.color = '#00f3ff';
-              btn.style.border = '1px solid #00f3ff';
-              btn.style.background = 'transparent';
-              btn.style.borderRadius = '8px';
-              btn.style.padding = '4px 10px';
-              btn.style.cursor = 'pointer';
-              btn.style.marginTop = '8px';
-            }
-          }
+          if (bottleneckHost) report = ReportPanel.renderToday(bottleneckHost, this.data.students);
         } catch (err) {
           console.warn('ReportPanel error:', err);
         }
@@ -174,27 +158,20 @@ window.TeacherV3 = {
     const statusBody = document.getElementById('today-status-body');
     if (statusBody) statusBody.innerHTML = statusHTML;
 
-    let suggestionHTML = '';
-    const weakest = this.data.totals.weakest;
-    if (weakest) {
-      const parts = weakest.split('×');
-      const f1 = parseInt(parts[0], 10), f2 = parseInt(parts[1], 10);
-      const wrongList = [];
-      this.data.students.forEach(st => {
-        (st.details || []).forEach(d => {
-          if ((d.f1 === f1 && d.f2 === f2) && (d.wrongAnswers || []).length > 0) wrongList.push(st.name);
-        });
-      });
-      suggestionHTML = '<div style="font-size:1rem; font-weight:700; margin-bottom:6px; color:#fff;">۷ دقیقه مرور ضرب ' + toFa(f1) + '×' + toFa(f2) + '</div>';
-      suggestionHTML += '<div style="font-size:0.82rem; color:var(--muted); margin-bottom:12px; line-height:1.6;">' + toFa(wrongList.length) + ' دانش‌آموز در این ضرب خطا کردند.</div>';
-      suggestionHTML += '<button class="action-btn" style="width:100%;" id="today-go-students-btn">ببین جزئیات</button>';
-    } else {
-      suggestionHTML = '<div style="font-size:1rem; font-weight:700; margin-bottom:6px; color:#fff;">امروز تمرین خاصی پیشنهاد نمی‌شود.</div>';
-      suggestionHTML += '<div style="font-size:0.82rem; color:var(--muted);">وقتی دانش‌آموزان بازی کنند، اینجا پیشنهاد ظاهر می‌شود.</div>';
-    }
-    const sugBody = document.getElementById('today-suggestion-body');
-    if (sugBody) sugBody.innerHTML = suggestionHTML;
-
+        let suggestionHTML = '';
+      if (!report || report.kind !== 'class') {
+        suggestionHTML = '<div style="font-size:1rem;font-weight:700;color:#fff;">امروز ایستگاه کلاس نداریم.</div>';
+        suggestionHTML += '<div style="font-size:0.82rem;color:var(--muted);">ضرب ضعیف را در جزئیات هر دانش‌آموز ببین.</div>';
+      } else if (this.data.totals.weakest) {
+        const parts = this.data.totals.weakest.split('×');
+        const f1 = parseInt(parts[0], 10), f2 = parseInt(parts[1], 10);
+        suggestionHTML = '<div style="font-size:1rem;font-weight:700;color:#fff;">۷ دقیقه مرور ضرب ' + toFa(f1) + '×' + toFa(f2) + '</div>';
+        suggestionHTML += '<button class="action-btn" style="width:100%;" id="today-go-students-btn">ببین جزئیات</button>';
+      } else {
+        suggestionHTML = '<div style="font-size:1rem;font-weight:700;color:#fff;">امروز تمرین خاصی پیشنهاد نمی‌شود.</div>';
+      }
+      const sugBody = document.getElementById('today-suggestion-body');
+      if (sugBody) sugBody.innerHTML = suggestionHTML;
     let overviewHTML = '';
     overviewHTML += '<div class="stat-line"><span>👥 دانش‌آموزان</span><span style="font-weight:800; color:var(--cyan);">' + toFa(this.data.totals.count) + '</span></div>';
     overviewHTML += '<div class="stat-line clickable" data-expando="avg"><span class="expando-icon" data-icon="avg">▼</span><span>✅ میانگین دقت</span><span style="font-weight:800; color:var(--green);">' + toFa(this.data.totals.avgAcc) + '٪</span></div>';
