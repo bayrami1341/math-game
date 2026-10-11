@@ -36,6 +36,44 @@ window.TeacherV3 = {
     this.goTo('today');
     this._bindNav();
   },
+     _mergeCoreEvents() {
+      try {
+        var raw = localStorage.getItem('sw_core_v1');
+        if (!raw) {
+          console.log('۸.۱: sw_core_v1 خالی است — رویداد خامی نیست');
+          return;
+        }
+        var parsed = JSON.parse(raw);
+        var sessions = Array.isArray(parsed) ? parsed : [parsed];
+        console.log('۸.۱: ' + sessions.length + ' نشست هسته در انبار');
+
+        var byName = {};
+        var byIdPart = {};
+        sessions.forEach(function (s) {
+          if (!s || !Array.isArray(s.events) || s.events.length === 0) return;
+          if (s.name) byName[s.name] = s;
+          if (s.id) {
+            var parts = String(s.id).split('-');
+            if (parts.length > 1) byIdPart[parts[parts.length - 1]] = s;
+          }
+        });
+
+        var merged = 0;
+        this.data.students.forEach(function (st) {
+          var matched = null;
+          var sid = st.profileId || null;
+          if (sid && byIdPart[sid]) matched = byIdPart[sid];
+          else if (byName[st.name]) matched = byName[st.name];
+          if (matched && matched.events) {
+            st.events = matched.events;
+            merged++;
+          }
+        });
+        console.log('۸.۱: ' + merged + ' دانش‌آموز رویداد خام هسته گرفتند');
+      } catch (e) {
+        console.warn('۸.۱: خطا در merge رویداد', e);
+      }
+    },
 
   close() {
     document.getElementById('modal-teacher-v2').classList.add('hidden');
