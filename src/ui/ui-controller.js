@@ -632,10 +632,11 @@
 
   window.UIController = UIController;
 
-   // ============================================
+  // ============================================
   // init
   // ============================================
-  window.addEventListener('load', () => {
+  window.addEventListener('load', function () {
+    // ─── داده‌ی آزمایشی فاز ۲ (موقت) ───
     localStorage.removeItem('sw_student_dossiers_v60');
     try {
       var testRecords = [
@@ -659,8 +660,9 @@
           ] }
       ];
       localStorage.setItem('sw_student_dossiers_v60', JSON.stringify(testRecords));
-      console.log('🧪 داده‌ی آزمایشی تنظیم شد: ۳ دانش‌آموز، همه با گلوگاه «حاصل جدول کناری»');
+      console.log('🧪 داده‌ی آزمایشی تنظیم شد: ۳ دانش‌آموز');
     } catch (e) { console.warn('test data error:', e); }
+
     const canvas = document.getElementById('stage');
     const game = new GameController(canvas);
     new UIController(game);
