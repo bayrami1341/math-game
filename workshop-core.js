@@ -411,6 +411,7 @@
         status: session.status,
         sector: session.sector,
         savedAt: now(),
+        events: session.events || [],
         facts: facts
       };
     }
