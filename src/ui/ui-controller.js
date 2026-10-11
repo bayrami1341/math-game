@@ -636,33 +636,6 @@
   // init
   // ============================================
   window.addEventListener('load', function () {
-    // ─── داده‌ی آزمایشی فاز ۲ (موقت) ───
-    localStorage.removeItem('sw_student_dossiers_v60');
-    try {
-      var testRecords = [
-        { name: 'مینا آزمون', profileId: 'test_mina', className: 'کلاس آزمایشی',
-          date: '۱۴۰۵/۰۷/۲۰', successRate: 40, modulesAttached: 3,
-          details: [
-           { f1: 4, f2: 6, correctCount: 0, wrongAnswers: [16], ... },
-           { f1: 6, f2: 7, correctCount: 0, wrongAnswers: [28], ... }
-          ] },
-        { name: 'آرمین آزمون', profileId: 'test_armin', className: 'کلاس آزمایشی',
-          date: '۱۴۰۵/۰۷/۲۰', successRate: 35, modulesAttached: 2,
-          details: [
-          { f1: 4, f2: 6, correctCount: 0, wrongAnswers: [16], ... },
-          { f1: 6, f2: 7, correctCount: 0, wrongAnswers: [28], ... }
-          ] },
-        { name: 'سارا آزمون', profileId: 'test_sara', className: 'کلاس آزمایشی',
-          date: '۱۴۰۵/۰۷/۲۰', successRate: 38, modulesAttached: 3,
-          details: [
-            { f1: 4, f2: 6, correctCount: 0, wrongAnswers: [16], ... },
-            { f1: 6, f2: 7, correctCount: 0, wrongAnswers: [28], ... }
-          ] }
-      ];
-      localStorage.setItem('sw_student_dossiers_v60', JSON.stringify(testRecords));
-      console.log('🧪 داده‌ی آزمایشی تنظیم شد: ۳ دانش‌آموز');
-    } catch (e) { console.warn('test data error:', e); }
-
     const canvas = document.getElementById('stage');
     const game = new GameController(canvas);
     new UIController(game);
