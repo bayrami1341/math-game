@@ -35,11 +35,15 @@
   </div>
 
   <script>
-    function show(t) { document.getElementById('status').textContent = t; }
-    const list = ['علی','زهرا','محمد','فاطمه','امیر','نرگس','حسین','مریم'];
-    function spin() {
-      document.getElementById('picked').textContent = list[Math.floor(Math.random()*list.length)];
-    }
-  </script>
+  function show(t) { document.getElementById('status').textContent = t; }
+
+  function spin() {
+    const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
+    const names = scores.map(s => s.name).filter(Boolean);
+    const list = names.length > 0 ? names : ['علی','زهرا','محمد','فاطمه'];
+    const picked = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('picked').textContent = picked;
+  }
+</script>
 </body>
 </html>
