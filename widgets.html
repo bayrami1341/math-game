@@ -111,6 +111,39 @@
       color: #444;
     }
 
+    /* فرم افزودن اسامی */
+    .add-form {
+      margin-top: 16px;
+      text-align: right;
+    }
+    .add-form textarea {
+      width: 100%;
+      height: 90px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-family: Tahoma;
+      font-size: 15px;
+      resize: none;
+      direction: rtl;
+    }
+    .add-form button {
+      margin-top: 10px;
+      background: #1976D2;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .hint {
+      font-size: 13px;
+      color: #777;
+      margin-top: 6px;
+    }
+
     /* افکت خرده کاغذ طلایی */
     .confetti {
       position: fixed;
@@ -133,8 +166,15 @@
       <div class="pointer"></div>
       <canvas id="wheel" width="300" height="300"></canvas>
     </div>
-    <button class="spin-btn" id="spinBtn" onclick="spin()">بچرخان</button>
+    <button class="spin-btn" id="spinBtn" onclick="spin()" disabled>بچرخان</button>
     <div id="result">منتظر چرخش...</div>
+
+    <!-- فرم افزودن اسامی (وقتی خالی است) -->
+    <div class="add-form" id="addForm" style="display:none;">
+      <textarea id="namesInput" placeholder="اسامی را وارد کنید (هر اسم در یک خط)&#10;مثال:&#10;علی رضایی&#10;زهرا محمدی&#10;محمد احمدی"></textarea>
+      <div class="hint">هر اسم را در یک خط بنویسید</div>
+      <button onclick="saveNames()">ذخیره و فعال‌سازی چرخ</button>
+    </div>
   </div>
 
   <div class="card">
@@ -149,6 +189,7 @@
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spinBtn');
+    const addForm = document.getElementById('addForm');
     let names = [];
     let angle = 0;
     let spinning = false;
@@ -162,7 +203,6 @@
       if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    // صدای تیک کوتاه (قرقر)
     function playTick(volume = 0.18) {
       try {
         initAudio();
@@ -179,7 +219,6 @@
       } catch (e) {}
     }
 
-    // صدای برنده (آکورد شاد)
     function playWin() {
       try {
         initAudio();
@@ -200,7 +239,7 @@
       } catch (e) {}
     }
 
-    // ========== افکت خرده کاغذ طلایی ==========
+    // ========== افکت طلایی ==========
     function celebrate() {
       const colors = ['#FFD700', '#FFC107', '#FFEC8B', '#FFA000', '#FFF8E1', '#FF8F00'];
       for (let i = 0; i < 55; i++) {
@@ -228,12 +267,20 @@
       }
     }
 
-    // ========== بارگذاری اسامی واقعی ==========
+    // ========== بارگذاری اسامی ==========
     function loadNames() {
+      // اول از demo_scores بخوان
       const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
       names = [...new Set(scores.map(s => s.name).filter(Boolean))];
 
+      // اگر خالی بود، از لیست دستی بخوان
       if (names.length === 0) {
+        const manual = JSON.parse(localStorage.getItem('wheel_names') || '[]');
+        names = manual;
+      }
+
+      if (names.length === 0) {
+        // حالت خالی
         ctx.clearRect(0, 0, 300, 300);
         ctx.fillStyle = '#f5f5f5';
         ctx.beginPath();
@@ -242,16 +289,44 @@
         ctx.fillStyle = '#999';
         ctx.font = '16px Tahoma';
         ctx.textAlign = 'center';
-        ctx.fillText('هنوز کسی وارد نشده', 150, 145);
+        ctx.fillText('هنوز کسی وارد نشده', 150, 140);
         ctx.font = '13px Tahoma';
-        ctx.fillText('اول از صفحه ورود کلاس استفاده کنید', 150, 170);
+        ctx.fillText('اسامی را پایین وارد کنید', 150, 165);
+
         spinBtn.disabled = true;
         document.getElementById('result').textContent = 'داده‌ای برای چرخ وجود ندارد';
+        addForm.style.display = 'block';
         return;
       }
 
+      // داده وجود دارد
+      addForm.style.display = 'none';
       spinBtn.disabled = false;
       drawWheel();
+      document.getElementById('result').textContent = 'آماده چرخش';
+    }
+
+    function saveNames() {
+      const text = document.getElementById('namesInput').value.trim();
+      if (!text) {
+        alert('حداقل یک اسم وارد کنید');
+        return;
+      }
+      const list = text.split('\n')
+        .map(n => n.trim())
+        .filter(n => n.length > 0);
+
+      if (list.length === 0) {
+        alert('حداقل یک اسم معتبر وارد کنید');
+        return;
+      }
+
+      localStorage.setItem('wheel_names', JSON.stringify(list));
+      names = list;
+      addForm.style.display = 'none';
+      spinBtn.disabled = false;
+      drawWheel();
+      document.getElementById('result').textContent = 'آماده چرخش — ' + list.length + ' نفر';
     }
 
     function drawWheel() {
@@ -280,7 +355,6 @@
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // متن وسط قطاع
         ctx.save();
         ctx.translate(150, 150);
         ctx.rotate(start + arc / 2);
@@ -292,7 +366,6 @@
         ctx.restore();
       }
 
-      // دایره وسط
       ctx.beginPath();
       ctx.arc(150, 150, 24, 0, 2 * Math.PI);
       ctx.fillStyle = '#ffffff';
@@ -308,27 +381,23 @@
       spinBtn.disabled = true;
       document.getElementById('result').textContent = 'در حال چرخش...';
 
-      initAudio(); // برای موبایل ضروری است
+      initAudio();
 
-      const extra = 2000 + Math.random() * 1000; // چند دور کامل
+      const extra = 2000 + Math.random() * 1000;
       const duration = 5200;
       const startTime = performance.now();
       let lastTickTime = 0;
 
       function animate(now) {
         const t = Math.min((now - startTime) / duration, 1);
-        // ease-out خیلی نرم
         const ease = 1 - Math.pow(1 - t, 5);
         angle = (extra * ease * Math.PI) / 180;
         drawWheel();
 
-        // === صدای قرقر متناسب با سرعت ===
-        // هرچه t نزدیک ۱ شود، فاصله بین تیک‌ها بیشتر می‌شود
-        const speedFactor = 1 - t;                 // از ۱ به ۰
-        const interval = 40 + (1 - speedFactor) * 160; // از ۴۰ms تا ۲۰۰ms
+        const speedFactor = 1 - t;
+        const interval = 40 + (1 - speedFactor) * 160;
 
         if (now - lastTickTime > interval && t < 0.97) {
-          // حجم صدا هم با سرعت کم می‌شود
           const vol = 0.08 + speedFactor * 0.16;
           playTick(vol);
           lastTickTime = now;
@@ -347,7 +416,7 @@
 
           document.getElementById('result').textContent = '🎉 انتخاب شد: ' + names[index];
           playWin();
-          celebrate(); // خرده کاغذ طلایی
+          celebrate();
         }
       }
       requestAnimationFrame(animate);
