@@ -5,20 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ابزارک‌های کلاس</title>
   <style>
-    body { font-family: Tahoma, sans-serif; background: #f4f6f8; margin: 0; padding: 16px; }
-    .back { color: #1976D2; text-decoration: none; font-size: 15px; }
-    h1 { text-align: center; color: #1565C0; font-size: 22px; margin: 12px 0 20px; }
-    .card { background: white; border-radius: 16px; padding: 20px; margin: 0 auto 16px; max-width: 400px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    .light { width: 72px; height: 72px; border-radius: 50%; border: none; margin: 6px; font-size: 26px; cursor: pointer; }
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; margin: 0; padding: 16px; text-align: center; }
+    .back { color: #1976D2; text-decoration: none; font-size: 15px; display: inline-block; margin-bottom: 10px; }
+    h1 { color: #1565C0; font-size: 22px; margin: 8px 0 16px; }
+    .card { background: white; border-radius: 16px; padding: 20px; margin: 0 auto 20px; max-width: 420px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    canvas { display: block; margin: 0 auto; }
+    button { background: #FF9800; color: white; border: none; padding: 12px 32px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 12px; }
+    #result { margin-top: 14px; font-size: 18px; font-weight: bold; color: #1565C0; min-height: 28px; }
+    .light { width: 70px; height: 70px; border-radius: 50%; border: none; margin: 6px; font-size: 24px; cursor: pointer; }
     .g { background: #4CAF50; } .y { background: #FFC107; } .r { background: #F44336; }
-    #status { margin-top: 12px; font-weight: bold; font-size: 16px; }
-    .spin { background: #FF9800; color: white; border: none; padding: 12px 28px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    #picked { margin-top: 14px; font-size: 18px; font-weight: bold; color: #1565C0; }
+    #status { margin-top: 10px; font-weight: bold; }
+    .confetti { position: fixed; width: 10px; height: 10px; top: -10px; z-index: 999; }
   </style>
 </head>
 <body>
   <a href="home.html" class="back">← بازگشت</a>
   <h1>ابزارک‌های کلاس</h1>
+
+  <div class="card">
+    <h2>چرخ گردان</h2>
+    <canvas id="wheel" width="300" height="300"></canvas>
+    <button onclick="spin()">بچرخان</button>
+    <div id="result">منتظر چرخش...</div>
+  </div>
 
   <div class="card">
     <h2>چراغ راهنمایی</h2>
@@ -28,22 +37,104 @@
     <div id="status">انتخاب کنید</div>
   </div>
 
-  <div class="card">
-    <h2>چرخ گردان</h2>
-    <button class="spin" onclick="spin()">بچرخان</button>
-    <div id="picked">—</div>
-  </div>
-
   <script>
-  function show(t) { document.getElementById('status').textContent = t; }
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    let names = [];
+    let angle = 0;
+    let spinning = false;
+    const tick = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
+    const win = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
 
-  function spin() {
-    const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
-    const names = scores.map(s => s.name).filter(Boolean);
-    const list = names.length > 0 ? names : ['علی','زهرا','محمد','فاطمه'];
-    const picked = list[Math.floor(Math.random() * list.length)];
-    document.getElementById('picked').textContent = picked;
-  }
-</script>
+    function loadNames() {
+      const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
+      names = scores.map(s => s.name).filter(Boolean);
+      if (names.length === 0) names = ['علی', 'زهرا', 'محمد', 'فاطمه', 'امیر'];
+      drawWheel();
+    }
+
+    function drawWheel() {
+      const n = names.length;
+      const arc = (2 * Math.PI) / n;
+      const colors = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F'];
+      ctx.clearRect(0, 0, 300, 300);
+      for (let i = 0; i < n; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(150, 150);
+        ctx.arc(150, 150, 140, i * arc + angle, (i + 1) * arc + angle);
+        ctx.fill();
+        ctx.save();
+        ctx.translate(150, 150);
+        ctx.rotate(i * arc + arc / 2 + angle);
+        ctx.fillStyle = '#222';
+        ctx.font = 'bold 13px Tahoma';
+        ctx.textAlign = 'right';
+        ctx.fillText(names[i], 105, 4);
+        ctx.restore();
+      }
+      ctx.beginPath();
+      ctx.fillStyle = '#222';
+      ctx.moveTo(150, 8);
+      ctx.lineTo(138, 32);
+      ctx.lineTo(162, 32);
+      ctx.fill();
+    }
+
+    function celebrate() {
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + 'vw';
+        c.style.background = ['#FFD700','#FFA500','#FFEC8B','#FFF'][i % 4];
+        c.style.transform = `rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(c);
+        c.animate([
+          { top: '-10px', opacity: 1 },
+          { top: '100vh', opacity: 0 }
+        ], { duration: 1800 + Math.random()*800, easing: 'ease-in' });
+        setTimeout(() => c.remove(), 2500);
+      }
+      try { win.play(); } catch(e) {}
+    }
+
+    function spin() {
+      if (spinning) return;
+      spinning = true;
+      document.getElementById('result').textContent = 'در حال چرخش...';
+      const extra = 1800 + Math.random() * 720;
+      const duration = 4500;
+      const start = performance.now();
+      let lastTick = 0;
+
+      function animate(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 4); // کند شدن در انتها
+        angle = (extra * ease * Math.PI) / 180;
+        drawWheel();
+
+        if (now - lastTick > 80 && t < 0.85) {
+          try { tick.currentTime = 0; tick.play(); } catch(e) {}
+          lastTick = now;
+        }
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          spinning = false;
+          const n = names.length;
+          const arc = (2 * Math.PI) / n;
+          const normalized = ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+          const index = Math.floor(((2 * Math.PI - normalized) % (2 * Math.PI)) / arc) % n;
+          document.getElementById('result').textContent = 'انتخاب شد: ' + names[index];
+          celebrate();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function show(t) { document.getElementById('status').textContent = t; }
+    loadNames();
+  </script>
 </body>
 </html>
