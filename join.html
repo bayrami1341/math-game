@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورود به کلاس</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+    .box { background: white; padding: 28px; border-radius: 16px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
+    button { width: 100%; padding: 14px; background: #1976D2; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    #msg { margin-top: 12px; color: #d32f2f; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>ورود به کلاس معلم</h2>
+    <input id="name" placeholder="نام شما" maxlength="30">
+    <input id="code" placeholder="کد ۶ رقمی کلاس" maxlength="6">
+    <button onclick="join()">ورود و شروع بازی</button>
+    <div id="msg"></div>
+    <p style="margin-top:16px; font-size:13px;"><a href="home.html">بازگشت</a></p>
+  </div>
+  <script>
+    function join() {
+      const name = document.getElementById('name').value.trim();
+      const code = document.getElementById('code').value.trim();
+      if (!name || code.length !== 6) {
+        document.getElementById('msg').textContent = 'نام و کد ۶ رقمی را وارد کنید';
+        return;
+      }
+      // ذخیره موقت برای بازی
+      localStorage.setItem('demo_student_name', name);
+      localStorage.setItem('demo_class_code', code);
+      location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
