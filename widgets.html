@@ -5,30 +5,130 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ابزارک‌های کلاس</title>
   <style>
-    body { font-family: Tahoma, sans-serif; background: #f4f6f8; margin: 0; padding: 16px; text-align: center; }
-    .back { color: #1976D2; text-decoration: none; font-size: 15px; display: inline-block; margin-bottom: 10px; }
-    h1 { color: #1565C0; font-size: 22px; margin: 8px 0 16px; }
-    .card { background: white; border-radius: 16px; padding: 20px; margin: 0 auto 20px; max-width: 420px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-    canvas { display: block; margin: 0 auto; }
-    button { background: #FF9800; color: white; border: none; padding: 12px 32px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 12px; }
-    #result { margin-top: 14px; font-size: 18px; font-weight: bold; color: #1565C0; min-height: 28px; }
-    .light { width: 70px; height: 70px; border-radius: 50%; border: none; margin: 6px; font-size: 24px; cursor: pointer; }
-    .g { background: #4CAF50; } .y { background: #FFC107; } .r { background: #F44336; }
-    #status { margin-top: 10px; font-weight: bold; }
-    .confetti { position: fixed; width: 10px; height: 10px; top: -10px; z-index: 999; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Tahoma, 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      padding: 16px;
+      text-align: center;
+    }
+    .back {
+      color: #1976D2;
+      text-decoration: none;
+      font-size: 15px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    h1 {
+      color: #0d47a1;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 16px;
+      margin: 0 auto 20px;
+      max-width: 420px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .card h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 16px;
+    }
+    #wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    canvas {
+      display: block;
+      border-radius: 50%;
+      box-shadow: 0 0 0 8px #fff, 0 0 0 12px #e0e0e0, 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .pointer {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid #d32f2f;
+      z-index: 10;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+    }
+    .spin-btn {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 18px;
+      box-shadow: 0 4px 12px rgba(255,152,0,0.4);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .spin-btn:active {
+      transform: scale(0.96);
+    }
+    .spin-btn:disabled {
+      background: #bbb;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    #result {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #0d47a1;
+      min-height: 30px;
+    }
+    .light {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: none;
+      margin: 8px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.12s;
+    }
+    .light:active { transform: scale(0.9); }
+    .g { background: #43a047; }
+    .y { background: #fbc02d; }
+    .r { background: #e53935; }
+    #status {
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #444;
+    }
   </style>
 </head>
 <body>
   <a href="home.html" class="back">← بازگشت</a>
   <h1>ابزارک‌های کلاس</h1>
 
+  <!-- چرخ گردان -->
   <div class="card">
     <h2>چرخ گردان</h2>
-    <canvas id="wheel" width="300" height="300"></canvas>
-    <button onclick="spin()">بچرخان</button>
+    <div id="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="300" height="300"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">بچرخان</button>
     <div id="result">منتظر چرخش...</div>
   </div>
 
+  <!-- چراغ راهنمایی -->
   <div class="card">
     <h2>چراغ راهنمایی</h2>
     <button class="light g" onclick="show('سبز — فهمیدم')">🟢</button>
@@ -40,81 +140,101 @@
   <script>
     const canvas = document.getElementById('wheel');
     const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
     let names = [];
     let angle = 0;
     let spinning = false;
-    const tick = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
-    const win = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
+
+    // صداهای واقعی (تیک و برنده)
+    const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3');
+    const winSound  = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3');
+    tickSound.volume = 0.35;
+    winSound.volume = 0.5;
 
     function loadNames() {
       const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
       names = scores.map(s => s.name).filter(Boolean);
-      if (names.length === 0) names = ['علی', 'زهرا', 'محمد', 'فاطمه', 'امیر'];
+      if (names.length === 0) {
+        names = ['علی', 'زهرا', 'محمد', 'فاطمه', 'امیر', 'نرگس', 'حسین'];
+      }
       drawWheel();
     }
 
     function drawWheel() {
       const n = names.length;
       const arc = (2 * Math.PI) / n;
-      const colors = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F'];
+      const colors = [
+        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
+        '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+        '#FF9F43', '#54A0FF'
+      ];
+
       ctx.clearRect(0, 0, 300, 300);
+
+      // رسم قطاع‌ها
       for (let i = 0; i < n; i++) {
+        const start = i * arc + angle;
+        const end = start + arc;
+
         ctx.beginPath();
-        ctx.fillStyle = colors[i % colors.length];
         ctx.moveTo(150, 150);
-        ctx.arc(150, 150, 140, i * arc + angle, (i + 1) * arc + angle);
+        ctx.arc(150, 150, 140, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
         ctx.fill();
+
+        // خط جداکننده
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // متن — دقیقاً وسط قطاع
         ctx.save();
         ctx.translate(150, 150);
-        ctx.rotate(i * arc + arc / 2 + angle);
-        ctx.fillStyle = '#222';
-        ctx.font = 'bold 13px Tahoma';
-        ctx.textAlign = 'right';
-        ctx.fillText(names[i], 105, 4);
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#1a1a1a';
+        ctx.font = 'bold 15px Tahoma';
+        // فاصله از مرکز تا وسط قطاع (حدود ۷۵ پیکسل)
+        ctx.fillText(names[i], 78, 0);
         ctx.restore();
       }
-      ctx.beginPath();
-      ctx.fillStyle = '#222';
-      ctx.moveTo(150, 8);
-      ctx.lineTo(138, 32);
-      ctx.lineTo(162, 32);
-      ctx.fill();
-    }
 
-    function celebrate() {
-      for (let i = 0; i < 40; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = Math.random() * 100 + 'vw';
-        c.style.background = ['#FFD700','#FFA500','#FFEC8B','#FFF'][i % 4];
-        c.style.transform = `rotate(${Math.random()*360}deg)`;
-        document.body.appendChild(c);
-        c.animate([
-          { top: '-10px', opacity: 1 },
-          { top: '100vh', opacity: 0 }
-        ], { duration: 1800 + Math.random()*800, easing: 'ease-in' });
-        setTimeout(() => c.remove(), 2500);
-      }
-      try { win.play(); } catch(e) {}
+      // دایره وسط
+      ctx.beginPath();
+      ctx.arc(150, 150, 22, 0, 2 * Math.PI);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+      ctx.strokeStyle = '#ddd';
+      ctx.lineWidth = 3;
+      ctx.stroke();
     }
 
     function spin() {
       if (spinning) return;
       spinning = true;
+      spinBtn.disabled = true;
       document.getElementById('result').textContent = 'در حال چرخش...';
-      const extra = 1800 + Math.random() * 720;
-      const duration = 4500;
-      const start = performance.now();
+
+      const extra = 1800 + Math.random() * 900; // چند دور کامل + تصادفی
+      const duration = 4800;
+      const startTime = performance.now();
       let lastTick = 0;
 
       function animate(now) {
-        const t = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - t, 4); // کند شدن در انتها
+        const t = Math.min((now - startTime) / duration, 1);
+        // ease-out قوی
+        const ease = 1 - Math.pow(1 - t, 4.5);
         angle = (extra * ease * Math.PI) / 180;
         drawWheel();
 
-        if (now - lastTick > 80 && t < 0.85) {
-          try { tick.currentTime = 0; tick.play(); } catch(e) {}
+        // صدای تیک
+        if (now - lastTick > 90 && t < 0.88) {
+          try {
+            tickSound.currentTime = 0;
+            tickSound.play();
+          } catch (e) {}
           lastTick = now;
         }
 
@@ -122,18 +242,27 @@
           requestAnimationFrame(animate);
         } else {
           spinning = false;
+          spinBtn.disabled = false;
+
+          // محاسبه نام برنده
           const n = names.length;
           const arc = (2 * Math.PI) / n;
           const normalized = ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+          // چون فلش بالا است، معکوس می‌کنیم
           const index = Math.floor(((2 * Math.PI - normalized) % (2 * Math.PI)) / arc) % n;
-          document.getElementById('result').textContent = 'انتخاب شد: ' + names[index];
-          celebrate();
+
+          document.getElementById('result').textContent = '🎉 انتخاب شد: ' + names[index];
+          try { winSound.play(); } catch (e) {}
         }
       }
       requestAnimationFrame(animate);
     }
 
-    function show(t) { document.getElementById('status').textContent = t; }
+    function show(t) {
+      document.getElementById('status').textContent = t;
+    }
+
+    // شروع
     loadNames();
   </script>
 </body>
