@@ -12,6 +12,7 @@
       min-height: 100vh;
       padding: 16px;
       text-align: center;
+      overflow-x: hidden;
     }
     .back {
       color: #1976D2;
@@ -109,10 +110,16 @@
       font-size: 16px;
       color: #444;
     }
-    .empty-msg {
-      color: #888;
-      font-size: 15px;
-      padding: 30px 10px;
+
+    /* افکت خرده کاغذ طلایی */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      z-index: 9999;
+      pointer-events: none;
+      border-radius: 2px;
     }
   </style>
 </head>
@@ -120,7 +127,6 @@
   <a href="home.html" class="back">← بازگشت</a>
   <h1>ابزارک‌های کلاس</h1>
 
-  <!-- چرخ گردان -->
   <div class="card">
     <h2>چرخ گردان</h2>
     <div id="wheel-container">
@@ -131,7 +137,6 @@
     <div id="result">منتظر چرخش...</div>
   </div>
 
-  <!-- چراغ راهنمایی -->
   <div class="card">
     <h2>چراغ راهنمایی</h2>
     <button class="light g" onclick="show('سبز — فهمیدم')">🟢</button>
@@ -148,57 +153,87 @@
     let angle = 0;
     let spinning = false;
 
-    // ========== صدای واقعی با Web Audio API (بدون فایل خارجی) ==========
+    // ========== صدا ==========
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
 
     function initAudio() {
       if (!audioCtx) audioCtx = new AudioCtx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function playTick() {
+    // صدای تیک کوتاه (قرقر)
+    function playTick(volume = 0.18) {
       try {
         initAudio();
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain);
         gain.connect(audioCtx.destination);
-        osc.frequency.value = 800;
         osc.type = 'square';
-        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+        osc.frequency.value = 700 + Math.random() * 200;
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.045);
         osc.start(audioCtx.currentTime);
-        osc.stop(audioCtx.currentTime + 0.06);
+        osc.stop(audioCtx.currentTime + 0.045);
       } catch (e) {}
     }
 
+    // صدای برنده (آکورد شاد)
     function playWin() {
       try {
         initAudio();
-        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
+        const notes = [523.25, 659.25, 783.99, 1046.50];
         notes.forEach((freq, i) => {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
           osc.connect(gain);
           gain.connect(audioCtx.destination);
-          osc.frequency.value = freq;
           osc.type = 'sine';
-          const t = audioCtx.currentTime + i * 0.12;
-          gain.gain.setValueAtTime(0.2, t);
-          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
+          osc.frequency.value = freq;
+          const t = audioCtx.currentTime + i * 0.11;
+          gain.gain.setValueAtTime(0.22, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
           osc.start(t);
-          osc.stop(t + 0.3);
+          osc.stop(t + 0.35);
         });
       } catch (e) {}
+    }
+
+    // ========== افکت خرده کاغذ طلایی ==========
+    function celebrate() {
+      const colors = ['#FFD700', '#FFC107', '#FFEC8B', '#FFA000', '#FFF8E1', '#FF8F00'];
+      for (let i = 0; i < 55; i++) {
+        const conf = document.createElement('div');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.background = colors[i % colors.length];
+        conf.style.width = (6 + Math.random() * 8) + 'px';
+        conf.style.height = (6 + Math.random() * 8) + 'px';
+        conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(conf);
+
+        conf.animate(
+          [
+            { top: '-20px', opacity: 1, transform: `rotate(0deg) translateX(0)` },
+            { top: '110vh', opacity: 0, transform: `rotate(${360 + Math.random()*360}deg) translateX(${(Math.random()-0.5)*120}px)` }
+          ],
+          {
+            duration: 2200 + Math.random() * 1400,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            delay: Math.random() * 300
+          }
+        );
+        setTimeout(() => conf.remove(), 4000);
+      }
     }
 
     // ========== بارگذاری اسامی واقعی ==========
     function loadNames() {
       const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
-      names = [...new Set(scores.map(s => s.name).filter(Boolean))]; // حذف تکراری
+      names = [...new Set(scores.map(s => s.name).filter(Boolean))];
 
       if (names.length === 0) {
-        // هیچ داده‌ای نیست
         ctx.clearRect(0, 0, 300, 300);
         ctx.fillStyle = '#f5f5f5';
         ctx.beginPath();
@@ -234,7 +269,6 @@
         const start = i * arc + angle;
         const end = start + arc;
 
-        // قطاع
         ctx.beginPath();
         ctx.moveTo(150, 150);
         ctx.arc(150, 150, 140, start, end);
@@ -242,12 +276,11 @@
         ctx.fillStyle = colors[i % colors.length];
         ctx.fill();
 
-        // خط جداکننده
         ctx.strokeStyle = 'rgba(255,255,255,0.7)';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // متن دقیقاً وسط قطاع
+        // متن وسط قطاع
         ctx.save();
         ctx.translate(150, 150);
         ctx.rotate(start + arc / 2);
@@ -255,7 +288,7 @@
         ctx.textBaseline = 'middle';
         ctx.fillStyle = '#1a1a1a';
         ctx.font = 'bold 15px Tahoma';
-        ctx.fillText(names[i], 78, 0);   // فاصله مناسب از مرکز
+        ctx.fillText(names[i], 78, 0);
         ctx.restore();
       }
 
@@ -275,24 +308,30 @@
       spinBtn.disabled = true;
       document.getElementById('result').textContent = 'در حال چرخش...';
 
-      // برای شروع صدا در موبایل باید یک بار با تعامل کاربر صدا ساخته شود
-      initAudio();
+      initAudio(); // برای موبایل ضروری است
 
-      const extra = 1800 + Math.random() * 900;
-      const duration = 4800;
+      const extra = 2000 + Math.random() * 1000; // چند دور کامل
+      const duration = 5200;
       const startTime = performance.now();
-      let lastTick = 0;
+      let lastTickTime = 0;
 
       function animate(now) {
         const t = Math.min((now - startTime) / duration, 1);
-        const ease = 1 - Math.pow(1 - t, 4.5);
+        // ease-out خیلی نرم
+        const ease = 1 - Math.pow(1 - t, 5);
         angle = (extra * ease * Math.PI) / 180;
         drawWheel();
 
-        // صدای تیک
-        if (now - lastTick > 85 && t < 0.88) {
-          playTick();
-          lastTick = now;
+        // === صدای قرقر متناسب با سرعت ===
+        // هرچه t نزدیک ۱ شود، فاصله بین تیک‌ها بیشتر می‌شود
+        const speedFactor = 1 - t;                 // از ۱ به ۰
+        const interval = 40 + (1 - speedFactor) * 160; // از ۴۰ms تا ۲۰۰ms
+
+        if (now - lastTickTime > interval && t < 0.97) {
+          // حجم صدا هم با سرعت کم می‌شود
+          const vol = 0.08 + speedFactor * 0.16;
+          playTick(vol);
+          lastTickTime = now;
         }
 
         if (t < 1) {
@@ -308,6 +347,7 @@
 
           document.getElementById('result').textContent = '🎉 انتخاب شد: ' + names[index];
           playWin();
+          celebrate(); // خرده کاغذ طلایی
         }
       }
       requestAnimationFrame(animate);
@@ -317,7 +357,6 @@
       document.getElementById('status').textContent = t;
     }
 
-    // شروع
     loadNames();
   </script>
 </body>
