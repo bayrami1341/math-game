@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لیدربرد کلاس</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; padding: 20px; }
+    h1 { text-align: center; color: #1565C0; }
+    .item { background: white; margin: 8px auto; padding: 12px; border-radius: 10px; max-width: 400px; display: flex; justify-content: space-between; }
+    .back { display: block; text-align: center; margin-top: 20px; color: #1976D2; }
+  </style>
+</head>
+<body>
+  <h1>نتایج کلاس</h1>
+  <div id="list"></div>
+  <a href="home.html" class="back">بازگشت</a>
+  <script>
+    const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
+    const list = document.getElementById('list');
+    if (scores.length === 0) {
+      list.innerHTML = '<p style="text-align:center;">هنوز نتیجه‌ای ثبت نشده</p>';
+    } else {
+      scores.sort((a,b) => b.score - a.score);
+      scores.forEach(s => {
+        list.innerHTML += `<div class="item"><span>${s.name}</span><span>${s.score}</span></div>`;
+      });
+    }
+  </script>
+</body>
+</html>
