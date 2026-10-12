@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ابزارک‌های کلاس</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; margin: 0; padding: 16px; }
+    .back { color: #1976D2; text-decoration: none; font-size: 15px; }
+    h1 { text-align: center; color: #1565C0; font-size: 22px; margin: 12px 0 20px; }
+    .card { background: white; border-radius: 16px; padding: 20px; margin: 0 auto 16px; max-width: 400px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .light { width: 72px; height: 72px; border-radius: 50%; border: none; margin: 6px; font-size: 26px; cursor: pointer; }
+    .g { background: #4CAF50; } .y { background: #FFC107; } .r { background: #F44336; }
+    #status { margin-top: 12px; font-weight: bold; font-size: 16px; }
+    .spin { background: #FF9800; color: white; border: none; padding: 12px 28px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    #picked { margin-top: 14px; font-size: 18px; font-weight: bold; color: #1565C0; }
+  </style>
+</head>
+<body>
+  <a href="home.html" class="back">← بازگشت</a>
+  <h1>ابزارک‌های کلاس</h1>
+
+  <div class="card">
+    <h2>چراغ راهنمایی</h2>
+    <button class="light g" onclick="show('سبز — فهمیدم')">🟢</button>
+    <button class="light y" onclick="show('زرد — نصفه')">🟡</button>
+    <button class="light r" onclick="show('قرمز — نفهمیدم')">🔴</button>
+    <div id="status">انتخاب کنید</div>
+  </div>
+
+  <div class="card">
+    <h2>چرخ گردان</h2>
+    <button class="spin" onclick="spin()">بچرخان</button>
+    <div id="picked">—</div>
+  </div>
+
+  <script>
+    function show(t) { document.getElementById('status').textContent = t; }
+    const list = ['علی','زهرا','محمد','فاطمه','امیر','نرگس','حسین','مریم'];
+    function spin() {
+      document.getElementById('picked').textContent = list[Math.floor(Math.random()*list.length)];
+    }
+  </script>
+</body>
+</html>
