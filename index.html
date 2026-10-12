@@ -516,5 +516,17 @@ window.addEventListener('DOMContentLoaded', function () {
   console.log('📦 نسخه ساختار:', وضعیت);
 });
 </script>
+<script>
+  // ثبت امتیاز آزمایشی بعد از بارگذاری صفحه
+  window.addEventListener('load', function() {
+    const name = localStorage.getItem('demo_student_name');
+    if (name) {
+      const score = Math.floor(Math.random() * 40) + 60; // امتیاز نمونه بین ۶۰ تا ۱۰۰
+      const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
+      scores.push({ name: name, score: score });
+      localStorage.setItem('demo_scores', JSON.stringify(scores));
+    }
+  });
+</script>  
 </body>
 </html>
