@@ -7,7 +7,7 @@
   <style>
     body { font-family: Tahoma, sans-serif; background: #f4f6f8; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
     .box { background: white; padding: 28px; border-radius: 16px; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; }
+    input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; text-align: center; box-sizing: border-box; }
     button { width: 100%; padding: 14px; background: #1976D2; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; }
     #msg { margin-top: 12px; color: #d32f2f; font-size: 14px; }
   </style>
@@ -15,25 +15,42 @@
 <body>
   <div class="box">
     <h2>ورود به کلاس معلم</h2>
-    <input id="name" placeholder="نام شما" maxlength="30">
-    <input id="code" placeholder="کد ۶ رقمی کلاس" maxlength="6">
-    <button onclick="join()">ورود و شروع بازی</button>
-    <div id="msg"></div>
+    <form id="join-form">
+      <input id="name" placeholder="نام شما" aria-label="نام شما" maxlength="30" autocomplete="name" required>
+      <input id="code" placeholder="کد ۶ رقمی کلاس" aria-label="کد ۶ رقمی کلاس" maxlength="6" inputmode="numeric" required>
+      <button type="submit">ورود و شروع بازی</button>
+    </form>
+    <div id="msg" role="alert"></div>
     <p style="margin-top:16px; font-size:13px;"><a href="home.html">بازگشت</a></p>
   </div>
   <script>
     function join() {
       const name = document.getElementById('name').value.trim();
-      const code = document.getElementById('code').value.trim();
-      if (!name || code.length !== 6) {
+      const code = document.getElementById('code').value.trim()
+        .replace(/[۰-۹]/g, function (d) { return String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)); })
+        .replace(/[٠-٩]/g, function (d) { return String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)); });
+      if (!name || !/^[0-9]{6}$/.test(code)) {
         document.getElementById('msg').textContent = 'نام و کد ۶ رقمی را وارد کنید';
         return;
       }
-      // ذخیره موقت برای بازی
-      localStorage.setItem('demo_student_name', name);
-      localStorage.setItem('demo_class_code', code);
-      location.href = 'index.html';
+      try {
+        var playerId = localStorage.getItem('demo_player_id');
+        if (!playerId) {
+          playerId = 'p_' + ((window.crypto && window.crypto.randomUUID)
+            ? window.crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
+          localStorage.setItem('demo_player_id', playerId);
+        }
+        localStorage.setItem('demo_student_name', name);
+        localStorage.setItem('demo_class_code', code);
+        location.href = 'index.html';
+      } catch (e) {
+        document.getElementById('msg').textContent = 'ذخیرهٔ اطلاعات ورود ممکن نیست؛ ذخیره‌سازی مرورگر را فعال کنید.';
+      }
     }
+    document.getElementById('join-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      join();
+    });
   </script>
 </body>
 </html>

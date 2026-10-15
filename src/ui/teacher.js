@@ -1,5 +1,7 @@
 /* teacher.js — پنل معلم v3 — v1.0 */
 window.TeacherV3 = {
+  GOOD_THRESHOLD: 80,
+  WARN_THRESHOLD: 50,
   data: { students: [], latest: {}, totals: {} },
   currentDetail: null,
   currentPage: 'today',
@@ -20,7 +22,7 @@ window.TeacherV3 = {
       (st.details || []).forEach(d => {
         const k = (d.f1 || '') + '×' + (d.f2 || '');
         if (!allFacts[k]) allFacts[k] = { fluent: 0, shaky: 0, wrong: 0 };
-        if (d.masteryLevel >= 3) allFacts[k].fluent++;
+        if (window.isPositiveMastery(d)) allFacts[k].fluent++;
         if (d.shaky) allFacts[k].shaky++;
         if ((d.wrongAnswers || []).length > 0) allFacts[k].wrong++;
       });
@@ -38,7 +40,7 @@ window.TeacherV3 = {
   },
      _mergeCoreEvents() {
       try {
-        var raw = localStorage.getItem('sw_core_v1');
+        var raw = localStorage.getItem(window.STORAGE_KEYS && window.STORAGE_KEYS.CORE || 'sw_core_v1');
         if (!raw) {
           console.log('۸.۱: sw_core_v1 خالی است — رویداد خامی نیست');
           return;
@@ -130,9 +132,9 @@ window.TeacherV3 = {
     const h = new Date().getHours();
     const cnt = this.data.students.length;
     if (cnt === 0) return 'هنوز کسی بازی نکرده. وقتی اولین دانش‌آموز بازی کند، اینجا گزارش می‌دهم.';
-    const good = this.data.students.filter(s => (s.successRate || 0) >= 80).length;
-    const warn = this.data.students.filter(s => (s.successRate || 0) >= 50 && (s.successRate || 0) < 80).length;
-    const danger = this.data.students.filter(s => (s.successRate || 0) < 50).length;
+    const good = this.data.students.filter(s => (s.successRate || 0) >= this.GOOD_THRESHOLD).length;
+    const warn = this.data.students.filter(s => (s.successRate || 0) >= this.WARN_THRESHOLD && (s.successRate || 0) < this.GOOD_THRESHOLD).length;
+    const danger = this.data.students.filter(s => (s.successRate || 0) < this.WARN_THRESHOLD).length;
     if (h >= 5 && h < 12) {
       return toFa(cnt) + ' دانش‌آموز در سیستم داریم. ' + (good > 0 ? toFa(good) + ' نفر آماده، ' : '') + (warn > 0 ? toFa(warn) + ' نفر نیاز به تمرین، ' : '') + (danger > 0 ? toFa(danger) + ' نفر نیاز به توجه.' : 'همه خوب.');
     }
@@ -159,8 +161,8 @@ window.TeacherV3 = {
     const good = [], warn = [], danger = [];
     this.data.students.forEach(st => {
       const acc = st.successRate || 0;
-      if (acc >= 80) good.push(st);
-      else if (acc >= 50) warn.push(st);
+      if (acc >= this.GOOD_THRESHOLD) good.push(st);
+      else if (acc >= this.WARN_THRESHOLD) warn.push(st);
       else danger.push(st);
     });
 
@@ -263,8 +265,8 @@ window.TeacherV3 = {
     students.forEach(st => {
       const acc = st.successRate || 0;
       let statusIcon = '✅';
-      if (acc < 50) statusIcon = '❌';
-      else if (acc < 80) statusIcon = '⚠️';
+      if (acc < this.WARN_THRESHOLD) statusIcon = '❌';
+      else if (acc < this.GOOD_THRESHOLD) statusIcon = '⚠️';
       const profile = ProfileManager.getById(st.profileId);
       const avatar = profile ? profile.avatar : '👤';
       const heroCount = st.profileId ? HeroesCore.countForProfile(st.profileId) : 0;
@@ -293,7 +295,7 @@ window.TeacherV3 = {
     const avatar = profile ? profile.avatar : '👤';
     const details = st.details || [];
     let fluentCount = 0;
-    details.forEach(d => { if (d.masteryLevel >= 3) fluentCount++; });
+    details.forEach(d => { if (window.isPositiveMastery(d)) fluentCount++; });
     const heroCount = st.profileId ? HeroesCore.countForProfile(st.profileId) : 0;
     const ownedHeroes = st.profileId ? HeroesCore.getForProfile(st.profileId) : [];
 
@@ -322,7 +324,7 @@ window.TeacherV3 = {
       html += '</div></div>';
     }
 
-    const learned = details.filter(d => d.masteryLevel >= 3);
+    const learned = details.filter(d => window.isPositiveMastery(d));
     html += '<div style="background:rgba(13,22,45,0.95); border:1.5px solid rgba(0,243,255,0.15); border-radius:12px; padding:12px 14px; margin-bottom:10px;">';
     html += '<h3 style="color:var(--cyan); font-size:0.88rem; margin-bottom:10px; font-weight:800;">✅ ضرب‌های روان</h3>';
     if (learned.length === 0) html += '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">هنوز ضربی روان نشده.</div>';
@@ -331,7 +333,7 @@ window.TeacherV3 = {
     });
     html += '</div>';
 
-    const shaky = details.filter(d => d.shaky || ((d.masteryLevel < 3) && (d.wrongAnswers || []).length > 0));
+    const shaky = details.filter(d => d.shaky || (!window.isPositiveMastery(d) && (d.wrongAnswers || []).length > 0));
     html += '<div style="background:rgba(13,22,45,0.95); border:1.5px solid rgba(0,243,255,0.15); border-radius:12px; padding:12px 14px; margin-bottom:10px;">';
     html += '<h3 style="color:var(--cyan); font-size:0.88rem; margin-bottom:10px; font-weight:800;">⚠️ ضرب‌های لرزان</h3>';
     if (shaky.length === 0) html += '<div style="color:var(--muted); font-size:0.82rem; padding:8px;">همه ضرب‌ها محکم هستند.</div>';

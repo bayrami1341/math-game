@@ -33,9 +33,12 @@ window.LiveBoard = (function () {
   }
 
   /** گوش دادن زنده به لیدربرد یک اتاق/کلاس/گروه */
-  function listen(roomCode, onUpdate) {
+  function listen(roomCode, onUpdate, onError) {
     var database = db();
-    if (!database || !roomCode) return function () {};
+    if (!database || !roomCode) {
+      if (typeof onError === 'function') onError(new Error('Firebase آماده نیست یا کد کلاس وارد نشده است.'));
+      return function () {};
+    }
     var ref = database.ref('rooms/' + String(roomCode).trim() + '/scores');
     var handler = function (snap) {
       var val = snap.val() || {};
@@ -45,7 +48,10 @@ window.LiveBoard = (function () {
       list.sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
       if (typeof onUpdate === 'function') onUpdate(list);
     };
-    ref.on('value', handler);
+    ref.on('value', handler, function (err) {
+      console.error('LiveBoard listen error', err);
+      if (typeof onError === 'function') onError(err);
+    });
     return function unsubscribe() {
       ref.off('value', handler);
     };

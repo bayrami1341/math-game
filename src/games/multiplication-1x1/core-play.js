@@ -14,11 +14,16 @@
   function slicePin(db) { var value = db.getItem('sw_pin_v1'); return value == null ? '' : String(value); }
   function sliceCore(db) { return WorkshopCore.create({ storage: sliceStore(db), pin: slicePin(db) }); }
 
-  function reduceStep(core, state, given) {
+  function clockNow() {
+    return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now();
+  }
+
+  function reduceStep(core, state, given, ms) {
     if (typeof given !== 'number' || !isFinite(given)) {
       return { session: state.session, step: state.step, phase: state.phase, message: state.message || '', docked: state.docked || null, finished: false, refused: true };
     }
     var judgment = core.judge.answer(state.step, given, core.presentation.assisted(state.phase));
+    if (Number.isFinite(ms) && ms > 0) judgment.ms = ms;
     var session = core.session.apply(state.session, state.step, judgment);
     if (core.presentation.stays(state.phase, judgment)) {
       return { session: session, step: state.step, phase: core.presentation.afterWrong(state.phase), message: judgment.message, docked: state.docked || null, finished: false, refused: false };
@@ -50,36 +55,14 @@
       const name = session.name || 'مهندس';
       const className = session.className || '';
       const id = 'CORE_' + (profileId || name) + '_s' + sectorId;
-      const details = [];
-      const eventByKey = {};
-      (session.events || []).forEach(ev => {
-        if (ev.filler) return;
-        const key = Math.min(ev.f1, ev.f2) + '×' + Math.max(ev.f1, ev.f2);
-        if (!eventByKey[key]) {
-          eventByKey[key] = {
-            f1: Math.min(ev.f1, ev.f2), f2: Math.max(ev.f1, ev.f2), key,
-            attempts: 0, correctCount: 0, wrongAnswers: [], history: [],
-            errorCodes: [], maxConsecutiveCorrect: 0, consecutiveCorrect: 0,
-            avgCorrectTimeMs: 0, _correctTimeSum: 0
-          };
+      const details = window.rowsFromCoreEvents(session.events || []);
+      var timedSum = 0;
+      var timedN = 0;
+      details.forEach(function (row) {
+        if (row.hasTiming && row.avgCorrectTimeMs > 0) {
+          timedSum += row.avgCorrectTimeMs;
+          timedN++;
         }
-        const r = eventByKey[key];
-        r.attempts++;
-        if (ev.correct) {
-          r.correctCount++; r.history.push('C'); r.consecutiveCorrect++;
-          if (r.consecutiveCorrect > r.maxConsecutiveCorrect) r.maxConsecutiveCorrect = r.consecutiveCorrect;
-        } else {
-          r.history.push('W'); r.consecutiveCorrect = 0;
-          if (ev.given != null && !r.wrongAnswers.includes(ev.given)) r.wrongAnswers.push(ev.given);
-        }
-      });
-      Object.keys(eventByKey).forEach(k => {
-        const r = eventByKey[k];
-        const m = evaluateMastery(r);
-        r.masteryLevel = m.level;
-        r.masteryName = m.name;
-        r.isPositive = m.level >= 3;
-        details.push(r);
       });
 
       const record = {
@@ -88,9 +71,10 @@
         date: todayFa(), sector: sectorId,
         modulesAttached: (session.events || []).filter(e => e.correct).length,
         successRate: accuracy || 0,
-        avgTime: avgTime || 0,
+        avgTime: timedN ? timedSum / timedN : (Number(avgTime) || 0),
         details,
-        fromCore: true
+        fromCore: true,
+        origin: 'core'
       };
 
       const at = list.findIndex(x => x.id === id);
@@ -208,9 +192,29 @@
         bridgeCoreToDossier(play.session, play.profileId, play.sectorId, accuracy, 0);
         const activeClassCode = AppStorage.getActiveClass();
         if (activeClassCode && window.SocialCore) {
-          SocialCore.classes.submitScore(activeClassCode, play.profileId, totalCorrect);
+          try {
+            SocialCore.classes.submitScore(activeClassCode, play.profileId, totalCorrect);
+          } catch (e) { console.warn('Local class score error:', e); }
         }
-      } catch (e) {}
+        var roomCode = localStorage.getItem('demo_class_code');
+        if (roomCode && window.LiveBoard && !play.liveScorePending && !play.liveScoreSent) {
+          var profile = (window.ProfileManager && ProfileManager.getActive) ? ProfileManager.getActive() : null;
+          play.liveScorePending = true;
+          LiveBoard.submitScore(roomCode, {
+            profileId: localStorage.getItem('demo_player_id') || play.profileId || (profile && profile.profileId),
+            name: localStorage.getItem('demo_student_name') || (profile && profile.displayName) || play.session.name || 'بازیکن',
+            avatar: (profile && profile.avatar) || '👤',
+            score: totalCorrect,
+            sector: play.sectorId
+          }).then(function (sent) {
+            play.liveScorePending = false;
+            play.liveScoreSent = sent;
+          });
+        }
+      } catch (e) {
+        play.liveScorePending = false;
+        console.warn('Sector score error:', e);
+      }
 
       try {
         const stats = buildHeroStats(play);
@@ -245,9 +249,11 @@
     }
 
     play.locked = false;
+    play.questionStartTime = clockNow();
     renderCoreChoices(play.currentChoices, frame.rows * frame.cols, function (val, btn) {
       if (play.locked) return;
       play.locked = true;
+      var ms = (typeof play.questionStartTime === 'number') ? (clockNow() - play.questionStartTime) : undefined;
       var allBtns = document.querySelectorAll('#core-choices .core-choice');
       var correct = frame.rows * frame.cols;
       var rows = frame.rows;
@@ -260,7 +266,7 @@
         showCoreToast('correct', msgs[Math.floor(Math.random() * msgs.length)]);
         animatePieceDock(rows, cols);
         play.streak = (play.streak || 0) + 1;
-        setTimeout(function () { submitCoreChoice(val); }, 1100);
+        setTimeout(function () { submitCoreChoice(val, ms); }, 1100);
       } else {
         btn.classList.add('wrong');
         if (sharedSound) sharedSound.playReview();
@@ -272,7 +278,7 @@
         var wrongMsgs = ['دوباره تلاش کن 💪', 'نزدیک بود! 🎯', 'با دقت بشمار 🌱'];
         showCoreToast('wrong', wrongMsgs[Math.floor(Math.random() * wrongMsgs.length)]);
         play.streak = 0;
-        setTimeout(function () { submitCoreChoice(val); }, 1500);
+        setTimeout(function () { submitCoreChoice(val, ms); }, 1500);
       }
     });
 
@@ -359,9 +365,9 @@
     document.getElementById('modal-start').classList.remove('hidden');
   }
 
-  function submitCoreChoice(given) {
+  function submitCoreChoice(given, ms) {
     if (window.workshopMode !== 'core' || !corePlay || !corePlay.step || corePlay.step.type !== 'ask') return;
-    var view = reduceStep(corePlay.core, corePlay, given);
+    var view = reduceStep(corePlay.core, corePlay, given, ms);
     if (view.refused) return;
     corePlay.session = view.session;
     corePlay.phase = view.phase;
@@ -391,5 +397,6 @@
   window.openCore = openCore;
   window.closeCore = closeCore;
   window.submitCoreChoice = submitCoreChoice;
+  window.bridgeCoreToDossier = bridgeCoreToDossier;
   window.paintCore = paintCore;
 })();

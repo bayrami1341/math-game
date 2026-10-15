@@ -5,27 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>لیدربرد کلاس</title>
   <style>
-    body { font-family: Tahoma, sans-serif; background: #f4f6f8; padding: 20px; }
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; padding: 20px; margin: 0; }
     h1 { text-align: center; color: #1565C0; }
-    .item { background: white; margin: 8px auto; padding: 12px; border-radius: 10px; max-width: 400px; display: flex; justify-content: space-between; }
+    .item { background: white; margin: 8px auto; padding: 12px 16px; border-radius: 10px; max-width: 400px; display: flex; justify-content: space-between; gap: 16px; overflow-wrap: anywhere; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    #status, .hint { text-align: center; }
     .back { display: block; text-align: center; margin-top: 20px; color: #1976D2; }
   </style>
 </head>
 <body>
   <h1>نتایج کلاس</h1>
+  <p id="status" role="status">در حال اتصال به نتایج کلاس…</p>
+  <p class="hint">امتیازها مربوط به آخرین سکتور ثبت‌شدهٔ هر بازیکن هستند.</p>
   <div id="list"></div>
+  <a href="join.html" class="back">ورود یا تغییر کلاس</a>
   <a href="home.html" class="back">بازگشت</a>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="live-board.js"></script>
   <script>
-    const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
-    const list = document.getElementById('list');
-    if (scores.length === 0) {
-      list.innerHTML = '<p style="text-align:center;">هنوز نتیجه‌ای ثبت نشده</p>';
-    } else {
-      scores.sort((a,b) => b.score - a.score);
-      scores.forEach(s => {
-        list.innerHTML += `<div class="item"><span>${s.name}</span><span>${s.score}</span></div>`;
-      });
+    var list = document.getElementById('list');
+    var statusEl = document.getElementById('status');
+    var unsubscribe = null;
+
+    function showError() {
+      list.textContent = '';
+      statusEl.textContent = 'دریافت نتایج ممکن نشد؛ اتصال اینترنت و دسترسی Firebase را بررسی و صفحه را دوباره بارگذاری کنید.';
     }
+
+    function connect() {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = null;
+      list.textContent = '';
+      var roomCode;
+      try { roomCode = localStorage.getItem('demo_class_code'); }
+      catch (e) { showError(); return; }
+      if (!roomCode || !window.LiveBoard || !window.fbDB) {
+        statusEl.textContent = !roomCode ? 'کد کلاس نیست؛ اول از صفحهٔ ورود وارد شوید.' : 'Firebase آماده نیست؛ اتصال اینترنت را بررسی و صفحه را دوباره بارگذاری کنید.';
+        return;
+      }
+      statusEl.textContent = 'در حال اتصال به نتایج کلاس…';
+      try {
+        unsubscribe = LiveBoard.listen(roomCode, function (rows) {
+          list.textContent = '';
+          statusEl.textContent = rows.length ? 'نتایج زندهٔ کلاس ' + roomCode : 'هنوز نتیجه‌ای ثبت نشده';
+          rows.forEach(function (row) {
+            var item = document.createElement('div');
+            item.className = 'item';
+            var nameEl = document.createElement('span');
+            var scoreEl = document.createElement('span');
+            nameEl.textContent = row.name || 'بازیکن';
+            scoreEl.textContent = String(row.score || 0);
+            item.appendChild(nameEl);
+            item.appendChild(scoreEl);
+            list.appendChild(item);
+          });
+        }, showError);
+      } catch (e) { showError(); }
+    }
+    window.addEventListener('pagehide', function () {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = null;
+    });
+    window.addEventListener('pageshow', connect);
   </script>
 </body>
 </html>

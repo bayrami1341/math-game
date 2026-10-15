@@ -37,10 +37,45 @@
   // ============================================
   // ذخیره‌سازی
   // ============================================
+  function copyJson(value) {
+    return JSON.parse(JSON.stringify(value));
+  }
+
+  function normalizeDossier(raw) {
+    var dossier = (raw && typeof raw === 'object') ? copyJson(raw) : {};
+    var details = Array.isArray(dossier.details) ? dossier.details : [];
+    dossier.details = details.map(function (detail) {
+      var row = (detail && typeof detail === 'object') ? detail : {};
+      if (window.migrateRow) window.migrateRow(row);
+      if (window.evaluateMastery) {
+        var mastery = window.evaluateMastery(row);
+        row.masteryLevel = mastery.level;
+        row.masteryName = mastery.name;
+        row.isPositive = window.isPositiveMastery ? window.isPositiveMastery(row) : mastery.level >= window.MASTERY.BASIC.level;
+      }
+      return row;
+    });
+    if (Array.isArray(dossier.events) && window.migrateEventOrigin) {
+      dossier.events = dossier.events.map(function (event) {
+        return window.migrateEventOrigin(copyJson(event));
+      });
+    }
+    if (dossier.origin == null || dossier.origin === '') dossier.origin = 'legacy';
+    return dossier;
+  }
+
   const Storage = {
     getSettings() { try { return Object.assign({ teacherPin: '1234' }, JSON.parse(localStorage.getItem(STORAGE_KEYS.SETTINGS)) || {}); } catch { return { teacherPin: '1234' }; } },
     saveSettings(s) { try { localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(s)); } catch {} },
-    getAll() { try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.RECORDS)) || []; } catch { return []; } },
+    getAll() {
+      try {
+        var parsed = JSON.parse(localStorage.getItem(STORAGE_KEYS.RECORDS) || '[]');
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map(normalizeDossier);
+      } catch (e) {
+        return [];
+      }
+    },
     saveAll(list) { try { localStorage.setItem(STORAGE_KEYS.RECORDS, JSON.stringify((list || []).slice(0, 200))); } catch {} },
     addDossier(d) {
       const list = this.getAll();

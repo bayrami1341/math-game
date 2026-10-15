@@ -13,6 +13,10 @@
     STABLE: { level: 4, name: 'تسلط پایدار' },
     FLUENT: { level: 5, name: 'تسلط سیال' }
   };
+  Object.keys(window.MASTERY).forEach(function (name) {
+    Object.freeze(window.MASTERY[name]);
+  });
+  Object.freeze(window.MASTERY);
 
   window.LEITNER_BOXES = [
     { box: 1, delay: 2 },
@@ -26,17 +30,153 @@
     return Math.min(f1, f2) + '×' + Math.max(f1, f2);
   };
 
-  // ============================================
-  // ارزیابی تسلط
-  // ============================================
+  window.APP_VERSION = '۸.۱';
+
+  window.EVENT_ORIGINS = Object.freeze({
+    CORE: 'core',
+    LEGACY: 'legacy',
+    IMPORT: 'import',
+    UNKNOWN: 'unknown'
+  });
+
+  window.MASTERY_RULES = Object.freeze({
+    MIN_CONSECUTIVE: 3,
+    FLUENT_MAX_MS_EXCLUSIVE: 4000,
+    WINDOW_SIZE: 20,
+    HISTORY_STORE_CAP: 200
+  });
+  var RULES = window.MASTERY_RULES;
+
+  window.createRow = function () {
+    return {
+      attempts: 0,
+      correctCount: 0,
+      history: [],
+      consecutiveCorrect: 0,
+      maxConsecutiveCorrect: 0,
+      _correctTimeSum: 0,
+      avgCorrectTimeMs: 0,
+      hasTiming: false,
+      timingSampleCount: 0,
+      wrongCount: 0,
+      wrongMsSum: 0,
+      historyTruncated: 0
+    };
+  };
+
+  window.recordAttempt = function (row, ok, ms) {
+    var cap = RULES.HISTORY_STORE_CAP;
+    ms = Number(ms);
+    row.attempts++;
+    if (ok) {
+      row.correctCount++;
+      row.history.push('C');
+      row.consecutiveCorrect++;
+      if (row.consecutiveCorrect > row.maxConsecutiveCorrect) {
+        row.maxConsecutiveCorrect = row.consecutiveCorrect;
+      }
+      if (Number.isFinite(ms) && ms > 0) {
+        row._correctTimeSum += ms;
+        row.timingSampleCount++;
+        row.avgCorrectTimeMs = row._correctTimeSum / row.timingSampleCount;
+        row.hasTiming = true;
+      }
+    } else {
+      row.history.push('W');
+      row.consecutiveCorrect = 0;
+      row.wrongCount++;
+      if (Number.isFinite(ms) && ms > 0) row.wrongMsSum += ms;
+    }
+    if (row.history.length > cap) {
+      var trim = row.history.length - cap;
+      row.history.splice(0, trim);
+      row.historyTruncated += trim;
+    }
+    return row;
+  };
+
   window.evaluateMastery = function (r) {
     if (!r || r.attempts === 0) return window.MASTERY.NOVICE;
-    if (r.maxConsecutiveCorrect >= 3 && r.avgCorrectTimeMs > 0 && r.avgCorrectTimeMs < 4000) return window.MASTERY.FLUENT;
-    if (r.maxConsecutiveCorrect >= 3) return window.MASTERY.STABLE;
+    if (r.maxConsecutiveCorrect >= RULES.MIN_CONSECUTIVE
+        && r.hasTiming
+        && r._correctTimeSum > 0
+        && r._correctTimeSum < RULES.FLUENT_MAX_MS_EXCLUSIVE * r.timingSampleCount) {
+      return window.MASTERY.FLUENT;
+    }
+    if (r.maxConsecutiveCorrect >= RULES.MIN_CONSECUTIVE) return window.MASTERY.STABLE;
     if (r.maxConsecutiveCorrect >= 2) return window.MASTERY.BASIC;
     if (r.correctCount >= 2) return window.MASTERY.LEARNING;
     if (r.correctCount >= 1) return window.MASTERY.FAMILIAR;
     return window.MASTERY.NOVICE;
+  };
+
+  window.isPositiveMastery = function (row) {
+    return window.evaluateMastery(row).level >= window.MASTERY.BASIC.level;
+  };
+
+  window.formatCorrectTime = function (row) {
+    if (!row || row.hasTiming !== true) return '—';
+    return Math.round(row.avgCorrectTimeMs);
+  };
+
+  window.formatWrongTime = function (row) {
+    if (!row || !(row.wrongCount > 0) || !(row.wrongMsSum > 0)) return '—';
+    return Math.round(row.wrongMsSum / row.wrongCount);
+  };
+
+  window.migrateRow = function (row) {
+    if (!row) return row;
+    var hadTiming = Object.prototype.hasOwnProperty.call(row, 'hasTiming');
+    var streakWasAbsent = !Object.prototype.hasOwnProperty.call(row, 'maxConsecutiveCorrect');
+    var attemptsWasAbsent = !Object.prototype.hasOwnProperty.call(row, 'attempts');
+    var correctWasAbsent = !Object.prototype.hasOwnProperty.call(row, 'correctCount');
+    if (!hadTiming) {
+      var avg = Number(row.avgCorrectTimeMs);
+      row.avgCorrectTimeMs = (Number.isFinite(avg) && avg > 0) ? avg : 0;
+      var n = (row.correctCount > 0) ? row.correctCount : 1;
+      if (row.avgCorrectTimeMs > 0) {
+        row.hasTiming = true;
+        row.timingSampleCount = n;
+        row._correctTimeSum = row.avgCorrectTimeMs * n;
+        if (correctWasAbsent) row.correctCount = n;
+        if (attemptsWasAbsent || !(row.attempts > 0)) row.attempts = n;
+        if (streakWasAbsent && row.avgCorrectTimeMs < RULES.FLUENT_MAX_MS_EXCLUSIVE) {
+          row.maxConsecutiveCorrect = RULES.MIN_CONSECUTIVE;
+        }
+      } else {
+        row.hasTiming = false;
+        row.timingSampleCount = 0;
+        if (!Object.prototype.hasOwnProperty.call(row, '_correctTimeSum')) row._correctTimeSum = 0;
+      }
+    }
+    var blank = window.createRow();
+    Object.keys(blank).forEach(function (key) {
+      if (!Object.prototype.hasOwnProperty.call(row, key)) row[key] = blank[key];
+    });
+    if (!Array.isArray(row.history)) row.history = [];
+    if (!Array.isArray(row.wrongAnswers)) row.wrongAnswers = [];
+    if (!Array.isArray(row.errorCodes)) row.errorCodes = [];
+    if (row.origin == null || row.origin === '') row.origin = 'legacy';
+    var level = Number(row.masteryLevel);
+    if (row.masteryLevel != null && row.masteryLevel !== '' && Number.isFinite(level)) row.masteryLevel = level;
+    return row;
+  };
+
+  window.migrateEventOrigin = function (event) {
+    if (!event) return event;
+    if (event.origin == null || event.origin === '') event.origin = 'legacy';
+    return event;
+  };
+
+  window.rowsFromCoreEvents = function (events) {
+    var engine = new window.PedagogyEngine();
+    engine.origin = 'core';
+    (Array.isArray(events) ? events : []).forEach(function (ev) {
+      if (!ev || ev.filler) return;
+      var ms = Number(ev.ms);
+      engine.recordAttempt(ev.f1, ev.f2, ev.given, !!ev.correct, (Number.isFinite(ms) && ms > 0) ? ms : undefined);
+    });
+    return engine.getReportData();
   };
 
   // ============================================
@@ -151,31 +291,25 @@
   // PedagogyEngine — موتور آموزشی
   // ============================================
   window.PedagogyEngine = class PedagogyEngine {
-    constructor() { this.history = new Map(); this.leitner = new window.Leitner(); }
+    constructor() { this.history = new Map(); this.leitner = new window.Leitner(); this.origin = 'legacy'; }
     reset() { this.history.clear(); this.leitner.reset(); }
     keyOf(f1, f2) { return window.normalizeKey(f1, f2); }
     recordAttempt(f1, f2, chosen, ok, ms) {
       const key = this.keyOf(f1, f2);
       if (!this.history.has(key)) {
-        this.history.set(key, {
-          f1: Math.min(f1, f2), f2: Math.max(f1, f2), key,
-          attempts: 0, correctCount: 0, wrongAnswers: [],
-          history: [], errorCodes: [],
-          maxConsecutiveCorrect: 0, consecutiveCorrect: 0,
-          avgCorrectTimeMs: 0, _correctTimeSum: 0
-        });
+        const born = window.createRow();
+        born.f1 = Math.min(f1, f2);
+        born.f2 = Math.max(f1, f2);
+        born.key = key;
+        born.wrongAnswers = [];
+        born.errorCodes = [];
+        this.history.set(key, born);
       }
       const r = this.history.get(key);
-      r.attempts++;
-      if (ok) {
-        r.correctCount++; r.history.push('C'); r.consecutiveCorrect++;
-        if (r.consecutiveCorrect > r.maxConsecutiveCorrect) r.maxConsecutiveCorrect = r.consecutiveCorrect;
-        r._correctTimeSum += ms;
-        r.avgCorrectTimeMs = r._correctTimeSum / r.correctCount;
-      } else {
-        r.history.push('W'); r.consecutiveCorrect = 0;
-        if (!r.wrongAnswers.includes(chosen)) r.wrongAnswers.push(chosen);
-        const c = window.classifyError(f1, f2, chosen);
+      window.recordAttempt(r, ok, ms);
+      if (!ok) {
+        if (chosen != null && !r.wrongAnswers.includes(chosen)) r.wrongAnswers.push(chosen);
+        const c = chosen == null ? null : window.classifyError(f1, f2, chosen);
         if (c && !r.errorCodes.includes(c)) r.errorCodes.push(c);
       }
       this.leitner.register(key);
@@ -185,7 +319,12 @@
       const o = [];
       for (const r of this.history.values()) {
         const m = window.evaluateMastery(r);
-        o.push(Object.assign({}, r, { masteryLevel: m.level, masteryName: m.name, isPositive: m.level >= 3 }));
+        o.push(Object.assign({}, r, {
+          masteryLevel: m.level,
+          masteryName: m.name,
+          isPositive: window.isPositiveMastery(r),
+          origin: r.origin || this.origin || 'legacy'
+        }));
       }
       return o;
     }
@@ -215,14 +354,14 @@
   // ============================================
   window.BADGES = [
     { id: 'first_module', icon: '🔧', name: 'اولین قطعه', desc: 'اولین پاسخ درست', check: s => s.totalCorrect >= 1 },
-    { id: 'explorer_2', icon: '🛸', name: 'کاوشگر ۲', desc: 'تسلط پایه در ضرب ۲', check: s => (s.factorMastery[2] || 0) >= 3 },
-    { id: 'explorer_3', icon: '🚀', name: 'کاوشگر ۳', desc: 'تسلط پایه در ضرب ۳', check: s => (s.factorMastery[3] || 0) >= 3 },
-    { id: 'explorer_4', icon: '🛰️', name: 'کاوشگر ۴', desc: 'تسلط پایه در ضرب ۴', check: s => (s.factorMastery[4] || 0) >= 3 },
-    { id: 'energy_5', icon: '⚡', name: 'مهندس انرژی', desc: 'تسلط پایه در ضرب ۵', check: s => (s.factorMastery[5] || 0) >= 3 },
-    { id: 'star_6', icon: '💫', name: 'ستارهٔ ۶', desc: 'تسلط پایه در ضرب ۶', check: s => (s.factorMastery[6] || 0) >= 3 },
-    { id: 'star_7', icon: '✨', name: 'ستارهٔ ۷', desc: 'تسلط پایه در ضرب ۷', check: s => (s.factorMastery[7] || 0) >= 3 },
-    { id: 'double_8', icon: '🌟', name: 'دوبرابر ۸', desc: 'تسلط پایه در ضرب ۸', check: s => (s.factorMastery[8] || 0) >= 3 },
-    { id: 'digit_9', icon: '🌠', name: 'رقم ۹', desc: 'تسلط پایه در ضرب ۹', check: s => (s.factorMastery[9] || 0) >= 3 },
+    { id: 'explorer_2', icon: '🛸', name: 'کاوشگر ۲', desc: 'تسلط پایه در ضرب ۲', check: s => (s.factorMastery[2] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'explorer_3', icon: '🚀', name: 'کاوشگر ۳', desc: 'تسلط پایه در ضرب ۳', check: s => (s.factorMastery[3] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'explorer_4', icon: '🛰️', name: 'کاوشگر ۴', desc: 'تسلط پایه در ضرب ۴', check: s => (s.factorMastery[4] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'energy_5', icon: '⚡', name: 'مهندس انرژی', desc: 'تسلط پایه در ضرب ۵', check: s => (s.factorMastery[5] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'star_6', icon: '💫', name: 'ستارهٔ ۶', desc: 'تسلط پایه در ضرب ۶', check: s => (s.factorMastery[6] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'star_7', icon: '✨', name: 'ستارهٔ ۷', desc: 'تسلط پایه در ضرب ۷', check: s => (s.factorMastery[7] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'double_8', icon: '🌟', name: 'دوبرابر ۸', desc: 'تسلط پایه در ضرب ۸', check: s => (s.factorMastery[8] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'digit_9', icon: '🌠', name: 'رقم ۹', desc: 'تسلط پایه در ضرب ۹', check: s => (s.factorMastery[9] || 0) >= window.MASTERY.BASIC.level },
     { id: 'streak_3', icon: '🔥', name: 'سه پشت‌سرهم', desc: '۳ پاسخ درست پیاپی', check: s => s.maxStreak >= 3 },
     { id: 'streak_5', icon: '🔥', name: 'پنج پشت‌سرهم', desc: '۵ پاسخ درست پیاپی', check: s => s.maxStreak >= 5 },
     { id: 'careful', icon: '🎯', name: 'دقت مهندسی', desc: 'دقت بالای ۷۵٪', check: s => s.accuracy >= 75 && s.totalAttempts >= 6 },
@@ -245,5 +384,25 @@
     window.BADGES.forEach(b => { if (!owned.has(b.id) && b.check(stats)) { owned.add(b.id); neu.push(b); } });
     return { all: Array.from(owned), newlyEarned: neu };
   };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+      APP_VERSION: window.APP_VERSION,
+      MASTERY: window.MASTERY,
+      MASTERY_RULES: window.MASTERY_RULES,
+      createRow: window.createRow,
+      recordAttempt: window.recordAttempt,
+      evaluateMastery: window.evaluateMastery,
+      isPositiveMastery: window.isPositiveMastery,
+      formatCorrectTime: window.formatCorrectTime,
+      formatWrongTime: window.formatWrongTime,
+      migrateRow: window.migrateRow,
+      migrateEventOrigin: window.migrateEventOrigin,
+      rowsFromCoreEvents: window.rowsFromCoreEvents,
+      EVENT_ORIGINS: window.EVENT_ORIGINS,
+      PedagogyEngine: window.PedagogyEngine,
+      Leitner: window.Leitner
+    };
+  }
 
 })();
