@@ -27,7 +27,7 @@ function readJson(req) {
   });
 }
 
-function createServer({ service, authenticate, mode, root, allowedOrigins = [], accounts = [] }) {
+function createServer({ service, authenticate, mode, root, allowedOrigins = [], accounts = [], allowLocalNetwork = false }) {
   if (!['local', 'production'].includes(mode)) throw new Error('Explicit server mode required');
   if (mode === 'production' && accounts.length) throw new Error('Development accounts forbidden in production');
   const buckets = new Map();
@@ -46,7 +46,10 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
     res.setHeader('Cache-Control', 'no-store');
     try {
       const host = req.headers.host || '';
-      if (mode === 'local' && !/^(127\.0\.0\.1|localhost):\d+$/.test(host)) throw new ApiError('FORBIDDEN');
+      if (mode === 'local' && !/^(127\.0\.0\.1|localhost):\d+$/.test(host)) {
+        const lanHost = /^((192\.168\.|10\.|172\.(1[6-9]|2\d|3[0-1])\.)[A-Za-z0-9:.-]+:\d+)$/.test(host);
+        if (!allowLocalNetwork || !lanHost) throw new ApiError('FORBIDDEN');
+      }
       const sameOrigin = `${mode === 'local' ? 'http' : 'https'}://${host}`;
       const origin = req.headers.origin;
       if (origin && origin !== sameOrigin && (mode === 'local' || !allowedOrigins.includes(origin))) throw new ApiError('FORBIDDEN');
