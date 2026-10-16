@@ -1,0 +1,14 @@
+.git
+.gapcode
+.agents
+.aws
+.local
+node_modules
+.env
+.env.*
+*.log
+*.pem
+*service-account*.json
+*credentials*.json
+tests
+docs
