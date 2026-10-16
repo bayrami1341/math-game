@@ -2,12 +2,14 @@
   "name": "math-game",
   "version": "8.1.0",
   "private": true,
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "description": "Math Workshop regression and v9 contract validation tools",
   "scripts": {
     "test": "node tests/run-mastery.js && node --test tests/*.test.js",
     "test:contracts": "node --test tests/v9-phase1-contracts.test.js",
-    "test:v9": "node --test tests/v9-server.test.js tests/v9-production-config.test.js tests/v9-local.test.js tests/v9-entry.test.js tests/v9-activity.test.js tests/v9-experience.test.js tests/v9-ui-flow.test.js",
+    "test:v9": "node --test tests/v9-server.test.js tests/v9-production-config.test.js tests/v9-local.test.js tests/v9-entry.test.js tests/v9-activity.test.js tests/v9-experience.test.js tests/v9-ui-flow.test.js tests/v9-leaderboard.test.js",
     "dev:v9": "node server/start.js --local",
     "start:v9": "node server/start.js"
   },

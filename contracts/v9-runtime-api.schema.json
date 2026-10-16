@@ -123,6 +123,84 @@
         "writerEpoch"
       ],
       "additionalProperties": false
+    },
+    "getTeacherClassesRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "const": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "schemaVersion"
+      ],
+      "additionalProperties": false
+    },
+    "setClassPolicyRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "requestId": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 128,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "classId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "leaderboard": {
+          "enum": [
+            "off",
+            "on"
+          ]
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "classId",
+        "revision",
+        "leaderboard"
+      ],
+      "additionalProperties": false
+    },
+    "getLeaderboardRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "classId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "studentId": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{1,128}$"
+        },
+        "sectorId": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "classId",
+        "sectorId"
+      ],
+      "additionalProperties": false
     }
   }
 }

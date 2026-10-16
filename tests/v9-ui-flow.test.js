@@ -34,7 +34,7 @@ async function app(t, options = {}) {
   }
   const nav = [...html.matchAll(/<button[^>]+data-screen="([^"]+)"/g)].map(match => { const button = new Element('button'); button.dataset.screen = match[1]; return button; });
   const sectors = [...html.matchAll(/<button[^>]+data-sector="([^"]+)"/g)].map(match => { const button = new Element('button'); button.dataset.sector = match[1]; return button; });
-  Object.entries({ sector: '1', membership: 'invite_confirm', 'hero-avatar': 'astronaut', 'activity-context': 'personal' }).forEach(([id, value]) => { ids.get(id).value = value; });
+  Object.entries({ sector: '1', 'board-sector': '1', membership: 'invite_confirm', 'hero-avatar': 'astronaut', 'activity-context': 'personal' }).forEach(([id, value]) => { ids.get(id).value = value; });
   const document = {
     getElementById: id => { assert.ok(ids.has(id), 'Missing element ' + id); return ids.get(id); },
     createElement: tag => new Element(tag),
@@ -46,11 +46,13 @@ async function app(t, options = {}) {
   const entryModule = await import('../src/v9/entry.mjs');
   const missionModule = await import('../src/v9/mission.mjs');
   const experienceModule = await import('../src/v9/experience.mjs');
+  const connectionModule = await import('../src/v9/connection.mjs');
   const factory = new IDBFactory();
   const database = await localModule.openLocal(factory); t.after(() => database.close());
   const navigator = { onLine: true };
   const context = vm.createContext({ document, window: { MathGameV9Config: { apiBase: origin }, addEventListener() {} },
     openLocal: async () => database, ...entryModule, ...missionModule, ...experienceModule,
+    connectApi: base => connectionModule.connectApi(base, { fetcher: options.fetch || fetch, pause: async () => {} }),
     navigator, location: new URL(origin + '/v9.html'), history: { replaceState() {} },
     sessionStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) },
     URL, AbortSignal, fetch: options.fetch || fetch, crypto: webcrypto, structuredClone, performance, setInterval() {}, console });
@@ -233,4 +235,44 @@ test('class joining reuses story identity and restores membership without asking
   await ui.go('classes'); assert.equal(ui.get('join-class').hidden, true); assert.equal(ui.profileCount(), 1);
   await ui.click(ui.get('class-practice')); await ui.submit('start-session');
   assert.equal(ui.state().session.classId, classroom.classId);
+});
+
+test('teacher class picker, approval, mission board and revocation work through the real HTTP UI flow', async t => {
+  const ui = await app(t);
+  await ui.click(ui.get('account-buttons').children[0]);
+  ui.get('class-name').value = 'کلاس سفر'; await ui.submit('create-class');
+  const classId = ui.state().classId;
+  assert.ok(classId); assert.equal(ui.get('teacher-classes').children.length, 1);
+  await ui.click(ui.get('issue-invite')); const token = ui.get('invite-token').value; assert.ok(token);
+  await ui.click(ui.get('logout')); await ui.click(ui.get('account-buttons').children[1]); await ui.createHero('مینا');
+  const studentId = ui.state().studentId;
+  await ui.go('classes'); ui.get('student-invite').value = token; await ui.submit('join-class');
+  assert.equal(ui.state().membershipStatus, 'pending'); assert.equal(ui.get('class-mission').hidden, true);
+  await ui.click(ui.get('logout')); await ui.click(ui.get('account-buttons').children[0]);
+  assert.match(ui.get('teacher-summary').textContent, /۱ منتظر تأیید/);
+  await ui.click(ui.get('members').children[0].children[1]);
+  assert.match(ui.get('teacher-summary').textContent, /۱ عضو فعال/);
+  await ui.click(ui.get('toggle-leaderboard'));
+  assert.match(ui.get('toggle-leaderboard').textContent, /خاموش/);
+  await ui.click(ui.get('logout')); await ui.click(ui.get('account-buttons').children[1]);
+  await ui.go('classes'); assert.equal(ui.get('class-mission').hidden, false);
+  await ui.click(ui.get('student-show-board')); assert.equal(ui.get('board-entries').children.length, 0);
+  await ui.click(ui.get('close-board')); await ui.click(ui.get('class-mission')); await ui.submit('start-session');
+  const session = ui.state().session; assert.equal(session.classId, classId); assert.equal(session.activity, 'mission');
+  for (const [index, question] of session.questions.entries()) {
+    const correct = String(question.f1 * question.f2).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+    await ui.click(ui.get('mission-choices').children.find(button => index === 0 ? button.textContent !== correct : button.textContent === correct));
+  }
+  await ui.click(ui.get('finalize')); await ui.go('classes'); await ui.click(ui.get('student-show-board'));
+  assert.equal(ui.get('board-entries').children.length, 1); assert.equal(ui.get('board-entries').children[0].dataset.me, 'true');
+  await ui.click(ui.get('logout')); assert.equal(ui.get('class-board').hidden, true); assert.equal(ui.get('board-entries').children.length, 0);
+  await ui.click(ui.get('account-buttons').children[0]);
+  assert.match(ui.get('results').children[0].textContent, /پایان‌یافته/);
+  assert.match(ui.get('results').children[1].textContent, /پیشنهاد مرور/);
+  await ui.click(ui.get('teacher-show-board')); assert.equal(ui.get('board-entries').children.length, 1);
+  await ui.click(ui.get('toggle-leaderboard')); assert.equal(ui.get('board-entries').children.length, 0);
+  assert.match(ui.get('board-status').textContent, /روشن نکرده/);
+  await ui.click(ui.get('toggle-leaderboard')); await ui.click(ui.get('members').children[0].children[1]);
+  await ui.click(ui.get('refresh-board')); assert.equal(ui.get('board-entries').children.length, 0);
+  assert.equal((await ui.store.get('memberships/' + classId + '/' + studentId)).status, 'revoked');
 });

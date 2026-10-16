@@ -1,4 +1,5 @@
 import { openLocal } from './local.mjs';
+import { connectApi } from './connection.mjs';
 import { studentKey, selectProfile, membershipContext } from './entry.mjs';
 import { missionChoices } from './mission.mjs';
 import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer, stationSystems, nextDestination, multiplicationModel, companionLine } from './experience.mjs';
@@ -13,6 +14,7 @@ let local, actor, tokenProvider, auth, authSdk, state = {}, serial = Promise.res
 let profiles = [], selectedId = null, storyStep = null, replaying = false, pendingCreation = null;
 let screen = 'home', collection = null, motionPaused = false, choiceKey = null;
 let soundEnabled = false;
+let teacherClass = null;
 let showingFlight = false;
 let helpLevel = 0;
 const playSound = createSoundPlayer(() => new (window.AudioContext || window.webkitAudioContext)());
@@ -49,6 +51,10 @@ function render() {
   const profile = profiles.find(profile => profile.studentId === selectedId);
   $('identity').textContent = actor.teacher ? 'پنل معلم' : profile ? profile.displayName : 'سفر قهرمان';
   $('teacher').hidden = !actor.teacher;
+  if (actor.teacher && teacherClass?.classId !== state.classId) {
+    teacherClass = null; $('teacher-policy').hidden = true;
+    $('invite-token').value = ''; $('invite-link').value = '';
+  }
   $('student').hidden = actor.teacher || !profile || storyStep !== null;
   $('profile-picker').hidden = actor.teacher || !!profile || storyStep !== null;
   $('hero-story').hidden = actor.teacher || storyStep === null;
@@ -87,6 +93,8 @@ function render() {
   $('membership-status').textContent = { active: 'عضویت تأیید شد؛ آمادهٔ تمرین هستی.', pending: 'منتظر تأیید معلم هستی.', revoked: 'عضویت غیرفعال شده؛ از معلم کمک بگیر.' }[status] || 'اول به کلاس بپیوند.';
   $('check-membership').hidden = !state.classId;
   $('class-practice').hidden = status !== 'active';
+  $('class-mission').hidden = status !== 'active';
+  $('student-show-board').hidden = status !== 'active';
   $('class-context-option').disabled = status !== 'active';
   if (status !== 'active') $('activity-context').value = 'personal';
   const mission = screen === 'missions';
@@ -98,7 +106,7 @@ function render() {
   document.querySelectorAll('[data-sector]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.sector === $('sector').value)));
   $('student-class-name').textContent = mission ? 'مأموریت نجات ایستگاه' : 'تمرین من';
   $('start-activity').textContent = mission ? 'شروع مأموریت' : 'شروع تمرین';
-  $('activity-rules').textContent = mission ? 'قانون این مأموریت: هر سؤال یک پاسخ، هر پاسخ درست یک امتیاز. سرعت امتیاز اضافه ندارد و حرکت کارت‌ها قابل توقف است. نتیجه پس از تأیید سرور ثبت می‌شود؛ رتبه‌بندی عمومی خاموش است.' : 'با آرامش پاسخ بده. پاسخ نادرست را با جواب درست مرور می‌کنی. این نتیجه سابقهٔ آموزشی است و وارد رکورد مأموریت نمی‌شود.';
+  $('activity-rules').textContent = mission ? 'قانون این مأموریت: هر سؤال یک پاسخ، هر پاسخ درست یک امتیاز. سرعت امتیاز اضافه ندارد و حرکت کارت‌ها قابل توقف است. نتیجه پس از تأیید سرور ثبت می‌شود؛ نتایج کلاس فقط با اجازهٔ معلم در تابلوی همان کلاس نمایش داده می‌شود.' : 'با آرامش پاسخ بده. پاسخ نادرست را با جواب درست مرور می‌کنی. این نتیجه سابقهٔ آموزشی است و وارد رکورد مأموریت نمی‌شود.';
   $('class-context-option').textContent = state.className ? 'کلاس: ' + state.className : 'کلاس انتخاب‌شده';
   $('practice').hidden = !showingFlight || !state.session || !['practice', 'missions'].includes(screen) || (state.session.activity === 'mission') !== mission;
   $('student').dataset.playing = String(!$('practice').hidden);
@@ -212,6 +220,7 @@ function renderStory() {
   $('hero-name').readOnly = !!pendingCreation; $('hero-avatar').disabled = !!pendingCreation;
 }
 async function activateProfile(profile) {
+  $('class-board').hidden = true; $('board-entries').replaceChildren();
   showingFlight = false;
   selectedId = profile.studentId; storyStep = null; replaying = false; shownQuestionKey = null; choiceKey = null; collection = null; screen = 'home';
   $('achievements').replaceChildren(); $('personal-records').replaceChildren(); $('activity-history').replaceChildren();
@@ -224,6 +233,7 @@ async function activateProfile(profile) {
 }
 async function chooseClass(membership) {
   if (state.session && state.session.status !== 'FINALIZED' && state.session.classId !== membership.classId) throw new Error('ابتدا تمرین فعلی را تمام کن؛ پاسخ‌ها به کلاس همان تمرین تعلق دارند.');
+  $('class-board').hidden = true; $('board-entries').replaceChildren();
   await save({ ...state, classId: membership.classId, className: membership.name, membershipStatus: membership.status });
   render(); await refreshMembership();
 }
@@ -262,7 +272,8 @@ async function signIn(provider) {
   notice(actor.teacher ? 'کلاس خود را بسازید یا ادامه دهید.' : 'سفر تو با همین پرونده ادامه پیدا می‌کند.');
   state = await local.get(key()) || {};
   $('members').replaceChildren(); $('results').replaceChildren(); $('invite-token').value = ''; $('feedback').textContent = '';
-  if (actor.teacher) { render(); await refreshClass(); }
+  $('class-board').hidden = true;
+  if (actor.teacher) { render(); await refreshTeacherClasses(); await refreshClass(); }
   else {
     await loadEntry();
     const invite = new URL(location.href).searchParams.get('invite');
@@ -285,12 +296,16 @@ async function refreshMembership() {
 async function refreshClass() {
   if (!state.classId) return;
   const classroom = await api('getClass', { schemaVersion: 1, classId: state.classId });
+  teacherClass = classroom;
+  $('teacher-policy').hidden = false;
+  $('toggle-leaderboard').textContent = classroom.policy.leaderboard === 'on' ? 'خاموش‌کردن تابلو' : 'روشن‌کردن تابلو';
+  $('teacher-summary').textContent = fa(classroom.members.filter(m => m.status === 'active').length) + ' عضو فعال، ' + fa(classroom.members.filter(m => m.status === 'pending').length) + ' منتظر تأیید؛ ' + fa(classroom.sessions.filter(s => s.status === 'FINALIZED').length) + ' فعالیت پایان‌یافته در گزارش اخیر.';
   $('members').replaceChildren(); $('results').replaceChildren();
   for (const member of classroom.members) {
     const row = document.createElement('div'); row.className = 'member';
     const label = document.createElement('p'); label.textContent = member.displayName + ' — ' + ({ active: 'فعال', pending: 'منتظر تأیید', revoked: 'غیرفعال' }[member.status]); row.append(label);
     const button = document.createElement('button'); button.className = 'secondary'; button.textContent = member.status === 'active' ? 'لغو عضویت' : 'تأیید عضویت';
-    button.onclick = () => run(async () => { await api('setMembership', { ...request(), classId: state.classId, studentId: member.studentId, status: member.status === 'active' ? 'revoked' : 'active' }); await refreshClass(); });
+    button.onclick = () => run(async () => { await api('setMembership', { ...request(), classId: state.classId, studentId: member.studentId, status: member.status === 'active' ? 'revoked' : 'active' }); await refreshClass(); if (!$('class-board').hidden) await refreshBoard(); });
     row.append(button); $('members').append(row);
   }
   if (!classroom.members.length) $('members').textContent = 'هنوز دانش‌آموزی نپیوسته است.';
@@ -298,11 +313,43 @@ async function refreshClass() {
   for (const session of classroom.sessions) {
     const line = document.createElement('p'); line.className = 'result';
     const name = classroom.members.find(member => member.studentId === session.studentId)?.displayName || 'دانش‌آموز';
-    line.textContent = `${name} — ${session.activity === 'mission' ? 'مأموریت' : 'تمرین'}: ${fa(session.score)} درست از ${fa(session.answered)} پاسخ ثبت‌شده — ${session.status === 'FINALIZED' ? 'پایان‌یافته' : 'در حال انجام'}`;
+    line.textContent = `${name} — ${session.activity === 'mission' ? 'مأموریت' : 'تمرین'}: ${fa(session.score)} درست از ${fa(session.total)} سؤال؛ ${fa(session.answered)} پاسخ ثبت‌شده — ${session.status === 'FINALIZED' ? 'پایان‌یافته' : 'در حال انجام'}`;
     $('results').append(line);
+    const review = session.mastery.filter(item => item.wrongAnswers?.length);
+    if (review.length) {
+      const note = document.createElement('p'); note.className = 'review-note';
+      note.textContent = 'پیشنهاد مرور همین نوبت: ' + review.map(item => fa(item.f1) + ' × ' + fa(item.f2)).join('، ') + '؛ نتیجهٔ یک نوبت، تشخیص قطعی تسلط نیست.';
+      $('results').append(note);
+    }
   }
+  if (!classroom.sessions.length) $('results').textContent = 'هنوز فعالیتی برای این کلاس ثبت نشده است.';
   if (classroom.historyTruncated) { const note = document.createElement('p'); note.textContent = 'فقط ۲۰ جلسهٔ آخر نمایش داده می‌شود.'; $('results').append(note); }
 }
+async function refreshTeacherClasses() {
+  const data = await api('getTeacherClasses', { schemaVersion: 1 });
+  $('teacher-classes').replaceChildren();
+  for (const classroom of data.classes) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'secondary'; button.textContent = classroom.name;
+    button.onclick = () => run(async () => { $('class-board').hidden = true; await save({ ...state, classId: classroom.classId, className: classroom.name }); render(); await refreshClass(); });
+    $('teacher-classes').append(button);
+  }
+  if (!data.classes.length) $('teacher-classes').textContent = 'هنوز کلاسی نساخته‌اید. کلاس قدیمی را یک‌بار با شناسه باز کنید تا اینجا اضافه شود.';
+  if (data.truncated) notice('فقط ۱۰۰ کلاس نمایش داده می‌شود.', true);
+}
+async function refreshBoard() {
+  $('board-entries').replaceChildren(); $('board-status').textContent = 'در حال دریافت نتیجه…';
+  if (!state.classId) throw new Error('ابتدا کلاس را انتخاب کنید.');
+  let data;
+  try { data = await api('getLeaderboard', { schemaVersion: 1, classId: state.classId, sectorId: Number($('board-sector').value), ...(actor.teacher ? {} : { studentId: selectedId }) }); }
+  catch (error) { $('board-status').textContent = 'تابلو دریافت نشد؛ اتصال یا وضعیت عضویت را بررسی و دوباره تلاش کنید.'; throw error; }
+  $('board-title').textContent = 'تابلوی نتایج — ' + data.name;
+  $('board-status').textContent = !data.enabled ? 'معلم هنوز نمایش نتایج کلاس را روشن نکرده است.' : !data.entries.length ? 'هنوز مأموریت پایان‌یافته‌ای در این مسیر ثبت نشده است.' : data.truncated ? 'نمایش محدود است؛ این رتبه‌بندی شامل همهٔ اعضا نیست.' : 'نتیجه‌های تأییدشدهٔ اعضای فعال همین کلاس';
+  for (const entry of data.entries) {
+    const row = document.createElement('li'); row.className = 'board-row'; row.dataset.me = String(entry.isMe);
+    row.textContent = 'رتبهٔ ' + fa(entry.rank) + ' · ' + entry.displayName + (entry.isMe ? ' (تو)' : '') + ' — ' + fa(entry.score) + ' از ' + fa(entry.total); $('board-entries').append(row);
+  }
+}
+async function openBoard() { $('class-board').hidden = false; await refreshBoard(); $('class-board').scrollIntoView({ block: 'start' }); }
 async function flush(force = false) {
   if (!actor || actor.teacher) return;
   if (!navigator.onLine) { notice('اینترنت قطع است؛ پاسخ‌ها روی این دستگاه نگهداری می‌شوند.'); return; }
@@ -332,10 +379,21 @@ async function flush(force = false) {
 const form = (id, task) => $(id).addEventListener('submit', event => { event.preventDefault(); run(task); });
 const focusStory = () => { render(); $('story-title').focus(); };
 document.querySelectorAll('[data-screen]').forEach(button => { button.onclick = () => run(async () => {
-  screen = button.dataset.screen; showingFlight = false; render();
+  screen = button.dataset.screen; showingFlight = false; $('class-board').hidden = true; render();
   if (screen === 'collection') await refreshCollection();
 }); });
 $('resume-activity').onclick = () => { showingFlight = true; screen = state.session.activity === 'mission' ? 'missions' : 'practice'; render(); $('practice').scrollIntoView({ block: 'start' }); };
+$('refresh-teacher-classes').onclick = () => run(refreshTeacherClasses);
+$('toggle-leaderboard').onclick = () => run(async () => {
+  if (!teacherClass || teacherClass.classId !== state.classId) throw new Error('کلاس را تازه‌سازی کنید.');
+  await api('setClassPolicy', { ...request(), classId: state.classId, revision: teacherClass.revision, leaderboard: teacherClass.policy.leaderboard === 'on' ? 'off' : 'on' });
+  await refreshClass(); if (!$('class-board').hidden) await refreshBoard();
+});
+$('teacher-show-board').onclick = $('student-show-board').onclick = () => run(openBoard);
+$('refresh-board').onclick = () => run(refreshBoard);
+$('board-sector').addEventListener('change', () => run(refreshBoard));
+$('close-board').onclick = () => { $('class-board').hidden = true; };
+$('class-mission').onclick = () => { screen = 'missions'; showingFlight = false; $('activity-context').value = 'class'; render(); };
 $('class-practice').onclick = () => { screen = 'practice'; $('activity-context').value = 'class'; render(); };
 $('refresh-collection').onclick = () => run(refreshCollection);
 $('next-destination').onclick = () => chooseDestination(nextDestination(state.stationRecords || []));
@@ -365,7 +423,7 @@ $('story-skip').onclick = () => { storyStep = scenes.length; focusStory(); };
 $('story-return').onclick = () => { storyStep = null; replaying = false; render(); };
 $('replay-story').onclick = () => { replaying = true; storyStep = 0; focusStory(); };
 $('change-hero').onclick = () => run(async () => {
-  selectedId = null; state = {}; storyStep = null; $('feedback').textContent = ''; render();
+  $('class-board').hidden = true; selectedId = null; state = {}; storyStep = null; $('feedback').textContent = ''; render();
 });
 $('new-hero').onclick = () => { replaying = false; storyStep = 0; $('hero-name').value = ''; focusStory(); };
 $('show-invite').onclick = () => { $('join-class').hidden = false; $('student-invite').focus(); };
@@ -384,17 +442,20 @@ form('hero-introduction', async () => {
 });
 form('create-class', async () => {
   const result = await api('createClass', { ...request(), name: $('class-name').value.trim(), policy: { leaderboard: 'off', membership: $('membership').value } });
-  await save({ classId: result.classId, className: result.name }); render(); await refreshClass(); notice('کلاس ساخته شد. اکنون دعوت دانش‌آموز را بسازید.');
+  await save({ classId: result.classId, className: result.name }); render(); await refreshClass(); await refreshTeacherClasses(); notice('کلاس ساخته شد. اکنون دعوت دانش‌آموز را بسازید.');
 });
 form('open-class', async () => {
-  const classId = $('open-class-id').value.trim(); await api('getClass', { schemaVersion: 1, classId }); await save({ ...state, classId }); render(); await refreshClass();
+  const classId = $('open-class-id').value.trim(); await api('getClass', { schemaVersion: 1, classId }); await save({ ...state, classId }); render(); await refreshClass(); await refreshTeacherClasses();
 });
 $('issue-invite').onclick = () => run(async () => {
   if (!state.classId) throw new Error('ابتدا کلاس را بسازید یا باز کنید.');
   const result = await api('issueInvite', { ...request(), classId: state.classId, expiresInSeconds: 86400, maxUses: 40 });
-  $('invite-token').value = result.token; notice('دعوت برای ۲۴ ساعت و حداکثر ۴۰ عضویت آماده است.');
+  $('invite-token').value = result.token;
+  const link = new URL(location.origin + location.pathname); link.searchParams.set('invite', result.token); $('invite-link').value = link.href;
+  notice('دعوت برای ۲۴ ساعت و حداکثر ۴۰ عضویت آماده است؛ فقط برای دانش‌آموزان همین کلاس بفرستید.');
 });
 $('copy-invite').onclick = () => run(async () => { await navigator.clipboard.writeText($('invite-token').value); notice('دعوت کپی شد.'); });
+$('copy-invite-link').onclick = () => run(async () => { if (!$('invite-link').value) throw new Error('ابتدا دعوت را بسازید.'); await navigator.clipboard.writeText($('invite-link').value); notice('پیوند ورود به کلاس کپی شد.'); });
 form('join-class', async () => {
   if (state.session && state.session.status !== 'FINALIZED') throw new Error('ابتدا تمرین فعلی را تمام کن؛ دعوتت را بعد از آن وارد کن.');
   const operation = operationKey('join:' + selectedId);
@@ -460,6 +521,7 @@ $('logout').onclick = () => run(async () => {
   if ((await local.pending(actor.uid)).length) throw new Error('پیش از خروج، پاسخ‌های منتظر را همگام کن.');
   if (auth?.currentUser?.isAnonymous && !window.confirm('ورود دوباره به همین پرونده پس از خروج از حساب ناشناس، هنوز در این پیش‌نمایش فراهم نیست. خارج می‌شوی؟')) return;
   if (auth) await authSdk.signOut(auth);
+  $('class-board').hidden = true; $('board-entries').replaceChildren(); teacherClass = null;
   sessionStorage.removeItem('v9-local-token'); actor = null; tokenProvider = null; state = {}; profiles = []; selectedId = null; storyStep = null;
   $('landing-intro').hidden = false;
   $('hero-name').value = ''; $('student-invite').value = ''; $('workspace').hidden = true; $('login').hidden = false; notice('از حساب خارج شدی. پاسخ‌های ارسال‌نشده برای همین حساب محفوظ‌اند.');
@@ -472,8 +534,8 @@ run(async () => {
   local = await openLocal();
   let meta;
   try {
-    const response = await fetch(base + '/api/v9/meta', { signal: AbortSignal.timeout(8000) });
-    if (!response.ok) throw new Error(); meta = await response.json();
+    notice('در حال اتصال به ایستگاه…');
+    meta = await connectApi(base, { onWaiting: () => notice('ایستگاه در حال بیدارشدن است؛ اتصال دوباره بررسی می‌شود…') });
   } catch {
     $('unconfigured').hidden = false; notice('برای این پیش‌نمایش، سرور هنوز در دسترس نیست.'); return;
   }

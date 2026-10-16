@@ -28,13 +28,13 @@ class Service {
   id(kind, ...parts) { return kind + '_' + createHmac('sha256', this.secret).update(canonical(parts)).digest('hex').slice(0, 40); }
   async call(operation, input, actor) {
     need(actor && typeof actor.uid === 'string', 'UNAUTHENTICATED');
-    need(['createClass', 'issueInvite', 'redeemInvite', 'startSession', 'submitAttempts', 'getIdentity', 'getClass', 'setMembership', 'getSyncStatus', 'finalizeSession', 'createStudent', 'getEntry', 'joinStudentClass', 'startActivity', 'getCollection'].includes(operation));
+    need(['createClass', 'issueInvite', 'redeemInvite', 'startSession', 'submitAttempts', 'getIdentity', 'getClass', 'setMembership', 'getSyncStatus', 'finalizeSession', 'createStudent', 'getEntry', 'joinStudentClass', 'startActivity', 'getCollection', 'getTeacherClasses', 'setClassPolicy', 'getLeaderboard'].includes(operation));
     if (this.validators[operation]) need(this.validators[operation](input));
     else {
       const runtimeSchema = require('../contracts/v9-runtime-api.schema.json');
       if (!this.runtimeValidators) {
         const ajv = new Ajv({ strict: true }); addFormats(ajv); ajv.addSchema(runtimeSchema);
-        this.runtimeValidators = Object.fromEntries(['getIdentity', 'getClass', 'setMembership', 'getSyncStatus', 'finalizeSession'].map(name => [name, ajv.getSchema(runtimeSchema.$id + '#/$defs/' + name + 'Request')]));
+        this.runtimeValidators = Object.fromEntries(['getIdentity', 'getClass', 'setMembership', 'getSyncStatus', 'finalizeSession', 'getTeacherClasses', 'setClassPolicy', 'getLeaderboard'].map(name => [name, ajv.getSchema(runtimeSchema.$id + '#/$defs/' + name + 'Request')]));
       }
       need(this.runtimeValidators[operation](input));
     }
@@ -190,7 +190,61 @@ class Service {
       if (old) { this.replay(old, input); return old; }
       return { schemaVersion: 1, classId, ownerUid: actor.uid, name: input.name.trim(), policy: { leaderboard: 'off', membership: 'invite_confirm', ...input.policy }, revision: 1, inputHash: hash(input) };
     });
+    await this.indexClass(record);
     return { ok: true, classId, name: record.name, ownerUid: record.ownerUid, revision: record.revision };
+  }
+  async indexClass(record) {
+    await this.store.transact('teacherClasses/' + hash(record.ownerUid) + '/' + record.classId, old => old || { classId: record.classId });
+  }
+  async getTeacherClasses(input, actor) {
+    this.teacher(actor);
+    const index = await this.store.list('teacherClasses/' + hash(actor.uid), 101);
+    const classes = await Promise.all(index.slice(-100).map(item => this.owned(item.classId, actor)));
+    return { ok: true, classes: classes.map(item => ({ classId: item.classId, name: item.name, policy: item.policy, revision: item.revision })), truncated: index.length > 100 };
+  }
+  async setClassPolicy(input, actor) {
+    await this.owned(input.classId, actor);
+    const requestKey = hash(input.requestId);
+    const record = await this.store.transact('classrooms/' + input.classId, old => {
+      need(old && old.ownerUid === actor.uid, 'FORBIDDEN'); old.policyRequests ||= {};
+      if (old.policyRequests[requestKey]) { this.replay(old.policyRequests[requestKey], input); return old; }
+      need(old.revision === input.revision, 'EVENT_CONFLICT');
+      need(Object.keys(old.policyRequests).length < 200, 'RATE_LIMITED');
+      old.policy = { ...old.policy, leaderboard: input.leaderboard }; old.revision++;
+      old.policyRequests[requestKey] = { inputHash: hash(input), response: { ok: true, classId: old.classId, policy: { ...old.policy }, revision: old.revision } };
+      return old;
+    });
+    return record.policyRequests[requestKey].response;
+  }
+  boardKey(sectorId, rulesVersion = 'rv1', questionSetVersion = 'graph-v8.1') {
+    return hash(['mission-sector-' + sectorId, rulesVersion, questionSetVersion]);
+  }
+  async recordLeaderboard(record) {
+    if (record.activity !== 'mission' || !record.classId || record.status !== 'FINALIZED') return;
+    const result = this.summary(record);
+    const group = this.boardKey(record.sectorId, record.rulesVersion, record.questionSetVersion);
+    await this.store.transact('classBoards/' + record.classId + '/' + group + '/' + record.studentId, old => {
+      if (old && old.score >= result.score) return old;
+      return { studentId: record.studentId, score: result.score, total: result.total, sessionId: record.sessionId };
+    });
+  }
+  async getLeaderboard(input, actor) {
+    const classroom = await this.store.get('classrooms/' + input.classId);
+    need(classroom, 'FORBIDDEN');
+    if (actor.teacher) await this.owned(input.classId, actor);
+    else { need(input.studentId, 'FORBIDDEN'); await this.member(input.classId, input.studentId, actor); }
+    const enabled = classroom.policy.leaderboard === 'on';
+    const info = { ok: true, classId: classroom.classId, name: classroom.name, enabled, sectorId: input.sectorId, rulesVersion: 'rv1', questionSetVersion: 'graph-v8.1' };
+    if (!enabled) return { ...info, entries: [], truncated: false };
+    const records = await this.store.list('classBoards/' + input.classId + '/' + this.boardKey(input.sectorId), 101);
+    const entries = (await Promise.all(records.slice(-100).map(async record => {
+      const member = await this.store.get('memberships/' + input.classId + '/' + record.studentId);
+      if (member?.status !== 'active') return null;
+      return { studentId: record.studentId, displayName: member.displayName, score: record.score, total: record.total, isMe: input.studentId === record.studentId };
+    }))).filter(Boolean).sort((a, b) => b.score - a.score || a.studentId.localeCompare(b.studentId));
+    let rank = 0, previous;
+    for (const [index, entry] of entries.entries()) { if (entry.score !== previous) rank = index + 1; entry.rank = rank; previous = entry.score; }
+    return { ...info, entries, truncated: records.length > 100 };
   }
   async issueInvite(input, actor) {
     const classroom = await this.owned(input.classId, actor);
@@ -317,6 +371,7 @@ class Service {
       return old;
     });
     await this.recordCollection(record);
+    await this.recordLeaderboard(record);
     return record.requests[requestKey].response;
   }
   async getClass(input, actor) {
@@ -329,11 +384,12 @@ class Service {
       return { ok: true, classId: classroom.classId, name: classroom.name, membershipStatus: member.status };
     }
     await this.owned(input.classId, actor);
+    await this.indexClass(classroom);
     const members = await this.store.list('memberships/' + input.classId, 101);
     const index = await this.store.list('sessionIndex/' + input.classId, 21, 'createdAt');
     const recent = index.slice(-20);
     const sessions = await Promise.all(recent.map(entry => this.store.get('sessions/' + entry.sessionId)));
-    return { ok: true, classId: classroom.classId, name: classroom.name, policy: classroom.policy, members: members.slice(-100).map(member => ({ studentId: member.studentId, displayName: member.displayName, status: member.status })), membersTruncated: members.length > 100, sessions: sessions.filter(Boolean).map(record => this.summary(record)), historyTruncated: index.length > 20 };
+    return { ok: true, classId: classroom.classId, name: classroom.name, policy: classroom.policy, revision: classroom.revision, members: members.slice(-100).map(member => ({ studentId: member.studentId, displayName: member.displayName, status: member.status })), membersTruncated: members.length > 100, sessions: sessions.filter(Boolean).map(record => this.summary(record)), historyTruncated: index.length > 20 };
   }
 }
 module.exports = { Service, ApiError, hash, safeId };

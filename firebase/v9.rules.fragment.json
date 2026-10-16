@@ -6,6 +6,11 @@
       "$classId": {
         ".indexOn": ["createdAt"]
       }
+    },
+    "studentSessions": {
+      "$studentId": {
+        ".indexOn": ["createdAt"]
+      }
     }
   }
 }

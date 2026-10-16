@@ -13,3 +13,5 @@
 @keyframes card-float{from{transform:translateY(-5px)}to{transform:translateY(5px)}}
 @media(max-width:680px){.destinations{grid-template-columns:1fr 1fr;gap:10px}.destinations button{min-height:110px;padding:12px;font-size:16px}.mission-choices{gap:18px}.mission-choices button{min-height:76px}}
 @media(prefers-reduced-motion:reduce){.mission-choices button{animation:none}}
+
+.board-entries{padding:0;list-style:none}.board-row{padding:15px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}.board-row[data-me=true]{background:#e4f3ef;border-radius:12px;font-weight:bold}
