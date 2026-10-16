@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bayrami1341.github.io/math-game/contracts/v9-phase1-api.schema.json",
+  "title": "Math Workshop v9 Phase 1 Minimum API",
+  "description": "Contract-only request and response validation. No live server. Select the operation-specific $defs fragment; root anyOf checks only membership in the catalog.",
+  "$comment": "contractVersion: 9.0.1-phase1; schemaVersion: 1; artifactRevision: 1.0.1. D1-D4 unchanged. Validation completed from the supplied 1.0.0 schema samples.",
+  "$defs": {
+    "requestId": {
+      "type": "string",
+      "minLength": 8
+    },
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "errorCode": {
+      "type": "string",
+      "enum": [
+        "UNAUTHENTICATED",
+        "FORBIDDEN",
+        "INVITE_EXPIRED",
+        "INVALID_PAYLOAD",
+        "EVENT_CONFLICT",
+        "STALE_WRITER",
+        "RATE_LIMITED",
+        "TEMPORARILY_UNAVAILABLE"
+      ]
+    },
+    "apiError": {
+      "type": "object",
+      "required": [
+        "ok",
+        "error"
+      ],
+      "properties": {
+        "ok": {
+          "const": false
+        },
+        "error": {
+          "type": "object",
+          "required": [
+            "code"
+          ],
+          "properties": {
+            "code": {
+              "$ref": "#/$defs/errorCode"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "attempt": {
+      "type": "object",
+      "required": [
+        "eventId",
+        "questionId",
+        "answer"
+      ],
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 8
+        },
+        "questionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "answer": {
+          "type": "number"
+        },
+        "responseMs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "clientOccurredAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": [
+        "eventId",
+        "status",
+        "acceptedAt",
+        "correct",
+        "revision"
+      ],
+      "properties": {
+        "eventId": {
+          "type": "string",
+          "minLength": 8
+        },
+        "status": {
+          "const": "ACKNOWLEDGED"
+        },
+        "acceptedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "correct": {
+          "type": "boolean"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "question": {
+      "type": "object",
+      "required": [
+        "questionId",
+        "f1",
+        "f2"
+      ],
+      "properties": {
+        "questionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "f1": {
+          "type": "integer"
+        },
+        "f2": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "createClassRequest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "name"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "requestId": {
+          "$ref": "#/$defs/requestId"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "policy": {
+          "type": "object",
+          "required": [],
+          "properties": {
+            "leaderboard": {
+              "enum": [
+                "off",
+                "on"
+              ],
+              "default": "off"
+            },
+            "membership": {
+              "enum": [
+                "invite_confirm",
+                "invite_open"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "createClassResponse": {
+      "type": "object",
+      "required": [
+        "ok",
+        "classId",
+        "name",
+        "ownerUid",
+        "revision"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "issueInviteRequest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "classId"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "requestId": {
+          "$ref": "#/$defs/requestId"
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expiresInSeconds": {
+          "type": "integer",
+          "minimum": 60
+        },
+        "maxUses": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "issueInviteResponse": {
+      "type": "object",
+      "required": [
+        "ok",
+        "inviteId",
+        "token",
+        "classId",
+        "expiresAt",
+        "maxUses",
+        "uses"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "inviteId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "token": {
+          "type": "string",
+          "minLength": 4
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "maxUses": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "uses": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "redeemInviteRequest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "token",
+        "displayName"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "requestId": {
+          "$ref": "#/$defs/requestId"
+        },
+        "token": {
+          "type": "string",
+          "minLength": 4
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        }
+      },
+      "additionalProperties": false
+    },
+    "redeemInviteResponse": {
+      "type": "object",
+      "required": [
+        "ok",
+        "status",
+        "studentId",
+        "classId",
+        "displayName"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "active"
+          ]
+        },
+        "studentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        }
+      },
+      "additionalProperties": false
+    },
+    "startSessionRequest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "classId",
+        "studentId",
+        "goal"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "requestId": {
+          "$ref": "#/$defs/requestId"
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "studentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goal": {
+          "type": "object",
+          "required": [
+            "type",
+            "sectorId"
+          ],
+          "properties": {
+            "type": {
+              "const": "sector"
+            },
+            "sectorId": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "startSessionResponse": {
+      "type": "object",
+      "required": [
+        "ok",
+        "sessionId",
+        "classId",
+        "studentId",
+        "status",
+        "rulesVersion",
+        "questionSetVersion",
+        "writerEpoch",
+        "questions",
+        "revision"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "studentId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "const": "ACTIVE"
+        },
+        "rulesVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "questionSetVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writerEpoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "submitAttemptsRequest": {
+      "type": "object",
+      "required": [
+        "schemaVersion",
+        "requestId",
+        "sessionId",
+        "writerEpoch",
+        "attempts"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "$ref": "#/$defs/schemaVersion"
+        },
+        "requestId": {
+          "$ref": "#/$defs/requestId"
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "writerEpoch": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "attempts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/attempt"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "submitAttemptsResponse": {
+      "type": "object",
+      "required": [
+        "ok",
+        "sessionId",
+        "receipts",
+        "sessionRevision"
+      ],
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "sessionId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/receipt"
+          }
+        },
+        "sessionRevision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/createClassRequest"
+    },
+    {
+      "$ref": "#/$defs/createClassResponse"
+    },
+    {
+      "$ref": "#/$defs/issueInviteRequest"
+    },
+    {
+      "$ref": "#/$defs/issueInviteResponse"
+    },
+    {
+      "$ref": "#/$defs/redeemInviteRequest"
+    },
+    {
+      "$ref": "#/$defs/redeemInviteResponse"
+    },
+    {
+      "$ref": "#/$defs/startSessionRequest"
+    },
+    {
+      "$ref": "#/$defs/startSessionResponse"
+    },
+    {
+      "$ref": "#/$defs/submitAttemptsRequest"
+    },
+    {
+      "$ref": "#/$defs/submitAttemptsResponse"
+    },
+    {
+      "$ref": "#/$defs/apiError"
+    }
+  ]
+}

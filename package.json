@@ -1,0 +1,14 @@
+{
+  "name": "math-game",
+  "version": "8.1.0",
+  "private": true,
+  "description": "Math Workshop regression and v9 contract validation tools",
+  "scripts": {
+    "test": "node tests/run-mastery.js && node --test tests/live-board.test.js tests/v9-phase1-contracts.test.js",
+    "test:contracts": "node --test tests/v9-phase1-contracts.test.js"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  }
+}
