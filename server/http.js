@@ -56,7 +56,7 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
       }
       const url = new URL(req.url, sameOrigin);
       if (url.pathname.startsWith('/api/')) rateLimit('ip:' + req.socket.remoteAddress, 300);
-      if (req.method === 'GET' && url.pathname === '/api/v9/meta') return send(200, { ok: true, mode, contractVersion: '9.0.2-runtime-preview' });
+      if (req.method === 'GET' && url.pathname === '/api/v9/meta') return send(200, { ok: true, mode, contractVersion: '9.0.3-entry-preview' });
       if (req.method === 'GET' && url.pathname === '/api/dev/accounts' && mode === 'local') return send(200, { ok: true, accounts });
       if (req.method === 'POST' && /^\/api\/v9\/[A-Za-z]+$/.test(url.pathname)) {
         if (!(req.headers['content-type'] || '').toLowerCase().startsWith('application/json')) throw new ApiError('INVALID_PAYLOAD');
@@ -66,7 +66,7 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
         try { actor = await authenticate(token); } catch { throw new ApiError('UNAUTHENTICATED'); }
         if (!actor) throw new ApiError('UNAUTHENTICATED');
         const operation = url.pathname.split('/').at(-1);
-        rateLimit('uid:' + actor.uid, operation === 'redeemInvite' ? 20 : 120);
+        rateLimit('uid:' + actor.uid, ['redeemInvite', 'joinStudentClass', 'createStudent'].includes(operation) ? 20 : 120);
         const input = await readJson(req);
         return send(200, await service.call(operation, input, actor));
       }

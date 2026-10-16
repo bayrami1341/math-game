@@ -16,6 +16,8 @@ https://bayrami1341.github.io/math-game/
 ### مسیر ارتقا به نسخهٔ ۹
 
 - [معماری جامع سه‌لایهٔ نسخهٔ ۹](docs/V9-ARCHITECTURE.fa.md)
+- [معماری بازطراحی تجربهٔ نسخهٔ ۹: داستان، تمرین، مأموریت و گنجینه](docs/V9-REDESIGN-THREE-LAYERS.fa.md)
+- [اجرای بازطراحی: ثبت نام در داستان، فعالیت‌ها و گنجینه](docs/V9-ENTRY-IMPLEMENTATION.fa.md)
 - [فاز صفر: ثبت مبنای نسخهٔ ۸.۱، آزمون‌ها و شکاف‌ها](docs/v9-phase0-baseline.md)
 - [فاز یک: قرارداد شناسه‌ها و API](docs/v9-phase1-contracts.md)
 - [تصمیم‌های قفل‌شدهٔ فاز یک](docs/v9-phase1-locked.md)

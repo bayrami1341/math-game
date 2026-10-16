@@ -7,7 +7,7 @@
   "scripts": {
     "test": "node tests/run-mastery.js && node --test tests/*.test.js",
     "test:contracts": "node --test tests/v9-phase1-contracts.test.js",
-    "test:v9": "node --test tests/v9-server.test.js tests/v9-local.test.js",
+    "test:v9": "node --test tests/v9-server.test.js tests/v9-local.test.js tests/v9-entry.test.js tests/v9-activity.test.js tests/v9-ui-flow.test.js",
     "dev:v9": "node server/start.js --local",
     "start:v9": "node server/start.js"
   },

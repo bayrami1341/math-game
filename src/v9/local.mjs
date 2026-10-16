@@ -23,11 +23,38 @@ export function openLocal(indexedDB = globalThis.indexedDB) {
       resolve({
         get: key => transaction(['records'], 'readonly', (tx, result) => { tx.objectStore('records').get(key).onsuccess = event => result(event.target.result); }),
         put: (key, value) => transaction(['records'], 'readwrite', tx => tx.objectStore('records').put(value, key)),
+        prepareOperation: (key, input) => transaction(['records'], 'readwrite', (tx, result) => {
+          const store = tx.objectStore('records');
+          store.get(key).onsuccess = event => {
+            const saved = event.target.result;
+            if (saved) result(saved);
+            else { store.put(input, key); result(input); }
+          };
+        }),
+        migrateProfile: (oldKey, newKey, uid) => transaction(['records', 'outbox'], 'readwrite', tx => {
+          const records = tx.objectStore('records');
+          records.get(oldKey).onsuccess = event => {
+            const old = event.target.result;
+            if (!old?.studentId) return;
+            records.get(newKey).onsuccess = event => {
+              if (!event.target.result) records.put(old, newKey);
+            };
+            const outbox = tx.objectStore('outbox');
+            outbox.openCursor().onsuccess = event => {
+              const cursor = event.target.result;
+              if (!cursor) return;
+              const command = cursor.value;
+              if (command.uid === uid && !command.stateKey && command.input.sessionId === old.session?.sessionId) cursor.update({ ...command, stateKey: newKey });
+              cursor.continue();
+            };
+          };
+        }),
         enqueue: (key, state, command) => transaction(['records', 'outbox'], 'readwrite', tx => {
-          tx.objectStore('records').put(state, key); tx.objectStore('outbox').add(command);
+          tx.objectStore('records').put(state, key); tx.objectStore('outbox').add({ ...command, stateKey: key });
         }),
         pending: uid => transaction(['outbox'], 'readonly', (tx, result) => { tx.objectStore('outbox').getAll().onsuccess = event => result(event.target.result.filter(command => command.uid === uid)); }),
         acknowledge: (command, response, stateKey) => {
+          stateKey = command.stateKey || stateKey;
           const expected = new Set(command.input.attempts.map(attempt => attempt.eventId));
           if (response.sessionId !== command.input.sessionId || !Array.isArray(response.receipts)
             || response.receipts.length !== expected.size || new Set(response.receipts.map(receipt => receipt.eventId)).size !== expected.size

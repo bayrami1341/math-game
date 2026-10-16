@@ -48,3 +48,50 @@ test('unavailable IndexedDB fails explicitly instead of pretending an answer was
   const { openLocal } = await import('../src/v9/local.mjs');
   await assert.rejects(openLocal(null));
 });
+
+test('a late acknowledgement stays with its original child after switching profiles', async () => {
+  const { db } = await local();
+  await db.enqueue('student:device:one', state, command);
+  const second = { session: { sessionId: 'ses_child_two', receipts: {} } };
+  await db.put('student:device:two', second);
+  const queued = (await db.pending('student-one'))[0];
+  await db.acknowledge(queued, response, 'student:device:two');
+  assert.equal((await db.get('student:device:one')).session.receipts.evt_local_001.correct, true);
+  assert.deepEqual(await db.get('student:device:two'), second); db.close();
+});
+
+test('profile migration preserves the session and retargets old queued answers atomically', async () => {
+  const { db } = await local();
+  const legacy = { studentId: 'stu_old', session: state.session };
+  await db.enqueue('profile:device', legacy, command);
+  // Legacy rows did not record their storage key.
+  const queued = (await db.pending('student-one'))[0];
+  await db.retry({ ...queued, stateKey: undefined });
+  await db.migrateProfile('profile:device', 'student:device:stu_old', 'student-one');
+  assert.deepEqual(await db.get('student:device:stu_old'), legacy);
+  const migrated = (await db.pending('student-one'))[0];
+  assert.equal(migrated.stateKey, 'student:device:stu_old');
+  await db.acknowledge(migrated, response, 'profile:device');
+  await db.migrateProfile('profile:device', 'student:device:stu_old', 'student-one');
+  assert.equal((await db.get('student:device:stu_old')).session.receipts.evt_local_001.correct, true); db.close();
+});
+
+test('concurrent operation preparation and reload retain the original request and name', async () => {
+  const { db, factory, openLocal } = await local();
+  const input = { requestId: 'req_create_001', displayName: 'مینا' };
+  const [a, b] = await Promise.all([db.prepareOperation('create:uid', input), db.prepareOperation('create:uid', { requestId: 'req_create_002', displayName: 'دیگر' })]);
+  assert.deepEqual(a, input); assert.deepEqual(b, input); db.close();
+  const reopened = await openLocal(factory);
+  assert.deepEqual(await reopened.prepareOperation('create:uid', {}), input); reopened.close();
+});
+
+test('entry selection never guesses among children or multiple classes', async () => {
+  const { selectProfile, membershipContext } = await import('../src/v9/entry.mjs');
+  const a = { studentId: 'one', displayName: 'مینا', memberships: [{ classId: 'a' }, { classId: 'b' }] };
+  const b = { studentId: 'two', displayName: 'مینا' };
+  assert.equal(selectProfile([a, b], null), null);
+  assert.equal(selectProfile([a, b], 'two'), b);
+  assert.equal(selectProfile([a], null), a);
+  assert.equal(membershipContext(a, null), null);
+  assert.equal(membershipContext(a, 'b').classId, 'b');
+});
