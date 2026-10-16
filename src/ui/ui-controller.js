@@ -113,7 +113,21 @@
       setTimeout(() => { const btn = document.getElementById('btn-continue'); if (btn) btn.focus(); }, 50);
     }
 
+    _submitLiveSector(statusId) {
+      if (!window.LiveBoard || !this.game.sectorsCompleted) return;
+      const sector = this.game.sectorsCompleted;
+      const results = this.game.liveSectorResults || (this.game.liveSectorResults = {});
+      if (!results[sector]) {
+        results[sector] = { score: this.game.modulesAttached - (this.game.liveSectorBaseline || 0) };
+        this.game.liveSectorBaseline = this.game.modulesAttached;
+      }
+      return LiveBoard.publishResult(results[sector], {
+        name: this.game.playerName, score: results[sector].score, sector: sector
+      }, statusId);
+    }
+
     _renderS(s) {
+      this._submitLiveSector('sector-live-status');
       document.getElementById('sector-title').textContent = s.title;
       document.getElementById('sector-desc').textContent = s.desc;
       document.getElementById('progress-fill').style.width = '0%';
@@ -139,6 +153,7 @@
     }
 
     _renderR(rep) {
+      this._submitLiveSector('report-live-status');
       const sum = document.getElementById('report-summary');
       const bg = document.getElementById('report-badges');
       if (sum) sum.innerHTML = '<p>مهندس: <b style="color:var(--gold)">' + escapeHtml(rep.name) + '</b>' + (rep.className ? ' (کلاس: ' + escapeHtml(rep.className) + ')' : '') + '</p><p>قطعه‌های متصل‌شده: <b style="color:var(--cyan)">' + toFa(rep.modulesAttached) + '</b></p><p>درصد تسلط پایه: <b style="color:var(--green)">' + toFa(rep.successRate) + '٪</b></p>';

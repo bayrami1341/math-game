@@ -24,7 +24,7 @@ function storage() {
 
 function element() {
   const el = {
-    value: '', children: [], listeners: {}, classList: { add() {}, remove() {} },
+    value: '', children: [], listeners: {}, style: {}, focus() {}, classList: { add() {}, remove() {} },
     appendChild(child) { this.children.push(child); },
     addEventListener(type, callback) { this.listeners[type] = callback; }
   };
@@ -58,7 +58,7 @@ function page(localStorage = storage()) {
       if (!events.has(type)) events.set(type, []);
       events.get(type).push(callback);
     },
-    sharedSound: null
+    sharedSound: null, setTimeout: () => 0
   });
   context.window = context;
   // Window.status is a string property in actual browsers, not a DOM element.
@@ -81,11 +81,17 @@ function database() {
   const listeners = new Map();
   let failWrites = false;
   let writes = 0;
+  let connected = true;
+  const connectionListeners = new Set();
   function snapshot(room) {
     return { val: () => Object.fromEntries(rooms.get(room) || []) };
   }
   const db = {
     ref(refPath) {
+      if (refPath === '.info/connected') return {
+        on(type, next) { connectionListeners.add(next); next({ val: () => connected }); },
+        off(type, next) { connectionListeners.delete(next); }
+      };
       const [, room, , playerId] = refPath.split('/');
       return {
         set(payload) {
@@ -110,6 +116,11 @@ function database() {
       (listeners.get(room) || []).forEach(item => item.error(new Error('PERMISSION_DENIED')));
     },
     set failWrites(value) { failWrites = value; },
+    set connected(value) {
+      connected = value;
+      connectionListeners.forEach(next => next({ val: () => connected }));
+    },
+    get connectionListenerCount() { return connectionListeners.size; },
     get writes() { return writes; },
     listenerCount(room) { return (listeners.get(room) || []).length; }
   };
@@ -157,7 +168,7 @@ function finish(p, correctCount, sector = 1) {
 }
 
 const settle = () => new Promise(resolve => setImmediate(resolve));
-const scores = p => p.el('list').children.map(item => item.children.map(child => child.textContent));
+const scores = p => p.el('list').children.map(item => item.children.slice(0, 2).map(child => child.textContent));
 
 for (const code of ['123456', '۱۲۳۴۵۶', '١٢٣٤٥٦', '۱2٣۴5٦']) {
   test('join normalizes classroom digits: ' + code, () => {
@@ -344,7 +355,7 @@ test('Firebase is optional for local play and reports missing database to listen
 
 test('Firebase scripts load exactly once before the game and demo scores are removed', () => {
   const html = read('index.html');
-  const scripts = [...html.matchAll(/<script\s+src="([^"]+)"[^>]*>/g)].map(match => match[1]);
+  const scripts = [...html.matchAll(/<script\s+src="([^"]+)"[^>]*>/g)].map(match => match[1].split('?')[0]);
   const required = ['https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js',
     'https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js',
     'firebase-config.js', 'live-board.js', 'src/games/multiplication-1x1/core-play.js'];
@@ -354,4 +365,114 @@ test('Firebase scripts load exactly once before the game and demo scores are rem
   });
   assert.ok(!html.includes('demo_scores'));
   assert.ok(!read('leaderboard.html').includes('demo_scores'));
+});
+
+test('arcade sector and final completion publish each sector rather than cumulative points', async () => {
+  const db = database();
+  const p = page();
+  join(p, 'بازیکن متحرک');
+  const b = board(db, p.context.localStorage);
+  const g = game(db, p.context.localStorage);
+  ['src/games/multiplication-1x1/config.js', 'src/games/multiplication-1x1/game.js',
+    'src/ui/ui-controller.js'].forEach(file => g.run(file));
+  const controller = Object.create(g.context.UIController.prototype);
+  const engine = Object.create(g.context.GameController.prototype);
+  Object.assign(engine, {
+    _listeners: {}, currentFact: {}, mainCount: 4, sectorIdx: 0, sectorsCompleted: 0,
+    modulesAttached: 4, playerName: 'نام داستان',
+    pedagogy: {
+      leitner: { advance() {}, hasPendingInSector: () => false, reset() {} },
+      getReportData: () => [], getDiagnosticInsights: () => []
+    }
+  });
+  controller.game = engine;
+  controller.sound = { playSectorFanfare() {} };
+  // A local report error must not swallow the independent live write.
+  g.context.AppStorage.addDossier = () => { throw new Error('local storage full'); };
+  controller._bindGame();
+  engine.proceed();
+  await settle();
+  assert.deepEqual(scores(b), [['بازیکن متحرک', '4']]);
+  assert.equal(engine.liveSectorResults[1].liveSubmission.player.sector, 1);
+  controller._renderS(g.context.SECTORS[1]);
+  await settle();
+  assert.equal(db.writes, 1);
+  engine.mainCount = 4;
+  engine.modulesAttached = 7;
+  engine.proceed();
+  await settle();
+  assert.deepEqual(scores(b), [['بازیکن متحرک', '3']]);
+  engine.mainCount = 7;
+  engine.modulesAttached = 12;
+  engine.proceed();
+  await settle();
+  assert.equal(engine.state, 'DONE');
+  assert.equal(engine.liveSectorResults[3].liveScoreSent, true);
+  assert.deepEqual(scores(b), [['بازیکن متحرک', '5']]);
+  assert.equal(db.writes, 3);
+});
+
+test('completion shows failure and retry button sends the same result after recovery', async () => {
+  const db = database();
+  db.failWrites = true;
+  const p = page();
+  join(p);
+  const g = game(db, p.context.localStorage);
+  finish(g, 3);
+  await settle();
+  const status = g.el('core-live-status');
+  assert.match(status.textContent, /ارسال نشد/);
+  assert.equal(status.children[0].textContent, 'تلاش دوباره');
+  db.failWrites = false;
+  status.children[0].listeners.click();
+  await settle();
+  assert.match(status.textContent, /امتیاز 3.*123456.*ثبت شد/);
+  assert.equal(status.children.length, 0);
+});
+
+test('local dossier failure cannot prevent the learning game live write', async () => {
+  const db = database();
+  const p = page();
+  join(p);
+  const g = game(db, p.context.localStorage);
+  g.context.AppStorage.getActiveClass = () => { throw new Error('broken local class'); };
+  finish(g, 2);
+  await settle();
+  assert.equal(g.context.corePlay.liveScoreSent, true);
+});
+
+test('a missing or incompatible old player id is replaced by a stable valid Firebase id', async () => {
+  const db = database();
+  for (const oldId of ['', 'old-profile']) {
+    const s = storage();
+    s.setItem('demo_class_code', '123456');
+    s.setItem('demo_player_id', oldId);
+    const g = game(db, s);
+    finish(g, 2);
+    await settle();
+    const id = s.getItem('demo_player_id');
+    assert.match(id, /^p_[A-Za-z0-9-]{8,100}$/);
+    finish(g, 3, 2);
+    await settle();
+    assert.equal(s.getItem('demo_player_id'), id);
+  }
+});
+
+test('disconnected leaderboard labels stale rows and reconnect does not leak listeners', async () => {
+  const db = database();
+  const p = page();
+  join(p);
+  const b = board(db, p.context.localStorage);
+  finish(game(db, p.context.localStorage), 2);
+  await settle();
+  db.connected = false;
+  assert.match(b.el('status').textContent, /ممکن است قدیمی/);
+  assert.equal(scores(b).length, 1);
+  db.connected = true;
+  assert.match(b.el('status').textContent, /نتایج زنده/);
+  b.el('refresh').listeners.click();
+  assert.equal(db.listenerCount('123456'), 1);
+  assert.equal(db.connectionListenerCount, 1);
+  b.event('pagehide');
+  assert.equal(db.connectionListenerCount, 0);
 });

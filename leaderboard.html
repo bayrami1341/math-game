@@ -9,6 +9,8 @@
     h1 { text-align: center; color: #1565C0; }
     .item { background: white; margin: 8px auto; padding: 12px 16px; border-radius: 10px; max-width: 400px; display: flex; justify-content: space-between; gap: 16px; overflow-wrap: anywhere; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
     #status, .hint { text-align: center; }
+    .item { flex-wrap: wrap; }
+    .updated { flex-basis: 100%; color: #526171; font-size: 12px; }
     .back { display: block; text-align: center; margin-top: 20px; color: #1976D2; }
   </style>
 </head>
@@ -17,12 +19,13 @@
   <p id="status" role="status">در حال اتصال به نتایج کلاس…</p>
   <p class="hint">امتیازها مربوط به آخرین سکتور ثبت‌شدهٔ هر بازیکن هستند.</p>
   <div id="list"></div>
+  <p class="hint"><button id="refresh" type="button">اتصال دوباره</button></p>
   <a href="join.html" class="back">ورود یا تغییر کلاس</a>
   <a href="home.html" class="back">بازگشت</a>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="live-board.js"></script>
+  <script src="live-board.js?v=20261016-scorefix"></script>
   <script>
     var list = document.getElementById('list');
     var statusEl = document.getElementById('status');
@@ -45,10 +48,21 @@
         return;
       }
       statusEl.textContent = 'در حال اتصال به نتایج کلاس…';
+      var connected = null;
+      var rowCount = null;
+      var readFailed = false;
+      function connectionStatus() {
+        if (readFailed) return;
+        statusEl.textContent = connected === false
+          ? 'اتصال برقرار نیست؛ نتایج نمایش‌داده‌شده ممکن است قدیمی باشند.'
+          : rowCount === null ? 'در حال اتصال به نتایج کلاس…'
+          : rowCount ? 'نتایج زندهٔ کلاس ' + roomCode : 'هنوز نتیجه‌ای ثبت نشده';
+      }
       try {
         unsubscribe = LiveBoard.listen(roomCode, function (rows) {
           list.textContent = '';
-          statusEl.textContent = rows.length ? 'نتایج زندهٔ کلاس ' + roomCode : 'هنوز نتیجه‌ای ثبت نشده';
+          rowCount = rows.length;
+          connectionStatus();
           rows.forEach(function (row) {
             var item = document.createElement('div');
             item.className = 'item';
@@ -58,9 +72,18 @@
             scoreEl.textContent = String(row.score || 0);
             item.appendChild(nameEl);
             item.appendChild(scoreEl);
+            if (Number.isFinite(row.updatedAt)) {
+              var updatedEl = document.createElement('small');
+              updatedEl.className = 'updated';
+              updatedEl.textContent = 'آخرین ثبت: ' + new Date(row.updatedAt).toLocaleString('fa-IR');
+              item.appendChild(updatedEl);
+            }
             list.appendChild(item);
           });
-        }, showError);
+        }, function () { readFailed = true; showError(); }, function (online) {
+          connected = online;
+          connectionStatus();
+        });
       } catch (e) { showError(); }
     }
     window.addEventListener('pagehide', function () {
@@ -68,6 +91,7 @@
       unsubscribe = null;
     });
     window.addEventListener('pageshow', connect);
+    document.getElementById('refresh').addEventListener('click', connect);
   </script>
 </body>
 </html>

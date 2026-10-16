@@ -317,7 +317,10 @@
       <div class="core-companion-avatar" id="core-companion-avatar">🐿️</div>
       <div class="core-companion-text" id="core-companion-text">سلام! بیا با هم بشماریم!</div>
     </div>
-    <div class="core-bottom">
+    <p id="core-live-status" role="status" aria-live="polite" style="text-align:center"></p>
+    <div class="core-bottom" style="flex-wrap:wrap">
+      <a href="join.html" style="color:var(--cyan)">ورود به کلاس</a>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
       <button type="button" id="core-home" class="action-btn btn-secondary">🏠 خانه</button>
       <button type="button" id="core-back" class="action-btn btn-secondary">خروج</button>
     </div>
@@ -452,6 +455,8 @@
     <div class="modal-card">
       <h2 id="sector-title">انتقال بخش</h2>
       <p id="sector-desc"></p>
+      <p id="sector-live-status" role="status" aria-live="polite"></p>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
       <button id="btn-sector-next" class="action-btn">ورود به بخش بعدی</button>
     </div>
   </div>
@@ -460,6 +465,8 @@
   <div id="modal-report" class="modal-overlay hidden" role="dialog" aria-modal="true">
     <div class="modal-card">
       <h2>📊 کارنامهٔ ساخت ایستگاه</h2>
+      <p id="report-live-status" role="status" aria-live="polite"></p>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
       <div id="report-summary" style="text-align:right;line-height:1.8;margin-bottom:10px"></div>
       <div id="report-badges" class="badges-grid"></div>
       <div id="report-heroes" style="margin-top:14px;"></div>
@@ -480,7 +487,7 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" defer></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js" defer></script>
 <script src="firebase-config.js" defer></script>
-<script src="live-board.js" defer></script>
+<script src="live-board.js?v=20261016-scorefix" defer></script>
 
 <!-- هسته‌ها — به ترتیب وابستگی -->
 <script src="workshop-core.js" defer></script>
@@ -491,8 +498,8 @@
 <script src="src/core/graph-data.js" defer></script>
 <script src="src/core/bottleneck.js" defer></script>  
 <script src="src/games/multiplication-1x1/config.js" defer></script>
-<script src="src/games/multiplication-1x1/game.js" defer></script>
-<script src="src/games/multiplication-1x1/core-play.js" defer></script>
+<script src="src/games/multiplication-1x1/game.js?v=20261016-scorefix" defer></script>
+<script src="src/games/multiplication-1x1/core-play.js?v=20261016-scorefix" defer></script>
 
 <!-- رابط کاربری -->
 <script src="src/ui/story.js" defer></script>
@@ -502,7 +509,7 @@
 <script src="src/ui/groups-ui.js" defer></script>
 <script src="src/ui/teacher.js" defer></script>
 <script src="src/ui/report-panel.js" defer></script>
-<script src="src/ui/ui-controller.js" defer></script>
+<script src="src/ui/ui-controller.js?v=20261016-scorefix" defer></script>
 
 <!-- نگهبان بارگذاری -->
 <script>

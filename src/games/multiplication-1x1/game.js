@@ -66,6 +66,8 @@
     }
 
     start(n, c) {
+      this.liveSectorResults = {};
+      this.liveSectorBaseline = 0;
       this.playerName = n || 'مهندس ناشناس';
       this.playerClass = c || '';
       this.pedagogy.reset();

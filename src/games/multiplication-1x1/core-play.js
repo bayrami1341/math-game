@@ -196,24 +196,17 @@
             SocialCore.classes.submitScore(activeClassCode, play.profileId, totalCorrect);
           } catch (e) { console.warn('Local class score error:', e); }
         }
-        var roomCode = localStorage.getItem('demo_class_code');
-        if (roomCode && window.LiveBoard && !play.liveScorePending && !play.liveScoreSent) {
-          var profile = (window.ProfileManager && ProfileManager.getActive) ? ProfileManager.getActive() : null;
-          play.liveScorePending = true;
-          LiveBoard.submitScore(roomCode, {
-            profileId: localStorage.getItem('demo_player_id') || play.profileId || (profile && profile.profileId),
-            name: localStorage.getItem('demo_student_name') || (profile && profile.displayName) || play.session.name || 'بازیکن',
-            avatar: (profile && profile.avatar) || '👤',
-            score: totalCorrect,
-            sector: play.sectorId
-          }).then(function (sent) {
-            play.liveScorePending = false;
-            play.liveScoreSent = sent;
-          });
-        }
       } catch (e) {
-        play.liveScorePending = false;
         console.warn('Sector score error:', e);
+      }
+
+      // Local report failures must never prevent the public classroom write.
+      if (window.LiveBoard) {
+        LiveBoard.publishResult(play, {
+          name: play.session.name || 'بازیکن',
+          score: (play.session.events || []).filter(function (e) { return e.correct; }).length,
+          sector: play.sectorId
+        }, 'core-live-status');
       }
 
       try {
@@ -324,6 +317,8 @@
   function openCore(sectorId) {
     if (typeof WorkshopCore === 'undefined') { alert('هسته در دسترس نیست.'); return; }
     window.workshopMode = 'core';
+    var liveStatus = document.getElementById('core-live-status');
+    if (liveStatus) liveStatus.textContent = 'امتیاز پس از تمام کردن این بخش ارسال می‌شود.';
     document.getElementById('modal-start').classList.add('hidden');
     document.getElementById('modal-sector-picker').classList.add('hidden');
     document.getElementById('modal-classroom').classList.add('hidden');
