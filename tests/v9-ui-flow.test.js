@@ -22,7 +22,7 @@ async function app(t, options = {}) {
   const html = await fs.readFile(path.resolve(__dirname, '../v9.html'), 'utf8');
   const elements = [], ids = new Map();
   class Element {
-    constructor(tag, id = '') { this.tag = tag; this.id = id; this.children = []; this.handlers = {}; this.dataset = {}; this.value = ''; this.hidden = false; this.disabled = false; this.textContent = ''; elements.push(this); if (id) ids.set(id, this); }
+    constructor(tag, id = '') { this.tag = tag; this.id = id; this.children = []; this.handlers = {}; this.dataset = {}; this.style = {}; this.value = ''; this.hidden = false; this.disabled = false; this.textContent = ''; elements.push(this); if (id) ids.set(id, this); }
     addEventListener(event, handler) { this.handlers[event] = handler; }
     append(...items) { this.children.push(...items); }
     replaceChildren(...items) { this.children = items; }
@@ -33,22 +33,24 @@ async function app(t, options = {}) {
     const element = new Element(match[1], match[3]); element.hidden = /\bhidden\b/.test(match[2]);
   }
   const nav = [...html.matchAll(/<button[^>]+data-screen="([^"]+)"/g)].map(match => { const button = new Element('button'); button.dataset.screen = match[1]; return button; });
+  const sectors = [...html.matchAll(/<button[^>]+data-sector="([^"]+)"/g)].map(match => { const button = new Element('button'); button.dataset.sector = match[1]; return button; });
   Object.entries({ sector: '1', membership: 'invite_confirm', 'hero-avatar': 'astronaut', 'activity-context': 'personal' }).forEach(([id, value]) => { ids.get(id).value = value; });
   const document = {
     getElementById: id => { assert.ok(ids.has(id), 'Missing element ' + id); return ids.get(id); },
     createElement: tag => new Element(tag),
-    querySelectorAll: selector => selector === '[data-screen]' ? nav : elements.filter(element => element.tag === 'button'),
+    querySelectorAll: selector => selector === '[data-screen]' ? nav : selector === '[data-sector]' ? sectors : elements.filter(element => element.tag === 'button'),
     addEventListener() {}, hidden: false
   };
   const storage = new Map();
   const localModule = await import('../src/v9/local.mjs');
   const entryModule = await import('../src/v9/entry.mjs');
   const missionModule = await import('../src/v9/mission.mjs');
+  const experienceModule = await import('../src/v9/experience.mjs');
   const factory = new IDBFactory();
   const database = await localModule.openLocal(factory); t.after(() => database.close());
   const navigator = { onLine: true };
   const context = vm.createContext({ document, window: { MathGameV9Config: { apiBase: origin }, addEventListener() {} },
-    openLocal: async () => database, ...entryModule, ...missionModule,
+    openLocal: async () => database, ...entryModule, ...missionModule, ...experienceModule,
     navigator, location: new URL(origin + '/v9.html'), history: { replaceState() {} },
     sessionStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) },
     URL, AbortSignal, fetch: options.fetch || fetch, crypto: webcrypto, structuredClone, performance, setInterval() {}, console });
@@ -66,7 +68,7 @@ async function app(t, options = {}) {
     await click(get('story-skip')); get('hero-name').value = name; await submit('hero-introduction');
     assert.equal(get('notice').dataset.error, 'false', get('notice').textContent);
   };
-  return { get, click, submit, go, state, profileCount, createHero, navigator, database, accounts, context, store, service, settle };
+  return { get, click, submit, go, state, profileCount, createHero, navigator, database, accounts, context, store, service, settle, sectors, origin };
 }
 test('story, personal practice, moving-card mission and shared collection form one working flow', async t => {
   const ui = await app(t);
@@ -74,6 +76,7 @@ test('story, personal practice, moving-card mission and shared collection form o
   assert.equal(ui.get('hero-story').hidden, false);
   assert.equal(ui.get('hero-introduction').hidden, true);
   await ui.createHero(); assert.equal(ui.profileCount(), 1);
+  assert.equal(ui.get('station-meter').value, 0);
   assert.equal(ui.get('identity').textContent, 'قهرمان آزمایشی');
   await ui.click(ui.get('replay-story')); await ui.click(ui.get('story-skip'));
   assert.equal(ui.get('hero-introduction').hidden, true);
@@ -93,14 +96,31 @@ test('story, personal practice, moving-card mission and shared collection form o
         assert.ok(button); await ui.click(button);
       }
     }
+    assert.equal(ui.get('flight-meter').value, 100);
+    assert.equal(ui.get('energy-cells').children.filter(cell => cell.dataset.lit === 'true').length, session.questions.length);
+    assert.equal(ui.get('flight-result').hidden, true, 'No celebration of a final result before server finalization');
+    assert.equal(ui.get('station-meter').value, 0, 'Practice or unfinished mission must not power the persistent station');
     await ui.click(ui.get('finalize'));
     assert.equal(ui.state().session.status, 'FINALIZED', ui.get('notice').textContent);
+    assert.equal(ui.get('flight-result').hidden, false);
+    assert.equal(ui.get('station-meter').value, mode === 'missions' ? 33 : 0);
   }
   await ui.go('collection');
   assert.equal(ui.get('achievements').children.length, 3);
   assert.equal(ui.get('personal-records').children.length, 1);
   assert.equal(ui.get('activity-history').children.length, 2);
   assert.equal(ui.profileCount(), 1);
+  await ui.go('missions');
+  assert.equal(ui.get('activity-settings').hidden, false, 'Completed missions can be played again');
+  await ui.click(ui.sectors[1]); await ui.submit('start-session');
+  assert.equal(ui.state().session.sectorId, 2);
+  assert.match(ui.get('flight-title').textContent, /یک پیام تا زمین/);
+  await ui.click(ui.get('back-station'));
+  assert.equal(ui.get('station-home').hidden, false);
+  await ui.click(ui.get('resume-activity'));
+  assert.equal(ui.get('practice').hidden, false);
+  await ui.click(ui.get('change-hero')); await ui.click(ui.get('new-hero')); await ui.createHero('قهرمان دوم');
+  assert.equal(ui.get('station-meter').value, 0, 'Another child must not inherit station power');
 });
 test('switching children preserves offline answers and later receipts in the original profile', async t => {
   const ui = await app(t);
@@ -108,6 +128,8 @@ test('switching children preserves offline answers and later receipts in the ori
   await ui.go('practice'); await ui.submit('start-session');
   const firstId = ui.state().studentId;
   ui.navigator.onLine = false; ui.get('answer').value = '4'; await ui.submit('answer-form');
+  assert.match(ui.get('flight-energy').textContent, /منتظر تأیید/);
+  assert.equal(ui.get('flight-result').hidden, true);
   assert.equal((await ui.database.pending(ui.accounts[1].uid)).length, 1);
   await ui.click(ui.get('change-hero')); await ui.click(ui.get('new-hero')); await ui.createHero('مینا');
   const secondId = ui.state().studentId; assert.notEqual(secondId, firstId);
@@ -121,6 +143,27 @@ test('switching children preserves offline answers and later receipts in the ori
   assert.equal(ui.get('profile-buttons').children.length, 2);
   await ui.click(ui.get('profile-buttons').children.find(button => button.textContent.endsWith('۱')) || ui.get('profile-buttons').children[0]);
   assert.equal(ui.get('hero-story').hidden, true);
+});
+
+test('unavailable optional audio never prevents answering or synchronization', async t => {
+  const ui = await app(t);
+  await ui.click(ui.get('account-buttons').children[1]); await ui.createHero();
+  await ui.go('practice'); await ui.submit('start-session');
+  await ui.click(ui.get('toggle-sound'));
+  assert.equal(ui.get('toggle-sound')['aria-pressed'], 'false');
+  const question = ui.state().session.questions[0];
+  ui.get('answer').value = String(question.f1 * question.f2); await ui.submit('answer-form');
+  assert.equal(Object.keys(ui.state().session.receipts).length, 1);
+  assert.equal(ui.get('notice').dataset.error, 'false', ui.get('notice').textContent);
+});
+
+test('game requests do not exhaust registration quota and registration remains limited', async t => {
+  const ui = await app(t);
+  const call = (operation, input) => fetch(ui.origin + '/api/v9/' + operation, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + ui.accounts[1].token }, body: JSON.stringify({ schemaVersion: 1, ...input }) });
+  for (let index = 0; index < 21; index++) assert.equal((await call('getEntry', {})).status, 200);
+  for (let index = 0; index < 20; index++) assert.equal((await call('createStudent', { requestId: 'req_quota_' + index, displayName: 'آزمایش' })).status, 200);
+  assert.equal((await call('createStudent', { requestId: 'req_quota_blocked', displayName: 'آزمایش' })).status, 429);
+  assert.equal((await call('getEntry', {})).status, 200);
 });
 
 test('lost registration response retries the same story operation without another child', async t => {

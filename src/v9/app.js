@@ -1,6 +1,7 @@
 import { openLocal } from './local.mjs';
 import { studentKey, selectProfile, membershipContext } from './entry.mjs';
 import { missionChoices } from './mission.mjs';
+import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer } from './experience.mjs';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config;
@@ -11,6 +12,12 @@ const request = () => ({ schemaVersion: 1, requestId: 'req_' + crypto.randomUUID
 let local, actor, tokenProvider, auth, authSdk, state = {}, serial = Promise.resolve(), shownQuestionKey, questionShownAt;
 let profiles = [], selectedId = null, storyStep = null, replaying = false, pendingCreation = null;
 let screen = 'home', collection = null, motionPaused = false, choiceKey = null;
+let soundEnabled = false;
+let showingFlight = false;
+const playSound = createSoundPlayer(() => new (window.AudioContext || window.webkitAudioContext)());
+const sound = kind => { if (soundEnabled) void playSound(kind).then(played => {
+  if (!played) { soundEnabled = false; $('toggle-sound').textContent = 'صدا در دسترس نیست'; $('toggle-sound').setAttribute('aria-pressed', 'false'); }
+}); };
 const scenes = [
   ['پیام از ایستگاه', 'چراغ‌های ایستگاه فضایی کم‌نور شده‌اند. برای روشن‌کردنشان به کسی نیاز داریم که فکر کند، یاد بگیرد و دوباره تلاش کند.'],
   ['هر تلاش، یک قدم', 'قرار نیست از اول همهٔ جواب‌ها را بدانی. با تمرین، راه ساختن و پیش‌رفتن را پیدا می‌کنی.'],
@@ -36,6 +43,7 @@ async function api(operation, input) {
 }
 async function save(next) { await local.put(key(), next); state = next; }
 function render() {
+  $('landing-intro').hidden = true;
   $('login').hidden = true; $('workspace').hidden = false;
   const profile = profiles.find(profile => profile.studentId === selectedId);
   $('identity').textContent = actor.teacher ? 'پنل معلم' : profile ? profile.displayName : 'سفر قهرمان';
@@ -52,6 +60,8 @@ function render() {
       button.onclick = () => run(() => activateProfile(item)); $('profile-buttons').append(button);
     });
     if (!profile) return;
+    renderStation();
+    $('back-station').hidden = screen === 'home';
     $('hero-greeting').textContent = ({ astronaut: '🧑‍🚀 ', pilot: '🚀 ', scientist: '🔬 ' }[profile.avatar] || '') + profile.displayName + '، به ایستگاه خودت خوش آمدی';
     $('join-card').hidden = screen !== 'classes';
     $('activity-settings').hidden = !['practice', 'missions'].includes(screen);
@@ -79,11 +89,19 @@ function render() {
   $('class-context-option').disabled = status !== 'active';
   if (status !== 'active') $('activity-context').value = 'personal';
   const mission = screen === 'missions';
+  const destination = missions[Number($('sector').value)] || missions[1];
+  $('activity-eyebrow').textContent = mission ? 'مرکز فرماندهی / مقصد سفرت را انتخاب کن' : 'آزمایشگاه / فرصت کشف و مرور';
+  $('mission-map').hidden = !mission;
+  $('mission-objective').hidden = !mission;
+  $('mission-objective').textContent = destination.objective;
+  document.querySelectorAll('[data-sector]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.sector === $('sector').value)));
   $('student-class-name').textContent = mission ? 'مأموریت نجات ایستگاه' : 'تمرین من';
   $('start-activity').textContent = mission ? 'شروع مأموریت' : 'شروع تمرین';
   $('activity-rules').textContent = mission ? 'قانون این مأموریت: هر سؤال یک پاسخ، هر پاسخ درست یک امتیاز. سرعت امتیاز اضافه ندارد و حرکت کارت‌ها قابل توقف است. نتیجه پس از تأیید سرور ثبت می‌شود؛ رتبه‌بندی عمومی خاموش است.' : 'با آرامش پاسخ بده. پاسخ نادرست را با جواب درست مرور می‌کنی. این نتیجه سابقهٔ آموزشی است و وارد رکورد مأموریت نمی‌شود.';
   $('class-context-option').textContent = state.className ? 'کلاس: ' + state.className : 'کلاس انتخاب‌شده';
-  $('practice').hidden = !state.session || !['practice', 'missions'].includes(screen) || (state.session.activity === 'mission') !== mission;
+  $('practice').hidden = !showingFlight || !state.session || !['practice', 'missions'].includes(screen) || (state.session.activity === 'mission') !== mission;
+  $('student').dataset.playing = String(!$('practice').hidden);
+  if (!$('practice').hidden) $('activity-settings').hidden = true;
   if (!state.session) return;
   const session = state.session;
   const answered = session.answers || {};
@@ -107,8 +125,41 @@ function render() {
   const confirmed = Object.keys(session.receipts || {}).length;
   $('queue-status').textContent = fa(confirmed) + ' پاسخ در پروندهٔ سرور تأیید شده است.';
   if (session.status === 'FINALIZED') $('feedback').textContent = `نتیجهٔ نهایی: ${fa(session.score)} پاسخ درست از ${fa(session.questions.length)}`;
+  renderFlight(session);
+}
+function renderStation() {
+  const power = stationPower(state.stationRecords || []);
+  $('station-power').textContent = fa(power) + '٪'; $('station-meter').value = power;
+  $('station-home').hidden = screen !== 'home';
+}
+function renderFlight(session) {
+  const progress = flightProgress(session), mission = session.activity === 'mission';
+  const destination = missions[session.sectorId] || missions[1];
+  $('flight-title').textContent = mission ? destination.icon + ' ' + destination.title : '🌱 آزمایشگاه کشف جواب‌ها';
+  $('flight-chapter').textContent = 'قدم ' + fa(progress.answered) + ' از ' + fa(progress.total);
+  const chapters = mission ? [destination.destination + ' در انتظار توست', 'از زمین فاصله گرفتیم!', 'مقصد نزدیک است…', 'رسیدیم؛ حالا پایان سفر را ثبت کن'] : ['آزمایشگاه آمادهٔ کشف توست', 'داریم راه جواب‌ها را پیدا می‌کنیم', 'چند کشف دیگر تا پایان تمرین', 'مرور تمام شد؛ پایان تمرین را ثبت کن'];
+  $('flight-message').textContent = progress.finalized ? 'این سفر در داستان تو ماند' : chapters[progress.stage];
+  $('flight-energy').textContent = fa(progress.lit) + ' سلول روشن' + (progress.pending ? ' — ' + fa(progress.pending) + ' پاسخ هنوز منتظر تأیید است' : progress.answered ? ' — پاسخ‌ها تأیید شده‌اند' : ' — آمادهٔ اولین قدم');
+  $('flight-meter').value = progress.percent;
+  $('flight-ship').style.left = (14 + progress.percent * 0.57) + '%';
+  $('flight-ship').style.top = (65 - progress.percent * 0.55) + '%';
+  $('energy-cells').replaceChildren();
+  for (let index = 0; index < progress.total; index++) {
+    const cell = document.createElement('span'); cell.dataset.lit = String(index < progress.lit); $('energy-cells').append(cell);
+  }
+  $('question-prompt').textContent = mission ? 'کدام سلول، جواب درست را دارد؟' : 'جواب را کشف کن؛ اینجا فرصت تمرین توست.';
+  $('answer-deck').hidden = progress.finalized;
+  $('flight-result').hidden = !progress.finalized;
+  if (progress.finalized) {
+    const perfect = session.score === progress.total;
+    $('flight-result').dataset.perfect = String(perfect);
+    $('result-title').textContent = perfect ? 'همهٔ چراغ‌های این مسیر روشن شد!' : 'یک قدم دیگر در مسیر یادگیری!';
+    $('result-description').textContent = fa(session.score) + ' پاسخ درست از ' + fa(progress.total) + '؛ ' + (mission ? 'نتیجه ثبت شد. بهترین نتیجهٔ هر مسیر به روشنایی ایستگاه کمک می‌کند.' : 'این سفر در سابقهٔ تمرینت ماند؛ می‌توانی برای مأموریت بعدی آماده شوی.');
+    $('companion-message').textContent = perfect ? 'چه سفر روشنی! حالا برویم یادگاری‌اش را ببینیم.' : 'تلاشت را دیدم! جواب‌هایی که سخت بودند را در تمرین دوباره پیدا می‌کنیم.';
+  }
 }
 function renderStory() {
+  $('story-art').dataset.scene = String(storyStep);
   const final = storyStep >= scenes.length;
   const profile = profiles.find(profile => profile.studentId === selectedId);
   $('story-step').textContent = 'داستان ایستگاه — ' + fa(Math.min(storyStep + 1, scenes.length + 1)) + ' از ' + fa(scenes.length + 1);
@@ -123,6 +174,7 @@ function renderStory() {
   $('hero-name').readOnly = !!pendingCreation; $('hero-avatar').disabled = !!pendingCreation;
 }
 async function activateProfile(profile) {
+  showingFlight = false;
   selectedId = profile.studentId; storyStep = null; replaying = false; shownQuestionKey = null; choiceKey = null; collection = null; screen = 'home';
   $('achievements').replaceChildren(); $('personal-records').replaceChildren(); $('activity-history').replaceChildren();
   state = await local.get(key()) || { studentId: selectedId };
@@ -139,6 +191,7 @@ async function chooseClass(membership) {
 }
 async function refreshCollection() {
   collection = await api('getCollection', { schemaVersion: 1, studentId: selectedId });
+  await save({ ...state, stationRecords: collection.best }); renderStation();
   const fill = (id, entries, empty) => {
     $(id).replaceChildren();
     for (const text of entries.length ? entries : [empty]) { const paragraph = document.createElement('p'); paragraph.className = 'result'; paragraph.textContent = text; $(id).append(paragraph); }
@@ -241,14 +294,26 @@ async function flush(force = false) {
 const form = (id, task) => $(id).addEventListener('submit', event => { event.preventDefault(); run(task); });
 const focusStory = () => { render(); $('story-title').focus(); };
 document.querySelectorAll('[data-screen]').forEach(button => { button.onclick = () => run(async () => {
-  screen = button.dataset.screen; render();
+  screen = button.dataset.screen; showingFlight = false; render();
   if (screen === 'collection') await refreshCollection();
 }); });
-$('resume-activity').onclick = () => { screen = state.session.activity === 'mission' ? 'missions' : 'practice'; render(); $('practice').scrollIntoView({ block: 'start' }); };
+$('resume-activity').onclick = () => { showingFlight = true; screen = state.session.activity === 'mission' ? 'missions' : 'practice'; render(); $('practice').scrollIntoView({ block: 'start' }); };
 $('class-practice').onclick = () => { screen = 'practice'; $('activity-context').value = 'class'; render(); };
 $('refresh-collection').onclick = () => run(refreshCollection);
+$('back-station').onclick = () => { screen = 'home'; render(); };
+$('launch-mission').onclick = () => { screen = 'missions'; showingFlight = false; render(); $('activity-settings').scrollIntoView({ block: 'start' }); };
+$('result-home').onclick = () => { screen = 'home'; render(); $('station-home').scrollIntoView({ block: 'start' }); };
+$('result-collection').onclick = () => run(async () => { screen = 'collection'; render(); await refreshCollection(); $('collection').scrollIntoView({ block: 'start' }); });
+document.querySelectorAll('[data-sector]').forEach(button => { button.onclick = () => { $('sector').value = button.dataset.sector; render(); }; });
+$('sector').addEventListener('change', render);
+$('toggle-sound').onclick = () => {
+  soundEnabled = !soundEnabled;
+  $('toggle-sound').textContent = soundEnabled ? 'صدا: روشن' : 'صدا: خاموش';
+  $('toggle-sound').setAttribute('aria-pressed', String(soundEnabled)); sound('correct');
+};
 $('toggle-motion').onclick = () => {
   motionPaused = !motionPaused; $('mission-choices').dataset.paused = String(motionPaused);
+  $('student').dataset.motionPaused = String(motionPaused);
   $('toggle-motion').setAttribute('aria-pressed', String(motionPaused)); $('toggle-motion').textContent = motionPaused ? 'ادامهٔ حرکت کارت‌ها' : 'توقف حرکت کارت‌ها';
 };
 $('story-next').onclick = () => { storyStep++; focusStory(); };
@@ -311,9 +376,12 @@ form('start-session', async () => {
   let result;
   try { result = await api('startActivity', input); }
   catch (error) { if (['INVALID_PAYLOAD', 'FORBIDDEN'].includes(error.code)) await local.put(operation, null); throw error; }
-  await save({ ...state, session: { ...result, answers: {}, receipts: {} } }); render(); $('answer').focus();
+  await save({ ...state, session: { ...result, answers: {}, receipts: {} } }); showingFlight = true; render(); if (result.activity !== 'mission') $('answer').focus();
+  $('companion-message').textContent = 'من همراهتم؛ هر جواب درست یک سلول را روشن می‌کند. اگر سخت بود، با هم مرورش می‌کنیم.';
+  $('answer-deck').dataset.reaction = '';
   screen = result.activity === 'mission' ? 'missions' : 'practice'; choiceKey = null;
   await local.put(operation, null); render(); notice(result.activity === 'mission' ? 'مأموریت شروع شد؛ از میان کارت‌ها پاسخ را انتخاب کن.' : 'تمرین شروع شد؛ با آرامش فکر کن.');
+  $('practice').scrollIntoView({ block: 'start' });
 });
 form('answer-form', async () => {
   const text = number($('answer').value.trim());
@@ -328,6 +396,10 @@ async function submitAnswer(value, expectedQuestionId) {
   const input = { ...request(), sessionId: session.sessionId, writerEpoch: session.writerEpoch, attempts: [attempt] };
   const next = structuredClone(state); next.session.answers[question.questionId] = attempt;
   await local.enqueue(key(), next, { uid: actor.uid, studentId: selectedId, input }); state = next;
+  const correct = value === question.f1 * question.f2;
+  $('answer-deck').dataset.reaction = correct ? 'correct' : 'review';
+  $('companion-message').textContent = correct ? 'یک سلول دیگر روشن شد! بریم سراغ بعدی؟' : 'این یکی را پیدا کردیم: ' + fa(question.f1) + ' × ' + fa(question.f2) + ' = ' + fa(question.f1 * question.f2) + '. برای قدم بعدی همراهتم.';
+  sound(correct ? 'correct' : 'review');
   $('answer').value = ''; $('feedback').textContent = value === question.f1 * question.f2 ? 'آفرین! پاسخ روی این دستگاه ذخیره شد؛ در انتظار تأیید.' : 'پاسخ درست ' + fa(question.f1 * question.f2) + ' بود. این سؤال را دوباره مرور کن؛ پاسخ تو برای ارسال ذخیره شد.';
   render(); if (session.activity !== 'mission') $('answer').focus(); await flush();
 }
@@ -338,7 +410,7 @@ $('finalize').onclick = () => run(async () => {
   const operation = operationKey('finish:' + state.session.sessionId);
   const input = await local.prepareOperation(operation, { ...request(), sessionId: state.session.sessionId, writerEpoch: state.session.writerEpoch });
   const result = await api('finalizeSession', input);
-  await save({ ...state, session: { ...state.session, status: result.status, score: result.score } }); render(); notice('تمرینت در پرونده ثبت شد.');
+  await save({ ...state, stationRecords: keepStationRecord(state.stationRecords || [], state.session, result), session: { ...state.session, status: result.status, score: result.score } }); render(); sound('finish'); notice('تمرینت در پرونده ثبت شد.');
   await local.put(operation, null);
   notice(state.session.activity === 'mission' ? 'نتیجهٔ مأموریت تأیید شد؛ رکورد و نشان‌ها را در گنجینه ببین.' : 'تمرینت در سابقهٔ آموزشی ثبت شد.');
 });
@@ -347,6 +419,7 @@ $('logout').onclick = () => run(async () => {
   if (auth?.currentUser?.isAnonymous && !window.confirm('ورود دوباره به همین پرونده پس از خروج از حساب ناشناس، هنوز در این پیش‌نمایش فراهم نیست. خارج می‌شوی؟')) return;
   if (auth) await authSdk.signOut(auth);
   sessionStorage.removeItem('v9-local-token'); actor = null; tokenProvider = null; state = {}; profiles = []; selectedId = null; storyStep = null;
+  $('landing-intro').hidden = false;
   $('hero-name').value = ''; $('student-invite').value = ''; $('workspace').hidden = true; $('login').hidden = false; notice('از حساب خارج شدی. پاسخ‌های ارسال‌نشده برای همین حساب محفوظ‌اند.');
 });
 window.addEventListener('online', () => run(flush));

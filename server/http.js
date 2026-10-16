@@ -66,7 +66,8 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
         try { actor = await authenticate(token); } catch { throw new ApiError('UNAUTHENTICATED'); }
         if (!actor) throw new ApiError('UNAUTHENTICATED');
         const operation = url.pathname.split('/').at(-1);
-        rateLimit('uid:' + actor.uid, ['redeemInvite', 'joinStudentClass', 'createStudent'].includes(operation) ? 20 : 120);
+        const entryOperation = ['redeemInvite', 'joinStudentClass', 'createStudent'].includes(operation);
+        rateLimit('uid:' + actor.uid + ':' + (entryOperation ? 'entry' : 'activity'), entryOperation ? 20 : 120);
         const input = await readJson(req);
         return send(200, await service.call(operation, input, actor));
       }
