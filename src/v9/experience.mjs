@@ -42,6 +42,35 @@ export function stationPower(records) {
   return Math.round(100 * powered / 3);
 }
 
+export function stationSystems(records = []) {
+  return [1, 2, 3].map(sectorId => {
+    const compatible = records.filter(record => record.sectorId === sectorId && record.rulesVersion === 'rv1' && record.questionSetVersion === 'graph-v8.1' && record.total > 0);
+    const best = compatible.reduce((best, record) => !best || record.score / record.total > best.score / best.total ? record : best, null);
+    return { sectorId, ...missions[sectorId], percent: best ? Math.round(100 * best.score / best.total) : 0, complete: !!best && best.score === best.total, started: !!best };
+  });
+}
+export function nextDestination(records = []) {
+  const systems = stationSystems(records);
+  return systems.reduce((next, system) => system.percent < next.percent ? system : next).sectorId;
+}
+
+export function multiplicationModel(question) {
+  if (!question || ![question.f1, question.f2].every(value => Number.isInteger(value) && value >= 1 && value <= 12)) return null;
+  return { groups: question.f1, each: question.f2, total: question.f1 * question.f2, addends: Array(question.f1).fill(question.f2) };
+}
+
+export function companionLine(session) {
+  const progress = flightProgress(session);
+  if (!progress.answered) return 'هوشک هستم، همراه سفر تو! هر جواب یک قدم است؛ با خیال راحت فکر کن.';
+  const previous = [...session.questions].reverse().find(question => session.answers?.[question.questionId]);
+  const attempt = session.answers[previous.questionId];
+  const receipt = Object.values(session.receipts || {}).find(receipt => receipt.eventId === attempt.eventId && receipt.status === 'ACKNOWLEDGED');
+  const correct = receipt ? receipt.correct : attempt.answer === previous.f1 * previous.f2;
+  if (!correct) return 'با هم پیدایش کردیم: ' + previous.f1 + ' × ' + previous.f2 + ' = ' + previous.f1 * previous.f2 + '. این کشف را برای تمرین بعدی نگه داریم!';
+  const lines = ['یک چراغ دیگر! نورش را می‌بینی؟', 'این سلول هم آماده است؛ سفرمان جلو رفت!', 'چه خوب پیدایش کردی! مقصد نزدیک‌تر شد.', 'یک کشف تازه برای دفتر سفر تو!'];
+  return lines[(progress.answered - 1) % lines.length];
+}
+
 export function createSoundPlayer(makeContext) {
   let context;
   return async kind => {

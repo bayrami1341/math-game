@@ -1,7 +1,7 @@
 import { openLocal } from './local.mjs';
 import { studentKey, selectProfile, membershipContext } from './entry.mjs';
 import { missionChoices } from './mission.mjs';
-import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer } from './experience.mjs';
+import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer, stationSystems, nextDestination, multiplicationModel, companionLine } from './experience.mjs';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config;
@@ -14,6 +14,7 @@ let profiles = [], selectedId = null, storyStep = null, replaying = false, pendi
 let screen = 'home', collection = null, motionPaused = false, choiceKey = null;
 let soundEnabled = false;
 let showingFlight = false;
+let helpLevel = 0;
 const playSound = createSoundPlayer(() => new (window.AudioContext || window.webkitAudioContext)());
 const sound = kind => { if (soundEnabled) void playSound(kind).then(played => {
   if (!played) { soundEnabled = false; $('toggle-sound').textContent = 'صدا در دسترس نیست'; $('toggle-sound').setAttribute('aria-pressed', 'false'); }
@@ -120,21 +121,58 @@ function render() {
     }
   }
   if (question && shownQuestionKey !== session.sessionId + ':' + question.questionId) {
+    helpLevel = 0;
     shownQuestionKey = session.sessionId + ':' + question.questionId; questionShownAt = performance.now();
   }
   const confirmed = Object.keys(session.receipts || {}).length;
   $('queue-status').textContent = fa(confirmed) + ' پاسخ در پروندهٔ سرور تأیید شده است.';
   if (session.status === 'FINALIZED') $('feedback').textContent = `نتیجهٔ نهایی: ${fa(session.score)} پاسخ درست از ${fa(session.questions.length)}`;
   renderFlight(session);
+  renderHelp(question);
 }
 function renderStation() {
   const power = stationPower(state.stationRecords || []);
   $('station-power').textContent = fa(power) + '٪'; $('station-meter').value = power;
   $('station-home').hidden = screen !== 'home';
+  $('station-report').hidden = screen !== 'home';
+  $('station-home').dataset.phase = power === 0 ? 'dark' : power === 100 ? 'restored' : 'repairing';
+  const systems = stationSystems(state.stationRecords || []);
+  $('station-story').textContent = power === 100 ? 'نور، ارتباط و سکوی پرواز آماده‌اند. می‌توانی دوباره سفر کنی یا در آزمایشگاه کشف تازه‌ای داشته باشی.' : power ? 'نور دارد به ایستگاه برمی‌گردد؛ هر مسیر داستان خودش را دارد. بهترین سفرهایت اینجا می‌مانند.' : 'سه بخش ایستگاه منتظر کمک تو هستند. از هر مسیری که دوست داری شروع کن.';
+  $('station-systems').replaceChildren();
+  for (const system of systems) {
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'system-card secondary';
+    button.dataset.complete = String(system.complete);
+    button.textContent = system.icon + ' ' + system.destination + ' — ' + (system.complete ? 'روشن و آماده ✓' : system.started ? fa(system.percent) + '٪ روشن شده' : 'آمادهٔ اولین سفر');
+    button.onclick = () => chooseDestination(system.sectorId);
+    $('station-systems').append(button);
+  }
+}
+function chooseDestination(sectorId) {
+  screen = 'missions'; showingFlight = false; $('sector').value = String(sectorId); render(); $('activity-settings').scrollIntoView({ block: 'start' });
+}
+function renderHelp(question) {
+  const model = multiplicationModel(question);
+  const available = state.session?.activity === 'practice' && state.session.status !== 'FINALIZED' && !!model;
+  $('practice-help').hidden = !available;
+  $('help-picture').hidden = !available || !helpLevel;
+  $('show-help').setAttribute('aria-expanded', String(available && helpLevel > 0));
+  $('show-help').textContent = helpLevel === 0 ? '💡 با هم بسازیم' : helpLevel === 1 ? 'حالا جمع و جواب را ببینیم' : 'بستن راهنما';
+  $('help-groups').replaceChildren();
+  if (!available || !helpLevel) return;
+  $('help-description').textContent = fa(model.groups) + ' گروه داریم؛ در هر گروه ' + fa(model.each) + ' ستاره است.';
+  for (let group = 0; group < model.groups; group++) {
+    const frame = document.createElement('div'); frame.className = 'star-group';
+    for (let star = 0; star < model.each; star++) { const dot = document.createElement('span'); dot.textContent = '✦'; frame.append(dot); }
+    $('help-groups').append(frame);
+  }
+  $('help-equation').textContent = helpLevel >= 2 ? model.addends.map(fa).join(' + ') + ' = ' + fa(model.total) : '';
 }
 function renderFlight(session) {
   const progress = flightProgress(session), mission = session.activity === 'mission';
   const destination = missions[session.sectorId] || missions[1];
+  $('flight-scene').dataset.sector = mission ? String(session.sectorId) : 'practice';
+  $('flight-destination-note').textContent = mission ? destination.objective : 'در آزمایشگاه می‌توانی جواب‌ها را با گروه‌های ستاره بسازی؛ راهنما فقط برای همین تمرین است.';
+  $('companion-message').textContent = companionLine(session).replace(/\d/g, digit => '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]);
   $('flight-title').textContent = mission ? destination.icon + ' ' + destination.title : '🌱 آزمایشگاه کشف جواب‌ها';
   $('flight-chapter').textContent = 'قدم ' + fa(progress.answered) + ' از ' + fa(progress.total);
   const chapters = mission ? [destination.destination + ' در انتظار توست', 'از زمین فاصله گرفتیم!', 'مقصد نزدیک است…', 'رسیدیم؛ حالا پایان سفر را ثبت کن'] : ['آزمایشگاه آمادهٔ کشف توست', 'داریم راه جواب‌ها را پیدا می‌کنیم', 'چند کشف دیگر تا پایان تمرین', 'مرور تمام شد؛ پایان تمرین را ثبت کن'];
@@ -300,6 +338,12 @@ document.querySelectorAll('[data-screen]').forEach(button => { button.onclick = 
 $('resume-activity').onclick = () => { showingFlight = true; screen = state.session.activity === 'mission' ? 'missions' : 'practice'; render(); $('practice').scrollIntoView({ block: 'start' }); };
 $('class-practice').onclick = () => { screen = 'practice'; $('activity-context').value = 'class'; render(); };
 $('refresh-collection').onclick = () => run(refreshCollection);
+$('next-destination').onclick = () => chooseDestination(nextDestination(state.stationRecords || []));
+$('show-help').onclick = () => {
+  if (state.session?.activity !== 'practice' || state.session.status === 'FINALIZED') return;
+  helpLevel = (helpLevel + 1) % 3;
+  renderHelp(state.session.questions.find(question => !state.session.answers[question.questionId]));
+};
 $('back-station').onclick = () => { screen = 'home'; render(); };
 $('launch-mission').onclick = () => { screen = 'missions'; showingFlight = false; render(); $('activity-settings').scrollIntoView({ block: 'start' }); };
 $('result-home').onclick = () => { screen = 'home'; render(); $('station-home').scrollIntoView({ block: 'start' }); };
@@ -377,7 +421,6 @@ form('start-session', async () => {
   try { result = await api('startActivity', input); }
   catch (error) { if (['INVALID_PAYLOAD', 'FORBIDDEN'].includes(error.code)) await local.put(operation, null); throw error; }
   await save({ ...state, session: { ...result, answers: {}, receipts: {} } }); showingFlight = true; render(); if (result.activity !== 'mission') $('answer').focus();
-  $('companion-message').textContent = 'من همراهتم؛ هر جواب درست یک سلول را روشن می‌کند. اگر سخت بود، با هم مرورش می‌کنیم.';
   $('answer-deck').dataset.reaction = '';
   screen = result.activity === 'mission' ? 'missions' : 'practice'; choiceKey = null;
   await local.put(operation, null); render(); notice(result.activity === 'mission' ? 'مأموریت شروع شد؛ از میان کارت‌ها پاسخ را انتخاب کن.' : 'تمرین شروع شد؛ با آرامش فکر کن.');
@@ -398,7 +441,6 @@ async function submitAnswer(value, expectedQuestionId) {
   await local.enqueue(key(), next, { uid: actor.uid, studentId: selectedId, input }); state = next;
   const correct = value === question.f1 * question.f2;
   $('answer-deck').dataset.reaction = correct ? 'correct' : 'review';
-  $('companion-message').textContent = correct ? 'یک سلول دیگر روشن شد! بریم سراغ بعدی؟' : 'این یکی را پیدا کردیم: ' + fa(question.f1) + ' × ' + fa(question.f2) + ' = ' + fa(question.f1 * question.f2) + '. برای قدم بعدی همراهتم.';
   sound(correct ? 'correct' : 'review');
   $('answer').value = ''; $('feedback').textContent = value === question.f1 * question.f2 ? 'آفرین! پاسخ روی این دستگاه ذخیره شد؛ در انتظار تأیید.' : 'پاسخ درست ' + fa(question.f1 * question.f2) + ' بود. این سؤال را دوباره مرور کن؛ پاسخ تو برای ارسال ذخیره شد.';
   render(); if (session.activity !== 'mission') $('answer').focus(); await flush();

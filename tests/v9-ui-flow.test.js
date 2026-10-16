@@ -77,6 +77,7 @@ test('story, personal practice, moving-card mission and shared collection form o
   assert.equal(ui.get('hero-introduction').hidden, true);
   await ui.createHero(); assert.equal(ui.profileCount(), 1);
   assert.equal(ui.get('station-meter').value, 0);
+  assert.equal(ui.get('station-home').dataset.phase, 'dark');
   assert.equal(ui.get('identity').textContent, 'قهرمان آزمایشی');
   await ui.click(ui.get('replay-story')); await ui.click(ui.get('story-skip'));
   assert.equal(ui.get('hero-introduction').hidden, true);
@@ -104,12 +105,15 @@ test('story, personal practice, moving-card mission and shared collection form o
     assert.equal(ui.state().session.status, 'FINALIZED', ui.get('notice').textContent);
     assert.equal(ui.get('flight-result').hidden, false);
     assert.equal(ui.get('station-meter').value, mode === 'missions' ? 33 : 0);
+    assert.equal(ui.get('station-home').dataset.phase, mode === 'missions' ? 'repairing' : 'dark');
   }
   await ui.go('collection');
   assert.equal(ui.get('achievements').children.length, 3);
   assert.equal(ui.get('personal-records').children.length, 1);
   assert.equal(ui.get('activity-history').children.length, 2);
   assert.equal(ui.profileCount(), 1);
+  await ui.click(ui.get('next-destination'));
+  assert.equal(ui.get('sector').value, '2');
   await ui.go('missions');
   assert.equal(ui.get('activity-settings').hidden, false, 'Completed missions can be played again');
   await ui.click(ui.sectors[1]); await ui.submit('start-session');
@@ -155,6 +159,37 @@ test('unavailable optional audio never prevents answering or synchronization', a
   ui.get('answer').value = String(question.f1 * question.f2); await ui.submit('answer-form');
   assert.equal(Object.keys(ui.state().session.receipts).length, 1);
   assert.equal(ui.get('notice').dataset.error, 'false', ui.get('notice').textContent);
+});
+
+test('star help has two steps, saves no answer and resets before the next question or child', async t => {
+  const ui = await app(t);
+  await ui.click(ui.get('account-buttons').children[1]); await ui.createHero('مینا');
+  await ui.go('practice'); await ui.submit('start-session');
+  const question = ui.state().session.questions[0];
+  assert.equal(ui.get('practice-help').hidden, false);
+  assert.equal(ui.get('help-picture').hidden, true);
+  await ui.click(ui.get('show-help'));
+  assert.equal(ui.get('help-picture').hidden, false);
+  assert.equal(ui.get('help-groups').children.length, question.f1);
+  assert.ok(ui.get('help-groups').children.every(group => group.children.length === question.f2));
+  assert.equal(ui.get('help-equation').textContent, '');
+  assert.equal(Object.keys(ui.state().session.answers).length, 0);
+  assert.equal((await ui.database.pending(ui.accounts[1].uid)).length, 0);
+  await ui.click(ui.get('show-help'));
+  assert.match(ui.get('help-equation').textContent, /=/);
+  ui.get('answer').value = '0'; await ui.submit('answer-form');
+  assert.equal(ui.get('help-picture').hidden, true);
+  assert.match(ui.get('companion-message').textContent, /با هم پیدایش کردیم/);
+  await ui.click(ui.get('back-station')); await ui.click(ui.get('resume-activity'));
+  assert.match(ui.get('companion-message').textContent, /با هم پیدایش کردیم/, 'Review survives navigation');
+  await ui.click(ui.get('show-help'));
+  await ui.click(ui.get('change-hero')); await ui.click(ui.get('new-hero')); await ui.createHero('سارا');
+  await ui.go('missions'); await ui.submit('start-session');
+  assert.equal(ui.get('practice-help').hidden, true);
+  assert.equal(ui.get('help-picture').hidden, true);
+  await ui.click(ui.get('show-help'));
+  assert.equal(ui.get('help-picture').hidden, true, 'Mission cannot reveal a practice hint');
+  assert.equal(ui.get('station-meter').value, 0);
 });
 
 test('game requests do not exhaust registration quota and registration remains limited', async t => {
