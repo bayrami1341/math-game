@@ -1,5 +1,6 @@
+(function () {
 /* graph-data.js — داده‌ی گراف گلوگاه، فاز ۱ نسخهٔ ۷ */
-window.GraphData = {
+var data = {
   BOTTLENECKS: [
     { id: 'G', name: 'گروه‌های برابر', label: 'SUM', blocksSector: 2, tomorrow: 'ساختن دسته روی میز. حاصل را معلم نگوید.' },
     { id: 'S', name: 'شمارش پرشی', label: 'LESS/MORE', blocksSector: 2, tomorrow: 'شمارش ۵تا۵تا تا ۵۰، و ۲تا۲تا تا ۲۰، پیش از بخش ۲.' },
@@ -107,4 +108,7 @@ window.GraphData = {
     return null;
   }
 };
-console.log('✅ GraphData بارگذاری شد. تعداد ضرب:', window.GraphData.FACTS.length);
+
+if (typeof module === 'object' && module.exports) module.exports = data;
+if (typeof window !== 'undefined') window.GraphData = data;
+})();

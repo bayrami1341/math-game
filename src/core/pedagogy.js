@@ -1,11 +1,18 @@
-/* pedagogy.js — منطق آموزشی خالص — v1.0 */
-(function () {
+/* Shared educational engine: browser globals and isolated CommonJS exports. */
+(function (factory) {
   'use strict';
+  var api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  if (typeof window !== 'undefined') Object.assign(window, api);
+})(function () {
+  'use strict';
+  var api = {};
+  function formatNumber(n) { return String(n).replace(/[0-9]/g, function (d) { return '۰۱۲۳۴۵۶۷۸۹'[Number(d)]; }); }
 
   // ============================================
   // سطوح تسلط
   // ============================================
-  window.MASTERY = {
+  api.MASTERY = {
     NOVICE: { level: 0, name: 'نوآموز' },
     FAMILIAR: { level: 1, name: 'آشنا' },
     LEARNING: { level: 2, name: 'در حال یادگیری' },
@@ -13,12 +20,12 @@
     STABLE: { level: 4, name: 'تسلط پایدار' },
     FLUENT: { level: 5, name: 'تسلط سیال' }
   };
-  Object.keys(window.MASTERY).forEach(function (name) {
-    Object.freeze(window.MASTERY[name]);
+  Object.keys(api.MASTERY).forEach(function (name) {
+    Object.freeze(api.MASTERY[name]);
   });
-  Object.freeze(window.MASTERY);
+  Object.freeze(api.MASTERY);
 
-  window.LEITNER_BOXES = [
+  api.LEITNER_BOXES = [
     { box: 1, delay: 2 },
     { box: 2, delay: 4 },
     { box: 3, delay: 8 },
@@ -26,28 +33,28 @@
     { box: 5, delay: 25 }
   ];
 
-  window.normalizeKey = function (f1, f2) {
+  api.normalizeKey = function (f1, f2) {
     return Math.min(f1, f2) + '×' + Math.max(f1, f2);
   };
 
-  window.APP_VERSION = '۸.۱';
+  api.APP_VERSION = '۸.۱';
 
-  window.EVENT_ORIGINS = Object.freeze({
+  api.EVENT_ORIGINS = Object.freeze({
     CORE: 'core',
     LEGACY: 'legacy',
     IMPORT: 'import',
     UNKNOWN: 'unknown'
   });
 
-  window.MASTERY_RULES = Object.freeze({
+  api.MASTERY_RULES = Object.freeze({
     MIN_CONSECUTIVE: 3,
     FLUENT_MAX_MS_EXCLUSIVE: 4000,
     WINDOW_SIZE: 20,
     HISTORY_STORE_CAP: 200
   });
-  var RULES = window.MASTERY_RULES;
+  var RULES = api.MASTERY_RULES;
 
-  window.createRow = function () {
+  api.createRow = function () {
     return {
       attempts: 0,
       correctCount: 0,
@@ -64,7 +71,7 @@
     };
   };
 
-  window.recordAttempt = function (row, ok, ms) {
+  api.recordAttempt = function (row, ok, ms) {
     var cap = RULES.HISTORY_STORE_CAP;
     ms = Number(ms);
     row.attempts++;
@@ -95,36 +102,36 @@
     return row;
   };
 
-  window.evaluateMastery = function (r) {
-    if (!r || r.attempts === 0) return window.MASTERY.NOVICE;
+  api.evaluateMastery = function (r) {
+    if (!r || r.attempts === 0) return api.MASTERY.NOVICE;
     if (r.maxConsecutiveCorrect >= RULES.MIN_CONSECUTIVE
         && r.hasTiming
         && r._correctTimeSum > 0
         && r._correctTimeSum < RULES.FLUENT_MAX_MS_EXCLUSIVE * r.timingSampleCount) {
-      return window.MASTERY.FLUENT;
+      return api.MASTERY.FLUENT;
     }
-    if (r.maxConsecutiveCorrect >= RULES.MIN_CONSECUTIVE) return window.MASTERY.STABLE;
-    if (r.maxConsecutiveCorrect >= 2) return window.MASTERY.BASIC;
-    if (r.correctCount >= 2) return window.MASTERY.LEARNING;
-    if (r.correctCount >= 1) return window.MASTERY.FAMILIAR;
-    return window.MASTERY.NOVICE;
+    if (r.maxConsecutiveCorrect >= RULES.MIN_CONSECUTIVE) return api.MASTERY.STABLE;
+    if (r.maxConsecutiveCorrect >= 2) return api.MASTERY.BASIC;
+    if (r.correctCount >= 2) return api.MASTERY.LEARNING;
+    if (r.correctCount >= 1) return api.MASTERY.FAMILIAR;
+    return api.MASTERY.NOVICE;
   };
 
-  window.isPositiveMastery = function (row) {
-    return window.evaluateMastery(row).level >= window.MASTERY.BASIC.level;
+  api.isPositiveMastery = function (row) {
+    return api.evaluateMastery(row).level >= api.MASTERY.BASIC.level;
   };
 
-  window.formatCorrectTime = function (row) {
+  api.formatCorrectTime = function (row) {
     if (!row || row.hasTiming !== true) return '—';
     return Math.round(row.avgCorrectTimeMs);
   };
 
-  window.formatWrongTime = function (row) {
+  api.formatWrongTime = function (row) {
     if (!row || !(row.wrongCount > 0) || !(row.wrongMsSum > 0)) return '—';
     return Math.round(row.wrongMsSum / row.wrongCount);
   };
 
-  window.migrateRow = function (row) {
+  api.migrateRow = function (row) {
     if (!row) return row;
     var hadTiming = Object.prototype.hasOwnProperty.call(row, 'hasTiming');
     var streakWasAbsent = !Object.prototype.hasOwnProperty.call(row, 'maxConsecutiveCorrect');
@@ -149,7 +156,7 @@
         if (!Object.prototype.hasOwnProperty.call(row, '_correctTimeSum')) row._correctTimeSum = 0;
       }
     }
-    var blank = window.createRow();
+    var blank = api.createRow();
     Object.keys(blank).forEach(function (key) {
       if (!Object.prototype.hasOwnProperty.call(row, key)) row[key] = blank[key];
     });
@@ -162,14 +169,14 @@
     return row;
   };
 
-  window.migrateEventOrigin = function (event) {
+  api.migrateEventOrigin = function (event) {
     if (!event) return event;
     if (event.origin == null || event.origin === '') event.origin = 'legacy';
     return event;
   };
 
-  window.rowsFromCoreEvents = function (events) {
-    var engine = new window.PedagogyEngine();
+  api.rowsFromCoreEvents = function (events) {
+    var engine = new api.PedagogyEngine();
     engine.origin = 'core';
     (Array.isArray(events) ? events : []).forEach(function (ev) {
       if (!ev || ev.filler) return;
@@ -182,7 +189,7 @@
   // ============================================
   // طبقه‌بندی خطا
   // ============================================
-  window.classifyError = function (f1, f2, c) {
+  api.classifyError = function (f1, f2, c) {
     const corr = f1 * f2;
     if (c === corr) return null;
     if (c === f1 + f2) return 'SUM';
@@ -198,26 +205,26 @@
   // ============================================
   // پیام خطا
   // ============================================
-  window.errorMessage = function (code, f1, f2) {
+  api.errorMessage = function (code, f1, f2) {
     switch (code) {
-      case 'SUM': return 'تو ' + window.toFa(f1) + ' و ' + window.toFa(f2) + ' را جمع کردی. اما ضرب یعنی ' + window.toFa(f2) + ' را ' + window.toFa(f1) + ' بار کنار هم بچینی.';
-      case 'LESS': return 'یک دسته کمتر شمردی. تو ' + window.toFa(f2) + ' دسته داری، نه ' + window.toFa(f2 - 1) + ' دسته. دوباره با دقت بشمار.';
-      case 'MORE': return 'یک دسته بیشتر شمردی. تو ' + window.toFa(f2) + ' دسته داری، نه ' + window.toFa(f2 + 1) + ' دسته. دوباره با دقت بشمار.';
-      case 'SWAP': return 'ارقام را جابه‌جا کردی. حاصل این ضرب ' + window.toFa(f1 * f2) + ' است. با دقت نگاه کن.';
-      case 'TABLE': return 'این حاصلِ ضرب دیگری است. ' + window.toFa(f1) + '×' + window.toFa(f2) + ' یعنی ' + window.toFa(f2) + ' تا دستهٔ ' + window.toFa(f1) + 'تایی.';
-      default: return 'بیا با هم دوباره بشماریم. ' + window.toFa(f1) + ' دستهٔ ' + window.toFa(f2) + 'تایی داری.';
+      case 'SUM': return 'تو ' + formatNumber(f1) + ' و ' + formatNumber(f2) + ' را جمع کردی. اما ضرب یعنی ' + formatNumber(f2) + ' را ' + formatNumber(f1) + ' بار کنار هم بچینی.';
+      case 'LESS': return 'یک دسته کمتر شمردی. تو ' + formatNumber(f2) + ' دسته داری، نه ' + formatNumber(f2 - 1) + ' دسته. دوباره با دقت بشمار.';
+      case 'MORE': return 'یک دسته بیشتر شمردی. تو ' + formatNumber(f2) + ' دسته داری، نه ' + formatNumber(f2 + 1) + ' دسته. دوباره با دقت بشمار.';
+      case 'SWAP': return 'ارقام را جابه‌جا کردی. حاصل این ضرب ' + formatNumber(f1 * f2) + ' است. با دقت نگاه کن.';
+      case 'TABLE': return 'این حاصلِ ضرب دیگری است. ' + formatNumber(f1) + '×' + formatNumber(f2) + ' یعنی ' + formatNumber(f2) + ' تا دستهٔ ' + formatNumber(f1) + 'تایی.';
+      default: return 'بیا با هم دوباره بشماریم. ' + formatNumber(f1) + ' دستهٔ ' + formatNumber(f2) + 'تایی داری.';
     }
   };
 
   // ============================================
   // پیام راهنما
   // ============================================
-  window.hintMessage = function (phase, f1, f2) {
+  api.hintMessage = function (phase, f1, f2) {
     switch (phase) {
-      case 'hint-group': return '👀 به یک دسته نگاه کن. ' + window.toFa(f2) + ' خانه در آن هست. پس هر دسته = ' + window.toFa(f2) + '.';
-      case 'hint-sum': return '🧮 ' + window.toFa(f1) + ' دسته داری که در هرکدام ' + window.toFa(f2) + ' خانه هست. یعنی ' + Array(f1).fill(window.toFa(f2)).join(' + ') + '.';
+      case 'hint-group': return '👀 به یک دسته نگاه کن. ' + formatNumber(f2) + ' خانه در آن هست. پس هر دسته = ' + formatNumber(f2) + '.';
+      case 'hint-sum': return '🧮 ' + formatNumber(f1) + ' دسته داری که در هرکدام ' + formatNumber(f2) + ' خانه هست. یعنی ' + Array(f1).fill(formatNumber(f2)).join(' + ') + '.';
       case 'count': return '👆 حالا همهٔ خانه‌ها را با انگشتت از ۱ تا آخر بشمار و جواب را وارد کن.';
-      case 'reveal': return '✨ حاصل این ضرب ' + window.toFa(f1 * f2) + ' است. حالا ' + window.toFa(f1 * f2) + ' را وارد کن.';
+      case 'reveal': return '✨ حاصل این ضرب ' + formatNumber(f1 * f2) + ' است. حالا ' + formatNumber(f1 * f2) + ' را وارد کن.';
       default: return '';
     }
   };
@@ -225,7 +232,7 @@
   // ============================================
   // تولید گزینه‌ها
   // ============================================
-  window.generateChoices = function (f1, f2, correct) {
+  api.generateChoices = function (f1, f2, correct) {
     const pool = new Set();
     if (f1 > 1) pool.add((f1 - 1) * f2);
     if (f1 < 9) pool.add((f1 + 1) * f2);
@@ -261,7 +268,7 @@
   // ============================================
   // Leitner — مرور فاصله‌دار
   // ============================================
-  window.Leitner = class Leitner {
+  api.Leitner = class Leitner {
     constructor() { this.facts = new Map(); this.questionIndex = 0; }
     reset() { this.facts.clear(); this.questionIndex = 0; }
     register(k) { if (!this.facts.has(k)) this.facts.set(k, { box: 1, nextDue: 0 }); }
@@ -273,7 +280,7 @@
     record(k, ok) {
       const i = this.facts.get(k) || { box: 1, nextDue: 0 };
       i.box = ok ? Math.min(5, i.box + 1) : 1;
-      const b = window.LEITNER_BOXES[i.box - 1] || window.LEITNER_BOXES[0];
+      const b = api.LEITNER_BOXES[i.box - 1] || api.LEITNER_BOXES[0];
       i.nextDue = this.questionIndex + b.delay;
       this.facts.set(k, i);
     }
@@ -290,14 +297,14 @@
   // ============================================
   // PedagogyEngine — موتور آموزشی
   // ============================================
-  window.PedagogyEngine = class PedagogyEngine {
-    constructor() { this.history = new Map(); this.leitner = new window.Leitner(); this.origin = 'legacy'; }
+  api.PedagogyEngine = class PedagogyEngine {
+    constructor() { this.history = new Map(); this.leitner = new api.Leitner(); this.origin = 'legacy'; }
     reset() { this.history.clear(); this.leitner.reset(); }
-    keyOf(f1, f2) { return window.normalizeKey(f1, f2); }
+    keyOf(f1, f2) { return api.normalizeKey(f1, f2); }
     recordAttempt(f1, f2, chosen, ok, ms) {
       const key = this.keyOf(f1, f2);
       if (!this.history.has(key)) {
-        const born = window.createRow();
+        const born = api.createRow();
         born.f1 = Math.min(f1, f2);
         born.f2 = Math.max(f1, f2);
         born.key = key;
@@ -306,10 +313,10 @@
         this.history.set(key, born);
       }
       const r = this.history.get(key);
-      window.recordAttempt(r, ok, ms);
+      api.recordAttempt(r, ok, ms);
       if (!ok) {
         if (chosen != null && !r.wrongAnswers.includes(chosen)) r.wrongAnswers.push(chosen);
-        const c = chosen == null ? null : window.classifyError(f1, f2, chosen);
+        const c = chosen == null ? null : api.classifyError(f1, f2, chosen);
         if (c && !r.errorCodes.includes(c)) r.errorCodes.push(c);
       }
       this.leitner.register(key);
@@ -318,11 +325,11 @@
     getReportData() {
       const o = [];
       for (const r of this.history.values()) {
-        const m = window.evaluateMastery(r);
+        const m = api.evaluateMastery(r);
         o.push(Object.assign({}, r, {
           masteryLevel: m.level,
           masteryName: m.name,
-          isPositive: window.isPositiveMastery(r),
+          isPositive: api.isPositiveMastery(r),
           origin: r.origin || this.origin || 'legacy'
         }));
       }
@@ -352,16 +359,16 @@
   // ============================================
   // نشان‌ها
   // ============================================
-  window.BADGES = [
+  api.BADGES = [
     { id: 'first_module', icon: '🔧', name: 'اولین قطعه', desc: 'اولین پاسخ درست', check: s => s.totalCorrect >= 1 },
-    { id: 'explorer_2', icon: '🛸', name: 'کاوشگر ۲', desc: 'تسلط پایه در ضرب ۲', check: s => (s.factorMastery[2] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'explorer_3', icon: '🚀', name: 'کاوشگر ۳', desc: 'تسلط پایه در ضرب ۳', check: s => (s.factorMastery[3] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'explorer_4', icon: '🛰️', name: 'کاوشگر ۴', desc: 'تسلط پایه در ضرب ۴', check: s => (s.factorMastery[4] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'energy_5', icon: '⚡', name: 'مهندس انرژی', desc: 'تسلط پایه در ضرب ۵', check: s => (s.factorMastery[5] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'star_6', icon: '💫', name: 'ستارهٔ ۶', desc: 'تسلط پایه در ضرب ۶', check: s => (s.factorMastery[6] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'star_7', icon: '✨', name: 'ستارهٔ ۷', desc: 'تسلط پایه در ضرب ۷', check: s => (s.factorMastery[7] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'double_8', icon: '🌟', name: 'دوبرابر ۸', desc: 'تسلط پایه در ضرب ۸', check: s => (s.factorMastery[8] || 0) >= window.MASTERY.BASIC.level },
-    { id: 'digit_9', icon: '🌠', name: 'رقم ۹', desc: 'تسلط پایه در ضرب ۹', check: s => (s.factorMastery[9] || 0) >= window.MASTERY.BASIC.level },
+    { id: 'explorer_2', icon: '🛸', name: 'کاوشگر ۲', desc: 'تسلط پایه در ضرب ۲', check: s => (s.factorMastery[2] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'explorer_3', icon: '🚀', name: 'کاوشگر ۳', desc: 'تسلط پایه در ضرب ۳', check: s => (s.factorMastery[3] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'explorer_4', icon: '🛰️', name: 'کاوشگر ۴', desc: 'تسلط پایه در ضرب ۴', check: s => (s.factorMastery[4] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'energy_5', icon: '⚡', name: 'مهندس انرژی', desc: 'تسلط پایه در ضرب ۵', check: s => (s.factorMastery[5] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'star_6', icon: '💫', name: 'ستارهٔ ۶', desc: 'تسلط پایه در ضرب ۶', check: s => (s.factorMastery[6] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'star_7', icon: '✨', name: 'ستارهٔ ۷', desc: 'تسلط پایه در ضرب ۷', check: s => (s.factorMastery[7] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'double_8', icon: '🌟', name: 'دوبرابر ۸', desc: 'تسلط پایه در ضرب ۸', check: s => (s.factorMastery[8] || 0) >= api.MASTERY.BASIC.level },
+    { id: 'digit_9', icon: '🌠', name: 'رقم ۹', desc: 'تسلط پایه در ضرب ۹', check: s => (s.factorMastery[9] || 0) >= api.MASTERY.BASIC.level },
     { id: 'streak_3', icon: '🔥', name: 'سه پشت‌سرهم', desc: '۳ پاسخ درست پیاپی', check: s => s.maxStreak >= 3 },
     { id: 'streak_5', icon: '🔥', name: 'پنج پشت‌سرهم', desc: '۵ پاسخ درست پیاپی', check: s => s.maxStreak >= 5 },
     { id: 'careful', icon: '🎯', name: 'دقت مهندسی', desc: 'دقت بالای ۷۵٪', check: s => s.accuracy >= 75 && s.totalAttempts >= 6 },
@@ -369,7 +376,7 @@
     { id: 'station_done', icon: '🏆', name: 'مهندس ارشد', desc: 'تکمیل تمامی ۳ بخش', check: s => s.sectorsCompleted >= 3 }
   ];
 
-  window.evaluateBadges = function (game, cur) {
+  api.evaluateBadges = function (game, cur) {
     const data = game.pedagogy.getReportData();
     const fm = {}; let tc = 0, ta = 0, rec = 0;
     data.forEach(d => {
@@ -381,28 +388,9 @@
     const stats = { totalCorrect: tc, totalAttempts: ta, factorMastery: fm, accuracy: acc, maxStreak: game.maxStreakEver || 0, recoveredAfterWrong: rec, sectorsCompleted: game.sectorsCompleted || 0 };
     const owned = new Set(cur || []);
     const neu = [];
-    window.BADGES.forEach(b => { if (!owned.has(b.id) && b.check(stats)) { owned.add(b.id); neu.push(b); } });
+    api.BADGES.forEach(b => { if (!owned.has(b.id) && b.check(stats)) { owned.add(b.id); neu.push(b); } });
     return { all: Array.from(owned), newlyEarned: neu };
   };
 
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {
-      APP_VERSION: window.APP_VERSION,
-      MASTERY: window.MASTERY,
-      MASTERY_RULES: window.MASTERY_RULES,
-      createRow: window.createRow,
-      recordAttempt: window.recordAttempt,
-      evaluateMastery: window.evaluateMastery,
-      isPositiveMastery: window.isPositiveMastery,
-      formatCorrectTime: window.formatCorrectTime,
-      formatWrongTime: window.formatWrongTime,
-      migrateRow: window.migrateRow,
-      migrateEventOrigin: window.migrateEventOrigin,
-      rowsFromCoreEvents: window.rowsFromCoreEvents,
-      EVENT_ORIGINS: window.EVENT_ORIGINS,
-      PedagogyEngine: window.PedagogyEngine,
-      Leitner: window.Leitner
-    };
-  }
-
-})();
+  return api;
+});

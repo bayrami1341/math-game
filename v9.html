@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>کارگاه ضرب — پیش‌نمایش نسخهٔ ۹</title>
+  <link rel="stylesheet" href="styles/v9.css">
+  <script src="v9-config.js" defer></script>
+  <script src="src/v9/app.js" type="module"></script>
+</head>
+<body>
+  <header><div class="shell"><a class="brand" href="v9.html">✦ کارگاه ضرب</a><span class="tag">پیش‌نمایش نسخهٔ ۹</span><a class="legacy" href="index.html">بازی نسخهٔ ۸.۱</a></div></header>
+  <main class="shell">
+    <section class="intro"><p class="eyebrow">تمرین کوتاه، یادگیری ماندگار</p><h1>هر پاسخ، یک قدم جلوتر</h1><p>با کلاس خودت تمرین کن و نتیجهٔ ثبت‌شده را ببین.</p></section>
+    <p id="notice" role="status" aria-live="polite">در حال بررسی اتصال…</p>
+    <section id="login" class="card" hidden>
+      <h2>ورود به کارگاه</h2>
+      <div id="local-accounts" hidden><p>محیط آزمایش محلی است. این حساب‌ها دادهٔ واقعی ندارند.</p><div id="account-buttons" class="actions"></div></div>
+      <div id="firebase-login" hidden>
+        <form id="email-form"><label for="email">ایمیل معلم</label><input id="email" type="email" autocomplete="email" required><button>دریافت یا تأیید پیوند ورود</button></form>
+        <button id="anonymous-login" type="button" class="secondary">ورود دانش‌آموز با دعوت</button>
+      </div>
+    </section>
+    <section id="workspace" hidden>
+      <div class="identity"><span id="identity"></span><button id="logout" class="secondary">خروج از این حساب</button></div>
+      <section id="teacher" hidden>
+        <div class="grid">
+          <section class="card"><h2>کلاس من</h2><form id="create-class"><label for="class-name">نام کلاس</label><input id="class-name" maxlength="80" required placeholder="مثلاً سوم الف"><label for="membership">روش عضویت</label><select id="membership"><option value="invite_confirm">با تأیید من</option><option value="invite_open">عضویت فوری با دعوت</option></select><button>ساخت کلاس</button></form><p id="class-id" class="code"></p></section>
+          <section class="card"><h2>دعوت دانش‌آموز</h2><p>پس از ساخت یا بازکردن کلاس، دعوت یک‌روزه صادر کنید.</p><button id="issue-invite">ساخت دعوت</button><label for="invite-token">توکن دعوت برای دانش‌آموز</label><textarea id="invite-token" rows="3" readonly dir="ltr"></textarea><button id="copy-invite" class="secondary">کپی دعوت</button></section>
+        </div>
+        <section class="card"><h2>اعضا و نتیجهٔ تمرین</h2><form id="open-class" class="inline"><label for="open-class-id">شناسهٔ کلاس</label><input id="open-class-id" dir="ltr" required><button>بازکردن / تازه‌سازی</button></form><div id="members"></div><div id="results"></div></section>
+      </section>
+      <section id="student" hidden>
+        <div class="grid">
+          <section id="join-card" class="card"><h2>به کلاست بپیوند</h2><form id="join-class"><label for="student-name">نام نمایشی تو</label><input id="student-name" maxlength="40" autocomplete="nickname" required><label for="student-invite">دعوتی که معلم داده</label><input id="student-invite" dir="ltr" required><button>پیوستن به کلاس</button></form></section>
+          <section class="card"><h2 id="student-class-name">تمرین من</h2><p id="membership-status">اول به کلاس بپیوند.</p><button id="check-membership" class="secondary">بررسی تأیید معلم</button><form id="start-session"><label for="sector">بخش تمرین</label><select id="sector"><option value="1">۱ — ضرب‌های پایه</option><option value="2">۲ — ادامهٔ تمرین</option><option value="3">۳ — ضرب‌های پیشرفته</option></select><button>شروع تمرین</button></form></section>
+        </div>
+        <section id="practice" class="card practice" hidden><p id="progress"></p><h2 id="question" dir="ltr"></h2><form id="answer-form"><label for="answer">پاسخ تو</label><input id="answer" inputmode="numeric" autocomplete="off" required><button>ثبت پاسخ</button></form><p id="feedback" aria-live="polite"></p><div class="actions"><button id="sync" class="secondary">ارسال پاسخ‌های منتظر</button><button id="finalize">پایان و دریافت نتیجه</button></div><p id="queue-status"></p></section>
+      </section>
+    </section>
+    <section id="unconfigured" class="card" hidden><h2>پیش‌نمایش هنوز به سرور متصل نیست</h2><p>برای آزمایش روی همین رایانه، در پوشهٔ پروژه دستورهای زیر را اجرا کنید و نشانی محلی را باز کنید:</p><pre dir="ltr">npm ci --ignore-scripts
+npm run dev:v9</pre><a href="http://127.0.0.1:9090/v9.html">بازکردن نسخهٔ محلی</a><p>اتصال عمومی پس از آماده‌سازی سرور و ورود امن فعال می‌شود.</p></section>
+  </main>
+  <footer class="shell">پاسخ‌های منتظر ارسال را پیش از پاک‌کردن حافظهٔ مرورگر همگام کنید.</footer>
+</body>
+</html>
