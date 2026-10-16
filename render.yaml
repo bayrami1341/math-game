@@ -1,0 +1,26 @@
+# Free preview only. This file does not create a service until imported in Render.
+services:
+  - type: web
+    name: math-game-v9-preview
+    runtime: docker
+    plan: free
+    region: frankfurt
+    branch: v6
+    dockerfilePath: ./Dockerfile
+    autoDeployTrigger: off
+    healthCheckPath: /api/v9/meta
+    envVars:
+      - key: FIREBASE_PROJECT_ID
+        value: class-board-2752e
+      - key: FIREBASE_DATABASE_URL
+        value: https://class-board-2752e-default-rtdb.europe-west1.firebasedatabase.app
+      - key: MATH_GAME_ALLOWED_ORIGINS
+        value: https://bayrami1341.github.io
+      - key: MATH_GAME_TEACHER_EMAILS
+        sync: false
+      - key: MATH_GAME_ID_SECRET
+        generateValue: true
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /etc/secrets/firebase-service-account.json
+# Add the service identity as a private Render Secret File, never in this repo.
+# No paid disk or database is requested. Persistent data stays in Firebase.
