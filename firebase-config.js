@@ -1,12 +1,12 @@
 /* firebase-config.js — اتصال Firebase برای لیدربرد زنده */
 const firebaseConfig = {
-  apiKey: "AIzaSyDGwKZ0rpW2a_3D7bnJ0ZfYoDoo5S7joGU",
-  authDomain: "math-game-live-6b991.firebaseapp.com",
-  databaseURL: "https://math-game-live-6b991-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "math-game-live-6b991",
-  storageBucket: "math-game-live-6b991.firebasestorage.app",
-  messagingSenderId: "577612394099",
-  appId: "1:577612394099:web:79fa9610b3eb6fc611c406"
+  apiKey: "AIzaSyAxW1bXDRKZ0b-4-HQXx_2z8qMsU-yRoII",
+  authDomain: "class-board-2752e.firebaseapp.com",
+  databaseURL: "https://class-board-2752e-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "class-board-2752e",
+  storageBucket: "class-board-2752e.firebasestorage.app",
+  messagingSenderId: "429685206281",
+  appId: "1:429685206281:web:b74665d121ab87d9d237d8"
 };
 
 if (typeof firebase !== 'undefined') {
