@@ -15,7 +15,7 @@ const { createServer, localAccounts } = require('../server/http');
 async function app(t, options = {}) {
   const accounts = localAccounts(), store = new LocalStore();
   const service = new Service(store, { secret: 'ui-integration-test-'.repeat(3) });
-  const server = createServer({ service, mode: 'local', root: path.resolve(__dirname, '..'), accounts, authenticate: async token => accounts.find(account => account.token === token) });
+  const server = createServer({ service, mode: options.production ? 'production' : 'local', root: path.resolve(__dirname, '..'), accounts: options.production ? [] : accounts, authenticate: async token => accounts.find(account => account.token === token) });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => server.close(resolve)));
   const origin = 'http://127.0.0.1:' + server.address().port;
@@ -47,13 +47,18 @@ async function app(t, options = {}) {
   const missionModule = await import('../src/v9/mission.mjs');
   const experienceModule = await import('../src/v9/experience.mjs');
   const connectionModule = await import('../src/v9/connection.mjs');
+  const loginModule = await import('../src/v9/firebase-login.mjs');
   const factory = new IDBFactory();
   const database = await localModule.openLocal(factory); t.after(() => database.close());
   const navigator = { onLine: true };
-  const context = vm.createContext({ document, window: { MathGameV9Config: { apiBase: origin }, addEventListener() {} },
+  const historyUrls = [];
+  const context = vm.createContext({ document, window: { MathGameV9Config: { apiBase: origin, firebase: { projectId: 'test' } }, addEventListener() {} },
     openLocal: async () => database, ...entryModule, ...missionModule, ...experienceModule,
+    ...loginModule, loadFirebaseLogin: options.loadFirebaseLogin || loginModule.loadFirebaseLogin,
     connectApi: base => connectionModule.connectApi(base, { fetcher: options.fetch || fetch, pause: async () => {} }),
-    navigator, location: new URL(origin + '/v9.html'), history: { replaceState() {} },
+    navigator, location: new URL(origin + '/v9.html' + (options.urlSuffix || '')), history: {
+      replaceState(state, title, url) { historyUrls.push(url); context.location = new URL(url, origin); }
+    },
     sessionStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value), removeItem: key => storage.delete(key) },
     URL, AbortSignal, fetch: options.fetch || fetch, crypto: webcrypto, structuredClone, performance, setInterval() {}, console });
   const source = (await fs.readFile(path.resolve(__dirname, '../src/v9/app.js'), 'utf8')).replace(/^import .*;\r?\n/gm, '');
@@ -70,7 +75,7 @@ async function app(t, options = {}) {
     await click(get('story-skip')); get('hero-name').value = name; await submit('hero-introduction');
     assert.equal(get('notice').dataset.error, 'false', get('notice').textContent);
   };
-  return { get, click, submit, go, state, profileCount, createHero, navigator, database, accounts, context, store, service, settle, sectors, origin };
+  return { get, click, submit, go, state, profileCount, createHero, navigator, database, accounts, context, store, service, settle, sectors, origin, historyUrls };
 }
 test('story, personal practice, moving-card mission and shared collection form one working flow', async t => {
   const ui = await app(t);
@@ -275,4 +280,82 @@ test('teacher class picker, approval, mission board and revocation work through 
   await ui.click(ui.get('toggle-leaderboard')); await ui.click(ui.get('members').children[0].children[1]);
   await ui.click(ui.get('refresh-board')); assert.equal(ui.get('board-entries').children.length, 0);
   assert.equal((await ui.store.get('memberships/' + classId + '/' + studentId)).status, 'revoked');
+});
+
+function fakeFirebase() {
+  const auth = { currentUser: null, authStateReady: async () => {} };
+  let token;
+  let nextError;
+  const sdk = {
+    GoogleAuthProvider: class { setCustomParameters(value) { this.parameters = value; } },
+    signInWithPopup(received, provider) {
+      assert.equal(received, auth);
+      assert.equal(provider.parameters.prompt, 'select_account');
+      if (nextError) return Promise.reject(nextError);
+      auth.currentUser = { getIdToken: async () => token };
+      return Promise.resolve({ user: auth.currentUser });
+    },
+    isSignInWithEmailLink: () => false,
+    signInAnonymously: async () => { throw { code: 'auth/operation-not-allowed' }; }
+  };
+  return { auth, sdk, set token(value) { token = value; }, set error(value) { nextError = value; },
+    load: async () => ({ auth, sdk }) };
+}
+
+test('production Google teacher login uses server role and opens the existing classroom panel', async t => {
+  const firebase = fakeFirebase();
+  const ui = await app(t, { production: true, loadFirebaseLogin: firebase.load });
+  assert.equal(ui.get('firebase-login').hidden, false);
+  assert.equal(ui.get('local-accounts').hidden, true);
+  firebase.token = ui.accounts[0].token;
+  await ui.click(ui.get('google-login'));
+  assert.equal(ui.get('teacher').hidden, false);
+  ui.get('class-name').value = 'کلاس Google'; await ui.submit('create-class');
+  assert.ok(ui.state().classId);
+});
+
+test('a Google student identity cannot obtain teacher access from the login button', async t => {
+  const firebase = fakeFirebase();
+  const ui = await app(t, { production: true, loadFirebaseLogin: firebase.load });
+  firebase.token = ui.accounts[1].token;
+  await ui.click(ui.get('google-login'));
+  assert.equal(ui.get('teacher').hidden, true);
+  assert.equal(ui.get('hero-story').hidden, false);
+  assert.equal(ui.profileCount(), 0, 'Sign-in does not duplicate or invent a child profile');
+});
+
+test('cancelled Google login keeps the login available and a later attempt succeeds', async t => {
+  const firebase = fakeFirebase();
+  const ui = await app(t, { production: true, loadFirebaseLogin: firebase.load });
+  firebase.error = { code: 'auth/popup-closed-by-user', message: 'private-provider-message' };
+  await ui.click(ui.get('google-login'));
+  assert.match(ui.get('notice').textContent, /پنجرهٔ ورود بسته/);
+  assert.equal(ui.get('google-login').disabled, false);
+  assert.equal(ui.get('workspace').hidden, true);
+  firebase.error = null; firebase.token = ui.accounts[0].token;
+  await ui.click(ui.get('google-login'));
+  assert.equal(ui.get('teacher').hidden, false);
+});
+
+test('disabled anonymous sign-in reports the missing Firebase setting instead of proceeding', async t => {
+  const firebase = fakeFirebase();
+  const ui = await app(t, { production: true, loadFirebaseLogin: firebase.load });
+  await ui.click(ui.get('anonymous-login'));
+  assert.match(ui.get('notice').textContent, /روش ورود هنوز در Firebase فعال نشده/);
+  assert.equal(ui.get('workspace').hidden, true);
+  assert.equal(ui.profileCount(), 0);
+});
+
+test('email link confirmation removes authentication parameters while retaining the classroom invite', async t => {
+  const firebase = fakeFirebase();
+  firebase.sdk.isSignInWithEmailLink = () => true;
+  firebase.sdk.signInWithEmailLink = async auth => { auth.currentUser = { getIdToken: async () => token }; };
+  let token;
+  const ui = await app(t, { production: true, loadFirebaseLogin: firebase.load,
+    urlSuffix: '?invite=invite_keep&apiKey=public-key&oobCode=one-use-code&mode=signIn&lang=fa#entry' });
+  token = ui.accounts[0].token;
+  ui.get('email').value = 'teacher@example.com';
+  await ui.submit('email-form');
+  assert.equal(ui.historyUrls[0], '/v9.html?invite=invite_keep#entry');
+  assert.equal(ui.get('teacher').hidden, false);
 });

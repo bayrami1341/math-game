@@ -1,5 +1,6 @@
 import { openLocal } from './local.mjs';
 import { connectApi } from './connection.mjs';
+import { loadFirebaseLogin, googleLogin, loginError } from './firebase-login.mjs';
 import { studentKey, selectProfile, membershipContext } from './entry.mjs';
 import { missionChoices } from './mission.mjs';
 import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer, stationSystems, nextDestination, multiplicationModel, companionLine } from './experience.mjs';
@@ -554,22 +555,45 @@ run(async () => {
     return;
   }
   if (!config.firebase) throw new Error('تنظیمات ورود امن این پیش‌نمایش هنوز آماده نیست.');
-  const sdkBase = 'https://www.gstatic.com/firebasejs/10.14.1/';
-  const firebaseApp = await import(sdkBase + 'firebase-app.js'); authSdk = await import(sdkBase + 'firebase-auth.js');
-  auth = authSdk.getAuth(firebaseApp.initializeApp(config.firebase, 'math-game-v9'));
+  try { ({ auth, sdk: authSdk } = await loadFirebaseLogin(config.firebase)); }
+  catch (error) { notice(loginError(error), true); return; }
   $('firebase-login').hidden = false;
+  $('google-login').onclick = () => {
+    let pending;
+    try { pending = googleLogin(auth, authSdk); }
+    catch (error) { notice(loginError(error), true); return; }
+    // Attach the rejection handler immediately, even if another task is queued.
+    const outcome = Promise.resolve(pending).then(() => ({ ok: true }), error => ({ error }));
+    run(async () => {
+      const result = await outcome;
+      if (result.error) { notice(loginError(result.error), true); return; }
+      if (!auth.currentUser) { notice('ورود تأیید نشد؛ دوباره تلاش کن.', true); return; }
+      await signIn(() => auth.currentUser.getIdToken());
+    });
+  };
   form('email-form', async () => {
     const email = $('email').value.trim();
-    if (authSdk.isSignInWithEmailLink(auth, location.href)) {
-      await authSdk.signInWithEmailLink(auth, email, location.href);
-      history.replaceState(null, '', location.pathname);
-      await signIn(() => auth.currentUser.getIdToken());
-    } else {
-      await authSdk.sendSignInLinkToEmail(auth, email, { url: location.origin + location.pathname, handleCodeInApp: true });
-      notice('پیوند ورود ارسال شد؛ آن را باز کن و ایمیلت را تأیید کن.');
+    try {
+      if (authSdk.isSignInWithEmailLink(auth, location.href)) {
+        await authSdk.signInWithEmailLink(auth, email, location.href);
+        const clean = new URL(location.href);
+        for (const param of ['apiKey', 'oobCode', 'mode', 'lang']) clean.searchParams.delete(param);
+        history.replaceState(null, '', clean.pathname + clean.search + clean.hash);
+        await signIn(() => auth.currentUser.getIdToken());
+      } else {
+        await authSdk.sendSignInLinkToEmail(auth, email, { url: location.origin + location.pathname, handleCodeInApp: true });
+        notice('پیوند ورود ارسال شد؛ آن را باز کن و ایمیلت را تأیید کن.');
+      }
+    } catch (error) {
+      if (error.code?.startsWith('auth/')) notice(loginError(error), true);
+      else throw error;
     }
   });
-  $('anonymous-login').onclick = () => run(async () => { await authSdk.signInAnonymously(auth); await signIn(() => auth.currentUser.getIdToken()); });
+  $('anonymous-login').onclick = () => run(async () => {
+    try { await authSdk.signInAnonymously(auth); }
+    catch (error) { notice(loginError(error), true); return; }
+    await signIn(() => auth.currentUser.getIdToken());
+  });
   await auth.authStateReady();
   if (auth.currentUser) await signIn(() => auth.currentUser.getIdToken());
   else notice('با ایمیل معلم یا دعوت دانش‌آموز وارد شوید.');
