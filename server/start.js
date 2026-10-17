@@ -27,12 +27,24 @@ async function main() {
   } else {
     const config = productionConfig(process.env);
     allowedOrigins = config.allowedOrigins;
-    const { initializeApp, applicationDefault } = require('firebase-admin/app');
+    const { initializeApp, cert } = require('firebase-admin/app');
     const { getAuth } = require('firebase-admin/auth');
     const { getDatabase } = require('firebase-admin/database');
-    const app = initializeApp({ credential: applicationDefault(), projectId: config.projectId, databaseURL: config.databaseURL });
+
+    // ساخت آبجکت credential از متغیرهای محیطی Railway
+    const serviceAccount = {
+      projectId: config.projectId,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      // تبدیل کاراکترهای \n متنی به خط جدید واقعی (بسیار مهم!)
+      privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined,
+    };
+
+    const app = initializeApp({ 
+      credential: cert(serviceAccount), 
+      projectId: config.projectId, 
+      databaseURL: config.databaseURL 
+    });
     store = new FirebaseStore(getDatabase(app));
-    // Fail before accepting traffic if the actual production database is inaccessible.
     await store.get('system/readiness');
     authenticate = async token => {
       const claims = await getAuth(app).verifyIdToken(token, true);
