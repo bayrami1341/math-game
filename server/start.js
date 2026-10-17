@@ -32,12 +32,13 @@ async function main() {
     const { getDatabase } = require('firebase-admin/database');
 
     // ساخت آبجکت credential از متغیرهای محیطی Railway
-    const serviceAccount = {
-      projectId: config.projectId,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      // تبدیل کاراکترهای \n متنی به خط جدید واقعی (بسیار مهم!)
-      privateKey: process.env.FIREBASE_PRIVATE_KEY ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n') : undefined,
-    };
+  const serviceAccount = {
+  project_id: config.projectId,
+  client_email: process.env.FIREBASE_CLIENT_EMAIL,
+  private_key: process.env.FIREBASE_PRIVATE_KEY_BASE64 
+    ? Buffer.from(process.env.FIREBASE_PRIVATE_KEY_BASE64, 'base64').toString('utf8') 
+    : undefined,
+};
 
     const app = initializeApp({ 
       credential: cert(serviceAccount), 
