@@ -1,6 +1,6 @@
 // Public deployment configuration only. Never put server credentials here.
 window.MathGameV9Config = {
-  apiBase: '',
+  apiBase: 'https://math-game-production-9ddb.up.railway.app',
   // Set apiBase only after the production API is deployed and verified.
   // Teacher access is granted on the server, never by this public config.
   firebase: {
