@@ -12,6 +12,7 @@ async function main() {
   const mode = local ? 'local' : 'production';
   const root = path.resolve(__dirname, '..');
   let secret = process.env.MATH_GAME_ID_SECRET, store, authenticate, accounts = [], allowedOrigins = [];
+
   if (local) {
     const directory = path.join(root, '.local', 'v9');
     await fs.mkdir(directory, { recursive: true });
@@ -31,31 +32,44 @@ async function main() {
     const { getAuth } = require('firebase-admin/auth');
     const { getDatabase } = require('firebase-admin/database');
 
-    // ساخت آبجکت credential از متغیرهای محیطی Railway
-  const serviceAccount = {
-  project_id: config.projectId,
-  client_email: process.env.FIREBASE_CLIENT_EMAIL,
-  private_key: process.env.FIREBASE_PRIVATE_KEY_BASE64 
-    ? Buffer.from(process.env.FIREBASE_PRIVATE_KEY_BASE64, 'base64').toString('utf8') 
-    : undefined,
-};
+    // 1. خواندن کلید خصوصی از متغیر Base64
+    // 2. تبدیل به رشته متنی (utf8)
+    // 3. تبدیل کاراکترهای \n متنی به خط جدید واقعی (بسیار حیاتی برای Firebase)
+    let privateKey = undefined;
+    if (process.env.FIREBASE_PRIVATE_KEY_BASE64) {
+      privateKey = Buffer.from(process.env.FIREBASE_PRIVATE_KEY_BASE64, 'base64')
+        .toString('utf8')
+        .replace(/\\n/g, '\n');
+    }
 
-    const app = initializeApp({ 
-      credential: cert(serviceAccount), 
-      projectId: config.projectId, 
-      databaseURL: config.databaseURL 
+    const serviceAccount = {
+      project_id: config.projectId,
+      client_email: process.env.FIREBASE_CLIENT_EMAIL,
+      private_key: privateKey,
+    };
+
+    const app = initializeApp({
+      credential: cert(serviceAccount),
+      projectId: config.projectId,
+      databaseURL: config.databaseURL
     });
+
     store = new FirebaseStore(getDatabase(app));
+    // Fail before accepting traffic if the actual production database is inaccessible.
     await store.get('system/readiness');
+
     authenticate = async token => {
       const claims = await getAuth(app).verifyIdToken(token, true);
       return { uid: claims.uid, teacher: isTeacher(claims, config) };
     };
   }
+
   const server = createServer({ service: new Service(store, { secret }), authenticate, mode, root, accounts,
     allowedOrigins });
   server.requestTimeout = 15000; server.headersTimeout = 10000;
+
   const port = Number(process.env.PORT || 9090);
   server.listen(port, local ? '127.0.0.1' : '0.0.0.0', () => console.log(`Math Workshop v9 ${mode}: http://127.0.0.1:${port}/v9.html`));
 }
+
 main().catch(error => { console.error(error.message); process.exitCode = 1; });
