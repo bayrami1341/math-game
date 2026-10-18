@@ -1,0 +1,410 @@
+/* Styles strictly compliant with station-brief.md */
+:root {
+  --bg-color: #071427;
+  --header-color: #122441;
+  --accent-color: #146a62;
+  --ring-color: #7ef0ff;
+  --done-color: #5ee0b5;
+  --locked-color: #8aa0ab;
+  --text-main: #f0f7fa;
+  --text-muted: #8aa0ab;
+  --surface: #0d1e36;
+  --surface-border: #1d3554;
+  font-family: Tahoma, system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  direction: rtl;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: var(--header-color);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 12px 24px;
+}
+
+.header-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--ring-color);
+}
+
+.identity-badge {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+#notice {
+  background-color: var(--header-color);
+  border: 1px solid var(--ring-color);
+  color: var(--ring-color);
+  padding: 10px 16px;
+  max-width: 900px;
+  margin: 12px auto;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+#notice[data-error="true"] {
+  border-color: #ff8b7e;
+  color: #ff8b7e;
+}
+
+main.main-shell {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Map Shell */
+.station-map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle at 50% 50%, #0d223f 0%, var(--bg-color) 85%);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  padding: 24px 16px;
+  min-height: 480px;
+}
+
+.buildings-track {
+  display: flex;
+  flex-direction: column-reverse; /* Power at bottom, Pad at top */
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+}
+
+.building-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 6px;
+  outline: none;
+  transition: transform 0.2s ease;
+}
+
+.building-node:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.building-node[data-state="locked"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.building-node[data-state="current"] {
+  filter: drop-shadow(0 0 10px rgba(126, 240, 255, 0.45));
+}
+
+.station-svg {
+  width: 90px;
+  height: 90px;
+  display: block;
+}
+
+.path-connector {
+  height: 50px;
+  width: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.path-svg {
+  width: 20px;
+  height: 100%;
+}
+
+/* Bottom Sheet (ورق پایین نقشه) */
+.bottom-sheet {
+  margin-top: 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sheet-story {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.sheet-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Primary momentary button */
+.primary-button {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: 1px solid var(--ring-color);
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  background-color: #198076;
+  box-shadow: 0 0 14px rgba(126, 240, 255, 0.3);
+}
+
+.secondary-button {
+  background: transparent;
+  color: var(--locked-color);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  color: var(--text-main);
+  border-color: var(--locked-color);
+}
+
+/* Secondary Guide on map */
+.guide-box {
+  background-color: #071427;
+  border: 1px dashed var(--surface-border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Side Missions (مأموریت‌های جانبی) */
+.side-missions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding-top: 12px;
+  border-top: 1px dashed var(--surface-border);
+}
+
+.side-mission-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background-color: #071427;
+  color: var(--text-main);
+  border: 1px solid var(--accent-color);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.side-mission-button:hover:not(:disabled) {
+  border-color: var(--ring-color);
+  box-shadow: 0 0 10px rgba(126, 240, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.side-mission-button .side-mission-icon {
+  font-size: 18px;
+}
+
+.side-mission-button .side-mission-note {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Question View */
+.question-container {
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.question-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--surface-border);
+  padding-bottom: 12px;
+}
+
+.building-indicator {
+  font-size: 14px;
+  color: var(--done-color);
+}
+
+.question-cells-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.cell-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.cell-svg.lit {
+  filter: drop-shadow(0 0 6px var(--done-color));
+}
+
+.math-equation {
+  font-size: 44px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+  margin: 10px 0;
+  direction: ltr;
+}
+
+.answer-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.answer-form input {
+  font-size: 26px;
+  text-align: center;
+  width: 120px;
+  height: 52px;
+  background-color: #071427;
+  border: 2px solid var(--surface-border);
+  border-radius: 12px;
+  color: #fff;
+}
+
+.answer-form input:focus {
+  border-color: var(--ring-color);
+  outline: none;
+}
+
+.question-feedback {
+  min-height: 24px;
+  font-size: 14px;
+  color: #ff9f8e;
+  text-align: center;
+}
+
+.equal-groups-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 14px;
+  background-color: #071427;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+}
+
+.equal-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  background-color: #0c2038;
+}
+
+.group-item {
+  color: var(--ring-color);
+  font-size: 16px;
+}
+
+/* Modal Dialog */
+.board-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 20, 39, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.dialog-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Teacher Shell */
+.teacher-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.teacher-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
