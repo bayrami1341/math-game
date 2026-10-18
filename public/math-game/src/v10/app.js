@@ -1,4 +1,6 @@
-// Version 10.1 Client Application — Powered by Station Layer on top of v9 Core
+// Version 10.1.3 Client Application — Powered by Station Layer on top of v9 Core
+// v10.1.3: بازگرداندن قابلیت‌های مستقل (ثبت‌نام محلی، تابلوی افتخارات محلی، داستان خوش‌آمد)
+// + رفع باگ بحرانی: uid تصادفی در هر بارگذاری، پیشرفت پس از رفرش پاک می‌شد — uid اکنون پایدار است
 import { openLocal } from '../v9/local.mjs';
 import { connectApi } from '../v9/connection.mjs';
 import { loadFirebaseLogin, googleLogin, loginError } from '../v9/firebase-login.mjs';
@@ -11,6 +13,7 @@ import {
   SIDE_MISSIONS,
   generateSideMissionQuestions,
   stationSystems,
+  stationPower,
   flightProgress,
   keepStationRecord,
   multiplicationModel
@@ -49,6 +52,7 @@ let state = {};
 let serial = Promise.resolve();
 let profiles = [];
 let selectedId = null;
+let profileMode = null; // null | 'create' — دروازهٔ پرونده (v10.1.3)
 let soundEnabled = false;
 let currentView = 'map'; // 'map' | 'question'
 let activeQuestionIndex = 0;
@@ -69,6 +73,68 @@ const TEACHER_MISSION_TITLES = {
   'side-2-backup': 'شارژ سلول پشتیبان',
   'side-3-fuel': 'تأمین سوخت اضافه'
 };
+
+// ─── پرونده‌های محلی (v10.1.3): ثبت‌نام بدون سرور — چند کودک روی یک دستگاه ───
+const ROLE_META = Object.freeze({
+  astronaut: { label: 'فضانورد', icon: '🧑‍🚀' },
+  pilot: { label: 'خلبان', icon: '🧑‍✈️' },
+  scientist: { label: 'دانشمند', icon: '🧑‍🔬' }
+});
+const UID_STORAGE_KEY = 'station_uid';
+const SELECTED_STORAGE_KEY = 'station_selected_profile';
+const PROFILES_INDEX_KEY = 'station_profiles_index';
+
+// uid پایدار: در v10.1.2 با هر رفرش uid تازه ساخته می‌شد و کلید حافظه عوض می‌شد —
+// نتیجه: پیشرفت کودک بعد از بستن مرورگر گم می‌شد. اکنون uid در localStorage می‌ماند.
+function stableUid() {
+  try {
+    let uid = localStorage.getItem(UID_STORAGE_KEY);
+    if (!uid) {
+      uid = 'anon_student_' + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem(UID_STORAGE_KEY, uid);
+    }
+    return uid;
+  } catch {
+    return 'anon_student_device'; // حافظهٔ محلی در دسترس نیست — حداقل درون یک نشست پایدار است
+  }
+}
+
+function persistSelectedProfile() {
+  try {
+    if (selectedId) localStorage.setItem(SELECTED_STORAGE_KEY, selectedId);
+    else localStorage.removeItem(SELECTED_STORAGE_KEY);
+  } catch { /* حافظهٔ محلی اختیاری است */ }
+}
+
+async function loadProfiles() {
+  try {
+    const stored = await local.get(PROFILES_INDEX_KEY);
+    profiles = Array.isArray(stored) ? stored : [];
+  } catch {
+    profiles = [];
+  }
+}
+
+function roleMeta(profile) {
+  return ROLE_META[profile?.role] || ROLE_META.astronaut;
+}
+
+// داستان خوش‌آمد (v10.1.3) — در لحن مجاز ایستگاه (station-brief)، بدون واژه‌های ممنوع
+function welcomeLine(profile) {
+  const role = roleMeta(profile);
+  return `${role.icon} به ایستگاه خوش آمدی، ${profile.displayName}! تو ${role.label} ایستگاه هستی؛ سه بنا منتظر انرژیِ سلول‌های توئند.`;
+}
+
+function renderProfileButtons() {
+  const box = $('profile-buttons');
+  if (!box) return;
+  box.innerHTML = profiles.map(p => {
+    const role = roleMeta(p);
+    return `<button type="button" class="secondary-button profile-button" data-profile-id="${p.studentId}">`
+      + `<span aria-hidden="true">${role.icon}</span> ${p.displayName} <span class="profile-role">${role.label}</span>`
+      + `</button>`;
+  }).join('');
+}
 
 const playStationAudio = async (kind) => {
   if (!soundEnabled || !stationLayer?.soundPlayer) return;
@@ -230,29 +296,86 @@ function render() {
   const stationState = refreshStationLayer();
   const profile = profiles.find(p => p.studentId === selectedId);
 
-  $('login-card').hidden = !!actor;
-  $('workspace').hidden = !actor;
-  if (!actor) return;
-
-  $('identity-display').textContent = actor.teacher
-    ? 'پنل معلم'
-    : (profile ? profile.displayName : 'انتخاب قهرمان');
-
-  $('teacher-shell').hidden = !actor.teacher;
-  $('child-shell').hidden = actor.teacher || !profile;
-  $('profile-picker').hidden = actor.teacher || !!profile;
-
-  if (actor.teacher) {
-    renderTeacherShell();
-  } else if (profile) {
-    renderChildShell(stationState);
+  if (!profile) {
+    // دروازهٔ پرونده (v10.1.3): ساخت پروندهٔ تازه یا انتخاب پرونده‌های همین دستگاه
+    const showCreate = profileMode === 'create' || profiles.length === 0;
+    $('login-card').hidden = !showCreate;
+    $('profile-picker').hidden = showCreate || !profiles.length;
+    if (!showCreate) renderProfileButtons();
+    $('workspace').hidden = true;
+    $('switch-profile-button').hidden = true;
+    $('identity-display').textContent = 'ایستگاه ضرب';
+    return;
   }
+
+  $('login-card').hidden = true;
+  $('profile-picker').hidden = true;
+  $('workspace').hidden = false;
+  $('switch-profile-button').hidden = false;
+  $('identity-display').textContent = `${roleMeta(profile).icon} ${profile.displayName}`;
+
+  $('teacher-shell').hidden = true;
+  $('child-shell').hidden = false;
+
+  renderChildShell(stationState);
 }
 
 function renderTeacherShell() {
   $('teacher-summary').textContent = teacherClass
     ? `کلاس: ${teacherClass.name} — اعضا: ${fa(teacherClass.members?.length || 0)} نفر`
     : 'یک کلاس را برای بررسی انتخاب کنید.';
+}
+
+// خط پیشرفت (v10.1.3): درصد هر بنا + آستانهٔ واقعی لایهٔ بعدی از DEPTH_LAYERS
+function buildProgressLine(systemsNow) {
+  if (!systemsNow?.length) return '';
+  const parts = systemsNow.map(s => {
+    const current = s.currentDepth || 0;
+    const nextDepth = Math.min(3, current + 1);
+    const layer = DEPTH_LAYERS[`${s.sectorId}-${nextDepth}`];
+    const need = nextDepth > current ? layer?.unlock?.minPercent : null;
+    const suffix = need ? ` (لایهٔ ${fa(nextDepth)} با ${fa(need)}٪)` : '';
+    return `${BUILDING_NAMES[s.sectorId] || 'بنا'}: ${fa(s.percent)}٪${suffix}`;
+  });
+  return `📍 پیشرفت ایستگاه — ${parts.join(' • ')}`;
+}
+
+// تابلوی افتخارات محلی (v10.1.3): بهترین دستاوردهای پرونده‌های همین دستگاه — کاملاً آفلاین
+async function refreshLocalBoard() {
+  const entriesEl = $('board-entries');
+  const statusEl = $('board-status');
+  if (!entriesEl) return;
+  if (!profiles.length) {
+    entriesEl.innerHTML = '';
+    if (statusEl) statusEl.textContent = 'هنوز پرونده‌ای ساخته نشده است.';
+    return;
+  }
+  const rows = [];
+  for (const p of profiles) {
+    let records = [];
+    try {
+      const stored = await local.get(studentKey(actor.uid, p.studentId));
+      records = stored?.stationRecords || [];
+    } catch { records = []; }
+    rows.push({ profile: p, power: stationPower(records), systems: stationSystems(records) });
+  }
+  rows.sort((a, b) => b.power - a.power);
+  if (statusEl) {
+    statusEl.textContent = `بهترین دستاوردهای پرونده‌های همین دستگاه — بر پایهٔ قدرت کلی ایستگاه (${fa(rows.length)} پرونده)`;
+  }
+  entriesEl.innerHTML = rows.map((row, i) => {
+    const role = roleMeta(row.profile);
+    const medal = ['🥇', '🥈', '🥉'][i] || `${fa(i + 1)}.`;
+    const sectors = row.systems.map(s =>
+      `<span class="board-sector-chip">${BUILDING_NAMES[s.sectorId] || ''} ${fa(s.percent)}٪${s.currentDepth ? ` · لایهٔ ${fa(s.currentDepth)}` : ''}</span>`
+    ).join(' ');
+    return `<li class="board-row">
+      <span class="board-rank" aria-hidden="true">${medal}</span>
+      <span class="board-name">${role.icon} ${row.profile.displayName}</span>
+      <span class="board-power">قدرت ایستگاه: ${fa(row.power)}٪</span>
+      <span class="board-sectors">${sectors}</span>
+    </li>`;
+  }).join('');
 }
 
 function renderChildShell(stationState) {
@@ -279,20 +402,44 @@ function renderChildShell(stationState) {
     $('path-1').innerHTML = renderPathSVG(1, map.getPathState(1));
     $('path-2').innerHTML = renderPathSVG(2, map.getPathState(2));
 
-    $('sheet-text').textContent = sheet.getSheetText();
+    // داستان خوش‌آمد (v10.1.3): در نخستین ورود، داستان ایستگاه با نام و نقش کودک روایت می‌شود
+    const profileNow = profiles.find(p => p.studentId === selectedId);
+    const hasProgress = (state.stationRecords || []).length > 0 || !!state.session;
+    $('sheet-text').textContent = (!hasProgress && profileNow)
+      ? `${welcomeLine(profileNow)} ${sheet.getSheetText()}`
+      : sheet.getSheetText();
+
+    // خط پیشرفت (v10.1.3): مسیر بازشدن تدریجی را «دیده‌پذیر» می‌کند
+    $('sheet-progress').textContent = buildProgressLine(stationSystems(state.stationRecords || []));
 
     // Side Missions: render unlocked side-mission buttons (affectsLeaderboard: false)
     const sideButtons = sheet.getSideMissionButtons();
     const sideRow = $('sheet-side-missions');
-    if (sideButtons.length) {
+    const unlockedHtml = sideButtons.map(m => `
+      <button type="button" class="side-mission-button" data-mission-id="${m.id}" aria-label="${m.title}">
+        <span class="side-mission-icon">${m.icon}</span>
+        <span>${m.title}</span>
+        <span class="side-mission-note">${fa(m.questionCount)} سؤال تمرینی</span>
+      </button>
+    `).join('');
+    // مأموریت‌های قفل‌شده (v10.1.3): محتوای پنهان دیگر مخفی نیست — چرا و با چه شرطی باز می‌شود
+    const unlockedIds = new Set(sideButtons.map(m => m.id));
+    const lockedHtml = Object.values(SIDE_MISSIONS)
+      .filter(m => !unlockedIds.has(m.id))
+      .map(m => {
+        const need = fa(m.unlock?.minPercent ?? 70);
+        const buildingName = BUILDING_NAMES[m.parentSectorId] || 'نیروگاه';
+        return `
+          <button type="button" class="side-mission-button side-mission-locked" aria-disabled="true" aria-label="قفل: ${m.title}">
+            <span class="side-mission-icon">🔒</span>
+            <span>${m.title}</span>
+            <span class="side-mission-note">با ${need}٪ دقتِ ${buildingName} باز می‌شود</span>
+          </button>
+        `;
+      }).join('');
+    if (unlockedHtml || lockedHtml) {
       sideRow.hidden = false;
-      sideRow.innerHTML = sideButtons.map(m => `
-        <button type="button" class="side-mission-button" data-mission-id="${m.id}" aria-label="${m.title}">
-          <span class="side-mission-icon">${m.icon}</span>
-          <span>${m.title}</span>
-          <span class="side-mission-note">${fa(m.questionCount)} سؤال تمرینی</span>
-        </button>
-      `).join('');
+      sideRow.innerHTML = unlockedHtml + lockedHtml;
     } else {
       sideRow.hidden = true;
       sideRow.innerHTML = '';
@@ -800,8 +947,69 @@ function setupEvents() {
     handleAnswerSubmit(inputVal);
   });
 
+  // ─── پرونده‌های محلی (v10.1.3): ثبت‌نام، مهمان، انتخاب و تغییر پرونده ───
+  const createProfile = (displayName, role) => run(async () => {
+    const profile = {
+      studentId: 'student_' + crypto.randomUUID().slice(0, 8),
+      displayName,
+      role,
+      createdAt: new Date().toISOString()
+    };
+    profiles = profiles.concat(profile);
+    await local.put(PROFILES_INDEX_KEY, profiles);
+    selectedId = profile.studentId;
+    persistSelectedProfile();
+    profileMode = null;
+    state = { session: null, stationRecords: [] };
+    await saveState(state);
+    render();
+    notice(welcomeLine(profile));
+    void speakFa(welcomeLine(profile));
+  });
+
+  $('hero-create-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = $('hero-name').value.trim().slice(0, 32);
+    if (!name) return;
+    void createProfile(name, $('hero-avatar').value);
+  });
+
+  $('guest-login').addEventListener('click', () => {
+    void createProfile('مهمان ایستگاه', 'astronaut');
+  });
+
+  $('profile-buttons').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-profile-id]');
+    if (!btn) return;
+    void run(async () => {
+      selectedId = btn.dataset.profileId;
+      persistSelectedProfile();
+      profileMode = null;
+      const stored = await local.get(profileStorageKey());
+      state = stored || { session: null, stationRecords: [] };
+      render();
+      void refreshTeacherMissions();
+    });
+  });
+
+  $('new-profile-button').addEventListener('click', () => {
+    profileMode = 'create';
+    render();
+    $('hero-name').focus();
+  });
+
+  $('switch-profile-button').addEventListener('click', () => {
+    void run(async () => {
+      selectedId = null;
+      persistSelectedProfile();
+      profileMode = null;
+      render();
+    });
+  });
+
   $('open-board-button').addEventListener('click', () => {
     $('board-dialog').hidden = false;
+    void refreshLocalBoard(); // تابلوی افتخارات محلی (v10.1.3) — هر بار تازه خوانده می‌شود
   });
   $('close-board-button').addEventListener('click', () => {
     $('board-dialog').hidden = true;
@@ -812,16 +1020,17 @@ export async function initApp() {
   local = await openLocal(); // موتور v9 خودش globalThis.indexedDB را تزریق می‌کند
   setupEvents();
 
-  actor = { uid: 'anon_student_' + Math.random().toString(36).slice(2, 8), teacher: false };
-  profiles = [{ studentId: 'student_1', displayName: 'کودک' }];
-  selectedId = 'student_1';
+  // uid پایدار (رفع باگ v10.1.2): پیشرفت پس از بستن مرورگر می‌ماند
+  actor = { uid: stableUid(), teacher: false };
 
-  const stored = await local.get(profileStorageKey());
-  if (stored) {
-    state = stored;
-  } else {
-    state = { session: null, stationRecords: [] };
-  }
+  // پرونده‌های محلی (v10.1.3): ثبت‌نام/انتخاب پرونده بدون سرور
+  await loadProfiles();
+  try { selectedId = localStorage.getItem(SELECTED_STORAGE_KEY) || null; } catch { selectedId = null; }
+  if (selectedId && !profiles.some(p => p.studentId === selectedId)) selectedId = null;
+  profileMode = profiles.length ? null : 'create';
+
+  const stored = selectedId ? await local.get(profileStorageKey()) : null;
+  state = stored || { session: null, stationRecords: [] };
 
   render();
   void refreshTeacherMissions();

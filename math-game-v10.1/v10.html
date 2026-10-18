@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>کارگاه ضرب — نسخهٔ ۱۰.۱</title>
+  <title>کارگاه ضرب — نسخهٔ ۱۰.۱.۳</title>
   <link rel="stylesheet" href="styles/v10.css">
   <script src="v9-config.js" defer></script>
   <script src="src/v10/app.js" type="module"></script>
@@ -11,9 +11,10 @@
 <body>
   <header>
     <div class="header-shell">
-      <div class="brand-title">✦ ایستگاه یادگیری ۱۰.۱</div>
+      <div class="brand-title">✦ ایستگاه یادگیری ۱۰.۱.۳</div>
       <div class="header-actions">
         <span id="identity-display" class="identity-badge"></span>
+        <button id="switch-profile-button" class="secondary-button" type="button" hidden>تغییر پرونده</button>
         <button id="toggle-sound" class="secondary-button" type="button" aria-pressed="false">صدا: خاموش</button>
       </div>
     </div>
@@ -22,17 +23,34 @@
   <p id="notice" role="status" aria-live="polite" hidden></p>
 
   <main class="main-shell">
+    <!-- ثبت‌نام محلی (v10.1.3): ساخت پرونده بدون نیاز به سرور — پیشرفت روی همین دستگاه می‌ماند -->
     <section id="login-card" class="teacher-card" hidden>
-      <h2>ورود به ایستگاه</h2>
-      <p>در حال برقراری ارتباط...</p>
+      <h2>ساخت پروندهٔ ایستگاه</h2>
+      <p>نام تو روی پروندهٔ ایستگاه نوشته می‌شود و پیشرفتت همین‌جا روی همین دستگاه می‌ماند.</p>
+      <form id="hero-create-form" class="inline-form">
+        <input id="hero-name" type="text" maxlength="32" placeholder="نام دانش‌آموز" required>
+        <select id="hero-avatar" aria-label="نقش">
+          <option value="astronaut">🧑‍🚀 فضانورد</option>
+          <option value="pilot">🧑‍✈️ خلبان</option>
+          <option value="scientist">🧑‍🔬 دانشمند</option>
+        </select>
+        <button class="primary-button" type="submit">ساخت پرونده</button>
+      </form>
+      <div class="auth-block">
+        <button id="guest-login" class="secondary-button" type="button">ورود سریع مهمان</button>
+      </div>
+    </section>
+
+    <!-- انتخاب پرونده: پرونده‌های همین دستگاه (v10.1.3) -->
+    <section id="profile-picker" class="teacher-card" hidden>
+      <h2>انتخاب پرونده</h2>
+      <div id="profile-buttons" class="button-row"></div>
+      <div class="auth-block">
+        <button id="new-profile-button" class="secondary-button" type="button">+ پروندهٔ تازه</button>
+      </div>
     </section>
 
     <div id="workspace">
-      <!-- Profile picker if multiple child profiles exist -->
-      <section id="profile-picker" class="teacher-card" hidden>
-        <h2>انتخاب قهرمان</h2>
-        <div id="profile-buttons"></div>
-      </section>
 
       <!-- Teacher Shell (Strictly separate from Child Shell) -->
       <section id="teacher-shell" class="teacher-panel" hidden>
@@ -72,6 +90,8 @@
           <!-- Bottom Sheet (ورق پایین نقشه) -->
           <div class="bottom-sheet" id="station-bottom-sheet">
             <p id="sheet-text" class="sheet-story"></p>
+            <!-- خط پیشرفت (v10.1.3): درصدها و آستانهٔ لایهٔ بعدی — دیده‌پذیر کردن مسیر -->
+            <p id="sheet-progress" class="sheet-progress"></p>
             <!-- Side Missions (مأموریت‌های جانبی — بدون اثر بر لیدربرد) -->
             <div id="sheet-side-missions" class="side-missions-row" role="group" aria-label="مأموریت‌های جانبی" hidden></div>
             <!-- Teacher Missions (مأموریت‌های ارسالی معلم — از داشبورد) -->
@@ -120,11 +140,12 @@
       </section>
     </div>
 
-    <!-- Class Board Modal (کلاس من فقط تا تابلو) -->
+    <!-- تابلوی افتخارات محلی (v10.1.3): بهترین دستاوردهای پرونده‌های همین دستگاه — بدون سرور -->
     <div id="board-dialog" class="board-dialog" hidden>
       <div class="dialog-card">
-        <h3>تابلوی نتایج کلاس</h3>
-        <p>بهترین دستاورد اعضای کلاس در سه بنای ایستگاه.</p>
+        <h3>🏅 تابلوی افتخارات ایستگاه</h3>
+        <p id="board-status">بهترین دستاوردهای پرونده‌های همین دستگاه.</p>
+        <ol id="board-entries" class="board-list"></ol>
         <button id="close-board-button" class="secondary-button" type="button">بستن تابلو</button>
       </div>
     </div>
