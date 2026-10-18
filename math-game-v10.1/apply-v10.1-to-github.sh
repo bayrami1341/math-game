@@ -130,7 +130,8 @@ cp -f "$KIT_DIR/src/v10/app.js" \
 cp -f "$KIT_DIR/src/v10/station/"*.js      src/v10/station/
 cp -f "$KIT_DIR/src/v9/"*.mjs              src/v9/
 cp -f "$KIT_DIR/tests/"*.test.js           tests/
-ok "فایل‌ها کپی شدند (۲۲ فایل کیت)."
+if [ -f "$KIT_DIR/apply-v10.1.ps1" ]; then cp -f "$KIT_DIR/apply-v10.1.ps1" .; fi
+ok "فایل‌ها کپی شدند (۲۳ فایل کیت)."
 
 # ── ۴) چهار کامیت منطقی ──────────────────────────────────────────────────────
 commit() { # $1 = پیام، بقیه = مسیرها

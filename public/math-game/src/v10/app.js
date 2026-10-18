@@ -125,6 +125,26 @@ function welcomeLine(profile) {
   return `${role.icon} به ایستگاه خوش آمدی، ${profile.displayName}! تو ${role.label} ایستگاه هستی؛ سه بنا منتظر انرژیِ سلول‌های توئند.`;
 }
 
+// داستان کامل ایستگاه (v10.1.4): همیشه از طریق نوار ناوبری در دسترس است (دکمهٔ «📖 داستان ایستگاه»)
+// لحن مجاز station-brief: جمله‌های کوتاه و عینی، بدون واژه‌های ممنوع
+const STORY_NARRATIVE = Object.freeze([
+  'تو نگهبان انرژی ایستگاه فضایی ضرب هستی.',
+  'سه بنا روی تو حساب می‌کنند: نیروگاه چراغ‌ها را روشن می‌کند، برج ارتباط با زمین حرف می‌زند، و سکوی پرتاب بارها را آماده می‌کند.',
+  'سوخت هر بنا فقط یک چیز است: ضرب درست. هر ضرب درست یک سلول انرژی را پر می‌کند.',
+  'هر بنا سه لایه دارد. با دقت بالا، لایه‌های عمیق‌تر یکی‌یکی باز می‌شوند و بخش‌های تازهٔ ایستگاه روشن می‌شود.',
+  'سه مأموریت جانبی هم داری: تعمیر آنتن فرعی، شارژ سلول پشتیبان و تأمین سوخت اضافه. این‌ها تمرین بیشترند و به قدرت ایستگاه نمره اضافه نمی‌کنند.',
+  'می‌توانی با «🔊 سؤال» هر ضرب را برایت بخوانند و با «💡 راهنما» پله‌پله جلو بروی. اشتباه شد؟ نردبان راهنما خودش بالا می‌آید.',
+  'ایستگاه منتظر توست. آرام و با دقت، سلول‌به‌سلول.'
+]);
+
+// پنجرهٔ داستان (v10.1.4): رندر داستان کامل ایستگاه
+function openStoryDialog() {
+  const content = $('story-content');
+  if (content) content.innerHTML = STORY_NARRATIVE.map(p => `<p>${p}</p>`).join('');
+  const dialog = $('story-dialog');
+  if (dialog) dialog.hidden = false;
+}
+
 function renderProfileButtons() {
   const box = $('profile-buttons');
   if (!box) return;
@@ -376,6 +396,55 @@ async function refreshLocalBoard() {
       <span class="board-sectors">${sectors}</span>
     </li>`;
   }).join('');
+}
+
+// پنل معلم (v10.1.4): گزارش آفلاین همین دستگاه — برای معلم/والد کنار کودک
+// شامل: قدرت ایستگاه، درصد هر بنا، وضعیت ۹ لایهٔ عمق (باز/قفل/شرط بازشدن)، جلسه‌ها، خطاها، مأموریت‌های معلم
+async function renderTeacherPanel() {
+  const box = $('teacher-panel-content');
+  if (!box) return;
+  if (!profiles.length) {
+    box.innerHTML = '<p class="teacher-note">هنوز پرونده‌ای روی این دستگاه ساخته نشده است.</p>';
+    return;
+  }
+  const pending = teacherMissions.length;
+  let html = pending
+    ? `<p class="teacher-note">📌 ${fa(pending)} مأموریت از داشبورد معلم در انتظار برداشتن است.</p>`
+    : '';
+  for (const p of profiles) {
+    let stored = null;
+    try { stored = await local.get(studentKey(actor.uid, p.studentId)); } catch { stored = null; }
+    const records = stored?.stationRecords || [];
+    const attempts = stored?.attemptLog || [];
+    const wrongTotal = attempts.reduce((sum, a) => sum + (a?.wrongCount || 0), 0);
+    const sideSessions = attempts.filter(a => a?.type === 'side').length;
+    const systems = stationSystems(records);
+    const layersHtml = [1, 2, 3].map(id => {
+      const sys = systems.find(s => s.sectorId === id);
+      const pct = sys?.percent || 0;
+      const cur = sys?.currentDepth || 0;
+      const rows = [1, 2, 3].map(d => {
+        const layer = DEPTH_LAYERS[`${id}-${d}`];
+        const need = layer?.unlock?.minPercent;
+        const stateTxt = cur >= d
+          ? '✅ باز'
+          : d === 1
+            ? '🟢 باز — همین حالا در دسترس است' // لایهٔ ورودی هر بنا آستانه ندارد
+            : (cur + 1 === d ? `🔓 با ${fa(need)}٪ دقت باز می‌شود` : '🔒 قفل');
+        return `<li>لایهٔ ${fa(d)} — ${stateTxt}</li>`;
+      }).join('');
+      return `<div class="teacher-building"><strong>${BUILDING_NAMES[id] || 'بنا'}: ${fa(pct)}٪</strong><ul>${rows}</ul></div>`;
+    }).join('');
+    html += `
+      <div class="teacher-report-card">
+        <h4>${roleMeta(p).icon} ${p.displayName} — قدرت ایستگاه: ${fa(stationPower(records))}٪</h4>
+        <p class="teacher-stats">جلسهٔ تمام‌شده: ${fa(attempts.length)} • خطای ثبت‌شده: ${fa(wrongTotal)} • تمرین جانبی: ${fa(sideSessions)} جلسه</p>
+        ${layersHtml}
+      </div>`;
+  }
+  html += `
+    <p class="teacher-note">💡 «داشبورد کامل معلم» (ارسال مأموریت، تحلیل خطاها، مدیریت کلاس) در پلتفرم «کارگاه ضرب» اجرا می‌شود و این نسخهٔ مستقل به آن وصل نیست. تاریخچهٔ کامل پاسخ‌ها (تلاش‌نگار) روی همین دستگاه ذخیره می‌شود و همین‌جا قابل مرور است.</p>`;
+  box.innerHTML = html;
 }
 
 function renderChildShell(stationState) {
@@ -1014,6 +1083,23 @@ function setupEvents() {
   $('close-board-button').addEventListener('click', () => {
     $('board-dialog').hidden = true;
   });
+
+  // نوار ناوبری (v10.1.4): داستان + پنل معلم — لینک‌های خانه/لیدربرد/ثبت‌نام مستقیم href هستند
+  const storyButton = $('open-story-button');
+  if (storyButton) storyButton.addEventListener('click', openStoryDialog);
+  const storyClose = $('close-story-button');
+  if (storyClose) storyClose.addEventListener('click', () => { $('story-dialog').hidden = true; });
+  const storySpeak = $('story-speak-button');
+  if (storySpeak) storySpeak.addEventListener('click', () => {
+    void speakFa(STORY_NARRATIVE.join(' '), storySpeak);
+  });
+  const teacherButton = $('open-teacher-panel');
+  if (teacherButton) teacherButton.addEventListener('click', () => {
+    $('teacher-dialog').hidden = false;
+    void renderTeacherPanel(); // هر بار باز شدن، تازه خوانده می‌شود
+  });
+  const teacherClose = $('close-teacher-panel-button');
+  if (teacherClose) teacherClose.addEventListener('click', () => { $('teacher-dialog').hidden = true; });
 }
 
 export async function initApp() {
