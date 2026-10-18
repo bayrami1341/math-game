@@ -1,0 +1,514 @@
+/* Styles strictly compliant with station-brief.md */
+:root {
+  --bg-color: #071427;
+  --header-color: #122441;
+  --accent-color: #146a62;
+  --ring-color: #7ef0ff;
+  --done-color: #5ee0b5;
+  --locked-color: #8aa0ab;
+  --text-main: #f0f7fa;
+  --text-muted: #8aa0ab;
+  --surface: #0d1e36;
+  --surface-border: #1d3554;
+  font-family: Tahoma, system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  direction: rtl;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+header {
+  background-color: var(--header-color);
+  border-bottom: 1px solid var(--surface-border);
+  padding: 12px 24px;
+}
+
+.header-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.brand-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--ring-color);
+}
+
+.identity-badge {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+#notice {
+  background-color: var(--header-color);
+  border: 1px solid var(--ring-color);
+  color: var(--ring-color);
+  padding: 10px 16px;
+  max-width: 900px;
+  margin: 12px auto;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+#notice[data-error="true"] {
+  border-color: #ff8b7e;
+  color: #ff8b7e;
+}
+
+main.main-shell {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Map Shell — pure lightweight SVG station map backdrop */
+.station-map-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background:
+    url('../assets/v10/map-dark.svg') center/cover no-repeat,
+    radial-gradient(circle at 50% 50%, #0d223f 0%, var(--bg-color) 85%);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  padding: 28px 16px;
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.buildings-track {
+  display: flex;
+  flex-direction: column-reverse; /* Power at bottom, Pad at top */
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  z-index: 1;
+}
+
+.building-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  background: rgba(13, 30, 54, 0.78);
+  border: 1px solid var(--surface-border);
+  border-radius: 24px;
+  padding: 8px;
+  outline: none;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.building-node:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.building-node[data-state="locked"] {
+  opacity: 0.65;
+  cursor: not-allowed;
+  border-color: rgba(138, 160, 171, 0.35);
+}
+
+.building-node[data-state="current"] {
+  border-color: var(--ring-color);
+  filter: drop-shadow(0 0 12px rgba(126, 240, 255, 0.45));
+}
+
+.building-node[data-state="done"] {
+  border-color: var(--done-color);
+  filter: drop-shadow(0 0 8px rgba(94, 224, 181, 0.28));
+}
+
+.station-svg {
+  width: 104px;
+  height: 104px;
+  display: block;
+}
+
+.path-connector {
+  height: 52px;
+  width: 36px;
+  display: flex;
+  justify-content: center;
+}
+
+.path-svg {
+  width: 36px;
+  height: 100%;
+}
+
+/* Bottom Sheet (ورق پایین نقشه) */
+.bottom-sheet {
+  margin-top: 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.sheet-story {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.sheet-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Primary momentary button */
+.primary-button {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: 1px solid var(--ring-color);
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.primary-button:hover:not(:disabled) {
+  background-color: #198076;
+  box-shadow: 0 0 14px rgba(126, 240, 255, 0.3);
+}
+
+.secondary-button {
+  background: transparent;
+  color: var(--locked-color);
+  border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.secondary-button:hover:not(:disabled) {
+  color: var(--text-main);
+  border-color: var(--locked-color);
+}
+
+/* Secondary Guide on map */
+.guide-box {
+  background-color: #071427;
+  border: 1px dashed var(--surface-border);
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Question View */
+.question-container {
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.question-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--surface-border);
+  padding-bottom: 12px;
+}
+
+.building-indicator {
+  font-size: 14px;
+  color: var(--done-color);
+  margin-right: 8px;
+}
+
+.question-cells-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cell-svg {
+  width: 34px;
+  height: 34px;
+}
+
+.cell-svg.lit {
+  filter: drop-shadow(0 0 6px var(--done-color));
+}
+
+.math-equation {
+  font-size: 44px;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+  margin: 10px 0;
+  direction: ltr;
+}
+
+.answer-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.answer-form input {
+  font-size: 26px;
+  text-align: center;
+  width: 120px;
+  height: 52px;
+  background-color: #071427;
+  border: 2px solid var(--surface-border);
+  border-radius: 12px;
+  color: #fff;
+}
+
+.answer-form input:focus {
+  border-color: var(--ring-color);
+  outline: none;
+}
+
+.choices-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.question-feedback {
+  min-height: 24px;
+  font-size: 14px;
+  color: #ff9f8e;
+  text-align: center;
+}
+
+.equal-groups-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 14px;
+  background-color: #071427;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+}
+
+.equal-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--accent-color);
+  border-radius: 8px;
+  background-color: #0c2038;
+}
+
+.group-item {
+  color: var(--ring-color);
+  font-size: 16px;
+}
+
+/* Modal Dialog */
+.board-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 20, 39, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 20;
+}
+
+.dialog-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  max-width: 480px;
+  width: 100%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.board-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.board-row {
+  padding: 8px 12px;
+  background: #071427;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.board-row[data-me="true"] {
+  border-color: var(--done-color);
+  color: var(--done-color);
+}
+
+/* Teacher Shell & Forms */
+.teacher-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.teacher-card {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.card-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.teacher-summary-line {
+  font-size: 14px;
+  color: var(--done-color);
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.inline-form input,
+.inline-form select,
+.card-header-row select {
+  background-color: #071427;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 8px 12px;
+  font-size: 13px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.auth-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--surface-border);
+}
+
+.members-list,
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.member-row,
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: #071427;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.review-note {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding-right: 8px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
