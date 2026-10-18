@@ -1,37 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { DashboardProviders } from "@/components/dashboard/providers";
 
 export const metadata: Metadata = {
-  title: "کارگاه ضرب ۱۰.۱ — بستهٔ اصلاح‌شده",
-  description: "ایستگاه یادگیری ضرب دبستان — نسخهٔ ۱۰.۱ با مأموریت‌های جانبی کامل، مدل ۹ لایهٔ عمق و ۳۰ آزمون پاس‌شده.",
-  keywords: ["Z.ai", "Next.js", "TypeScript", "Tailwind CSS", "shadcn/ui", "AI development", "React"],
-  authors: [{ name: "Z.ai Team" }],
+  title: "داشبورد معلم — کارگاه ضرب",
+  description:
+    "داشبورد تحلیلی معلم برای پیگیری یادگیری ضرب دانش‌آموزان بر پایهٔ مدل ۹ لایهٔ عمق، گلوگاه‌های یادگیری و جلسات زندهٔ بازی کارگاه ضرب.",
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
-  },
-  openGraph: {
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
-    url: "https://chat.z.ai",
-    siteName: "Z.ai",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Z.ai Code Scaffold",
-    description: "AI-powered development with modern React stack",
   },
 };
 
@@ -41,11 +18,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
-        {children}
+    <html lang="fa" dir="rtl" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font -- فونت با <link> بارگذاری می‌شود تا در نبود شبکه صفحه نشکند */}
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap"
+        />
+      </head>
+      <body className="antialiased bg-background text-foreground">
+        <DashboardProviders>{children}</DashboardProviders>
         <Toaster />
       </body>
     </html>

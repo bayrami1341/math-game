@@ -1,250 +1,239 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import {
-  Rocket,
-  Download,
-  ExternalLink,
-  FlaskConical,
-  Bug,
-  CheckCircle2,
-  Sparkles,
+  AlertTriangle,
   Gamepad2,
-  ShieldCheck,
-  Layers,
+  GraduationCap,
+  LayoutDashboard,
+  RefreshCw,
+  Sparkles,
+  Users,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { KpiCards } from "@/components/dashboard/kpi-cards";
+import { OverviewTab } from "@/components/dashboard/overview-tab";
+import { StudentsTab } from "@/components/dashboard/students-tab";
+import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
+import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
+import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
+import { fetchBottlenecks, fetchOverview, fetchStudents } from "@/components/dashboard/api";
+import { faRelative } from "@/lib/dashboard/constants";
+import { useToast } from "@/hooks/use-toast";
 
-const fixes = [
-  {
-    icon: <Bug className="h-5 w-5" />,
-    title: "شکاف ۱ — اکشن شروع مأموریت جانبی وصل شد",
-    body: "دکمه‌های «تعمیر آنتن فرعی»، «شارژ سلول پشتیبان» و «تأمین سوخت اضافه» در ورق پایین نقشه نمایش داده می‌شوند و با کلیک، جلسهٔ واقعی شروع می‌شود (bridge → sheet → app → session).",
-    files: ["bridge.js", "station/index.js", "station/sheet.js", "v10.html", "app.js"],
-  },
-  {
-    icon: <Sparkles className="h-5 w-5" />,
-    title: "شکاف ۲ — تولید ۵ سؤال تطبیقی اختصاصی هر مأموریت",
-    body: "تابع Pure جدید generateSideMissionQuestions در هستهٔ الگوریتمی: ۵ سؤال از فاکتورهای خود مأموریت، با استراتژی برگرفته از گلوگاه‌های شناختی سکتور مادر و seed تطبیقی برای تنوع بین تلاش‌ها.",
-    files: ["experience.mjs", "styles/v10.css"],
-  },
-  {
-    icon: <ShieldCheck className="h-5 w-5" />,
-    title: "محافظت از لیدربرد و سلول‌های اصلی",
-    body: "رکورد مأموریت جانبی با type=side ذخیره می‌شود ولی درصد سکتور و تابلو نتایج کلاس را هرگز تغییر نمی‌دهد (affectsLeaderboard: false رعایت شد).",
-    files: ["bridge.js", "experience.mjs"],
-  },
-];
+type TabKey = "overview" | "students" | "bottlenecks";
 
-const testGroups = [
-  { name: "رگرسیون لایهٔ ایستگاه (v10)", count: 10 },
-  { name: "مدل عمق و گلوگاه‌ها (v10.1)", count: 10 },
-  { name: "مأموریت‌های جانبی + رگرسیون activityId — جدید", count: 11 },
-];
+/** تاریخ شمسی امروز — فقط در کلاینت محاسبه می‌شود تا با SSR ناسازگار نشود */
+function useTodayFa(): string {
+  const subscribe = useCallback(() => () => {}, []);
+  const getSnapshot = useCallback(() => {
+    try {
+      const now = new Date();
+      const part = (options: Intl.DateTimeFormatOptions) =>
+        new Intl.DateTimeFormat("fa-IR", options).format(now);
+      return `${part({ weekday: "long" })} ${part({ day: "numeric" })} ${part({ month: "long" })} ${part({ year: "numeric" })}`;
+    } catch {
+      return "";
+    }
+  }, []);
+  const getServerSnapshot = useCallback(() => "", []);
+  return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+}
 
-export default function Home() {
-  const [showGame, setShowGame] = useState(false);
+export default function TeacherDashboardPage() {
+  const { toast } = useToast();
+
+  const overviewQuery = useQuery({
+    queryKey: ["overview"],
+    queryFn: fetchOverview,
+    refetchInterval: 30_000,
+  });
+  const studentsQuery = useQuery({
+    queryKey: ["students"],
+    queryFn: fetchStudents,
+    refetchInterval: 30_000,
+  });
+  const bottlenecksQuery = useQuery({
+    queryKey: ["bottlenecks"],
+    queryFn: fetchBottlenecks,
+    refetchInterval: 30_000,
+  });
+
+  const [tab, setTab] = useState<TabKey>("overview");
+  const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
+  const [aiOpen, setAiOpen] = useState(false);
+  const today = useTodayFa();
+
+  const refetchAll = useCallback(async () => {
+    await Promise.all([
+      overviewQuery.refetch(),
+      studentsQuery.refetch(),
+      bottlenecksQuery.refetch(),
+    ]);
+  }, [overviewQuery, studentsQuery, bottlenecksQuery]);
+
+  const isRefreshing =
+    overviewQuery.isRefetching || studentsQuery.isRefetching || bottlenecksQuery.isRefetching;
+
+  // پیام خطای یک‌باره هنگام شکست واکشی
+  const anyError =
+    overviewQuery.isError || studentsQuery.isError || bottlenecksQuery.isError;
+  const errorToastShown = useRef(false);
+  useEffect(() => {
+    if (anyError && !errorToastShown.current) {
+      errorToastShown.current = true;
+      toast({
+        title: "خطا در دریافت داده‌ها",
+        description: "ارتباط با سرور برقرار نشد؛ می‌توانید دوباره تلاش کنید.",
+        variant: "destructive",
+      });
+    }
+    if (!anyError) {
+      errorToastShown.current = false;
+    }
+  }, [anyError, toast]);
+
+  const openStudent = useCallback((id: string) => {
+    setActiveStudentId(id);
+  }, []);
 
   return (
-    <div
-      dir="rtl"
-      lang="fa"
-      className="min-h-screen flex flex-col bg-gradient-to-b from-slate-950 via-slate-900 to-teal-950 text-slate-100"
-    >
-      {/* Header */}
-      <header className="border-b border-white/10 bg-slate-950/60 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2 font-bold text-teal-300">
-            <Rocket className="h-5 w-5" />
-            <span>کارگاه ضرب — نسخهٔ ۱۰.۱</span>
+    <div className="flex min-h-screen flex-col bg-slate-50">
+      {/* هدر چسبان */}
+      <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+          <div className="flex min-w-0 items-center gap-3">
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-white">
+              <GraduationCap className="size-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <h1 className="truncate text-base font-bold text-slate-900 sm:text-lg">داشبورد معلم</h1>
+              <p className="truncate text-xs text-slate-500">کارگاه ضرب — ایستگاه یادگیری مضاعف</p>
+            </div>
           </div>
-          <Badge variant="outline" className="border-teal-400/40 text-teal-300">
-            v10.1.1 — اصلاح‌شده
-          </Badge>
+          <div className="flex shrink-0 items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => void refetchAll()}
+              disabled={isRefreshing}
+              aria-label="بازآوری داده‌ها"
+            >
+              <RefreshCw className={isRefreshing ? "size-4 animate-spin" : "size-4"} aria-hidden />
+              <span className="hidden sm:inline">بازآوری</span>
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => setAiOpen(true)}
+              className="bg-emerald-600 text-white hover:bg-emerald-700"
+              aria-label="گزارش هوشمند AI"
+            >
+              <Sparkles className="size-4" aria-hidden />
+              <span className="hidden sm:inline">گزارش هوشمند AI</span>
+            </Button>
+            <Button variant="outline" size="sm" asChild aria-label="اجرای بازی">
+              <a href="/math-game/v10.html" target="_blank" rel="noopener noreferrer">
+                <Gamepad2 className="size-4" aria-hidden />
+                <span className="hidden md:inline">اجرای بازی</span>
+              </a>
+            </Button>
+          </div>
+        </div>
+        {/* نوار تاریخ */}
+        <div className="border-t border-slate-100 bg-white/60">
+          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-0.5 px-4 py-1.5 text-[11px] text-slate-500 sm:px-6">
+            <span>امروز: {today || "—"}</span>
+            <span>
+              آخرین به‌روزرسانی:{" "}
+              <span className="tabular-nums">{faRelative(overviewQuery.data?.generatedAt)}</span>
+            </span>
+          </div>
         </div>
       </header>
 
-      {/* Main */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-        {/* Hero */}
-        <section className="text-center space-y-4 py-6">
-          <h1 className="text-2xl sm:text-4xl font-extrabold leading-relaxed">
-            بستهٔ ۱۰.۱ شما،{" "}
-            <span className="text-teal-300">بازبینی، ممیزی و تکمیل</span> شد
-          </h1>
-          <p className="text-slate-300 max-w-2xl mx-auto leading-8 text-sm sm:text-base">
-            هر دو شکاف شناسایی‌شده بین سند راهنما و کد، به‌همراه دو باگ P0 که فقط در اجرای واقعی مرورگر خود را نشان می‌دادند، اصلاح و با ۱۱ آزمون جدید پوشش داده شد.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Button
-              size="lg"
-              className="bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold"
-              onClick={() => setShowGame((v) => !v)}
-            >
-              <Gamepad2 className="h-5 w-5 ml-1" />
-              {showGame ? "بستن پیش‌نمایش بازی" : "اجرای بازی همین‌جا"}
-            </Button>
-            <Button size="lg" variant="outline" className="border-slate-600 bg-slate-900 text-slate-100 hover:bg-slate-800 hover:text-white" asChild>
-              <a href="/math-game/v10.html" target="_blank" rel="noreferrer">
-                <ExternalLink className="h-5 w-5 ml-1" />
-                بازی در تب جدید
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" className="border-slate-600 bg-slate-900 text-slate-100 hover:bg-slate-800 hover:text-white" asChild>
-              <a href="/math-game-v10.1-fixed.zip" download>
-                <Download className="h-5 w-5 ml-1" />
-                دانلود بستهٔ کامل (با آزمون‌ها)
-              </a>
-            </Button>
-          </div>
-          <p className="text-xs text-slate-400 pt-1">
-            در بازی، از «ورود مستقیم به ایستگاه (آفلاین / محلی)» استفاده کنید؛
-            ورود آنلاین به سرویس Firebase شبکه نیاز دارد.
-          </p>
-        </section>
+      {/* محتوا */}
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6">
+        <div className="space-y-6">
+          <KpiCards kpis={overviewQuery.data?.kpis} />
 
-        {/* Embedded game preview */}
-        {showGame && (
-          <section className="rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-            <iframe
-              src="/math-game/v10.html"
-              title="کارگاه ضرب — نسخهٔ ۱۰.۱"
-              className="w-full h-[640px] bg-[#071427]"
-            />
-          </section>
-        )}
+          <Tabs value={tab} onValueChange={(value) => setTab(value as TabKey)} className="w-full">
+            <TabsList className="h-auto w-full flex-wrap justify-start sm:w-fit">
+              <TabsTrigger value="overview" className="gap-1.5">
+                <LayoutDashboard className="size-4" aria-hidden />
+                نمای کلی
+              </TabsTrigger>
+              <TabsTrigger value="students" className="gap-1.5">
+                <Users className="size-4" aria-hidden />
+                دانش‌آموزان
+              </TabsTrigger>
+              <TabsTrigger value="bottlenecks" className="gap-1.5">
+                <AlertTriangle className="size-4" aria-hidden />
+                گلوگاه‌های یادگیری
+              </TabsTrigger>
+            </TabsList>
 
-        {/* Test evidence */}
-        <Card className="bg-slate-900/70 border-white/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-teal-300">
-              <FlaskConical className="h-5 w-5" />
-              راستی‌آزمایی — ۳۱/۳۱ آزمون پاس شد
-            </CardTitle>
-            <CardDescription className="text-slate-400">
-              اجرای واقعی <code className="text-teal-300">npm test</code> روی
-              بستهٔ اصلاح‌شده (node --test)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {testGroups.map((g) => (
-              <div
-                key={g.name}
-                className="flex items-center justify-between rounded-lg bg-slate-950/60 border border-white/5 px-4 py-3"
-              >
-                <div className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                  {g.name}
-                </div>
-                <Badge className="bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                  {g.count} پاس
-                </Badge>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+            <TabsContent value="overview" className="mt-4">
+              <OverviewTab
+                data={overviewQuery.data}
+                isLoading={overviewQuery.isLoading}
+                isError={overviewQuery.isError}
+                onRetry={() => void overviewQuery.refetch()}
+              />
+            </TabsContent>
 
-        {/* Fixes */}
-        <section className="space-y-4">
-          <h2 className="text-lg sm:text-xl font-bold flex items-center gap-2">
-            <Bug className="h-5 w-5 text-amber-400" />
-            چه چیزی اصلاح شد؟
-          </h2>
-          <div className="grid gap-4 md:grid-cols-3">
-            {fixes.map((f) => (
-              <Card key={f.title} className="bg-slate-900/70 border-white/10">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base leading-7 flex items-start gap-2">
-                    <span className="text-amber-400 mt-0.5 shrink-0">{f.icon}</span>
-                    {f.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <p className="text-sm text-slate-300 leading-7">{f.body}</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {f.files.map((file) => (
-                      <Badge
-                        key={file}
-                        variant="secondary"
-                        className="bg-slate-800 text-slate-300 text-[11px] font-mono"
-                        dir="ltr"
-                      >
-                        {file}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
+            <TabsContent value="students" className="mt-4">
+              <StudentsTab
+                data={studentsQuery.data}
+                isLoading={studentsQuery.isLoading}
+                isError={studentsQuery.isError}
+                onRetry={() => void studentsQuery.refetch()}
+                onSelectStudent={openStudent}
+              />
+            </TabsContent>
 
-        {/* Depth model showcase */}
-        <Card className="bg-slate-900/70 border-white/10">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-teal-300">
-              <Layers className="h-5 w-5" />
-              مدل ۹ لایهٔ عمق + ۳ مأموریت جانبی — دست‌نخورده و محافظت‌شده
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm text-right border-collapse">
-                <thead>
-                  <tr className="text-slate-400 border-b border-white/10">
-                    <th className="py-2 px-3 font-medium">بنا</th>
-                    <th className="py-2 px-3 font-medium">فاکتورها</th>
-                    <th className="py-2 px-3 font-medium">لایه‌ها</th>
-                    <th className="py-2 px-3 font-medium">مأموریت جانبی (۷۰٪)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { b: "⚡ نیروگاه", f: "۲× تا ۵×", d: "۸ / ۱۰ / ۶ سؤال", s: "📡 تعمیر آنتن فرعی" },
-                    { b: "📡 برج ارتباط", f: "۶× تا ۹×", d: "۸ / ۱۰ / ۶ سؤال", s: "🔋 شارژ سلول پشتیبان" },
-                    { b: "🚀 سکوی پرتاب", f: "۱۰× تا ۱۲×", d: "۸ / ۱۰ / ۶ سؤال", s: "🚀 تأمین سوخت اضافه" },
-                  ].map((r) => (
-                    <tr key={r.b} className="border-b border-white/5 last:border-0">
-                      <td className="py-2.5 px-3">{r.b}</td>
-                      <td className="py-2.5 px-3 text-slate-300">{r.f}</td>
-                      <td className="py-2.5 px-3 text-slate-300">{r.d}</td>
-                      <td className="py-2.5 px-3 text-teal-300">{r.s}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Separator className="bg-white/10" />
-
-        <section className="text-center text-sm text-slate-400 space-y-2 pb-2">
-          <p>
-            بستهٔ کامل اصلاح‌شده (شامل سند راهنما، کد و ۳۰ آزمون) در فایل زیپ
-            بالا آمادهٔ بارگذاری در گیت‌هاب یا هر محیط توسعهٔ دیگر است.
-          </p>
-        </section>
+            <TabsContent value="bottlenecks" className="mt-4">
+              <BottlenecksTab
+                data={bottlenecksQuery.data}
+                isLoading={bottlenecksQuery.isLoading}
+                isError={bottlenecksQuery.isError}
+                onRetry={() => void bottlenecksQuery.refetch()}
+                onSelectStudent={openStudent}
+                onOpenAiReport={() => setAiOpen(true)}
+              />
+            </TabsContent>
+          </Tabs>
+        </div>
       </main>
 
-      {/* Sticky footer */}
-      <footer className="mt-auto border-t border-white/10 bg-slate-950/60">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-          <span>کارگاه ضرب — ایستگاه یادگیری ۱۰.۱ | نسخهٔ اصلاح‌شده v10.1.1</span>
-          <span dir="ltr" className="font-mono">
-            31/31 tests passing · node --test
-          </span>
+      {/* فوتر چسبان */}
+      <footer className="mt-auto border-t border-slate-200 bg-white">
+        <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 px-4 py-4 text-xs text-slate-500 sm:flex-row sm:px-6">
+          <p>کارگاه ضرب — داشبورد معلم · داده‌ها زنده از دیتابیس SQLite</p>
+          <p className="flex items-center gap-2">
+            <span>مدل ۹ لایهٔ عمق v10.1</span>
+            <span aria-hidden>·</span>
+            <a
+              href="/math-game/v10.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-emerald-700 hover:underline"
+            >
+              بازی کارگاه ضرب
+            </a>
+          </p>
         </div>
       </footer>
+
+      {/* لایه‌های سراسری */}
+      <StudentDetailSheet
+        studentId={activeStudentId}
+        onOpenChange={(open) => {
+          if (!open) setActiveStudentId(null);
+        }}
+      />
+      <AiReportDialog open={aiOpen} onOpenChange={setAiOpen} />
     </div>
   );
 }

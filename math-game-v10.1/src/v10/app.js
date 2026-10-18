@@ -279,6 +279,40 @@ async function handleAnswerSubmit(userAnswer) {
 
     await saveState(state);
 
+    // پل داشبورد معلم: ارسال آتش‌وفراموش‌شدهٔ جلسه به سرور محلی (POST /api/sessions)
+    // اگر بازی مستقل از داشبورد اجرا شود یا شبکه در دسترس نباشد، خطاها بی‌صدا نادیده گرفته می‌شوند.
+    try {
+      if (typeof fetch === 'function') {
+        const dashProfile = (profiles || []).find(p => p.studentId === selectedId);
+        // سکتور می‌تواند رشتهٔ بنا ('station-power') یا شمارهٔ سکتور مأموریت جانبی (۱/۲/۳) باشد
+        const sectorKey = String(session.sectorId ?? '');
+        const sectorNames = { 'station-power': 'station-power', 'station-antenna': 'station-antenna', 'station-launch': 'station-launch', '1': 'station-power', '2': 'station-antenna', '3': 'station-launch' };
+        const sectorOffsets = { 'station-power': 0, 'station-antenna': 3, 'station-launch': 6, '1': 0, '2': 3, '3': 6 };
+        const buildingName = sectorNames[sectorKey] ?? 'unknown';
+        const sectorOffset = sectorOffsets[sectorKey] ?? 0;
+        const firstAt = Object.values(session.receipts || {})[0]?.serverTime;
+        const lastAt = Object.values(session.receipts || {}).slice(-1)[0]?.serverTime;
+        const spanSec = firstAt && lastAt ? Math.max(0, Math.round((new Date(lastAt) - new Date(firstAt)) / 1000)) : undefined;
+        void fetch('/api/sessions', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({
+            studentName: dashProfile?.displayName || 'بازیکن ایستگاه',
+            buildingId: buildingName,
+            layer: Math.min(9, sectorOffset + (session.depth ?? 2)),
+            mode: session.activityType === 'side' ? 'side' : 'station',
+            durationSec: spanSec,
+            results: (session.questions || []).map(q => ({
+              a: q.f1 ?? 0,
+              b: q.f2 ?? 0,
+              correct: !!(session.answers && session.answers[q.questionId])
+            }))
+          })
+        }).catch(() => {});
+      }
+    } catch { /* داشبورد اختیاری است */ }
+
     currentView = 'map';
     showGuide = false;
     void playStationAudio(SOUND_EVENTS.pathLit);

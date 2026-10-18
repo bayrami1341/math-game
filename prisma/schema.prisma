@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// داشبورد معلم — کارگاه ضرب (مضاعف)
+// مدل داده برای پیشرفت دانش‌آموزان و تشخیص گلوگاه‌های یادگیری
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +10,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+// دانش‌آموز کلاس
+model Student {
   id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
+  name      String
+  grade     Int // پایه تحصیلی (۴، ۵، ۶)
+  hero      String   @default("astronaut") // astronaut | pilot | scientist
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  sessions Session[]
+  results  QuestionResult[]
+
+  @@index([grade])
 }
 
-model Post {
+// یک جلسه تمرین کامل‌شده در بازی
+model Session {
+  id          String   @id @default(cuid())
+  studentId   String
+  student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  buildingId  String   @default("unknown") // station-power | station-antenna | station-launch ...
+  layer       Int // لایه عمق ۱ تا ۹ (مدل ۹ لایه v10.1)
+  mode        String   @default("station") // station | online | side
+  total       Int
+  correct     Int
+  durationSec Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  results QuestionResult[]
+
+  @@index([studentId, createdAt])
+  @@index([createdAt])
+}
+
+// نتیجه تک‌تک سؤال‌ها — پایه تشخیص گلوگاه (a×b)
+model QuestionResult {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  sessionId String
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  studentId String // denormalized برای پرس‌وجوی سریع گلوگاه هر دانش‌آموز
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  a         Int
+  b         Int
+  correct   Boolean
+  timeSec   Float    @default(0)
+  layer     Int      @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  @@index([a, b])
+  @@index([studentId, createdAt])
+  @@index([createdAt])
 }
