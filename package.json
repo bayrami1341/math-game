@@ -1,10 +1,10 @@
 {
-  "name": "math-game-v10",
-  "version": "10.0.0",
-  "description": "کارگاه ضرب — نسخهٔ ۱۰ بر پایه دستور ثابت ایستگاه",
+  "name": "math-game-v10.1",
+  "version": "10.1.0",
+  "description": "کارگاه ضرب — نسخهٔ ۱۰.۱ با مدل داده لایه‌های عمق و گلوگاه‌های یادگیری",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/v10-station.test.js",
+    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js",
     "start": "npx serve ."
   }
 }

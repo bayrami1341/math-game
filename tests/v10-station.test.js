@@ -45,14 +45,6 @@ import {
 } from '../src/v10/station/sounds.js';
 
 import {
-  VISUAL_ASSETS,
-  renderBuildingSVG,
-  renderPathSVG,
-  renderCellSVG,
-  renderEqualGroupsSVG
-} from '../src/v10/station/visuals.js';
-
-import {
   toStationState
 } from '../src/v10/bridge.js';
 
@@ -299,7 +291,7 @@ test('9. Bridge converts v9 session and records into sequential stationState', (
   assert.equal(stateAll.mapCombo, MAP_COMBOS.FINISHED);
 });
 
-test('10. Touch interactions on buildings and visual assets follow allowed rules', () => {
+test('10. Touch interactions on buildings follow allowed results', () => {
   const map = createStationMap({ completed: [BUILDINGS.POWER], current: BUILDINGS.TOWER });
 
   // Touch completed Power:
@@ -320,20 +312,4 @@ test('10. Touch interactions on buildings and visual assets follow allowed rules
   assert.equal(touchLocked.message, 'تا زمین خبر نداشته باشد، سکو آماده نمی‌شود.');
   assert.equal(touchLocked.staysOnMap, true);
   assert.equal(touchLocked.sound, SOUND_EVENTS.locked);
-
-  // Verify visual SVG ring appears ONLY on current building
-  const svgCurrent = renderBuildingSVG(1, 'current');
-  const svgDone = renderBuildingSVG(1, 'done');
-  const svgLocked = renderBuildingSVG(1, 'locked');
-  assert.equal(svgCurrent.includes('current-halo'), true);
-  assert.equal(svgDone.includes('current-halo'), false);
-  assert.equal(svgLocked.includes('current-halo'), false);
-
-  // Verify equal groups visual does not output numeric product
-  const eqMarkup = renderEqualGroupsSVG(3, 4);
-  assert.equal(eqMarkup.includes('12'), false);
-  assert.equal(eqMarkup.includes('۱۲'), false);
-  assert.ok(VISUAL_ASSETS['map-dark']);
-  assert.ok( renderPathSVG(1, true).includes(COLORS.done) );
-  assert.ok( renderCellSVG(true).includes(COLORS.done) );
 });

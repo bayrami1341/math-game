@@ -1,5 +1,22 @@
 // The answer, profile state, and outgoing command share one IndexedDB commit.
+// در محیط‌های با حافظهٔ محدودشده (iframe شخص‌ثالث، حالت ناشناس سخت‌گیرانه)
+// به‌جای شکست، یک حافظهٔ درون‌حافظه‌ای هم‌قرارداد برمی‌گردد تا بازی متوقف نشود.
+function openMemoryLocal() {
+  const memory = new Map();
+  return Promise.resolve({
+    volatile: true,
+    get: key => Promise.resolve(memory.get(key)),
+    put: (key, value) => { memory.set(key, value); return Promise.resolve(); },
+    prepareOperation: (key, input) => Promise.resolve(memory.get(key) || (memory.set(key, input), input)),
+    migrateProfile: () => Promise.resolve(),
+    enqueue: (key, state) => { memory.set(key, state); return Promise.resolve(); },
+    pending: () => Promise.resolve([]),
+    acknowledge: () => Promise.resolve()
+  });
+}
+
 export function openLocal(indexedDB = globalThis.indexedDB) {
+  if (!indexedDB || typeof indexedDB.open !== 'function') return openMemoryLocal();
   return new Promise((resolve, reject) => {
     if (!indexedDB) return reject(new Error('حافظهٔ پایدار مرورگر در دسترس نیست.'));
     const request = indexedDB.open('math-game-v9', 1);

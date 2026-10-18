@@ -1,29 +1,30 @@
-// Bridge translating v9 state into strict v10 stationState
+// Bridge translating v9/v10.1 state into strict stationState
 import { BUILDINGS, MAP_COMBOS } from './station/constants.js';
+import { stationSystems, isUnlocked, CORE_SECTORS } from '../v9/experience.mjs';
 
 export function toStationState(session = null, records = []) {
   const safeRecords = Array.isArray(records) ? records : [];
+  const systems = stationSystems(safeRecords);
 
-  // Determine which sectors have complete records (score === total && total > 0)
-  const isSectorCompleteInRecords = (sectorId) => {
-    return safeRecords.some(r =>
-      r.sectorId === sectorId &&
-      r.total > 0 &&
-      r.score >= r.total
-    );
-  };
+  // Derive completion from pure stationSystems logic
+  const p1 = systems.find(s => s.sectorId === 1);
+  const p2 = systems.find(s => s.sectorId === 2);
+  const p3 = systems.find(s => s.sectorId === 3);
 
-  // Determine if active session has completed its sector
+  // Check if active session is finalized complete
   const isSessionFinalizedComplete = (sectorId) => {
-    if (!session || session.sectorId !== sectorId) return false;
-    if (session.status !== 'FINALIZED') return false;
+    if (!session || session.sectorId !== sectorId || session.status !== 'FINALIZED') return false;
     const total = session.questions?.length || 0;
     return total > 0 && session.score >= total;
   };
 
-  const sector1Done = isSectorCompleteInRecords(1) || isSessionFinalizedComplete(1);
-  const sector2Done = sector1Done && (isSectorCompleteInRecords(2) || isSessionFinalizedComplete(2));
-  const sector3Done = sector1Done && sector2Done && (isSectorCompleteInRecords(3) || isSessionFinalizedComplete(3));
+  const sector1Done = (p1?.complete ?? false) || isSessionFinalizedComplete(1);
+  const sector1UnlockedFor2 = (p1?.percent ?? 0) >= 80 || sector1Done;
+
+  const sector2Done = sector1Done && ((p2?.complete ?? false) || isSessionFinalizedComplete(2));
+  const sector2UnlockedFor3 = sector2Done || ((p2?.percent ?? 0) >= 80 && sector1UnlockedFor2);
+
+  const sector3Done = sector1Done && sector2Done && ((p3?.complete ?? false) || isSessionFinalizedComplete(3));
 
   const completed = [];
   if (sector1Done) completed.push(BUILDINGS.POWER);
@@ -39,11 +40,10 @@ export function toStationState(session = null, records = []) {
     current = BUILDINGS.PAD;
   }
 
-  // Count accepted answers / lit cells for each building
+  // Count lit cells from active session.
+  // Side-mission sessions never feed the core cell tracker (affectsLeaderboard: false).
   const cells = { 1: 0, 2: 0, 3: 0 };
-
-  // Calculate cells from active session
-  if (session && session.sectorId && session.questions) {
+  if (session && session.sectorId && session.questions && session.activityType !== 'side') {
     const receipts = new Map(Object.values(session.receipts || {}).map(r => [r.eventId, r]));
     let litCount = 0;
     for (const q of session.questions) {
@@ -59,7 +59,6 @@ export function toStationState(session = null, records = []) {
     cells[session.sectorId] = litCount;
   }
 
-  // If sector is completed in records, reflect max score
   for (const s of [1, 2, 3]) {
     if (completed.includes(s) && !cells[s]) {
       const rec = safeRecords.find(r => r.sectorId === s && r.total > 0 && r.score >= r.total);
@@ -79,6 +78,13 @@ export function toStationState(session = null, records = []) {
     current,
     cells,
     isFinished: completed.length === 3,
-    mapCombo
+    mapCombo,
+    systems,
+    // v10.1 metadata
+    activeDepth: session?.depth || 1,
+    activeType: session?.activityType || 'core',
+    activeMissionId: session?.missionId || null,
+    // Union of unlocked side missions across ALL sectors (each gated by its own 70% rule)
+    availableSides: systems.flatMap(s => s.availableSides || [])
   };
 }

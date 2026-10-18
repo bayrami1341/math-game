@@ -13,10 +13,16 @@ export function createStationLayer({ stationState = { completed: [], current: 1,
   const currentBuilding = map.getCurrentBuilding();
   const isFinished = map.isAllDone();
 
+  const systems = Array.isArray(stationState?.systems) ? stationState.systems : [];
+  const currentSystem = systems.find(s => s.sectorId === currentBuilding);
+
   const sheet = createStationSheet({
     currentBuilding,
     isFinished,
-    completedBuildings: map.getCompletedBuildings()
+    completedBuildings: map.getCompletedBuildings(),
+    availableSides: Array.isArray(stationState?.availableSides) ? stationState.availableSides : [],
+    // عمق بعدی برای بازی: عمق فعلی + ۱ (همان قرارداد app.js)
+    currentDepth: currentSystem?.currentDepth ? Math.min(3, currentSystem.currentDepth + 1) : 1
   });
 
   const cells = createCellTracker({
