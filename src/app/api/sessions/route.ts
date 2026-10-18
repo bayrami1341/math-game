@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { layerName } from '@/lib/dashboard/constants';
+import { nextChainFields, integrityOfResults } from '@/lib/dashboard/chain-server';
 import type { PostSessionResponse } from '@/lib/dashboard/types';
 
 export const dynamic = 'force-dynamic';
@@ -30,10 +31,12 @@ const bodySchema = z.object({
         b: z.number().int().min(0).max(20),
         correct: z.boolean(),
         timeSec: z.number().min(0).max(300).optional(),
+        submitted: z.number().int().min(0).max(400).nullable().optional(), // پاسخ واقعی دانش‌آموز (شاهد تشخیص)
       })
     )
     .min(1)
     .max(60),
+  hintsMax: z.number().int().min(0).max(7).optional(), // بیشترین پلهٔ راهنما — تشخیص تکدی سرنخ
 });
 
 export async function POST(req: Request) {
@@ -109,6 +112,27 @@ export async function POST(req: Request) {
   const total = data.results.length;
   const correct = data.results.filter((r) => r.correct).length;
 
+  // ─── فروشگاه رویداد فقط‌الحاقی (CEAP §4): ساعت لامپورت + زنجیرهٔ رسید + integrity ───
+  const chainEvent = {
+    eventId: data.eventId ?? null,
+    studentId: student.id,
+    buildingId: data.buildingId ?? 'unknown',
+    layer: data.layer,
+    mode: data.mode,
+    total,
+    correct,
+    results: data.results.map((r) => ({
+      a: r.a,
+      b: r.b,
+      correct: r.correct,
+      submitted: r.submitted ?? null,
+      timeSec: r.timeSec ?? 0,
+    })),
+  };
+  const chain = await nextChainFields(student.id, chainEvent);
+  const integrity = integrityOfResults(data.results);
+  if (!integrity) console.warn('[sessions] integrity mismatch (submitted ↔ correct) — flagged:', data.eventId);
+
   let session;
   try {
     session = await db.session.create({
@@ -121,12 +145,17 @@ export async function POST(req: Request) {
         correct,
         durationSec: Math.round(data.durationSec ?? 0),
         eventId: data.eventId,
+        lamportClock: chain.lamportClock,
+        prevReceipt: chain.prevReceipt,
+        receipt: chain.receipt,
+        integrity,
         results: {
           create: data.results.map((r) => ({
             studentId: student.id,
             a: r.a,
             b: r.b,
             correct: r.correct,
+            submitted: r.submitted ?? null,
             timeSec: r.timeSec ?? 0,
             layer: data.layer,
           })),

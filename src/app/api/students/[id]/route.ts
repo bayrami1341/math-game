@@ -1,10 +1,13 @@
 // GET /api/students/[id] — جزئیات کامل یک دانش‌آموز
 
 import { NextResponse } from 'next/server';
+import { db } from '@/lib/db';
 import { buildStudentSummary, loadDashboardData } from '@/lib/dashboard/server';
+import { computeDiagnoses } from '@/lib/dashboard/diagnosis';
 import { computeDailyTrend, computeLayerProgress, computeStudentFacts, computeTableHealth, daysAgo } from '@/lib/dashboard/stats';
 import { TABLE_TIPS, faNum, faPercent, statusFromAccuracy } from '@/lib/dashboard/constants';
 import { remedyForFact } from '@/lib/dashboard/remediation';
+import { buildChainReport } from '@/lib/dashboard/chain-server';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,6 +59,16 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   }
 
+  // Task 11-a: تاریخچهٔ بازنویسی معلم (فقط‌الحاقی) — آخرین ۱۰ رکورد
+  const [{ chain, replay }, overrideRows] = await Promise.all([
+    buildChainReport(id),
+    db.teacherOverride.findMany({
+      where: { studentId: id },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+    }),
+  ]);
+
   return NextResponse.json({
     student: summary,
     layers,
@@ -63,6 +76,20 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     bottlenecks,
     recommendations,
     recommendedRemedy,
+    // لایهٔ بالینی: موتور ۱۲خطا (CEAP §7.3) + تاریخچهٔ بازنویسی معلم (§9.2)
+    diagnoses: computeDiagnoses(questions),
+    overrides: overrideRows.map((o) => ({
+      id: o.id,
+      originalCode: o.originalCode,
+      overrideCode: o.overrideCode,
+      note: o.note,
+      createdAt: o.createdAt.toISOString(),
+    })),
+    chain: {
+      ...chain,
+      replayMatch: replay.replayMatch,
+      mismatchedSessions: replay.mismatchedSessions,
+    },
     recentSessions: sessions.slice(0, 6).map((s) => ({
       id: s.id,
       studentId: s.studentId,

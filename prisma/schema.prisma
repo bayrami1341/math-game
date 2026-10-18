@@ -21,8 +21,22 @@ model Student {
   sessions Session[]
   results  QuestionResult[]
   assignments Assignment[]
+  overrides TeacherOverride[]
 
   @@index([grade])
+}
+
+// بازنویسی تشخیص معلم (CEAP §9.2 — TEACHER_OVERRIDE فقط‌الحاقی؛ تشخیص اولیه هرگز حذف نمی‌شود)
+model TeacherOverride {
+  id           String   @id @default(cuid())
+  studentId    String
+  student      Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  originalCode String // کد تشخیص الگوریتم (E_*)
+  overrideCode String // کد تشخیص نهایی معلم
+  note         String? // یادداشت تشخیصی معلم
+  createdAt    DateTime @default(now())
+
+  @@index([studentId, createdAt])
 }
 
 // مأموریت درمانی ارسالی معلم به دانش‌آموز (حلقهٔ گزارش ← اقدام ← اجرا در بازی)
@@ -54,6 +68,11 @@ model Session {
   correct     Int
   durationSec Int      @default(0)
   eventId     String?  @unique // شناسهٔ idempotency — ریترای شبکه رکورد تکراری نمی‌سازد
+  // ─── فروشگاه رویداد فقط‌الحاقی (CEAP §4) — زنجیرهٔ رسید ───
+  lamportClock Int      @default(0) // شمارندهٔ یکنواخت رویدادها به‌ازای هر دانش‌آموز
+  prevReceipt  String? // رسید رویداد قبلی (پیوند زنجیره)
+  receipt      String? // sha256 محتوای کانونی رویداد + رسید قبلی
+  integrity    Boolean  @default(true) // false = ناسازگاری معنایی بین submitted و correct
   createdAt   DateTime @default(now())
 
   results QuestionResult[]
@@ -72,6 +91,7 @@ model QuestionResult {
   a         Int
   b         Int
   correct   Boolean
+  submitted Int?   // مقداری که دانش‌آموز واقعاً نوشته (شاهد عینی تشخیص ۱۲خطا) — null = ثبت نشده
   timeSec   Float    @default(0)
   layer     Int      @default(0)
   createdAt DateTime @default(now())

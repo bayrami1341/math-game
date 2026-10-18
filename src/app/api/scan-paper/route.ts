@@ -190,6 +190,7 @@ export async function POST(req: Request) {
             a: r.a,
             b: r.b,
             correct: r.correct,
+            submitted: r.studentAnswer, // پاسخ دست‌نویس واقعی — شاهد عینی موتور ۱۲خطا
             timeSec: 0,
             layer,
           })),

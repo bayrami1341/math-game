@@ -5,6 +5,7 @@ import type {
   BottlenecksResponse,
   OverviewResponse,
   PostAssignmentBody,
+  PostOverrideBody,
   ScanPaperAnalyzeResponse,
   StudentDetailResponse,
   StudentsResponse,
@@ -43,6 +44,20 @@ export async function postAssignment(body: PostAssignmentBody) {
     throw new Error(`خطای سرور (${res.status})`);
   }
   return (await res.json()) as { ok: boolean; duplicate?: boolean; assignment: AssignmentsResponse["assignments"][number] };
+}
+
+/** ثبت بازنویسی تشخیص معلم (CEAP §9.2 — فقط‌الحاقی) — ۲۰۱ = رکورد با برچسب TEACHER_OVERRIDE ساخته شد */
+export async function postOverride(body: PostOverrideBody) {
+  const res = await fetch("/api/overrides", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(`خطای سرور (${res.status})`);
+  }
+  return (await res.json()) as { ok: boolean; id: string };
 }
 
 /** اسکن برگهٔ کاغذی با VLM — commit=false فقط تحلیل، commit=true ثبت در پروندهٔ دانش‌آموز */

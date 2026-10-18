@@ -5,10 +5,17 @@ import { computeLayerProgress, computeStudentFacts, daysAgo, type QRow, type Ses
 import { statusFromAccuracy } from './constants';
 import type { StudentSummary } from './types';
 
+/** سطر کامل QuestionResult برای موتور تشخیص ۱۲خطا (Task 11-a) — QRow + فیلدهای بالینی */
+export type ClinicalQRow = QRow & {
+  submitted: number | null; // پاسخ واقعی دانش‌آموز — شاهد عینی تشخیص
+  timeSec: number; // زمان پاسخ‌گویی — شاهد خستگی/حدس
+  sessionId: string;
+};
+
 export interface DashboardData {
   students: { id: string; name: string; grade: number; hero: string; createdAt: Date }[];
   sessions: SessRow[];
-  questions: QRow[];
+  questions: ClinicalQRow[];
   studentsById: Map<string, { id: string; name: string }>;
 }
 
@@ -18,7 +25,8 @@ export async function loadDashboardData(questionsSinceDays = 30): Promise<Dashbo
     db.session.findMany({ orderBy: { createdAt: 'desc' } }),
     db.questionResult.findMany({
       where: { createdAt: { gte: daysAgo(questionsSinceDays) } },
-      select: { a: true, b: true, correct: true, studentId: true, createdAt: true },
+      // Task 11-a: submitted/timeSec/sessionId برای موتور تشخیص ۱۲خطا افزوده شد (افزودنی — مصرف‌کننده‌های قبلی فقط زیرمجموعه می‌خوانند)
+      select: { a: true, b: true, correct: true, submitted: true, timeSec: true, sessionId: true, studentId: true, createdAt: true },
       orderBy: { createdAt: 'asc' },
     }),
   ]);

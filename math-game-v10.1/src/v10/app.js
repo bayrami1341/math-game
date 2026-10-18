@@ -16,6 +16,7 @@ import {
   multiplicationModel
 } from '../v9/experience.mjs';
 import { toStationState } from './bridge.js';
+import { buildLadder } from './station/ladder.js';
 import {
   createStationLayer,
   COLORS,
@@ -51,8 +52,15 @@ let selectedId = null;
 let soundEnabled = false;
 let currentView = 'map'; // 'map' | 'question'
 let activeQuestionIndex = 0;
-let showGuide = false;
+let showGuide = false; // فقط راهنمای نقشه (map-guide-info) — راهنمای سؤال با نردبان محلی مدیریت می‌شود
 let stationLayer = null;
+
+// ─── نردبان داربست ۷پله‌ای (CEAP §8) + ضد تکدی سرنخ (§3.2) ───
+let hintLevel = 0;                 // پلهٔ جاری نردبان در سؤال جاری
+let legacyGuideShown = false;      // fallback قدیمی (وقتی buildLadder null باشد)
+let hintCooldownUntil = 0;         // مهر زمانی سرد شدن دکمهٔ راهنما
+let hintCooldownTimer = null;      // id تایمر سرد شدن — در render بعدی پاک می‌شود
+let questionStartedAt = 0;         // زمان‌سنجی سؤال جاری برای timeSec
 let teacherClass = null;
 let teacherMissions = []; // مأموریت‌های در انتظار معلم (از داشبورد — داشبورد اختیاری است)
 
@@ -273,6 +281,65 @@ function renderChildShell(stationState) {
   }
 }
 
+// ─── نردبان راهنمای سؤال: عنوان دکمه، سرد شدن، و رندر ناحیهٔ راهنما ───
+const guideButtonLabel = () => `💡 راهنما (گام ${fa(hintLevel)} از ${fa(7)})`;
+
+function clearHintCooldownTimer() {
+  if (hintCooldownTimer) {
+    clearTimeout(hintCooldownTimer);
+    hintCooldownTimer = null;
+  }
+}
+
+// سرد شدن افزایشی (CEAP §3.2 — ضد تکدی سرنخ): پس از پلهٔ ۲ ← ۵ ثانیه، پس از پلهٔ ۴ ← ۱۰ ثانیه
+function applyHintCooldown(seconds) {
+  hintCooldownUntil = Date.now() + seconds * 1000;
+  const btn = $('question-guide-button');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = 'کمی صبر…';
+  clearHintCooldownTimer();
+  hintCooldownTimer = setTimeout(() => {
+    hintCooldownTimer = null;
+    hintCooldownUntil = 0;
+    const b = $('question-guide-button');
+    if (!b || currentView !== 'question') return; // سؤال عوض شده؛ render بعدی خودش می‌چیند
+    b.disabled = false;
+    b.textContent = guideButtonLabel();
+  }, seconds * 1000);
+}
+
+// رندر ناحیهٔ راهنمای سؤال بر اساس وضعیت محلی (نردبان یا fallback قدیمی)
+function renderGuideArea(question) {
+  const area = $('question-guide-area');
+  if (!area) return;
+  const ladder = question ? buildLadder({ f1: question.f1, f2: question.f2 }) : null;
+
+  if (ladder && hintLevel > 0) {
+    const step = ladder[hintLevel - 1];
+    if (step) {
+      area.hidden = false;
+      let html = `<p class="guide-box">${step.textFa}</p>`;
+      if (step.visual === 'equal-groups') {
+        html += renderEqualGroupsSVG(question.f1, question.f2);
+      }
+      area.innerHTML = html;
+      return;
+    }
+  }
+
+  if (!ladder && legacyGuideShown) {
+    // fallback امن: راهنمای یک‌پله‌ای قدیمی (createQuestionGuide) — رفتار قبل
+    const qGuide = stationLayer.guide.createQuestionGuide(question);
+    area.hidden = false;
+    area.innerHTML = qGuide ? renderEqualGroupsSVG(qGuide.groupsCount, qGuide.itemsPerGroup) : '';
+    return;
+  }
+
+  area.hidden = true;
+  area.innerHTML = '';
+}
+
 function renderQuestionView() {
   const session = state.session;
   const questions = session?.questions || [];
@@ -304,13 +371,18 @@ function renderQuestionView() {
   $('answer-input').value = '';
   $('answer-input').focus();
 
-  const qGuide = stationLayer.guide.createQuestionGuide(question);
-  if (qGuide && showGuide) {
-    $('question-guide-area').hidden = false;
-    $('question-guide-area').innerHTML = renderEqualGroupsSVG(qGuide.groupsCount, qGuide.itemsPerGroup);
-  } else {
-    $('question-guide-area').hidden = true;
+  // سؤال جدید: نردبان از پلهٔ صفر، دکمهٔ راهنما فعال، زمان‌سنجی از نو
+  hintLevel = 0;
+  legacyGuideShown = false;
+  hintCooldownUntil = 0;
+  clearHintCooldownTimer();
+  questionStartedAt = Date.now();
+  const guideBtn = $('question-guide-button');
+  if (guideBtn) {
+    guideBtn.disabled = false;
+    guideBtn.textContent = guideButtonLabel();
   }
+  renderGuideArea(question);
 }
 
 async function handleAnswerSubmit(userAnswer) {
@@ -318,10 +390,22 @@ async function handleAnswerSubmit(userAnswer) {
   const question = session.questions[activeQuestionIndex];
   const expected = question.f1 * question.f2;
   const isCorrect = Number(normalizeDigits(userAnswer)) === expected;
+  // زمان‌سنجی سؤال (گرد تا یک دهم ثانیه) — برای receipt و تلاش‌نگار
+  const elapsedSec = questionStartedAt
+    ? Math.round(((Date.now() - questionStartedAt) / 1000) * 10) / 10
+    : 0;
 
   const result = stationLayer.cells.onAnswer(isCorrect);
 
   if (!isCorrect) {
+    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): پاسخ‌های غلط حذف نمی‌شوند — شاهد تشخیص گلوگاه
+    session.wrongAttempts = session.wrongAttempts || [];
+    session.wrongAttempts.push({
+      questionId: question.questionId,
+      submitted: Number(normalizeDigits(userAnswer)),
+      timeSec: elapsedSec,
+      at: new Date().toISOString()
+    });
     $('question-feedback').textContent = result.feedback;
     void playStationAudio(result.sound);
     return;
@@ -344,6 +428,7 @@ async function handleAnswerSubmit(userAnswer) {
     questionId: question.questionId,
     correct: true,
     status: 'ACKNOWLEDGED',
+    timeSec: elapsedSec, // زمان طی‌شده روی این سؤال (فیلد اضافی مجاز)
     serverTime: new Date().toISOString()
   };
 
@@ -362,6 +447,24 @@ async function handleAnswerSubmit(userAnswer) {
       score: session.score,
       total: session.total
     });
+
+    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): تاریخچهٔ کامل جلسه موازی با رکورد «بهترین» نگه داشته می‌شود
+    // keepStationRecord دست‌نخورده می‌ماند (نمایش «بهترین» UI است)؛ اینجا فقط ضمیمه می‌کنیم.
+    state.attemptLog = state.attemptLog || [];
+    const attemptEntry = {
+      eventId: 'evt_' + crypto.randomUUID(),
+      activityId: session.activityId,
+      sectorId: session.sectorId,
+      depth: session.depth,
+      missionId: session.missionId || null,
+      type: session.activityType || 'core',
+      total: session.total,
+      correct: session.questions.filter(q => session.answers?.[q.questionId]).length,
+      wrongCount: (session.wrongAttempts || []).length,
+      hintsMax: session.hintsMax || 0,
+      completedAt: new Date().toISOString()
+    };
+    state.attemptLog = state.attemptLog.slice(-499).concat(attemptEntry); // سقف ۵۰۰ ورودی
 
     await saveState(state);
 
@@ -396,11 +499,28 @@ async function handleAnswerSubmit(userAnswer) {
             mode: session.activityType === 'side' ? 'side' : 'station',
             missionId: session.missionId || undefined,
             durationSec: spanSec,
-            results: (session.questions || []).map(q => ({
-              a: q.f1 ?? 0,
-              b: q.f2 ?? 0,
-              correct: !!(session.answers && session.answers[q.questionId])
-            }))
+            hintsMax: session.hintsMax || 0, // بیشترین پلهٔ نردبان راهنما — تشخیص تکدی سرنخ
+            results: (session.questions || []).map(q => {
+              const answered = !!(session.answers && session.answers[q.questionId]);
+              // شواهد فقط‌الحاقی: آخرین پاسخ واقعی دانش‌آموز برای هر سؤال
+              const wrongs = (session.wrongAttempts || []).filter(w => w && w.questionId === q.questionId);
+              const lastWrong = wrongs.length ? wrongs[wrongs.length - 1] : null;
+              const receipt = Object.values(session.receipts || {}).find(r => r && r.questionId === q.questionId);
+              const item = {
+                a: q.f1 ?? 0,
+                b: q.f2 ?? 0,
+                correct: answered
+              };
+              if (answered) {
+                item.submitted = q.f1 * q.f2; // نهایی درست
+              } else if (lastWrong && Number.isFinite(lastWrong.submitted)) {
+                item.submitted = lastWrong.submitted; // آخرین پاسخ غلط (شاهد تشخیص)
+              }
+              if (receipt && Number.isFinite(receipt.timeSec)) {
+                item.timeSec = receipt.timeSec;
+              }
+              return item;
+            })
           })
         }).catch(() => {});
       }
@@ -451,7 +571,9 @@ function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = 
     receipts: {},
     status: 'IN_PROGRESS',
     bottleneckHits: DEPTH_LAYERS[`${buildingId}-${depth}`]?.focus?.bottleneckTypes || [],
-    fluentCount: depth === 2 ? questions.length : 0
+    fluentCount: depth === 2 ? questions.length : 0,
+    wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1)
+    hintsMax: 0 // بیشترین پلهٔ نردبان راهنما در این جلسه
   };
 
   activeQuestionIndex = 0;
@@ -484,7 +606,9 @@ function startSideMission(missionId) {
     receipts: {},
     status: 'IN_PROGRESS',
     bottleneckHits: [...new Set(questions.map(q => q.strategy))],
-    fluentCount: 0
+    fluentCount: 0,
+    wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — مسیر مأموریت جانبی هم پوشش داده می‌شود
+    hintsMax: 0
   };
 
   activeQuestionIndex = 0;
@@ -563,9 +687,31 @@ function setupEvents() {
     $('map-guide-info').hidden = !showGuide;
   });
 
+  // نردبان داربست ۷پله‌ای (CEAP §8) + سرد شدن ضد تکدی سرنخ (§3.2)
   $('question-guide-button').addEventListener('click', () => {
-    showGuide = !showGuide;
-    renderQuestionView();
+    if (Date.now() < hintCooldownUntil) return; // در سرد شدن دکمه disabled است؛ محافظ مضاعف
+    const session = state.session;
+    const question = session?.questions?.[activeQuestionIndex];
+    if (!question) return;
+
+    hintLevel = Math.min(7, hintLevel + 1);
+    session.hintsMax = Math.max(session.hintsMax || 0, hintLevel); // بیشترین پلهٔ جلسهٔ جاری
+
+    const ladder = buildLadder({ f1: question.f1, f2: question.f2 });
+    if (ladder) {
+      legacyGuideShown = false;
+    } else {
+      // fallback امن: راهنمای یک‌پله‌ای قدیمی با toggle محلی (نه showGuide نقشه)
+      legacyGuideShown = !legacyGuideShown;
+    }
+
+    renderGuideArea(question);
+
+    const btn = $('question-guide-button');
+    if (btn) btn.textContent = guideButtonLabel();
+
+    if (ladder && hintLevel === 2) applyHintCooldown(5);
+    else if (ladder && hintLevel === 4) applyHintCooldown(10);
   });
 
   $('question-speak').addEventListener('click', () => {
@@ -576,6 +722,7 @@ function setupEvents() {
     stationLayer.cells.onAbandon();
     currentView = 'map';
     showGuide = false;
+    clearHintCooldownTimer(); // تایمر سرد شدن راهنما در render بعدی دوباره چیده می‌شود
     void refreshTeacherMissions();
     render();
   });

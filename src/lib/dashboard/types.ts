@@ -1,6 +1,7 @@
 // انواع مشترک داشبورد معلم — قرارداد API و فرانت‌اند
 
 import type { Remedy } from './remediation';
+import type { CpaStage } from './error-model';
 
 export type Severity = 'critical' | 'high' | 'medium';
 export type StudentStatus = 'excellent' | 'good' | 'practice' | 'critical';
@@ -118,6 +119,54 @@ export interface StudentDetailResponse {
   recommendations: string[];
   recommendedRemedy: Remedy | null; // ماموریت درمانی بر اساس ضعیف‌ترین فاکتور
   recentSessions: SessionSummary[];
+  diagnoses: DiagnosisItem[]; // لایهٔ بالینی: مدل ۱۲خطا (CEAP §7.3 و §9.1)
+  overrides: OverrideItem[]; // تاریخچهٔ بازنویسی معلم (فقط‌الحاقی)
+  chain: ChainReportResponse; // وضعیت زنجیرهٔ رسید و بازپخش قطعی
+}
+
+// ─── لایهٔ بالینی: تشخیص ۱۲خطا (CEAP §7.3 / §9.1) ───
+
+export interface DiagnosisItem {
+  code: string; // E_SKIP_OVERCOUNT ...
+  titleFa: string;
+  cpaStage: CpaStage; // Concrete | Pictorial | Abstract
+  cpaLabelFa: string; // مجسم / تصویری / انتزاعی
+  confidence: number; // 0..1 — فاصلهٔ اطمینان الگوریتم
+  attempts: number;
+  errorRate: number; // 0..1
+  medianTimeSec: number;
+  sampleFacts: string[]; // شواهد عینی (مثل «۷×۸»)
+  patternFa: string; // توضیح مفهومی الگو بدون اصطلاح پیچیده
+  actionFa: string; // اقدام پیشنهادی قابل اجرا در کلاس
+}
+
+export interface OverrideItem {
+  id: string;
+  originalCode: string;
+  overrideCode: string;
+  note: string | null;
+  createdAt: string;
+}
+
+export interface PostOverrideBody {
+  studentId: string;
+  originalCode: string;
+  overrideCode: string;
+  note?: string;
+}
+
+// ─── فروشگاه رویداد فقط‌الحاقی (CEAP §4) ───
+
+export interface ChainReportResponse {
+  valid: boolean; // زنجیرهٔ رسید سالم است
+  integrityOk: boolean; // ناسازگاری submitted ↔ correct وجود ندارد
+  sessions: number;
+  verified: number;
+  legacyCount: number; // جلسات پیش از ساخت زنجیره
+  brokenAt: string | null;
+  clockOrdered: boolean;
+  replayMatch: boolean; // بازپخش قطعی با مقادیر ذخیره‌شده منطبق است
+  mismatchedSessions: string[];
 }
 
 export interface BottlenecksResponse {
@@ -137,7 +186,8 @@ export interface PostSessionBody {
   layer: number;
   mode?: 'station' | 'online' | 'side';
   durationSec?: number;
-  results: { a: number; b: number; correct: boolean; timeSec?: number }[];
+  results: { a: number; b: number; correct: boolean; timeSec?: number; submitted?: number | null }[];
+  hintsMax?: number; // بیشترین پلهٔ راهنمای استفاده‌شده در جلسه (تشخیص تکدی سرنخ)
 }
 
 export interface PostSessionResponse {

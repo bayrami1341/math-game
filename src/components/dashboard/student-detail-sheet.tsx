@@ -1,14 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   BatteryCharging,
   CheckCircle2,
   ClipboardList,
   Gamepad2,
+  History,
   Lightbulb,
+  Link2,
   Loader2,
   Lock,
+  PenLine,
   RadioTower,
   Rocket,
   Route,
@@ -22,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { AccuracyBadge, errorBarClass } from "@/components/dashboard/accuracy-badge";
 import { TrendBars } from "@/components/dashboard/trend-bars";
 import { EmptyState, SectionTitle } from "@/components/dashboard/state-views";
+import { OverrideDialog } from "@/components/dashboard/override-dialog";
 import { fetchStudentAssignments, fetchStudentDetail, postAssignment } from "@/components/dashboard/api";
 import {
   HERO_CONFIG,
@@ -33,7 +38,10 @@ import {
 import type {
   AssignmentItem,
   AssignmentStatus,
+  ChainReportResponse,
+  DiagnosisItem,
   FactStat,
+  OverrideItem,
   StudentDetailResponse,
 } from "@/lib/dashboard/types";
 import { cn } from "@/lib/utils";
@@ -172,6 +180,186 @@ function TeacherAssignmentsSection({ studentId }: { studentId: string }) {
   );
 }
 
+/** بج زنجیرهٔ رویداد فقط‌الحاقی (CEAP §4) — سلامت رسید و انطباق بازپخش قطعی */
+function ChainBadge({ chain }: { chain: ChainReportResponse }) {
+  const healthy = chain.valid && chain.replayMatch;
+  const title = healthy
+    ? "زنجیرهٔ رویداد فقط‌الحاقی این دانش‌آموز سالم است: ترتیب زمانی ساعت‌منظم و بازپخش قطعی منطبق با مقادیر ذخیره‌شده."
+    : "زنجیرهٔ رویداد این دانش‌آموز نیازمند بررسی است: یکپارچگی رسید یا انطباق بازپخش قطعی برقرار نیست.";
+  return (
+    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+      <Badge
+        variant="outline"
+        title={title}
+        className={cn(
+          "gap-1.5",
+          healthy
+            ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+            : "border-rose-200 bg-rose-50 text-rose-700"
+        )}
+      >
+        <Link2 className="size-3" aria-hidden />
+        {healthy
+          ? `زنجیرهٔ رویداد سالم · ${faNum(chain.verified)} رویداد راستی‌آزمایی‌شده`
+          : "زنجیرهٔ رویداد نیازمند بررسی"}
+      </Badge>
+      {chain.legacyCount > 0 ? (
+        <span className="text-[11px] text-slate-400">
+          (شامل {faNum(chain.legacyCount)} رویداد پیش از ساخت زنجیره)
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
+/** رنگ نوار فاصلهٔ اطمینان — پالت مجاز: ≥۰٫۶۵ emerald، ≥۰٫۵ amber، کمتر slate */
+function confidenceBarClass(confidence: number): string {
+  if (confidence >= 0.65) return "bg-emerald-500";
+  if (confidence >= 0.5) return "bg-amber-500";
+  return "bg-slate-400";
+}
+
+/** کارت یک تشخیص بالینی (حداکثر ۳ تشخیص بر اساس confidence نزولی) */
+function DiagnosisCard({ diagnosis, onOverride }: { diagnosis: DiagnosisItem; onOverride: () => void }) {
+  return (
+    <article className="rounded-xl border border-slate-200 bg-white p-3.5">
+      <div className="flex flex-wrap items-center gap-2">
+        <span
+          dir="ltr"
+          className="rounded-full border border-slate-300 bg-slate-100 px-2.5 py-0.5 font-mono text-[11px] font-bold text-slate-700"
+        >
+          {diagnosis.code}
+        </span>
+        <h4 className="text-sm font-bold text-slate-800">{diagnosis.titleFa}</h4>
+        <Badge variant="outline" className="border-teal-200 bg-teal-50 text-teal-700">
+          {diagnosis.cpaLabelFa}
+        </Badge>
+      </div>
+
+      <div className="mt-2.5 flex items-center gap-2.5">
+        <div className="h-1.5 w-24 shrink-0 overflow-hidden rounded-full bg-slate-100" aria-hidden>
+          <div
+            className={cn("h-full rounded-full", confidenceBarClass(diagnosis.confidence))}
+            style={{ width: `${Math.max(3, Math.round(diagnosis.confidence * 100))}%` }}
+          />
+        </div>
+        <p className="text-[11px] text-slate-500">
+          فاصلهٔ اطمینان{" "}
+          <span className="font-semibold tabular-nums text-slate-700">
+            {faPercent(diagnosis.confidence)}
+          </span>
+        </p>
+      </div>
+
+      <p className="mt-2 text-xs leading-6 text-slate-600">
+        {faNum(diagnosis.attempts)} تلاش · خطای {faPercent(diagnosis.errorRate)} · میانهٔ پاسخ{" "}
+        {faNum(diagnosis.medianTimeSec, 1)} ثانیه
+      </p>
+
+      {diagnosis.sampleFacts.length > 0 ? (
+        <p className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500">
+          <span className="shrink-0">نمونهٔ فاکتورها:</span>
+          {diagnosis.sampleFacts.map((fact, i) => (
+            <span
+              key={`${fact}-${i}`}
+              dir="ltr"
+              className="rounded border border-slate-200 bg-slate-50 px-1.5 py-0.5 font-mono text-[11px] text-slate-700"
+            >
+              {fact}
+            </span>
+          ))}
+        </p>
+      ) : null}
+
+      <p className="mt-2 text-xs leading-6 text-slate-600">{diagnosis.patternFa}</p>
+
+      <p className="mt-2 flex items-start gap-1.5 text-xs leading-6 text-slate-700">
+        <Lightbulb className="mt-0.5 size-4 shrink-0 text-amber-500" aria-hidden />
+        <span>{diagnosis.actionFa}</span>
+      </p>
+
+      <Button
+        size="sm"
+        type="button"
+        variant="outline"
+        onClick={onOverride}
+        className="mt-3 min-h-11 border-emerald-200 text-emerald-700 hover:bg-emerald-50 focus-visible:ring-emerald-600"
+      >
+        <PenLine className="size-4" aria-hidden />
+        بازنویسی تشخیص
+      </Button>
+    </article>
+  );
+}
+
+/** بخش «تشخیص بالینی (مدل ۱۲خطا)» — خالی بودن شواهد با یک خط آرام (نه EmptyState سنگین) */
+function ClinicalDiagnosesSection({
+  diagnoses,
+  onOverride,
+}: {
+  diagnoses: DiagnosisItem[];
+  onOverride: (diagnosis: DiagnosisItem) => void;
+}) {
+  return (
+    <section aria-label="تشخیص بالینی مدل ۱۲خطا">
+      <SectionTitle className="mb-2">تشخیص بالینی (مدل ۱۲خطا)</SectionTitle>
+      {diagnoses.length === 0 ? (
+        <p className="rounded-xl border border-slate-200 bg-slate-50/60 px-3.5 py-3 text-xs leading-6 text-slate-500">
+          شواهد کافی برای تشخیص شناختی هنوز جمع نشده است.
+        </p>
+      ) : (
+        <div className="space-y-3">
+          {diagnoses.map((diagnosis) => (
+            <DiagnosisCard
+              key={diagnosis.code}
+              diagnosis={diagnosis}
+              onOverride={() => onOverride(diagnosis)}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
+/** بخش «تاریخچهٔ بازنویسی معلم» — فقط وقتی حداقل یک بازنویسی ثبت شده باشد */
+function OverrideHistorySection({ overrides }: { overrides: OverrideItem[] }) {
+  return (
+    <section aria-label="تاریخچهٔ بازنویسی معلم">
+      <SectionTitle icon={<History className="size-4 text-emerald-600" aria-hidden />} className="mb-2">
+        تاریخچهٔ بازنویسی معلم
+      </SectionTitle>
+      <div className="max-h-96 space-y-2 overflow-y-auto custom-scroll pe-1">
+        <ul className="space-y-2">
+          {overrides.map((item) => (
+            <li key={item.id} className="rounded-xl border border-slate-200 bg-white p-3">
+              <div className="flex flex-wrap items-center gap-2">
+                <span
+                  dir="ltr"
+                  className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 font-mono text-[11px] font-bold text-slate-600"
+                >
+                  {item.originalCode}
+                </span>
+                <span className="text-xs text-slate-400" aria-hidden>
+                  ←
+                </span>
+                <span
+                  dir="ltr"
+                  className="rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-0.5 font-mono text-[11px] font-bold text-emerald-700"
+                >
+                  {item.overrideCode}
+                </span>
+              </div>
+              {item.note ? <p className="mt-1.5 text-xs leading-6 text-slate-600">{item.note}</p> : null}
+              <p className="mt-1 text-[11px] tabular-nums text-slate-500">{faRelative(item.createdAt)}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 interface StudentDetailSheetProps {
   studentId: string | null;
   onOpenChange: (open: boolean) => void;
@@ -203,6 +391,10 @@ function FactRow({ fact }: { fact: FactStat }) {
 }
 
 export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailSheetProps) {
+  // بازنویسی تشخیص — هدف فعلی + باز بودن دیالوگ (هدف null نمی‌شود تا انیمیشن خروج دیالوگ خالی نماند)
+  const [overrideTarget, setOverrideTarget] = useState<DiagnosisItem | null>(null);
+  const [overrideOpen, setOverrideOpen] = useState(false);
+
   const detailQuery = useQuery({
     queryKey: ["student-detail", studentId],
     queryFn: () => fetchStudentDetail(studentId as string),
@@ -217,7 +409,13 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
   const heroLabel = detail ? (HERO_CONFIG[detail.student.hero]?.label ?? detail.student.hero) : "";
 
   return (
-    <Sheet open={!!studentId} onOpenChange={onOpenChange}>
+    <Sheet
+      open={!!studentId}
+      onOpenChange={(open) => {
+        if (!open) setOverrideOpen(false);
+        onOpenChange(open);
+      }}
+    >
       <SheetContent
         side="left"
         className="w-full overflow-y-auto sm:max-w-xl custom-scroll"
@@ -272,6 +470,9 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
                 </div>
               </div>
             </SheetHeader>
+
+            {/* بج زنجیرهٔ رویداد فقط‌الحاقی (CEAP §4) — زیر هدر دانش‌آموز */}
+            <ChainBadge chain={detail.chain} />
 
             {/* مسیر ۹ لایهٔ عمق */}
             <section>
@@ -348,12 +549,28 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
               )}
             </section>
 
+            {/* مأموریت درمانی در بازی — کارت خودتوصیف (پیش از لایهٔ بالینی) */}
+            {detail.recommendedRemedy ? (
+              <div>
+                <RemedyCard detail={detail} />
+              </div>
+            ) : null}
+
+            {/* تشخیص بالینی (مدل ۱۲خطا) — لایهٔ بالینی CEAP §7.3/§9.1 */}
+            <ClinicalDiagnosesSection
+              diagnoses={detail.diagnoses}
+              onOverride={(diagnosis) => {
+                setOverrideTarget(diagnosis);
+                setOverrideOpen(true);
+              }}
+            />
+
+            {/* تاریخچهٔ بازنویسی معلم — فقط وقتی حداقل یک بازنویسی ثبت شده باشد */}
+            {detail.overrides.length > 0 ? <OverrideHistorySection overrides={detail.overrides} /> : null}
+
             {/* پیشنهادهای آموزشی */}
             <section>
               <SectionTitle className="mb-2">پیشنهادهای آموزشی</SectionTitle>
-              <div className="mb-3">
-                <RemedyCard detail={detail} />
-              </div>
               {detail.recommendations.length === 0 ? (
                 <EmptyState title="پیشنهادی ثبت نشده است" />
               ) : (
@@ -395,6 +612,16 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
                 </ul>
               )}
             </section>
+
+            {/* دیالوگ بازنویسی تشخیص (CEAP §9.2 — فقط‌الحاقی) */}
+            <OverrideDialog
+              studentId={detail.student.id}
+              studentName={detail.student.name}
+              open={overrideOpen}
+              onOpenChange={setOverrideOpen}
+              originalCode={overrideTarget?.code ?? ""}
+              originalTitleFa={overrideTarget?.titleFa ?? ""}
+            />
           </div>
         )}
       </SheetContent>
