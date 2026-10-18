@@ -95,3 +95,43 @@ Stage Summary:
 - هر دو معیار پذیرش پلن مصوب بسته شد: (۱) «یک بازی واقعی، رکوردهایش در SQLite بنشیند بدون تکرار» — idempotency فعال و تست‌شده؛ (۲) «هر گزارش گلوگاه با یک اقدام تمام شود» — ۱۳/۱۳ گلوگاه به ماموریت درمانی نگاشت شدند
 - حلقهٔ کامل محصول اکنون سرتاسری است: بازی → sync idempotent → SQLite → داشبورد → توصیهٔ ماموریت درمانی → اجرای همان ماموریت در بازی
 - قرارداد API پس‌سازگار است: بدنه‌های بدون eventId (کلاینت‌های قدیمی) مثل قبل 201 می‌گیرند
+
+---
+Task ID: 9-c
+Agent: Z.ai Code (main)
+Task: حلقهٔ اقدام معلم در فرانت — دکمهٔ «ارسال مأموریت به دانش‌آموز» + بخش «مأموریت‌های معلم» در Sheet، دیالوگ «اسکن برگهٔ کاغذی» (VLM) با دکمهٔ هدر، و توابع API فرانت‌اند
+
+Work Log:
+- worklog.md خوانده شد؛ قراردادهای types.ts (AssignmentItem/PostAssignmentBody/ScanPaperAnalyzeResponse)، constants.ts و remediation.ts مرور شد؛ دو API آمادهٔ assignments و scan-paper با خواندن سورس route.ts تأیید شدند
+- api.ts: سه تابع جدید با همان الگوی فایل (fetch نسبی + cache:'no-store') اضافه شد: postAssignment (POST /api/assignments — پاسخ ۲۰۰ duplicate و ۲۰۱ ساخت هر دو موفق شمرده می‌شوند)، fetchStudentAssignments (GET با studentId) و analyzePaper(dataUrl, commit, studentId?) (POST /api/scan-paper)
+- student-detail-sheet.tsx: (۱) داخل RemedyCard دکمهٔ «ارسال مأموریت به دانش‌آموز» (آیکون Send، سبز emerald، min-h-11 برای تاچ‌تارگت ۴۴px) با useMutation — بدنهٔ {studentId, missionId, fact: bottlenecks[0]?.fact}؛ onSuccess توست موفق «مأموریت «{title}» برای {name} ارسال شد» (با توضیح متمایز برای duplicate:true) + invalidate ['student-detail', id] و ['student-assignments', id]؛ onError توست destructive الگوی ai-report-dialog؛ حین pending دکمهٔ disabled + Loader2 animate-spin و متن «در حال ارسال…» (۲) بخش جدید «مأموریت‌های معلم» بعد از «پیشنهادهای آموزشی» با useQuery کلید ['student-assignments', studentId] — هر آیتم: عنوان مأموریت + بج وضعیت فارسی (pending=«در انتظار انجام» amber / seen=«دانش‌آموز دیده است» teal / completed=«انجام شد» emerald با dot) + fact با dir=ltr mono + faRelative(createdAt) + note؛ لیست در max-h-96 overflow-y-auto custom-scroll؛ خالی یا لودینگ = هیچ (نه EmptyState)
+- scan-paper-dialog.tsx (فایل جدید ~۳۳۰ خط): DialogTitle «اسکن برگهٔ کاغذی» + توضیح دقیق درخواستی؛ Select دانش‌آموز از useQuery ['students'] (۱۳ گزینه، Skeleton حین لود)؛ آپلود با input file مخفی sr-only + دکمهٔ «انتخاب عکس برگه» (accept="image/*" → دوربین موبایل خودکار)؛ FileReader → dataURL سمت کلاینت؛ سقف ۶MB با پیام inline (تست شد با تصویر ۱۰MB)؛ پیش‌نمایش <img> با max-h-48 و alt فارسی؛ دکمهٔ «تحلیل برگه» (ScanLine) بدون فایل disabled؛ حین فراخوانی spinner + Skeleton + متن «تا ۱۵ ثانیه» با role=status aria-live؛ نتیجه: دو بج «تعداد مسئله/تعداد درست» با faNum + چیپ‌های factStats (mono dir=ltr + نوار errorBarClass + faPercent) + متن notes + هشدار amber برای unreadable>0؛ دکمهٔ «ثبت در داشبورد» بدون دانش‌آموز → خطای inline با role=alert (تست شد)؛ commit موفق → توست «{stored} نتیجه به پروندهٔ {name} اضافه شد» + invalidate ['students']/['overview']/['bottlenecks']/['student-detail'] + بستن دیالوگ؛ ریست کامل state و mutation.reset() هنگام بستن
+- باگ a11y حین E2E کشف و رفع شد: پذیرش aria-describedby={custom-id} روی DialogContent + id سفارشی روی DialogDescription، چک داخلی Radix را می‌شکند (Radix id تولیدی خودش را در DOM جست‌وجو می‌کند و هشدار «Missing Description» می‌دهد) → حذف id سفارشی و اتکا به اتصال خودکار Radix (content توصیف‌گر را می‌گیرد) → صفر هشدار
+- page.tsx: state scanOpen مشابه aiOpen + دکمهٔ هدر «اسکن برگه» (آیکون ScanLine، variant outline، بین «بازآوری» و «گزارش هوشمند AI»، aria-label کامل در موبایل) + رندر ScanPaperDialog در لایه‌های سراسری
+- E2E مرورگری کامل (agent-browser): هدر → تب دانش‌آموزان → Sheet «باران قاسمی» → کلیک «ارسال مأموریت به دانش‌آموز» → توست موفق + ظهور بخش «مأموریت‌های معلم» با بج «در انتظار انجام»، فکت 2×4 و «همین حالا» (اسکرین‌شات)؛ کلیک دوباره → duplicate:true و توست تکراری — تأیید دقیقاً ۱ رکورد در DB با curl؛ دیالوگ اسکن بدون فایل → دکمهٔ تحلیل disabled؛ آپلود برگهٔ واقعی ساخته‌شده با PIL (۸ مسئله) → تحلیل VLM در ~۱۵ ثانیه → ۸ مسئله/۵ درست + چیپ‌های 3×4، 4×8، 6×7 با ٪۱۰۰ (بازمحاسبهٔ سرور درست بود حتی وقتی متن آزاد VLM اشتباه شمرد)؛ ثبت بدون دانش‌آموز → خطای inline؛ انتخاب «امیر کاظمی» و commit → دیالوگ بست + totalQuestions او دقیقاً +۸ شد و weakestFact به‌روز شد؛ agent-browser errors خالی؛ mobile-safe (گرید تک‌ستونه)
+- رکوردهای واقعی ساخته‌شده برای عامل E2E بعدی نگه داشته شد: ۱ assignment (pending، side-1-antenna، fact 2×4 برای باران قاسمی) + ۱ جلسهٔ mode='paper' (۸ سؤال برای امیر کاظمی)
+- bun run lint: صفر خطا/هشدار | dev.log: بدون خطای کامپایل (دو هشدار Fast Refresh قدیمی فقط حین ویرایش داغ فایل‌ها بود و پس از کامپایل نهایی هیچ خطایی نیست)
+
+Stage Summary:
+- حلقهٔ «گزارش ← اقدام» از سمت معلم کامل شد: معلم از Sheet یک کلیک مأموریت درمانی می‌فرستد، وضعیتش را زنده می‌بیند و از بازی بازخورد می‌گیرد؛ برگهٔ کاغذی هم با VLM به همان موتور گلوگاه تزریق می‌شود (mode='paper')
+- سه فایل تغییر یافت (api.ts، student-detail-sheet.tsx، page.tsx) و یک فایل ساخته شد (scan-paper-dialog.tsx) — هیچ تغییری در API routes، src/lib/dashboard/**، بازی و prisma نرفت؛ globals.css هم دست نخورد (custom-scroll موجود کافی بود)
+- درس فنی: با Radix Dialog هرگز id سفارشی روی DialogDescription/aria-describedby سفارشی متفاوت ندهید — اتصال خودکار Radix هم درست است هم بدون هشدار
+- نکتهٔ باقی‌مانده: PATCH دکمهٔ «seen/completed» UI ندارد (توسط بازی/تکمیل خودکار ست می‌شود) — خارج از scope این تسک
+
+---
+Task ID: 9 (a,b,d,e) — subagent 9-c جداگانه ثبت کرد
+Agent: Z.ai Code (main)
+Task: P3 کامل — «معلم مأموریت بدهد» + اسکن برگه با VLM + TTS فارسی (بک‌اند، بازی، E2E حلقهٔ کامل)
+
+Work Log:
+- 9-a: مدل `Assignment` (studentId/missionId/fact/note/status pending|seen|completed/sessionId/completedAt) + db:push + ری‌استارت سرور (درس قبلی: Prisma Client کهنه) | POST /api/assignments (با جلوگیری از duplicate pending)، GET (studentId برای داشبورد / studentName برای برداشت بازی)، PATCH /[id] | sessions: zod `missionId` + `completeSideAssignments` در هر دو مسیر (create و duplicate) — اتمام مأموریت در بازی = completed خودکار با لینک sessionId
+- 9-b: POST /api/tts (voice tongtong، speed clamp 0.5–2، سقف ۳۰۰ نویسه، کش درون‌حافظه ۴۰تایی، پاسخ binary audio/wav) | POST /api/scan-paper: createVision با پرامپت سخت‌گیرانهٔ JSON، extract tolerant، **بازمحاسبهٔ صحت در سرور (اعتماد به پرچم VLM نمی‌شود)**، factStats تجمیعی، inferLayer از جدول‌های غلط، commit → Session با mode='paper' و buildingId='paper-scan' — دادهٔ کاغذی وارد همان موتور گلوگاه می‌شود
+- 9-d (بازی، هر دو نسخه sync + node --check + diff): بنر «📌 از معلم: …» در bottom-sheet (CSS کهربایی متمایز)، برداشت با GET studentName=displayName&status=pending در سه نقطه (init، بعد از اتمام بنا، abandon)، کلیک → PATCH seen + startSideMission | دکمهٔ «🔊 سؤال» در فرم پاسخ: جمله‌سازی «{عدد به حروف} ضربدر {عدد} چند می‌شود؟» با speed 0.9 + کش objectURL | پل: `missionId` به POST اضافه شد
+- 9-c (delegated به full-stack-developer): دکمهٔ «ارسال مأموریت» در RemedyCard + بخش «مأموریت‌های معلم» در Sheet + دیالوگ کامل اسکن برگه (Select دانش‌آموز، آپلود/پیش‌نمایش، تحلیل→ثبت دومرحله‌ای) + دکمهٔ هدر «اسکن برگه» — گزارش کامل و E2E خودش در worklog (Task ID: 9-c)
+- 9-e (E2E حلقهٔ کامل با agent-browser): مأموریت pending برای «کودک» → بنر در نقشهٔ بازی ظاهر شد → کلیک → ۵ سؤال تطبیقی مأموریت side-1-antenna (۳×۴، ۴×۵، ۵×۶، ۲×۷، ۳×۸) همگی درست → اتمام → بنر محو | سمت سرور: `[assignments] auto-completed: 1 side-1-antenna`، وضعیت completed + sessionId لینک‌شده، Session با eventId `evt_side-side-1-antenna_...` و ۵ نتیجه | فراخوانی POST /api/tts از بازی: 200 بدون خطای کنسول | اسکن VLM واقعی توسط subagent 9-c (۸ مسئله، بازمحاسبهٔ سرور دقیق) | bun run lint صفر خطا | ۳۱/۳۱ تست بازی | زیپ با پچ‌های جدید بازسازی شد
+
+Stage Summary:
+- P3 تحویل شد و حلقهٔ محصول اکنون واقعاً بسته است: داشبورد گلوگاه را می‌بیند → معلم با یک کلیک مأموریت درمانی می‌دهد → دانش‌آموز در بازی آن را می‌بیند و انجام می‌دهد → بدون هیچ ورود دستی، مأموریت در داشبورد completed می‌شود → دادهٔ جدید، گزارش بعدی را دقیق‌تر می‌کند
+- اسکن برگه، دنیای کاغذ را هم به همان موتور گلوگاه وصل کرد (mode='paper') — معلم می‌تواند برگهٔ کاغذی کلاس را عکس بگیرد و داده‌اش کنار دادهٔ بازی تحلیل شود
+- TTS فارسی پشتیبان دسترسی‌پذیری خواندن سؤال است؛ در نبود داشبورد همهٔ قابلیت‌های جدید بی‌صدا غیرفعال می‌شوند (استقرار مستقل گیت‌هاب حفظ شد)
+- قراردادها پس‌سازگارند: sessions بدون missionId، assignments بدون status filter و کلاینت‌های قدیمی همگی مثل قبل کار می‌کنند

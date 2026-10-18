@@ -1,14 +1,28 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { BatteryCharging, CheckCircle2, Gamepad2, Lightbulb, Lock, RadioTower, Rocket, Route } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  BatteryCharging,
+  CheckCircle2,
+  ClipboardList,
+  Gamepad2,
+  Lightbulb,
+  Loader2,
+  Lock,
+  RadioTower,
+  Rocket,
+  Route,
+  Send,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { useToast } from "@/hooks/use-toast";
 import { AccuracyBadge, errorBarClass } from "@/components/dashboard/accuracy-badge";
 import { TrendBars } from "@/components/dashboard/trend-bars";
 import { EmptyState, SectionTitle } from "@/components/dashboard/state-views";
-import { fetchStudentDetail } from "@/components/dashboard/api";
+import { fetchStudentAssignments, fetchStudentDetail, postAssignment } from "@/components/dashboard/api";
 import {
   HERO_CONFIG,
   STATUS_CONFIG,
@@ -16,7 +30,12 @@ import {
   faPercent,
   faRelative,
 } from "@/lib/dashboard/constants";
-import type { FactStat, StudentDetailResponse } from "@/lib/dashboard/types";
+import type {
+  AssignmentItem,
+  AssignmentStatus,
+  FactStat,
+  StudentDetailResponse,
+} from "@/lib/dashboard/types";
 import { cn } from "@/lib/utils";
 
 /** آیکون ماموریت‌های درمانی — هم‌راستا با SIDE_MISSIONS بازی */
@@ -27,8 +46,38 @@ const REMEDY_ICONS: Record<string, typeof RadioTower> = {
 };
 
 function RemedyCard({ detail }: { detail: StudentDetailResponse }) {
-  if (!detail.recommendedRemedy) return null;
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const studentId = detail.student.id;
   const remedy = detail.recommendedRemedy;
+
+  const sendMutation = useMutation({
+    mutationFn: () =>
+      postAssignment({
+        studentId,
+        missionId: remedy!.missionId,
+        fact: detail.bottlenecks[0]?.fact ?? undefined,
+      }),
+    onSuccess: (data) => {
+      toast({
+        title: `مأموریت «${remedy!.title}» برای ${detail.student.name} ارسال شد`,
+        description: data.duplicate
+          ? "این مأموریت قبلاً در انتظار انجام بوده و رکورد تکراری ساخته نشد."
+          : "به‌محض انجام مأموریت در بازی، وضعیت آن در بخش «مأموریت‌های معلم» به‌روز می‌شود.",
+      });
+      void queryClient.invalidateQueries({ queryKey: ["student-detail", studentId] });
+      void queryClient.invalidateQueries({ queryKey: ["student-assignments", studentId] });
+    },
+    onError: () => {
+      toast({
+        title: "خطا در ارسال مأموریت",
+        description: "ارسال مأموریت درمانی ناموفق بود. لطفاً دوباره تلاش کنید.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  if (!remedy) return null;
   const Icon = REMEDY_ICONS[remedy.missionId] ?? Rocket;
   return (
     <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
@@ -45,9 +94,81 @@ function RemedyCard({ detail }: { detail: StudentDetailResponse }) {
           <p className="mt-1 text-[11px] text-emerald-700">
             بخش {remedy.sectorHint} · تمرین جدول‌های {remedy.tablesCovered.map((t) => faNum(t)).join("، ")} · ۵ سؤال تطبیقی
           </p>
+          <Button
+            size="sm"
+            type="button"
+            disabled={sendMutation.isPending}
+            onClick={() => sendMutation.mutate()}
+            className="mt-3 min-h-11 w-full bg-emerald-600 text-white hover:bg-emerald-700 focus-visible:ring-emerald-600 sm:w-fit"
+          >
+            {sendMutation.isPending ? (
+              <Loader2 className="size-4 animate-spin" aria-hidden />
+            ) : (
+              <Send className="size-4" aria-hidden />
+            )}
+            {sendMutation.isPending ? "در حال ارسال…" : "ارسال مأموریت به دانش‌آموز"}
+          </Button>
         </div>
       </div>
     </div>
+  );
+}
+
+/** بج وضعیت مأموریت معلم — پالت موجود بدون آبی */
+const ASSIGNMENT_STATUS_CONFIG: Record<AssignmentStatus, { label: string; badge: string; dot: string }> = {
+  pending: { label: "در انتظار انجام", badge: "bg-amber-100 text-amber-800 border-amber-200", dot: "bg-amber-500" },
+  seen: { label: "دانش‌آموز دیده است", badge: "bg-teal-100 text-teal-700 border-teal-200", dot: "bg-teal-500" },
+  completed: { label: "انجام شد", badge: "bg-emerald-100 text-emerald-700 border-emerald-200", dot: "bg-emerald-500" },
+};
+
+function AssignmentRow({ item }: { item: AssignmentItem }) {
+  const cfg = ASSIGNMENT_STATUS_CONFIG[item.status] ?? ASSIGNMENT_STATUS_CONFIG.pending;
+  return (
+    <li className="rounded-xl border border-slate-200 bg-white p-3">
+      <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1.5">
+        <p className="text-sm font-semibold text-slate-800">{item.missionTitle}</p>
+        <Badge variant="outline" className={cn("gap-1.5", cfg.badge)}>
+          <span className={cn("inline-block size-1.5 rounded-full", cfg.dot)} aria-hidden />
+          {cfg.label}
+        </Badge>
+      </div>
+      <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500">
+        {item.fact ? (
+          <span dir="ltr" className="font-mono text-xs font-bold text-slate-700">
+            {item.fact}
+          </span>
+        ) : null}
+        <span className="tabular-nums">{faRelative(item.createdAt)}</span>
+      </div>
+      {item.note ? <p className="mt-1.5 text-xs leading-6 text-slate-600">{item.note}</p> : null}
+    </li>
+  );
+}
+
+/** بخش «مأموریت‌های معلم» — فقط وقتی حداقل یک مأموریت باشد نمایش داده می‌شود */
+function TeacherAssignmentsSection({ studentId }: { studentId: string }) {
+  const assignmentsQuery = useQuery({
+    queryKey: ["student-assignments", studentId],
+    queryFn: () => fetchStudentAssignments(studentId),
+    enabled: !!studentId,
+  });
+  const assignments = assignmentsQuery.data?.assignments ?? [];
+
+  if (assignmentsQuery.isLoading || assignments.length === 0) return null;
+
+  return (
+    <section aria-label="مأموریت‌های معلم">
+      <SectionTitle icon={<ClipboardList className="size-4 text-emerald-600" aria-hidden />} className="mb-2">
+        مأموریت‌های معلم
+      </SectionTitle>
+      <div className="max-h-96 space-y-2 overflow-y-auto custom-scroll pe-1">
+        <ul className="space-y-2">
+          {assignments.map((item) => (
+            <AssignmentRow key={item.id} item={item} />
+          ))}
+        </ul>
+      </div>
+    </section>
   );
 }
 
@@ -246,6 +367,9 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
                 </ul>
               )}
             </section>
+
+            {/* مأموریت‌های معلم — فقط وقتی مأموریتی وجود دارد */}
+            <TeacherAssignmentsSection studentId={detail.student.id} />
 
             {/* جلسه‌های اخیر */}
             <section>

@@ -55,3 +55,8 @@ export function remedyForFact(a: number, b: number): Remedy | null {
   }
   return null;
 }
+
+/** عنوان فارسی ماموریت از شناسه — برای مقادیر ناشناخته خود شناسه برمی‌گردد */
+export function missionTitleOf(missionId: string): string {
+  return SIDE_MISSION_REMEDIES[missionId]?.title ?? missionId;
+}

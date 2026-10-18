@@ -256,6 +256,20 @@ main.main-shell {
   color: var(--text-muted);
 }
 
+/* Teacher Missions (از داشبورد معلم — تمایز کهربایی) */
+.teacher-mission-button {
+  border-color: #f0b429;
+}
+
+.teacher-mission-button:hover:not(:disabled) {
+  border-color: #ffd166;
+  box-shadow: 0 0 10px rgba(240, 180, 41, 0.3);
+}
+
+.teacher-mission-button .side-mission-note {
+  color: #f0b429;
+}
+
 /* Question View */
 .question-container {
   background-color: var(--surface);

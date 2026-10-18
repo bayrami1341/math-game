@@ -21,6 +21,7 @@ const bodySchema = z.object({
     .optional(),
   layer: z.number().int().min(1).max(9),
   mode: z.enum(['station', 'online', 'side']).default('station'),
+  missionId: z.string().min(3).max(60).optional(), // مأموریت جانبی (برای تکمیل خودکار مأموریت معلم)
   durationSec: z.number().min(0).max(7200).optional(),
   results: z
     .array(
@@ -53,6 +54,19 @@ export async function POST(req: Request) {
   }
   const data = parsed.data;
 
+  /** حلقهٔ کامل: اتمام مأموریت جانبی در بازی = تکمیل خودکار مأموریت معلم */
+  async function completeSideAssignments(studentId: string, missionId: string, sessionId: string) {
+    try {
+      const r = await db.assignment.updateMany({
+        where: { studentId, missionId, status: { in: ['pending', 'seen'] } },
+        data: { status: 'completed', completedAt: new Date(), sessionId },
+      });
+      if (r.count > 0) console.log('[assignments] auto-completed:', r.count, missionId);
+    } catch (e) {
+      console.error('[assignments] auto-complete failed:', e instanceof Error ? e.message : e);
+    }
+  }
+
   // ─── Idempotency: رویداد تکراری (ریترای شبکه) رکورد جدید نمی‌سازد ───
   if (data.eventId) {
     const existing = await db.session.findUnique({
@@ -71,6 +85,9 @@ export async function POST(req: Request) {
         accuracy: existing.total > 0 ? existing.correct / existing.total : 0,
         layerName: layerName(existing.layer),
       };
+      if (data.mode === 'side' && data.missionId) {
+        await completeSideAssignments(existing.studentId, data.missionId, existing.id);
+      }
       return NextResponse.json(res, { status: 200 });
     }
   }
@@ -145,6 +162,10 @@ export async function POST(req: Request) {
       }
     }
     throw err;
+  }
+
+  if (data.mode === 'side' && data.missionId) {
+    await completeSideAssignments(student.id, data.missionId, session.id);
   }
 
   const res: PostSessionResponse = {

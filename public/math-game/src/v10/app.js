@@ -48,6 +48,13 @@ let activeQuestionIndex = 0;
 let showGuide = false;
 let stationLayer = null;
 let teacherClass = null;
+let teacherMissions = []; // مأموریت‌های در انتظار معلم (از داشبورد — داشبورد اختیاری است)
+
+const TEACHER_MISSION_TITLES = {
+  'side-1-antenna': 'تعمیر آنتن فرعی',
+  'side-2-backup': 'شارژ سلول پشتیبان',
+  'side-3-fuel': 'تأمین سوخت اضافه'
+};
 
 const playStationAudio = async (kind) => {
   if (!soundEnabled || !stationLayer?.soundPlayer) return;
@@ -64,6 +71,76 @@ function notice(message, isError = false) {
   el.textContent = message;
   el.dataset.error = String(isError);
   el.hidden = !message;
+}
+
+// ─── مأموریت‌های معلم (برداشت از داشبورد — اگر داشبورد نباشد، بی‌صدا رد می‌شود) ───
+async function refreshTeacherMissions() {
+  try {
+    const profile = profiles.find(p => p.studentId === selectedId);
+    if (!profile || typeof fetch !== 'function') return;
+    const res = await fetch('/api/assignments?studentName=' + encodeURIComponent(profile.displayName) + '&status=pending');
+    if (!res.ok) return;
+    const data = await res.json();
+    teacherMissions = Array.isArray(data.assignments) ? data.assignments : [];
+    renderTeacherMissions();
+  } catch { /* داشبورد اختیاری است */ }
+}
+
+function renderTeacherMissions() {
+  const row = $('sheet-teacher-missions');
+  if (!row) return;
+  const pending = teacherMissions.filter(m => m.status === 'pending');
+  if (!pending.length) {
+    row.hidden = true;
+    row.innerHTML = '';
+    return;
+  }
+  row.hidden = false;
+  row.innerHTML = pending.map(m => `
+    <button type="button" class="side-mission-button teacher-mission-button" data-assignment-id="${m.id}" data-mission-id="${m.missionId}" aria-label="مأموریت معلم: ${m.missionTitle || TEACHER_MISSION_TITLES[m.missionId] || ''}">
+      <span class="side-mission-icon">📌</span>
+      <span>از معلم: ${m.missionTitle || TEACHER_MISSION_TITLES[m.missionId] || 'مأموریت تمرینی'}</span>
+      <span class="side-mission-note">${m.note ? m.note : fa(5) + ' سؤال تمرینی'}</span>
+    </button>
+  `).join('');
+}
+
+// ─── خواندن صوتی سؤال (TTS فارسی — اختیاری و بی‌صدا در خطا) ───
+const DIGIT_WORDS = ['صفر', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده', 'یازده', 'دوازده'];
+const speakCache = new Map();
+let speakingBusy = false;
+
+async function speakCurrentQuestion() {
+  const session = state.session;
+  const question = session?.questions?.[activeQuestionIndex];
+  const btn = $('question-speak');
+  if (!question || speakingBusy || !btn || typeof fetch !== 'function') return;
+  const w1 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f1))] ?? String(question.f1);
+  const w2 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f2))] ?? String(question.f2);
+  const phrase = `${w1} ضربدر ${w2} چند می‌شود؟`;
+  speakingBusy = true;
+  const prevLabel = btn.textContent;
+  btn.textContent = '... در حال آماده‌سازی';
+  try {
+    let url = speakCache.get(phrase);
+    if (!url) {
+      const res = await fetch('/api/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: phrase, speed: 0.9 })
+      });
+      if (!res.ok) throw new Error('tts-unavailable');
+      const blob = await res.blob();
+      url = URL.createObjectURL(blob);
+      speakCache.set(phrase, url);
+    }
+    await new Audio(url).play();
+  } catch {
+    notice('خواندن صوتی در دسترس نیست.', true);
+  } finally {
+    speakingBusy = false;
+    if (btn) btn.textContent = prevLabel;
+  }
 }
 
 const accountKey = () => 'profile:' + actor.uid;
@@ -170,6 +247,9 @@ function renderChildShell(stationState) {
       sideRow.hidden = true;
       sideRow.innerHTML = '';
     }
+
+    // Teacher Missions: رندر مأموریت‌های در انتظار معلم (اگر باشند)
+    renderTeacherMissions();
 
     const mainBtnLabel = sheet.getMainButtonLabel();
     const mainBtn = $('sheet-main-button');
@@ -308,6 +388,7 @@ async function handleAnswerSubmit(userAnswer) {
             buildingId: buildingName,
             layer: Math.min(9, sectorOffset + (session.depth ?? 2)),
             mode: session.activityType === 'side' ? 'side' : 'station',
+            missionId: session.missionId || undefined,
             durationSec: spanSec,
             results: (session.questions || []).map(q => ({
               a: q.f1 ?? 0,
@@ -322,6 +403,7 @@ async function handleAnswerSubmit(userAnswer) {
     currentView = 'map';
     showGuide = false;
     void playStationAudio(SOUND_EVENTS.pathLit);
+    void refreshTeacherMissions();
     render();
   }
 }
@@ -452,6 +534,24 @@ function setupEvents() {
     }
   });
 
+  // Teacher Missions: برداشت مأموریت معلم — علامت «دیده شد» + شروع مأموریت
+  $('sheet-teacher-missions').addEventListener('click', e => {
+    const btn = e.target.closest('button[data-assignment-id]');
+    if (!btn) return;
+    const assignmentId = btn.dataset.assignmentId;
+    const missionId = btn.dataset.missionId;
+    if (typeof fetch === 'function') {
+      void fetch('/api/assignments/' + encodeURIComponent(assignmentId), {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+        body: JSON.stringify({ status: 'seen' })
+      }).catch(() => {});
+    }
+    teacherMissions = teacherMissions.filter(m => m.id !== assignmentId);
+    startSideMission(missionId);
+  });
+
   $('map-guide-button').addEventListener('click', () => {
     showGuide = !showGuide;
     $('map-guide-info').hidden = !showGuide;
@@ -462,10 +562,15 @@ function setupEvents() {
     renderQuestionView();
   });
 
+  $('question-speak').addEventListener('click', () => {
+    void speakCurrentQuestion();
+  });
+
   $('question-abandon').addEventListener('click', () => {
     stationLayer.cells.onAbandon();
     currentView = 'map';
     showGuide = false;
+    void refreshTeacherMissions();
     render();
   });
 
@@ -500,6 +605,7 @@ export async function initApp() {
   }
 
   render();
+  void refreshTeacherMissions();
 }
 
 if (typeof window !== 'undefined') {

@@ -151,3 +151,61 @@ export interface PostSessionResponse {
   layerName: string;
   duplicate?: boolean; // true یعنی رویداد قبلاً ثبت شده و رکورد جدیدی ساخته نشد
 }
+
+// ─── مأموریت‌های درمانی معلم (P3: حلقهٔ کامل) ───
+
+export type AssignmentStatus = 'pending' | 'seen' | 'completed';
+
+/** یک مأموریت درمانی ارسال‌شده به دانش‌آموز */
+export interface AssignmentItem {
+  id: string;
+  studentId: string;
+  studentName?: string;
+  missionId: string;
+  missionTitle: string;
+  fact: string | null;
+  note: string | null;
+  status: AssignmentStatus;
+  sessionId?: string | null; // جلسه‌ای که مأموریت را کامل کرد (در تکمیل خودکار)
+  createdAt: string;
+  completedAt: string | null;
+}
+
+export interface PostAssignmentBody {
+  studentId: string;
+  missionId: string;
+  fact?: string;
+  note?: string;
+}
+
+export interface AssignmentsResponse {
+  assignments: AssignmentItem[];
+}
+
+// ─── اسکن برگهٔ کاغذی با VLM ───
+
+/** یک مسئلهٔ ضرب شناسایی‌شده روی برگه */
+export interface ScanPaperItem {
+  a: number;
+  b: number;
+  studentAnswer: number | null;
+  correct: boolean;
+}
+
+export interface ScanPaperAnalyzeResponse {
+  ok: boolean;
+  items: ScanPaperItem[];
+  unreadable: number; // تعداد موارد ناخوانا
+  notes: string; // مشاهدهٔ آزاد VLM
+  factStats: FactStat[]; // فاکتورهای اشتباه برگه
+  total: number;
+  correct: number;
+  sessionId?: string; // فقط در commit
+  stored?: number; // فقط در commit
+}
+
+export interface ScanPaperCommitResponse {
+  ok: boolean;
+  sessionId?: string;
+  stored: number; // تعداد نتیجه‌های ثبت‌شده
+}

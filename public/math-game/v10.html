@@ -74,6 +74,8 @@
             <p id="sheet-text" class="sheet-story"></p>
             <!-- Side Missions (مأموریت‌های جانبی — بدون اثر بر لیدربرد) -->
             <div id="sheet-side-missions" class="side-missions-row" role="group" aria-label="مأموریت‌های جانبی" hidden></div>
+            <!-- Teacher Missions (مأموریت‌های ارسالی معلم — از داشبورد) -->
+            <div id="sheet-teacher-missions" class="side-missions-row" role="group" aria-label="مأموریت‌های معلم" hidden></div>
             <div class="sheet-actions">
               <!-- Momentary Main Button -->
               <button id="sheet-main-button" class="primary-button" type="button">ادامهٔ چراغ‌ها</button>
@@ -107,6 +109,7 @@
             <input id="answer-input" type="text" inputmode="numeric" autocomplete="off" required>
             <button class="primary-button" type="submit">ثبت پاسخ</button>
             <button id="question-guide-button" class="secondary-button" type="button">💡 راهنما</button>
+            <button id="question-speak" class="secondary-button" type="button" aria-label="خواندن سؤال با صدا">🔊 سؤال</button>
           </form>
 
           <p id="question-feedback" class="question-feedback" role="status" aria-live="polite"></p>

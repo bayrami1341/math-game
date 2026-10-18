@@ -20,8 +20,26 @@ model Student {
 
   sessions Session[]
   results  QuestionResult[]
+  assignments Assignment[]
 
   @@index([grade])
+}
+
+// مأموریت درمانی ارسالی معلم به دانش‌آموز (حلقهٔ گزارش ← اقدام ← اجرا در بازی)
+model Assignment {
+  id          String    @id @default(cuid())
+  studentId   String
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  missionId   String // side-1-antenna | side-2-backup | side-3-fuel
+  fact        String? // فاکتور مبنای تشخیص (مثل «7×8»)
+  note        String? // یادداشت معلم
+  status      String    @default("pending") // pending | seen | completed
+  sessionId   String? // جلسه‌ای که مأموریت را کامل کرد
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  @@index([studentId, status])
+  @@index([status, createdAt])
 }
 
 // یک جلسه تمرین کامل‌شده در بازی

@@ -8,6 +8,7 @@ import {
   GraduationCap,
   LayoutDashboard,
   RefreshCw,
+  ScanLine,
   Sparkles,
   Users,
 } from "lucide-react";
@@ -19,6 +20,7 @@ import { StudentsTab } from "@/components/dashboard/students-tab";
 import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
 import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
+import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
 import { fetchBottlenecks, fetchOverview, fetchStudents } from "@/components/dashboard/api";
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
@@ -64,6 +66,7 @@ export default function TeacherDashboardPage() {
   const [tab, setTab] = useState<TabKey>("overview");
   const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
+  const [scanOpen, setScanOpen] = useState(false);
   const today = useTodayFa();
 
   const refetchAll = useCallback(async () => {
@@ -123,6 +126,15 @@ export default function TeacherDashboardPage() {
             >
               <RefreshCw className={isRefreshing ? "size-4 animate-spin" : "size-4"} aria-hidden />
               <span className="hidden sm:inline">بازآوری</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setScanOpen(true)}
+              aria-label="اسکن برگهٔ کاغذی"
+            >
+              <ScanLine className="size-4" aria-hidden />
+              <span className="hidden sm:inline">اسکن برگه</span>
             </Button>
             <Button
               size="sm"
@@ -234,6 +246,7 @@ export default function TeacherDashboardPage() {
         }}
       />
       <AiReportDialog open={aiOpen} onOpenChange={setAiOpen} />
+      <ScanPaperDialog open={scanOpen} onOpenChange={setScanOpen} />
     </div>
   );
 }
