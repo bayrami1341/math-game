@@ -293,11 +293,17 @@ async function handleAnswerSubmit(userAnswer) {
         const firstAt = Object.values(session.receipts || {})[0]?.serverTime;
         const lastAt = Object.values(session.receipts || {}).slice(-1)[0]?.serverTime;
         const spanSec = firstAt && lastAt ? Math.max(0, Math.round((new Date(lastAt) - new Date(firstAt)) / 1000)) : undefined;
+        // شناسهٔ قطعی رویداد برای همگام‌سازی idempotent — همان تلاش = همان eventId؛
+        // ریترای شبکه رکورد تکراری نمی‌سازد، اما بازی دوبارهٔ همان بنا رویداد تازه می‌سازد.
+        const syncEventId = ('evt_' + String(session.activityId ?? ('sync-' + sectorKey)) + '_' + String(firstAt ?? new Date().toISOString()))
+          .replace(/\s/g, '-')
+          .slice(0, 120);
         void fetch('/api/sessions', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           keepalive: true,
           body: JSON.stringify({
+            eventId: syncEventId,
             studentName: dashProfile?.displayName || 'بازیکن ایستگاه',
             buildingId: buildingName,
             layer: Math.min(9, sectorOffset + (session.depth ?? 2)),

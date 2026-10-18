@@ -10,6 +10,7 @@ import type {
   TrendPoint,
 } from './types';
 import { TABLE_TIPS, layerName, layerShort } from './constants';
+import { remedyForTable } from './remediation';
 
 export interface QRow {
   a: number;
@@ -185,6 +186,7 @@ export function computeBottlenecks(
       students: f.perStudent.size,
       tables,
       recommendation: TABLE_TIPS[refTable] ?? 'تمرین هدفمند با دسته‌بندی اشیاء و کشف الگو',
+      remedy: remedyForTable(refTable),
       affected,
     });
   }

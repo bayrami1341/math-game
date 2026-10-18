@@ -73,3 +73,25 @@ Stage Summary:
 - قرارداد داده: src/lib/dashboard/types.ts (مشترک بک‌اند/فرانت) | آستانه‌ها: گلوگاه ≥۲۵٪ خطا و ≥۵ تلاش، تسلط لایه ۸۵٪+۸ تلاش
 - بازی بدون داشبورد هم بدون خطا کار می‌کند (fetch بی‌صدا شکست می‌خورد) — سازگار با استقرار گیت‌هاب
 - لاگر عیب‌یابی payload نامعتبر در POST /api/sessions فعال ماند (console.error سمت سرور) برای دیباگ آینده
+
+---
+Task ID: 8 (main agent)
+Agent: Z.ai Code (main)
+Task: اجرای «برو» روی پلن مصوب — بستن دو شکاف باقی‌مانده: همگام‌سازی Idempotent (پلن P1) و حلقهٔ گزارش←اقدام (پلن معماری شمارهٔ ۲) + راستی‌آزمایی کامل وضعیت
+
+Work Log:
+- worklog.md خوانده شد؛ تأیید شد M1 (فیکس ماموریت جانبی، ۳۱/۳۱ تست) و M2/M3 (بک‌اند + داشبورد) قبلاً تحویل شده‌اند؛ دو شکاف واقعی پلن مصوب باقی بود: idempotency و اتصال گلوگاه به ماموریت درمانی
+- Idempotency: فیلد `eventId String? @unique` روی Session + db:push؛ POST /api/sessions با چک قبلی + catch P2002 (مسابقهٔ همزمان) → پاسخ 200 با `duplicate:true` بدون ساخت رکورد
+- پل بازی (هر دو نسخهٔ public و منبع): `syncEventId` قطعی از `evt_{activityId}_{firstReceiptTime}` — همان تلاش = همان eventId؛ بازیابی بنا = رویداد تازه. node --check هر دو پاس
+- حلقهٔ گزارش←اقدام: ماژول جدید `src/lib/dashboard/remediation.ts` (نگاشت جدول ۲–۵ → side-1-antenna، ۶–۹ → side-2-backup، ۱۰–۱۲ → side-3-fuel — آینهٔ SIDE_MISSIONS بازی)؛ `BottleneckItem.remedy` در stats.ts از جدول مرجع؛ `StudentDetailResponse.recommendedRemedy` از ضعیف‌ترین فاکتور + خط پیشنهادی متنی
+- UI: چیپ ماموریت درمانی (آیکون‌های lucide: RadioTower/BatteryCharging/Rocket) در ستون «اقدام پیشنهادی» تب گلوگاه‌ها؛ کارت «مأموریت درمانی در بازی» در Sheet دانش‌آموز (هدف، بخش ایستگاه، جدول‌های تحت پوشش، ۵ سؤال تطبیقی)
+- باگ حین E2E: `faNum is not defined` در students/[id]/route.ts (ایمپورت جامانده) → رفع شد
+- نکتهٔ عملیاتی: پس از db:push باید dev server ری‌استارت شود وگرنه Prisma Client کهنه در حافظه `Unknown argument eventId` می‌دهد (رخ داد و رفع شد)
+- تست curl: سه POST با همان eventId → دقیقاً ۱ جلسه و ۳ سؤال در DB، پاسخ سوم `duplicate:true` با همان sessionId؛ دانش‌آموز آزمایشی پس از تست حذف شد
+- Agent Browser E2E: تب گلوگاه‌ها = ۱۳ چیپ ماموریت درمانی | Sheet «باران قاسمی» = کارت «تعمیر آنتن فرعی — بخش ایستگاه نیرو» | موبایل 390px بدون overflow افقی | بازی سروشده بدون خطای کنسول، تعامل واقعی (نیروگاه → پاسخ ۲×۲=۴ → سؤال بعدی ۳×۳) تأیید شد
+- زیپ `public/math-game-v10.1-fixed.zip` با پل جدید بازسازی شد (تأیید presence of syncEventId داخل زیپ) | bun run lint صفر خطا | ۳۱/۳۱ تست بازی پاس
+
+Stage Summary:
+- هر دو معیار پذیرش پلن مصوب بسته شد: (۱) «یک بازی واقعی، رکوردهایش در SQLite بنشیند بدون تکرار» — idempotency فعال و تست‌شده؛ (۲) «هر گزارش گلوگاه با یک اقدام تمام شود» — ۱۳/۱۳ گلوگاه به ماموریت درمانی نگاشت شدند
+- حلقهٔ کامل محصول اکنون سرتاسری است: بازی → sync idempotent → SQLite → داشبورد → توصیهٔ ماموریت درمانی → اجرای همان ماموریت در بازی
+- قرارداد API پس‌سازگار است: بدنه‌های بدون eventId (کلاینت‌های قدیمی) مثل قبل 201 می‌گیرند

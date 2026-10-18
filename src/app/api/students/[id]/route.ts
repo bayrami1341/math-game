@@ -3,7 +3,8 @@
 import { NextResponse } from 'next/server';
 import { buildStudentSummary, loadDashboardData } from '@/lib/dashboard/server';
 import { computeDailyTrend, computeLayerProgress, computeStudentFacts, computeTableHealth, daysAgo } from '@/lib/dashboard/stats';
-import { TABLE_TIPS, faPercent, statusFromAccuracy } from '@/lib/dashboard/constants';
+import { TABLE_TIPS, faNum, faPercent, statusFromAccuracy } from '@/lib/dashboard/constants';
+import { remedyForFact } from '@/lib/dashboard/remediation';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +36,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   if (currentLayer && !currentLayer.mastered) {
     recommendations.push(`تسلط بر لایهٔ ${currentLayer.layer} — «${currentLayer.name}»: دقت آخرین جلسه ${faPercent(currentLayer.accuracy, 1)} است؛ حداقل ${faPercent(0.85)} لازم است.`);
   }
+
+  // حلقهٔ گزارش ← اقدام: ماموریت درمانی بازی بر اساس ضعیف‌ترین فاکتور
+  const weakestFact = bottlenecks[0] ?? null;
+  const recommendedRemedy = weakestFact ? remedyForFact(weakestFact.a, weakestFact.b) : null;
+  if (recommendedRemedy && weakestFact) {
+    recommendations.push(
+      `ماموریت درمانی پیشنهادی در بازی: «${recommendedRemedy.title}» در ${recommendedRemedy.sectorHint} — این ماموریت جدول‌های ${recommendedRemedy.tablesCovered.map((t) => faNum(t)).join('، ')} را تمرین می‌دهد.`
+    );
+  }
   const status = statusFromAccuracy(summary.accuracy7d ?? summary.overallAccuracy);
   if (status === 'critical') {
     recommendations.push('جلسهٔ کوتاه روزانه (۵ دقیقه) با بناکردهای لایهٔ جاری؛ از ساختمان‌های آسان برای بازیابی اعتماد شروع شود.');
@@ -52,6 +62,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     trend: computeDailyTrend(questions, sessions, 14),
     bottlenecks,
     recommendations,
+    recommendedRemedy,
     recentSessions: sessions.slice(0, 6).map((s) => ({
       id: s.id,
       studentId: s.studentId,

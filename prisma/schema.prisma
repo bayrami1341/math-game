@@ -35,6 +35,7 @@ model Session {
   total       Int
   correct     Int
   durationSec Int      @default(0)
+  eventId     String?  @unique // شناسهٔ idempotency — ریترای شبکه رکورد تکراری نمی‌سازد
   createdAt   DateTime @default(now())
 
   results QuestionResult[]

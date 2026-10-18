@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Search, Sparkles } from "lucide-react";
+import { AlertCircle, BatteryCharging, RadioTower, Rocket, Search, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,7 +25,28 @@ import { errorBarClass } from "@/components/dashboard/accuracy-badge";
 import { EmptyState, ErrorCard } from "@/components/dashboard/state-views";
 import { SEVERITY_CONFIG, faNum, faPercent } from "@/lib/dashboard/constants";
 import type { BottleneckItem, BottlenecksResponse } from "@/lib/dashboard/types";
+import type { Remedy } from "@/lib/dashboard/remediation";
 import { cn } from "@/lib/utils";
+
+/** آیکون ماموریت‌های درمانی — هم‌راستا با SIDE_MISSIONS بازی */
+const REMEDY_ICONS: Record<string, typeof RadioTower> = {
+  "side-1-antenna": RadioTower,
+  "side-2-backup": BatteryCharging,
+  "side-3-fuel": Rocket,
+};
+
+function RemedyChip({ remedy }: { remedy: Remedy }) {
+  const Icon = REMEDY_ICONS[remedy.missionId] ?? Rocket;
+  return (
+    <span
+      className="inline-flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-700"
+      title={`مأموریت جانبی در بخش ${remedy.sectorHint} — ${remedy.objective}`}
+    >
+      <Icon className="size-3" aria-hidden />
+      {remedy.title}
+    </span>
+  );
+}
 
 interface BottlenecksTabProps {
   data?: BottlenecksResponse;
@@ -202,7 +223,7 @@ export function BottlenecksTab({
                     <TableHead>تلاش‌ها</TableHead>
                     <TableHead>دانش‌آموزان</TableHead>
                     <TableHead>شدت</TableHead>
-                    <TableHead className="min-w-48">پیشنهاد تدریس</TableHead>
+                    <TableHead className="min-w-48">اقدام پیشنهادی</TableHead>
                     <TableHead className="text-left">افراد</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -252,7 +273,14 @@ export function BottlenecksTab({
                           </Badge>
                         </TableCell>
                         <TableCell className="max-w-64 text-xs leading-6 text-slate-600">
-                          {item.recommendation}
+                          {item.remedy ? (
+                            <div className="space-y-1.5">
+                              <RemedyChip remedy={item.remedy} />
+                              <p>{item.recommendation}</p>
+                            </div>
+                          ) : (
+                            item.recommendation
+                          )}
                         </TableCell>
                         <TableCell className="text-left">
                           <Button

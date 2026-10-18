@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle2, Lightbulb, Lock, Route } from "lucide-react";
+import { BatteryCharging, CheckCircle2, Gamepad2, Lightbulb, Lock, RadioTower, Rocket, Route } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
@@ -16,8 +16,40 @@ import {
   faPercent,
   faRelative,
 } from "@/lib/dashboard/constants";
-import type { FactStat } from "@/lib/dashboard/types";
+import type { FactStat, StudentDetailResponse } from "@/lib/dashboard/types";
 import { cn } from "@/lib/utils";
+
+/** آیکون ماموریت‌های درمانی — هم‌راستا با SIDE_MISSIONS بازی */
+const REMEDY_ICONS: Record<string, typeof RadioTower> = {
+  "side-1-antenna": RadioTower,
+  "side-2-backup": BatteryCharging,
+  "side-3-fuel": Rocket,
+};
+
+function RemedyCard({ detail }: { detail: StudentDetailResponse }) {
+  if (!detail.recommendedRemedy) return null;
+  const remedy = detail.recommendedRemedy;
+  const Icon = REMEDY_ICONS[remedy.missionId] ?? Rocket;
+  return (
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3.5">
+      <div className="flex items-start gap-3">
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-emerald-200 bg-white text-emerald-600" aria-hidden>
+          <Icon className="size-4.5" />
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="flex items-center gap-1.5 text-sm font-bold text-emerald-800">
+            <Gamepad2 className="size-3.5 shrink-0" aria-hidden />
+            مأموریت درمانی در بازی: {remedy.title}
+          </p>
+          <p className="mt-1 text-xs leading-6 text-emerald-900/80">{remedy.objective}</p>
+          <p className="mt-1 text-[11px] text-emerald-700">
+            بخش {remedy.sectorHint} · تمرین جدول‌های {remedy.tablesCovered.map((t) => faNum(t)).join("، ")} · ۵ سؤال تطبیقی
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface StudentDetailSheetProps {
   studentId: string | null;
@@ -198,6 +230,9 @@ export function StudentDetailSheet({ studentId, onOpenChange }: StudentDetailShe
             {/* پیشنهادهای آموزشی */}
             <section>
               <SectionTitle className="mb-2">پیشنهادهای آموزشی</SectionTitle>
+              <div className="mb-3">
+                <RemedyCard detail={detail} />
+              </div>
               {detail.recommendations.length === 0 ? (
                 <EmptyState title="پیشنهادی ثبت نشده است" />
               ) : (

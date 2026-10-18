@@ -10,6 +10,7 @@ import type { PostSessionResponse } from '@/lib/dashboard/types';
 export const dynamic = 'force-dynamic';
 
 const bodySchema = z.object({
+  eventId: z.string().min(6).max(120).optional(),
   studentId: z.string().min(1).max(64).optional(),
   studentName: z.string().min(2).max(60).optional(),
   grade: z.number().int().min(1).max(6).optional(),
@@ -52,6 +53,28 @@ export async function POST(req: Request) {
   }
   const data = parsed.data;
 
+  // ─── Idempotency: رویداد تکراری (ریترای شبکه) رکورد جدید نمی‌سازد ───
+  if (data.eventId) {
+    const existing = await db.session.findUnique({
+      where: { eventId: data.eventId },
+      include: { student: true },
+    });
+    if (existing) {
+      const res: PostSessionResponse = {
+        ok: true,
+        duplicate: true,
+        sessionId: existing.id,
+        studentId: existing.studentId,
+        studentName: existing.student.name,
+        total: existing.total,
+        correct: existing.correct,
+        accuracy: existing.total > 0 ? existing.correct / existing.total : 0,
+        layerName: layerName(existing.layer),
+      };
+      return NextResponse.json(res, { status: 200 });
+    }
+  }
+
   // یافتن یا ساخت دانش‌آموز
   let student = data.studentId ? await db.student.findUnique({ where: { id: data.studentId } }) : null;
   if (!student && data.studentName) {
@@ -69,27 +92,60 @@ export async function POST(req: Request) {
   const total = data.results.length;
   const correct = data.results.filter((r) => r.correct).length;
 
-  const session = await db.session.create({
-    data: {
-      studentId: student.id,
-      buildingId: data.buildingId ?? 'unknown',
-      layer: data.layer,
-      mode: data.mode,
-      total,
-      correct,
-      durationSec: Math.round(data.durationSec ?? 0),
-      results: {
-        create: data.results.map((r) => ({
-          studentId: student.id,
-          a: r.a,
-          b: r.b,
-          correct: r.correct,
-          timeSec: r.timeSec ?? 0,
-          layer: data.layer,
-        })),
+  let session;
+  try {
+    session = await db.session.create({
+      data: {
+        studentId: student.id,
+        buildingId: data.buildingId ?? 'unknown',
+        layer: data.layer,
+        mode: data.mode,
+        total,
+        correct,
+        durationSec: Math.round(data.durationSec ?? 0),
+        eventId: data.eventId,
+        results: {
+          create: data.results.map((r) => ({
+            studentId: student.id,
+            a: r.a,
+            b: r.b,
+            correct: r.correct,
+            timeSec: r.timeSec ?? 0,
+            layer: data.layer,
+          })),
+        },
       },
-    },
-  });
+    });
+  } catch (err) {
+    // مسابقهٔ همزمان: دو درخواست با همان eventId — اولی برنده است
+    if (
+      data.eventId &&
+      typeof err === 'object' &&
+      err !== null &&
+      'code' in err &&
+      (err as { code?: string }).code === 'P2002'
+    ) {
+      const existing = await db.session.findUnique({
+        where: { eventId: data.eventId },
+        include: { student: true },
+      });
+      if (existing) {
+        const res: PostSessionResponse = {
+          ok: true,
+          duplicate: true,
+          sessionId: existing.id,
+          studentId: existing.studentId,
+          studentName: existing.student.name,
+          total: existing.total,
+          correct: existing.correct,
+          accuracy: existing.total > 0 ? existing.correct / existing.total : 0,
+          layerName: layerName(existing.layer),
+        };
+        return NextResponse.json(res, { status: 200 });
+      }
+    }
+    throw err;
+  }
 
   const res: PostSessionResponse = {
     ok: true,

@@ -1,5 +1,7 @@
 // انواع مشترک داشبورد معلم — قرارداد API و فرانت‌اند
 
+import type { Remedy } from './remediation';
+
 export type Severity = 'critical' | 'high' | 'medium';
 export type StudentStatus = 'excellent' | 'good' | 'practice' | 'critical';
 
@@ -19,6 +21,7 @@ export interface BottleneckItem extends FactStat {
   students: number; // تعداد دانش‌آموزان درگیر
   tables: number[]; // جدول‌های مرتبط (۷ و ۸ برای ۷×۸)
   recommendation: string; // پیشنهاد آموزشی
+  remedy: Remedy | null; // ماموریت درمانی بازی برای این گلوگاه (حلقهٔ گزارش←اقدام)
   affected: { id: string; name: string; attempts: number; errorRate: number }[];
 }
 
@@ -113,6 +116,7 @@ export interface StudentDetailResponse {
   trend: TrendPoint[];
   bottlenecks: FactStat[];
   recommendations: string[];
+  recommendedRemedy: Remedy | null; // ماموریت درمانی بر اساس ضعیف‌ترین فاکتور
   recentSessions: SessionSummary[];
 }
 
@@ -124,6 +128,7 @@ export interface BottlenecksResponse {
 
 /** بدنه POST /api/sessions — اتصال بازی به داشبورد */
 export interface PostSessionBody {
+  eventId?: string; // شناسهٔ idempotency — ارسال دوبارهٔ همان رویداد، جلسهٔ تکراری نمی‌سازد
   studentId?: string;
   studentName?: string;
   grade?: number;
@@ -144,4 +149,5 @@ export interface PostSessionResponse {
   correct: number;
   accuracy: number;
   layerName: string;
+  duplicate?: boolean; // true یعنی رویداد قبلاً ثبت شده و رکورد جدیدی ساخته نشد
 }
