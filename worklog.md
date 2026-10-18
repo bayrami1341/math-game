@@ -248,3 +248,20 @@ Stage Summary:
 - سه خواستهٔ پلن مصوب کامل شد: (۱) لایهٔ بالینی معلم: تشخیص با کد + عنوان فارسی + مرحلهٔ CPA + فاصلهٔ اطمینان + شواهد (submitted/زمان/فاکت‌ها) + اقدام کلاسی + بازنویسی معلم فقط‌الحاقی با برچسب تاریخچه؛ (۲) فروشگاه رویداد: همهٔ تلاش‌ها (حتی غلط‌ها) با submitted و زمان حفظ می‌شوند، هر جلسهٔ جدید رسید sha256 زنجیره‌ای + ساعت لامپورت دارد و با بازپخش قطعی راستی‌آزمایی می‌شود — دستکاری دیتابیس خودکار آشکار می‌شود؛ (۳) نردبان ۷پله‌ای با ضدنشت و سرد شدن ضدتکدی
 - بازی مستقل (بدون داشبورد) همچنان کامل کار می‌کند: نردبان و تلاش‌نگار محلی‌اند؛ پل sync در نبود سرور بی‌صدا می‌ماند
 - پس‌سازگاری: جلسات قدیمی legacy محسوب و در گزارش زنجیره جدا شمرده می‌شوند؛ sessions بدون submitted مثل قبل
+
+---
+Task ID: 12
+Agent: Z.ai Code (main)
+Task: فهرست صفر تا صد تغییرات نسخهٔ ۱۰ → ۱۰.۱ برای نصب روی گیت‌هاب — دیف دقیق و واقعی برابر شاخهٔ v6
+
+Work Log:
+- شاخهٔ v6 مخزن bayrami1341/math-game (HEAD 62cfd48 «docs: update README for v10 application on v6 branch») به /tmp/gh-math-game کلون شد و فایل‌به‌فایل با بستهٔ محلی math-game-v10.1 مقایسه شد
+- نتیجه: ۱۰ فایل DIFF (v10.html ‏۱۱۵ خط، styles/v10.css ‏۲۲۵، src/v10/app.js ‏۱۱۵۸، bridge.js ‏۴۵، station/index.js ‏۷، station/sheet.js ‏۳۸، station/visuals.js ‏۳۰۶، src/v9/experience.mjs ‏۴۳۱، src/v9/local.mjs ‏۱۶، tests/v10-station.test.js ‏۲۳، package.json ‏۸) | ۴ فایل NEW (station/ladder.js، tests/v10.1-station.test.js، tests/v10.1-side-missions.test.js، راهنمای_جامع_نسخه_۱۰.۱.md) | ۱۲ فایل SAME (v9-config، station/{cells,constants,guide,map,sounds,story}، src/v9/{app,connection,entry,firebase-login,mission})
+- دو یافتهٔ ساختاری: (۱) v10.1 پوستهٔ کودک خالص است — سیم‌کشی پنل معلم/ورود Firebase در app.js از ۲۱ مسیر به ۰ رسیده و UIهای کلاس/دعوت/تابلو/ساخت قهرمان از v10.html حذف شده‌اند (مدیریت کلاس به داشبورد پلتفرم منتقل شده)؛ (۲) visuals.js از ۲۵.۲KB به ۵.۷KB سبک‌سازی شده (حذف VISUAL_ASSETS و renderMapBackdropSVG؛ ۴ تابع رندر building/path/cell/equal-groups باقی است)
+- صحت‌سنجی وضعیت فعلی: ۳۱/۳۱ تست بازی (exit 0)، node --check سه فایل کلیدی سالم، public/math-game همگام با منبع (فقط بدون پوشهٔ tests)، زیپ public/math-game-v10.1-fixed.zip بایت‌به‌بایت Fresh برای ۷ فایل کلیدی
+- ناهماهنگی جزئی سند: درخت فایل §۵ راهنمای ۱۰.۱ هنوز ladder.js، ظرف sheet-teacher-missions و دکمهٔ 🔊 را (که در Taskهای ۹/۱۱ اضافه شدند) فهرست نکرده — پیشنهاد به‌روزرسانی سند قبل از push
+- فهرست کامل نصب + دو مسیر نصب (push با توکن کاربر، یا آپلود دستی zip) به کاربر تحویل شد
+
+Stage Summary:
+- نقشهٔ نصب v10.1 روی شاخهٔ v6 آماده است: جایگزینی ۱۰ فایل + افزودن ۴ فایل؛ هیچ فایلی از سرور/دارایی‌ها/مستندات v9 دست نمی‌خورد؛ package.json فقط name/version/test تغییر می‌کند (بدون وابستگی جدید)
+- تصمیم باز برای کاربر: نصب با push مستقیم (نیاز به احراز هویت کاربر) یا آپلود دستی zip به‌روز
