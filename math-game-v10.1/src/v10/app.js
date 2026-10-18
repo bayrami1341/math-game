@@ -119,42 +119,78 @@ function renderTeacherMissions() {
   `).join('');
 }
 
-// ─── خواندن صوتی سؤال (TTS فارسی — اختیاری و بی‌صدا در خطا) ───
+// ─── خواندن صوتی (TTS فارسی — v10.1.2): اول API داشبورد، در نبودش صدای محلی مرورگر ───
 const DIGIT_WORDS = ['صفر', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده', 'یازده', 'دوازده'];
 const speakCache = new Map();
 let speakingBusy = false;
+
+// fallback محلی: Web Speech API خود مرورگر (fa-IR) — در استقرار مستقل (گیت‌هاب Pages) هم کار می‌کند؛
+// اگر صدای فارسی نصب نباشد، موتور پیش‌فرض تلاش می‌کند و در بدترین حالت بی‌صدا می‌ماند.
+function localSpeak(text) {
+  return new Promise(resolve => {
+    try {
+      if (typeof window === 'undefined' || !('speechSynthesis' in window)) return resolve(false);
+      const synth = window.speechSynthesis;
+      try { synth.cancel(); } catch { /* بی‌اهمیت */ }
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'fa-IR';
+      u.rate = 0.9;
+      const voices = typeof synth.getVoices === 'function' ? (synth.getVoices() || []) : [];
+      const faVoice = voices.find(v => v && /^fa/i.test(v.lang || ''));
+      if (faVoice) u.voice = faVoice;
+      let settled = false;
+      const done = ok => { if (!settled) { settled = true; resolve(ok); } };
+      u.onend = () => done(true);
+      u.onerror = () => done(false);
+      synth.speak(u);
+      setTimeout(() => done(true), 20000); // محافظ: اگر رویداد end/error نیامد
+    } catch { resolve(false); }
+  });
+}
+
+// گویندهٔ مشترک: صدا از API داشبورد (اگر در دسترس بود) → وگرنه صدای محلی مرورگر → وگرنه بی‌صدا.
+// فقط URLهای موفق کش می‌شوند تا شکست API در تلاش بعدی دوباره امتحان شود.
+async function speakFa(text, btn = null) {
+  if (!text || speakingBusy) return;
+  speakingBusy = true;
+  const prevLabel = btn ? btn.textContent : null;
+  if (btn) btn.textContent = '... در حال خواندن';
+  try {
+    let url = speakCache.get(text) || null;
+    if (!url && typeof fetch === 'function') {
+      try {
+        const res = await fetch('/api/tts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, speed: 0.9 })
+        });
+        if (res.ok) {
+          url = URL.createObjectURL(await res.blob());
+          speakCache.set(text, url);
+        }
+      } catch { /* داشبورد در دسترس نیست — fallback محلی */ }
+    }
+    if (url) {
+      await new Audio(url).play();
+    } else {
+      const ok = await localSpeak(text);
+      if (!ok && btn && btn.id === 'question-speak') notice('خواندن صوتی در دسترس نیست.', true);
+    }
+  } catch { /* TTS اختیاری است — بی‌صدا */ }
+  finally {
+    speakingBusy = false;
+    if (btn && prevLabel) btn.textContent = prevLabel;
+  }
+}
 
 async function speakCurrentQuestion() {
   const session = state.session;
   const question = session?.questions?.[activeQuestionIndex];
   const btn = $('question-speak');
-  if (!question || speakingBusy || !btn || typeof fetch !== 'function') return;
+  if (!question || !btn) return;
   const w1 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f1))] ?? String(question.f1);
   const w2 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f2))] ?? String(question.f2);
-  const phrase = `${w1} ضربدر ${w2} چند می‌شود؟`;
-  speakingBusy = true;
-  const prevLabel = btn.textContent;
-  btn.textContent = '... در حال آماده‌سازی';
-  try {
-    let url = speakCache.get(phrase);
-    if (!url) {
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: phrase, speed: 0.9 })
-      });
-      if (!res.ok) throw new Error('tts-unavailable');
-      const blob = await res.blob();
-      url = URL.createObjectURL(blob);
-      speakCache.set(phrase, url);
-    }
-    await new Audio(url).play();
-  } catch {
-    notice('خواندن صوتی در دسترس نیست.', true);
-  } finally {
-    speakingBusy = false;
-    if (btn) btn.textContent = prevLabel;
-  }
+  await speakFa(`${w1} ضربدر ${w2} چند می‌شود؟`, btn);
 }
 
 const accountKey = () => 'profile:' + actor.uid;
@@ -340,6 +376,25 @@ function renderGuideArea(question) {
   area.innerHTML = '';
 }
 
+// یک پله بالا رفتن نردبان + رندر + اعلام صوتی پله (v10.1.2) — نقطهٔ مشترک دکمهٔ راهنما و نردبان خودکار
+function showGuideStepUp(question) {
+  const ladder = buildLadder({ f1: question.f1, f2: question.f2 });
+  if (ladder) {
+    legacyGuideShown = false;
+  } else {
+    // fallback امن: راهنمای یک‌پله‌ای قدیمی با toggle محلی (نه showGuide نقشه)
+    legacyGuideShown = !legacyGuideShown;
+  }
+  renderGuideArea(question);
+  const btn = $('question-guide-button');
+  if (btn) btn.textContent = guideButtonLabel();
+  if (ladder && hintLevel > 0) {
+    const stepText = ladder[hintLevel - 1]?.textFa;
+    if (stepText) void speakFa(stepText);
+  }
+  return ladder;
+}
+
 function renderQuestionView() {
   const session = state.session;
   const questions = session?.questions || [];
@@ -381,6 +436,7 @@ function renderQuestionView() {
   if (guideBtn) {
     guideBtn.disabled = false;
     guideBtn.textContent = guideButtonLabel();
+    guideBtn.classList.remove('attract');
   }
   renderGuideArea(question);
 }
@@ -408,6 +464,15 @@ async function handleAnswerSubmit(userAnswer) {
     });
     $('question-feedback').textContent = result.feedback;
     void playStationAudio(result.sound);
+    // نردبان خودکار پلهٔ ۱ (v10.1.2): بعد از خطا، ملایم‌ترین راهنما («به عددها نگاه کن»)
+    // همان لحظه دیده و شنیده می‌شود — بدون افشای پاسخ (assertNoLeak پلهٔ ۱)
+    if (hintLevel === 0) {
+      hintLevel = 1;
+      session.hintsMax = Math.max(session.hintsMax || 0, hintLevel);
+      const autoBtn = $('question-guide-button');
+      if (autoBtn) autoBtn.classList.add('attract');
+      showGuideStepUp(question);
+    }
     return;
   }
 
@@ -697,18 +762,10 @@ function setupEvents() {
     hintLevel = Math.min(7, hintLevel + 1);
     session.hintsMax = Math.max(session.hintsMax || 0, hintLevel); // بیشترین پلهٔ جلسهٔ جاری
 
-    const ladder = buildLadder({ f1: question.f1, f2: question.f2 });
-    if (ladder) {
-      legacyGuideShown = false;
-    } else {
-      // fallback امن: راهنمای یک‌پله‌ای قدیمی با toggle محلی (نه showGuide نقشه)
-      legacyGuideShown = !legacyGuideShown;
-    }
-
-    renderGuideArea(question);
-
     const btn = $('question-guide-button');
-    if (btn) btn.textContent = guideButtonLabel();
+    if (btn) btn.classList.remove('attract'); // کودک خودش سراغ راهنما آمد؛ نبض لازم نیست
+
+    const ladder = showGuideStepUp(question); // رندر + اعلام صوتی پله
 
     if (ladder && hintLevel === 2) applyHintCooldown(5);
     else if (ladder && hintLevel === 4) applyHintCooldown(10);

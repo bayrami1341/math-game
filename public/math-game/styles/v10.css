@@ -332,8 +332,14 @@ main.main-shell {
 
 .answer-form {
   display: flex;
+  flex-wrap: wrap; /* v10.1.2: روی موبایل دکمه‌ها با احترام می‌شکنند، نه بریده/سرریز */
   gap: 12px;
   align-items: center;
+  justify-content: center;
+}
+
+.answer-form .secondary-button {
+  white-space: nowrap; /* برچسب «راهنما (گام ۱ از ۷)» هرگز عمودی فشرده نمی‌شود */
 }
 
 .answer-form input {
@@ -357,6 +363,62 @@ main.main-shell {
   font-size: 14px;
   color: #ff9f8e;
   text-align: center;
+}
+
+/* ─── ناحیهٔ راهنمای سؤال (v10.1.2): نمایان، پرکنتراست، با ورود نرم — راهنما هرگز گم نمی‌شود ─── */
+#question-guide-area {
+  margin-top: 12px;
+}
+
+#question-guide-area .guide-box {
+  color: var(--text-main);
+  font-size: 15px;
+  line-height: 1.9;
+  background-color: #0d2440;
+  border: 1px solid rgba(126, 240, 255, 0.55);
+  border-radius: 12px;
+  padding: 14px 16px;
+  animation: guide-in 0.35s ease-out;
+}
+
+#question-guide-area .guide-box svg {
+  max-width: 100%;
+  height: auto;
+  margin-top: 8px;
+}
+
+@keyframes guide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* نبض دکمهٔ راهنما بعد از پاسخ غلط — کودک می‌فهمد کمک همین‌جاست */
+#question-guide-button.attract {
+  border-color: var(--ring-color);
+  animation: guide-attract 1.5s ease-in-out 3;
+}
+
+@keyframes guide-attract {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(126, 240, 255, 0); }
+  50% { box-shadow: 0 0 0 5px rgba(126, 240, 255, 0.35); }
+}
+
+/* موبایل: ردیف پاسخ بدون سرریز — هدف لمسی 44px حفظ می‌شود */
+@media (max-width: 480px) {
+  .answer-form {
+    gap: 8px;
+  }
+  .answer-form input {
+    width: 96px;
+    height: 48px;
+    font-size: 22px;
+  }
+  .answer-form .primary-button,
+  .answer-form .secondary-button {
+    padding: 10px 12px;
+    font-size: 14px;
+    min-height: 44px;
+  }
 }
 
 .equal-groups-container {

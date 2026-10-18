@@ -152,7 +152,7 @@ commit "feat(v10.1): depth layers, side missions, 7-step scaffold ladder, Persia
   src/v9 src/v10
 commit "feat(v10.1-ui): teacher missions banner, TTS button, RTL answer field, focus outline" \
   v10.html styles/v10.css
-commit "test(v10.1): 31 tests (station, depth/bottleneck, side missions) + package 10.1.0" \
+commit "test(v10.1): 31 tests (station, depth/bottleneck, side missions) + package metadata" \
   tests package.json
 commit "docs(v10.1): comprehensive Persian guide — install, matrix, side missions, ladder" \
   "$GUIDE"
