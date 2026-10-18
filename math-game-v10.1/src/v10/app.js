@@ -36,6 +36,12 @@ const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(
 const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
   .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
+const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
+// تایپ زندهٔ فارسی: رقم لاتین/عربی همان لحظه فارسی نمایش داده می‌شود؛ نویسهٔ غیررقمی حذف می‌شود (سازگار با normalizeDigits چک پاسخ)
+const fafyAnswerInput = val => String(val || '')
+  .replace(/[0-9]/g, d => FA_DIGITS[Number(d)])
+  .replace(/[٠-٩]/g, d => FA_DIGITS['٠١٢٣٤٥٦٧٨٩'.indexOf(d)])
+  .replace(/[^۰-۹]/g, '');
 
 let local, actor, tokenProvider;
 let state = {};
@@ -572,6 +578,15 @@ function setupEvents() {
     showGuide = false;
     void refreshTeacherMissions();
     render();
+  });
+
+  // باگ تایپ: کیبورد انگلیسی رقم لاتین می‌نوشت — هر ورودی همان لحظه فارسی می‌شود
+  const answerInput = $('answer-input');
+  answerInput.addEventListener('input', () => {
+    const fafied = fafyAnswerInput(answerInput.value);
+    if (fafied === answerInput.value) return;
+    answerInput.value = fafied;
+    answerInput.setSelectionRange(fafied.length, fafied.length);
   });
 
   $('question-form').addEventListener('submit', e => {
