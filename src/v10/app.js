@@ -40,6 +40,7 @@ import {
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
 const base = (config.apiBase || '').replace(/\/$/, '');
+const toFaDigits = val => String(val || '').replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]).replace(/[٠-٩]/g, d => '۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
 const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
 const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
@@ -241,9 +242,11 @@ function renderChildShell(stationState) {
       mainBtn.hidden = true;
     }
 
-    $('station-finish-view').hidden = !isFinished;
+    const finishView = $('station-finish-view');
+    if (finishView) finishView.hidden = !isFinished;
     if (isFinished) {
-      $('finish-narrative').textContent = 'هر سه بنا روشن شدند. مخزن درست است. مأموریت ایستگاه کامل شد.';
+      const narrative = $('finish-narrative');
+      if (narrative) narrative.textContent = 'هر سه بنا روشن شدند. مخزن درست است. مأموریت ایستگاه کامل شد.';
     }
   } else if (currentView === 'question') {
     renderQuestionView();
@@ -252,14 +255,11 @@ function renderChildShell(stationState) {
 
 function render() {
   const stationState = toStationState(state.session, state.stationRecords || []);
-  stationLayer = createStationLayer(stationState, {
-    soundEnabled,
-    currentStep: state.session ? state.session.currentHintStep || 1 : 1
-  });
+  stationLayer = createStationLayer({ stationState, session: state.session });
 
   const isTeacher = Boolean(actor?.teacher);
-  $('student-view').hidden = isTeacher;
-  $('teacher-view').hidden = !isTeacher;
+  const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
+  const teacherEl = $('teacher-shell') || $('teacher-view'); if (teacherEl) teacherEl.hidden = !isTeacher;
 
   if (isTeacher) {
     renderTeacherShell();
@@ -440,60 +440,104 @@ async function handleAnswerSubmit(userAnswer) {
   }
 }
 
-// ─── تولید سؤال بر پایهٔ دامنهٔ لایه (v10.2 بر کتاب کد ۳۰۵) ───
-const X10_QUESTIONS = Object.freeze([
-  { f1: 3, f2: 10 }, { f1: 7, f2: 10 }, { f1: 9, f2: 10 }, { f1: 6, f2: 10 },
-  { f1: 8, f2: 10 }, { f1: 14, f2: 10 }, { f1: 42, f2: 10 }, { f1: 25, f2: 10 }
-]);
-const ZERO_ONE_QUESTIONS = Object.freeze([
-  { f1: 6, f2: 0 }, { f1: 0, f2: 7 }, { f1: 8, f2: 1 }, { f1: 1, f2: 9 },
-  { f1: 5, f2: 0 }, { f1: 0, f2: 3 }, { f1: 7, f2: 1 }, { f1: 1, f2: 6 },
-  { f1: 9, f2: 0 }, { f1: 4, f2: 1 }
-]);
-const MULTI_DIGIT_QUESTIONS = Object.freeze([
-  { f1: 3, f2: 24 }, { f1: 4, f2: 13 }, { f1: 2, f2: 45 },
-  { f1: 5, f2: 32 }, { f1: 2, f2: 213 }, { f1: 3, f2: 121 }
-]);
-const POWER_PAIRS = Object.freeze([[3, 5], [2, 4], [4, 6]]);
-const TOWER_PAIRS = Object.freeze([[7, 4], [8, 3], [9, 2]]);
+// ─── تولید سؤال: هر لایه خزانهٔ جدا، بدون تکرار داخل جلسه ───
+function mixSeed() {
+  return (Date.now() ^ Math.floor(Math.random() * 0x7fffffff)) >>> 0;
+}
 
-function generateQuestionsForDepth(buildingId, depth) {
+function makeRng(seed) {
+  let state = (seed || 1) >>> 0;
+  return () => {
+    state = (state + 0x6D2B79F5) | 0;
+    let t = Math.imul(state ^ (state >>> 15), 1 | state);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function shuffle(list, rng) {
+  const out = list.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    const swap = out[i];
+    out[i] = out[j];
+    out[j] = swap;
+  }
+  return out;
+}
+
+function uniquePairs(items) {
+  const seen = new Set();
+  const out = [];
+  for (const item of items) {
+    const key = item.f1 + '×' + item.f2;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(item);
+  }
+  return out;
+}
+
+function poolFromFactors(factors, partners, accept) {
+  const pool = [];
+  for (const f1 of factors) {
+    for (const f2 of partners) {
+      const item = { f1, f2 };
+      if (!accept || accept(item)) pool.push(item);
+    }
+  }
+  return uniquePairs(pool);
+}
+
+const ZERO_ONE_POOL = Object.freeze([
+  { f1: 2, f2: 0 }, { f1: 0, f2: 3 }, { f1: 4, f2: 0 }, { f1: 0, f2: 5 },
+  { f1: 6, f2: 1 }, { f1: 1, f2: 6 }, { f1: 8, f2: 1 }, { f1: 1, f2: 4 },
+  { f1: 3, f2: 1 }, { f1: 1, f2: 7 }, { f1: 5, f2: 0 }, { f1: 0, f2: 8 },
+  { f1: 7, f2: 1 }, { f1: 1, f2: 2 }
+]);
+
+function generateQuestionsForDepth(buildingId, depth, seed = mixSeed()) {
   const layerKey = `${buildingId}-${depth}`;
   const layer = DEPTH_LAYERS[layerKey] || DEPTH_LAYERS['1-1'];
   const domain = layer.domain || 'table';
-  const baseQ = (f1, f2, i, visual) => ({
-    questionId: `q_${buildingId}_${depth}_${i + 1}`,
-    f1, f2,
-    ...(visual ? { visual } : {})
+  const count = layer.questionCount || 6;
+  const focus = layer.focus || {};
+  const rng = makeRng(seed ^ (buildingId * 100 + depth));
+
+  let picked = [];
+  if (domain === 'paired' && Array.isArray(focus.pairs)) {
+    const both = [];
+    for (const [a, b] of focus.pairs) {
+      both.push({ f1: a, f2: b });
+      if (a !== b) both.push({ f1: b, f2: a });
+    }
+    picked = shuffle(uniquePairs(both), rng).slice(0, count);
+  } else if (domain === 'zero-one') {
+    picked = shuffle(uniquePairs(ZERO_ONE_POOL), rng).slice(0, count);
+  } else if (domain === 'x10') {
+    picked = shuffle(poolFromFactors(focus.factors || [2, 3, 4, 5, 6, 7], [10], q => q.f2 === 10 && q.f1 >= 2 && q.f1 <= 9), rng).slice(0, count);
+  } else if (domain === 'multi-digit') {
+    picked = shuffle(poolFromFactors(
+      focus.factors || [2, 3, 4, 5, 6],
+      focus.partners || [20, 30, 40, 50, 100],
+      q => q.f1 >= 2 && q.f1 <= 9 && q.f2 >= 20 && q.f2 % 10 === 0
+    ), rng).slice(0, count);
+  } else {
+    const factors = focus.factors || [2, 3, 4, 5];
+    const partners = focus.partners || factors;
+    picked = shuffle(poolFromFactors(factors, partners, q => q.f1 >= 2 && q.f2 >= 2), rng).slice(0, count);
+  }
+
+  const showGroups = layerKey === '1-1';
+  return picked.map((q, i) => {
+    const visual = showGroups && q.f1 > 0 && q.f2 > 0 && (q.f1 * q.f2) <= 60 ? 'equal-groups' : null;
+    return {
+      questionId: `q_${buildingId}_${depth}_${i + 1}`,
+      f1: q.f1,
+      f2: q.f2,
+      ...(visual ? { visual } : {})
+    };
   });
-
-  if (domain === 'x10') return X10_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
-  if (domain === 'zero-one') return ZERO_ONE_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
-  if (domain === 'multi-digit') return MULTI_DIGIT_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
-
-  if (domain === 'paired') {
-    const pairs = buildingId === 1 ? POWER_PAIRS : TOWER_PAIRS;
-    const out = [];
-    pairs.forEach(([a, b], k) => {
-      out.push(baseQ(a, b, k * 2, 'equal-groups'));
-      out.push(baseQ(b, a, k * 2 + 1));
-    });
-    return out;
-  }
-
-  const factors = layer.focus?.factors || [buildingId + 1];
-  const count = layer.questionCount || 8;
-  const visualAll = layerKey === '1-1';
-  const visualFirst = layerKey === '2-1';
-
-  const questions = [];
-  for (let i = 0; i < count; i++) {
-    const f1 = factors[i % factors.length];
-    const f2 = (i % 9) + 2;
-    const visual = (visualAll || (visualFirst && i < 4)) ? 'equal-groups' : null;
-    questions.push(baseQ(f1, f2, i, visual));
-  }
-  return questions;
 }
 
 function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = null) {
@@ -606,6 +650,19 @@ function setupEvents() {
 }
 
 export async function initApp() {
+  const answerInput = $('answer-input');
+  if (answerInput && !answerInput.dataset.faListener) {
+    answerInput.dataset.faListener = 'true';
+    answerInput.addEventListener('input', () => {
+      const start = answerInput.selectionStart;
+      const end = answerInput.selectionEnd;
+      const next = toFaDigits(answerInput.value);
+      if (next === answerInput.value) return;
+      answerInput.value = next;
+      if (start != null && end != null) answerInput.setSelectionRange(start, end);
+    });
+  }
+
   local = await openLocal('math_game_v10');
   setupEvents();
 

@@ -54,49 +54,49 @@ export const DEPTH_LAYERS = Object.freeze({
     id: '1-1', sectorId: 1, depth: 1, type: 'depth',
     title: 'سلول‌های پایه', questionCount: 6, difficulty: 'basic',
     domain: 'table',
-    focus: { factors: [2, 3, 4, 5], visual: 'equal-groups' },
+    focus: { factors: [2, 3, 4, 5], partners: [2, 3, 4, 5], visual: 'equal-groups' },
     unlock: null
   },
   '1-2': {
     id: '1-2', sectorId: 1, depth: 2, type: 'depth',
     title: 'سلول‌های پایدار', questionCount: 8, difficulty: 'stable',
     domain: 'table',
-    focus: { factors: [6, 7, 8], preferFluent: true },
+    focus: { factors: [6, 7, 8], partners: [2, 3, 4, 5, 6, 7, 8], preferFluent: true },
     unlock: { require: 'depth', id: '1-1', minPercent: 70 }
   },
   '1-3': {
     id: '1-3', sectorId: 1, depth: 3, type: 'depth',
     title: 'دسته‌ها و چرخش', questionCount: 10, difficulty: 'conceptual',
     domain: 'paired', paired: true,
-    focus: { bottleneckTypes: ['equal-groups', 'skip-counting', 'commutativity'] },
+    focus: { pairs: [[9, 2], [9, 3], [9, 4], [9, 5], [9, 6]], bottleneckTypes: ['equal-groups', 'skip-counting', 'commutativity'] },
     unlock: { require: 'depth', id: '1-2', minPercent: 75 }
   },
   '2-1': {
     id: '2-1', sectorId: 2, depth: 1, type: 'depth',
     title: 'آنتن‌های اولیه', questionCount: 6, difficulty: 'basic',
     domain: 'table',
-    focus: { factors: [6, 7, 8, 9] },
+    focus: { factors: [6, 7], partners: [2, 3, 4] },
     unlock: null
   },
   '2-2': {
     id: '2-2', sectorId: 2, depth: 2, type: 'depth',
     title: 'سیگنال پایدار', questionCount: 8, difficulty: 'stable',
     domain: 'table',
-    focus: { factors: [7, 8, 9, 10], preferFluent: true },
+    focus: { factors: [8, 9], partners: [2, 3, 4, 5], preferFluent: true },
     unlock: { require: 'depth', id: '2-1', minPercent: 70 }
   },
   '2-3': {
     id: '2-3', sectorId: 2, depth: 3, type: 'depth',
     title: 'چرخش و شکستن', questionCount: 10, difficulty: 'conceptual',
     domain: 'paired', paired: true,
-    focus: { bottleneckTypes: ['commutativity', 'anchor-5'] },
+    focus: { pairs: [[6, 7], [6, 8], [6, 9], [7, 8], [7, 9]], bottleneckTypes: ['commutativity', 'anchor-5'] },
     unlock: { require: 'depth', id: '2-2', minPercent: 75 }
   },
   '3-1': {
     id: '3-1', sectorId: 3, depth: 1, type: 'depth',
     title: 'ضرب در ده', questionCount: 6, difficulty: 'basic',
     domain: 'x10',
-    focus: { bottleneckTypes: ['place-value'] },
+    focus: { factors: [2, 3, 4, 5, 6, 7], partners: [10], bottleneckTypes: ['place-value'] },
     unlock: null
   },
   '3-2': {
@@ -110,7 +110,7 @@ export const DEPTH_LAYERS = Object.freeze({
     id: '3-3', sectorId: 3, depth: 3, type: 'depth',
     title: 'یک رقم در عدد بزرگ‌تر', questionCount: 10, difficulty: 'conceptual',
     domain: 'multi-digit',
-    focus: { bottleneckTypes: ['place-value', 'distributive-part'] },
+    focus: { factors: [2, 3, 4, 5, 6], partners: [20, 30, 40, 50, 100], bottleneckTypes: ['place-value', 'distributive-part'] },
     unlock: { require: 'depth', id: '3-2', minPercent: 75 }
   }
 });
