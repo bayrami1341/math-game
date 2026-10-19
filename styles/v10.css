@@ -540,3 +540,10 @@ main.main-shell {
 }
 
 #answer-input { font-family: Tahoma, Vazirmatn, sans-serif; }
+
+.station-finish {
+  margin: 8px 0 0;
+  text-align: center;
+  color: #d7fff4;
+}
+.station-finish p { margin: 0; }
