@@ -1,4 +1,4 @@
-﻿// Version 10.2 Client Application â€” Powered by Station Layer on top of v9 Core
+// Version 10.2 Client Application — Powered by Station Layer on top of v9 Core
 import { openLocal } from '../v9/local.mjs';
 import { connectApi } from '../v9/connection.mjs';
 import { loadFirebaseLogin, googleLogin, loginError } from '../v9/firebase-login.mjs';
@@ -43,10 +43,10 @@ const base = (config.apiBase || '').replace(/\/$/, '');
 const toFaDigits = val => String(val || '')
   .replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
   .replace(/[٠-٩]/g, d => '۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
-const fa = num => String(num).replace(/\d/g, d => 'Û°Û±Û²Û³Û´ÛµÛ¶Û·Û¸Û¹'[Number(d)]);
+const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
 const normalizeDigits = val => String(val || '')
-  .replace(/[Û°-Û¹]/g, d => String('Û°Û±Û²Û³Û´ÛµÛ¶Û·Û¸Û¹'.indexOf(d)))
-  .replace(/[Ù -Ù©]/g, d => String('Ù Ù¡Ù¢Ù£Ù¤Ù¥Ù¦Ù§Ù¨Ù©'.indexOf(d)));
+  .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
+  .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 
 function escHtml(s) {
   return String(s || '').replace(/[&<>"']/g, c => ({
@@ -93,7 +93,7 @@ function run(task) {
     try {
       await task();
     } catch (err) {
-      notice(err.message || 'Ø¹Ù…Ù„ÛŒØ§Øª Ø§Ù†Ø¬Ø§Ù… Ù†Ø´Ø¯.', true);
+      notice(err.message || 'عملیات انجام نشد.', true);
     } finally {
       document.querySelectorAll('button').forEach(b => { b.disabled = false; });
     }
@@ -112,11 +112,11 @@ async function saveState(data) {
   await local.put('states', profileStorageKey(), data);
 }
 
-// â”€â”€â”€ Ú©Ø§Ø±Øªâ€ŒÙ‡Ø§ÛŒ ØªØ´Ø®ÛŒØµÛŒ Ù…Ø¹Ù„Ù… Ùˆ Ø¨Ø§Ø²Ù†ÙˆÛŒØ³ÛŒ Ø¨Ø±Ú†Ø³Ø¨ (v10.2) â”€â”€â”€
+// ─── کارت‌های تشخیصی معلم و بازنویسی برچسب (v10.2) ───
 const RELABEL_LABELS_FA = Object.freeze({
-  confirmed: 'ØªØ£ÛŒÛŒØ¯Ø´Ø¯Ù‡',
-  'case-slip': 'Ù„ØºØ²Ø´ Ù…ÙˆØ±Ø¯ÛŒ',
-  rejected: 'Ø±Ø¯Ø´Ø¯Ù‡'
+  confirmed: 'تأییدشده',
+  'case-slip': 'لغزش موردی',
+  rejected: 'ردشده'
 });
 
 function buildTeacherErrorCards(profileId, attempts, overrides) {
@@ -125,39 +125,39 @@ function buildTeacherErrorCards(profileId, attempts, overrides) {
     .slice(-6)
     .reverse();
   if (!flagged.length) {
-    return '<p style="color: #8aa0ab; font-size: 0.9rem;">Ù‡Ù†ÙˆØ² Ø®Ø·Ø§ÛŒÛŒ Ø¨Ø±Ø§ÛŒ Ø§ÛŒÙ† Ø¬Ù„Ø³Ù‡ Ø«Ø¨Øª Ù†Ø´Ø¯Ù‡ Ø§Ø³Øª.</p>';
+    return '<p style="color: #8aa0ab; font-size: 0.9rem;">هنوز خطایی برای این جلسه ثبت نشده است.</p>';
   }
   const cards = flagged.map(a => {
     const code = dominantCode(a.wrongCodes);
-    const sentence = CODE_SENTENCES_FA[code] || 'Ø§Ù„Ú¯ÙˆÛŒ Ø±ÙˆØ´Ù†ÛŒ Ù¾ÛŒØ¯Ø§ Ù†Ø´Ø¯.';
+    const sentence = CODE_SENTENCES_FA[code] || 'الگوی روشنی پیدا نشد.';
     const key = `${profileId}:${a.eventId}`;
     const ov = overrides?.[key];
     const examples = (a.wrongExamples || [])
-      .map(w => `${fa(w.f1)}Ã—${fa(w.f2)} Ø±Ø§ ${fa(w.submitted)} Ù†ÙˆØ´ØªÙ‡`)
-      .join(' â€¢ ');
+      .map(w => `${fa(w.f1)}×${fa(w.f2)} را ${fa(w.submitted)} نوشته`)
+      .join(' • ');
     const labelChip = ov?.label
       ? `<span class="teacher-label-chip teacher-label-${ov.label}">${RELABEL_LABELS_FA[ov.label] || ''}</span>`
       : '';
     return `<div class="teacher-error-card">
-      <p class="teacher-error-headline">${escHtml(sentence)} Ú©Ø¯: <strong>${code}</strong>${labelChip}</p>
+      <p class="teacher-error-headline">${escHtml(sentence)} کد: <strong>${code}</strong>${labelChip}</p>
       ${examples ? `<p class="teacher-error-examples">${escHtml(examples)}.</p>` : ''}
-      <p class="teacher-error-meta">${BUILDING_NAMES[a.sectorId] || 'Ø¨Ù†Ø§'}${a.depth ? ` â€” Ù„Ø§ÛŒÙ‡Ù” ${fa(a.depth)}` : ''}${a.type === 'side' ? ' â€” ØªÙ…Ø±ÛŒÙ† Ø¬Ø§Ù†Ø¨ÛŒ' : ''}</p>
-      ${ov?.note ? `<p class="teacher-error-note">ÛŒØ§Ø¯Ø¯Ø§Ø´Øª: ${escHtml(ov.note)}</p>` : ''}
-      <div class="teacher-relabel-row" role="group" aria-label="Ø¨Ø§Ø²Ù†ÙˆÛŒØ³ÛŒ Ø¨Ø±Ú†Ø³Ø¨ Ø®Ø·Ø§">
-        <button type="button" data-relabel="confirmed" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'confirmed' ? 'active' : ''}">ØªØ£ÛŒÛŒØ¯ ØªØ´Ø®ÛŒØµ</button>
-        <button type="button" data-relabel="case-slip" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'case-slip' ? 'active' : ''}">Ù„ØºØ²Ø´ Ù…ÙˆØ±Ø¯ÛŒ</button>
-        <button type="button" data-relabel="rejected" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'rejected' ? 'active' : ''}">Ø±Ø¯ ØªØ´Ø®ÛŒØµ</button>
+      <p class="teacher-error-meta">${BUILDING_NAMES[a.sectorId] || 'بنا'}${a.depth ? ` — لایهٔ ${fa(a.depth)}` : ''}${a.type === 'side' ? ' — تمرین جانبی' : ''}</p>
+      ${ov?.note ? `<p class="teacher-error-note">یادداشت: ${escHtml(ov.note)}</p>` : ''}
+      <div class="teacher-relabel-row" role="group" aria-label="بازنویسی برچسب خطا">
+        <button type="button" data-relabel="confirmed" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'confirmed' ? 'active' : ''}">تأیید تشخیص</button>
+        <button type="button" data-relabel="case-slip" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'case-slip' ? 'active' : ''}">لغزش موردی</button>
+        <button type="button" data-relabel="rejected" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'rejected' ? 'active' : ''}">رد تشخیص</button>
       </div>
-      <input type="text" class="teacher-note-input" data-note-id="${a.eventId}" data-profile-id="${profileId}" value="${escHtml(ov?.note || '')}" maxlength="200" placeholder="ÛŒØ§Ø¯Ø¯Ø§Ø´Øª Ù…Ø¹Ù„Ù… (Ø§Ø®ØªÛŒØ§Ø±ÛŒ)">
+      <input type="text" class="teacher-note-input" data-note-id="${a.eventId}" data-profile-id="${profileId}" value="${escHtml(ov?.note || '')}" maxlength="200" placeholder="یادداشت معلم (اختیاری)">
     </div>`;
   }).join('');
-  return `<div class="teacher-cards"><h5>Ú©Ø§Ø±Øªâ€ŒÙ‡Ø§ÛŒ ØªØ´Ø®ÛŒØµÛŒ Ø¬Ù„Ø³Ù‡â€ŒÙ‡Ø§</h5>${cards}</div>`;
+  return `<div class="teacher-cards"><h5>کارت‌های تشخیصی جلسه‌ها</h5>${cards}</div>`;
 }
 
 function renderTeacherShell() {
   $('teacher-summary').textContent = teacherClass
-    ? `Ú©Ù„Ø§Ø³: ${teacherClass.name} â€” Ø§Ø¹Ø¶Ø§: ${fa(teacherClass.members?.length || 0)} Ù†ÙØ±`
-    : 'ÛŒÚ© Ú©Ù„Ø§Ø³ Ø±Ø§ Ø¨Ø±Ø§ÛŒ Ø¨Ø±Ø±Ø³ÛŒ Ø§Ù†ØªØ®Ø§Ø¨ Ú©Ù†ÛŒØ¯.';
+    ? `کلاس: ${teacherClass.name} — اعضا: ${fa(teacherClass.members?.length || 0)} نفر`
+    : 'یک کلاس را برای بررسی انتخاب کنید.';
 
   const container = $('teacher-cards-container');
   if (container) {
@@ -218,7 +218,7 @@ function renderChildShell(stationState) {
       const prereq = id === BUILDINGS.TOWER ? BUILDINGS.POWER : BUILDINGS.TOWER;
       const sys = systems.find(s => s.sectorId === prereq);
       const layerLeft = sys ? Math.min(3, (sys.currentDepth || 0) + 1) : 1;
-      return `<p class="building-lock-note">Ù†ÛŒØ§Ø²: Ù‡Ø± Ø³Ù‡ Ù„Ø§ÛŒÙ‡Ù” ${BUILDING_NAMES[prereq]} Ú©Ø§Ù…Ù„ Ø´ÙˆØ¯ (Ø§Ù„Ø§Ù† Ù„Ø§ÛŒÙ‡Ù” ${fa(layerLeft)} â€” ${fa(sys?.percent || 0)}Ùª)</p>`;
+      return `<p class="building-lock-note">نیاز: هر سه لایهٔ ${BUILDING_NAMES[prereq]} کامل شود (الان لایهٔ ${fa(layerLeft)} — ${fa(sys?.percent || 0)}٪)</p>`;
     };
 
     $('building-power').innerHTML = renderBuildingSVG(BUILDINGS.POWER, powerState);
@@ -246,7 +246,7 @@ function renderChildShell(stationState) {
 
     $('station-finish-view').hidden = !isFinished;
     if (isFinished) {
-      $('finish-narrative').textContent = 'Ù‡Ø± Ø³Ù‡ Ø¨Ù†Ø§ Ø±ÙˆØ´Ù† Ø´Ø¯Ù†Ø¯. Ù…Ø®Ø²Ù† Ø¯Ø±Ø³Øª Ø§Ø³Øª. Ù…Ø£Ù…ÙˆØ±ÛŒØª Ø§ÛŒØ³ØªÚ¯Ø§Ù‡ Ú©Ø§Ù…Ù„ Ø´Ø¯.';
+      $('finish-narrative').textContent = 'هر سه بنا روشن شدند. مخزن درست است. مأموریت ایستگاه کامل شد.';
     }
   } else if (currentView === 'question') {
     renderQuestionView();
@@ -255,7 +255,7 @@ function renderChildShell(stationState) {
 
 function render() {
   const stationState = toStationState(state.session, state.stationRecords || []);
-   stationLayer = createStationLayer({ stationState, session: state.session });
+  stationLayer = createStationLayer({ stationState, session: state.session });
 
   const isTeacher = Boolean(actor?.teacher);
   const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
@@ -291,30 +291,30 @@ function renderQuestionView() {
   }).join('');
 
   // CPA visual representation layer
-  const visEl = document.getElementById('question-visual'); if (visEl) {
+  const visEl = $('question-visual');
   if (visEl) {
     const canVisual = question.visual === 'equal-groups'
       && question.f1 > 0 && question.f2 > 0 && (question.f1 * question.f2) <= 60;
-      visEl.hidden = !canVisual;
-      visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : ''; }
+    visEl.hidden = !canVisual;
+    visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : '';
   }
 
   // Question equation
-  $('question-equation').textContent = `${fa(question.f1)} Ã— ${fa(question.f2)} = ØŸ`;
+  $('question-equation').textContent = `${fa(question.f1)} × ${fa(question.f2)} = ؟`;
 
   // Guide area (7-step ladder)
   if (showGuide) {
     const stepNum = session.currentHintStep || 1;
     const ladder = buildLadder(question);
     const stepObj = ladder ? ladder[stepNum - 1] : null;
-    const hintText = stepObj ? (stepObj.text || stepObj.textFa) : 'Ø¨Ù‡ Ø¯Ø³ØªÙ‡â€ŒÙ‡Ø§ Ùˆ Ø§Ø¹Ø¶Ø§ Ù†Ú¯Ø§Ù‡ Ú©Ù†.';
+    const hintText = stepObj ? (stepObj.text || stepObj.textFa) : 'به دسته‌ها و اعضا نگاه کن.';
 
     session.hintsMax = Math.max(session.hintsMax || 0, stepNum);
 
     $('question-guide-area').hidden = false;
     $('question-guide-area').innerHTML = `
       <div class="guide-box">
-        <p><strong>Ù¾Ù„Ù‡Ù” ${fa(stepNum)} Ø§Ø² Û·:</strong> ${escHtml(hintText)}</p>
+        <p><strong>پلهٔ ${fa(stepNum)} از ۷:</strong> ${escHtml(hintText)}</p>
       </div>
       ${(stepObj?.visual === 'equal-groups' && renderEqualGroupsSVG(question.f1, question.f2)) || ''}
     `;
@@ -355,7 +355,7 @@ async function handleAnswerSubmit(userAnswer) {
     return;
   }
 
-  // Ø«Ø¨Øª Ù¾Ø°ÛŒØ±Ø´ Ø§ÛŒÙ† Ø¹Ø¨Ø§Ø±Øª Ø¨Ø±Ø§ÛŒ Ú©Ø¯Ù‡Ø§ÛŒ Ø±ÙØªØ§Ø±ÛŒ
+  // ثبت پذیرش این عبارت برای کدهای رفتاری
   session.acceptedFacts = session.acceptedFacts || [];
   session.acceptedFacts.push({ f1: question.f1, f2: question.f2 });
 
@@ -389,7 +389,7 @@ async function handleAnswerSubmit(userAnswer) {
     session.score = session.questions.length;
     session.total = session.questions.length;
 
-    // Ø«Ø¨Øª Ú¯Ø²Ø§Ø±Ø´ ØªÙ„Ø§Ø´â€ŒÙ‡Ø§ (attemptLog)
+    // ثبت گزارش تلاش‌ها (attemptLog)
     state.attemptLog = state.attemptLog || [];
     const wrongCodes = {};
     const wrongExamples = [];
@@ -440,7 +440,7 @@ async function handleAnswerSubmit(userAnswer) {
   }
 }
 
-// â”€â”€â”€ ØªÙˆÙ„ÛŒØ¯ Ø³Ø¤Ø§Ù„ Ø¨Ø± Ù¾Ø§ÛŒÙ‡Ù” Ø¯Ø§Ù…Ù†Ù‡Ù” Ù„Ø§ÛŒÙ‡ (v10.2 Ø¨Ø± Ú©ØªØ§Ø¨ Ú©Ø¯ Û³Û°Ûµ) â”€â”€â”€
+// ─── تولید سؤال بر پایهٔ دامنهٔ لایه (v10.2 بر کتاب کد ۳۰۵) ───
 const X10_QUESTIONS = Object.freeze([
   { f1: 3, f2: 10 }, { f1: 7, f2: 10 }, { f1: 9, f2: 10 }, { f1: 6, f2: 10 },
   { f1: 8, f2: 10 }, { f1: 14, f2: 10 }, { f1: 42, f2: 10 }, { f1: 25, f2: 10 }
@@ -529,7 +529,7 @@ function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = 
 function setupEvents() {
   $('toggle-sound').addEventListener('click', () => {
     soundEnabled = !soundEnabled;
-    $('toggle-sound').textContent = soundEnabled ? 'ØµØ¯Ø§: Ø±ÙˆØ´Ù†' : 'ØµØ¯Ø§: Ø®Ø§Ù…ÙˆØ´';
+    $('toggle-sound').textContent = soundEnabled ? 'صدا: روشن' : 'صدا: خاموش';
     $('toggle-sound').setAttribute('aria-pressed', String(soundEnabled));
     if (soundEnabled) {
       void playStationAudio(SOUND_EVENTS.accepted);
@@ -622,7 +622,7 @@ export async function initApp() {
   setupEvents();
 
   actor = { uid: 'anon_student_' + Math.random().toString(36).slice(2, 8), teacher: false };
-  profiles = [{ studentId: 'student_1', displayName: 'Ú©ÙˆØ¯Ú©' }];
+  profiles = [{ studentId: 'student_1', displayName: 'کودک' }];
   selectedId = 'student_1';
 
   state = await loadState();
@@ -632,4 +632,3 @@ export async function initApp() {
 window.addEventListener('DOMContentLoaded', () => {
   void initApp();
 });
-
