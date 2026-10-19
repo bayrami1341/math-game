@@ -4,7 +4,7 @@
   "description": "کارگاه ضرب — نسخهٔ ۱۰.۱ با مدل داده لایه‌های عمق و گلوگاه‌های یادگیری",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js",
+    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js",
     "start": "npx serve ."
   }
 }

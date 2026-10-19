@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# کیت نصب «کارگاه ضرب — نسخهٔ ۱۰.۱» روی مخزن github.com/bayrami1341/math-game
+# کیت نصب «کارگاه ضرب — نسخهٔ ۱۰.۲» روی مخزن github.com/bayrami1341/math-game
 # Multiplication Workshop v10.1 installer   (target branch: v6)
 #
 # استفاده / Usage:
@@ -120,7 +120,7 @@ else
 fi
 
 # ── ۳) کپی فایل‌های کیت روی کلون ─────────────────────────────────────────────
-info "کپی فایل‌های نسخهٔ ۱۰.۱ …"
+info "کپی فایل‌های نسخهٔ ۱۰.۲ …"
 cp -f "$KIT_DIR/v10.html" "$KIT_DIR/package.json" .
 cp -f "$KIT_DIR/$GUIDE" .
 mkdir -p styles src/v10/station src/v9 tests
@@ -149,13 +149,13 @@ commit() { # $1 = پیام، بقیه = مسیرها
   fi
 }
 
-commit "feat(v10.1): depth layers, side missions, 7-step scaffold ladder, Persian typing" \
+commit "feat(v10.2): textbook-305 domains (no 11/12, pad x10/zero/one/multi-digit), 3-layer unlocks 70/75/80, depth-unlock P0 fix" \
   src/v9 src/v10
-commit "feat(v10.1-ui): teacher missions banner, TTS button, RTL answer field, focus outline" \
+commit "feat(v10.2-ui): 12-error teacher card with relabel, CPA equal-groups visuals, lock-condition chips" \
   v10.html styles/v10.css
-commit "test(v10.1): 31 tests (station, depth/bottleneck, side missions) + package metadata" \
+commit "test(v10.2): 53 tests (station, depth, side missions, 12-error atlas, textbook domains) + package metadata" \
   tests package.json
-commit "docs(v10.1): comprehensive Persian guide — install, matrix, side missions, ladder" \
+commit "docs(v10.2): comprehensive Persian guide — install, matrix, side missions, ladder, error atlas" \
   "$GUIDE"
 
 echo
