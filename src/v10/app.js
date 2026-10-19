@@ -258,8 +258,8 @@ function render() {
   });
 
   const isTeacher = Boolean(actor?.teacher);
-  $('student-view').hidden = isTeacher;
-  $('teacher-view').hidden = !isTeacher;
+  const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
+  const teacherEl = $('teacher-shell') || $('teacher-view'); if (teacherEl) teacherEl.hidden = !isTeacher;
 
   if (isTeacher) {
     renderTeacherShell();
@@ -291,12 +291,12 @@ function renderQuestionView() {
   }).join('');
 
   // CPA visual representation layer
-  const visEl = $('question-visual');
+  const visEl = document.getElementById('question-visual'); if (visEl) {
   if (visEl) {
     const canVisual = question.visual === 'equal-groups'
       && question.f1 > 0 && question.f2 > 0 && (question.f1 * question.f2) <= 60;
-    visEl.hidden = !canVisual;
-    visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : '';
+      visEl.hidden = !canVisual;
+      visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : ''; }
   }
 
   // Question equation
