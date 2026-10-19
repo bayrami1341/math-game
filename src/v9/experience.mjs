@@ -8,16 +8,10 @@
 export const RULES_VERSION = 'rv1';
 export const QUESTION_SET_VERSION = 'graph-v10.2';
 export const LEGACY_QUESTION_SET = 'graph-v8.1';
-// مهاجرت v10.2: نسخه‌های پذیرفته‌شدهٔ مجموعه‌سؤال — پیشرفت نسخه‌های ۱۰ و ۱۰.۱ کودکان سوخت نمی‌شود
 export const ACCEPTED_QUESTION_SETS = Object.freeze(['graph-v10.2', 'graph-v10.1', 'graph-v8.1']);
 export const LEGACY_QUESTION_SETS = Object.freeze(['graph-v10.1', 'graph-v8.1']);
 const isAcceptedVersion = v => ACCEPTED_QUESTION_SETS.includes(v);
 
-// ------------------------------------------------------------
-// ۱.۴ آستانه‌های v10.2 — بازنگری تجربهٔ میدانی «محتوای کم»
-// هر بنا سه لایه دارد و با گذراندن هر سه لایه کامل می‌شود:
-//   لایهٔ ۱ با ۷۰٪ ← لایهٔ ۲ | لایهٔ ۲ با ۷۵٪ ← لایهٔ ۳ | لایهٔ ۳ با ۸۰٪ ← کامل شدن بنا
-// ------------------------------------------------------------
 export const LAYER_PASS_MARK = Object.freeze({ 1: 70, 2: 75, 3: 80 });
 export const UNLOCK_THRESHOLDS = Object.freeze({
   layer1Pass: 70,
@@ -27,9 +21,6 @@ export const UNLOCK_THRESHOLDS = Object.freeze({
   coreAnyLayer: 60
 });
 
-// ------------------------------------------------------------
-// ۱. سکتورهای اصلی (تغییرناپذیر)
-// ------------------------------------------------------------
 export const CORE_SECTORS = Object.freeze({
   1: {
     sectorId: 1, type: 'core', key: 'power',
@@ -44,7 +35,6 @@ export const CORE_SECTORS = Object.freeze({
     title: 'یک پیام تا زمین', destination: 'برج ارتباط',
     objective: 'صدای زمین قطع شده! آنتن ایستگاه را با سلول‌های درست دوباره راه بینداز.',
     icon: '📡', order: 2,
-    // v10.2: برج با تکمیل هر سه لایهٔ نیروگاه باز می‌شود (کتاب: جابه‌جایی و شکستن، صفحهٔ ۷۰–۷۲)
     unlock: { require: 'core-complete', sectorId: 1 },
     focus: { factors: [6, 7, 8, 9], maxProduct: 81 },
     maxDepth: 3
@@ -54,21 +44,14 @@ export const CORE_SECTORS = Object.freeze({
     title: 'آمادهٔ پرواز', destination: 'سکوی پرتاب',
     objective: 'وقت برگشتن به مدار است. سوخت درست را پیدا کن و سفینه را برای پرواز آماده کن.',
     icon: '🚀', order: 3,
-    // v10.2: سکو = صفحه‌های ۱۳۶–۱۴۴ کتاب (×۱۰، ×۰، ×۱، یک‌رقم در چندرقمی) — ×۱۱ و ×۱۲ بیرون کتاب حذف شدند
     unlock: { require: 'core-complete', sectorId: 2 },
     focus: { domains: ['x10', 'zero-one', 'multi-digit'], maxProduct: 999 },
     maxDepth: 3
   }
 });
 
-// Backward compatibility alias for legacy imports
 export const missions = CORE_SECTORS;
 
-// ------------------------------------------------------------
-// ۲. لایه‌های عمق (۳ لایه × ۳ بنا = ۹ لایه) — v10.2 دامنه‌ها بر کتاب کد ۳۰۵
-//    نیروگاه ۶۴–۶۹: دسته/آرایه/جدول | برج ۷۰–۷۲: جابه‌جایی و شکستن (لنگر ۵)
-//    سکو ۱۳۶–۱۴۴: ×۱۰ سپس ×۰ و ×۱ سپس یک‌رقم در چندرقمی | تقریب → v10.3
-// ------------------------------------------------------------
 export const DEPTH_LAYERS = Object.freeze({
   '1-1': {
     id: '1-1', sectorId: 1, depth: 1, type: 'depth',
@@ -135,9 +118,6 @@ export const DEPTH_LAYERS = Object.freeze({
   }
 });
 
-// ------------------------------------------------------------
-// ۳. مأموریت‌های جانبی
-// ------------------------------------------------------------
 export const SIDE_MISSIONS = Object.freeze({
   'side-1-antenna': {
     id: 'side-1-antenna', type: 'side', parentSectorId: 1,
@@ -159,15 +139,12 @@ export const SIDE_MISSIONS = Object.freeze({
     id: 'side-3-fuel', type: 'side', parentSectorId: 3,
     title: 'تأمین سوخت اضافه', objective: 'سوخت اضافه برای سفینه آماده کن.',
     icon: '🚀', questionCount: 5,
-    focus: { factors: [10, 20, 30], adaptive: true }, // v10.2: حذف ×۱۱/×۱۲ بیرون کتاب
+    focus: { factors: [10, 20, 30], adaptive: true },
     unlock: { require: 'core', sectorId: 3, minPercent: 60 },
     affectsLeaderboard: false, reward: 'energy'
   }
 });
 
-// ------------------------------------------------------------
-// ۴. توابع دسترسی (Pure)
-// ------------------------------------------------------------
 export function getCoreSectors() {
   return Object.values(CORE_SECTORS).sort((a, b) => a.order - b.order);
 }
@@ -183,11 +160,6 @@ export function getSideMissionsForSector(sectorId) {
     .filter(m => m.parentSectorId === sectorId);
 }
 
-// ------------------------------------------------------------
-// ۴.۵ تکمیل بنا (v10.2): هر بنا با گذراندن هر سه لایه کامل می‌شود
-// لایهٔ ۱ ≥ ۷۰٪ | لایهٔ ۲ ≥ ۷۵٪ | لایهٔ ۳ ≥ ۸۰٪
-// + احترام به پیشرفت نسخه‌های قدیمی: جلسهٔ کاملِ نسخهٔ ۱۰/۱۰.۱ (۱۰۰٪) بنا را کامل می‌شمارد
-// ------------------------------------------------------------
 export function sectorComplete(records = [], sectorId) {
   const safe = Array.isArray(records) ? records : [];
   const rel = safe.filter(r =>
@@ -202,13 +174,9 @@ export function sectorComplete(records = [], sectorId) {
   return rel.some(r => LEGACY_QUESTION_SETS.includes(r.questionSetVersion) && getPercent(r) >= 100);
 }
 
-// ------------------------------------------------------------
-// ۵. الگوریتم بررسی باز بودن (Pure)
-// ------------------------------------------------------------
 export function isUnlocked(condition, records = [], systemsCache = null) {
   if (!condition) return true;
 
-  // v10.2: بنای بعدی با تکمیل هر سه لایهٔ بنا قبلی باز می‌شود (کتاب: «بعد از پذیرش نیروگاه»)
   if (condition.require === 'core-complete') {
     return sectorComplete(records, condition.sectorId);
   }
@@ -231,11 +199,9 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
   }
 
   if (condition.require === 'depth') {
-    // v10.2 (رفع باگ P0): جلسهٔ لایهٔ ۱ با type 'core' ذخیره می‌شود — فیلتر قدیمی
-    // (فقط type 'depth') یعنی لایه‌های ۲ و ۳ هرگز باز نمی‌شدند و محتوا «کم» حس می‌شد.
     const rec = records.find(r =>
       (r.type === 'depth' || r.type === 'core' || !r.type) &&
-      (r.activityId === condition.id || `${r.sectorId}-${r.depth}` === condition.id)
+      (r.activityId === condition.id || (r.sectorId + '-' + r.depth) === condition.id)
     );
     const percent = rec ? (rec.percent ?? (rec.total > 0 ? Math.round(100 * rec.score / rec.total) : 0)) : 0;
     return !!(rec && percent >= condition.minPercent);
@@ -250,9 +216,6 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
   return false;
 }
 
-// ------------------------------------------------------------
-// ۶. الگوریتم وضعیت سیستم‌های ایستگاه (Pure) — No hardcoded 3!
-// ------------------------------------------------------------
 export function stationSystems(records = []) {
   const sectors = getCoreSectors().map(sector => {
     const related = records.filter(r =>
@@ -271,7 +234,6 @@ export function stationSystems(records = []) {
     const bestPercent = best ? getPercent(best) : 0;
 
     const depths = getDepthsForSector(sector.sectorId);
-    // v10.2: لایهٔ جاری = بالاترین لایه‌ای که حد نصاب خودش (۷۰/۷۵/۸۰) را گذرانده
     const currentDepth = depths.reduce((max, d) => {
       const rec = related.find(r =>
         (r.type === 'depth' || r.type === 'core' || !r.type) &&
@@ -286,7 +248,6 @@ export function stationSystems(records = []) {
       destination: sector.destination,
       icon: sector.icon,
       percent: bestPercent,
-      // v10.2: کامل شدن بنا یعنی هر سه لایه گذرانده شده باشد (نه فقط یک جلسه)
       complete: sectorComplete(records, sector.sectorId),
       started: !!best,
       currentDepth
@@ -301,9 +262,6 @@ export function stationSystems(records = []) {
   }));
 }
 
-// ------------------------------------------------------------
-// ۷. الگوریتم قدرت کلی ایستگاه (Pure) — No hardcoded 3!
-// ------------------------------------------------------------
 export function stationPower(records = []) {
   const systems = stationSystems(records);
   if (!systems.length) return 0;
@@ -311,9 +269,6 @@ export function stationPower(records = []) {
   return Math.round(total / systems.length);
 }
 
-// ------------------------------------------------------------
-// ۸. الگوریتم مقصد بعدی (Pure)
-// ------------------------------------------------------------
 export function nextDestination(records = []) {
   const systems = stationSystems(records);
   const incomplete = systems.filter(s => !s.complete);
@@ -323,13 +278,6 @@ export function nextDestination(records = []) {
   ).sectorId;
 }
 
-// ------------------------------------------------------------
-// ۸.۵. تولید سؤال تطبیقی مأموریت‌های جانبی (Pure)
-// هر مأموریت جانبی دقیقاً questionCount سؤال (۵ سؤال) بر پایهٔ
-// فاکتورهای خود مأموریت و گلوگاه‌های شناختی سکتور مادر تولید می‌کند.
-// ورودی seed باعث تنوع بین تلاش‌ها (تطبیقی) بدون از دست دادن
-// قطعیت (determinism) برای آزمون‌ها می‌شود.
-// ------------------------------------------------------------
 export const SIDE_F2_RANGE = Object.freeze({ min: 2, max: 9 });
 
 export function generateSideMissionQuestions(missionId, seed = 0) {
@@ -340,8 +288,7 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
   if (!factors.length) return [];
 
   const count = mission.questionCount || 5;
-  // bottleneckTypes همان گلوگاه‌های لایهٔ مفهومی (لایهٔ ۳) سکتور مادر است
-  const parentLayer = DEPTH_LAYERS[`${mission.parentSectorId}-3`];
+  const parentLayer = DEPTH_LAYERS[mission.parentSectorId + '-3'];
   const strategies = parentLayer?.focus?.bottleneckTypes || ['equal-groups'];
 
   const offset = ((Number(seed) || 0) % 7 + 7) % 7;
@@ -353,11 +300,11 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
   for (let i = 0; i < count; i++) {
     const f1 = factors[(i + offset) % factors.length];
     let f2 = f2Min + ((i + offset * 2) % f2Span);
-    if (f2 === f1) f2 = f2 < f2Max ? f2 + 1 : f2 - 1; // پرهیز از تکرار کامل یک عامل در هر دو سمت
+    if (f2 === f1) f2 = f2 < f2Max ? f2 + 1 : f2 - 1;
 
     const strategy = strategies[i % strategies.length];
     const question = {
-      questionId: `q_side_${mission.parentSectorId}_${i + 1}_s${offset}`,
+      questionId: 'q_side_' + mission.parentSectorId + '_' + (i + 1) + '_s' + offset,
       missionId, f1, f2, strategy
     };
 
@@ -380,9 +327,6 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
   return questions;
 }
 
-// ------------------------------------------------------------
-// ۹. الگوریتم ثبت رکورد (سازگار با نسخه ۹ و ۱۰)
-// ------------------------------------------------------------
 export function keepStationRecord(records, session, result) {
   if (!result || result.status !== 'FINALIZED') return records;
   if (session?.activity && session.activity !== 'mission') return records;
@@ -421,9 +365,6 @@ export function keepStationRecord(records, session, result) {
   return [...records.filter(r => !same(r)), record];
 }
 
-// ------------------------------------------------------------
-// ۱۰. مهاجرت رکوردهای قدیمی (Idempotent)
-// ------------------------------------------------------------
 export function migrateLegacyRecords(records = []) {
   return records.map(r => {
     if (r.type) return r;
@@ -436,9 +377,6 @@ export function migrateLegacyRecords(records = []) {
   });
 }
 
-// ------------------------------------------------------------
-// ۱۱. توابع کمکی حفظ سازگاری کامل موتور v9
-// ------------------------------------------------------------
 export function flightProgress(session) {
   const questions = session?.questions || [];
   const answers = session?.answers || {};
@@ -497,6 +435,6 @@ export function createSoundPlayer(makeContext) {
         oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
       });
       return true;
-    } catch { return false; } // Audio failure must never interrupt saving an answer.
+    } catch { return false; }
   };
 }
