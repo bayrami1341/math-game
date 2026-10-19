@@ -53,7 +53,7 @@ if (-not (git branch --list "backup/v10-final")) {
   Write-Host "✔ شاخهٔ پشتیبان backup/v10-final از قبل موجود است."
 }
 
-# ── ۳) کپی فایل‌های کیت روی مخزن (۲۳ فایل) ────────────────────
+# ── ۳) کپی فایل‌های کیت روی مخزن (۲۶ فایل) ────────────────────
 $files = @(
   "v10.html",
   "package.json",
@@ -65,6 +65,7 @@ $files = @(
   "src/v10/bridge.js",
   "src/v10/station/cells.js",
   "src/v10/station/constants.js",
+  "src/v10/station/errors.js",
   "src/v10/station/guide.js",
   "src/v10/station/index.js",
   "src/v10/station/ladder.js",
@@ -77,7 +78,9 @@ $files = @(
   "src/v9/local.mjs",
   "tests/v10-station.test.js",
   "tests/v10.1-station.test.js",
-  "tests/v10.1-side-missions.test.js"
+  "tests/v10.1-side-missions.test.js",
+  "tests/v10.2-errors.test.js",
+  "tests/v10.2-domains.test.js"
 )
 foreach ($f in $files) {
   $src = Join-Path $kit $f
@@ -91,12 +94,12 @@ Write-Host "✔ $($files.Count) فایل کیت روی مخزن کپی شد."
 
 # ── ۴) آزمون‌ها (اگر Node.js نصب باشد) ────────────────────────
 if (Get-Command node -ErrorAction SilentlyContinue) {
-  Write-Host "↻ اجرای ۳۱ آزمون بازی ..."
-  node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js | Out-Null
+  Write-Host "↻ اجرای ۵۳ آزمون بازی ..."
+  node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js | Out-Null
   if ($LASTEXITCODE -ne 0) {
     Fail "آزمون‌ها سبز نشدند — نصب متوقف شد و مخزن تغییری نکرده که نگران باشید." 1
   }
-  Write-Host "✔ ۳۱/۳۱ آزمون سبز."
+  Write-Host "✔ ۵۳/۵۳ آزمون سبز."
 } else {
   Write-Host "⚠ Node.js پیدا نشد — آزمون‌ها رد شد (اختیاری بود؛ بازی بدون آن هم درست کار می‌کند)."
 }

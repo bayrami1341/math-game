@@ -1,0 +1,29 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "rooms": {
+      "$roomCode": {
+        "scores": {
+          ".read": "$roomCode.matches(/^[0-9]{6}$/)",
+          "$playerId": {
+            ".write": "$roomCode.matches(/^[0-9]{6}$/) && $playerId.matches(/^p_[A-Za-z0-9-]{8,100}$/) && newData.exists()",
+            ".validate": "newData.hasChildren(['name', 'avatar', 'score', 'sector', 'updatedAt'])",
+            "name": { ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 60" },
+            "avatar": { ".validate": "newData.isString() && newData.val().length <= 100" },
+            "score": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000 && newData.val() % 1 == 0" },
+            "sector": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 1000 && newData.val() % 1 == 0" },
+            "updatedAt": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    },
+    "v9": {
+      ".read": false,
+      ".write": false,
+      "sessionIndex": { "$classId": { ".indexOn": ["createdAt"] } },
+      "studentSessions": { "$studentId": { ".indexOn": ["createdAt"] } }
+    }
+  }
+}

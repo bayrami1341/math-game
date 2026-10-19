@@ -1,0 +1,16 @@
+{
+  "v9": {
+    ".read": false,
+    ".write": false,
+    "sessionIndex": {
+      "$classId": {
+        ".indexOn": ["createdAt"]
+      }
+    },
+    "studentSessions": {
+      "$studentId": {
+        ".indexOn": ["createdAt"]
+      }
+    }
+  }
+}

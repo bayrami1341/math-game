@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لیدربرد کلاس</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; background: #f4f6f8; padding: 20px; margin: 0; }
+    h1 { text-align: center; color: #1565C0; }
+    .item { background: white; margin: 8px auto; padding: 12px 16px; border-radius: 10px; max-width: 400px; display: flex; justify-content: space-between; gap: 16px; overflow-wrap: anywhere; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+    #status, .hint { text-align: center; }
+    .item { flex-wrap: wrap; }
+    .updated { flex-basis: 100%; color: #526171; font-size: 12px; }
+    .back { display: block; text-align: center; margin-top: 20px; color: #1976D2; }
+  </style>
+</head>
+<body>
+  <h1>نتایج کلاس</h1>
+  <p id="status" role="status">در حال اتصال به نتایج کلاس…</p>
+  <p class="hint">امتیازها مربوط به آخرین سکتور ثبت‌شدهٔ هر بازیکن هستند.</p>
+  <div id="list"></div>
+  <p class="hint"><button id="refresh" type="button">اتصال دوباره</button></p>
+  <a href="join.html" class="back">ورود یا تغییر کلاس</a>
+  <a href="home.html" class="back">بازگشت</a>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="live-board.js?v=20261016-scorefix"></script>
+  <script>
+    var list = document.getElementById('list');
+    var statusEl = document.getElementById('status');
+    var unsubscribe = null;
+
+    function showError() {
+      list.textContent = '';
+      statusEl.textContent = 'دریافت نتایج ممکن نشد؛ اتصال اینترنت و دسترسی Firebase را بررسی و صفحه را دوباره بارگذاری کنید.';
+    }
+
+    function connect() {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = null;
+      list.textContent = '';
+      var roomCode;
+      try { roomCode = localStorage.getItem('demo_class_code'); }
+      catch (e) { showError(); return; }
+      if (!roomCode || !window.LiveBoard || !window.fbDB) {
+        statusEl.textContent = !roomCode ? 'کد کلاس نیست؛ اول از صفحهٔ ورود وارد شوید.' : 'Firebase آماده نیست؛ اتصال اینترنت را بررسی و صفحه را دوباره بارگذاری کنید.';
+        return;
+      }
+      statusEl.textContent = 'در حال اتصال به نتایج کلاس…';
+      var connected = null;
+      var rowCount = null;
+      var readFailed = false;
+      function connectionStatus() {
+        if (readFailed) return;
+        statusEl.textContent = connected === false
+          ? 'اتصال برقرار نیست؛ نتایج نمایش‌داده‌شده ممکن است قدیمی باشند.'
+          : rowCount === null ? 'در حال اتصال به نتایج کلاس…'
+          : rowCount ? 'نتایج زندهٔ کلاس ' + roomCode : 'هنوز نتیجه‌ای ثبت نشده';
+      }
+      try {
+        unsubscribe = LiveBoard.listen(roomCode, function (rows) {
+          list.textContent = '';
+          rowCount = rows.length;
+          connectionStatus();
+          rows.forEach(function (row) {
+            var item = document.createElement('div');
+            item.className = 'item';
+            var nameEl = document.createElement('span');
+            var scoreEl = document.createElement('span');
+            nameEl.textContent = row.name || 'بازیکن';
+            scoreEl.textContent = String(row.score || 0);
+            item.appendChild(nameEl);
+            item.appendChild(scoreEl);
+            if (Number.isFinite(row.updatedAt)) {
+              var updatedEl = document.createElement('small');
+              updatedEl.className = 'updated';
+              updatedEl.textContent = 'آخرین ثبت: ' + new Date(row.updatedAt).toLocaleString('fa-IR');
+              item.appendChild(updatedEl);
+            }
+            list.appendChild(item);
+          });
+        }, function () { readFailed = true; showError(); }, function (online) {
+          connected = online;
+          connectionStatus();
+        });
+      } catch (e) { showError(); }
+    }
+    window.addEventListener('pagehide', function () {
+      if (unsubscribe) unsubscribe();
+      unsubscribe = null;
+    });
+    window.addEventListener('pageshow', connect);
+    document.getElementById('refresh').addEventListener('click', connect);
+  </script>
+</body>
+</html>

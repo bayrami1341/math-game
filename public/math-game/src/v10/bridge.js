@@ -1,30 +1,16 @@
-// Bridge translating v9/v10.1 state into strict stationState
+// Bridge translating v9/v10.2 state into strict stationState
 import { BUILDINGS, MAP_COMBOS } from './station/constants.js';
-import { stationSystems, isUnlocked, CORE_SECTORS } from '../v9/experience.mjs';
+import { stationSystems, sectorComplete, CORE_SECTORS } from '../v9/experience.mjs';
 
 export function toStationState(session = null, records = []) {
   const safeRecords = Array.isArray(records) ? records : [];
   const systems = stationSystems(safeRecords);
 
-  // Derive completion from pure stationSystems logic
-  const p1 = systems.find(s => s.sectorId === 1);
-  const p2 = systems.find(s => s.sectorId === 2);
-  const p3 = systems.find(s => s.sectorId === 3);
-
-  // Check if active session is finalized complete
-  const isSessionFinalizedComplete = (sectorId) => {
-    if (!session || session.sectorId !== sectorId || session.status !== 'FINALIZED') return false;
-    const total = session.questions?.length || 0;
-    return total > 0 && session.score >= total;
-  };
-
-  const sector1Done = (p1?.complete ?? false) || isSessionFinalizedComplete(1);
-  const sector1UnlockedFor2 = (p1?.percent ?? 0) >= 80 || sector1Done;
-
-  const sector2Done = sector1Done && ((p2?.complete ?? false) || isSessionFinalizedComplete(2));
-  const sector2UnlockedFor3 = sector2Done || ((p2?.percent ?? 0) >= 80 && sector1UnlockedFor2);
-
-  const sector3Done = sector1Done && sector2Done && ((p3?.complete ?? false) || isSessionFinalizedComplete(3));
+  // v10.2: تکمیل بنا یعنی گذراندن هر سه لایه (۷۰/۷۵/۸۰) — نه فقط یک جلسهٔ کامل.
+  // جلسهٔ تازه‌تمام‌شده همان لحظه در records ثبت می‌شود؛ پس تعیین وضعیت فقط از records.
+  const sector1Done = sectorComplete(safeRecords, 1);
+  const sector2Done = sector1Done && sectorComplete(safeRecords, 2);
+  const sector3Done = sector1Done && sector2Done && sectorComplete(safeRecords, 3);
 
   const completed = [];
   if (sector1Done) completed.push(BUILDINGS.POWER);
@@ -80,11 +66,14 @@ export function toStationState(session = null, records = []) {
     isFinished: completed.length === 3,
     mapCombo,
     systems,
-    // v10.1 metadata
+    // v10.2 metadata
     activeDepth: session?.depth || 1,
     activeType: session?.activityType || 'core',
     activeMissionId: session?.missionId || null,
-    // Union of unlocked side missions across ALL sectors (each gated by its own 70% rule)
+    // Union of unlocked side missions across ALL sectors (each gated by its own 60% rule)
     availableSides: systems.flatMap(s => s.availableSides || [])
   };
 }
+
+// سازگاری با واردکننده‌های قدیمی
+export { CORE_SECTORS };

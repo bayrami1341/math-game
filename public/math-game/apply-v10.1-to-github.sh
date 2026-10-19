@@ -16,7 +16,7 @@
 #   ۱) شاخهٔ پشتیبان backup/v10-final می‌سازد (نقطهٔ بازگشت = نسخهٔ ۱۰.۰)
 #   ۲) فایل‌های ۱۰.۱ را روی کلون کپی می‌کند
 #   ۳) ۴ کامیت منطقی می‌زند
-#   ۴) هر ۳۱ آزمون را اجرا می‌کند (باید سبز باشند)
+#   ۴) هر ۵۳ آزمون را اجرا می‌کند (باید سبز باشند)
 #   ۵) git push origin v6 را امتحان می‌کند؛ اگر اعتبارنامهٔ نوشتن نباشد،
 #      با پیام راهنمای تمیز (فارسی/انگلیسی) و کد خروج غیرصفر خارج می‌شود؛
 #      کامیت‌ها محلی می‌مانند و فقط push با شماست.
@@ -29,7 +29,7 @@ REPO_URL="https://github.com/bayrami1341/math-game.git"
 BRANCH="v6"
 BACKUP="backup/v10-final"
 GUIDE="راهنمای_جامع_نسخه_۱۰.۱.md"
-TEST_FILES="tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js"
+TEST_FILES="tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js"
 
 # رنگ‌ها فقط وقتی خروجی ترمینال است
 if [ -t 1 ]; then
@@ -131,7 +131,7 @@ cp -f "$KIT_DIR/src/v10/station/"*.js      src/v10/station/
 cp -f "$KIT_DIR/src/v9/"*.mjs              src/v9/
 cp -f "$KIT_DIR/tests/"*.test.js           tests/
 if [ -f "$KIT_DIR/apply-v10.1.ps1" ]; then cp -f "$KIT_DIR/apply-v10.1.ps1" .; fi
-ok "فایل‌ها کپی شدند (۲۳ فایل کیت)."
+ok "فایل‌ها کپی شدند (۲۶ فایل کیت)."
 
 # ── ۴) چهار کامیت منطقی ──────────────────────────────────────────────────────
 commit() { # $1 = پیام، بقیه = مسیرها
@@ -163,7 +163,7 @@ git log --oneline -5
 echo
 
 # ── ۵) آزمون‌های خودکار ──────────────────────────────────────────────────────
-info "اجرای آزمون‌ها (انتظار: ۳۱/۳۱ سبز) …"
+info "اجرای آزمون‌ها (انتظار: ۵۳/۵۳ سبز) …"
 if node --test $TEST_FILES; then
   ok "همهٔ آزمون‌ها سبزند."
 else
@@ -191,7 +191,7 @@ echo
 err "push انجام نشد — اعتبارنامهٔ گیت‌هاب با اجازهٔ نوشتن روی این دستگاه تنظیم نیست."
 err "Git push failed — no GitHub credentials with write access on this machine."
 echo
-ok "اما همه‌چیز آماده است: فایل‌های ۱۰.۱ اعمال شدند، ۳۱ آزمون سبز است و کامیت‌ها روی شاخهٔ $BRANCH ساخته شدند."
+ok "اما همه‌چیز آماده است: فایل‌های ۱۰.۱ اعمال شدند، ۵۳ آزمون سبز است و کامیت‌ها روی شاخهٔ $BRANCH ساخته شدند."
 ok "Everything is ready: v10.1 files applied, 31 tests green, commits created on '$BRANCH'."
 echo
 info "فقط push با شماست / You only need to push:"

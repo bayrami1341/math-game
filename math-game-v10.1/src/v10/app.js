@@ -1,6 +1,6 @@
-// Version 10.1.3 Client Application — Powered by Station Layer on top of v9 Core
-// v10.1.3: بازگرداندن قابلیت‌های مستقل (ثبت‌نام محلی، تابلوی افتخارات محلی، داستان خوش‌آمد)
-// + رفع باگ بحرانی: uid تصادفی در هر بارگذاری، پیشرفت پس از رفرش پاک می‌شد — uid اکنون پایدار است
+// Version 10.2.0 Client Application — Powered by Station Layer on top of v9 Core
+// v10.2: تطبیق دامنهٔ سه بنا با کتاب کد ۳۰۵ + اطلس تشخیصی ۱۲خطا + کارت معلم
+// (یک جمله + یک کد + دو نمونه + بازنویسی برچسب بدون تغییر نمره) + لایهٔ تصویری CPA
 import { openLocal } from '../v9/local.mjs';
 import { connectApi } from '../v9/connection.mjs';
 import { loadFirebaseLogin, googleLogin, loginError } from '../v9/firebase-login.mjs';
@@ -11,6 +11,7 @@ import {
   CORE_SECTORS,
   DEPTH_LAYERS,
   SIDE_MISSIONS,
+  UNLOCK_THRESHOLDS,
   generateSideMissionQuestions,
   stationSystems,
   stationPower,
@@ -20,6 +21,12 @@ import {
 } from '../v9/experience.mjs';
 import { toStationState } from './bridge.js';
 import { buildLadder } from './station/ladder.js';
+import {
+  classifyAttempt,
+  detectBehavioralCode,
+  CODE_SENTENCES_FA,
+  dominantCode
+} from './station/errors.js';
 import {
   createStationLayer,
   COLORS,
@@ -46,6 +53,11 @@ const fafyAnswerInput = val => String(val || '')
   .replace(/[0-9]/g, d => FA_DIGITS[Number(d)])
   .replace(/[٠-٩]/g, d => FA_DIGITS['٠١٢٣٤٥٦٧٨٩'.indexOf(d)])
   .replace(/[^۰-۹]/g, '');
+
+// گریز امن HTML برای ورودی آزاد معلم (یادداشت کارت)
+const escHtml = val => String(val ?? '')
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
 let local, actor, tokenProvider;
 let state = {};
@@ -400,6 +412,47 @@ async function refreshLocalBoard() {
 
 // پنل معلم (v10.1.4): گزارش آفلاین همین دستگاه — برای معلم/والد کنار کودک
 // شامل: قدرت ایستگاه، درصد هر بنا، وضعیت ۹ لایهٔ عمق (باز/قفل/شرط بازشدن)، جلسه‌ها، خطاها، مأموریت‌های معلم
+// برچسب‌های بازنویسی کارت معلم (سند فصل ۵): بدون تغییر نمره، پاسخ پذیرفته و قفل بنا
+const RELABEL_LABELS_FA = Object.freeze({
+  confirmed: 'تأییدشده',
+  'case-slip': 'لغزش موردی',
+  rejected: 'ردشده'
+});
+
+// کارت معلم (v10.2 — سند فصل ۵): یک جمله + یک کد + نمونه‌های واقعی + بازنویسی برچسب
+function buildTeacherErrorCards(profileId, attempts, overrides) {
+  const flagged = (attempts || [])
+    .filter(a => a?.wrongCodes && dominantCode(a.wrongCodes))
+    .slice(-6)
+    .reverse();
+  if (!flagged.length) return '';
+  const cards = flagged.map(a => {
+    const code = dominantCode(a.wrongCodes);
+    const sentence = CODE_SENTENCES_FA[code] || 'الگوی روشنی پیدا نشد.';
+    const key = `${profileId}:${a.eventId}`;
+    const ov = overrides?.[key];
+    const examples = (a.wrongExamples || [])
+      .map(w => `${fa(w.f1)}×${fa(w.f2)} را ${fa(w.submitted)} نوشته`)
+      .join(' • ');
+    const labelChip = ov?.label
+      ? `<span class="teacher-label-chip teacher-label-${ov.label}">${RELABEL_LABELS_FA[ov.label] || ''}</span>`
+      : '';
+    return `<div class="teacher-error-card">
+      <p class="teacher-error-headline">${escHtml(sentence)} کد: <strong>${code}</strong>${labelChip}</p>
+      ${examples ? `<p class="teacher-error-examples">${escHtml(examples)}.</p>` : ''}
+      <p class="teacher-error-meta">${BUILDING_NAMES[a.sectorId] || 'بنا'}${a.depth ? ` — لایهٔ ${fa(a.depth)}` : ''}${a.type === 'side' ? ' — تمرین جانبی' : ''}</p>
+      ${ov?.note ? `<p class="teacher-error-note">یادداشت: ${escHtml(ov.note)}</p>` : ''}
+      <div class="teacher-relabel-row" role="group" aria-label="بازنویسی برچسب خطا">
+        <button type="button" data-relabel="confirmed" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'confirmed' ? 'active' : ''}">تأیید تشخیص</button>
+        <button type="button" data-relabel="case-slip" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'case-slip' ? 'active' : ''}">لغزش موردی</button>
+        <button type="button" data-relabel="rejected" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'rejected' ? 'active' : ''}">رد تشخیص</button>
+      </div>
+      <input type="text" class="teacher-note-input" data-note-id="${a.eventId}" data-profile-id="${profileId}" value="${escHtml(ov?.note || '')}" maxlength="200" placeholder="یادداشت معلم (اختیاری)">
+    </div>`;
+  }).join('');
+  return `<div class="teacher-cards"><h5>کارت‌های تشخیصی جلسه‌ها</h5>${cards}</div>`;
+}
+
 async function renderTeacherPanel() {
   const box = $('teacher-panel-content');
   if (!box) return;
@@ -435,15 +488,17 @@ async function renderTeacherPanel() {
       }).join('');
       return `<div class="teacher-building"><strong>${BUILDING_NAMES[id] || 'بنا'}: ${fa(pct)}٪</strong><ul>${rows}</ul></div>`;
     }).join('');
+    const errorCardsHtml = buildTeacherErrorCards(p.studentId, attempts, state.errorOverrides);
     html += `
       <div class="teacher-report-card">
-        <h4>${roleMeta(p).icon} ${p.displayName} — قدرت ایستگاه: ${fa(stationPower(records))}٪</h4>
+        <h4>${roleMeta(p).icon} ${escHtml(p.displayName)} — قدرت ایستگاه: ${fa(stationPower(records))}٪</h4>
         <p class="teacher-stats">جلسهٔ تمام‌شده: ${fa(attempts.length)} • خطای ثبت‌شده: ${fa(wrongTotal)} • تمرین جانبی: ${fa(sideSessions)} جلسه</p>
         ${layersHtml}
+        ${errorCardsHtml}
       </div>`;
   }
   html += `
-    <p class="teacher-note">💡 «داشبورد کامل معلم» (ارسال مأموریت، تحلیل خطاها، مدیریت کلاس) در پلتفرم «کارگاه ضرب» اجرا می‌شود و این نسخهٔ مستقل به آن وصل نیست. تاریخچهٔ کامل پاسخ‌ها (تلاش‌نگار) روی همین دستگاه ذخیره می‌شود و همین‌جا قابل مرور است.</p>`;
+    <p class="teacher-note">💡 «داشبورد کامل معلم» (ارسال مأموریت، تحلیل خطاها، مدیریت کلاس) در پلتفرم «کارگاه ضرب» اجرا می‌شود و این نسخهٔ مستقل به آن وصل نیست. تاریخچهٔ کامل پاسخ‌ها (تلاش‌نگار) روی همین دستگاه ذخیره می‌شود و همین‌جا قابل مرور است. برچسب خطا پیشنهاد است؛ تصمیم نهایی با آموزگار — بازنویسی برچسب نمره و قفل بنا را عوض نمی‌کند.</p>`;
   box.innerHTML = html;
 }
 
@@ -458,14 +513,24 @@ function renderChildShell(stationState) {
     const powerState = map.getBuildingState(BUILDINGS.POWER);
     const towerState = map.getBuildingState(BUILDINGS.TOWER);
     const padState = map.getBuildingState(BUILDINGS.PAD);
+    const systemsNow = stationSystems(state.stationRecords || []);
 
-    $('building-power').innerHTML = renderBuildingSVG(BUILDINGS.POWER, powerState);
+    // چیپ شرط قفل روی نقشه (v10.2): «چرا بسته است» پنهان نمی‌ماند
+    const lockNote = (id, bState) => {
+      if (bState !== 'locked') return '';
+      const prereq = id === BUILDINGS.TOWER ? BUILDINGS.POWER : BUILDINGS.TOWER;
+      const sys = systemsNow.find(s => s.sectorId === prereq);
+      const layerLeft = sys ? Math.min(3, (sys.currentDepth || 0) + 1) : 1;
+      return `<p class="building-lock-note">نیاز: هر سه لایهٔ ${BUILDING_NAMES[prereq]} کامل شود (الان لایهٔ ${fa(layerLeft)} — ${fa(sys?.percent || 0)}٪)</p>`;
+    };
+
+    $('building-power').innerHTML = renderBuildingSVG(BUILDINGS.POWER, powerState) + lockNote(BUILDINGS.POWER, powerState);
     $('building-power').dataset.state = powerState;
 
-    $('building-tower').innerHTML = renderBuildingSVG(BUILDINGS.TOWER, towerState);
+    $('building-tower').innerHTML = renderBuildingSVG(BUILDINGS.TOWER, towerState) + lockNote(BUILDINGS.TOWER, towerState);
     $('building-tower').dataset.state = towerState;
 
-    $('building-pad').innerHTML = renderBuildingSVG(BUILDINGS.PAD, padState);
+    $('building-pad').innerHTML = renderBuildingSVG(BUILDINGS.PAD, padState) + lockNote(BUILDINGS.PAD, padState);
     $('building-pad').dataset.state = padState;
 
     $('path-1').innerHTML = renderPathSVG(1, map.getPathState(1));
@@ -479,7 +544,7 @@ function renderChildShell(stationState) {
       : sheet.getSheetText();
 
     // خط پیشرفت (v10.1.3): مسیر بازشدن تدریجی را «دیده‌پذیر» می‌کند
-    $('sheet-progress').textContent = buildProgressLine(stationSystems(state.stationRecords || []));
+    $('sheet-progress').textContent = buildProgressLine(systemsNow);
 
     // Side Missions: render unlocked side-mission buttons (affectsLeaderboard: false)
     const sideButtons = sheet.getSideMissionButtons();
@@ -496,7 +561,7 @@ function renderChildShell(stationState) {
     const lockedHtml = Object.values(SIDE_MISSIONS)
       .filter(m => !unlockedIds.has(m.id))
       .map(m => {
-        const need = fa(m.unlock?.minPercent ?? 70);
+        const need = fa(m.unlock?.minPercent ?? UNLOCK_THRESHOLDS.side);
         const buildingName = BUILDING_NAMES[m.parentSectorId] || 'نیروگاه';
         return `
           <button type="button" class="side-mission-button side-mission-locked" aria-disabled="true" aria-label="قفل: ${m.title}">
@@ -638,6 +703,15 @@ function renderQuestionView() {
   }
   $('question-cells').innerHTML = cellsHtml;
 
+  // لایهٔ تصویری CPA (v10.2 فصل ۱.۲ سند): سؤال‌های لایه‌های اول همراه دسته‌های مساوی می‌آیند
+  const visEl = $('question-visual');
+  if (visEl) {
+    const canVisual = question.visual === 'equal-groups'
+      && question.f1 > 0 && question.f2 > 0 && question.f1 * question.f2 <= 60;
+    visEl.hidden = !canVisual;
+    visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : '';
+  }
+
   $('question-equation').textContent = `${fa(question.f1)} × ${fa(question.f2)} = ؟`;
   $('answer-input').value = '';
   $('answer-input').focus();
@@ -671,10 +745,18 @@ async function handleAnswerSubmit(userAnswer) {
 
   if (!isCorrect) {
     // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): پاسخ‌های غلط حذف نمی‌شوند — شاهد تشخیص گلوگاه
+    const submittedNum = Number(normalizeDigits(userAnswer));
+    // اطلس ۱۲خطا (v10.2): کد ساختاری از خود پاسخ + کد رفتاری از تاریخچهٔ پذیرش جلسه
+    const structuralCode = classifyAttempt({ f1: question.f1, f2: question.f2, submitted: submittedNum });
+    const behavioralCode = detectBehavioralCode({ f1: question.f1, f2: question.f2, acceptedFacts: session.acceptedFacts });
     session.wrongAttempts = session.wrongAttempts || [];
     session.wrongAttempts.push({
       questionId: question.questionId,
-      submitted: Number(normalizeDigits(userAnswer)),
+      f1: question.f1,
+      f2: question.f2,
+      submitted: submittedNum,
+      code: structuralCode || null,
+      behavioral: behavioralCode || null,
       timeSec: elapsedSec,
       at: new Date().toISOString()
     });
@@ -694,6 +776,10 @@ async function handleAnswerSubmit(userAnswer) {
 
   void playStationAudio(result.sound);
   $('question-feedback').textContent = '';
+
+  // ثبت پذیرش این عبارت — شاهد کدهای رفتاری (جابه‌جایی/لغزش بعد از تسلط)
+  session.acceptedFacts = session.acceptedFacts || [];
+  session.acceptedFacts.push({ f1: question.f1, f2: question.f2 });
 
   const eventId = 'evt_' + crypto.randomUUID();
   session.answers = session.answers || {};
@@ -732,6 +818,23 @@ async function handleAnswerSubmit(userAnswer) {
     // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): تاریخچهٔ کامل جلسه موازی با رکورد «بهترین» نگه داشته می‌شود
     // keepStationRecord دست‌نخورده می‌ماند (نمایش «بهترین» UI است)؛ اینجا فقط ضمیمه می‌کنیم.
     state.attemptLog = state.attemptLog || [];
+    // خلاصهٔ خطاهای جلسه برای کارت معلم (v10.2): کد → تعداد + دو سه نمونهٔ واقعی
+    const wrongCodes = {};
+    const wrongExamples = [];
+    for (const w of session.wrongAttempts || []) {
+      if (w?.behavioral) wrongCodes[w.behavioral] = (wrongCodes[w.behavioral] || 0) + 1;
+      if (w?.code) {
+        wrongCodes[w.code] = (wrongCodes[w.code] || 0) + 1;
+      } else if (!w?.behavioral) {
+        wrongCodes.UNCLASSIFIED = (wrongCodes.UNCLASSIFIED || 0) + 1; // بی‌الگو — کاندید حدس بی‌ربط
+      }
+      if (wrongExamples.length < 3 && Number.isFinite(w?.submitted)) {
+        wrongExamples.push({ f1: w.f1, f2: w.f2, submitted: w.submitted });
+      }
+    }
+    if ((wrongCodes.UNCLASSIFIED || 0) >= 3) {
+      wrongCodes.E_PERSISTENT_GUESSING = wrongCodes.UNCLASSIFIED; // سه پاسخ بی‌ربط (سند فصل ۳)
+    }
     const attemptEntry = {
       eventId: 'evt_' + crypto.randomUUID(),
       activityId: session.activityId,
@@ -742,6 +845,8 @@ async function handleAnswerSubmit(userAnswer) {
       total: session.total,
       correct: session.questions.filter(q => session.answers?.[q.questionId]).length,
       wrongCount: (session.wrongAttempts || []).length,
+      wrongCodes,
+      wrongExamples,
       hintsMax: session.hintsMax || 0,
       completedAt: new Date().toISOString()
     };
@@ -815,21 +920,63 @@ async function handleAnswerSubmit(userAnswer) {
   }
 }
 
+// ─── تولید سؤال بر پایهٔ دامنهٔ لایه (v10.2 — دامنه‌ها بر کتاب کد ۳۰۵، deterministic) ───
+// سکو ۳–۱ (×۱۰ صفحهٔ ۱۳۶–۱۳۸)، ۳–۲ (×۰ و ×۱)، ۳–۳ (یک‌رقم در چندرقمی — سقف حاصل ۹۹۹)
+const X10_QUESTIONS = Object.freeze([
+  { f1: 3, f2: 10 }, { f1: 7, f2: 10 }, { f1: 9, f2: 10 }, { f1: 6, f2: 10 },
+  { f1: 8, f2: 10 }, { f1: 14, f2: 10 }, { f1: 42, f2: 10 }, { f1: 25, f2: 10 }
+]);
+const ZERO_ONE_QUESTIONS = Object.freeze([
+  { f1: 6, f2: 0 }, { f1: 0, f2: 7 }, { f1: 8, f2: 1 }, { f1: 1, f2: 9 },
+  { f1: 5, f2: 0 }, { f1: 0, f2: 3 }, { f1: 7, f2: 1 }, { f1: 1, f2: 6 },
+  { f1: 9, f2: 0 }, { f1: 4, f2: 1 }
+]);
+const MULTI_DIGIT_QUESTIONS = Object.freeze([
+  { f1: 3, f2: 24 }, { f1: 4, f2: 13 }, { f1: 2, f2: 45 },
+  { f1: 5, f2: 32 }, { f1: 2, f2: 213 }, { f1: 3, f2: 121 }
+]);
+// زوج‌های جابه‌جایی (گلوگاه ۱ و ۶ — نقد ۵ و ۶): دو سر زوج با تصویر متفاوت —
+// رفتار کودک روی زوج، شاهد درون‌بازی E_COMMUTATIVE_FAIL و درک دسته‌ها/اعضاست
+const POWER_PAIRS = Object.freeze([[3, 5], [2, 4], [4, 6]]);
+const TOWER_PAIRS = Object.freeze([[7, 4], [8, 3], [9, 2]]);
+
 function generateQuestionsForDepth(buildingId, depth) {
   const layerKey = `${buildingId}-${depth}`;
   const layer = DEPTH_LAYERS[layerKey] || DEPTH_LAYERS['1-1'];
+  const domain = layer.domain || 'table';
+  const base = (f1, f2, i, visual) => ({
+    questionId: `q_${buildingId}_${depth}_${i + 1}`,
+    f1,
+    f2,
+    ...(visual ? { visual } : {})
+  });
+
+  if (domain === 'x10') return X10_QUESTIONS.map((q, i) => base(q.f1, q.f2, i));
+  if (domain === 'zero-one') return ZERO_ONE_QUESTIONS.map((q, i) => base(q.f1, q.f2, i));
+  if (domain === 'multi-digit') return MULTI_DIGIT_QUESTIONS.map((q, i) => base(q.f1, q.f2, i));
+
+  if (domain === 'paired') {
+    const pairs = buildingId === 1 ? POWER_PAIRS : TOWER_PAIRS;
+    const out = [];
+    pairs.forEach(([a, b], k) => {
+      out.push(base(a, b, k * 2, 'equal-groups')); // سر اول زوج: تصویر دسته‌ها
+      out.push(base(b, a, k * 2 + 1));             // سر دوم: ترتیب چرخیده، بدون تصویر
+    });
+    return out;
+  }
+
+  // دامنهٔ جدول — لایهٔ ۱ نیروگاه کاملاً تصویری (CPA، فصل ۱.۲ سند)
   const factors = layer.focus?.factors || [buildingId + 1];
   const count = layer.questionCount || 8;
+  const visualAll = layerKey === '1-1';
+  const visualFirst = layerKey === '2-1';
 
   const questions = [];
   for (let i = 0; i < count; i++) {
     const f1 = factors[i % factors.length];
     const f2 = (i % 9) + 2;
-    questions.push({
-      questionId: `q_${buildingId}_${depth}_${i + 1}`,
-      f1,
-      f2
-    });
+    const visual = (visualAll || (visualFirst && i < 4)) ? 'equal-groups' : null;
+    questions.push(base(f1, f2, i, visual));
   }
   return questions;
 }
@@ -854,6 +1001,7 @@ function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = 
     bottleneckHits: DEPTH_LAYERS[`${buildingId}-${depth}`]?.focus?.bottleneckTypes || [],
     fluentCount: depth === 2 ? questions.length : 0,
     wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1)
+    acceptedFacts: [], // پذیرش‌های همین جلسه برای کدهای رفتاری (جابه‌جایی/لغزش)
     hintsMax: 0 // بیشترین پلهٔ نردبان راهنما در این جلسه
   };
 
@@ -889,6 +1037,7 @@ function startSideMission(missionId) {
     bottleneckHits: [...new Set(questions.map(q => q.strategy))],
     fluentCount: 0,
     wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — مسیر مأموریت جانبی هم پوشش داده می‌شود
+    acceptedFacts: [],
     hintsMax: 0
   };
 
@@ -1100,6 +1249,41 @@ function setupEvents() {
   });
   const teacherClose = $('close-teacher-panel-button');
   if (teacherClose) teacherClose.addEventListener('click', () => { $('teacher-dialog').hidden = true; });
+
+  // کارت معلم (v10.2): بازنویسی برچسب + یادداشت — بدون تغییر نمره و قفل بنا (سند فصل ۵)
+  // کلید ذخیره‌سازی: «پرونده:eventId» — کارت‌های همهٔ پرونده‌ها روی دستگاه جاری ذخیره می‌شوند
+  const panelBox = $('teacher-panel-content');
+  if (panelBox) {
+    panelBox.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-relabel]');
+      if (!btn) return;
+      const eventId = btn.dataset.eventId;
+      const profileId = btn.dataset.profileId || '';
+      const label = btn.dataset.relabel;
+      void run(async () => {
+        state.errorOverrides = state.errorOverrides || {};
+        const key = `${profileId}:${eventId}`;
+        const prev = state.errorOverrides[key] || {};
+        state.errorOverrides[key] = { ...prev, label, at: new Date().toISOString() };
+        await saveState(state);
+        void renderTeacherPanel();
+      });
+    });
+    panelBox.addEventListener('change', e => {
+      const input = e.target.closest('input[data-note-id]');
+      if (!input) return;
+      const eventId = input.dataset.noteId;
+      const profileId = input.dataset.profileId || '';
+      const note = String(input.value || '').slice(0, 200);
+      void run(async () => {
+        state.errorOverrides = state.errorOverrides || {};
+        const key = `${profileId}:${eventId}`;
+        const prev = state.errorOverrides[key] || { label: 'confirmed' };
+        state.errorOverrides[key] = { ...prev, note, at: new Date().toISOString() };
+        await saveState(state);
+      });
+    });
+  }
 }
 
 export async function initApp() {

@@ -5,6 +5,15 @@ import { createCellTracker } from './cells.js';
 import { getStoryText, getLockReason, getDoneMessage, getWrongFeedback } from './story.js';
 import { createMapGuide, createQuestionGuide, hasGuideForBuilding } from './guide.js';
 import { createStationSoundPlayer } from './sounds.js';
+import {
+  ERROR_CODES,
+  CODE_SEVERITY_ORDER,
+  CODE_SENTENCES_FA,
+  classifyAttempt,
+  detectBehavioralCode,
+  countIrrelevantAttempts,
+  dominantCode
+} from './errors.js';
 import * as visuals from './visuals.js';
 import * as constants from './constants.js';
 
@@ -40,6 +49,15 @@ export function createStationLayer({ stationState = { completed: [], current: 1,
     soundPlayer,
     visuals,
     constants,
+    errors: {
+      ERROR_CODES,
+      CODE_SEVERITY_ORDER,
+      CODE_SENTENCES_FA,
+      classifyAttempt,
+      detectBehavioralCode,
+      countIrrelevantAttempts,
+      dominantCode
+    },
     story: {
       getStoryText,
       getLockReason,
@@ -62,3 +80,4 @@ export * from './map.js';
 export * from './sheet.js';
 export * from './sounds.js';
 export * from './visuals.js';
+export * from './errors.js';

@@ -1,5 +1,5 @@
 // آزمون‌های اختصاصی اصلاحات ۱۰.۱ — مأموریت‌های جانبی و سؤال تطبیقی
-// پوشش: تولید ۵ سؤال تطبیقی، قفل‌گشایی ۷۰٪، اکشن شروع از شیپ، جداسازی از لیدربرد
+// پوشش: تولید ۵ سؤال تطبیقی، قفل‌گشایی ۶۰٪ (v10.2)، اکشن شروع از شیپ، جداسازی از لیدربرد
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
@@ -67,27 +67,26 @@ test('3. استراتژی هر سؤال از گلوگاه‌های شناختی 
       assert.ok(parentBottlenecks.includes(q.strategy), `استراتژی ${q.strategy} باید از سکتور مادر باشد`);
     }
   }
-  // متادیتای لنگر همسایه باید با فاکتورهای سؤال سازگار باشد
-  const towerQuestions = generateSideMissionQuestions('side-2-backup', 0);
-  for (const q of towerQuestions.filter(q => q.strategy === 'neighbor-anchor')) {
-    assert.equal(q.f1, q.meta.anchor.f1 + q.meta.delta);
-    assert.equal(q.meta.anchor.f2, q.f2);
-    assert.ok(Math.abs(q.meta.delta) === 1);
-  }
+  // v10.2: برج = جابه‌جایی و شکستن (صفحهٔ ۷۰–۷۲) — «ارزش مکانی» و «لنگر همسایه» از برج حذف شده‌اند
+  const towerBottlenecks = DEPTH_LAYERS['2-3'].focus.bottleneckTypes;
+  assert.ok(towerBottlenecks.includes('commutativity'));
+  assert.ok(towerBottlenecks.includes('anchor-5'));
   // متادیتای تعویض‌پذیری باید واقعاً جابه‌جا شده باشد
   const padQuestions = generateSideMissionQuestions('side-3-fuel', 0);
-  for (const q of padQuestions.filter(q => q.strategy === 'commutativity')) {
-    assert.equal(q.meta.swapped.f1, q.f2);
-    assert.equal(q.meta.swapped.f2, q.f1);
-    assert.equal(q.meta.swapped.f1 * q.meta.swapped.f2, q.f1 * q.f2);
+  for (const q of padQuestions) {
+    assert.ok(q.strategy === 'place-value' || q.strategy === 'distributive-part');
+    if (q.meta?.tens !== undefined) {
+      assert.equal(q.meta.tens, Math.floor(q.f2 / 10));
+      assert.equal(q.meta.ones, q.f2 % 10);
+    }
   }
 });
 
-test('4. قفل‌گشایی مأموریت جانبی دقیقاً در ۷۰٪ سکتور مادر رخ می‌دهد', () => {
-  const below = stationSystems([legacyRecord(1, 69, 100)]);
+test('4. قفل‌گشایی مأموریت جانبی دقیقاً در ۶۰٪ سکتور مادر رخ می‌دهد (v10.2)', () => {
+  const below = stationSystems([legacyRecord(1, 59, 100)]);
   assert.deepEqual(below.find(s => s.sectorId === 1).availableSides, []);
 
-  const at = stationSystems([legacyRecord(1, 70, 100)]);
+  const at = stationSystems([legacyRecord(1, 60, 100)]);
   assert.deepEqual(at.find(s => s.sectorId === 1).availableSides, ['side-1-antenna']);
 
   // رکورد سکتور ۱ نباید مأموریت جانبی سکتور ۲ را باز کند

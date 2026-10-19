@@ -1,0 +1,6 @@
+{
+  "database": {
+    "instance": "class-board-2752e-default-rtdb",
+    "rules": "firebase/database.rules.json"
+  }
+}

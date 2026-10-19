@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ابزارک‌های کلاس</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Tahoma, 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      min-height: 100vh;
+      padding: 16px;
+      text-align: center;
+      overflow-x: hidden;
+    }
+    .back {
+      color: #1976D2;
+      text-decoration: none;
+      font-size: 15px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+    h1 {
+      color: #0d47a1;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 24px 16px;
+      margin: 0 auto 20px;
+      max-width: 420px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .card h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 16px;
+    }
+    #wheel-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 0 auto;
+    }
+    canvas {
+      display: block;
+      border-radius: 50%;
+      box-shadow: 0 0 0 8px #fff, 0 0 0 12px #e0e0e0, 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .pointer {
+      position: absolute;
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 28px solid #d32f2f;
+      z-index: 10;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+    }
+    .spin-btn {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      border-radius: 50px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 18px;
+      box-shadow: 0 4px 12px rgba(255,152,0,0.4);
+      transition: transform 0.15s;
+    }
+    .spin-btn:active { transform: scale(0.96); }
+    .spin-btn:disabled {
+      background: #bbb;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+    #result {
+      margin-top: 16px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #0d47a1;
+      min-height: 30px;
+    }
+    .light {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: none;
+      margin: 8px;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.12s;
+    }
+    .light:active { transform: scale(0.9); }
+    .g { background: #43a047; }
+    .y { background: #fbc02d; }
+    .r { background: #e53935; }
+    #status {
+      margin-top: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #444;
+    }
+
+    /* فرم افزودن اسامی */
+    .add-form {
+      margin-top: 16px;
+      text-align: right;
+    }
+    .add-form textarea {
+      width: 100%;
+      height: 90px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-family: Tahoma;
+      font-size: 15px;
+      resize: none;
+      direction: rtl;
+    }
+    .add-form button {
+      margin-top: 10px;
+      background: #1976D2;
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .hint {
+      font-size: 13px;
+      color: #777;
+      margin-top: 6px;
+    }
+
+    /* افکت خرده کاغذ طلایی */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      top: -20px;
+      z-index: 9999;
+      pointer-events: none;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body>
+  <a href="home.html" class="back">← بازگشت</a>
+  <h1>ابزارک‌های کلاس</h1>
+
+  <div class="card">
+    <h2>چرخ گردان</h2>
+    <div id="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheel" width="300" height="300"></canvas>
+    </div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()" disabled>بچرخان</button>
+    <div id="result">منتظر چرخش...</div>
+
+    <!-- فرم افزودن اسامی (وقتی خالی است) -->
+    <div class="add-form" id="addForm" style="display:none;">
+      <textarea id="namesInput" placeholder="اسامی را وارد کنید (هر اسم در یک خط)&#10;مثال:&#10;علی رضایی&#10;زهرا محمدی&#10;محمد احمدی"></textarea>
+      <div class="hint">هر اسم را در یک خط بنویسید</div>
+      <button onclick="saveNames()">ذخیره و فعال‌سازی چرخ</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>چراغ راهنمایی</h2>
+    <button class="light g" onclick="show('سبز — فهمیدم')">🟢</button>
+    <button class="light y" onclick="show('زرد — نصفه')">🟡</button>
+    <button class="light r" onclick="show('قرمز — نفهمیدم')">🔴</button>
+    <div id="status">انتخاب کنید</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const spinBtn = document.getElementById('spinBtn');
+    const addForm = document.getElementById('addForm');
+    let names = [];
+    let angle = 0;
+    let spinning = false;
+
+    // ========== صدا ==========
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTick(volume = 0.18) {
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.value = 700 + Math.random() * 200;
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.045);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.045);
+      } catch (e) {}
+    }
+
+    function playWin() {
+      try {
+        initAudio();
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, i) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const t = audioCtx.currentTime + i * 0.11;
+          gain.gain.setValueAtTime(0.22, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+          osc.start(t);
+          osc.stop(t + 0.35);
+        });
+      } catch (e) {}
+    }
+
+    // ========== افکت طلایی ==========
+    function celebrate() {
+      const colors = ['#FFD700', '#FFC107', '#FFEC8B', '#FFA000', '#FFF8E1', '#FF8F00'];
+      for (let i = 0; i < 55; i++) {
+        const conf = document.createElement('div');
+        conf.className = 'confetti';
+        conf.style.left = Math.random() * 100 + 'vw';
+        conf.style.background = colors[i % colors.length];
+        conf.style.width = (6 + Math.random() * 8) + 'px';
+        conf.style.height = (6 + Math.random() * 8) + 'px';
+        conf.style.transform = `rotate(${Math.random() * 360}deg)`;
+        document.body.appendChild(conf);
+
+        conf.animate(
+          [
+            { top: '-20px', opacity: 1, transform: `rotate(0deg) translateX(0)` },
+            { top: '110vh', opacity: 0, transform: `rotate(${360 + Math.random()*360}deg) translateX(${(Math.random()-0.5)*120}px)` }
+          ],
+          {
+            duration: 2200 + Math.random() * 1400,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+            delay: Math.random() * 300
+          }
+        );
+        setTimeout(() => conf.remove(), 4000);
+      }
+    }
+
+    // ========== بارگذاری اسامی ==========
+    function loadNames() {
+      // اول از demo_scores بخوان
+      const scores = JSON.parse(localStorage.getItem('demo_scores') || '[]');
+      names = [...new Set(scores.map(s => s.name).filter(Boolean))];
+
+      // اگر خالی بود، از لیست دستی بخوان
+      if (names.length === 0) {
+        const manual = JSON.parse(localStorage.getItem('wheel_names') || '[]');
+        names = manual;
+      }
+
+      if (names.length === 0) {
+        // حالت خالی
+        ctx.clearRect(0, 0, 300, 300);
+        ctx.fillStyle = '#f5f5f5';
+        ctx.beginPath();
+        ctx.arc(150, 150, 140, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.fillStyle = '#999';
+        ctx.font = '16px Tahoma';
+        ctx.textAlign = 'center';
+        ctx.fillText('هنوز کسی وارد نشده', 150, 140);
+        ctx.font = '13px Tahoma';
+        ctx.fillText('اسامی را پایین وارد کنید', 150, 165);
+
+        spinBtn.disabled = true;
+        document.getElementById('result').textContent = 'داده‌ای برای چرخ وجود ندارد';
+        addForm.style.display = 'block';
+        return;
+      }
+
+      // داده وجود دارد
+      addForm.style.display = 'none';
+      spinBtn.disabled = false;
+      drawWheel();
+      document.getElementById('result').textContent = 'آماده چرخش';
+    }
+
+    function saveNames() {
+      const text = document.getElementById('namesInput').value.trim();
+      if (!text) {
+        alert('حداقل یک اسم وارد کنید');
+        return;
+      }
+      const list = text.split('\n')
+        .map(n => n.trim())
+        .filter(n => n.length > 0);
+
+      if (list.length === 0) {
+        alert('حداقل یک اسم معتبر وارد کنید');
+        return;
+      }
+
+      localStorage.setItem('wheel_names', JSON.stringify(list));
+      names = list;
+      addForm.style.display = 'none';
+      spinBtn.disabled = false;
+      drawWheel();
+      document.getElementById('result').textContent = 'آماده چرخش — ' + list.length + ' نفر';
+    }
+
+    function drawWheel() {
+      const n = names.length;
+      const arc = (2 * Math.PI) / n;
+      const colors = [
+        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4',
+        '#FFEAA7', '#DDA0DD', '#98D8C8', '#F7DC6F',
+        '#FF9F43', '#54A0FF', '#5F27CD', '#01A3A4'
+      ];
+
+      ctx.clearRect(0, 0, 300, 300);
+
+      for (let i = 0; i < n; i++) {
+        const start = i * arc + angle;
+        const end = start + arc;
+
+        ctx.beginPath();
+        ctx.moveTo(150, 150);
+        ctx.arc(150, 150, 140, start, end);
+        ctx.closePath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.7)';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.save();
+        ctx.translate(150, 150);
+        ctx.rotate(start + arc / 2);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = '#1a1a1a';
+        ctx.font = 'bold 15px Tahoma';
+        ctx.fillText(names[i], 78, 0);
+        ctx.restore();
+      }
+
+      ctx.beginPath();
+      ctx.arc(150, 150, 24, 0, 2 * Math.PI);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.strokeStyle = '#e0e0e0';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+
+    function spin() {
+      if (spinning || names.length === 0) return;
+      spinning = true;
+      spinBtn.disabled = true;
+      document.getElementById('result').textContent = 'در حال چرخش...';
+
+      initAudio();
+
+      const extra = 2000 + Math.random() * 1000;
+      const duration = 5200;
+      const startTime = performance.now();
+      let lastTickTime = 0;
+
+      function animate(now) {
+        const t = Math.min((now - startTime) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 5);
+        angle = (extra * ease * Math.PI) / 180;
+        drawWheel();
+
+        const speedFactor = 1 - t;
+        const interval = 40 + (1 - speedFactor) * 160;
+
+        if (now - lastTickTime > interval && t < 0.97) {
+          const vol = 0.08 + speedFactor * 0.16;
+          playTick(vol);
+          lastTickTime = now;
+        }
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          spinning = false;
+          spinBtn.disabled = false;
+
+          const n = names.length;
+          const arc = (2 * Math.PI) / n;
+          const normalized = ((angle % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+          const index = Math.floor(((2 * Math.PI - normalized) % (2 * Math.PI)) / arc) % n;
+
+          document.getElementById('result').textContent = '🎉 انتخاب شد: ' + names[index];
+          playWin();
+          celebrate();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    function show(t) {
+      document.getElementById('status').textContent = t;
+    }
+
+    loadNames();
+  </script>
+</body>
+</html>

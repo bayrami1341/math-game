@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کارگاه دیجیتال کلاس</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Tahoma, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 40px 28px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    h1 { font-size: 26px; margin-bottom: 6px; }
+    .subtitle { opacity: 0.85; margin-bottom: 28px; font-size: 14.5px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-games { background: #4CAF50; color: white; }
+    .btn-widgets { background: #FF9800; color: white; }
+    .btn-school { background: #2196F3; color: white; }
+    .btn-teacher { background: #7B1FA2; color: white; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>کارگاه دیجیتال کلاس</h1>
+    <p class="subtitle">ابزارهای تعاملی کلاس مجازی</p>
+    <button class="btn btn-games" onclick="location.href='join.html'">ورود به کلاس و بازی</button>
+    <button class="btn btn-widgets" onclick="location.href='leaderboard.html'">نتایج کلاس</button>
+    <button class="btn btn-widgets" onclick="location.href='widgets.html'">ابزارک‌های کلاس</button>
+    <button class="btn btn-school" onclick="alert('صفحه معرفی مدرسه به‌زودی')">معرفی مدرسه</button>
+    <button class="btn btn-teacher" onclick="alert('ورود معلم به‌زودی')">ورود معلم</button>
+  </div>
+</body>
+</html>

@@ -1,11 +1,31 @@
 // ============================================================
-// experience.mjs — نسخه ۱۰.۱ (قفل‌شده)
+// experience.mjs — نسخه ۱۰.۲ (تطبیق با کتاب ریاضی سوم، کد ۳۰۵)
 // Station Data Structure + Pure Algorithms
+// v10.2: دامنهٔ سه بنا بر کتاب (۶۴–۶۹، ۷۰–۷۲، ۱۳۶–۱۴۴)، حذف ×۱۱ و ×۱۲،
+// تکمیل سه‌لایه‌ای هر بنا (۷۰/۷۵/۸۰)، مهاجرت نسخه‌های قدیمی
 // ============================================================
 
 export const RULES_VERSION = 'rv1';
-export const QUESTION_SET_VERSION = 'graph-v10.1';
+export const QUESTION_SET_VERSION = 'graph-v10.2';
 export const LEGACY_QUESTION_SET = 'graph-v8.1';
+// مهاجرت v10.2: نسخه‌های پذیرفته‌شدهٔ مجموعه‌سؤال — پیشرفت نسخه‌های ۱۰ و ۱۰.۱ کودکان سوخت نمی‌شود
+export const ACCEPTED_QUESTION_SETS = Object.freeze(['graph-v10.2', 'graph-v10.1', 'graph-v8.1']);
+export const LEGACY_QUESTION_SETS = Object.freeze(['graph-v10.1', 'graph-v8.1']);
+const isAcceptedVersion = v => ACCEPTED_QUESTION_SETS.includes(v);
+
+// ------------------------------------------------------------
+// ۱.۴ آستانه‌های v10.2 — بازنگری تجربهٔ میدانی «محتوای کم»
+// هر بنا سه لایه دارد و با گذراندن هر سه لایه کامل می‌شود:
+//   لایهٔ ۱ با ۷۰٪ ← لایهٔ ۲ | لایهٔ ۲ با ۷۵٪ ← لایهٔ ۳ | لایهٔ ۳ با ۸۰٪ ← کامل شدن بنا
+// ------------------------------------------------------------
+export const LAYER_PASS_MARK = Object.freeze({ 1: 70, 2: 75, 3: 80 });
+export const UNLOCK_THRESHOLDS = Object.freeze({
+  layer1Pass: 70,
+  layer2Pass: 75,
+  layer3Pass: 80,
+  side: 60,
+  coreAnyLayer: 60
+});
 
 // ------------------------------------------------------------
 // ۱. سکتورهای اصلی (تغییرناپذیر)
@@ -33,7 +53,8 @@ export const CORE_SECTORS = Object.freeze({
     objective: 'صدای زمین قطع شده! آنتن ایستگاه را با سلول‌های درست دوباره راه بینداز.',
     icon: '📡',
     order: 2,
-    unlock: { require: 'core', sectorId: 1, minPercent: 80 },
+    // v10.2: برج با تکمیل هر سه لایهٔ نیروگاه باز می‌شود (کتاب: جابه‌جایی و شکستن، صفحهٔ ۷۰–۷۲)
+    unlock: { require: 'core-complete', sectorId: 1 },
     focus: { factors: [6, 7, 8, 9], maxProduct: 81 },
     maxDepth: 3
   },
@@ -46,8 +67,9 @@ export const CORE_SECTORS = Object.freeze({
     objective: 'وقت برگشتن به مدار است. سوخت درست را پیدا کن و سفینه را برای پرواز آماده کن.',
     icon: '🚀',
     order: 3,
-    unlock: { require: 'core', sectorId: 2, minPercent: 80 },
-    focus: { factors: [10, 11, 12], maxProduct: 144 },
+    // v10.2: سکو = صفحه‌های ۱۳۶–۱۴۴ کتاب (×۱۰، ×۰، ×۱، یک‌رقم در چندرقمی) — ×۱۱ و ×۱۲ بیرون کتاب حذف شدند
+    unlock: { require: 'core-complete', sectorId: 2 },
+    focus: { domains: ['x10', 'zero-one', 'multi-digit'], maxProduct: 999 },
     maxDepth: 3
   }
 });
@@ -56,7 +78,9 @@ export const CORE_SECTORS = Object.freeze({
 export const missions = CORE_SECTORS;
 
 // ------------------------------------------------------------
-// ۲. لایه‌های عمق (۳ لایه × ۳ بنا = ۹ لایه)
+// ۲. لایه‌های عمق (۳ لایه × ۳ بنا = ۹ لایه) — v10.2 دامنه‌ها بر کتاب کد ۳۰۵
+//    نیروگاه ۶۴–۶۹: دسته/آرایه/جدول | برج ۷۰–۷۲: جابه‌جایی و شکستن (لنگر ۵)
+//    سکو ۱۳۶–۱۴۴: ×۱۰ سپس ×۰ و ×۱ سپس یک‌رقم در چندرقمی | تقریب → v10.3
 // ------------------------------------------------------------
 export const DEPTH_LAYERS = Object.freeze({
   '1-1': {
@@ -64,7 +88,8 @@ export const DEPTH_LAYERS = Object.freeze({
     title: 'سلول‌های پایه',
     questionCount: 8,
     difficulty: 'basic',
-    focus: { factors: [2, 3, 4, 5] },
+    domain: 'table',
+    focus: { factors: [2, 3, 4, 5], visual: 'equal-groups' },
     unlock: null
   },
   '1-2': {
@@ -72,22 +97,26 @@ export const DEPTH_LAYERS = Object.freeze({
     title: 'سلول‌های پایدار',
     questionCount: 10,
     difficulty: 'stable',
+    domain: 'table',
     focus: { factors: [2, 3, 4, 5], preferFluent: true },
-    unlock: { require: 'depth', id: '1-1', minPercent: 90 }
+    unlock: { require: 'depth', id: '1-1', minPercent: 70 }
   },
   '1-3': {
     id: '1-3', sectorId: 1, depth: 3, type: 'depth',
-    title: 'سلول‌های مفهومی',
+    title: 'دسته‌ها و چرخش',
     questionCount: 6,
     difficulty: 'conceptual',
-    focus: { bottleneckTypes: ['equal-groups', 'skip-counting'] },
-    unlock: { require: 'depth', id: '1-2', minPercent: 85 }
+    domain: 'paired',
+    paired: true,
+    focus: { bottleneckTypes: ['equal-groups', 'skip-counting', 'commutativity'] },
+    unlock: { require: 'depth', id: '1-2', minPercent: 75 }
   },
   '2-1': {
     id: '2-1', sectorId: 2, depth: 1, type: 'depth',
     title: 'آنتن‌های اولیه',
     questionCount: 8,
     difficulty: 'basic',
+    domain: 'table',
     focus: { factors: [6, 7, 8, 9] },
     unlock: null
   },
@@ -96,40 +125,46 @@ export const DEPTH_LAYERS = Object.freeze({
     title: 'سیگنال پایدار',
     questionCount: 10,
     difficulty: 'stable',
+    domain: 'table',
     focus: { factors: [6, 7, 8, 9], preferFluent: true },
-    unlock: { require: 'depth', id: '2-1', minPercent: 90 }
+    unlock: { require: 'depth', id: '2-1', minPercent: 70 }
   },
   '2-3': {
     id: '2-3', sectorId: 2, depth: 3, type: 'depth',
-    title: 'ارتباط مفهومی',
+    title: 'چرخش و شکستن',
     questionCount: 6,
     difficulty: 'conceptual',
-    focus: { bottleneckTypes: ['neighbor-anchor', 'place-value'] },
-    unlock: { require: 'depth', id: '2-2', minPercent: 85 }
+    domain: 'paired',
+    paired: true,
+    focus: { bottleneckTypes: ['commutativity', 'anchor-5'] },
+    unlock: { require: 'depth', id: '2-2', minPercent: 75 }
   },
   '3-1': {
     id: '3-1', sectorId: 3, depth: 1, type: 'depth',
-    title: 'سوخت پایه',
+    title: 'ضرب در ده',
     questionCount: 8,
     difficulty: 'basic',
-    focus: { factors: [10, 11, 12] },
+    domain: 'x10',
+    focus: { bottleneckTypes: ['place-value'] },
     unlock: null
   },
   '3-2': {
     id: '3-2', sectorId: 3, depth: 2, type: 'depth',
-    title: 'موتور پایدار',
+    title: 'صفر و یک',
     questionCount: 10,
     difficulty: 'stable',
-    focus: { factors: [10, 11, 12], preferFluent: true },
-    unlock: { require: 'depth', id: '3-1', minPercent: 90 }
+    domain: 'zero-one',
+    focus: { bottleneckTypes: ['zero-property', 'identity'] },
+    unlock: { require: 'depth', id: '3-1', minPercent: 70 }
   },
   '3-3': {
     id: '3-3', sectorId: 3, depth: 3, type: 'depth',
-    title: 'آمادگی مفهومی',
+    title: 'یک رقم در عدد بزرگ‌تر',
     questionCount: 6,
     difficulty: 'conceptual',
-    focus: { bottleneckTypes: ['doubling', 'commutativity'] },
-    unlock: { require: 'depth', id: '3-2', minPercent: 85 }
+    domain: 'multi-digit',
+    focus: { bottleneckTypes: ['place-value', 'distributive-part'] },
+    unlock: { require: 'depth', id: '3-2', minPercent: 75 }
   }
 });
 
@@ -146,7 +181,7 @@ export const SIDE_MISSIONS = Object.freeze({
     icon: '📡',
     questionCount: 5,
     focus: { factors: [2, 3, 4, 5], adaptive: true },
-    unlock: { require: 'core', sectorId: 1, minPercent: 70 },
+    unlock: { require: 'core', sectorId: 1, minPercent: 60 },
     affectsLeaderboard: false,
     reward: 'energy'
   },
@@ -159,7 +194,7 @@ export const SIDE_MISSIONS = Object.freeze({
     icon: '🔋',
     questionCount: 5,
     focus: { factors: [6, 7, 8, 9], adaptive: true },
-    unlock: { require: 'core', sectorId: 2, minPercent: 70 },
+    unlock: { require: 'core', sectorId: 2, minPercent: 60 },
     affectsLeaderboard: false,
     reward: 'energy'
   },
@@ -171,8 +206,8 @@ export const SIDE_MISSIONS = Object.freeze({
     objective: 'سوخت اضافه برای سفینه آماده کن.',
     icon: '🚀',
     questionCount: 5,
-    focus: { factors: [10, 11, 12], adaptive: true },
-    unlock: { require: 'core', sectorId: 3, minPercent: 70 },
+    focus: { factors: [10, 20, 30], adaptive: true },
+    unlock: { require: 'core', sectorId: 3, minPercent: 60 },
     affectsLeaderboard: false,
     reward: 'energy'
   }
@@ -197,10 +232,34 @@ export function getSideMissionsForSector(sectorId) {
 }
 
 // ------------------------------------------------------------
+// ۴.۵ تکمیل بنا (v10.2): هر بنا با گذراندن هر سه لایه کامل می‌شود
+// لایهٔ ۱ ≥ ۷۰٪ | لایهٔ ۲ ≥ ۷۵٪ | لایهٔ ۳ ≥ ۸۰٪
+// + احترام به پیشرفت نسخه‌های قدیمی: جلسهٔ کاملِ نسخهٔ ۱۰/۱۰.۱ (۱۰۰٪) بنا را کامل می‌شمارد
+// ------------------------------------------------------------
+export function sectorComplete(records = [], sectorId) {
+  const safe = Array.isArray(records) ? records : [];
+  const rel = safe.filter(r =>
+    (r.type === 'core' || r.type === 'depth' || !r.type) &&
+    r.sectorId === sectorId &&
+    isAcceptedVersion(r.questionSetVersion)
+  );
+  const getPercent = r => r.percent !== undefined ? r.percent : (r.total > 0 ? Math.round(100 * r.score / r.total) : 0);
+  const passed = [1, 2, 3].every(d => rel.some(r =>
+    (r.depth === d || (d === 1 && !r.depth)) && getPercent(r) >= LAYER_PASS_MARK[d]));
+  if (passed) return true;
+  return rel.some(r => LEGACY_QUESTION_SETS.includes(r.questionSetVersion) && getPercent(r) >= 100);
+}
+
+// ------------------------------------------------------------
 // ۵. الگوریتم بررسی باز بودن (Pure)
 // ------------------------------------------------------------
 export function isUnlocked(condition, records = [], systemsCache = null) {
   if (!condition) return true;
+
+  // v10.2: بنای بعدی با تکمیل هر سه لایهٔ بنا قبلی باز می‌شود (کتاب: «بعد از پذیرش نیروگاه»)
+  if (condition.require === 'core-complete') {
+    return sectorComplete(records, condition.sectorId);
+  }
 
   if (condition.require === 'core') {
     if (systemsCache) {
@@ -211,8 +270,7 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
       (r.type === 'core' || r.type === 'depth' || !r.type) &&
       r.sectorId === condition.sectorId &&
       r.rulesVersion === RULES_VERSION &&
-      (r.questionSetVersion === QUESTION_SET_VERSION ||
-       r.questionSetVersion === LEGACY_QUESTION_SET) &&
+      isAcceptedVersion(r.questionSetVersion) &&
       (r.total > 0 || (r.percent !== undefined && r.percent > 0))
     );
     const getPercent = r => r.percent !== undefined ? r.percent : (r.total > 0 ? Math.round(100 * r.score / r.total) : 0);
@@ -221,8 +279,10 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
   }
 
   if (condition.require === 'depth') {
+    // v10.2 (رفع باگ P0): جلسهٔ لایهٔ ۱ با type 'core' ذخیره می‌شود — فیلتر قدیمی
+    // (فقط type 'depth') یعنی لایه‌های ۲ و ۳ هرگز باز نمی‌شدند و محتوا «کم» حس می‌شد.
     const rec = records.find(r =>
-      (r.type === 'depth' || !r.type) &&
+      (r.type === 'depth' || r.type === 'core' || !r.type) &&
       (r.activityId === condition.id || `${r.sectorId}-${r.depth}` === condition.id)
     );
     const percent = rec ? (rec.percent ?? (rec.total > 0 ? Math.round(100 * rec.score / rec.total) : 0)) : 0;
@@ -247,8 +307,7 @@ export function stationSystems(records = []) {
       (r.type === 'core' || r.type === 'depth' || !r.type) &&
       r.sectorId === sector.sectorId &&
       r.rulesVersion === RULES_VERSION &&
-      (r.questionSetVersion === QUESTION_SET_VERSION ||
-       r.questionSetVersion === LEGACY_QUESTION_SET) &&
+      isAcceptedVersion(r.questionSetVersion) &&
       (r.total > 0 || (r.percent !== undefined && r.percent > 0))
     );
 
@@ -260,9 +319,12 @@ export function stationSystems(records = []) {
     const bestPercent = best ? getPercent(best) : 0;
 
     const depths = getDepthsForSector(sector.sectorId);
+    // v10.2: لایهٔ جاری = بالاترین لایه‌ای که حد نصاب خودش (۷۰/۷۵/۸۰) را گذرانده
     const currentDepth = depths.reduce((max, d) => {
-      const rec = related.find(r => (r.type === 'depth' || !r.type) && r.depth === d.depth);
-      return (rec && getPercent(rec) >= 80) ? Math.max(max, d.depth) : max;
+      const rec = related.find(r =>
+        (r.type === 'depth' || r.type === 'core' || !r.type) &&
+        (r.depth === d.depth || (d.depth === 1 && !r.depth)));
+      return (rec && getPercent(rec) >= LAYER_PASS_MARK[d.depth]) ? Math.max(max, d.depth) : max;
     }, 0);
 
     return {
@@ -272,7 +334,8 @@ export function stationSystems(records = []) {
       destination: sector.destination,
       icon: sector.icon,
       percent: bestPercent,
-      complete: bestPercent >= 100,
+      // v10.2: کامل شدن بنا یعنی هر سه لایه گذرانده شده باشد (نه فقط یک جلسه)
+      complete: sectorComplete(records, sector.sectorId),
       started: !!best,
       currentDepth
     };
@@ -359,7 +422,7 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
       question.meta = { doubleOf: { f1, f2: half } };
     } else if (strategy === 'commutativity') {
       question.meta = { swapped: { f1: f2, f2: f1 } };
-    } else if (strategy === 'place-value') {
+    } else if (strategy === 'place-value' || strategy === 'distributive-part') {
       question.meta = { tens: Math.floor(f2 / 10), ones: f2 % 10 };
     }
 

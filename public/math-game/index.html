@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="assets/avatar-hooshak.png" type="image/png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
+  <meta name="theme-color" content="#00f3ff">
+  <title>کارگاه ایستگاه فضایی — پایه سوم v6.0</title>
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/report.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="stage" aria-label="کارگاه ایستگاه فضایی"></canvas>
+  <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <header id="hud" role="banner">
+    <div class="hud-item" id="hud-player">مهندس: —</div>
+    <div class="hud-item" id="hud-progress">بخش ۱ از ۳</div>
+    <div class="hud-item" id="hud-modules">قطعه: ۰</div>
+    <div class="hud-item" id="hud-streak">پشت‌سرهم: ۰</div>
+    <div class="hud-actions">
+      <button class="icon-btn" id="btn-sound" aria-label="صدا">🔊</button>
+      <button class="icon-btn" id="btn-inbox" aria-label="پیام‌ها" title="پیام‌ها">📬</button>
+      <button class="icon-btn" id="btn-heroes" aria-label="گنجینه پهلوانان" title="پهلوانان">🏆</button>
+      <button class="icon-btn" id="btn-exit" aria-label="خروج" title="خروج">🚪</button>
+      <button class="icon-btn" id="btn-teacher-hud" aria-label="میزکار معلم">🎓</button>
+    </div>
+  </header>
+  <div id="progress-bar"><div id="progress-fill"></div></div>
+  <div id="question-panel"><span id="question-text">در حال آماده‌سازی کارگاه...</span></div>
+  <div id="feedback-bar" aria-live="polite">
+    <div class="fb-title" id="fb-title"></div>
+    <div class="fb-sub" id="fb-sub"></div>
+  </div>
+  <div id="badge-area"></div>
+
+  <!-- ============ داستان ورق‌زن ============ -->
+  <div id="story-app" class="hidden" aria-label="داستان">
+    <div class="story-slide active" data-slide="0">
+      <div class="story-bg" id="story-bg-0"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-0" alt="" style="display:none;">
+        <div class="story-text-box"><p id="story-text-0">در مداری دور زمین، ایستگاهی درخشان بود.</p></div>
+      </div>
+    </div>
+    <div class="story-slide" data-slide="1">
+      <div class="story-bg" id="story-bg-1"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-1" alt="" style="display:none;">
+        <div class="story-text-box"><p id="story-text-1">یک شب، طوفان کیهانی از راه رسید.</p></div>
+      </div>
+    </div>
+    <div class="story-slide" data-slide="2">
+      <div class="story-bg" id="story-bg-2"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-2" alt="" style="display:none;">
+        <div class="story-text-box"><p id="story-text-2">ایستگاه شکست. قطعه‌ها پراکنده شدند.</p></div>
+      </div>
+    </div>
+    <div class="story-slide" data-slide="3">
+      <div class="story-bg" id="story-bg-3"></div>
+      <div class="story-overlay"></div>
+      <div class="story-content">
+        <img class="story-character" id="story-char-3" alt="" style="display:none;">
+        <div class="story-text-box">
+          <p id="story-text-3">تو کمک‌کننده‌ای. اسمت چیه؟</p>
+          <input type="text" class="story-name-input" id="story-name-input" placeholder="نام خود را وارد کن..." maxlength="20" autocomplete="off">
+        </div>
+      </div>
+    </div>
+    <button class="story-skip" id="story-skip">رد کردن ⏭</button>
+    <button class="story-replay" id="story-replay" title="تکرار">🔊</button>
+    <div class="story-controls">
+      <button class="story-nav-btn" id="story-next">بعدی ←</button>
+      <span class="story-indicator" id="story-indicator">۱ از ۴</span>
+      <button class="story-nav-btn" id="story-prev" disabled>→ قبلی</button>
+    </div>
+  </div>
+
+  <!-- ============ انتخاب بخش ============ -->
+    <!-- ============ ساخت پروفایل ============ -->
+  <div id="modal-profile" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>👋 خوش آمدی!</h2>
+      <p>قبل از شروع، اسم و آواتارت را انتخاب کن.</p>
+      <label class="field-label">آواتارت را انتخاب کن:</label>
+      <div class="heroes-grid" id="profile-avatars" style="grid-template-columns: repeat(4, 1fr); gap:8px; margin:10px 0;">
+        <button class="hero-card" data-avatar="🦊" style="font-size:2rem; padding:12px;">🦊</button>
+        <button class="hero-card" data-avatar="🐼" style="font-size:2rem; padding:12px;">🐼</button>
+        <button class="hero-card" data-avatar="🦁" style="font-size:2rem; padding:12px;">🦁</button>
+        <button class="hero-card" data-avatar="🐧" style="font-size:2rem; padding:12px;">🐧</button>
+        <button class="hero-card" data-avatar="🐻" style="font-size:2rem; padding:12px;">🐻</button>
+        <button class="hero-card" data-avatar="🦉" style="font-size:2rem; padding:12px;">🦉</button>
+        <button class="hero-card" data-avatar="🐸" style="font-size:2rem; padding:12px;">🐸</button>
+        <button class="hero-card" data-avatar="🦄" style="font-size:2rem; padding:12px;">🦄</button>
+        <button class="hero-card" data-avatar="🐯" style="font-size:2rem; padding:12px;">🐯</button>
+        <button class="hero-card" data-avatar="🐨" style="font-size:2rem; padding:12px;">🐨</button>
+        <button class="hero-card" data-avatar="🦅" style="font-size:2rem; padding:12px;">🦅</button>
+        <button class="hero-card" data-avatar="🐢" style="font-size:2rem; padding:12px;">🐢</button>
+      </div>
+      <label class="field-label">اسمت چیه؟</label>
+      <input type="text" id="profile-name-input" class="input-field" placeholder="مثال: مینا" maxlength="20" autocomplete="off">
+      <div class="start-buttons">
+        <button class="action-btn" id="btn-profile-create" style="width:100%; padding:14px; background:linear-gradient(180deg, var(--green), #049f76); color:#02040a;">شروع بازی 🚀</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal-sector-picker" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2 id="picker-greeting">سلام!</h2>
+      <p style="margin-bottom:20px;">کدام بخش را تمرین کنی؟</p>
+      <div class="start-buttons" style="flex-direction:column; gap:12px;">
+        <button class="action-btn picker-btn" data-sector="1" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #00f3ff, #0099b8);">🌱 بخش ۱ — دسته‌های کوچک</button>
+        <button class="action-btn picker-btn" data-sector="2" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #ff7043, #c44a1f);">⚡ بخش ۲ — دو، چهار و پنج</button>
+        <button class="action-btn picker-btn" data-sector="3" style="width:100%; padding:16px; font-size:1rem; background:linear-gradient(180deg, #10b981, #047857);">🏆 بخش ۳ — دسته‌های شلوغ‌تر</button>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="action-btn btn-secondary picker-cancel" style="width:100%;">↩ بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ صفحه شروع (۵ دکمه) ============ -->
+  <div id="modal-start" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>🛰️ کارگاه ایستگاه فضایی</h2>
+      <p>هر جواب درست، یک قطعه به ایستگاه فضایی‌ات اضافه می‌کند.</p>
+      <div class="start-buttons" style="flex-direction:column; gap:10px; margin-top:20px;">
+        <button id="btn-solo" class="action-btn" style="width:100%; font-size:1rem; padding:14px; background:linear-gradient(180deg, #00f3ff, #0099b8);">
+          🌱 بازی انفرادی
+          <div style="font-size:0.72rem; font-weight:400; margin-top:2px;">یادگیری آرام، قدم به قدم</div>
+        </button>
+        <button id="btn-friends" class="action-btn" style="width:100%; padding:14px; font-size:1rem; background:linear-gradient(180deg, #ffb703, #c78a00); color:#02040a;">
+          👥 بازی با دوستان
+          <div style="font-size:0.72rem; font-weight:400; margin-top:2px;">گروه بساز، کل‌کل کن</div>
+        </button>
+        <button id="btn-classroom" class="action-btn" style="width:100%; padding:14px; font-size:1rem; background:linear-gradient(180deg, #10b981, #047857);">
+          🏫 کلاس من
+          <div style="font-size:0.72rem; font-weight:400; margin-top:2px;">با کد کلاس وارد شو</div>
+        </button>
+        <button id="btn-legacy" class="action-btn btn-secondary" style="width:100%; padding:12px;">
+          🚀 کارگاه ایستگاه (هیجان)
+          <div style="font-size:0.72rem; font-weight:400; margin-top:2px;">مسابقه سریع، کارت‌های پرنده</div>
+        </button>
+        <button id="btn-teacher" class="action-btn btn-teacher" style="width:100%; padding:12px;">
+          👨‍🏫 ورود معلم
+        </button>
+      </div>
+      <p style="font-size:0.72rem; color:var(--muted); margin-top:14px;">نسخه ۶.۰ — نسخه در حال توسعه</p>
+      <input id="player-name" type="hidden" value="">
+      <input id="player-class" type="hidden" value="">
+      <button id="btn-start" style="display:none;"></button>
+      <button id="btn-core-1" style="display:none;"></button>
+      <button id="btn-core-2" style="display:none;"></button>
+      <button id="btn-core-3" style="display:none;"></button>
+      <button id="btn-open-teacher-login" style="display:none;"></button>
+      <button id="btn-slice-25" style="display:none;"></button>
+      <button id="btn-start-assessment" style="display:none;"></button>
+    </div>
+  </div>
+
+  <!-- ============ مدال گروه (ساخت / عضویت) ============ -->
+  <div id="modal-group" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>👥 بازی با دوستان</h2>
+      <p>گروه بساز یا با کد به گروهی بپیوند.</p>
+      <div class="start-buttons" style="flex-direction:column; gap:10px;">
+        <button id="btn-create-group" class="action-btn" style="width:100%; padding:14px; background:linear-gradient(180deg, #ffb703, #c78a00); color:#02040a;">
+          ➕ ساخت گروه جدید
+        </button>
+        <button id="btn-join-group" class="action-btn btn-secondary" style="width:100%; padding:14px;">
+          🔗 پیوستن به گروه
+        </button>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="action-btn btn-secondary" id="btn-group-back" style="width:100%;">↩ بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال ساخت گروه (نمایش کد) ============ -->
+  <div id="modal-create-group" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>🎉 گروه ساخته شد!</h2>
+      <p>این کد را به دوستانت بده:</p>
+      <div class="group-code-box">
+        <div class="group-code-value" id="created-group-code">------</div>
+        <div class="group-code-hint">دوستانت با این کد وارد می‌شوند</div>
+      </div>
+      <div class="group-code-actions">
+        <button class="action-btn" id="btn-copy-group-code" style="background:var(--cyan);color:#02040a;">📋 کپی کد</button>
+        <button class="action-btn" id="btn-start-group-game" style="background:linear-gradient(180deg, var(--gold), #c78a00); color:#02040a;">▶ شروع بازی</button>
+      </div>
+      <div style="margin-top:12px;">
+        <button class="action-btn btn-secondary" id="btn-create-group-back" style="width:100%;">↩ بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال عضویت در گروه ============ -->
+  <div id="modal-join-group" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>🔗 پیوستن به گروه</h2>
+      <p>کد ۶ رقمی گروه را وارد کن:</p>
+      <input type="text" id="join-group-code" class="input-field" placeholder="مثال: ۱۲۳۴۵۶" maxlength="6" inputmode="numeric" style="font-size:1.5rem;letter-spacing:0.3em;text-align:center;direction:ltr;">
+      <div class="start-buttons">
+        <button class="action-btn" id="btn-join-group-ok" style="background:linear-gradient(180deg, var(--green), #049f76); color:#02040a;">ورود به گروه</button>
+        <button class="action-btn btn-secondary" id="btn-join-group-back">بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال لیدربرد گروه ============ -->
+  <div id="modal-group-board" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2 id="group-board-title">🏆 رتبه‌بندی گروه</h2>
+      <p id="group-board-sub" style="font-size:0.82rem;color:var(--muted);"></p>
+      <div class="leaderboard-list" id="group-leaderboard"></div>
+      <div class="start-buttons" style="margin-top:14px;">
+        <button class="action-btn" id="btn-group-play-again" style="background:linear-gradient(180deg, var(--gold), #c78a00); color:#02040a;">🎮 بازی دوباره</button>
+        <button class="action-btn btn-secondary" id="btn-group-board-back">بستن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال کلاس (عضویت) ============ -->
+  <div id="modal-class-join" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>🏫 ورود به کلاس</h2>
+      <p>کد ۶ رقمی کلاس را وارد کن:</p>
+      <input type="text" id="join-class-code" class="input-field" placeholder="مثال: ۱۲۳۴۵۶" maxlength="6" inputmode="numeric" style="font-size:1.5rem;letter-spacing:0.3em;text-align:center;direction:ltr;">
+      <div class="start-buttons">
+        <button class="action-btn" id="btn-join-class-ok" style="background:linear-gradient(180deg, var(--green), #049f76); color:#02040a;">ورود به کلاس</button>
+        <button class="action-btn btn-secondary" id="btn-join-class-back">بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال کلاس فعال (نمایش اطلاعات) ============ -->
+  <div id="modal-classroom" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2 id="classroom-title">🏫 کلاس من</h2>
+      <div id="classroom-info"></div>
+      <div class="start-buttons" style="flex-direction:column; gap:10px; margin-top:14px;">
+        <button class="action-btn" id="btn-classroom-play" style="background:linear-gradient(180deg, #00f3ff, #0099b8);">🎮 شروع بازی</button>
+        <button class="action-btn" id="btn-classroom-messages" style="background:linear-gradient(180deg, var(--purple), #6d28d9); color:#fff;">📬 پیام‌های کلاس</button>
+        <button class="action-btn" id="btn-classroom-leave" style="background:rgba(255,255,255,0.1); color:#fff; border:1px solid rgba(255,255,255,0.25);">خروج از کلاس</button>
+        <button class="action-btn btn-secondary" id="btn-classroom-back">↩ بازگشت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال پیام‌ها (دانش‌آموز ↔ معلم) ============ -->
+  <div id="modal-messages" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>📬 پیام‌ها</h2>
+      <p id="messages-subtitle" style="font-size:0.82rem;color:var(--muted);">گفتگو با معلم</p>
+      <div class="chat-container" id="chat-container">
+        <div class="chat-empty">هنوز پیامی رد و بدل نشده.</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="پیام خود را بنویسید..." maxlength="500" autocomplete="off">
+        <button class="chat-send-btn" id="btn-chat-send">ارسال</button>
+      </div>
+      <div style="margin-top:12px;">
+        <button class="action-btn btn-secondary" id="btn-messages-close" style="width:100%;">بستن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال گنجینه پهلوانان ============ -->
+  <div id="modal-heroes" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>🏆 گنجینه پهلوانان</h2>
+      <p id="heroes-counter" style="font-size:0.9rem;color:var(--gold);font-weight:800;"></p>
+      <div class="heroes-grid" id="heroes-grid"></div>
+      <div style="margin-top:14px;">
+        <button class="action-btn btn-secondary" id="btn-heroes-close" style="width:100%;">بستن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال جزئیات یک پهلوان ============ -->
+  <div id="modal-hero-detail" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div style="font-size:4rem; margin-bottom:8px;" id="hero-detail-emoji">🏹</div>
+      <h2 id="hero-detail-name">آرش کمانگیر</h2>
+      <p style="color:var(--cyan); font-weight:700;" id="hero-detail-title">کماندار افسانه‌ای</p>
+      <div class="diagnostic-box" style="background:rgba(0,243,255,0.05); border-color:var(--cyan); text-align:right; line-height:1.9;">
+        <p id="hero-detail-quote" style="font-size:0.92rem; color:#e2e8f0;"></p>
+        <hr style="border-color:rgba(255,255,255,0.1); margin:12px 0;">
+        <p style="font-size:0.82rem; color:var(--muted);"><b style="color:var(--gold);">شرط آزادسازی:</b> <span id="hero-detail-req"></span></p>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="action-btn btn-secondary" id="btn-hero-detail-close" style="width:100%;">بستن</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ Core Board ============ -->
+  <section id="core-board" class="hidden" aria-label="بخش هسته">
+    <div class="core-top">
+      <span class="core-chip" id="core-sector">بخش ۱</span>
+      <span class="core-chip" id="core-progress">روان: ۰ از ۷</span>
+    </div>
+    <div class="core-main" id="core-main">
+      <div class="core-prompt" id="core-prompt"></div>
+      <div class="core-groups-wrap"><div class="core-groups" id="core-groups"></div></div>
+      <div class="core-question">حاصل چند است؟</div>
+      <div class="core-choices" id="core-choices"></div>
+    </div>
+    <div class="core-companion">
+      <div class="core-companion-avatar" id="core-companion-avatar">🐿️</div>
+      <div class="core-companion-text" id="core-companion-text">سلام! بیا با هم بشماریم!</div>
+    </div>
+    <p id="core-live-status" role="status" aria-live="polite" style="text-align:center"></p>
+    <div class="core-bottom" style="flex-wrap:wrap">
+      <a href="join.html" style="color:var(--cyan)">ورود به کلاس</a>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
+      <button type="button" id="core-home" class="action-btn btn-secondary">🏠 خانه</button>
+      <button type="button" id="core-back" class="action-btn btn-secondary">خروج</button>
+    </div>
+  </section>
+
+  <!-- ============ ورود معلم ============ -->
+  <div id="modal-teacher-login" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card" style="max-width:380px">
+      <h2 style="color:#a78bfa">🔐 ورود معلم</h2>
+      <p>رمز عبور را وارد کنید.</p>
+      <input type="password" id="teacher-pin-input" class="input-field" placeholder="● ● ● ●" maxlength="20" autocomplete="off" inputmode="numeric">
+      <div class="start-buttons">
+        <button id="btn-teacher-login-ok" class="action-btn btn-teacher">ورود به پنل</button>
+        <button id="btn-teacher-login-cancel" class="action-btn btn-secondary">انصراف</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ پنل معلم v3 (با تب‌های جدید) ============ -->
+  <div id="modal-teacher-v2" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="teacher-panel">
+      <div class="teacher-header">
+        <button class="teacher-back-btn hidden" id="teacher-back-v2">← بازگشت</button>
+        <h2 id="teacher-title-v2">🏠 امروز</h2>
+        <button class="teacher-back-btn" id="teacher-close-v2" title="بستن">✕</button>
+      </div>
+      <div class="teacher-nav" id="teacher-nav">
+        <button class="teacher-nav-btn active" data-tpage="today">🏠 امروز</button>
+        <button class="teacher-nav-btn" data-tpage="students">👥 دانش‌آموزان</button>
+        <button class="teacher-nav-btn" data-tpage="classes">🏫 کلاس‌های من</button>
+        <button class="teacher-nav-btn" data-tpage="messages">📬 پیام‌ها</button>
+        <button class="teacher-nav-btn" data-tpage="settings">⚙️ تنظیمات</button>
+      </div>
+
+      <!-- تب امروز -->
+      <div class="teacher-page" id="page-today">
+        <div class="kawh-message">
+          <div class="kawh-avatar" id="teacher-companion-avatar">🐿️</div>
+          <div class="kawh-text" id="kawh-text-today">در حال آماده‌سازی...</div>
+        </div>
+        <div class="summary-card-v2">
+          <div class="summary-header">🌟 وضعیت کلاس</div>
+          <div class="summary-body" id="today-status-body"></div>
+        </div>
+        <div class="summary-card-v2">
+          <div class="summary-header">🎯 پیشنهاد امروز</div>
+          <div class="summary-body" id="today-suggestion-body"></div>
+        </div>
+        <div class="summary-card-v2">
+          <div class="summary-header">📊 کلاس در یک نگاه</div>
+          <div class="summary-body" id="today-overview-body"></div>
+        </div>
+      </div>
+
+      <!-- تب دانش‌آموزان -->
+      <div class="teacher-page hidden" id="page-students">
+        <div class="student-list" id="student-list-v2"></div>
+      </div>
+
+      <!-- تب جزئیات (پنهان) -->
+      <div class="teacher-page hidden" id="page-detail">
+        <div id="detail-content"></div>
+      </div>
+
+      <!-- تب کلاس‌های من -->
+      <div class="teacher-page hidden" id="page-classes">
+        <div class="summary-card-v2">
+          <div class="summary-header">🏫 کلاس‌های من</div>
+          <div class="summary-body">
+            <div id="teacher-classes-list"></div>
+            <div style="margin-top:14px;">
+              <button class="action-btn" id="btn-teacher-create-class" style="width:100%; background:linear-gradient(180deg, var(--green), #049f76); color:#02040a;">➕ ساخت کلاس جدید</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تب پیام‌ها -->
+      <div class="teacher-page hidden" id="page-messages">
+        <div class="summary-card-v2">
+          <div class="summary-header">📬 پیام‌ها</div>
+          <div class="summary-body">
+            <div class="msg-student-picker" id="teacher-msg-picker"></div>
+            <div class="chat-container" id="teacher-chat-container">
+              <div class="chat-empty">دانش‌آموزی را انتخاب کنید تا گفتگو را ببینید.</div>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" id="teacher-chat-input" placeholder="پاسخ خود را بنویسید..." maxlength="500" autocomplete="off">
+              <button class="chat-send-btn" id="btn-teacher-chat-send">ارسال</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تب تنظیمات -->
+      <div class="teacher-page hidden" id="page-settings">
+        <div class="summary-card-v2">
+          <div class="summary-header">⚙️ تنظیمات</div>
+          <div class="summary-body">
+            <div class="stat-line">
+              <span>نمایش رتبه به دانش‌آموزان</span>
+              <input type="checkbox" id="setting-show-rank" style="width:20px;height:20px;">
+            </div>
+            <div class="stat-line">
+              <span>اجازه پیام دوطرفه</span>
+              <input type="checkbox" id="setting-allow-msg" checked style="width:20px;height:20px;">
+            </div>
+          </div>
+        </div>
+        <div class="summary-card-v2">
+          <div class="summary-header">📤 خروجی داده</div>
+          <div class="summary-body">
+            <button class="action-btn" id="btn-export-csv" style="width:100%; background:linear-gradient(180deg, var(--green), #049f76); color:#02040a; margin-bottom:8px;">📊 دانلود CSV</button>
+            <button class="action-btn btn-secondary" id="btn-export-json" style="width:100%;">📁 دانلود پشتیبان JSON</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ مدال بررسی خطا ============ -->
+  <div id="modal-correct" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card" style="border-color:var(--gold)">
+      <h2 style="color:var(--gold)">بیا با هم بررسی کنیم 🔍</h2>
+      <div id="correct-body"></div>
+      <button id="btn-continue" class="action-btn" style="background:var(--gold);color:#02040a">متوجه شدم، ادامه ساخت</button>
+    </div>
+  </div>
+
+  <!-- ============ مدال انتقال بخش ============ -->
+  <div id="modal-sector" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2 id="sector-title">انتقال بخش</h2>
+      <p id="sector-desc"></p>
+      <p id="sector-live-status" role="status" aria-live="polite"></p>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
+      <button id="btn-sector-next" class="action-btn">ورود به بخش بعدی</button>
+    </div>
+  </div>
+
+  <!-- ============ مدال کارنامه ============ -->
+  <div id="modal-report" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h2>📊 کارنامهٔ ساخت ایستگاه</h2>
+      <p id="report-live-status" role="status" aria-live="polite"></p>
+      <a href="leaderboard.html" style="color:var(--cyan)">لیدربرد کلاس</a>
+      <div id="report-summary" style="text-align:right;line-height:1.8;margin-bottom:10px"></div>
+      <div id="report-badges" class="badges-grid"></div>
+      <div id="report-heroes" style="margin-top:14px;"></div>
+      <div class="start-buttons" style="margin-top:14px; flex-direction:column;">
+        <button id="btn-report-send-teacher" class="action-btn" style="width:100%; background:linear-gradient(180deg, var(--gold), #c78a00); color:#02040a;">📤 ارسال گزارش به معلم</button>
+        <button id="btn-download-report" class="action-btn btn-secondary" style="width:100%;">دانلود کارنامه 📥</button>
+        <button id="btn-replay" class="action-btn" style="width:100%; background:var(--gold);color:#02040a">ساخت ایستگاه جدید 🔁</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- لایه پایه — باید اول بارگذاری شود -->
+<script src="errors.js" defer></script>
+<script src="storage.js" defer></script>
+<script src="src/core/utils.js" defer></script>
+
+<!-- لیدربرد زنده — پیش از هستهٔ بازی و به ترتیب وابستگی -->
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js" defer></script>
+<script src="firebase-config.js" defer></script>
+<script src="live-board.js?v=20261016-scorefix" defer></script>
+
+<!-- هسته‌ها — به ترتیب وابستگی -->
+<script src="workshop-core.js" defer></script>
+<script src="profile-manager.js" defer></script>
+<script src="heroes-core.js" defer></script>
+<script src="social-core.js" defer></script>
+<script src="src/core/pedagogy.js" defer></script>
+<script src="src/core/graph-data.js" defer></script>
+<script src="src/core/bottleneck.js" defer></script>  
+<script src="src/games/multiplication-1x1/config.js" defer></script>
+<script src="src/games/multiplication-1x1/game.js?v=20261016-scorefix" defer></script>
+<script src="src/games/multiplication-1x1/core-play.js?v=20261016-scorefix" defer></script>
+
+<!-- رابط کاربری -->
+<script src="src/ui/story.js" defer></script>
+<script src="src/ui/heroes-ui.js" defer></script>
+<script src="src/ui/messages-ui.js" defer></script>
+<script src="src/ui/classroom-ui.js" defer></script>
+<script src="src/ui/groups-ui.js" defer></script>
+<script src="src/ui/teacher.js" defer></script>
+<script src="src/ui/report-panel.js" defer></script>
+<script src="src/ui/ui-controller.js?v=20261016-scorefix" defer></script>
+
+<!-- نگهبان بارگذاری -->
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  var لازم = ['AppStorage', 'HeroesCore', 'WorkshopCore', 'ProfileManager', 'SocialCore', 'toFa', 'SoundSystem'];
+  var گمشده = لازم.filter(function (نام) { return typeof window[نام] === 'undefined'; });
+  if (گمشده.length > 0) {
+    console.error('⛔ ماژول‌های بارگذاری‌نشده:', گمشده.join('، '));
+    var پیام = document.createElement('div');
+    پیام.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#b00;color:#fff;padding:12px;z-index:9999;text-align:center;font-family:Tahoma';
+    پیام.textContent = 'خطا در بارگذاری برنامه. لطفاً صفحه را دوباره باز کنید.';
+    document.body.appendChild(پیام);
+    return;
+  }
+  console.log('✅ همه ماژول‌ها بارگذاری شدند');
+  var وضعیت = window.Storage.بررسی_نسخه();
+  console.log('📦 نسخه ساختار:', وضعیت);
+});
+</script>
+</body>
+</html>

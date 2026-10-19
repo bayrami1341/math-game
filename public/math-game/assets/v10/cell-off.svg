@@ -1,0 +1,11 @@
+<svg class="cell-svg unlit" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- قاب بیرونی پخ‌خورده سلول خاموش -->
+      <polygon points="10,4 34,4 40,10 40,34 34,40 10,40 4,34 4,10" fill="#0b1726" stroke="#2a4057" stroke-width="2.2" stroke-linejoin="round"/>
+      <!-- قاب میانی خاموش -->
+      <rect x="9" y="9" width="26" height="26" rx="4" fill="#0f2034" stroke="#1d3554" stroke-width="1.4"/>
+      <!-- هسته مستطیلی تاریک سلول -->
+      <rect x="13" y="12" width="18" height="20" rx="2.5" fill="#14263c"/>
+      <!-- کنتاکت‌های بالا و پایین باتری -->
+      <rect x="17" y="6" width="10" height="2.5" rx="1" fill="#2a4057"/>
+      <rect x="17" y="35.5" width="10" height="2.5" rx="1" fill="#2a4057"/>
+    </svg>

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://bayrami1341.github.io/math-game/contracts/v9-entry-api.schema.json",
+  "title": "9.0.3-entry-preview — story identity and activity extensions",
+  "description": "Additive operations. The locked phase-one and runtime request schemas are unchanged.",
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" },
+    "requestId": { "type": "string", "pattern": "^[A-Za-z0-9_-]{8,128}$" },
+    "createStudentRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "const": 1, "type": "integer" },
+        "requestId": { "$ref": "#/$defs/requestId" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "avatar": { "enum": ["astronaut", "pilot", "scientist"] }
+      },
+      "required": ["schemaVersion", "requestId", "displayName"],
+      "additionalProperties": false
+    },
+    "getEntryRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "const": 1, "type": "integer" },
+        "legacyMembership": {
+          "type": "object",
+          "properties": { "classId": { "$ref": "#/$defs/id" }, "studentId": { "$ref": "#/$defs/id" } },
+          "required": ["classId", "studentId"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["schemaVersion"],
+      "additionalProperties": false
+    },
+    "startActivityRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "const": 1, "type": "integer" },
+        "requestId": { "$ref": "#/$defs/requestId" },
+        "studentId": { "$ref": "#/$defs/id" },
+        "classId": { "$ref": "#/$defs/id" },
+        "activity": { "enum": ["practice", "mission"] },
+        "sectorId": { "type": "integer", "minimum": 1, "maximum": 3 }
+      },
+      "required": ["schemaVersion", "requestId", "studentId", "activity", "sectorId"],
+      "additionalProperties": false
+    },
+    "getCollectionRequest": {
+      "type": "object",
+      "properties": { "schemaVersion": { "const": 1, "type": "integer" }, "studentId": { "$ref": "#/$defs/id" } },
+      "required": ["schemaVersion", "studentId"],
+      "additionalProperties": false
+    },
+    "joinStudentClassRequest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": { "const": 1, "type": "integer" },
+        "requestId": { "$ref": "#/$defs/requestId" },
+        "studentId": { "$ref": "#/$defs/id" },
+        "token": { "type": "string", "minLength": 16, "maxLength": 512 }
+      },
+      "required": ["schemaVersion", "requestId", "studentId", "token"],
+      "additionalProperties": false
+    }
+  }
+}

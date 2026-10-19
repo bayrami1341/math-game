@@ -1,0 +1,10 @@
+<svg class="path-svg path-1 lit" viewBox="0 0 40 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- بستر ایزومتریک مسیر -->
+      <rect x="12" y="0" width="16" height="120" fill="#09182b" stroke="#7ef0ff" stroke-width="1.5" stroke-opacity="0.55"/>
+      <!-- خط اصلی انتقال انرژی -->
+      <line x1="20" y1="0" x2="20" y2="120" stroke="#5ee0b5" stroke-width="4.5" stroke-dasharray="none" filter="drop-shadow(0 0 6px #5ee0b5)"/>
+      <!-- گره‌های تقویت مسیر -->
+      <circle cx="20" cy="28" r="4" fill="#5ee0b5" stroke="#5ee0b5" stroke-width="1.8"/>
+      <circle cx="20" cy="60" r="4" fill="#5ee0b5" stroke="#5ee0b5" stroke-width="1.8"/>
+      <circle cx="20" cy="92" r="4" fill="#5ee0b5" stroke="#5ee0b5" stroke-width="1.8"/>
+    </svg>

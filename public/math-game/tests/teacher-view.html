@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>نمای معلم — سه دانش‌آموز نمونه</title>
+<style>
+  body {
+    font-family: Tahoma, sans-serif;
+    background: #f5f5f5;
+    color: #1a202c;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    direction: rtl;
+  }
+  h1 {
+    color: #2c5282;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+  }
+  .student-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-right: 5px solid #2c5282;
+  }
+  .student-name {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2c5282;
+    margin-bottom: 12px;
+  }
+  .row {
+    margin-bottom: 12px;
+    line-height: 1.8;
+  }
+  .label {
+    font-weight: bold;
+    color: #4a5568;
+    margin-left: 6px;
+  }
+  .bottleneck-name {
+    color: #c53030;
+    font-weight: bold;
+    font-size: 1.05rem;
+  }
+  .action {
+    background: #ebf8ff;
+    border-right: 4px solid #3182ce;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+    line-height: 1.8;
+  }
+  .action-title {
+    font-weight: bold;
+    color: #2b6cb0;
+    margin-bottom: 4px;
+  }
+  .note {
+    text-align: center;
+    color: #718096;
+    font-size: 0.85rem;
+    margin-top: 30px;
+    padding: 16px;
+    background: white;
+    border-radius: 8px;
+  }
+</style>
+</head>
+<body>
+
+<h1>نمای معلم</h1>
+<p class="subtitle">سه دانش‌آموز نمونه با گلوگاه‌های متفاوت</p>
+
+<div id="students"></div>
+
+<div class="note">
+  این صفحه برای معلم ساخته شده است. هیچ اصطلاح فنی نشان داده نمی‌شود.
+</div>
+
+<script src="../src/core/graph-data.js"></script>
+<script src="../src/core/bottleneck.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  // تبدیل گلوگاه فنی به زبان معلم
+  var PLAIN_NAMES = {
+    'G': 'جمع کردن به‌جای ضرب',
+    'S': 'یک قدم گم در شمارش',
+    'A': 'یک خانه کم در آرایه',
+    'D': 'دوبرابر را حساب نکردن',
+    'N': 'حاصل جدول کناری',
+    'P': 'جابه‌جا نوشتن رقم‌ها',
+    'C': 'نشناختن شکل ضرب'
+  };
+
+  // کار فردا به زبان ساده
+  var PLAIN_ACTIONS = {
+    'G': 'روی میز، چند دستهٔ کوچک بچینید (مثلاً دو دستهٔ پنج‌تایی). از او بپرسید «چند دسته داری؟ چند تا در هر دسته؟» جواب را نگویید، بگذارید خودش بشمارد.',
+    'S': 'با او ۵تا۵تا تا ۵۰ و ۲تا۲تا تا ۲۰ بشمارید. سپس روی کاغذ شطرنجی، همان را با آرایه نشان دهید.',
+    'A': 'کاغذ شطرنجی بدهید و از او بخواهید خانه‌ها را رنگ کند. انگشتش را روی ردیف بکشد، نه روی خانه‌های جدا.',
+    'D': 'مثلاً ۸ مهره روی میز بگذارید. بگویید «حالا دو بارش کن.» بگذارید خودش دو دستهٔ ۸تایی بسازد و بشمارد.',
+    'N': 'دو آرایه کنار هم بکشید (مثلاً ۴×۵ و ۴×۶). تفاوت را با رنگ نشان دهید. بپرسید «تفاوت چند تاست؟»',
+    'P': 'دو بستهٔ ده‌تایی و چند تایی روی میز بگذارید. بپرسید «اول چند تا ده داری؟ بعد چند تا یکی؟» حاصل را خودش بنویسد.',
+    'C': 'یک‌بار عامل‌ها را برعکس نشان دهید. مثلاً ۲×۵ و ۵×۲ را کنار هم بچینید. ببیند هر دو یکی است.'
+  };
+
+  var students = [
+    {
+      name: 'مینا',
+      events: [
+        { f1: 4, f2: 6, given: 42, correct: false, assisted: false, filler: false },
+        { f1: 6, f2: 7, given: 24, correct: false, assisted: false, filler: false }
+      ]
+    },
+    {
+      name: 'آرمین',
+      events: [
+        { f1: 2, f2: 5, given: 7, correct: false, assisted: false, filler: false },
+        { f1: 3, f2: 4, given: 7, correct: false, assisted: false, filler: false },
+        { f1: 3, f2: 5, given: 8, correct: false, assisted: false, filler: false }
+      ]
+    },
+    {
+      name: 'سارا',
+      events: [
+        { f1: 2, f2: 5, given: 10, correct: true, assisted: false, filler: false },
+        { f1: 3, f2: 4, given: 12, correct: true, assisted: false, filler: false },
+        { f1: 4, f2: 5, given: 20, correct: true, assisted: false, filler: false }
+      ]
+    }
+  ];
+
+  var container = document.getElementById('students');
+
+  students.forEach(function (student) {
+    var diagnosis = Bottleneck.diagnoseStudent(student.events, student.name);
+
+    var bottleneckName = 'مشکلی دیده نشد';
+    var action = 'این دانش‌آموز در ضرب‌های آزمایش‌شده موفق بوده است. به تمرین‌های عادی ادامه دهید.';
+
+    if (diagnosis.primaryBottleneck) {
+      var id = diagnosis.primaryBottleneck.id;
+      bottleneckName = PLAIN_NAMES[id] || diagnosis.primaryBottleneck.name;
+      action = PLAIN_ACTIONS[id] || diagnosis.primaryBottleneck.tomorrow;
+    }
+
+    var card = document.createElement('div');
+    card.className = 'student-card';
+
+    var html = '<div class="student-name">' + student.name + '</div>';
+    html += '<div class="row"><span class="label">گلوگاه:</span><span class="bottleneck-name">' + bottleneckName + '</span></div>';
+    html += '<div class="action"><div class="action-title">فردا در کلاس:</div>' + action + '</div>';
+
+    card.innerHTML = html;
+    container.appendChild(card);
+  });
+
+})();
+</script>
+</body>
+</html>
