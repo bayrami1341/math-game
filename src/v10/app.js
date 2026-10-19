@@ -252,10 +252,7 @@ function renderChildShell(stationState) {
 
 function render() {
   const stationState = toStationState(state.session, state.stationRecords || []);
-  stationLayer = createStationLayer(stationState, {
-    soundEnabled,
-    currentStep: state.session ? state.session.currentHintStep || 1 : 1
-  });
+   stationLayer = createStationLayer({ stationState, session: state.session });
 
   const isTeacher = Boolean(actor?.teacher);
   const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
