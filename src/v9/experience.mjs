@@ -71,64 +71,51 @@ export const missions = CORE_SECTORS;
 // ------------------------------------------------------------
 export const DEPTH_LAYERS = Object.freeze({
   '1-1': {
-    id: '1-1', sectorId: 1, depth: 1, type: 'depth',
-    title: 'سلول‌های پایه', questionCount: 8, difficulty: 'basic',
+    id: '1-1',
+    sectorId: 1, depth: 1, type: 'depth',
+    title: 'سلول‌های پایه', questionCount: 6, difficulty: 'basic',, difficulty: 'basic',
     domain: 'table',
     focus: { factors: [2, 3, 4, 5], visual: 'equal-groups' },
     unlock: null
   },
   '1-2': {
-    id: '1-2', sectorId: 1, depth: 2, type: 'depth',
-    title: 'سلول‌های پایدار', questionCount: 10, difficulty: 'stable',
+    id: '1-2',
+    sectorId: 1, depth: 2, type: 'depth',
+    title: 'سلول‌های پایدار', questionCount: 8, difficulty: 'stable',, difficulty: 'stable',
     domain: 'table',
     focus: { factors: [2, 3, 4, 5], preferFluent: true },
-    unlock: { require: 'depth', id: '1-1', minPercent: 70 }
-  },
-  '1-3': {
-    id: '1-3', sectorId: 1, depth: 3, type: 'depth',
-    title: 'دسته‌ها و چرخش', questionCount: 6, difficulty: 'conceptual',
-    domain: 'paired', paired: true,
-    focus: { bottleneckTypes: ['equal-groups', 'skip-counting', 'commutativity'] },
-    unlock: { require: 'depth', id: '1-2', minPercent: 75 }
-  },
-  '2-1': {
-    id: '2-1', sectorId: 2, depth: 1, type: 'depth',
-    title: 'آنتن‌های اولیه', questionCount: 8, difficulty: 'basic',
+    unlock: { require: 'depth', id: '1-1',
+    sectorId: 1, depth: 1, type: 'depth',
+    title: 'سلول‌های پایه', questionCount: 6, difficulty: 'basic',, difficulty: 'basic',
     domain: 'table',
     focus: { factors: [6, 7, 8, 9] },
     unlock: null
   },
   '2-2': {
-    id: '2-2', sectorId: 2, depth: 2, type: 'depth',
-    title: 'سیگنال پایدار', questionCount: 10, difficulty: 'stable',
+    id: '2-2',
+    sectorId: 2, depth: 2, type: 'depth',
+    title: 'سلول‌های پایدار', questionCount: 8, difficulty: 'stable',, difficulty: 'stable',
     domain: 'table',
     focus: { factors: [6, 7, 8, 9], preferFluent: true },
-    unlock: { require: 'depth', id: '2-1', minPercent: 70 }
-  },
-  '2-3': {
-    id: '2-3', sectorId: 2, depth: 3, type: 'depth',
-    title: 'چرخش و شکستن', questionCount: 6, difficulty: 'conceptual',
-    domain: 'paired', paired: true,
-    focus: { bottleneckTypes: ['commutativity', 'anchor-5'] },
-    unlock: { require: 'depth', id: '2-2', minPercent: 75 }
-  },
-  '3-1': {
-    id: '3-1', sectorId: 3, depth: 1, type: 'depth',
-    title: 'ضرب در ده', questionCount: 8, difficulty: 'basic',
+    unlock: { require: 'depth', id: '2-1',
+    sectorId: 2, depth: 1, type: 'depth',
+    title: 'سلول‌های پایه', questionCount: 6, difficulty: 'basic',, difficulty: 'basic',
     domain: 'x10',
     focus: { bottleneckTypes: ['place-value'] },
     unlock: null
   },
   '3-2': {
-    id: '3-2', sectorId: 3, depth: 2, type: 'depth',
-    title: 'صفر و یک', questionCount: 10, difficulty: 'stable',
+    id: '3-2',
+    sectorId: 3, depth: 2, type: 'depth',
+    title: 'سلول‌های پایدار', questionCount: 8, difficulty: 'stable',, difficulty: 'stable',
     domain: 'zero-one',
     focus: { bottleneckTypes: ['zero-property', 'identity'] },
     unlock: { require: 'depth', id: '3-1', minPercent: 70 }
   },
   '3-3': {
-    id: '3-3', sectorId: 3, depth: 3, type: 'depth',
-    title: 'یک رقم در عدد بزرگ‌تر', questionCount: 6, difficulty: 'conceptual',
+    id: '3-3',
+    sectorId: 3, depth: 3, type: 'depth',
+    title: 'دسته‌ها و چرخش', questionCount: 10, difficulty: 'conceptual',, difficulty: 'conceptual',
     domain: 'multi-digit',
     focus: { bottleneckTypes: ['place-value', 'distributive-part'] },
     unlock: { require: 'depth', id: '3-2', minPercent: 75 }

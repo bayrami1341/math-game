@@ -458,40 +458,71 @@ const POWER_PAIRS = Object.freeze([[3, 5], [2, 4], [4, 6]]);
 const TOWER_PAIRS = Object.freeze([[7, 4], [8, 3], [9, 2]]);
 
 function generateQuestionsForDepth(buildingId, depth) {
-  const layerKey = `${buildingId}-${depth}`;
+  const layerKey = ${buildingId}-${depth};
   const layer = DEPTH_LAYERS[layerKey] || DEPTH_LAYERS['1-1'];
   const domain = layer.domain || 'table';
-  const baseQ = (f1, f2, i, visual) => ({
-    questionId: `q_${buildingId}_${depth}_${i + 1}`,
+  const base = (f1, f2, i, visual) => ({
+    questionId: q_${buildingId}_${depth}_${i + 1},
     f1, f2,
     ...(visual ? { visual } : {})
   });
 
-  if (domain === 'x10') return X10_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
-  if (domain === 'zero-one') return ZERO_ONE_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
-  if (domain === 'multi-digit') return MULTI_DIGIT_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
+  if (domain === 'x10') return X10_QUESTIONS.map((q, i) => base(q.f1, q.f2, i));
+  if (domain === 'zero-one') return ZERO_ONE_QUESTIONS.map((q, i) => base(q.f1, q.f2, i));
+  if (domain === 'multi-digit') {
+    const pools = [[2,10],[3,10],[4,10],[2,20],[3,20],[2,30],[4,20],[2,100],[3,100],[2,200]];
+    return pools.map(([a,b], i) => base(a, b, i));
+  }
 
   if (domain === 'paired') {
     const pairs = buildingId === 1 ? POWER_PAIRS : TOWER_PAIRS;
     const out = [];
     pairs.forEach(([a, b], k) => {
-      out.push(baseQ(a, b, k * 2, 'equal-groups'));
-      out.push(baseQ(b, a, k * 2 + 1));
+      out.push(base(a, b, k * 2, 'equal-groups')); 
+      out.push(base(b, a, k * 2 + 1));             
     });
     return out;
   }
 
-  const factors = layer.focus?.factors || [buildingId + 1];
-  const count = layer.questionCount || 8;
+  // دامنهٔ جدول — تعداد و اعداد بر اساس سری بازی (لایه)
+  const count = depth === 1 ? 6 : (depth === 2 ? 8 : 10);
   const visualAll = layerKey === '1-1';
   const visualFirst = layerKey === '2-1';
+  
+  let f1Pool = [], f2Pool = [];
+  
+  if (depth === 1) {
+    f1Pool = [2, 3, 4, 5];
+    f2Pool = [2, 3, 4, 5];
+  } else if (depth === 2) {
+    f1Pool = [6, 7, 8];
+    f2Pool = [6, 7, 8, 9];
+  } else {
+    f1Pool = [9, 10];
+    f2Pool = [7, 8, 9, 10];
+  }
 
   const questions = [];
+  const seen = new Set();
+  
+  for (let i = 0; i < f1Pool.length; i++) {
+    for (let j = 0; j < f2Pool.length; j++) {
+      seen.add(${Math.min(f1Pool[i], f2Pool[j])}x${Math.max(f1Pool[i], f2Pool[j])});
+    }
+  }
+  const pool = Array.from(seen).map(s => s.split('x').map(Number));
+  pool.sort(() => Math.random() - 0.5);
+
   for (let i = 0; i < count; i++) {
-    const f1 = factors[i % factors.length];
-    const f2 = (i % 9) + 2;
+    let f1, f2;
+    if (i < pool.length) {
+      [f1, f2] = pool[i];
+    } else {
+      f1 = f1Pool[i % f1Pool.length];
+      f2 = f2Pool[i % f2Pool.length];
+    }
     const visual = (visualAll || (visualFirst && i < 4)) ? 'equal-groups' : null;
-    questions.push(baseQ(f1, f2, i, visual));
+    questions.push(base(f1, f2, i, visual));
   }
   return questions;
 }
