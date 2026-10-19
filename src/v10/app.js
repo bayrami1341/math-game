@@ -40,6 +40,9 @@ import {
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
 const base = (config.apiBase || '').replace(/\/$/, '');
+const toFaDigits = val => String(val || '')
+  .replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
+  .replace(/[٠-٩]/g, d => '۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
 const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
 const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
@@ -252,17 +255,12 @@ function renderChildShell(stationState) {
 
 function render() {
   const stationState = toStationState(state.session, state.stationRecords || []);
-  stationLayer = createStationLayer(stationState, {
-    soundEnabled,
-    currentStep: state.session ? state.session.currentHintStep || 1 : 1
-  });
+  stationLayer = createStationLayer({ stationState, session: state.session });
 
-   const isTeacher = Boolean(actor?.teacher);
-  const studentEl = $('child-shell') || $('student-view');
-  const teacherEl = $('teacher-shell') || $('teacher-view');
-  if (studentEl) studentEl.hidden = isTeacher;
-  if (teacherEl) teacherEl.hidden = !isTeacher;
- 
+  const isTeacher = Boolean(actor?.teacher);
+  const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
+  const teacherEl = $('teacher-shell') || $('teacher-view'); if (teacherEl) teacherEl.hidden = !isTeacher;
+
   if (isTeacher) {
     renderTeacherShell();
   } else {
@@ -608,6 +606,18 @@ function setupEvents() {
 }
 
 export async function initApp() {
+  const answerInput = $('answer-input');
+  if (answerInput && !answerInput.dataset.faListener) {
+    answerInput.dataset.faListener = 'true';
+    answerInput.addEventListener('input', () => {
+      const start = answerInput.selectionStart;
+      const end = answerInput.selectionEnd;
+      const next = toFaDigits(answerInput.value);
+      if (next === answerInput.value) return;
+      answerInput.value = next;
+      if (start != null && end != null) answerInput.setSelectionRange(start, end);
+    });
+  }
   local = await openLocal('math_game_v10');
   setupEvents();
 
