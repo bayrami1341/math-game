@@ -257,10 +257,12 @@ function render() {
     currentStep: state.session ? state.session.currentHintStep || 1 : 1
   });
 
-  const isTeacher = Boolean(actor?.teacher);
-  const studentEl = $('child-shell') || $('student-view'); if (studentEl) studentEl.hidden = isTeacher;
-  const teacherEl = $('teacher-shell') || $('teacher-view'); if (teacherEl) teacherEl.hidden = !isTeacher;
-
+   const isTeacher = Boolean(actor?.teacher);
+  const studentEl = $('child-shell') || $('student-view');
+  const teacherEl = $('teacher-shell') || $('teacher-view');
+  if (studentEl) studentEl.hidden = isTeacher;
+  if (teacherEl) teacherEl.hidden = !isTeacher;
+ 
   if (isTeacher) {
     renderTeacherShell();
   } else {
