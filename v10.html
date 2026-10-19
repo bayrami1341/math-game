@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ú©Ø§Ø±Ú¯Ø§Ù‡ Ø¶Ø±Ø¨ â€” Ù†Ø³Ø®Ù‡Ù” Û±Û°.Û²</title>
+  <title>کارگاه ضرب — نسخهٔ ۱۰.۲</title>
   <link rel="stylesheet" href="styles/v10.css">
   <script src="v9-config.js" defer></script>
   <script src="src/v10/app.js" type="module"></script>
@@ -11,10 +11,10 @@
 <body>
   <header>
     <div class="header-shell">
-      <div class="brand-title">âœ¦ Ø§ÛŒØ³ØªÚ¯Ø§Ù‡ ÛŒØ§Ø¯Ú¯ÛŒØ±ÛŒ Û±Û°.Û²</div>
+      <div class="brand-title">✦ ایستگاه یادگیری ۱۰.۲</div>
       <div class="header-actions">
         <span id="identity-display" class="identity-badge"></span>
-        <button id="toggle-sound" class="secondary-button" type="button" aria-pressed="false">ØµØ¯Ø§: Ø®Ø§Ù…ÙˆØ´</button>
+        <button id="toggle-sound" class="secondary-button" type="button" aria-pressed="false">صدا: خاموش</button>
       </div>
     </div>
   </header>
@@ -23,29 +23,29 @@
 
   <main class="main-shell">
     <section id="login-card" class="teacher-card" hidden>
-      <h2>ÙˆØ±ÙˆØ¯ Ø¨Ù‡ Ø§ÛŒØ³ØªÚ¯Ø§Ù‡</h2>
-      <p>Ø¯Ø± Ø­Ø§Ù„ Ø¨Ø±Ù‚Ø±Ø§Ø±ÛŒ Ø§Ø±ØªØ¨Ø§Ø·...</p>
+      <h2>ورود به ایستگاه</h2>
+      <p>در حال برقراری ارتباط...</p>
     </section>
 
     <div id="workspace">
       <!-- Profile picker if multiple child profiles exist -->
       <section id="profile-picker" class="teacher-card" hidden>
-        <h2>Ø§Ù†ØªØ®Ø§Ø¨ Ù‚Ù‡Ø±Ù…Ø§Ù†</h2>
+        <h2>انتخاب قهرمان</h2>
         <div id="profile-buttons"></div>
       </section>
 
       <!-- Teacher Shell (Strictly separate from Child Shell) -->
       <section id="teacher-shell" class="teacher-panel" hidden>
         <div class="teacher-card">
-          <h2>Ú©Ù„Ø§Ø³â€ŒÙ‡Ø§ÛŒ Ù…Ù†</h2>
+          <h2>کلاس‌های من</h2>
           <p id="teacher-summary"></p>
         </div>
         <div class="teacher-card">
-          <h2>Ø§Ø¹Ø¶Ø§ Ùˆ Ù¾ÛŒÙˆÙ†Ø¯ Ø¯Ø¹ÙˆØª</h2>
+          <h2>اعضا و پیوند دعوت</h2>
           <div id="teacher-members"></div>
         </div>
         <div class="teacher-card">
-          <h2>Ú©Ø§Ø±Øªâ€ŒÙ‡Ø§ÛŒ ØªØ´Ø®ÛŒØµÛŒ Ø¨Ø§Ù„ÛŒÙ†ÛŒ</h2>
+          <h2>کارت‌های تشخیصی بالینی</h2>
           <div id="teacher-cards-container"></div>
         </div>
       </section>
@@ -54,36 +54,36 @@
       <section id="child-shell">
         <!-- View A: Map View -->
         <div id="station-map-view">
-          <div class="station-map-container" aria-label="Ù†Ù‚Ø´Ù‡ Ø§ÛŒØ³ØªÚ¯Ø§Ù‡">
+          <div class="station-map-container" aria-label="نقشه ایستگاه">
             <div class="buildings-track">
               <!-- Building 1: Power Station (Bottom) -->
-              <button id="building-power" class="building-node" type="button" aria-label="Ù†ÛŒØ±ÙˆÚ¯Ø§Ù‡"></button>
+              <button id="building-power" class="building-node" type="button" aria-label="نیروگاه"></button>
               
               <!-- Connector Path 1 -->
               <div id="path-1" class="path-connector" aria-hidden="true"></div>
 
               <!-- Building 2: Communication Tower (Center) -->
-              <button id="building-tower" class="building-node" type="button" aria-label="Ø¨Ø±Ø¬ Ø§Ø±ØªØ¨Ø§Ø·"></button>
+              <button id="building-tower" class="building-node" type="button" aria-label="برج ارتباط"></button>
 
               <!-- Connector Path 2 -->
               <div id="path-2" class="path-connector" aria-hidden="true"></div>
 
               <!-- Building 3: Launch Pad (Top) -->
-              <button id="building-pad" class="building-node" type="button" aria-label="Ø³Ú©ÙˆÛŒ Ù¾Ø±ØªØ§Ø¨"></button>
+              <button id="building-pad" class="building-node" type="button" aria-label="سکوی پرتاب"></button>
             </div>
           </div>
 
-          <!-- Bottom Sheet (ÙˆØ±Ù‚ Ù¾Ø§ÛŒÛŒÙ† Ù†Ù‚Ø´Ù‡) -->
+          <!-- Bottom Sheet (ورق پایین نقشه) -->
           <div class="bottom-sheet" id="station-bottom-sheet">
             <p id="sheet-text" class="sheet-story"></p>
             <div class="sheet-actions">
               <!-- Momentary Main Button -->
-              <button id="sheet-main-button" class="primary-button" type="button">Ø§Ø¯Ø§Ù…Ù‡Ù” Ú†Ø±Ø§Øºâ€ŒÙ‡Ø§</button>
-              <button id="map-guide-button" class="secondary-button" type="button">Ø±Ø§Ù‡Ù†Ù…Ø§</button>
-              <button id="open-board-button" class="secondary-button" type="button">Ú©Ù„Ø§Ø³ Ù…Ù†</button>
+              <button id="sheet-main-button" class="primary-button" type="button">ادامهٔ چراغ‌ها</button>
+              <button id="map-guide-button" class="secondary-button" type="button">راهنما</button>
+              <button id="open-board-button" class="secondary-button" type="button">کلاس من</button>
             </div>
             <div id="map-guide-info" class="guide-box" hidden>
-              ÙˆØ±Ù‚ Ù¾Ø§ÛŒÛŒÙ† ÙˆØ¶Ø¹ÛŒØª Ù‡Ø± Ø¨Ù†Ø§ Ø±Ø§ Ù…ÛŒâ€ŒÚ¯ÙˆÛŒØ¯. Ø¨Ø§ Ù¾Ø§Ø³Ø®â€ŒÙ‡Ø§ÛŒ Ù¾Ø°ÛŒØ±ÙØªÙ‡ØŒ Ø³Ù„ÙˆÙ„â€ŒÙ‡Ø§ Ù¾Ø± Ù…ÛŒâ€ŒØ´ÙˆÙ†Ø¯.
+              ورق پایین وضعیت هر بنا را می‌گوید. با پاسخ‌های پذیرفته، سلول‌ها پر می‌شوند.
             </div>
           </div>
         </div>
@@ -95,11 +95,11 @@
               <strong id="question-building-name"></strong>
               <span id="question-sensation" class="building-indicator"></span>
             </div>
-            <button id="question-abandon" class="secondary-button" type="button">â† Ø¨Ø±Ú¯Ø´Øª Ø¨Ù‡ Ù†Ù‚Ø´Ù‡</button>
+            <button id="question-abandon" class="secondary-button" type="button">← برگشت به نقشه</button>
           </div>
 
           <!-- Cell Energy Progress -->
-          <div id="question-cells" class="question-cells-row" aria-label="Ø³Ù„ÙˆÙ„â€ŒÙ‡Ø§ÛŒ Ø§Ù†Ø±Ú˜ÛŒ"></div>
+          <div id="question-cells" class="question-cells-row" aria-label="سلول‌های انرژی"></div>
 
           <!-- CPA Visual Representation Layer -->
           <div id="question-visual" class="question-visual" hidden aria-hidden="true"></div>
@@ -108,10 +108,10 @@
           <div id="question-equation" class="math-equation"></div>
 
           <form id="question-form" class="answer-form">
-            <label for="answer-input" class="sr-only">Ù¾Ø§Ø³Ø®:</label>
+            <label for="answer-input" class="sr-only">پاسخ:</label>
             <input id="answer-input" lang="fa" dir="rtl" type="text" inputmode="numeric" autocomplete="off" required>
-            <button class="primary-button" type="submit">Ø«Ø¨Øª Ù¾Ø§Ø³Ø®</button>
-            <button id="question-guide-button" class="secondary-button" type="button">ðŸ’¡ Ø±Ø§Ù‡Ù†Ù…Ø§</button>
+            <button class="primary-button" type="submit">ثبت پاسخ</button>
+            <button id="question-guide-button" class="secondary-button" type="button">💡 راهنما</button>
           </form>
 
           <p id="question-feedback" class="question-feedback" role="status" aria-live="polite"></p>
@@ -122,15 +122,14 @@
       </section>
     </div>
 
-    <!-- Class Board Modal (Ú©Ù„Ø§Ø³ Ù…Ù† ÙÙ‚Ø· ØªØ§ ØªØ§Ø¨Ù„Ùˆ) -->
+    <!-- Class Board Modal (کلاس من فقط تا تابلو) -->
     <div id="board-dialog" class="board-dialog" hidden>
       <div class="dialog-card">
-        <h3>ØªØ§Ø¨Ù„ÙˆÛŒ Ù†ØªØ§ÛŒØ¬ Ú©Ù„Ø§Ø³</h3>
-        <p>Ø¨Ù‡ØªØ±ÛŒÙ† Ø¯Ø³ØªØ§ÙˆØ±Ø¯ Ø§Ø¹Ø¶Ø§ÛŒ Ú©Ù„Ø§Ø³ Ø¯Ø± Ø³Ù‡ Ø¨Ù†Ø§ÛŒ Ø§ÛŒØ³ØªÚ¯Ø§Ù‡.</p>
-        <button id="close-board-button" class="secondary-button" type="button">Ø¨Ø³ØªÙ† ØªØ§Ø¨Ù„Ùˆ</button>
+        <h3>تابلوی نتایج کلاس</h3>
+        <p>بهترین دستاورد اعضای کلاس در سه بنای ایستگاه.</p>
+        <button id="close-board-button" class="secondary-button" type="button">بستن تابلو</button>
       </div>
     </div>
   </main>
 </body>
 </html>
-
