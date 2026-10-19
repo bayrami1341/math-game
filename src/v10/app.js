@@ -40,9 +40,7 @@ import {
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
 const base = (config.apiBase || '').replace(/\/$/, '');
-const toFaDigits = val => String(val || '')
-  .replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)])
-  .replace(/[٠-٩]/g, d => '۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
+const toFaDigits = val => String(val || '').replace(/[0-9]/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]).replace(/[٠-٩]/g, d => '۰۱۲۳۴۵۶۷۸۹'['٠١٢٣٤٥٦٧٨٩'.indexOf(d)]);
 const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
 const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
@@ -618,6 +616,7 @@ export async function initApp() {
       if (start != null && end != null) answerInput.setSelectionRange(start, end);
     });
   }
+
   local = await openLocal('math_game_v10');
   setupEvents();
 

@@ -44,6 +44,7 @@ export const CORE_SECTORS = Object.freeze({
     title: 'یک پیام تا زمین', destination: 'برج ارتباط',
     objective: 'صدای زمین قطع شده! آنتن ایستگاه را با سلول‌های درست دوباره راه بینداز.',
     icon: '📡', order: 2,
+    // v10.2: برج با تکمیل هر سه لایهٔ نیروگاه باز می‌شود (کتاب: جابه‌جایی و شکستن، صفحهٔ ۷۰–۷۲)
     unlock: { require: 'core-complete', sectorId: 1 },
     focus: { factors: [6, 7, 8, 9], maxProduct: 81 },
     maxDepth: 3
@@ -53,16 +54,20 @@ export const CORE_SECTORS = Object.freeze({
     title: 'آمادهٔ پرواز', destination: 'سکوی پرتاب',
     objective: 'وقت برگشتن به مدار است. سوخت درست را پیدا کن و سفینه را برای پرواز آماده کن.',
     icon: '🚀', order: 3,
+    // v10.2: سکو = صفحه‌های ۱۳۶–۱۴۴ کتاب (×۱۰، ×۰، ×۱، یک‌رقم در چندرقمی) — ×۱۱ و ×۱۲ بیرون کتاب حذف شدند
     unlock: { require: 'core-complete', sectorId: 2 },
     focus: { domains: ['x10', 'zero-one', 'multi-digit'], maxProduct: 999 },
     maxDepth: 3
   }
 });
 
+// Backward compatibility alias for legacy imports
 export const missions = CORE_SECTORS;
 
 // ------------------------------------------------------------
-// ۲. لایه‌های عمق (۳ لایه × ۳ بنا = ۹ لایه) — v10.2 با شیب آموزشی
+// ۲. لایه‌های عمق (۳ لایه × ۳ بنا = ۹ لایه) — v10.2 دامنه‌ها بر کتاب کد ۳۰۵
+//    نیروگاه ۶۴–۶۹: دسته/آرایه/جدول | برج ۷۰–۷۲: جابه‌جایی و شکستن (لنگر ۵)
+//    سکو ۱۳۶–۱۴۴: ×۱۰ سپس ×۰ و ×۱ سپس یک‌رقم در چندرقمی | تقریب → v10.3
 // ------------------------------------------------------------
 export const DEPTH_LAYERS = Object.freeze({
   '1-1': {
@@ -154,7 +159,7 @@ export const SIDE_MISSIONS = Object.freeze({
     id: 'side-3-fuel', type: 'side', parentSectorId: 3,
     title: 'تأمین سوخت اضافه', objective: 'سوخت اضافه برای سفینه آماده کن.',
     icon: '🚀', questionCount: 5,
-    focus: { factors: [10, 20, 30], adaptive: true },
+    focus: { factors: [10, 20, 30], adaptive: true }, // v10.2: حذف ×۱۱/×۱۲ بیرون کتاب
     unlock: { require: 'core', sectorId: 3, minPercent: 60 },
     affectsLeaderboard: false, reward: 'energy'
   }
@@ -180,6 +185,8 @@ export function getSideMissionsForSector(sectorId) {
 
 // ------------------------------------------------------------
 // ۴.۵ تکمیل بنا (v10.2): هر بنا با گذراندن هر سه لایه کامل می‌شود
+// لایهٔ ۱ ≥ ۷۰٪ | لایهٔ ۲ ≥ ۷۵٪ | لایهٔ ۳ ≥ ۸۰٪
+// + احترام به پیشرفت نسخه‌های قدیمی: جلسهٔ کاملِ نسخهٔ ۱۰/۱۰.۱ (۱۰۰٪) بنا را کامل می‌شمارد
 // ------------------------------------------------------------
 export function sectorComplete(records = [], sectorId) {
   const safe = Array.isArray(records) ? records : [];
@@ -201,6 +208,7 @@ export function sectorComplete(records = [], sectorId) {
 export function isUnlocked(condition, records = [], systemsCache = null) {
   if (!condition) return true;
 
+  // v10.2: بنای بعدی با تکمیل هر سه لایهٔ بنا قبلی باز می‌شود (کتاب: «بعد از پذیرش نیروگاه»)
   if (condition.require === 'core-complete') {
     return sectorComplete(records, condition.sectorId);
   }
@@ -223,9 +231,11 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
   }
 
   if (condition.require === 'depth') {
+    // v10.2 (رفع باگ P0): جلسهٔ لایهٔ ۱ با type 'core' ذخیره می‌شود — فیلتر قدیمی
+    // (فقط type 'depth') یعنی لایه‌های ۲ و ۳ هرگز باز نمی‌شدند و محتوا «کم» حس می‌شد.
     const rec = records.find(r =>
       (r.type === 'depth' || r.type === 'core' || !r.type) &&
-      (r.activityId === condition.id || \\-\\ === condition.id)
+      (r.activityId === condition.id || `${r.sectorId}-${r.depth}` === condition.id)
     );
     const percent = rec ? (rec.percent ?? (rec.total > 0 ? Math.round(100 * rec.score / rec.total) : 0)) : 0;
     return !!(rec && percent >= condition.minPercent);
@@ -241,7 +251,7 @@ export function isUnlocked(condition, records = [], systemsCache = null) {
 }
 
 // ------------------------------------------------------------
-// ۶. الگوریتم وضعیت سیستم‌های ایستگاه (Pure)
+// ۶. الگوریتم وضعیت سیستم‌های ایستگاه (Pure) — No hardcoded 3!
 // ------------------------------------------------------------
 export function stationSystems(records = []) {
   const sectors = getCoreSectors().map(sector => {
@@ -261,6 +271,7 @@ export function stationSystems(records = []) {
     const bestPercent = best ? getPercent(best) : 0;
 
     const depths = getDepthsForSector(sector.sectorId);
+    // v10.2: لایهٔ جاری = بالاترین لایه‌ای که حد نصاب خودش (۷۰/۷۵/۸۰) را گذرانده
     const currentDepth = depths.reduce((max, d) => {
       const rec = related.find(r =>
         (r.type === 'depth' || r.type === 'core' || !r.type) &&
@@ -275,6 +286,7 @@ export function stationSystems(records = []) {
       destination: sector.destination,
       icon: sector.icon,
       percent: bestPercent,
+      // v10.2: کامل شدن بنا یعنی هر سه لایه گذرانده شده باشد (نه فقط یک جلسه)
       complete: sectorComplete(records, sector.sectorId),
       started: !!best,
       currentDepth
@@ -290,7 +302,7 @@ export function stationSystems(records = []) {
 }
 
 // ------------------------------------------------------------
-// ۷. الگوریتم قدرت کلی ایستگاه (Pure)
+// ۷. الگوریتم قدرت کلی ایستگاه (Pure) — No hardcoded 3!
 // ------------------------------------------------------------
 export function stationPower(records = []) {
   const systems = stationSystems(records);
@@ -313,6 +325,10 @@ export function nextDestination(records = []) {
 
 // ------------------------------------------------------------
 // ۸.۵. تولید سؤال تطبیقی مأموریت‌های جانبی (Pure)
+// هر مأموریت جانبی دقیقاً questionCount سؤال (۵ سؤال) بر پایهٔ
+// فاکتورهای خود مأموریت و گلوگاه‌های شناختی سکتور مادر تولید می‌کند.
+// ورودی seed باعث تنوع بین تلاش‌ها (تطبیقی) بدون از دست دادن
+// قطعیت (determinism) برای آزمون‌ها می‌شود.
 // ------------------------------------------------------------
 export const SIDE_F2_RANGE = Object.freeze({ min: 2, max: 9 });
 
@@ -324,7 +340,8 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
   if (!factors.length) return [];
 
   const count = mission.questionCount || 5;
-  const parentLayer = DEPTH_LAYERS[\\-3\];
+  // bottleneckTypes همان گلوگاه‌های لایهٔ مفهومی (لایهٔ ۳) سکتور مادر است
+  const parentLayer = DEPTH_LAYERS[`${mission.parentSectorId}-3`];
   const strategies = parentLayer?.focus?.bottleneckTypes || ['equal-groups'];
 
   const offset = ((Number(seed) || 0) % 7 + 7) % 7;
@@ -336,11 +353,11 @@ export function generateSideMissionQuestions(missionId, seed = 0) {
   for (let i = 0; i < count; i++) {
     const f1 = factors[(i + offset) % factors.length];
     let f2 = f2Min + ((i + offset * 2) % f2Span);
-    if (f2 === f1) f2 = f2 < f2Max ? f2 + 1 : f2 - 1;
+    if (f2 === f1) f2 = f2 < f2Max ? f2 + 1 : f2 - 1; // پرهیز از تکرار کامل یک عامل در هر دو سمت
 
     const strategy = strategies[i % strategies.length];
     const question = {
-      questionId: \q_side_\_\_s\\,
+      questionId: `q_side_${mission.parentSectorId}_${i + 1}_s${offset}`,
       missionId, f1, f2, strategy
     };
 
@@ -480,6 +497,6 @@ export function createSoundPlayer(makeContext) {
         oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
       });
       return true;
-    } catch { return false; }
+    } catch { return false; } // Audio failure must never interrupt saving an answer.
   };
 }
