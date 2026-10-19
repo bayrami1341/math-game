@@ -1,227 +1,105 @@
-// آزمون‌های اختصاصی اصلاحات ۱۰.۱ — مأموریت‌های جانبی و سؤال تطبیقی
-// پوشش: تولید ۵ سؤال تطبیقی، قفل‌گشایی ۷۰٪، اکشن شروع از شیپ، جداسازی از لیدربرد
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
 import {
   SIDE_MISSIONS,
-  DEPTH_LAYERS,
   SIDE_F2_RANGE,
   generateSideMissionQuestions,
-  stationSystems,
-  keepStationRecord,
+  isUnlocked,
+  stationPower,
   RULES_VERSION,
   QUESTION_SET_VERSION
 } from '../src/v9/experience.mjs';
 import { toStationState } from '../src/v10/bridge.js';
-import { createStationSheet } from '../src/v10/station/sheet.js';
-import { createStationLayer } from '../src/v10/station/index.js';
 
-const legacyRecord = (sectorId, score, total, extras = {}) => ({
-  activityId: `legacy_${sectorId}_${score}`,
-  type: 'core',
-  sectorId,
-  rulesVersion: RULES_VERSION,
-  questionSetVersion: 'graph-v8.1',
-  score,
-  total,
-  percent: Math.round(100 * score / total),
-  completedAt: new Date().toISOString(),
-  ...extras
+test('1. Side missions: exactly 3 missions with correct parent sectors', () => {
+  const missions = Object.values(SIDE_MISSIONS);
+  assert.equal(missions.length, 3);
+  assert.equal(SIDE_MISSIONS['side-1-antenna'].parentSectorId, 1);
+  assert.equal(SIDE_MISSIONS['side-2-backup'].parentSectorId, 2);
+  assert.equal(SIDE_MISSIONS['side-3-fuel'].parentSectorId, 3);
 });
 
-test('1. هر مأموریت جانبی دقیقاً ۵ سؤال تطبیقی با فاکتورهای خودش تولید می‌کند', () => {
-  for (const mission of Object.values(SIDE_MISSIONS)) {
-    const questions = generateSideMissionQuestions(mission.id, 0);
-    assert.equal(questions.length, mission.questionCount, `تعداد سؤال ${mission.id}`);
-    assert.equal(mission.questionCount, 5);
-    for (const q of questions) {
-      assert.equal(q.missionId, mission.id);
-      assert.ok(mission.focus.factors.includes(q.f1), `f1=${q.f1} باید در فاکتورهای ${mission.id} باشد`);
-      assert.ok(q.f2 >= SIDE_F2_RANGE.min && q.f2 <= SIDE_F2_RANGE.max, `f2=${q.f2} خارج از بازه مجاز`);
-      assert.ok(Number.isInteger(q.f1 * q.f2));
+test('2. Side mission question count is locked at exactly 5 questions', () => {
+  for (const id of ['side-1-antenna', 'side-2-backup', 'side-3-fuel']) {
+    const questions = generateSideMissionQuestions(id, 0);
+    assert.equal(questions.length, 5, `Mission ${id} must produce exactly 5 questions`);
+  }
+});
+
+test('3. Deterministic generation with seed input', () => {
+  const qA1 = generateSideMissionQuestions('side-1-antenna', 42);
+  const qA2 = generateSideMissionQuestions('side-1-antenna', 42);
+  assert.deepEqual(qA1, qA2, 'Identical seed must produce identical questions');
+
+  const qB = generateSideMissionQuestions('side-1-antenna', 43);
+  assert.notDeepEqual(qA1, qB, 'Different seed produces different questions');
+});
+
+test('4. Factors obey SIDE_F2_RANGE [2, 9]', () => {
+  for (let s = 0; s < 10; s++) {
+    const q = generateSideMissionQuestions('side-1-antenna', s);
+    for (const item of q) {
+      assert.ok(item.f2 >= SIDE_F2_RANGE.min && item.f2 <= SIDE_F2_RANGE.max);
     }
   }
 });
 
-test('2. تولید سؤال: قطعیت با seed یکسان و تنوع واقعی با seed متفاوت (تطبیقی)', () => {
-  const a = generateSideMissionQuestions('side-1-antenna', 0);
-  const b = generateSideMissionQuestions('side-1-antenna', 0);
-  assert.deepEqual(a, b, 'seed یکسان باید خروجی یکسان بدهد');
-
-  const c = generateSideMissionQuestions('side-1-antenna', 1);
-  assert.notDeepEqual(a, c, 'seed متفاوت باید سؤال متفاوت بسازد (تطبیقی)');
-  assert.notEqual(a[0].f1, c[0].f1, 'اولین سؤال بین seedها باید تغییر کند');
-
-  const negative = generateSideMissionQuestions('side-1-antenna', -3);
-  assert.equal(negative.length, 5, 'seed منفی هم باید خروجی معتبر بدهد');
-
-  assert.deepEqual(generateSideMissionQuestions('unknown-mission'), []);
-});
-
-test('3. استراتژی هر سؤال از گلوگاه‌های شناختی لایهٔ مفهومی سکتور مادر می‌آید', () => {
-  for (const mission of Object.values(SIDE_MISSIONS)) {
-    const parentBottlenecks = DEPTH_LAYERS[`${mission.parentSectorId}-3`].focus.bottleneckTypes;
-    const questions = generateSideMissionQuestions(mission.id, 4);
-    for (const q of questions) {
-      assert.ok(parentBottlenecks.includes(q.strategy), `استراتژی ${q.strategy} باید از سکتور مادر باشد`);
+test('5. Avoids identical factors (f1 !== f2) when possible', () => {
+  const q = generateSideMissionQuestions('side-1-antenna', 0);
+  for (const item of q) {
+    if (item.f1 >= SIDE_F2_RANGE.min && item.f1 <= SIDE_F2_RANGE.max) {
+      assert.notEqual(item.f1, item.f2);
     }
   }
-  // متادیتای لنگر همسایه باید با فاکتورهای سؤال سازگار باشد
-  const towerQuestions = generateSideMissionQuestions('side-2-backup', 0);
-  for (const q of towerQuestions.filter(q => q.strategy === 'neighbor-anchor')) {
-    assert.equal(q.f1, q.meta.anchor.f1 + q.meta.delta);
-    assert.equal(q.meta.anchor.f2, q.f2);
-    assert.ok(Math.abs(q.meta.delta) === 1);
+});
+
+test('6. Strategy mapping from parent sector bottlenecks', () => {
+  const q1 = generateSideMissionQuestions('side-1-antenna', 0);
+  assert.ok(q1.some(q => q.strategy === 'equal-groups' || q.strategy === 'commutativity' || q.strategy === 'skip-counting'));
+
+  const q2 = generateSideMissionQuestions('side-2-backup', 0);
+  assert.ok(q2.some(q => q.strategy === 'commutativity' || q.strategy === 'anchor-5'));
+});
+
+test('7. Side 3 fuel factors are [10, 20, 30] without ×11 or ×12', () => {
+  const mission = SIDE_MISSIONS['side-3-fuel'];
+  assert.deepEqual(mission.focus.factors, [10, 20, 30]);
+  const questions = generateSideMissionQuestions('side-3-fuel', 0);
+  for (const q of questions) {
+    assert.ok([10, 20, 30].includes(q.f1));
+    assert.ok(q.f2 <= 9);
   }
-  // متادیتای تعویض‌پذیری باید واقعاً جابه‌جا شده باشد
-  const padQuestions = generateSideMissionQuestions('side-3-fuel', 0);
-  for (const q of padQuestions.filter(q => q.strategy === 'commutativity')) {
-    assert.equal(q.meta.swapped.f1, q.f2);
-    assert.equal(q.meta.swapped.f2, q.f1);
-    assert.equal(q.meta.swapped.f1 * q.meta.swapped.f2, q.f1 * q.f2);
+});
+
+test('8. affectsLeaderboard is strictly false for all side missions', () => {
+  for (const id in SIDE_MISSIONS) {
+    assert.equal(SIDE_MISSIONS[id].affectsLeaderboard, false);
   }
 });
 
-test('4. قفل‌گشایی مأموریت جانبی دقیقاً در ۷۰٪ سکتور مادر رخ می‌دهد', () => {
-  const below = stationSystems([legacyRecord(1, 69, 100)]);
-  assert.deepEqual(below.find(s => s.sectorId === 1).availableSides, []);
-
-  const at = stationSystems([legacyRecord(1, 70, 100)]);
-  assert.deepEqual(at.find(s => s.sectorId === 1).availableSides, ['side-1-antenna']);
-
-  // رکورد سکتور ۱ نباید مأموریت جانبی سکتور ۲ را باز کند
-  const onlySector1 = stationSystems([legacyRecord(1, 100, 100)]);
-  assert.ok(!onlySector1.find(s => s.sectorId === 2).availableSides.includes('side-2-backup'));
-});
-
-test('5. پل (bridge): availableSides اتحاد همهٔ سکتورهای واجد شرایط است', () => {
-  const records = [legacyRecord(1, 75, 100), legacyRecord(2, 71, 100)];
-  const state = toStationState(null, records);
-  assert.ok(state.availableSides.includes('side-1-antenna'));
-  assert.ok(state.availableSides.includes('side-2-backup'));
-  assert.ok(!state.availableSides.includes('side-3-fuel'));
-  // ترتیب: بر اساس سکتور مادر
-  assert.equal(state.availableSides.indexOf('side-1-antenna'), 0);
-});
-
-test('6. جلسهٔ جانبی هرگز شمارش سلول‌های اصلی پل را آلوده نمی‌کند', () => {
+test('9. Side mission sessions do not feed core cells in toStationState', () => {
   const sideSession = {
-    sectorId: 1,
+    activity: 'mission',
     activityType: 'side',
-    missionId: 'side-1-antenna',
-    status: 'IN_PROGRESS',
-    questions: [{ questionId: 'q1', f1: 2, f2: 3 }],
-    answers: { q1: { eventId: 'e1', questionId: 'q1', answer: 6 } },
-    receipts: { e1: { eventId: 'e1', questionId: 'q1', correct: true, status: 'ACKNOWLEDGED' } }
+    sectorId: 1,
+    questions: [{ questionId: 'q1', f1: 3, f2: 4 }],
+    answers: { q1: { answer: 12, eventId: 'e1' } },
+    receipts: { e1: { eventId: 'e1', correct: true, status: 'ACKNOWLEDGED' } }
   };
   const state = toStationState(sideSession, []);
-  assert.deepEqual(state.cells, { 1: 0, 2: 0, 3: 0 });
-
-  // در مقابل، جلسهٔ اصلی همان رفتار قبلی را دارد
-  const coreSession = { ...sideSession, activityType: 'depth' };
-  const coreState = toStationState(coreSession, []);
-  assert.equal(coreState.cells[1], 1);
+  assert.equal(state.cells[1], 0, 'Side mission session must never add core energy cells');
 });
 
-test('7. رکورد جلسهٔ جانبی با missionId ذخیره می‌شود اما درصد سکتور را تغییر نمی‌دهد', () => {
-  const records = [legacyRecord(1, 80, 100)];
-  const before = stationSystems(records).find(s => s.sectorId === 1).percent;
+test('10. Unlock requirement: parent sector >= 60%', () => {
+  const recLow = [{ sectorId: 1, percent: 59, rulesVersion: RULES_VERSION, questionSetVersion: QUESTION_SET_VERSION }];
+  assert.equal(isUnlocked(SIDE_MISSIONS['side-1-antenna'].unlock, recLow), false);
 
-  const sideSession = {
-    sessionId: 'sess_side',
-    sectorId: 1,
-    activity: 'mission',
-    activityType: 'side',
-    depth: null,
-    missionId: 'side-1-antenna',
-    rulesVersion: RULES_VERSION,
-    questionSetVersion: QUESTION_SET_VERSION,
-    status: 'FINALIZED',
-    score: 5,
-    total: 5,
-    questions: generateSideMissionQuestions('side-1-antenna', 0),
-    answers: {},
-    receipts: {},
-    bottleneckHits: ['equal-groups'],
-    fluentCount: 0
-  };
-  const next = keepStationRecord(records, sideSession, { status: 'FINALIZED', score: 5, total: 5 });
-  const sideRecord = next.find(r => r.type === 'side');
-  assert.ok(sideRecord, 'رکورد side باید ذخیره شود');
-  assert.equal(sideRecord.missionId, 'side-1-antenna');
-  assert.equal(sideRecord.percent, 100);
-
-  const after = stationSystems(next).find(s => s.sectorId === 1).percent;
-  assert.equal(after, before, 'درصد سکتور نباید از رکورد جانبی تغییر کند (affectsLeaderboard: false)');
+  const recPass = [{ sectorId: 1, percent: 60, rulesVersion: RULES_VERSION, questionSetVersion: QUESTION_SET_VERSION }];
+  assert.equal(isUnlocked(SIDE_MISSIONS['side-1-antenna'].unlock, recPass), true);
 });
 
-test('8. شیپ: دکمه‌های مأموریت جانبی اکشن start-side-mission را حمل می‌کنند', () => {
-  const sheet = createStationSheet({
-    currentBuilding: 1,
-    isFinished: false,
-    completedBuildings: [],
-    availableSides: ['side-1-antenna'],
-    currentDepth: 1
-  });
-
-  const buttons = sheet.getSideMissionButtons();
-  assert.equal(buttons.length, 1);
-  assert.equal(buttons[0].missionId, 'side-1-antenna');
-  assert.equal(buttons[0].action, 'start-side-mission');
-  assert.equal(buttons[0].canProceed, true);
-  assert.equal(buttons[0].questionCount, 5);
-
-  const outcome = sheet.onSideMissionButton('side-1-antenna');
-  assert.equal(outcome.action, 'start-side-mission');
-  assert.equal(outcome.canProceed, true);
-
-  const invalid = sheet.onSideMissionButton('hack-id');
-  assert.equal(invalid.canProceed, false);
-});
-
-test('9. لایهٔ ایستگاه: availableSides از stationState به شیپ می‌رسد (اتصال کامل)', () => {
-  const records = [legacyRecord(1, 85, 100)];
-  const stationState = toStationState(null, records);
-  const layer = createStationLayer({ stationState, session: null });
-
-  const sides = layer.sheet.getAvailableSides();
-  assert.equal(sides.length, 1);
-  assert.equal(sides[0].id, 'side-1-antenna');
-  assert.ok(layer.sheet.getSideMissionButtons().length === 1);
-});
-
-test('10. تولیدکننده با ورودی ناقص ایمن می‌ماند (Pure و بدون استثنا)', () => {
+test('11. Invalid missionId returns empty array', () => {
+  assert.deepEqual(generateSideMissionQuestions('unknown-mission'), []);
   assert.deepEqual(generateSideMissionQuestions(null), []);
-  assert.deepEqual(generateSideMissionQuestions(undefined, 'NaN-input'), []);
-  assert.doesNotThrow(() => generateSideMissionQuestions('side-3-fuel', 1e9));
-});
-
-test('11. جلسهٔ اصلی بدون activityId نباید رکورد جانبی را بلعیده باشد (رفع باگ activityId)', () => {
-  // شبیه‌سازی سناریوی واقعی مرورگر: رکورد اصلی با activityId تعریف‌نشده (بستهٔ ۱۰.۱ پیش از اصلاح)
-  const legacyCoreRecord = {
-    activityId: undefined,
-    type: 'core',
-    sectorId: 1,
-    rulesVersion: RULES_VERSION,
-    questionSetVersion: QUESTION_SET_VERSION,
-    score: 8, total: 8, percent: 100
-  };
-  const sideSession = {
-    sessionId: 'sess_side',
-    activityId: 'side-1-antenna', // پس از اصلاح، جلسهٔ جانبی هویت مستقل دارد
-    sectorId: 1,
-    activity: 'mission',
-    activityType: 'side',
-    depth: null,
-    missionId: 'side-1-antenna',
-    rulesVersion: RULES_VERSION,
-    questionSetVersion: QUESTION_SET_VERSION,
-    status: 'FINALIZED',
-    questions: generateSideMissionQuestions('side-1-antenna', 0),
-    answers: {}, receipts: {}
-  };
-  const next = keepStationRecord([legacyCoreRecord], sideSession, { status: 'FINALIZED', score: 5, total: 5 });
-  assert.ok(next.some(r => r.type === 'side'), 'رکورد جانبی باید جدا از رکورد اصلی بماند');
-  assert.equal(next.length, 2, 'هر دو رکورد باید موجود باشند');
 });

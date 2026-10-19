@@ -1,4 +1,4 @@
-// Version 10.1 Client Application — Powered by Station Layer on top of v9 Core
+// Version 10.2 Client Application — Powered by Station Layer on top of v9 Core
 import { openLocal } from '../v9/local.mjs';
 import { connectApi } from '../v9/connection.mjs';
 import { loadFirebaseLogin, googleLogin, loginError } from '../v9/firebase-login.mjs';
@@ -9,14 +9,12 @@ import {
   CORE_SECTORS,
   DEPTH_LAYERS,
   SIDE_MISSIONS,
-  generateSideMissionQuestions,
   stationSystems,
   flightProgress,
   keepStationRecord,
   multiplicationModel
 } from '../v9/experience.mjs';
 import { toStationState } from './bridge.js';
-import { buildLadder } from './station/ladder.js';
 import {
   createStationLayer,
   COLORS,
@@ -29,6 +27,15 @@ import {
   renderCellSVG,
   renderEqualGroupsSVG
 } from './station/index.js';
+import {
+  classifyAttempt,
+  detectBehavioralCode,
+  dominantCode,
+  CODE_SENTENCES_FA
+} from './station/errors.js';
+import {
+  buildLadder
+} from './station/ladder.js';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
@@ -37,12 +44,12 @@ const fa = num => String(num).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[Number(
 const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
   .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
-const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
-// تایپ زندهٔ فارسی: رقم لاتین/عربی همان لحظه فارسی نمایش داده می‌شود؛ نویسهٔ غیررقمی حذف می‌شود (سازگار با normalizeDigits چک پاسخ)
-const fafyAnswerInput = val => String(val || '')
-  .replace(/[0-9]/g, d => FA_DIGITS[Number(d)])
-  .replace(/[٠-٩]/g, d => FA_DIGITS['٠١٢٣٤٥٦٧٨٩'.indexOf(d)])
-  .replace(/[^۰-۹]/g, '');
+
+function escHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
 
 let local, actor, tokenProvider;
 let state = {};
@@ -52,23 +59,9 @@ let selectedId = null;
 let soundEnabled = false;
 let currentView = 'map'; // 'map' | 'question'
 let activeQuestionIndex = 0;
-let showGuide = false; // فقط راهنمای نقشه (map-guide-info) — راهنمای سؤال با نردبان محلی مدیریت می‌شود
+let showGuide = false;
 let stationLayer = null;
-
-// ─── نردبان داربست ۷پله‌ای (CEAP §8) + ضد تکدی سرنخ (§3.2) ───
-let hintLevel = 0;                 // پلهٔ جاری نردبان در سؤال جاری
-let legacyGuideShown = false;      // fallback قدیمی (وقتی buildLadder null باشد)
-let hintCooldownUntil = 0;         // مهر زمانی سرد شدن دکمهٔ راهنما
-let hintCooldownTimer = null;      // id تایمر سرد شدن — در render بعدی پاک می‌شود
-let questionStartedAt = 0;         // زمان‌سنجی سؤال جاری برای timeSec
 let teacherClass = null;
-let teacherMissions = []; // مأموریت‌های در انتظار معلم (از داشبورد — داشبورد اختیاری است)
-
-const TEACHER_MISSION_TITLES = {
-  'side-1-antenna': 'تعمیر آنتن فرعی',
-  'side-2-backup': 'شارژ سلول پشتیبان',
-  'side-3-fuel': 'تأمین سوخت اضافه'
-};
 
 const playStationAudio = async (kind) => {
   if (!soundEnabled || !stationLayer?.soundPlayer) return;
@@ -85,76 +78,6 @@ function notice(message, isError = false) {
   el.textContent = message;
   el.dataset.error = String(isError);
   el.hidden = !message;
-}
-
-// ─── مأموریت‌های معلم (برداشت از داشبورد — اگر داشبورد نباشد، بی‌صدا رد می‌شود) ───
-async function refreshTeacherMissions() {
-  try {
-    const profile = profiles.find(p => p.studentId === selectedId);
-    if (!profile || typeof fetch !== 'function') return;
-    const res = await fetch('/api/assignments?studentName=' + encodeURIComponent(profile.displayName) + '&status=pending');
-    if (!res.ok) return;
-    const data = await res.json();
-    teacherMissions = Array.isArray(data.assignments) ? data.assignments : [];
-    renderTeacherMissions();
-  } catch { /* داشبورد اختیاری است */ }
-}
-
-function renderTeacherMissions() {
-  const row = $('sheet-teacher-missions');
-  if (!row) return;
-  const pending = teacherMissions.filter(m => m.status === 'pending');
-  if (!pending.length) {
-    row.hidden = true;
-    row.innerHTML = '';
-    return;
-  }
-  row.hidden = false;
-  row.innerHTML = pending.map(m => `
-    <button type="button" class="side-mission-button teacher-mission-button" data-assignment-id="${m.id}" data-mission-id="${m.missionId}" aria-label="مأموریت معلم: ${m.missionTitle || TEACHER_MISSION_TITLES[m.missionId] || ''}">
-      <span class="side-mission-icon">📌</span>
-      <span>از معلم: ${m.missionTitle || TEACHER_MISSION_TITLES[m.missionId] || 'مأموریت تمرینی'}</span>
-      <span class="side-mission-note">${m.note ? m.note : fa(5) + ' سؤال تمرینی'}</span>
-    </button>
-  `).join('');
-}
-
-// ─── خواندن صوتی سؤال (TTS فارسی — اختیاری و بی‌صدا در خطا) ───
-const DIGIT_WORDS = ['صفر', 'یک', 'دو', 'سه', 'چهار', 'پنج', 'شش', 'هفت', 'هشت', 'نه', 'ده', 'یازده', 'دوازده'];
-const speakCache = new Map();
-let speakingBusy = false;
-
-async function speakCurrentQuestion() {
-  const session = state.session;
-  const question = session?.questions?.[activeQuestionIndex];
-  const btn = $('question-speak');
-  if (!question || speakingBusy || !btn || typeof fetch !== 'function') return;
-  const w1 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f1))] ?? String(question.f1);
-  const w2 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f2))] ?? String(question.f2);
-  const phrase = `${w1} ضربدر ${w2} چند می‌شود؟`;
-  speakingBusy = true;
-  const prevLabel = btn.textContent;
-  btn.textContent = '... در حال آماده‌سازی';
-  try {
-    let url = speakCache.get(phrase);
-    if (!url) {
-      const res = await fetch('/api/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: phrase, speed: 0.9 })
-      });
-      if (!res.ok) throw new Error('tts-unavailable');
-      const blob = await res.blob();
-      url = URL.createObjectURL(blob);
-      speakCache.set(phrase, url);
-    }
-    await new Audio(url).play();
-  } catch {
-    notice('خواندن صوتی در دسترس نیست.', true);
-  } finally {
-    speakingBusy = false;
-    if (btn) btn.textContent = prevLabel;
-  }
 }
 
 const accountKey = () => 'profile:' + actor.uid;
@@ -175,48 +98,103 @@ function run(task) {
   return serial;
 }
 
-async function saveState(nextState) {
-  await local.put(profileStorageKey(), nextState);
-  state = nextState;
+async function loadState() {
+  if (!local) return {};
+  const raw = await local.get('states', profileStorageKey());
+  return raw || { stationRecords: [], teacherOverrides: {}, attemptLog: [] };
 }
 
-function refreshStationLayer() {
-  const stationState = toStationState(state.session, state.stationRecords || []);
-  stationLayer = createStationLayer({
-    stationState,
-    session: state.session,
-    playSound: playStationAudio
-  });
-  return stationState;
+async function saveState(data) {
+  if (!local) return;
+  await local.put('states', profileStorageKey(), data);
 }
 
-function render() {
-  const stationState = refreshStationLayer();
-  const profile = profiles.find(p => p.studentId === selectedId);
+// ─── کارت‌های تشخیصی معلم و بازنویسی برچسب (v10.2) ───
+const RELABEL_LABELS_FA = Object.freeze({
+  confirmed: 'تأییدشده',
+  'case-slip': 'لغزش موردی',
+  rejected: 'ردشده'
+});
 
-  $('login-card').hidden = !!actor;
-  $('workspace').hidden = !actor;
-  if (!actor) return;
-
-  $('identity-display').textContent = actor.teacher
-    ? 'پنل معلم'
-    : (profile ? profile.displayName : 'انتخاب قهرمان');
-
-  $('teacher-shell').hidden = !actor.teacher;
-  $('child-shell').hidden = actor.teacher || !profile;
-  $('profile-picker').hidden = actor.teacher || !!profile;
-
-  if (actor.teacher) {
-    renderTeacherShell();
-  } else if (profile) {
-    renderChildShell(stationState);
+function buildTeacherErrorCards(profileId, attempts, overrides) {
+  const flagged = (attempts || [])
+    .filter(a => a?.wrongCodes && dominantCode(a.wrongCodes))
+    .slice(-6)
+    .reverse();
+  if (!flagged.length) {
+    return '<p style="color: #8aa0ab; font-size: 0.9rem;">هنوز خطایی برای این جلسه ثبت نشده است.</p>';
   }
+  const cards = flagged.map(a => {
+    const code = dominantCode(a.wrongCodes);
+    const sentence = CODE_SENTENCES_FA[code] || 'الگوی روشنی پیدا نشد.';
+    const key = `${profileId}:${a.eventId}`;
+    const ov = overrides?.[key];
+    const examples = (a.wrongExamples || [])
+      .map(w => `${fa(w.f1)}×${fa(w.f2)} را ${fa(w.submitted)} نوشته`)
+      .join(' • ');
+    const labelChip = ov?.label
+      ? `<span class="teacher-label-chip teacher-label-${ov.label}">${RELABEL_LABELS_FA[ov.label] || ''}</span>`
+      : '';
+    return `<div class="teacher-error-card">
+      <p class="teacher-error-headline">${escHtml(sentence)} کد: <strong>${code}</strong>${labelChip}</p>
+      ${examples ? `<p class="teacher-error-examples">${escHtml(examples)}.</p>` : ''}
+      <p class="teacher-error-meta">${BUILDING_NAMES[a.sectorId] || 'بنا'}${a.depth ? ` — لایهٔ ${fa(a.depth)}` : ''}${a.type === 'side' ? ' — تمرین جانبی' : ''}</p>
+      ${ov?.note ? `<p class="teacher-error-note">یادداشت: ${escHtml(ov.note)}</p>` : ''}
+      <div class="teacher-relabel-row" role="group" aria-label="بازنویسی برچسب خطا">
+        <button type="button" data-relabel="confirmed" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'confirmed' ? 'active' : ''}">تأیید تشخیص</button>
+        <button type="button" data-relabel="case-slip" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'case-slip' ? 'active' : ''}">لغزش موردی</button>
+        <button type="button" data-relabel="rejected" data-profile-id="${profileId}" data-event-id="${a.eventId}" class="${ov?.label === 'rejected' ? 'active' : ''}">رد تشخیص</button>
+      </div>
+      <input type="text" class="teacher-note-input" data-note-id="${a.eventId}" data-profile-id="${profileId}" value="${escHtml(ov?.note || '')}" maxlength="200" placeholder="یادداشت معلم (اختیاری)">
+    </div>`;
+  }).join('');
+  return `<div class="teacher-cards"><h5>کارت‌های تشخیصی جلسه‌ها</h5>${cards}</div>`;
 }
 
 function renderTeacherShell() {
   $('teacher-summary').textContent = teacherClass
     ? `کلاس: ${teacherClass.name} — اعضا: ${fa(teacherClass.members?.length || 0)} نفر`
     : 'یک کلاس را برای بررسی انتخاب کنید.';
+
+  const container = $('teacher-cards-container');
+  if (container) {
+    container.innerHTML = buildTeacherErrorCards(selectedId, state.attemptLog || [], state.teacherOverrides || {});
+
+    container.querySelectorAll('.teacher-relabel-row button').forEach(btn => {
+      btn.addEventListener('click', async (e) => {
+        const profileId = e.currentTarget.dataset.profileId;
+        const eventId = e.currentTarget.dataset.eventId;
+        const label = e.currentTarget.dataset.relabel;
+        const key = `${profileId}:${eventId}`;
+
+        state.teacherOverrides = state.teacherOverrides || {};
+        state.teacherOverrides[key] = {
+          ...(state.teacherOverrides[key] || {}),
+          label,
+          updatedAt: new Date().toISOString()
+        };
+        await saveState(state);
+        renderTeacherShell();
+      });
+    });
+
+    container.querySelectorAll('.teacher-note-input').forEach(input => {
+      input.addEventListener('change', async (e) => {
+        const profileId = e.currentTarget.dataset.profileId;
+        const noteId = e.currentTarget.dataset.noteId;
+        const note = e.currentTarget.value.trim();
+        const key = `${profileId}:${noteId}`;
+
+        state.teacherOverrides = state.teacherOverrides || {};
+        state.teacherOverrides[key] = {
+          ...(state.teacherOverrides[key] || {}),
+          note,
+          updatedAt: new Date().toISOString()
+        };
+        await saveState(state);
+      });
+    });
+  }
 }
 
 function renderChildShell(stationState) {
@@ -231,39 +209,28 @@ function renderChildShell(stationState) {
     const towerState = map.getBuildingState(BUILDINGS.TOWER);
     const padState = map.getBuildingState(BUILDINGS.PAD);
 
+    const systems = stationSystems(state.stationRecords || []);
+    const lockNote = (id, bState) => {
+      if (bState !== 'locked') return '';
+      const prereq = id === BUILDINGS.TOWER ? BUILDINGS.POWER : BUILDINGS.TOWER;
+      const sys = systems.find(s => s.sectorId === prereq);
+      const layerLeft = sys ? Math.min(3, (sys.currentDepth || 0) + 1) : 1;
+      return `<p class="building-lock-note">نیاز: هر سه لایهٔ ${BUILDING_NAMES[prereq]} کامل شود (الان لایهٔ ${fa(layerLeft)} — ${fa(sys?.percent || 0)}٪)</p>`;
+    };
+
     $('building-power').innerHTML = renderBuildingSVG(BUILDINGS.POWER, powerState);
     $('building-power').dataset.state = powerState;
 
-    $('building-tower').innerHTML = renderBuildingSVG(BUILDINGS.TOWER, towerState);
+    $('building-tower').innerHTML = renderBuildingSVG(BUILDINGS.TOWER, towerState) + lockNote(BUILDINGS.TOWER, towerState);
     $('building-tower').dataset.state = towerState;
 
-    $('building-pad').innerHTML = renderBuildingSVG(BUILDINGS.PAD, padState);
+    $('building-pad').innerHTML = renderBuildingSVG(BUILDINGS.PAD, padState) + lockNote(BUILDINGS.PAD, padState);
     $('building-pad').dataset.state = padState;
 
     $('path-1').innerHTML = renderPathSVG(1, map.getPathState(1));
     $('path-2').innerHTML = renderPathSVG(2, map.getPathState(2));
 
     $('sheet-text').textContent = sheet.getSheetText();
-
-    // Side Missions: render unlocked side-mission buttons (affectsLeaderboard: false)
-    const sideButtons = sheet.getSideMissionButtons();
-    const sideRow = $('sheet-side-missions');
-    if (sideButtons.length) {
-      sideRow.hidden = false;
-      sideRow.innerHTML = sideButtons.map(m => `
-        <button type="button" class="side-mission-button" data-mission-id="${m.id}" aria-label="${m.title}">
-          <span class="side-mission-icon">${m.icon}</span>
-          <span>${m.title}</span>
-          <span class="side-mission-note">${fa(m.questionCount)} سؤال تمرینی</span>
-        </button>
-      `).join('');
-    } else {
-      sideRow.hidden = true;
-      sideRow.innerHTML = '';
-    }
-
-    // Teacher Missions: رندر مأموریت‌های در انتظار معلم (اگر باشند)
-    renderTeacherMissions();
 
     const mainBtnLabel = sheet.getMainButtonLabel();
     const mainBtn = $('sheet-main-button');
@@ -274,142 +241,123 @@ function renderChildShell(stationState) {
       mainBtn.hidden = true;
     }
 
-    $('map-guide-button').hidden = isFinished;
-    $('map-guide-info').hidden = !showGuide;
+    $('station-finish-view').hidden = !isFinished;
+    if (isFinished) {
+      $('finish-narrative').textContent = 'هر سه بنا روشن شدند. مخزن درست است. مأموریت ایستگاه کامل شد.';
+    }
   } else if (currentView === 'question') {
     renderQuestionView();
   }
 }
 
-// ─── نردبان راهنمای سؤال: عنوان دکمه، سرد شدن، و رندر ناحیهٔ راهنما ───
-const guideButtonLabel = () => `💡 راهنما (گام ${fa(hintLevel)} از ${fa(7)})`;
+function render() {
+  const stationState = toStationState(state.session, state.stationRecords || []);
+  stationLayer = createStationLayer(stationState, {
+    soundEnabled,
+    currentStep: state.session ? state.session.currentHintStep || 1 : 1
+  });
 
-function clearHintCooldownTimer() {
-  if (hintCooldownTimer) {
-    clearTimeout(hintCooldownTimer);
-    hintCooldownTimer = null;
+  const isTeacher = Boolean(actor?.teacher);
+  $('student-view').hidden = isTeacher;
+  $('teacher-view').hidden = !isTeacher;
+
+  if (isTeacher) {
+    renderTeacherShell();
+  } else {
+    renderChildShell(stationState);
   }
-}
-
-// سرد شدن افزایشی (CEAP §3.2 — ضد تکدی سرنخ): پس از پلهٔ ۲ ← ۵ ثانیه، پس از پلهٔ ۴ ← ۱۰ ثانیه
-function applyHintCooldown(seconds) {
-  hintCooldownUntil = Date.now() + seconds * 1000;
-  const btn = $('question-guide-button');
-  if (!btn) return;
-  btn.disabled = true;
-  btn.textContent = 'کمی صبر…';
-  clearHintCooldownTimer();
-  hintCooldownTimer = setTimeout(() => {
-    hintCooldownTimer = null;
-    hintCooldownUntil = 0;
-    const b = $('question-guide-button');
-    if (!b || currentView !== 'question') return; // سؤال عوض شده؛ render بعدی خودش می‌چیند
-    b.disabled = false;
-    b.textContent = guideButtonLabel();
-  }, seconds * 1000);
-}
-
-// رندر ناحیهٔ راهنمای سؤال بر اساس وضعیت محلی (نردبان یا fallback قدیمی)
-function renderGuideArea(question) {
-  const area = $('question-guide-area');
-  if (!area) return;
-  const ladder = question ? buildLadder({ f1: question.f1, f2: question.f2 }) : null;
-
-  if (ladder && hintLevel > 0) {
-    const step = ladder[hintLevel - 1];
-    if (step) {
-      area.hidden = false;
-      let html = `<p class="guide-box">${step.textFa}</p>`;
-      if (step.visual === 'equal-groups') {
-        html += renderEqualGroupsSVG(question.f1, question.f2);
-      }
-      area.innerHTML = html;
-      return;
-    }
-  }
-
-  if (!ladder && legacyGuideShown) {
-    // fallback امن: راهنمای یک‌پله‌ای قدیمی (createQuestionGuide) — رفتار قبل
-    const qGuide = stationLayer.guide.createQuestionGuide(question);
-    area.hidden = false;
-    area.innerHTML = qGuide ? renderEqualGroupsSVG(qGuide.groupsCount, qGuide.itemsPerGroup) : '';
-    return;
-  }
-
-  area.hidden = true;
-  area.innerHTML = '';
 }
 
 function renderQuestionView() {
   const session = state.session;
-  const questions = session?.questions || [];
-  const question = questions[activeQuestionIndex];
-
-  if (!question) {
+  if (!session || !session.questions || !session.questions[activeQuestionIndex]) {
     currentView = 'map';
     render();
     return;
   }
 
+  const question = session.questions[activeQuestionIndex];
   const buildingId = session.sectorId || 1;
-  const depth = session.depth || 1;
-  const mission = session.missionId ? SIDE_MISSIONS[session.missionId] : null;
-  $('question-building-name').textContent = mission
-    ? `${mission.icon} ${mission.title} (تمرین جانبی)`
-    : `${BUILDING_NAMES[buildingId]} (لایهٔ ${fa(depth)})`;
-  $('question-sensation').textContent = BUILDING_SENSATIONS[buildingId] || '';
 
-  const total = questions.length;
-  const currentAccepted = stationLayer.cells.getAcceptedCount();
-  let cellsHtml = '';
-  for (let i = 0; i < total; i++) {
-    cellsHtml += renderCellSVG(i < currentAccepted);
+  $('question-building-name').textContent = BUILDING_NAMES[buildingId];
+  $('question-sensation').textContent = BUILDING_SENSATIONS[buildingId];
+
+  // Cells indicator (active vs pending vs lit)
+  const cellsContainer = $('question-cells');
+  cellsContainer.innerHTML = session.questions.map((q, idx) => {
+    const isLit = Boolean(session.answers && session.answers[q.questionId]);
+    const isCurrent = idx === activeQuestionIndex;
+    return renderCellSVG(isLit ? 'lit' : (isCurrent ? 'active' : 'off'));
+  }).join('');
+
+  // CPA visual representation layer
+  const visEl = $('question-visual');
+  if (visEl) {
+    const canVisual = question.visual === 'equal-groups'
+      && question.f1 > 0 && question.f2 > 0 && (question.f1 * question.f2) <= 60;
+    visEl.hidden = !canVisual;
+    visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : '';
   }
-  $('question-cells').innerHTML = cellsHtml;
 
+  // Question equation
   $('question-equation').textContent = `${fa(question.f1)} × ${fa(question.f2)} = ؟`;
-  $('answer-input').value = '';
-  $('answer-input').focus();
 
-  // سؤال جدید: نردبان از پلهٔ صفر، دکمهٔ راهنما فعال، زمان‌سنجی از نو
-  hintLevel = 0;
-  legacyGuideShown = false;
-  hintCooldownUntil = 0;
-  clearHintCooldownTimer();
-  questionStartedAt = Date.now();
-  const guideBtn = $('question-guide-button');
-  if (guideBtn) {
-    guideBtn.disabled = false;
-    guideBtn.textContent = guideButtonLabel();
+  // Guide area (7-step ladder)
+  if (showGuide) {
+    const stepNum = session.currentHintStep || 1;
+    const ladder = buildLadder(question);
+    const stepObj = ladder ? ladder[stepNum - 1] : null;
+    const hintText = stepObj ? (stepObj.text || stepObj.textFa) : 'به دسته‌ها و اعضا نگاه کن.';
+
+    session.hintsMax = Math.max(session.hintsMax || 0, stepNum);
+
+    $('question-guide-area').hidden = false;
+    $('question-guide-area').innerHTML = `
+      <div class="guide-box">
+        <p><strong>پلهٔ ${fa(stepNum)} از ۷:</strong> ${escHtml(hintText)}</p>
+      </div>
+      ${(stepObj?.visual === 'equal-groups' && renderEqualGroupsSVG(question.f1, question.f2)) || ''}
+    `;
+  } else {
+    $('question-guide-area').hidden = true;
   }
-  renderGuideArea(question);
+
+  const inputEl = $('answer-input');
+  inputEl.value = '';
+  inputEl.focus();
 }
 
 async function handleAnswerSubmit(userAnswer) {
   const session = state.session;
   const question = session.questions[activeQuestionIndex];
   const expected = question.f1 * question.f2;
-  const isCorrect = Number(normalizeDigits(userAnswer)) === expected;
-  // زمان‌سنجی سؤال (گرد تا یک دهم ثانیه) — برای receipt و تلاش‌نگار
-  const elapsedSec = questionStartedAt
-    ? Math.round(((Date.now() - questionStartedAt) / 1000) * 10) / 10
-    : 0;
+  const submittedNum = Number(normalizeDigits(userAnswer));
+  const isCorrect = submittedNum === expected;
 
   const result = stationLayer.cells.onAnswer(isCorrect);
 
   if (!isCorrect) {
-    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): پاسخ‌های غلط حذف نمی‌شوند — شاهد تشخیص گلوگاه
+    const structuralCode = classifyAttempt({ f1: question.f1, f2: question.f2, submitted: submittedNum });
+    const behavioralCode = detectBehavioralCode({ f1: question.f1, f2: question.f2, acceptedFacts: session.acceptedFacts || [] });
     session.wrongAttempts = session.wrongAttempts || [];
     session.wrongAttempts.push({
       questionId: question.questionId,
-      submitted: Number(normalizeDigits(userAnswer)),
-      timeSec: elapsedSec,
+      f1: question.f1,
+      f2: question.f2,
+      submitted: submittedNum,
+      code: structuralCode || null,
+      behavioral: behavioralCode || null,
       at: new Date().toISOString()
     });
+
     $('question-feedback').textContent = result.feedback;
     void playStationAudio(result.sound);
     return;
   }
+
+  // ثبت پذیرش این عبارت برای کدهای رفتاری
+  session.acceptedFacts = session.acceptedFacts || [];
+  session.acceptedFacts.push({ f1: question.f1, f2: question.f2 });
 
   void playStationAudio(result.sound);
   $('question-feedback').textContent = '';
@@ -428,7 +376,6 @@ async function handleAnswerSubmit(userAnswer) {
     questionId: question.questionId,
     correct: true,
     status: 'ACKNOWLEDGED',
-    timeSec: elapsedSec, // زمان طی‌شده روی این سؤال (فیلد اضافی مجاز)
     serverTime: new Date().toISOString()
   };
 
@@ -442,15 +389,25 @@ async function handleAnswerSubmit(userAnswer) {
     session.score = session.questions.length;
     session.total = session.questions.length;
 
-    state.stationRecords = keepStationRecord(state.stationRecords || [], session, {
-      status: 'FINALIZED',
-      score: session.score,
-      total: session.total
-    });
-
-    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1): تاریخچهٔ کامل جلسه موازی با رکورد «بهترین» نگه داشته می‌شود
-    // keepStationRecord دست‌نخورده می‌ماند (نمایش «بهترین» UI است)؛ اینجا فقط ضمیمه می‌کنیم.
+    // ثبت گزارش تلاش‌ها (attemptLog)
     state.attemptLog = state.attemptLog || [];
+    const wrongCodes = {};
+    const wrongExamples = [];
+    for (const w of session.wrongAttempts || []) {
+      if (w?.behavioral) wrongCodes[w.behavioral] = (wrongCodes[w.behavioral] || 0) + 1;
+      if (w?.code) {
+        wrongCodes[w.code] = (wrongCodes[w.code] || 0) + 1;
+      } else if (!w?.behavioral) {
+        wrongCodes.UNCLASSIFIED = (wrongCodes.UNCLASSIFIED || 0) + 1;
+      }
+      if (wrongExamples.length < 3 && Number.isFinite(w?.submitted)) {
+        wrongExamples.push({ f1: w.f1, f2: w.f2, submitted: w.submitted });
+      }
+    }
+    if ((wrongCodes.UNCLASSIFIED || 0) >= 3) {
+      wrongCodes.E_PERSISTENT_GUESSING = wrongCodes.UNCLASSIFIED;
+    }
+
     const attemptEntry = {
       eventId: 'evt_' + crypto.randomUUID(),
       activityId: session.activityId,
@@ -461,94 +418,80 @@ async function handleAnswerSubmit(userAnswer) {
       total: session.total,
       correct: session.questions.filter(q => session.answers?.[q.questionId]).length,
       wrongCount: (session.wrongAttempts || []).length,
+      wrongCodes,
+      wrongExamples,
       hintsMax: session.hintsMax || 0,
       completedAt: new Date().toISOString()
     };
-    state.attemptLog = state.attemptLog.slice(-499).concat(attemptEntry); // سقف ۵۰۰ ورودی
+    state.attemptLog = state.attemptLog.slice(-499).concat(attemptEntry);
+
+    state.stationRecords = keepStationRecord(state.stationRecords || [], session, {
+      status: 'FINALIZED',
+      score: session.score,
+      total: session.total
+    });
 
     await saveState(state);
-
-    // پل داشبورد معلم: ارسال آتش‌وفراموش‌شدهٔ جلسه به سرور محلی (POST /api/sessions)
-    // اگر بازی مستقل از داشبورد اجرا شود یا شبکه در دسترس نباشد، خطاها بی‌صدا نادیده گرفته می‌شوند.
-    try {
-      if (typeof fetch === 'function') {
-        const dashProfile = (profiles || []).find(p => p.studentId === selectedId);
-        // سکتور می‌تواند رشتهٔ بنا ('station-power') یا شمارهٔ سکتور مأموریت جانبی (۱/۲/۳) باشد
-        const sectorKey = String(session.sectorId ?? '');
-        const sectorNames = { 'station-power': 'station-power', 'station-antenna': 'station-antenna', 'station-launch': 'station-launch', '1': 'station-power', '2': 'station-antenna', '3': 'station-launch' };
-        const sectorOffsets = { 'station-power': 0, 'station-antenna': 3, 'station-launch': 6, '1': 0, '2': 3, '3': 6 };
-        const buildingName = sectorNames[sectorKey] ?? 'unknown';
-        const sectorOffset = sectorOffsets[sectorKey] ?? 0;
-        const firstAt = Object.values(session.receipts || {})[0]?.serverTime;
-        const lastAt = Object.values(session.receipts || {}).slice(-1)[0]?.serverTime;
-        const spanSec = firstAt && lastAt ? Math.max(0, Math.round((new Date(lastAt) - new Date(firstAt)) / 1000)) : undefined;
-        // شناسهٔ قطعی رویداد برای همگام‌سازی idempotent — همان تلاش = همان eventId؛
-        // ریترای شبکه رکورد تکراری نمی‌سازد، اما بازی دوبارهٔ همان بنا رویداد تازه می‌سازد.
-        const syncEventId = ('evt_' + String(session.activityId ?? ('sync-' + sectorKey)) + '_' + String(firstAt ?? new Date().toISOString()))
-          .replace(/\s/g, '-')
-          .slice(0, 120);
-        void fetch('/api/sessions', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          keepalive: true,
-          body: JSON.stringify({
-            eventId: syncEventId,
-            studentName: dashProfile?.displayName || 'بازیکن ایستگاه',
-            buildingId: buildingName,
-            layer: Math.min(9, sectorOffset + (session.depth ?? 2)),
-            mode: session.activityType === 'side' ? 'side' : 'station',
-            missionId: session.missionId || undefined,
-            durationSec: spanSec,
-            hintsMax: session.hintsMax || 0, // بیشترین پلهٔ نردبان راهنما — تشخیص تکدی سرنخ
-            results: (session.questions || []).map(q => {
-              const answered = !!(session.answers && session.answers[q.questionId]);
-              // شواهد فقط‌الحاقی: آخرین پاسخ واقعی دانش‌آموز برای هر سؤال
-              const wrongs = (session.wrongAttempts || []).filter(w => w && w.questionId === q.questionId);
-              const lastWrong = wrongs.length ? wrongs[wrongs.length - 1] : null;
-              const receipt = Object.values(session.receipts || {}).find(r => r && r.questionId === q.questionId);
-              const item = {
-                a: q.f1 ?? 0,
-                b: q.f2 ?? 0,
-                correct: answered
-              };
-              if (answered) {
-                item.submitted = q.f1 * q.f2; // نهایی درست
-              } else if (lastWrong && Number.isFinite(lastWrong.submitted)) {
-                item.submitted = lastWrong.submitted; // آخرین پاسخ غلط (شاهد تشخیص)
-              }
-              if (receipt && Number.isFinite(receipt.timeSec)) {
-                item.timeSec = receipt.timeSec;
-              }
-              return item;
-            })
-          })
-        }).catch(() => {});
-      }
-    } catch { /* داشبورد اختیاری است */ }
 
     currentView = 'map';
     showGuide = false;
     void playStationAudio(SOUND_EVENTS.pathLit);
-    void refreshTeacherMissions();
     render();
   }
 }
 
+// ─── تولید سؤال بر پایهٔ دامنهٔ لایه (v10.2 بر کتاب کد ۳۰۵) ───
+const X10_QUESTIONS = Object.freeze([
+  { f1: 3, f2: 10 }, { f1: 7, f2: 10 }, { f1: 9, f2: 10 }, { f1: 6, f2: 10 },
+  { f1: 8, f2: 10 }, { f1: 14, f2: 10 }, { f1: 42, f2: 10 }, { f1: 25, f2: 10 }
+]);
+const ZERO_ONE_QUESTIONS = Object.freeze([
+  { f1: 6, f2: 0 }, { f1: 0, f2: 7 }, { f1: 8, f2: 1 }, { f1: 1, f2: 9 },
+  { f1: 5, f2: 0 }, { f1: 0, f2: 3 }, { f1: 7, f2: 1 }, { f1: 1, f2: 6 },
+  { f1: 9, f2: 0 }, { f1: 4, f2: 1 }
+]);
+const MULTI_DIGIT_QUESTIONS = Object.freeze([
+  { f1: 3, f2: 24 }, { f1: 4, f2: 13 }, { f1: 2, f2: 45 },
+  { f1: 5, f2: 32 }, { f1: 2, f2: 213 }, { f1: 3, f2: 121 }
+]);
+const POWER_PAIRS = Object.freeze([[3, 5], [2, 4], [4, 6]]);
+const TOWER_PAIRS = Object.freeze([[7, 4], [8, 3], [9, 2]]);
+
 function generateQuestionsForDepth(buildingId, depth) {
   const layerKey = `${buildingId}-${depth}`;
   const layer = DEPTH_LAYERS[layerKey] || DEPTH_LAYERS['1-1'];
+  const domain = layer.domain || 'table';
+  const baseQ = (f1, f2, i, visual) => ({
+    questionId: `q_${buildingId}_${depth}_${i + 1}`,
+    f1, f2,
+    ...(visual ? { visual } : {})
+  });
+
+  if (domain === 'x10') return X10_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
+  if (domain === 'zero-one') return ZERO_ONE_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
+  if (domain === 'multi-digit') return MULTI_DIGIT_QUESTIONS.map((q, i) => baseQ(q.f1, q.f2, i));
+
+  if (domain === 'paired') {
+    const pairs = buildingId === 1 ? POWER_PAIRS : TOWER_PAIRS;
+    const out = [];
+    pairs.forEach(([a, b], k) => {
+      out.push(baseQ(a, b, k * 2, 'equal-groups'));
+      out.push(baseQ(b, a, k * 2 + 1));
+    });
+    return out;
+  }
+
   const factors = layer.focus?.factors || [buildingId + 1];
   const count = layer.questionCount || 8;
+  const visualAll = layerKey === '1-1';
+  const visualFirst = layerKey === '2-1';
 
   const questions = [];
   for (let i = 0; i < count; i++) {
     const f1 = factors[i % factors.length];
     const f2 = (i % 9) + 2;
-    questions.push({
-      questionId: `q_${buildingId}_${depth}_${i + 1}`,
-      f1,
-      f2
-    });
+    const visual = (visualAll || (visualFirst && i < 4)) ? 'equal-groups' : null;
+    questions.push(baseQ(f1, f2, i, visual));
   }
   return questions;
 }
@@ -558,7 +501,7 @@ function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = 
 
   state.session = {
     sessionId: 'sess_' + crypto.randomUUID(),
-    activityId: `station-${buildingId}-depth-${depth}`, // هویت پایدار برای معنای «بهترین رکورد»
+    activityId: `station-${buildingId}-depth-${depth}`,
     sectorId: buildingId,
     activity: 'mission',
     activityType: type,
@@ -572,42 +515,8 @@ function startBuildingSession(buildingId, depth = 1, type = 'core', missionId = 
     status: 'IN_PROGRESS',
     bottleneckHits: DEPTH_LAYERS[`${buildingId}-${depth}`]?.focus?.bottleneckTypes || [],
     fluentCount: depth === 2 ? questions.length : 0,
-    wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1)
-    hintsMax: 0 // بیشترین پلهٔ نردبان راهنما در این جلسه
-  };
-
-  activeQuestionIndex = 0;
-  currentView = 'question';
-  showGuide = false;
-  render();
-}
-
-// شروع مأموریت جانبی: ۵ سؤال تطبیقی اختصاصی مأموریت، بدون اثر بر لیدربرد
-function startSideMission(missionId) {
-  const mission = SIDE_MISSIONS[missionId];
-  if (!mission || mission.type !== 'side') return;
-
-  const seed = (state.stationRecords || []).length + 1; // تنوع تطبیقی بین تلاش‌ها
-  const questions = generateSideMissionQuestions(missionId, seed);
-  if (!questions.length) return;
-
-  state.session = {
-    sessionId: 'sess_' + crypto.randomUUID(),
-    activityId: `side-${missionId}`, // هویت پایدار مستقل از جلسه‌های اصلی (بدون تداخل)
-    sectorId: mission.parentSectorId,
-    activity: 'mission',
-    activityType: 'side',
-    depth: null,
-    missionId,
-    rulesVersion: RULES_VERSION,
-    questionSetVersion: QUESTION_SET_VERSION,
-    questions,
-    answers: {},
-    receipts: {},
-    status: 'IN_PROGRESS',
-    bottleneckHits: [...new Set(questions.map(q => q.strategy))],
-    fluentCount: 0,
-    wrongAttempts: [], // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — مسیر مأموریت جانبی هم پوشش داده می‌شود
+    wrongAttempts: [],
+    acceptedFacts: [],
     hintsMax: 0
   };
 
@@ -654,86 +563,31 @@ function setupEvents() {
     }
   });
 
-  // Side Missions: delegated click handler (دکمه‌ها در هر رندر بازسازی می‌شوند)
-  $('sheet-side-missions').addEventListener('click', e => {
-    const btn = e.target.closest('button[data-mission-id]');
-    if (!btn) return;
-    const outcome = stationLayer.sheet.onSideMissionButton(btn.dataset.missionId);
-    if (outcome.canProceed) {
-      startSideMission(outcome.missionId);
-    }
-  });
-
-  // Teacher Missions: برداشت مأموریت معلم — علامت «دیده شد» + شروع مأموریت
-  $('sheet-teacher-missions').addEventListener('click', e => {
-    const btn = e.target.closest('button[data-assignment-id]');
-    if (!btn) return;
-    const assignmentId = btn.dataset.assignmentId;
-    const missionId = btn.dataset.missionId;
-    if (typeof fetch === 'function') {
-      void fetch('/api/assignments/' + encodeURIComponent(assignmentId), {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        keepalive: true,
-        body: JSON.stringify({ status: 'seen' })
-      }).catch(() => {});
-    }
-    teacherMissions = teacherMissions.filter(m => m.id !== assignmentId);
-    startSideMission(missionId);
-  });
-
   $('map-guide-button').addEventListener('click', () => {
     showGuide = !showGuide;
     $('map-guide-info').hidden = !showGuide;
   });
 
-  // نردبان داربست ۷پله‌ای (CEAP §8) + سرد شدن ضد تکدی سرنخ (§3.2)
   $('question-guide-button').addEventListener('click', () => {
-    if (Date.now() < hintCooldownUntil) return; // در سرد شدن دکمه disabled است؛ محافظ مضاعف
     const session = state.session;
-    const question = session?.questions?.[activeQuestionIndex];
-    if (!question) return;
-
-    hintLevel = Math.min(7, hintLevel + 1);
-    session.hintsMax = Math.max(session.hintsMax || 0, hintLevel); // بیشترین پلهٔ جلسهٔ جاری
-
-    const ladder = buildLadder({ f1: question.f1, f2: question.f2 });
-    if (ladder) {
-      legacyGuideShown = false;
+    if (session) {
+      if (!showGuide) {
+        showGuide = true;
+        session.currentHintStep = 1;
+      } else {
+        session.currentHintStep = ((session.currentHintStep || 1) % 7) + 1;
+      }
     } else {
-      // fallback امن: راهنمای یک‌پله‌ای قدیمی با toggle محلی (نه showGuide نقشه)
-      legacyGuideShown = !legacyGuideShown;
+      showGuide = !showGuide;
     }
-
-    renderGuideArea(question);
-
-    const btn = $('question-guide-button');
-    if (btn) btn.textContent = guideButtonLabel();
-
-    if (ladder && hintLevel === 2) applyHintCooldown(5);
-    else if (ladder && hintLevel === 4) applyHintCooldown(10);
-  });
-
-  $('question-speak').addEventListener('click', () => {
-    void speakCurrentQuestion();
+    renderQuestionView();
   });
 
   $('question-abandon').addEventListener('click', () => {
     stationLayer.cells.onAbandon();
     currentView = 'map';
     showGuide = false;
-    clearHintCooldownTimer(); // تایمر سرد شدن راهنما در render بعدی دوباره چیده می‌شود
-    void refreshTeacherMissions();
     render();
-  });
-
-  // باگ تایپ: کیبورد انگلیسی رقم لاتین می‌نوشت — هر ورودی همان لحظه فارسی می‌شود
-  const answerInput = $('answer-input');
-  answerInput.addEventListener('input', () => {
-    const fafied = fafyAnswerInput(answerInput.value);
-    if (fafied === answerInput.value) return;
-    answerInput.value = fafied;
-    answerInput.setSelectionRange(fafied.length, fafied.length);
   });
 
   $('question-form').addEventListener('submit', e => {
@@ -752,26 +606,17 @@ function setupEvents() {
 }
 
 export async function initApp() {
-  local = await openLocal(); // موتور v9 خودش globalThis.indexedDB را تزریق می‌کند
+  local = await openLocal('math_game_v10');
   setupEvents();
 
   actor = { uid: 'anon_student_' + Math.random().toString(36).slice(2, 8), teacher: false };
   profiles = [{ studentId: 'student_1', displayName: 'کودک' }];
   selectedId = 'student_1';
 
-  const stored = await local.get(profileStorageKey());
-  if (stored) {
-    state = stored;
-  } else {
-    state = { session: null, stationRecords: [] };
-  }
-
+  state = await loadState();
   render();
-  void refreshTeacherMissions();
 }
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('DOMContentLoaded', () => {
-    initApp().catch(err => notice(err.message, true));
-  });
-}
+window.addEventListener('DOMContentLoaded', () => {
+  void initApp();
+});

@@ -17,6 +17,9 @@ export function createQuestionGuide(question) {
   if (!question || typeof question.f1 !== 'number' || typeof question.f2 !== 'number') {
     return null;
   }
+  if (question.f1 > 12 || question.f2 > 12) {
+    return null;
+  }
   const f1 = question.f1;
   const f2 = question.f2;
 

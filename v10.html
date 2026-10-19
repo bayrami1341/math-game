@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>کارگاه ضرب — نسخهٔ ۱۰.۱</title>
+  <title>کارگاه ضرب — نسخهٔ ۱۰.۲</title>
   <link rel="stylesheet" href="styles/v10.css">
   <script src="v9-config.js" defer></script>
   <script src="src/v10/app.js" type="module"></script>
@@ -11,7 +11,7 @@
 <body>
   <header>
     <div class="header-shell">
-      <div class="brand-title">✦ ایستگاه یادگیری ۱۰.۱</div>
+      <div class="brand-title">✦ ایستگاه یادگیری ۱۰.۲</div>
       <div class="header-actions">
         <span id="identity-display" class="identity-badge"></span>
         <button id="toggle-sound" class="secondary-button" type="button" aria-pressed="false">صدا: خاموش</button>
@@ -44,6 +44,10 @@
           <h2>اعضا و پیوند دعوت</h2>
           <div id="teacher-members"></div>
         </div>
+        <div class="teacher-card">
+          <h2>کارت‌های تشخیصی بالینی</h2>
+          <div id="teacher-cards-container"></div>
+        </div>
       </section>
 
       <!-- Child Shell (Map is Home) -->
@@ -72,10 +76,6 @@
           <!-- Bottom Sheet (ورق پایین نقشه) -->
           <div class="bottom-sheet" id="station-bottom-sheet">
             <p id="sheet-text" class="sheet-story"></p>
-            <!-- Side Missions (مأموریت‌های جانبی — بدون اثر بر لیدربرد) -->
-            <div id="sheet-side-missions" class="side-missions-row" role="group" aria-label="مأموریت‌های جانبی" hidden></div>
-            <!-- Teacher Missions (مأموریت‌های ارسالی معلم — از داشبورد) -->
-            <div id="sheet-teacher-missions" class="side-missions-row" role="group" aria-label="مأموریت‌های معلم" hidden></div>
             <div class="sheet-actions">
               <!-- Momentary Main Button -->
               <button id="sheet-main-button" class="primary-button" type="button">ادامهٔ چراغ‌ها</button>
@@ -101,15 +101,17 @@
           <!-- Cell Energy Progress -->
           <div id="question-cells" class="question-cells-row" aria-label="سلول‌های انرژی"></div>
 
+          <!-- CPA Visual Representation Layer -->
+          <div id="question-visual" class="question-visual" hidden aria-hidden="true"></div>
+
           <!-- Problem Presentation -->
           <div id="question-equation" class="math-equation"></div>
 
           <form id="question-form" class="answer-form">
             <label for="answer-input" class="sr-only">پاسخ:</label>
-            <input id="answer-input" type="text" inputmode="numeric" autocomplete="off" maxlength="3" required>
+            <input id="answer-input" type="text" inputmode="numeric" autocomplete="off" required>
             <button class="primary-button" type="submit">ثبت پاسخ</button>
             <button id="question-guide-button" class="secondary-button" type="button">💡 راهنما</button>
-            <button id="question-speak" class="secondary-button" type="button" aria-label="خواندن سؤال با صدا">🔊 سؤال</button>
           </form>
 
           <p id="question-feedback" class="question-feedback" role="status" aria-live="polite"></p>

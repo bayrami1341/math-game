@@ -1,10 +1,26 @@
 {
-  "name": "math-game-v10.1",
-  "version": "10.1.0",
-  "description": "کارگاه ضرب — نسخهٔ ۱۰.۱ با مدل داده لایه‌های عمق و گلوگاه‌های یادگیری",
-  "type": "module",
+  "name": "math-game",
+  "version": "10.2.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "description": "کارگاه ضرب — نسخهٔ ۱۰.۲ (CEAP 2.1)",
   "scripts": {
-    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js",
-    "start": "npx serve ."
+    "test": "node tests/run-mastery.js && node --test tests/*.test.js",
+    "test:station": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js",
+    "test:contracts": "node --test tests/v9-phase1-contracts.test.js",
+    "check:v9:release": "node scripts/check-v9-release.cjs",
+    "test:v9": "node --test tests/v9-server.test.js tests/v9-production-config.test.js tests/v9-local.test.js tests/v9-entry.test.js tests/v9-activity.test.js tests/v9-experience.test.js tests/v9-ui-flow.test.js tests/v9-leaderboard.test.js tests/v9-login.test.js tests/v9-release.test.js",
+    "dev:v9": "node server/start.js --local",
+    "start:v9": "node server/start.js"
+  },
+  "devDependencies": {
+    "fake-indexeddb": "6.2.5"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "firebase-admin": "14.5.0"
   }
 }

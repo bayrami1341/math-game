@@ -109,6 +109,7 @@ main.main-shell {
   background: none;
   border: none;
   padding: 6px;
+  outline: none;
   transition: transform 0.2s ease;
 }
 
@@ -193,19 +194,8 @@ main.main-shell {
   border: 1px solid var(--surface-border);
   border-radius: 10px;
   padding: 8px 16px;
-  min-height: 44px;
   font-size: 13px;
   cursor: pointer;
-}
-
-/* فوکوس مرئی کیبورد — WCAG 2.4.7 (outline حذف‌شدهٔ building-node جایگزین شد) */
-.building-node:focus-visible,
-.primary-button:focus-visible,
-.secondary-button:focus-visible,
-.side-mission-button:focus-visible,
-.answer-form input:focus-visible {
-  outline: 2px solid var(--ring-color);
-  outline-offset: 2px;
 }
 
 .secondary-button:hover {
@@ -222,62 +212,6 @@ main.main-shell {
   font-size: 13px;
   color: var(--text-muted);
   text-align: center;
-}
-
-/* Side Missions (مأموریت‌های جانبی) */
-.side-missions-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-  padding-top: 12px;
-  border-top: 1px dashed var(--surface-border);
-}
-
-.side-mission-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background-color: #071427;
-  color: var(--text-main);
-  border: 1px solid var(--accent-color);
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  min-height: 44px;
-}
-
-.side-mission-button:hover:not(:disabled) {
-  border-color: var(--ring-color);
-  box-shadow: 0 0 10px rgba(126, 240, 255, 0.25);
-  transform: translateY(-1px);
-}
-
-.side-mission-button .side-mission-icon {
-  font-size: 18px;
-}
-
-.side-mission-button .side-mission-note {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
-/* Teacher Missions (از داشبورد معلم — تمایز کهربایی) */
-.teacher-mission-button {
-  border-color: #f0b429;
-}
-
-.teacher-mission-button:hover:not(:disabled) {
-  border-color: #ffd166;
-  box-shadow: 0 0 10px rgba(240, 180, 41, 0.3);
-}
-
-.teacher-mission-button .side-mission-note {
-  color: #f0b429;
 }
 
 /* Question View */
@@ -430,5 +364,177 @@ main.main-shell {
   * {
     animation: none !important;
     transition: none !important;
+  }
+}
+/* Styles for v10.2: Teacher Error Cards, Relabeling, CPA Question Visuals, Building Lock Notes */
+
+.building-lock-note {
+  font-size: 0.8rem;
+  color: #8aa0ab;
+  background: rgba(18, 36, 65, 0.7);
+  border: 1px dashed #146a62;
+  border-radius: 6px;
+  padding: 4px 8px;
+  margin: 6px auto;
+  max-width: 320px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.question-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.question-visual svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.teacher-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.teacher-cards h5 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+  color: #7ef0ff;
+  border-bottom: 1px solid #1a3557;
+  padding-bottom: 4px;
+}
+
+.teacher-error-card {
+  background: #09172c;
+  border: 1px solid #146a62;
+  border-radius: 10px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #e2f1f8;
+  font-size: 0.95rem;
+}
+
+.teacher-error-headline {
+  margin: 0;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.teacher-error-headline strong {
+  font-family: monospace;
+  color: #7ef0ff;
+}
+
+.teacher-error-examples {
+  margin: 0;
+  color: #8aa0ab;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.teacher-error-meta {
+  margin: 0;
+  color: #5ee0b5;
+  font-size: 0.8rem;
+}
+
+.teacher-error-note {
+  margin: 4px 0 0 0;
+  padding: 4px 8px;
+  background: rgba(20, 106, 98, 0.2);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: #c5e3ee;
+}
+
+.teacher-relabel-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.teacher-relabel-row button {
+  background: #122441;
+  border: 1px solid #1a3557;
+  color: #8aa0ab;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.teacher-relabel-row button:hover {
+  background: #19335c;
+  color: #fff;
+}
+
+.teacher-relabel-row button.active {
+  background: #146a62;
+  border-color: #5ee0b5;
+  color: #fff;
+  font-weight: 500;
+}
+
+.teacher-label-chip {
+  display: inline-block;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-right: 6px;
+}
+
+.teacher-label-confirmed {
+  background: rgba(94, 224, 181, 0.2);
+  color: #5ee0b5;
+  border: 1px solid #5ee0b5;
+}
+
+.teacher-label-case-slip {
+  background: rgba(126, 240, 255, 0.2);
+  color: #7ef0ff;
+  border: 1px solid #7ef0ff;
+}
+
+.teacher-label-rejected {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid #ef4444;
+}
+
+.teacher-note-input {
+  width: 100%;
+  margin-top: 6px;
+  padding: 6px 10px;
+  background: #061120;
+  border: 1px solid #1a3557;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 0.85rem;
+  box-sizing: border-box;
+}
+
+.teacher-note-input:focus {
+  outline: none;
+  border-color: #7ef0ff;
+}
+
+@media (max-width: 480px) {
+  .teacher-relabel-row button {
+    flex: 1 1 auto;
+    text-align: center;
   }
 }
