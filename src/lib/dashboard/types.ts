@@ -96,6 +96,23 @@ export interface StudentSummary {
   weakestFact: FactStat | null;
 }
 
+export interface LeaderRow {
+  rank: number;
+  id: string;
+  name: string;
+  hero: string;
+  progressPct: number;
+  overallAccuracy: number | null;
+  totalSessions: number;
+  totalQuestions: number;
+  lastActivity: string | null;
+}
+
+export interface LeaderboardResponse {
+  leaders: LeaderRow[];
+  totalStudents: number;
+}
+
 export interface StudentsResponse {
   students: StudentSummary[];
 }

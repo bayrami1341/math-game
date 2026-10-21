@@ -1,6 +1,6 @@
 "use client";
 
-import { Crown, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -46,14 +46,13 @@ export function LeaderboardTab({ data, isLoading, isError, onRetry }: Leaderboar
   }
 
   if (isError) {
-    return <ErrorCard title="خطا در بارگذاری جدول قهرمانان" onRetry={onRetry} />;
+    return <ErrorCard onRetry={onRetry} />;
   }
 
   const leaders = data?.leaders ?? [];
   if (!leaders.length) {
     return (
       <EmptyState
-        icon={<Trophy className="size-10 text-amber-500" aria-hidden />}
         title="هنوز قهرمانی روی تخته نیست"
         description="پس از نخستین جلسهٔ بازی دانش‌آموزان، رتبه‌های کلاس همین‌جا روشن می‌شود."
       />
@@ -90,7 +89,7 @@ export function LeaderboardTab({ data, isLoading, isError, onRetry }: Leaderboar
                 <TableCell>
                   <div className="flex items-center gap-2">
                     {row.rank === 1 ? (
-                      <Crown className="size-4 text-amber-500" aria-hidden />
+                      <span aria-hidden>👑</span>
                     ) : null}
                     <span className="font-medium">{row.name}</span>
                     <Badge variant="outline" className="text-xs">
@@ -101,7 +100,7 @@ export function LeaderboardTab({ data, isLoading, isError, onRetry }: Leaderboar
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Progress value={row.progressPct} className="h-2" aria-label={`پیشرفت ${row.name}`} />
-                    <span className="w-12 text-xs text-slate-500">{faPercent(row.progressPct)}</span>
+                    <span className="w-12 text-xs text-slate-500">{faPercent(row.progressPct / 100, 0)}</span>
                   </div>
                 </TableCell>
                 <TableCell className="text-center text-sm">

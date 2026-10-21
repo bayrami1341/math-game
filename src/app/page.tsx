@@ -11,6 +11,7 @@ import {
   RefreshCw,
   ScanLine,
   Sparkles,
+  Trophy,
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,13 +22,14 @@ import { StudentsTab } from "@/components/dashboard/students-tab";
 import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
 import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
 import { CartridgeTab } from "@/components/dashboard/cartridge-tab";
+import { LeaderboardTab } from "@/components/dashboard/leaderboard-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
 import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
-import { fetchBottlenecks, fetchCartridge, fetchOverview, fetchStudents } from "@/components/dashboard/api";
+import { fetchBottlenecks, fetchCartridge, fetchLeaderboard, fetchOverview, fetchStudents } from "@/components/dashboard/api";
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
 
-type TabKey = "overview" | "students" | "bottlenecks" | "cartridge";
+type TabKey = "overview" | "students" | "leaderboard" | "bottlenecks" | "cartridge";
 
 /** تاریخ شمسی امروز — فقط در کلاینت محاسبه می‌شود تا با SSR ناسازگار نشود */
 function useTodayFa(): string {
@@ -59,6 +61,11 @@ export default function TeacherDashboardPage() {
     queryFn: fetchStudents,
     refetchInterval: 30_000,
   });
+  const leaderboardQuery = useQuery({
+    queryKey: ["leaderboard"],
+    queryFn: fetchLeaderboard,
+    refetchInterval: 30_000,
+  });
   const bottlenecksQuery = useQuery({
     queryKey: ["bottlenecks"],
     queryFn: fetchBottlenecks,
@@ -80,14 +87,16 @@ export default function TeacherDashboardPage() {
     await Promise.all([
       overviewQuery.refetch(),
       studentsQuery.refetch(),
+      leaderboardQuery.refetch(),
       bottlenecksQuery.refetch(),
       cartridgeQuery.refetch(),
     ]);
-  }, [overviewQuery, studentsQuery, bottlenecksQuery, cartridgeQuery]);
+  }, [overviewQuery, studentsQuery, leaderboardQuery, bottlenecksQuery, cartridgeQuery]);
 
   const isRefreshing =
     overviewQuery.isRefetching ||
     studentsQuery.isRefetching ||
+    leaderboardQuery.isRefetching ||
     bottlenecksQuery.isRefetching ||
     cartridgeQuery.isRefetching;
 
@@ -194,6 +203,10 @@ export default function TeacherDashboardPage() {
                 <Users className="size-4" aria-hidden />
                 دانش‌آموزان
               </TabsTrigger>
+              <TabsTrigger value="leaderboard" className="gap-1.5">
+                <Trophy className="size-4" aria-hidden />
+                جدول قهرمانان
+              </TabsTrigger>
               <TabsTrigger value="bottlenecks" className="gap-1.5">
                 <AlertTriangle className="size-4" aria-hidden />
                 گلوگاه‌های یادگیری
@@ -220,6 +233,15 @@ export default function TeacherDashboardPage() {
                 isError={studentsQuery.isError}
                 onRetry={() => void studentsQuery.refetch()}
                 onSelectStudent={openStudent}
+              />
+            </TabsContent>
+
+            <TabsContent value="leaderboard" className="mt-4">
+              <LeaderboardTab
+                data={leaderboardQuery.data}
+                isLoading={leaderboardQuery.isLoading}
+                isError={leaderboardQuery.isError}
+                onRetry={() => void leaderboardQuery.refetch()}
               />
             </TabsContent>
 

@@ -4,6 +4,7 @@ import type {
   AssignmentsResponse,
   BottlenecksResponse,
   CartridgeResponse,
+  LeaderboardResponse,
   OverviewResponse,
   PostAssignmentBody,
   PostOverrideBody,
@@ -23,6 +24,8 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
 export const fetchOverview = () => fetchJson<OverviewResponse>("/api/overview");
 
 export const fetchStudents = () => fetchJson<StudentsResponse>("/api/students");
+
+export const fetchLeaderboard = () => fetchJson<LeaderboardResponse>("/api/leaderboard");
 
 export const fetchBottlenecks = () => fetchJson<BottlenecksResponse>("/api/bottlenecks");
 
