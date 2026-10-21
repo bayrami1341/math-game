@@ -56,3 +56,6 @@ server.log
 public/math-game/release/
 download/*.zip
 .env
+
+# تصاویر بارگذاری‌شدهٔ چت (شامل عکس صفحات کتاب — حق نشر: هرگز کامیت نمی‌شود)
+upload/
