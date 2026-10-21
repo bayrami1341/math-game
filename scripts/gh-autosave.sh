@@ -9,16 +9,19 @@ cd /home/z/my-project
 
 echo "[$(date '+%H:%M:%S')] ذخیرهٔ خودکار فعال شد — هر ${INTERVAL} ثانیه"
 
-while true; do
-  sleep "$INTERVAL"
-  # اگر محیط کامیت تازه‌ای نداشت، پوش no-op است و بی‌هزینه می‌گذرد
+# تابع پوش مشترک
+do_push() {
   if git push origin "HEAD:refs/heads/v10.3-beta" >/dev/null 2>&1; then
-    if git diff --quiet "origin/v10.3-beta" 2>/dev/null; then
-      echo "[$(date '+%H:%M:%S')] بدون تغییر جدید"
-    else
-      echo "[$(date '+%H:%M:%S')] ✔ وضعیت تازه به گیت‌هاب رسید"
-    fi
+    echo "[$(date '+%H:%M:%S')] ✔ وضعیت تازه به گیت‌هاب رسید"
   else
     echo "[$(date '+%H:%M:%S')] ⚠ پوش ناموفق (ریموت وصل نیست یا توکن منقضی شده)"
   fi
+}
+
+# اولین پوش فوری — حتی اگر فرایند کوتاه عمر کند، یک ذخیرهٔ تازه می‌رود
+do_push
+
+while true; do
+  sleep "$INTERVAL"
+  do_push
 done
