@@ -183,8 +183,15 @@ test('13. چندخشابی: خشاب G2 منتشرشده با قرارداد پ�
   assert.equal(g2.cartridgeId, 'KH-G2-MATH');
   const v = validateCartridge(g2);
   assert.equal(v.ok, true, 'خطاها: ' + v.errors.join(' | '));
-  assert.equal(v.stats.lessons, 8); // اسکلت موج ۱ — هشت فصل
-  assert.equal(v.stats.questions, 0); // بانک سؤال موج ۲+ هنوز نیامده
+  // موج ۲ ادغام شد: ۸ اسکلت سبز + ۱۸ ردیف صفحه‌ای زرد فصل ۱
+  assert.equal(v.stats.lessons, 26);
+  assert.equal(v.stats.lessonsConfirmed, 8);
+  assert.equal(v.stats.atlasReal + v.stats.atlasProposed, 8);
+  // بانک سؤال موج ۲: ۴۰ سؤال همه زرد «نیاز به تأیید»
+  assert.equal(v.stats.questions, 40);
+  assert.equal(v.stats.questionsConfirmed, 0);
+  assert.equal(v.stats.questionsProposed, 40);
+  assert.equal(v.gate.red, 0, 'هیچ قرمزی مجاز نیست');
   // خشاب G2 با expectedId خودش هم دقیقاً سازگار است (رفتار لودر مرورگر)
   assert.equal(validateCartridge(g2, 'KH-G2-MATH').ok, true);
 });

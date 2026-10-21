@@ -1,9 +1,9 @@
 {
   "formatVersion": "1.0",
   "cartridgeId": "KH-G2-MATH",
-  "generatedAt": "2026-10-21T15:49:15.911Z",
+  "generatedAt": "2026-10-21T15:52:24.838Z",
   "source": {
-    "file": "khshab-G2-MATH_v0.3-merged.xlsx",
+    "file": "khshab-G2-MATH_v0.3.xlsx",
     "tool": "cartridge-converter v1.1 (چندخشابی)"
   },
   "identity": [
