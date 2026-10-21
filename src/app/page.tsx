@@ -261,6 +261,15 @@ export default function TeacherDashboardPage() {
             >
               بازی کارگاه ضرب
             </a>
+            <span aria-hidden>·</span>
+            <a
+              href="/math-game/pilot/pilot-prints-fase0.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-emerald-700 hover:underline"
+            >
+              بستهٔ چاپی پایلوت 🖨️
+            </a>
           </p>
         </div>
       </footer>
