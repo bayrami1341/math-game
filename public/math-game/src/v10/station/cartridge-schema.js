@@ -16,7 +16,10 @@
 import { ERROR_CODES, classifyAttempt } from './errors.js';
 
 export const CARTRIDGE_FORMAT_VERSION = '1.0';
+/** خشاب پیش‌فرض موتور (کتاب زندهٔ بازی) — پلتفرم چندخشابی است و سایر KH-… هم مجازند */
 export const CARTRIDGE_ID = 'KH-G3-MATH';
+/** الگوی مجاز شناسهٔ هر خشاب — قاعدهٔ نام‌گذاری چندخشابی (T4) */
+export const CARTRIDGE_ID_PATTERN = /^KH-[A-Za-z0-9_-]+$/;
 
 export const STATUS_CONFIRMED = 'تأییدشده';
 export const STATUS_PROPOSED = 'نیاز به تأیید';
@@ -146,10 +149,12 @@ function judgeClaim(qid, letter, claim, f1, f2, submitted, atlasProposed) {
 /**
  * اعتبارسنجی کامل خشاب. خروجی: { ok, errors[], warnings[], stats, gate }
  * fail-closed: حتی یک خطا = ورود به موتور ممنوع.
- * expectedId: شناسهٔ مورد انتظار (پیش‌فرض KH-G3-MATH) — مبدل چندخشابی آن را
- * از شیت «شناسنامهٔ خشاب» می‌خواند؛ لودر مرورگر همان رفتار پیش‌فرض را دارد.
+ * expectedId: شناسهٔ مورد انتظار.
+ *   • مبدل/سرور/لودر مرورگر شناسهٔ خودشان را صریح پاس می‌دهند → تطابق دقیق (T4 سخت).
+ *   • پیش‌فرض null: هر شناسهٔ خوش‌قالب KH-… پذیرفته می‌شود — قرارداد پلتفرم چندخشابی؛
+ *     خشابی با شناسهٔ بدشکل (مثل «WRONG-ID») همچنان مردود است.
  */
-export function validateCartridge(c, expectedId = CARTRIDGE_ID) {
+export function validateCartridge(c, expectedId = null) {
   const errors = [];
   const warnings = [];
   const err = msg => errors.push(msg);
@@ -157,7 +162,14 @@ export function validateCartridge(c, expectedId = CARTRIDGE_ID) {
 
   if (!c || typeof c !== 'object') return { ok: false, errors: ['خشاب تهی است'], warnings, stats: {}, gate: { red: 1, yellow: 0, verdict: 'مردود' } };
   if (c.formatVersion !== CARTRIDGE_FORMAT_VERSION) err(`formatVersion نامعتبر: ${c.formatVersion}`);
-  if (c.cartridgeId !== expectedId) err(`cartridgeId نامعتبر: ${c.cartridgeId} (انتظار: ${expectedId} — T4)`);
+  const idOk = expectedId
+    ? c.cartridgeId === expectedId
+    : CARTRIDGE_ID_PATTERN.test(String(c.cartridgeId || ''));
+  if (!idOk) {
+    err(expectedId
+      ? `cartridgeId نامعتبر: ${c.cartridgeId} (انتظار: ${expectedId} — T4)`
+      : `cartridgeId نامعتبر: ${c.cartridgeId} — باید با الگوی KH-… بخواند (T4)`);
+  }
 
   const bookMap = Array.isArray(c.bookMap) ? c.bookMap : [];
   const atlas = Array.isArray(c.errorAtlas) ? c.errorAtlas : [];

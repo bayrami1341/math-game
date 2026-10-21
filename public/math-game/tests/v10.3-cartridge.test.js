@@ -88,12 +88,20 @@ test('5. fail-closed: کلید پاسخ دستکاری‌شده → مردود (
   assert.ok(v.errors.some(e => e.includes('Q-113') && e.includes('ضد J12')), v.errors.join(' | '));
 });
 
-test('6. fail-closed: شناسهٔ خشاب نادرست → قرمز (T4)', () => {
-  const tampered = structuredClone(published);
-  tampered.cartridgeId = 'KH-UNKNOWN';
-  const v = validateCartridge(tampered);
-  assert.equal(v.ok, false);
-  assert.ok(v.errors.some(e => e.includes('cartridgeId')));
+test('6. fail-closed: شناسهٔ بدشکل → قرمز (T4) — و ناهم‌خوانی با expectedId صریح هم قرمز', () => {
+  // الف) قرارداد چندخشابی (بدون expectedId): هر شناسهٔ خوش‌قالب KH-… مجاز است،
+  //     ولی شناسهٔ بدشکل مردود می‌شود.
+  const bad = structuredClone(published);
+  bad.cartridgeId = 'WRONG-ID';
+  const vBad = validateCartridge(bad);
+  assert.equal(vBad.ok, false);
+  assert.ok(vBad.errors.some(e => e.includes('cartridgeId')));
+  // ب) رفتار مبدل/سرور: با expectedId صریح، حتی شناسهٔ خوش‌قالبِ غیرمنتظره هم مردود است.
+  const other = structuredClone(published);
+  other.cartridgeId = 'KH-G2-MATH';
+  const vOther = validateCartridge(other, 'KH-G3-MATH');
+  assert.equal(vOther.ok, false);
+  assert.ok(vOther.errors.some(e => e.includes('cartridgeId')));
 });
 
 test('7. fail-closed: لنگر یتیم → قرمز (AUD-04)', () => {
@@ -151,4 +159,18 @@ test('12. لودر fail-closed: URL در دسترس‌ناپذیر → ok:false 
   assert.equal(out.ok, false);
   assert.equal(typeof out.error, 'string');
   assert.ok(out.error.length > 5);
+});
+
+// ─── چندخشابی (v10.3.1): پلتفرم با هر خشاب خوش‌قالب KH-… کار می‌کند ───
+test('13. چندخشابی: خشاب G2 منتشرشده با قرارداد پیش‌فرض (بدون expectedId) پذیرفته می‌شود', () => {
+  const g2 = JSON.parse(
+    readFileSync(fileURLToPath(new URL('../cartridges/KH-G2-MATH.json', import.meta.url)), 'utf8')
+  );
+  assert.equal(g2.cartridgeId, 'KH-G2-MATH');
+  const v = validateCartridge(g2);
+  assert.equal(v.ok, true, 'خطاها: ' + v.errors.join(' | '));
+  assert.equal(v.stats.lessons, 8); // اسکلت موج ۱ — هشت فصل
+  assert.equal(v.stats.questions, 0); // بانک سؤال موج ۲+ هنوز نیامده
+  // خشاب G2 با expectedId خودش هم دقیقاً سازگار است (رفتار لودر مرورگر)
+  assert.equal(validateCartridge(g2, 'KH-G2-MATH').ok, true);
 });

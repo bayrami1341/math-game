@@ -40,7 +40,9 @@ import {
   renderEqualGroupsSVG
 } from './station/index.js';
 // خشاب محتوا (v10.3): فقط مصرف‌کنندهٔ لودر خشاب — بدون اثر بر موتور v10.2 (fail-closed)
-import { loadCartridge } from './station/cartridge.js';
+// چندخشابی (v10.3.1): CARTRIDGE_ID فقط خشاب «پیش‌فرض» است؛ انتخاب کاربر از فهرست نصب‌شده‌ها می‌آید
+import { loadCartridge, listAvailableCartridges } from './station/cartridge.js';
+import { CARTRIDGE_ID } from './station/cartridge-schema.js';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
@@ -1290,54 +1292,120 @@ function setupEvents() {
 
 // ─── خشاب محتوا (v10.3): سیم‌کشی وضعیت خشاب به جعبهٔ راهنمای نقشه ───
 // فقط اطلاع‌رسانی است: تولید سؤال/نردبان/قفل‌ها از محتوای داخلی خود موتور می‌آیند.
+// چندخشابی (v10.3.1): انتخابگر خشاب نصب‌شده — فهرست از داشبورد، انتخاب در localStorage،
+// و در استقرار استاتیک (بدون داشبورد) بی‌صدا فقط خشاب پیش‌فرض.
 // fail-closed مضاعف: هر خطا در همین تابع گیر می‌افتد و هیچ مسیر بوتی نمی‌شکند.
+const CARTRIDGE_STORAGE_KEY = 'station_active_cartridge';
+let cartridgeListCache = null; // فهرست نصب‌شده‌ها — یک‌بار در بوتی خوانده می‌شود
+
+function readSavedCartridgeId() {
+  try {
+    const v = localStorage.getItem(CARTRIDGE_STORAGE_KEY);
+    return v && /^KH-[A-Za-z0-9_-]+$/.test(v) ? v : null;
+  } catch { return null; } // حافظهٔ محلی اختیاری است
+}
+
+function persistCartridgeId(id) {
+  try { localStorage.setItem(CARTRIDGE_STORAGE_KEY, id); } catch { /* اختیاری */ }
+}
+
+function defaultCartridgeIdFrom(list) {
+  const saved = readSavedCartridgeId();
+  if (saved && list.some(x => x.id === saved)) return saved;
+  if (list.some(x => x.id === CARTRIDGE_ID)) return CARTRIDGE_ID;
+  const firstValid = list.find(x => x.valid !== false);
+  return (firstValid || list[0])?.id || CARTRIDGE_ID;
+}
+
+function cartridgeChipLabel(item) {
+  const q = item?.stats?.questions;
+  const parts = [item.id];
+  if (item.valid === false) parts.push('⚠ نامعتبر');
+  else if (typeof q === 'number') parts.push(`${fa(q)} سؤال`);
+  return parts.join(' — ');
+}
+
+/** رندر کامل جعبهٔ خشاب: انتخابگر (در صورت چندخشابی) + خط وضعیت خشاب انتخابی */
+async function renderCartridgeBox(box, list, selectedId) {
+  box.textContent = '';
+  if (list.length > 1) {
+    const picker = document.createElement('div');
+    picker.className = 'cartridge-picker';
+    picker.setAttribute('role', 'group');
+    picker.setAttribute('aria-label', 'انتخاب خشاب محتوا (کتاب فعال)');
+    for (const item of list) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cartridge-chip'
+        + (item.id === selectedId ? ' is-active' : '')
+        + (item.valid === false ? ' is-invalid' : '');
+      btn.textContent = cartridgeChipLabel(item);
+      btn.setAttribute('aria-pressed', String(item.id === selectedId));
+      if (item.title) btn.title = item.title;
+      btn.addEventListener('click', () => { void selectCartridge(box, item.id); });
+      picker.append(btn);
+    }
+    box.append(picker);
+  }
+
+  const result = await loadCartridge(`cartridges/${selectedId}.json`, { fresh: true });
+  if (result?.ok) {
+    const { cartridge, validation } = result;
+    const s = validation?.stats || {};
+    const g = validation?.gate || {};
+    const mainText = [
+      `📦 خشاب محتوا: ${cartridge.cartridgeId}`,
+      `سؤال‌ها: ${fa(s.questions ?? 0)} (${fa(s.questionsConfirmed ?? 0)} تأیید + ${fa(s.questionsProposed ?? 0)} پیشنهاد)`,
+      `اطلس خطا: ${fa(s.atlasReal ?? 0)} واقعی + ${fa(s.atlasProposed ?? 0)} پیشنهادی`,
+      `درس‌ها: ${fa(s.lessons ?? 0)} (${fa(s.lessonsConfirmed ?? 0)} تأیید)`,
+      `گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`
+    ].join(' — ');
+    const src = cartridge.source || {};
+    const metaText = [
+      src.file ? `منبع: ${src.file}` : null,
+      src.tool ? `ابزار: ${src.tool}` : null,
+      cartridge.generatedAt ? `زمان تولید: ${fa(String(cartridge.generatedAt).replace('T', ' ').replace(/\.\d+Z$/, ' UTC'))}` : null
+    ].filter(Boolean).join(' — ');
+    const main = document.createElement('div');
+    main.className = 'cartridge-status-line';
+    main.textContent = mainText;
+    const meta = document.createElement('div');
+    meta.className = 'cartridge-status-meta';
+    meta.textContent = metaText;
+    box.append(main, meta);
+    box.hidden = false;
+    console.info('[cartridge]', `خشاب ${cartridge.cartridgeId} بارگذاری و اعتبارسنجی شد — ${fa(s.questions ?? 0)} سؤال (${fa(s.questionsConfirmed ?? 0)} تأیید)، گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`);
+  } else {
+    // fail-closed: پیام صادقانه، بدون شکستن بازی
+    const detail = result?.error || 'خطای ناشناخته';
+    const errs = Array.isArray(result?.validation?.errors) ? result.validation.errors : [];
+    const main = document.createElement('div');
+    main.className = 'cartridge-status-line';
+    main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
+    const meta = document.createElement('div');
+    meta.className = 'cartridge-status-meta';
+    meta.textContent = [detail].concat(errs).join(' — ');
+    box.append(main, meta);
+    box.hidden = false;
+    console.warn('[cartridge]', 'بارگذاری ناموفق —', detail, errs);
+  }
+}
+
+async function selectCartridge(box, id) {
+  persistCartridgeId(id);
+  const list = cartridgeListCache || [{ id, valid: true, title: null, stats: null, gate: null }];
+  await renderCartridgeBox(box, list, id);
+}
+
 async function initCartridgeStatus() {
   const box = $('cartridge-status');
   if (!box) return;
   try {
-    const result = await loadCartridge();
-    if (result?.ok) {
-      const { cartridge, validation } = result;
-      const s = validation?.stats || {};
-      const g = validation?.gate || {};
-      const mainText = [
-        `📦 خشاب محتوا: ${cartridge.cartridgeId}`,
-        `سؤال‌ها: ${fa(s.questions ?? 0)} (${fa(s.questionsConfirmed ?? 0)} تأیید + ${fa(s.questionsProposed ?? 0)} پیشنهاد)`,
-        `اطلس خطا: ${fa(s.atlasReal ?? 0)} واقعی + ${fa(s.atlasProposed ?? 0)} پیشنهادی`,
-        `درس‌ها: ${fa(s.lessons ?? 0)} (${fa(s.lessonsConfirmed ?? 0)} تأیید)`,
-        `گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`
-      ].join(' — ');
-      const src = cartridge.source || {};
-      const metaText = [
-        src.file ? `منبع: ${src.file}` : null,
-        src.tool ? `ابزار: ${src.tool}` : null,
-        cartridge.generatedAt ? `زمان تولید: ${fa(String(cartridge.generatedAt).replace('T', ' ').replace(/\.\d+Z$/, ' UTC'))}` : null
-      ].filter(Boolean).join(' — ');
-      box.textContent = '';
-      const main = document.createElement('div');
-      main.className = 'cartridge-status-line';
-      main.textContent = mainText;
-      const meta = document.createElement('div');
-      meta.className = 'cartridge-status-meta';
-      meta.textContent = metaText;
-      box.append(main, meta);
-      box.hidden = false;
-      console.info('[cartridge]', `خشاب ${cartridge.cartridgeId} بارگذاری و اعتبارسنجی شد — ${fa(s.questions ?? 0)} سؤال (${fa(s.questionsConfirmed ?? 0)} تأیید)، گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`);
-    } else {
-      // fail-closed: پیام صادقانه، بدون شکستن بازی
-      const detail = result?.error || 'خطای ناشناخته';
-      const errs = Array.isArray(result?.validation?.errors) ? result.validation.errors : [];
-      box.textContent = '';
-      const main = document.createElement('div');
-      main.className = 'cartridge-status-line';
-      main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
-      const meta = document.createElement('div');
-      meta.className = 'cartridge-status-meta';
-      meta.textContent = [detail].concat(errs).join(' — ');
-      box.append(main, meta);
-      box.hidden = false;
-      console.warn('[cartridge]', 'بارگذاری ناموفق —', detail, errs);
-    }
+    const items = await listAvailableCartridges();
+    cartridgeListCache = items && items.length
+      ? items
+      : [{ id: CARTRIDGE_ID, valid: true, title: null, stats: null, gate: null }];
+    await renderCartridgeBox(box, cartridgeListCache, defaultCartridgeIdFrom(cartridgeListCache));
   } catch (e) {
     try {
       box.textContent = '';

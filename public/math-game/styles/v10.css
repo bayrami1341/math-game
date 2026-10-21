@@ -878,3 +878,41 @@ main.main-shell {
   overflow-wrap: anywhere;
 }
 .cartridge-status .cartridge-status-meta { font-size: 10px; opacity: 0.85; }
+
+/* ─── انتخابگر خشاب (v10.3.1): چیپ‌های کتاب فعال — چندخشابی ─── */
+.cartridge-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 8px;
+}
+.cartridge-chip {
+  appearance: none;
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10.5px;
+  line-height: 1;
+  padding: 9px 12px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.cartridge-chip:hover,
+.cartridge-chip:focus-visible {
+  border-color: rgba(126, 240, 255, 0.55);
+  color: var(--text-body, inherit);
+  outline: none;
+}
+.cartridge-chip.is-active {
+  border-color: rgba(126, 240, 255, 0.85);
+  background: rgba(126, 240, 255, 0.12);
+  color: var(--text-body, inherit);
+  font-weight: 700;
+}
+.cartridge-chip.is-invalid {
+  border-style: dashed;
+  color: #ffb4a8;
+}
