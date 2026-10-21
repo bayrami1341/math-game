@@ -146,8 +146,10 @@ function judgeClaim(qid, letter, claim, f1, f2, submitted, atlasProposed) {
 /**
  * اعتبارسنجی کامل خشاب. خروجی: { ok, errors[], warnings[], stats, gate }
  * fail-closed: حتی یک خطا = ورود به موتور ممنوع.
+ * expectedId: شناسهٔ مورد انتظار (پیش‌فرض KH-G3-MATH) — مبدل چندخشابی آن را
+ * از شیت «شناسنامهٔ خشاب» می‌خواند؛ لودر مرورگر همان رفتار پیش‌فرض را دارد.
  */
-export function validateCartridge(c) {
+export function validateCartridge(c, expectedId = CARTRIDGE_ID) {
   const errors = [];
   const warnings = [];
   const err = msg => errors.push(msg);
@@ -155,7 +157,7 @@ export function validateCartridge(c) {
 
   if (!c || typeof c !== 'object') return { ok: false, errors: ['خشاب تهی است'], warnings, stats: {}, gate: { red: 1, yellow: 0, verdict: 'مردود' } };
   if (c.formatVersion !== CARTRIDGE_FORMAT_VERSION) err(`formatVersion نامعتبر: ${c.formatVersion}`);
-  if (c.cartridgeId !== CARTRIDGE_ID) err(`cartridgeId نامعتبر: ${c.cartridgeId} (فقط ${CARTRIDGE_ID} تأیید شده — T4)`);
+  if (c.cartridgeId !== expectedId) err(`cartridgeId نامعتبر: ${c.cartridgeId} (انتظار: ${expectedId} — T4)`);
 
   const bookMap = Array.isArray(c.bookMap) ? c.bookMap : [];
   const atlas = Array.isArray(c.errorAtlas) ? c.errorAtlas : [];

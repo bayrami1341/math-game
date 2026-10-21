@@ -1,7 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // مبدل فرم تألیف اکسل → خشاب JSON اجرایی (v10.3)
 // اجرا:  bun convert.mjs [مسیر اکسل]
-// خروجی: public/math-game/cartridges/KH-G3-MATH.json + گزارش در download/
+// خروجی: public/math-game/cartridges/{شناسهٔ خشاب}.json + گزارش در download/
+// v1.1 — پشتیبانی چندخشابی: شناسهٔ خشاب از شیت «شناسنامهٔ خشاب» (فیلد «شناسهٔ خشاب»)
+// خوانده می‌شود و مسیر انتشار JSON و گزارش را تعیین می‌کند؛ بدون شناسهٔ معتبر = توقف (fail-closed).
 //
 // اصل fail-closed: اگر اعتبارسنجی (cartridge-schema.js) خطا داشته باشد،
 // JSON منتشر نمی‌شود و فقط گزارش قرمز نوشته می‌شود.
@@ -23,8 +25,8 @@ const ROOT = path.resolve(HERE, '..', '..');
 const inputPath = process.argv[2]
   ? path.resolve(process.argv[2])
   : path.join(ROOT, 'download', 'khshab-G3-MATH_v0.6.xlsx');
-const outJson = path.join(ROOT, 'public', 'math-game', 'cartridges', `${CARTRIDGE_ID}.json`);
-const outReport = path.join(ROOT, 'download', `convert-report-${CARTRIDGE_ID}-${path.basename(inputPath, '.xlsx').split('_').pop()}.md`);
+let outJson = path.join(ROOT, 'public', 'math-game', 'cartridges', `${CARTRIDGE_ID}.json`);
+let outReport = path.join(ROOT, 'download', `convert-report-${CARTRIDGE_ID}-${path.basename(inputPath, '.xlsx').split('_').pop()}.md`);
 
 const ANSWER_LETTER = { 'الف': 0, 'ب': 1, 'ج': 2, 'د': 3 };
 const clean = v => (v === null || v === undefined ? '' : String(v).replace(/\s+/g, ' ').trim());
@@ -66,6 +68,18 @@ for (let r = idHead + 1; r < idRows.length; r++) {
   identity.push({ field: k, value: clean(idRows[r]?.[1]), status: clean(idRows[r]?.[2]), source: clean(idRows[r]?.[3]) });
 }
 log.push(`شناسنامه: ${identity.length} فیلد`);
+
+// شناسهٔ هدف از شناسنامه (پشتیبانی چندخشابی) — بدون شناسهٔ معتبر، توقف
+const idField = identity.find(x => String(x.field).replace(/\s+/g, '').startsWith('شناسهٔخشاب'));
+const idMatch = idField ? /^KH-[A-Z0-9]+-[A-Z0-9]+/.exec(String(idField.value || '').trim()) : null;
+if (!idMatch) {
+  console.error('✗ شناسهٔ خشاب در شیت «شناسنامهٔ خشاب» قابل استخراج نیست (قالب معتبر: مثل KH-G2-MATH) — مبدل نمی‌داند JSON کدام خشاب را بنویسد (fail-closed).');
+  process.exit(1);
+}
+const TARGET_ID = idMatch[0];
+outJson = path.join(ROOT, 'public', 'math-game', 'cartridges', `${TARGET_ID}.json`);
+outReport = path.join(ROOT, 'download', `convert-report-${TARGET_ID}-${path.basename(inputPath, '.xlsx').split('_').pop()}.md`);
+log.push(`شناسهٔ هدف: ${TARGET_ID} (از شناسنامه)`);
 
 // نقشهٔ کتاب (۱۴ ستون)
 const mapRows = readSheet(wb, 'نقشهٔ کتاب');
@@ -147,19 +161,19 @@ try {
 // ───────────────────────── اعتبارسنجی fail-closed ─────────────────────────
 const cartridge = {
   formatVersion: CARTRIDGE_FORMAT_VERSION,
-  cartridgeId: CARTRIDGE_ID,
+  cartridgeId: TARGET_ID,
   generatedAt: new Date().toISOString(),
-  source: { file: path.basename(inputPath), tool: 'cartridge-converter v1.0' },
+  source: { file: path.basename(inputPath), tool: 'cartridge-converter v1.1 (چندخشابی)' },
   identity, bookMap, errorAtlas, questionBank, glossary, auditTrail
 };
-const validation = validateCartridge(cartridge);
+const validation = validateCartridge(cartridge, TARGET_ID);
 
 // ───────────────────────── گزارش ─────────────────────────
 const report = [];
-report.push(`# گزارش مبدل خشاب — ${CARTRIDGE_ID}`);
+report.push(`# گزارش مبدل خشاب — ${TARGET_ID}`);
 report.push('');
 report.push(`- ورودی: \`${path.basename(inputPath)}\``);
-report.push(`- ابزار: cartridge-converter v1.0 (قواعد = پرامپت ممیز T1..T7 + رسیدهای ممیزی)`);
+report.push(`- ابزار: cartridge-converter v1.1 (چندخشابی — قواعد = پرامپت ممیز T1..T7 + رسیدهای ممیزی)`);
 report.push(`- زمان: ${new Date().toISOString()}`);
 report.push('');
 report.push('| سنجه | مقدار |');
