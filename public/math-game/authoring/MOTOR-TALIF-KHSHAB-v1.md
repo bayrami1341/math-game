@@ -424,7 +424,7 @@ bun convert.mjs <مسیر-فایل-اکسل>
 | فایل | وضعیت |
 |---|---|
 | `public/math-game/authoring/khshab-G1-MATH_v0.1.xlsx` | خالی — پایهٔ اول |
-| `public/math-game/authoring/khshab-G2-MATH_v0.1.xlsx` | خالی — پایهٔ دوم |
+| `public/math-game/authoring/khshab-G2-MATH_v0.1.xlsx` | خالی — پایهٔ دوم — **اجرا: `RUNBOOK-G2-MATH.md` (دفترچهٔ گام‌به‌گام پایهٔ دوم)** |
 | `download/khshab-G3-MATH_v0.7.xlsx` | **پر و تأیید — مرجع طلایی** |
 | `public/math-game/authoring/khshab-G4-MATH_v0.1.xlsx` | خالی — پایهٔ چهارم |
 | `public/math-game/authoring/khshab-G5-MATH_v0.1.xlsx` | خالی — پایهٔ پنجم |
