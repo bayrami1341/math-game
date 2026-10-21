@@ -1,0 +1,59 @@
+[
+ {
+  "pdfPage": 22,
+  "diffs": [
+   "banner",
+   "pageType"
+  ],
+  "[a2]": {
+   "banner": "مرور فصل",
+   "pageType": "مرور فصل"
+  },
+  "[b]": {
+   "banner": "فرهنگ نوشتن",
+   "pageType": "تمرین"
+  }
+ },
+ {
+  "pdfPage": 39,
+  "diffs": [
+   "banner"
+  ],
+  "[b]": {
+   "banner": "تمرین"
+  },
+  "[c1]": {
+   "banner": null
+  }
+ },
+ {
+  "pdfPage": 40,
+  "diffs": [
+   "banner",
+   "pageType"
+  ],
+  "[b]": {
+   "banner": "فرهنگ نوشتن",
+   "pageType": "تمرین"
+  },
+  "[c1]": {
+   "banner": "مرور فصل",
+   "pageType": "مرور فصل"
+  }
+ },
+ {
+  "pdfPage": 58,
+  "diffs": [
+   "banner",
+   "pageType"
+  ],
+  "[c2]": {
+   "banner": "فرهنگ نوشتن",
+   "pageType": "غیره"
+  },
+  "[d]": {
+   "banner": "مرور فصل",
+   "pageType": "مرور فصل"
+  }
+ }
+]
