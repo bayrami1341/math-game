@@ -3,7 +3,10 @@
 import type {
   AssignmentsResponse,
   BottlenecksResponse,
+  CartridgeDetailResponse,
+  CartridgeInstallResult,
   CartridgeResponse,
+  CartridgesListResponse,
   LeaderboardResponse,
   OverviewResponse,
   PostAssignmentBody,
@@ -44,6 +47,51 @@ export const fetchCartridge = async (): Promise<CartridgeResponse> => {
   }
   return (await res.json()) as CartridgeResponse;
 };
+
+/** فهرست همهٔ خشاب‌های نصب‌شده با حکم گیت هرکدام */
+export const fetchCartridges = () =>
+  fetchJson<CartridgesListResponse>("/api/cartridges");
+
+/** جزئیات کامل یک خشاب (شناسنامه + نقشهٔ کتاب + اطلس + بانک برچسب‌خورده) */
+export const fetchCartridgeDetail = async (
+  id: string
+): Promise<CartridgeDetailResponse> => {
+  const res = await fetch(
+    `/api/cartridges?id=${encodeURIComponent(id)}`,
+    { cache: "no-store" }
+  );
+  if (!res.ok) {
+    let detail = "";
+    try {
+      const body = (await res.json()) as { error?: string };
+      if (body?.error) detail = String(body.error);
+    } catch {
+      // بدنهٔ خطا JSON نبود — پیام عمومی می‌ماند
+    }
+    throw new Error(detail || `خطای سرور (${res.status})`);
+  }
+  return (await res.json()) as CartridgeDetailResponse;
+};
+
+/**
+ * نصب خشاب از فایل JSON (fail-closed — خروجی همیشه JSON است، حتی روی ۴۰۰/۴۰۹).
+ * پاسخ ok=false یعنی گیت نگذراند؛ استثنا فقط برای خطای شبکه/سرور پرتاب می‌شود.
+ */
+export async function installCartridge(
+  data: unknown,
+  overwrite: boolean
+): Promise<CartridgeInstallResult> {
+  const res = await fetch("/api/cartridges/install", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data, overwrite }),
+  });
+  if (res.status >= 500) {
+    throw new Error(`خطای سرور (${res.status})`);
+  }
+  return (await res.json()) as CartridgeInstallResult;
+}
 
 export const fetchStudentDetail = (id: string) =>
   fetchJson<StudentDetailResponse>(`/api/students/${encodeURIComponent(id)}`);

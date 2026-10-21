@@ -335,3 +335,101 @@ export interface CartridgeResponse {
   };
   bank: CartridgeQuestion[];
 }
+
+// ─── کارگاه خشاب (فهرست، جزئیات، نصب) ───
+
+/** آمار محتوایی یک خشاب — خروجی validateCartridge موتور بازی */
+export interface CartridgeStats {
+  lessons: number;
+  lessonsConfirmed: number;
+  atlasReal: number;
+  atlasProposed: number;
+  questions: number;
+  questionsConfirmed: number;
+  questionsProposed: number;
+}
+
+export interface CartridgeGate {
+  red: number;
+  yellow: number;
+  verdict: string; // مجاز / مردود
+}
+
+/** یک خشاب نصب‌شده در فهرست کارگاه خشاب */
+export interface CartridgeListItem {
+  id: string;
+  file: string;
+  title: string | null;
+  generatedAt: string | null;
+  sourceFile: string | null;
+  tool: string | null;
+  valid: boolean;
+  errors: string[];
+  warnings: string[];
+  stats: CartridgeStats | null;
+  gate: CartridgeGate | null;
+}
+
+export interface CartridgesListResponse {
+  cartridges: CartridgeListItem[];
+}
+
+/** یک ردیف نقشهٔ کتاب (S1) */
+export interface CartridgeBookMapRow {
+  id: string | null;
+  page: string | null;
+  chapter: string | null;
+  title: string | null;
+  objective: string | null;
+  vocabulary: string | null;
+  activityType: string | null;
+  visual: string | null;
+  practicePotential: string | null;
+  engineCompat: string | null;
+  anchorsRaw: string | null;
+  source: string | null;
+  status: string | null;
+  note: string | null;
+}
+
+/** یک ردیف اطلس خطا */
+export interface CartridgeAtlasRow {
+  code: string | null;
+  nameFa: string | null;
+  category: string | null;
+  description: string | null;
+  behavioralSignal: string | null;
+  intervention: string | null;
+  priority: string | null;
+  questionPattern: string | null;
+  source: string | null;
+  status: string | null;
+  note: string | null;
+}
+
+/** پاسخ GET /api/cartridges?id=… — هر سه بخش محتوایی خشاب */
+export interface CartridgeDetailResponse {
+  cartridge: CartridgeResponse["cartridge"];
+  bookMap: CartridgeBookMapRow[];
+  atlas: CartridgeAtlasRow[];
+  bank: CartridgeQuestion[];
+}
+
+/** خروجی POST /api/cartridges/install — هم ۲۰۱ هم خطاها با بدنهٔ JSON */
+export interface CartridgeInstallResult {
+  ok: boolean;
+  id?: string;
+  overwritten?: boolean;
+  status?: number;
+  reason?: string;
+  errors?: string[];
+  warnings?: string[];
+  validation?: {
+    ok: boolean;
+    errors: string[];
+    warnings: string[];
+    stats: CartridgeStats;
+    gate: CartridgeGate;
+  };
+  error?: string;
+}

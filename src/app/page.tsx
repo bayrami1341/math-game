@@ -25,7 +25,7 @@ import { CartridgeTab } from "@/components/dashboard/cartridge-tab";
 import { LeaderboardTab } from "@/components/dashboard/leaderboard-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
 import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
-import { fetchBottlenecks, fetchCartridge, fetchLeaderboard, fetchOverview, fetchStudents } from "@/components/dashboard/api";
+import { fetchBottlenecks, fetchLeaderboard, fetchOverview, fetchStudents } from "@/components/dashboard/api";
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
 
@@ -71,12 +71,7 @@ export default function TeacherDashboardPage() {
     queryFn: fetchBottlenecks,
     refetchInterval: 30_000,
   });
-  // خشاب محتوای منتشرشده استاتیک است — بدون بازآوری دوره‌ای
-  const cartridgeQuery = useQuery({
-    queryKey: ["cartridge"],
-    queryFn: fetchCartridge,
-  });
-
+  // تب «کارگاه خشاب» خودکفا است (فهرست/جزئیات/نصب) — کوئری‌هایش داخل خود کامپوننت
   const [tab, setTab] = useState<TabKey>("overview");
   const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
   const [aiOpen, setAiOpen] = useState(false);
@@ -89,23 +84,20 @@ export default function TeacherDashboardPage() {
       studentsQuery.refetch(),
       leaderboardQuery.refetch(),
       bottlenecksQuery.refetch(),
-      cartridgeQuery.refetch(),
     ]);
-  }, [overviewQuery, studentsQuery, leaderboardQuery, bottlenecksQuery, cartridgeQuery]);
+  }, [overviewQuery, studentsQuery, leaderboardQuery, bottlenecksQuery]);
 
   const isRefreshing =
     overviewQuery.isRefetching ||
     studentsQuery.isRefetching ||
     leaderboardQuery.isRefetching ||
-    bottlenecksQuery.isRefetching ||
-    cartridgeQuery.isRefetching;
+    bottlenecksQuery.isRefetching;
 
   // پیام خطای یک‌باره هنگام شکست واکشی
   const anyError =
     overviewQuery.isError ||
     studentsQuery.isError ||
-    bottlenecksQuery.isError ||
-    cartridgeQuery.isError;
+    bottlenecksQuery.isError;
   const errorToastShown = useRef(false);
   useEffect(() => {
     if (anyError && !errorToastShown.current) {
@@ -213,7 +205,7 @@ export default function TeacherDashboardPage() {
               </TabsTrigger>
               <TabsTrigger value="cartridge" className="gap-1.5">
                 <Package className="size-4" aria-hidden />
-                بانک تمرین خشاب
+                کارگاه خشاب
               </TabsTrigger>
             </TabsList>
 
@@ -257,12 +249,7 @@ export default function TeacherDashboardPage() {
             </TabsContent>
 
             <TabsContent value="cartridge" className="mt-4">
-              <CartridgeTab
-                data={cartridgeQuery.data}
-                isLoading={cartridgeQuery.isLoading}
-                isError={cartridgeQuery.isError}
-                onRetry={() => void cartridgeQuery.refetch()}
-              />
+              <CartridgeTab />
             </TabsContent>
           </Tabs>
         </div>
