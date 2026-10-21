@@ -1,0 +1,12 @@
+{
+  "name": "cartridge-converter",
+  "version": "1.0.0",
+  "description": "مبدل فرم تألیف اکسل خشاب → JSON فرم اجرایی موتور (KH-G3-MATH)",
+  "type": "module",
+  "scripts": {
+    "convert": "bun convert.mjs"
+  },
+  "dependencies": {
+    "xlsx": "0.18.5"
+  }
+}

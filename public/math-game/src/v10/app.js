@@ -39,6 +39,8 @@ import {
   renderCellSVG,
   renderEqualGroupsSVG
 } from './station/index.js';
+// خشاب محتوا (v10.3): فقط مصرف‌کنندهٔ لودر خشاب — بدون اثر بر موتور v10.2 (fail-closed)
+import { loadCartridge } from './station/cartridge.js';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
@@ -1286,9 +1288,78 @@ function setupEvents() {
   }
 }
 
+// ─── خشاب محتوا (v10.3): سیم‌کشی وضعیت خشاب به جعبهٔ راهنمای نقشه ───
+// فقط اطلاع‌رسانی است: تولید سؤال/نردبان/قفل‌ها از محتوای داخلی خود موتور می‌آیند.
+// fail-closed مضاعف: هر خطا در همین تابع گیر می‌افتد و هیچ مسیر بوتی نمی‌شکند.
+async function initCartridgeStatus() {
+  const box = $('cartridge-status');
+  if (!box) return;
+  try {
+    const result = await loadCartridge();
+    if (result?.ok) {
+      const { cartridge, validation } = result;
+      const s = validation?.stats || {};
+      const g = validation?.gate || {};
+      const mainText = [
+        `📦 خشاب محتوا: ${cartridge.cartridgeId}`,
+        `سؤال‌ها: ${fa(s.questions ?? 0)} (${fa(s.questionsConfirmed ?? 0)} تأیید + ${fa(s.questionsProposed ?? 0)} پیشنهاد)`,
+        `اطلس خطا: ${fa(s.atlasReal ?? 0)} واقعی + ${fa(s.atlasProposed ?? 0)} پیشنهادی`,
+        `درس‌ها: ${fa(s.lessons ?? 0)} (${fa(s.lessonsConfirmed ?? 0)} تأیید)`,
+        `گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`
+      ].join(' — ');
+      const src = cartridge.source || {};
+      const metaText = [
+        src.file ? `منبع: ${src.file}` : null,
+        src.tool ? `ابزار: ${src.tool}` : null,
+        cartridge.generatedAt ? `زمان تولید: ${fa(String(cartridge.generatedAt).replace('T', ' ').replace(/\.\d+Z$/, ' UTC'))}` : null
+      ].filter(Boolean).join(' — ');
+      box.textContent = '';
+      const main = document.createElement('div');
+      main.className = 'cartridge-status-line';
+      main.textContent = mainText;
+      const meta = document.createElement('div');
+      meta.className = 'cartridge-status-meta';
+      meta.textContent = metaText;
+      box.append(main, meta);
+      box.hidden = false;
+      console.info('[cartridge]', `خشاب ${cartridge.cartridgeId} بارگذاری و اعتبارسنجی شد — ${fa(s.questions ?? 0)} سؤال (${fa(s.questionsConfirmed ?? 0)} تأیید)، گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`);
+    } else {
+      // fail-closed: پیام صادقانه، بدون شکستن بازی
+      const detail = result?.error || 'خطای ناشناخته';
+      const errs = Array.isArray(result?.validation?.errors) ? result.validation.errors : [];
+      box.textContent = '';
+      const main = document.createElement('div');
+      main.className = 'cartridge-status-line';
+      main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
+      const meta = document.createElement('div');
+      meta.className = 'cartridge-status-meta';
+      meta.textContent = [detail].concat(errs).join(' — ');
+      box.append(main, meta);
+      box.hidden = false;
+      console.warn('[cartridge]', 'بارگذاری ناموفق —', detail, errs);
+    }
+  } catch (e) {
+    try {
+      box.textContent = '';
+      const main = document.createElement('div');
+      main.className = 'cartridge-status-line';
+      main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
+      const meta = document.createElement('div');
+      meta.className = 'cartridge-status-meta';
+      meta.textContent = `خطای غیرمنتظره: ${e?.message || e}`;
+      box.append(main, meta);
+      box.hidden = false;
+    } catch { /* DOM در دسترس نیست — بی‌صدا */ }
+    console.warn('[cartridge]', 'initCartridgeStatus ناموفق —', e);
+  }
+}
+
 export async function initApp() {
   local = await openLocal(); // موتور v9 خودش globalThis.indexedDB را تزریق می‌کند
   setupEvents();
+
+  // خشاب محتوا (v10.3): بارگذاری غیرمسدودکننده — بدون await در مسیر بوت
+  void initCartridgeStatus();
 
   // uid پایدار (رفع باگ v10.1.2): پیشرفت پس از بستن مرورگر می‌ماند
   actor = { uid: stableUid(), teacher: false };

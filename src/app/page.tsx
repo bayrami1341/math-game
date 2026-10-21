@@ -7,6 +7,7 @@ import {
   Gamepad2,
   GraduationCap,
   LayoutDashboard,
+  Package,
   RefreshCw,
   ScanLine,
   Sparkles,
@@ -19,13 +20,14 @@ import { OverviewTab } from "@/components/dashboard/overview-tab";
 import { StudentsTab } from "@/components/dashboard/students-tab";
 import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
 import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
+import { CartridgeTab } from "@/components/dashboard/cartridge-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
 import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
-import { fetchBottlenecks, fetchOverview, fetchStudents } from "@/components/dashboard/api";
+import { fetchBottlenecks, fetchCartridge, fetchOverview, fetchStudents } from "@/components/dashboard/api";
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
 
-type TabKey = "overview" | "students" | "bottlenecks";
+type TabKey = "overview" | "students" | "bottlenecks" | "cartridge";
 
 /** تاریخ شمسی امروز — فقط در کلاینت محاسبه می‌شود تا با SSR ناسازگار نشود */
 function useTodayFa(): string {
@@ -62,6 +64,11 @@ export default function TeacherDashboardPage() {
     queryFn: fetchBottlenecks,
     refetchInterval: 30_000,
   });
+  // خشاب محتوای منتشرشده استاتیک است — بدون بازآوری دوره‌ای
+  const cartridgeQuery = useQuery({
+    queryKey: ["cartridge"],
+    queryFn: fetchCartridge,
+  });
 
   const [tab, setTab] = useState<TabKey>("overview");
   const [activeStudentId, setActiveStudentId] = useState<string | null>(null);
@@ -74,15 +81,22 @@ export default function TeacherDashboardPage() {
       overviewQuery.refetch(),
       studentsQuery.refetch(),
       bottlenecksQuery.refetch(),
+      cartridgeQuery.refetch(),
     ]);
-  }, [overviewQuery, studentsQuery, bottlenecksQuery]);
+  }, [overviewQuery, studentsQuery, bottlenecksQuery, cartridgeQuery]);
 
   const isRefreshing =
-    overviewQuery.isRefetching || studentsQuery.isRefetching || bottlenecksQuery.isRefetching;
+    overviewQuery.isRefetching ||
+    studentsQuery.isRefetching ||
+    bottlenecksQuery.isRefetching ||
+    cartridgeQuery.isRefetching;
 
   // پیام خطای یک‌باره هنگام شکست واکشی
   const anyError =
-    overviewQuery.isError || studentsQuery.isError || bottlenecksQuery.isError;
+    overviewQuery.isError ||
+    studentsQuery.isError ||
+    bottlenecksQuery.isError ||
+    cartridgeQuery.isError;
   const errorToastShown = useRef(false);
   useEffect(() => {
     if (anyError && !errorToastShown.current) {
@@ -184,6 +198,10 @@ export default function TeacherDashboardPage() {
                 <AlertTriangle className="size-4" aria-hidden />
                 گلوگاه‌های یادگیری
               </TabsTrigger>
+              <TabsTrigger value="cartridge" className="gap-1.5">
+                <Package className="size-4" aria-hidden />
+                بانک تمرین خشاب
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="mt-4">
@@ -213,6 +231,15 @@ export default function TeacherDashboardPage() {
                 onRetry={() => void bottlenecksQuery.refetch()}
                 onSelectStudent={openStudent}
                 onOpenAiReport={() => setAiOpen(true)}
+              />
+            </TabsContent>
+
+            <TabsContent value="cartridge" className="mt-4">
+              <CartridgeTab
+                data={cartridgeQuery.data}
+                isLoading={cartridgeQuery.isLoading}
+                isError={cartridgeQuery.isError}
+                onRetry={() => void cartridgeQuery.refetch()}
               />
             </TabsContent>
           </Tabs>

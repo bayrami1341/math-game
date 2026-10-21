@@ -3,6 +3,7 @@
 import type {
   AssignmentsResponse,
   BottlenecksResponse,
+  CartridgeResponse,
   OverviewResponse,
   PostAssignmentBody,
   PostOverrideBody,
@@ -24,6 +25,22 @@ export const fetchOverview = () => fetchJson<OverviewResponse>("/api/overview");
 export const fetchStudents = () => fetchJson<StudentsResponse>("/api/students");
 
 export const fetchBottlenecks = () => fetchJson<BottlenecksResponse>("/api/bottlenecks");
+
+/** خشاب منتشرشده + برچسب‌سنجی زندهٔ گزینه‌ها با موتور واقعی بازی */
+export const fetchCartridge = async (): Promise<CartridgeResponse> => {
+  const res = await fetch("/api/cartridge", { cache: "no-store" });
+  if (!res.ok) {
+    let detail = "";
+    try {
+      const body = (await res.json()) as { error?: string };
+      if (body?.error) detail = String(body.error);
+    } catch {
+      // بدنهٔ خطا JSON نبود — پیام عمومی می‌ماند
+    }
+    throw new Error(detail || `خطای سرور (${res.status})`);
+  }
+  return (await res.json()) as CartridgeResponse;
+};
 
 export const fetchStudentDetail = (id: string) =>
   fetchJson<StudentDetailResponse>(`/api/students/${encodeURIComponent(id)}`);

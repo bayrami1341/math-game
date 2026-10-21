@@ -865,3 +865,16 @@ main.main-shell {
   .teacher-relabel-row button { flex: 1 1 auto; }
   .question-visual .equal-group { padding: 3px 4px; }
 }
+
+/* ─── وضعیت خشاب محتوا (v10.3): خط تکمیلی جعبهٔ راهنمای نقشه — اطلاع‌رسانی صادقانه ─── */
+.cartridge-status {
+  border-top: 1px solid var(--surface-border);
+  margin-top: 10px;
+  padding-top: 8px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.cartridge-status .cartridge-status-meta { font-size: 10px; opacity: 0.85; }

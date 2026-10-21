@@ -259,3 +259,62 @@ export interface ScanPaperCommitResponse {
   sessionId?: string;
   stored: number; // تعداد نتیجه‌های ثبت‌شده
 }
+
+// ─── خشاب محتوا (تب «بانک تمرین خشاب») ───
+
+/** حکم زندهٔ موتور تشخیص برای یک گزینهٔ انحرافی — موتور واقعی بازی (تک‌منبع حقیقت) */
+export interface CartridgeVerdict {
+  letter: string; // الف/ب/ج/د
+  value: number | null; // مقدار عددی تفسیرشدهٔ گزینه (null = قابل‌تبدیل به عدد نیست)
+  engineCode: string | null; // کد خطای موتور (مثل E_OP_REVERSE) یا null = بی‌الگو
+  claim: string | null; // متن کاندید نقشهٔ گزینه→خطای خشاب (optionErrorMap)
+}
+
+/** یک سؤال بانک خشاب همراه با برچسب‌سنجی زنده */
+export interface CartridgeQuestion {
+  id: string;
+  anchorId: string;
+  anchorTitle: string | null; // عنوان درس از نقشهٔ کتاب
+  cpa: string | null; // لایهٔ CPA (مجسم/تصویری/علامتی)
+  domain: string | null; // CORE / DEPTH / SIDE
+  status: string; // تأییدشده / نیاز به تأیید
+  prompt: string;
+  options: string[];
+  answerIndex: number;
+  optionErrorMap: string | null;
+  verdicts: CartridgeVerdict[]; // فقط گزینه‌های انحرافی
+}
+
+/** یک فیلد شناسنامهٔ خشاب */
+export interface CartridgeIdentityField {
+  field: string;
+  value: string;
+  status: string;
+  source: string;
+}
+
+/** پاسخ GET /api/cartridge */
+export interface CartridgeResponse {
+  cartridge: {
+    cartridgeId: string | null;
+    generatedAt: string | null;
+    source: { file?: string; tool?: string } | null;
+    validation: {
+      ok: boolean;
+      errors: string[];
+      warnings: string[];
+      stats: {
+        lessons: number;
+        lessonsConfirmed: number;
+        atlasReal: number;
+        atlasProposed: number;
+        questions: number;
+        questionsConfirmed: number;
+        questionsProposed: number;
+      };
+      gate: { red: number; yellow: number; verdict: string };
+    } | null;
+    identity: CartridgeIdentityField[];
+  };
+  bank: CartridgeQuestion[];
+}
