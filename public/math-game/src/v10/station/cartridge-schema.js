@@ -92,19 +92,32 @@ export function parseClaims(mapText) {
   return out;
 }
 
-/** ارجاع‌های Q- درون یک سلول (با گسترش «Q-۱۰۳ تا Q-۱۰۵») */
+/**
+ * ارجاع‌های Q- درون یک سلول — با گسترش دو قالب بازه:
+ *   «Q-۱۰۳ تا Q-۱۰۵» (قالب G3)  و  «Q-1001-1004» (قالب مختصر موج ۲ G2)
+ * بازهٔ نامعتبر (برعکس یا ≥۵۰) مثل رفتار «تا» مصرف می‌شود و گسترش نمی‌یابد —
+ * نتیجه: T7 با «لنگرهای سلول ≠ مالکان واقعی» به‌طور بلند فریاد می‌زند (fail-closed).
+ */
 export function extractQRefs(text) {
   const t = String(text ?? '');
   const refs = [];
-  const range = /Q-(\d+)\s*تا\s*Q-(\d+)/g;
-  let m; let consumed = [];
-  while ((m = range.exec(t)) !== null) {
-    const a = parseInt(m[1], 10); const b = parseInt(m[2], 10);
-    if (b >= a && b - a < 50) for (let i = a; i <= b; i++) refs.push(`Q-${i}`);
-    consumed.push(m[0]);
-  }
   let rest = t;
-  for (const c of consumed) rest = rest.replace(c, ' ');
+  const consume = re => {
+    re.lastIndex = 0;
+    const hits = [];
+    let m;
+    while ((m = re.exec(rest)) !== null) {
+      hits.push(m);
+      if (m.index === re.lastIndex) re.lastIndex++;
+    }
+    for (const h of hits) {
+      const a = parseInt(h[1], 10); const b = parseInt(h[2], 10);
+      if (b >= a && b - a < 50) for (let i = a; i <= b; i++) refs.push(`Q-${i}`);
+      rest = rest.replace(h[0], ' ');
+    }
+  };
+  consume(/Q-(\d+)\s*تا\s*Q-(\d+)/g);
+  consume(/Q-(\d+)-(\d+)/g);
   for (const m2 of rest.matchAll(/Q-\d+/g)) refs.push(m2[0]);
   return refs;
 }

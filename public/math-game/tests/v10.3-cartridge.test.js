@@ -137,6 +137,20 @@ test('10. واحد راهنما: parseOptionValue و parseClaims', () => {
   assert.equal(claims[0].claim, 'E_ADD_CONFUSION');
 });
 
+test('10-ب. extractQRefs: دو قالب بازه («تا» و خط‌تیره) + ارجاع تنها', () => {
+  assert.deepEqual(extractQRefs('Q-101 تا Q-103'), ['Q-101', 'Q-102', 'Q-103']);
+  assert.deepEqual(extractQRefs('E_TABLE_NEIGHBOUR (Q-1001-1004)'), ['Q-1001', 'Q-1002', 'Q-1003', 'Q-1004']);
+  assert.deepEqual(
+    extractQRefs('E_GROUPS (Q-1025-1028)؛ E_DOUBLE_OFF (Q-1029-1032)'),
+    ['Q-1025', 'Q-1026', 'Q-1027', 'Q-1028', 'Q-1029', 'Q-1030', 'Q-1031', 'Q-1032']
+  );
+  assert.deepEqual(extractQRefs('Q-101'), ['Q-101']);
+  assert.deepEqual(extractQRefs('E_ZERO_PLACE_MISS، E_ADD_CONFUSION (مرور)'), []);
+  // بازهٔ نامعتبر: گسترش نمی‌یابد (fail-closed — T7 فریاد می‌زند)
+  assert.deepEqual(extractQRefs('Q-105-103'), []);
+  assert.deepEqual(extractQRefs('Q-101-200'), []);
+});
+
 test('11. cartridgeSummary فقط فیلدهای پنل معلم را نگاشت می‌کند', () => {
   assert.equal(peekCartridge(), null, 'پیش از بارگذاری، کش تهی است');
   const fake = {
