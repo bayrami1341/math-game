@@ -888,3 +888,21 @@ Stage Summary:
 - آدرس دانلود: /math-game/release/math-game-v10.3.0-beta.0-full.zip
 - پس از دریافت توکن گیت‌هاب کاربر: push تگ + GitHub Release با همین بسته
 - خواستهٔ کاربر «پرایوت رایگان» با مخزن موجود math-game (Change visibility) و توکن classic با اسکوپ repo هم‌چنان در انتظار دو خط کاربر است
+---
+Task ID: 40
+Agent: Z.ai Code (main)
+Task: اتصال به گیت‌هاب خصوصی کاربر + اولین ذخیرهٔ ابری + GitHub Release رسمی v10.3.0-beta.0
+
+Work Log:
+- کاربر مخزن bayrami1341/math-game را Private کرد (کشف ارزشمند: مخزن ۲۰۶ کامیت تاریخچهٔ v6→v10.2 + ۴ تگ/۴ ریلیز دارد)
+- کاربر PAT (اسکوپ repo، ۹۰ روز) فرستاد؛ کشف و رفع بهداشتی: .env ردیابی‌شده بود → git rm --cached + gitignore
+- اجرای scripts/gh-connect.sh: فچ تاریخچهٔ مخزن (main، v6، تگ‌های v6/v7/v9/v10.2-stable) + پوش وضعیت v10.3 به شاخهٔ تازهٔ v10.3-beta + پوش تگ v10.3.0-beta.0 — بدون هیچ تغییری در شاخه‌های موجود
+- ساخت GitHub Release «v10.3.0-beta.0 — ریلیز پایلوت فاز ۰» (id 419209318) + آپلود بستهٔ 26MB (state: uploaded، sha256 ثبت شد)
+- scripts/gh-autosave.sh نوشته شد؛ نسخهٔ اول به‌داشت جمع‌آوری فرایندهای سندباکس مرد → مقاوم‌سازی (پوش فوری هنگام شروع + setsid) → زنده (PID 4287) و اولین پوش فوری موفق
+- راستی‌آزمایی API: private:true؛ ls-remote: شاخه و تگ روی ریموت؛ آینهٔ /tmp تازه شد
+
+Stage Summary:
+- حلقهٔ پشتیبان ۴لایه کامل شد: گیت محلی + آینهٔ /tmp + زیپ ریلیز + گیت‌هاب خصوصی (شاخهٔ v10.3-beta + تگ + Release با زیپ قابل دانلود)
+- ذخیرهٔ خودکار هر ۵ دقیقه فعال؛ شاخه‌های اصلی کاربر (main/v6) دست‌نخورده
+- پیامد شناخته‌شده: صفحات Pages عمومی مخزن math-game از دسترس عموم خارج شد (عمدی، برگشت‌پذیر)
+- URL ریلیز: https://github.com/bayrami1341/math-game/releases/tag/v10.3.0-beta.0
