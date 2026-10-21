@@ -270,6 +270,14 @@ export default function TeacherDashboardPage() {
             >
               بستهٔ چاپی پایلوت 🖨️
             </a>
+            <span aria-hidden>·</span>
+            <a
+              href="/math-game/release/math-game-v10.3.0-beta.0-full.zip"
+              download
+              className="font-medium text-emerald-700 hover:underline"
+            >
+              دانلود ریلیز v10.3.0-beta.0 📦
+            </a>
           </p>
         </div>
       </footer>
