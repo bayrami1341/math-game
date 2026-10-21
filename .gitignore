@@ -55,3 +55,4 @@ server.log
 # ریلیز و پشتیبان‌های باینری (مرجع = تگ گیت)
 public/math-game/release/
 download/*.zip
+.env
