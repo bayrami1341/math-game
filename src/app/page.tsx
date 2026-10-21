@@ -300,6 +300,15 @@ export default function TeacherDashboardPage() {
             >
               دانلود ریلیز v10.3.0-beta.0 📦
             </a>
+            <span aria-hidden>·</span>
+            <a
+              href="/math-game/authoring/MOTOR-TALIF-KHSHAB-v1.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-emerald-700 hover:underline"
+            >
+              موتور تألیف خشاب 🧠
+            </a>
           </p>
         </div>
       </footer>
