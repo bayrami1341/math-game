@@ -1,0 +1,168 @@
+{
+  "schema": "khshab.blueprints/v1",
+  "version": 1,
+  "updated_at": "2026-10-22T18:30:00Z",
+  "updated_by": "z.ai",
+  "blueprints": [
+    {
+      "id": "BP-000",
+      "title": "ساخت سیستم مرکزی مدیریت (پروتکل + تابلو + کارگاه‌بان v2)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "approved",
+      "priority": 1,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک — پیام چت: «هر دو طبق پروتکل‌ها و سیستم مرکزی مدیریت می‌شوید؛ نقشه‌های فنی با یک تایید من توسط ربات‌های درونی جلو بروند»",
+      "approved_at": "2026-10-22T18:30:00Z",
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "تصویب سیاست: آرنا = محتوا روی arena/**، Z.ai = برنامهٔ اصلی، مدیریت مشترک با پروتکل مرکزی و تأیید واحد مالک.",
+      "tasks": [
+        { "id": "T1", "desc": "نوشتن GOVERNANCE.md — پروتکل مرکزی v1.0.0", "automated": false },
+        { "id": "T2", "desc": "ساخت blueprints/ با رجیستری و نقشه‌های اولیه (BP-000..BP-005)", "automated": false },
+        { "id": "T3", "desc": "ارتقای کارگاه‌بان به v2.0.0: تابلوی مرکزی گیت‌هاب + کانال تأیید واحد + موتور دیسپچ", "automated": false },
+        { "id": "T4", "desc": "CLI مالک/عامل‌ها: scripts/blueprint.ts", "automated": false },
+        { "id": "T5", "desc": "راه‌اندازی زنده، تأیید دیسپچ BP-000، پوش و سبز شدن CI", "automated": true }
+      ],
+      "acceptance": [
+        "GET :3030/status کارگاه‌بان v2.0.0 را نشان دهد",
+        "تابلوی مرکزی (Issue گیت‌هاب) ساخته شده و وضعیت نقشه‌ها را زنده نشان دهد",
+        "تأیید واحد مالک روی تابلو توسط ربات ثبت و دیسپچ شود",
+        "CI (khshab-gate) روی main سبز باشد"
+      ],
+      "artifacts": ["GOVERNANCE.md", "blueprints/registry.json", "scripts/blueprint.ts", "mini-services/foreman/index.ts"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": ""
+    },
+    {
+      "id": "BP-001",
+      "title": "رفع بدهی ۶۰-bis: فیکسچر pytest ایزوله + حذف هاردکد Q-1069 از automation_suite",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 2,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "یافتهٔ Task 60: تست‌های pytest ایجنت به فضای کاری شاخهٔ آرنا (authoring/audit/*.json، /tmp/c205_secure_vault) وابسته‌اند و new_wave_start_qid=Q-1069 هاردکد است (باگ دامنه برای خانواده‌های غیر G2).",
+      "tasks": [
+        { "id": "T1", "desc": "فیکسچر pytest مستقل از فضای کاری آرنا (ساخت fixture موقت با دادهٔ کمینه)", "automated": false },
+        { "id": "T2", "desc": "خواندن new_wave_start_qid از مانیفست/پارامتر خانواده به‌جای هاردکد", "automated": false },
+        { "id": "T3", "desc": "اجرای کل pytest در محیط سندباکس و ثبت نتیجه در worklog", "automated": true }
+      ],
+      "acceptance": ["pytest بدون وابستگی به شاخهٔ آرنا سبز شود", "کد هاردکد Q-1069 در سورس نباشد (rg = 0)", "check-wave سرهای رسمی همچنان PASS"],
+      "artifacts": ["authoring/agent/tests/", "authoring/agent/"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": "دستورکار ۶۰–۶۶، گام ۶۰-bis"
+    },
+    {
+      "id": "BP-002",
+      "title": "گام ۴ — سه آشکارساز خطای پروتکل v10.3 در مبدل/ایجنت رسمی",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 3,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "دستورکار ۶۰–۶۶ گام ۴: سه آشکارساز errors-v103 باید به گیت ماشینی اضافه شوند تا خطاهای شناخته‌شدهٔ نسخهٔ ۱۰۳ پیش از رسیدن به بازرسی انسانی گرفته شوند.",
+      "tasks": [
+        { "id": "T1", "desc": "طراحی و پیاده‌سازی سه آشکارساز در ابزار گیت (errors-v103)", "automated": false },
+        { "id": "T2", "desc": "افزودن به check-wave و CI khshab-gate (fail-closed)", "automated": false },
+        { "id": "T3", "desc": "آزمون مثبت/منفی و به‌روزرسانی مپ فنی", "automated": true }
+      ],
+      "acceptance": ["سه آشکارساز با فیکسچر آزمون شوند", "CI سبز با آشکارسازهای فعال"],
+      "artifacts": ["authoring/agent/", ".github/workflows/khshab-gate.yml"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": ""
+    },
+    {
+      "id": "BP-003",
+      "title": "گام ۵ — رندرر SVG چهارده‌مدلی برای مدل‌های سؤال",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 4,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "دستورکار ۶۰–۶۶ گام ۵: رندرر SVG برای ۱۴ مدل سؤال خشاب‌ها تا پیش‌نمایش بدون Excel ممکن شود.",
+      "tasks": [
+        { "id": "T1", "desc": "پیاده‌سازی رندرر ۱۴ مدل در ابزار پیش‌نمایش", "automated": false },
+        { "id": "T2", "desc": "رندر نمونه‌ای سرهای رسمی G2/G3 و راستی‌آزمایی بصری", "automated": true }
+      ],
+      "acceptance": ["۱۴ مدل بدون خطا رندر شوند", "خروجی SVG در authoring/build_preview (gitignored) قابل بازبینی باشد"],
+      "artifacts": ["authoring/agent/"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": ""
+    },
+    {
+      "id": "BP-004",
+      "title": "گام ۳ — داشبورد معلم: صفحهٔ بازرسی محتوا + مُهر رأی معلم",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 5,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "دستورکار ۶۰–۶۶ گام ۳: معلم باید بتواند بدون گیت، نتیجهٔ گیت‌ها و تفاوت نسخهٔ محتوا را ببیند و رأی تربیتی‌اش را مهر کند؛ رأی در فایل ثبت رسمی می‌نشیند و کارگاه‌بان آن را به تابلو می‌برد.",
+      "tasks": [
+        { "id": "T1", "desc": "صفحهٔ بازرسی: مقایسهٔ نسخهٔ آرنا با سر رسمی + نتیجهٔ گیت‌ها", "automated": false },
+        { "id": "T2", "desc": "دکمهٔ مُهر معلم (تأیید/رد + توضیح) → ثبت در authoring/teacher-stamps.json", "automated": false },
+        { "id": "T3", "desc": "دیسپچ خودکار مُهر به تابلوی مرکزی توسط کارگاه‌بان", "automated": true }
+      ],
+      "acceptance": ["مُهر معلم در فایل ثبت رسمی ذخیره و روی تابلو منعکس شود", "داشبورد موجود دست‌نخورده (رگرسیون صفر)"],
+      "artifacts": ["src/app/", "src/components/", "authoring/teacher-stamps.json"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": ""
+    },
+    {
+      "id": "BP-005",
+      "title": "موج محتوایی بعدی آرنا — توسعهٔ محتوای کتاب درسی بر پایهٔ سرهای رسمی",
+      "lane": "content",
+      "assignee": "arena",
+      "status": "awaiting_approval",
+      "priority": 6,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "مأموریت مصوب آرنا: خشاب‌های اکسل و توسعهٔ محتوای کتب درسی. این نقشه، مأموریت موج بعدی را پس از تأیید مالک/معلم فعال می‌کند؛ مالک می‌تواند پیش از تأیید، دامنه را ویرایش کند.",
+      "tasks": [
+        { "id": "T1", "desc": "اعلام دامنهٔ موج: خانواده/نسخهٔ هدف از OFFICIAL-HEADS (یا خانوادهٔ فاقد سر)", "automated": false },
+        { "id": "T2", "desc": "ساخت خشاب vNext در authoring/ + نقشهٔ صفحهٔ همراه", "automated": false },
+        { "id": "T3", "desc": "سند تحویل + پوش روی شاخهٔ arena/** (intake خودکار کارگاه‌بان)", "automated": true }
+      ],
+      "acceptance": [
+        "گیت کارگاه‌بان 🟢 (هم‌گام یا جدیدتر از سر رسمی — بدون INC-07)",
+        "مبدل رسمی: صفر قرمز",
+        "بازرسی دوم (Z.ai) و رأی معلم طبق مادهٔ ۷-ب"
+      ],
+      "artifacts": ["authoring/khshab-G*-MATH_v*.xlsx"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": "پایهٔ اجباری: فایل اعلام‌شدهٔ OFFICIAL-HEADS.json (حادثهٔ ۷ تکرارشدنی است)."
+    }
+  ]
+}

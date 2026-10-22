@@ -9,6 +9,16 @@
 - **داشبورد معلم**: Next.js 16 + shadcn/ui روی `/` (سرویس: پورت ۳۰۰۰، API در `src/app/api/`)
 - **خط تولید محتوا**: خشاب‌های Excel («khshab-G*-MATH_v*.xlsx») ← **مبدل رسمی** (`tools/cartridge-converter/convert.mjs`) ← JSON کارتریج (`public/math-game/cartridges/KH-G*.json`)
 
+## ۱-ب) سیستم مرکزی مدیریت (v2 — قانون: `GOVERNANCE.md`)
+
+- **تقسیم کار مصوب مالک:** آرنا = خشاب‌های اکسل و محتوای کتب درسی (شاخه‌های `arena/**`) | Z.ai = برنامهٔ اصلی — هر دو زیر یک پروتکل مرکزی.
+- **نقشه‌های فنی (Blueprint):** SSOT = `blueprints/registry.json` روی `main`. چرخه: `draft → awaiting_approval → approved → executing → delivered → verified → done`.
+- **تأیید واحد:** مالک روی «تابلوی مرکزی مدیریت» (Issue گیت‌هاب با برچسب `central-board`) کامنت `تایید BP-xxx` / `تایید همه` می‌گذارد؛ کارگاه‌بان آن را با Contents API در رجیستری ثبت (کامیت روی main) و دستور کار را دیسپچ می‌کند (آرنا: تابلو + PR مرتبط | Z.ai: تابلو + بریفینگ).
+- **فرمان فریز:** کامنت `فریز` روی تابلو = توقف تأیید/دیسپچ (مادهٔ ۸).
+- **امنیت:** تأیید فقط از حساب `bayrami1341`؛ تلاش دیگران با پاسخ رد ربات.
+- **CLI:** `bun scripts/blueprint.ts list|show|approve|set-status|validate`.
+- گارد sync: کامیت‌های ربات با Contents API انجام می‌شود و `git pull --rebase` محلی فقط وقتی درخت تمیز است.
+
 ## ۲) تقسیم کار (قرارداد مالکیت — بخش ۹)
 
 | بازیگر | قلمرو | کانال |
