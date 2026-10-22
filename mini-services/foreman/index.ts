@@ -331,6 +331,12 @@ function verdictFa(v: FamilyReport["verdict"]): string {
 }
 
 async function handleDelivery(branch: string, sha: string, st: BranchState, state: State) {
+  // گارد تکرار: اگر همین هد قبلاً رأی گرفته (مثلاً پس از کرش قبل از saveState)، کامنت اسپم نشود
+  if (st.verdictSha === sha && st.lastProcessedAt) {
+    st.lastSha = sha;
+    log(`↩️ ${branch}: هد ${sha7(sha)} قبلاً رأی گرفته (${st.verdictKind}) — بدون کامنت جدید`);
+    return;
+  }
   log(`📥 تحویل جدید روی ${branch}: ${sha7(st.lastSha)} → ${sha7(sha)}`);
   const token = ghToken();
   mkdirSync(WORKROOT, { recursive: true });
@@ -374,6 +380,7 @@ async function handleDelivery(branch: string, sha: string, st: BranchState, stat
     st.verdictSha = sha;
     st.verdictKind = verdictKind;
     st.note = prRes.note || (prRes.pr ? `PR #${prRes.pr.number}` : "");
+    saveState(state); // ذخیرهٔ زودهنگام: کرش بعدی باعث رأی تکراری نشود
     log(`⚖️ رأی کارگاه‌بان برای ${branch}: ${verdictKind} ${prRes.pr ? `→ PR #${prRes.pr.number}` : `(${prRes.note})`}`);
   } finally {
     git(["worktree", "remove", "--force", wt]);
@@ -436,6 +443,16 @@ function registryFromOrigin(): Registry | null {
   const r = git(["show", `origin/main:${REGISTRY_PATH}`], REPO, 60_000);
   if (!r.ok) return null;
   try { return JSON.parse(r.out) as Registry; } catch { return null; }
+}
+
+/**
+ * ⚠️ گارد پایداری Bun: spawnSync داخل هندلر Bun.serve روی این پلتفرم = مرگ بی‌صدای پروسه.
+ * بنابراین اندپوینت‌های HTTP هرگز git/.spawnSync صدا نمی‌زنند — به‌جای آن از کش درون‌حافظه‌ای
+ * استفاده می‌کنند که فقط توسط موتور اسکن (خارج از هندلر) به‌روز می‌شود.
+ */
+let REG_CACHE: { data: Registry | null; fetchedAt: string | null } = { data: null, fetchedAt: null };
+function registryCached(): Registry | null {
+  return REG_CACHE.data;
 }
 
 function registryLocal(): Registry | null {
@@ -700,9 +717,9 @@ async function applyApprovals(state: State, targets: string[], approver: string,
 /** موتور رجیستری: تشخیص تغییر نسخه → دیسپچ تأییدشده‌های جدید → به‌روزرسانی تابلو */
 async function processRegistryEngine(state: State, token: string, force = false): Promise<void> {
   const reg = registryFromOrigin();
+  REG_CACHE = { data: reg, fetchedAt: nowIso() };
   if (!reg) {
-    const local = registryLocal();
-    log(local ? "ℹ️ رجیستری هنوز روی origin/main نیست (پوش نشده) — موتور منتظر ماند" : "ℹ️ رجیستری نقشه‌ها موجود نیست");
+    log("ℹ️ رجیستری نقشه‌ها روی origin/main نیست (پوش نشده) — موتور منتظر ماند");
     return;
   }
   const changed = force || state.blueprints!.lastRegistryVersion !== reg.version;
@@ -848,20 +865,23 @@ Bun.serve({
     }
     if (url.pathname === "/blueprints") {
       const s = loadState();
-      const origin = registryFromOrigin();
+      const reg = registryCached();
       return Response.json({
-        registryOnMain: origin ? { version: origin.version, updated_at: origin.updated_at, count: origin.blueprints.length } : null,
-        registryLocal: registryLocal()?.version ?? null,
+        registryOnMain: reg ? { version: reg.version, updated_at: reg.updated_at, count: reg.blueprints.length, cachedAt: REG_CACHE.fetchedAt } : null,
+        blueprints: reg ? reg.blueprints.map((b) => ({ id: b.id, title: b.title, lane: b.lane, assignee: b.assignee, status: b.status, approved_by: b.approved_by })) : null,
         boardUrl: s.blueprints?.boardUrl ?? null,
         lastRegistryVersion: s.blueprints?.lastRegistryVersion ?? null,
         dispatched: s.blueprints?.dispatched ?? {},
         events: s.blueprints?.events ?? [],
         frozen: !!s.frozen,
+        notice: reg ? null : "رجیستری هنوز کش نشده — با POST /scan یا چرخهٔ خودکار به‌روز می‌شود",
       });
     }
     if (url.pathname === "/scan" && req.method === "POST") {
-      const r = await scan();
-      return Response.json({ ok: true, ...r });
+      // گارد پایداری: اسکن هرگز داخل هندلر اجرا نمی‌شود (spawnSync = مرگ پروسه روی این پلتفرم)
+      if (busy) return Response.json({ ok: false, queued: false, reason: "مشغول دور قبلی" });
+      setTimeout(() => { scan().catch((e) => log(`⛔ خطای اسکن صف‌شده: ${e?.stack || e}`)); }, 10);
+      return Response.json({ ok: true, queued: true, notice: "اسکن در پس‌زمینه آغاز شد — نتیجه در /status و BRIEF.md و لاگ" });
     }
     return new Response(`کارگاه‌بان v${VERSION} زنده است ✅ — GET /status | GET /blueprints | POST /scan\n`, { headers: { "Content-Type": "text/plain; charset=utf-8" } });
   },
