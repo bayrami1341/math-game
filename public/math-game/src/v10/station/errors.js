@@ -81,12 +81,19 @@ export const CODE_SENTENCES_FA = Object.freeze({
  * طبقه‌بندی ساختاری یک پاسخ نادرست از روی خود سه‌تایی (f1, f2, پاسخ‌داده‌شده).
  * خروجی: کد خطا یا null (پاسخ درست / بی‌الگو).
  * بی‌الگو بودن خودش شاهد است: سه پاسخ بی‌الگو در یک جلسه = E_PERSISTENT_GUESSING.
+ *
+ * W8 (BP-007 — انجمادِ هدفمند با تأیید مالک): دامنهٔ ورودی به عوامل ۶رقمی و
+ * پاسخ تا ۱۰ رقم گسترش یافت (هم‌راستا با بازهٔ رسمی parseOptionValue).
+ * منطق الگوها ذره‌ای تغییر نکرده — روی دامنهٔ قبلی (۰..۹۹۹) رفتار یکسان است
+ * (آزمون معکوس ۱۰۷/۱۰۷ + مبدل رسمی فقط-timestamp).
+ * دقت: حاصل ≤ ۹۹۹۹۹۸۰۰۰۰۰۱ ≈ ۱۰^۱۲ < ۲^۵۳ — تمام حساب‌ها exact می‌مانند.
+ * سقف submitted = حاصلِ بیشینه × ۱۰ (کفِ الگوی لغزش صفر) ≈ ۱۰^۱۳ — باز هم exact.
  */
 export function classifyAttempt(input = {}) {
   const { f1, f2, submitted } = input || {};
   if (!isInt(f1) || !isInt(f2) || !isInt(submitted)) return null;
-  if (f1 < 0 || f2 < 0 || f1 > 999 || f2 > 999) return null;
-  if (submitted < 0 || submitted > 9999) return null;
+  if (f1 < 0 || f2 < 0 || f1 > 999999 || f2 > 999999) return null;
+  if (submitted < 0 || submitted > 9999999999999) return null;
 
   const p = f1 * f2;
   if (submitted === p) return null; // پاسخ درست — خطا نیست
