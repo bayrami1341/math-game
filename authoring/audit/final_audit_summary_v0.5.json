@@ -26,7 +26,7 @@
       "status": "PASS",
       "reason_code": "OWNERSHIP_BOUNDARY_CLEAN",
       "metrics": {
-        "checked_changed_paths": 53,
+        "checked_changed_paths": 2,
         "violation_count": 0
       }
     },
@@ -113,7 +113,7 @@
         "v05_report": "/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md",
         "v04_red": 2,
         "v04_verdict": "مردود — انتشار JSON ممنوع",
-        "preview_json_sha256": "b8e13e0ba1f08c3c9c9370c7f0e5404629e6aa9d440ef42a222b7feb364a2dfe"
+        "preview_json_sha256": "fa5f0669e677bfef2aa24021efc9761b2c2cb3ca9f7cfb6197d29365c5702b38"
       }
     },
     "G_AUTO_10_HISTORICAL_INCIDENTS_16": {

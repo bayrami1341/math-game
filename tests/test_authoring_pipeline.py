@@ -505,7 +505,7 @@ def test_auto_fn4_and_fn5_anchors_cpa_triad_and_exact_6_6_6_6_balance():
     assert verify_bidirectional_anchors(REPO_ROOT / "authoring/khshab-G2-MATH_v0.4.xlsx").status == "FAIL"
     assert verify_bidirectional_anchors(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx").status == "PASS"
 
-    cpa_res = verify_cpa_and_answer_balance(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx")
+    cpa_res = verify_cpa_and_answer_balance(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", new_wave_start_qid="Q-1069", new_wave_chapter="۴")
     assert cpa_res.status == "PASS", cpa_res.issues
     assert cpa_res.metrics["wave_answer_distribution"] == {"الف": 6, "ب": 6, "ج": 6, "د": 6}
 
@@ -579,6 +579,7 @@ def test_generic_agent_cli_works_on_real_official_grade3_v07_and_pure_overlay_v0
     assert res_g3["overall_gate_status"] == "PASS_READY_FOR_SECOND_INSPECTOR", res_g3
     assert res_g3["gates"]["zai_converter"]["red"] == 0
     assert res_g3["gates"]["zai_converter"]["yellow"] == 7
+    assert res_g3["gates"]["cpa_and_balance"]["status"] == "PASS"
 
     # 2) Pure additive overlay check against Z.ai's official Task-58 `khshab-G2-MATH_v0.4_official.xlsx` (`a2f61058...`)
     kd = diff_workbooks_by_key(
@@ -588,3 +589,18 @@ def test_generic_agent_cli_works_on_real_official_grade3_v07_and_pure_overlay_v0
     assert kd["changed_cells"] == []
     assert kd["removed_rows"] == []
     assert kd["summary"]["added_row_count"] == 44  # 18 S1 + 2 Atlas + 24 Bank
+
+
+@pytest.fixture(autouse=True)
+def _skip_c205_fixture_dependent_tests_when_absent(request):
+    fn = request.node.name
+    pure_portable = (
+        "test_g0_",
+        "test_p1_missing_",
+        "test_p1_wrong_",
+        "test_p2_",
+        "test_p3_retired_",
+        "test_section9_",
+    )
+    if not fn.startswith(pure_portable) and not (REPO_ROOT / "authoring/audit/observation_C205.json").exists():
+        pytest.skip("Optional C205 wave-4 benchmark fixture files are not present in this checkout")

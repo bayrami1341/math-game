@@ -411,8 +411,10 @@ def verify_bidirectional_anchors(wb_path: str | Path) -> GateResult:
 # ==============================================================================
 def verify_cpa_and_answer_balance(
     wb_path: str | Path,
-    new_wave_start_qid: Optional[str] = "Q-1069",
-    new_wave_chapter: str = "۴",
+    new_wave_start_qid: Optional[str] = None,
+    new_wave_chapter: Optional[str] = None,
+    wave_qids: Optional[Set[str]] = None,
+    strict_all_rows_aud06: bool = True,
 ) -> GateResult:
     """Verify `AUD-06` CPA triad, balanced `الف/ب/ج/د` key distribution, and deep-lesson coverage."""
     wb = openpyxl.load_workbook(wb_path, data_only=False)
@@ -435,36 +437,38 @@ def verify_cpa_and_answer_balance(
         cpa = str(ws_qb.cell(r, 4).value or "").strip()
         ans = str(ws_qb.cell(r, 11).value or "").strip()
 
+        in_wave = (
+            (qid in wave_qids)
+            if wave_qids is not None
+            else (qid >= new_wave_start_qid if new_wave_start_qid else False)
+        )
         cpa_counts[cpa] += 1
         ans_counts_all[ans] += 1
         by_anchor_domains.setdefault(anc, []).append(dom)
         by_anchor_cpas.setdefault(anc, set()).add(cpa)
 
-        if cpa not in VALID_CPA:
+        if cpa not in VALID_CPA and (strict_all_rows_aud06 or in_wave):
             issues.append({"qid": qid, "cell": f"D{r}", "cpa": cpa, "error": "AUD_06_INVALID_CPA"})
         if ans not in VALID_ANSWERS:
             issues.append({"qid": qid, "cell": f"K{r}", "answer": ans, "error": "INVALID_ANSWER_LETTER"})
-        if new_wave_start_qid and qid >= new_wave_start_qid:
+        if in_wave:
             ans_counts_wave[ans] += 1
 
-    # Check Wave answer balance (exact 6/6/6/6 when 24 questions!)
-    if new_wave_start_qid and sum(ans_counts_wave.values()) > 0:
+    if sum(ans_counts_wave.values()) > 0:
         counts_vec = [ans_counts_wave[k] for k in VALID_ANSWERS]
         if max(counts_vec) - min(counts_vec) > 2:
             issues.append({
-                "scope": f"{new_wave_start_qid}+",
                 "distribution": dict(ans_counts_wave),
                 "error": "IMBALANCED_ANSWER_KEYS",
             })
 
-    # Check minimum coverage on Chapter 4 `'تعاملی-عمیق'` lessons (`2 CORE + 1 DEPTH + >=1 SIDE` + all 3 CPA layers)
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
         if not lid or lid == "یادداشت":
             break
         ch = str(ws_s1.cell(r, 3).value or "").strip()
         mode = str(ws_s1.cell(r, 10).value or "").strip()
-        if ch == new_wave_chapter and lid != "L-400" and mode == "تعاملی-عمیق":
+        if new_wave_chapter and ch == new_wave_chapter and not lid.endswith("00") and mode == "تعاملی-عمیق":
             doms = Counter(by_anchor_domains.get(lid, []))
             if doms["CORE"] < 2 or doms["DEPTH"] < 1 or doms["SIDE"] < 1:
                 issues.append({
@@ -478,7 +482,6 @@ def verify_cpa_and_answer_balance(
                     "cpas": sorted(by_anchor_cpas.get(lid, set())),
                     "error": "INCOMPLETE_CPA_LADDER_FOR_CONCEPT",
                 })
-
     if issues:
         return GateResult(
             stage="AUTO",
@@ -592,6 +595,7 @@ def count_visual_components(
 def _locate_node_modules_with_xlsx(repo_root: Path) -> Optional[Path]:
     candidates = [
         repo_root / "node_modules",
+        repo_root / "tools/cartridge-converter/node_modules",
         Path("/tmp/khshab_node_deps/node_modules"),
     ]
     for c in candidates:
@@ -708,7 +712,7 @@ def run_converter_and_parse_report(
 # Function 8 (§8.8 & §7): Version, SHA-256 & 20-Item Delivery Markdown (`manage_version_and_sha`)
 # ==============================================================================
 def parse_version_tuple(xlsx_path: str | Path) -> Tuple[int, ...]:
-    m = re.search(r"_v(\d+(?:\.\d+)+)\.xlsx$", Path(xlsx_path).name)
+    m = re.search(r"_v(\d+(?:\.\d+)+)(?:_[a-zA-Z0-9]+)?\.xlsx$", Path(xlsx_path).name)
     if not m:
         raise ValueError(f"Workbook name lacks `_vX.Y.xlsx` version suffix: {xlsx_path}")
     return tuple(int(p) for p in m.group(1).split("."))
@@ -733,27 +737,29 @@ def manage_version_and_sha(
     sidecar.write_text(f"{sha}  {cur_p.name}\n", encoding="utf-8")
 
     wb = openpyxl.load_workbook(cur_p, data_only=False)
-    ws_s1, ws_ea, ws_qb = wb["نقشهٔ کتاب (S1)"], wb["اطلس خطا"], wb["بانک سؤال"]
+    ws_id, ws_s1, ws_ea, ws_qb = wb["شناسنامهٔ خشاب"], wb["نقشهٔ کتاب (S1)"], wb["اطلس خطا"], wb["بانک سؤال"]
+    cartridge_id = str(ws_id.cell(3, 2).value or cur_p.stem).strip()
+    kd = diff_workbooks_by_key(prev_p, cur_p)
+    kd_summary = kd["summary"]
+    added_by_sheet = Counter(r["sheet"] for r in kd["added_rows"])
+    added_s1_keys = {r["key"] for r in kd["added_rows"] if r["sheet"] == "نقشهٔ کتاب (S1)"}
 
-    # Compute the 3 official Arena efficiency KPIs (§7.2):
-    # 1) % cells free of ungrounded/false `'؟'` in delivered Chapter 4 wave
-    s1_ch4_cells = 0
-    s1_ch4_clean = 0
+    # Compute the 3 official Arena efficiency KPIs (§7.2) dynamically across ANY grade/wave:
+    s1_wave_cells = 0
+    s1_wave_clean = 0
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
         if not lid or lid == "یادداشت":
             break
-        if lid.startswith("L-40") and lid != "L-400" or lid.startswith("L-41"):
+        if (lid in added_s1_keys) if added_s1_keys else (not lid.endswith("00")):
             for c in range(1, 15):
-                s1_ch4_cells += 1
+                s1_wave_cells += 1
                 val = str(ws_s1.cell(r, c).value or "").strip()
-                if val and "؟" not in val or c == 8:  # `پرسش: «...؟»` legitimately ends question prompt with `؟`!
-                    if val and val != "؟" and not val.startswith("؟"):
-                        s1_ch4_clean += 1
+                if val and val != "؟" and not val.startswith("؟"):
+                    s1_wave_clean += 1
 
-    pct_no_false_qmark = round(100.0 * s1_ch4_clean / max(1, s1_ch4_cells), 1)
+    pct_no_false_qmark = round(100.0 * s1_wave_clean / max(1, s1_wave_cells), 1)
 
-    # 2) % anti-J12 valid answer keys across ALL 92 questions
     total_q = 0
     anti_j12_ok = 0
     mapped_distractors = 0
@@ -773,24 +779,24 @@ def manage_version_and_sha(
 
     pct_anti_j12 = round(100.0 * anti_j12_ok / max(1, total_q), 1)
     pct_mapped_options = round(100.0 * mapped_distractors / max(1, total_distractors), 1)
+    ver_str = ".".join(str(x) for x in v_cur)
 
     lines = [
-        "# سند تحویل موج ۴ (فصل چهارم: عددهای سه‌رقمی) — `KH-G2-MATH v0.5`",
+        f"# سند تحویل رسمی موج — `{cartridge_id} v{ver_str}`",
         "",
-        f"- **فایل تحویلی:** `{cur_p.as_posix()}`",
+        f"- **فایل تحویلی:** `{cur_p.name}`",
         f"- **SHA-256 دقیق فایل:** `{sha}`",
-        f"- **نسخهٔ پایهٔ مقایسه:** `{prev_p.as_posix()}` (`{v_prev}` → `{v_cur}`)",
-        f"- **گزارش مبدّل رسمی (`cartridge-converter v1.1`):** `{converter_result.get('report_path')}` — حکم: **{converter_result.get('verdict')}** (`{converter_result.get('red')} قرمز، {converter_result.get('yellow')} زرد`)",
+        f"- **نسخهٔ پایهٔ مقایسه:** `{prev_p.name}` (`{v_prev}` → `{v_cur}`)",
+        f"- **گزارش مبدّل رسمی (`cartridge-converter v1.1`):** `{Path(converter_result.get('report_path') or '').name}` — حکم: **{converter_result.get('verdict')}** (`{converter_result.get('red')} قرمز، {converter_result.get('yellow')} زرد`)",
         "",
-        "## ۱. خلاصهٔ تغییرات به تفکیک شیت",
-        "- **`شناسنامهٔ خشاب`:** بازگردانی ۱۰۰٪ سلول‌های مُهردار رسمی نسخهٔ ادغام‌شدهٔ `v0.3.1` (`37a38bbd...`) مطابق قاعدهٔ حادثهٔ شمارهٔ ۷.",
-        "- **`نقشهٔ کتاب (S1)`:** بازگردانی ۸ ردیف سبز اسکلت (`L-100..L-800`) و اصلاحات رسمی بازرس دوم (`L-108`, `L-109`, `L-110`, `L-112`, `L-114`, `L-118`) + افزودن **۱۸ ردیف زرد فصل چهارم (`L-401..L-418`، ص ۵۵ تا ۷۲ کتاب / `PDF 61..78`)**.",
-        "- **`اطلس خطا`:** بازگردانی ۲ کد سبز موج ۲ (`E_GROUPS`, `E_TABLE_NEIGHBOUR`) + افزودن **۲ کد پیشنهادی تازهٔ فصل چهارم (`E_UNIT_VALUE_CONFUSION (پیشنهاد)` و `E_APPROX_EXACT_CONFUSION (پیشنهاد)`)**.",
-        "- **`بانک سؤال`:** بازگردانی اصلاح شمارش ماشینی `Q-1011` (`۱۳ مثلث → ۱۸`) + افزودن **۲۴ سؤال خودتألیف زرد (`Q-1069..Q-1092`)** با پوشش `2 CORE + 1 DEPTH + 1 SIDE` و توازن دقیق `۶ الف / ۶ ب / ۶ ج / ۶ د`.",
+        "## ۱. خلاصهٔ واقعی تغییرات شیت‌به‌شیت (محاسبه‌شدهٔ خودکار با دیف کلیدمحور ستون `A`)",
+        f"- **`added_row_count` (ردیف‌های افزوده‌شده):** **`{kd_summary['added_row_count']}`** (`نقشهٔ کتاب (S1)`: `{added_by_sheet.get('نقشهٔ کتاب (S1)', 0)}` | `اطلس خطا`: `{added_by_sheet.get('اطلس خطا', 0)}` | `بانک سؤال`: `{added_by_sheet.get('بانک سؤال', 0)}`)",
+        f"- **`changed_cell_count` (تغییر سلول در ردیف‌های قبلی پایه):** **`{kd_summary['changed_cell_count']}`** ({'افزودهٔ محض — صفر تغییر در سلول‌ها و مُهرهای پایهٔ رسمی' if kd_summary['changed_cell_count'] == 0 else 'سلول‌های تغییریافته: ' + str([(c['sheet'], c['key'], c['new_coord']) for c in kd['changed_cells'][:15]])})",
+        f"- **`removed_row_count` (حذف ردیف):** **`{kd_summary['removed_row_count']}`**",
         "",
         "## ۲. سه سنجهٔ رسمی بازدهی (§7.2)",
-        f"1. **درصد سلول‌های بدون «؟» کاذب در موج تحویلی:** **`{pct_no_false_qmark}%`** (`{s1_ch4_clean}/{s1_ch4_cells}`)",
-        f"2. **درصد پاسخ‌نامهٔ سالم ضد J12 (کل بانک ۹۲ سؤالی):** **`{pct_anti_j12}%`** (`{anti_j12_ok}/{total_q}`)",
+        f"1. **درصد سلول‌های بدون «؟» کاذب در موج تحویلی:** **`{pct_no_false_qmark}%`** (`{s1_wave_clean}/{s1_wave_cells}`)",
+        f"2. **درصد پاسخ‌نامهٔ سالم ضد J12 (کل بانک `{total_q}` سؤالی):** **`{pct_anti_j12}%`** (`{anti_j12_ok}/{total_q}`)",
         f"3. **درصد گزینه‌های انحرافی دارای نقشهٔ کد خطا (`E_`):** **`{pct_mapped_options}%`** (`{mapped_distractors}/{total_distractors}`)",
         "",
         "## ۳. نتیجهٔ خودآزمایی ۲۰بندی ماشینی (اجراشده، نه ادعایی)",

@@ -65,8 +65,18 @@ def run_generic_wave_check(
     """Run all book-agnostic Automation Agent checks on ANY `.xlsx` cartridge (`G1`, `G2`, `G3`, ...)."""
     g_git = audit_git_copyright_safety(repo_root)
     g_own = check_ownership_boundary(repo_root)
+    kd = diff_workbooks_by_key(base_xlsx, candidate_xlsx) if (base_xlsx is not None and base_xlsx.exists()) else None
+    added_wave_qids = (
+        {r["key"] for r in kd["added_rows"] if r["sheet"] == "بانک سؤال"}
+        if kd is not None
+        else None
+    )
     g_anchors = verify_bidirectional_anchors(candidate_xlsx)
-    g_cpa = verify_cpa_and_answer_balance(candidate_xlsx)
+    g_cpa = verify_cpa_and_answer_balance(
+        candidate_xlsx,
+        wave_qids=added_wave_qids,
+        strict_all_rows_aud06=(kd is not None),
+    )
     conv = run_converter_and_parse_report(candidate_xlsx, repo_root)
 
     gates: Dict[str, Any] = {
@@ -77,11 +87,8 @@ def run_generic_wave_check(
         "zai_converter": conv,
     }
 
-    diff_summary = None
-    if base_xlsx is not None and base_xlsx.exists():
-        kd = diff_workbooks_by_key(base_xlsx, candidate_xlsx)
-        diff_summary = kd["summary"]
-        gates["keyed_diff_summary"] = diff_summary
+    if kd is not None:
+        gates["keyed_diff_summary"] = kd["summary"]
         if whitelist_json is not None and whitelist_json.exists():
             wl_doc = json.loads(whitelist_json.read_text(encoding="utf-8"))
             allowed_cells = {tuple(x) for x in wl_doc.get("allowed_cell_triples", [])}
@@ -231,7 +238,7 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
         ]
         delivery_kpis = manage_version_and_sha(
             xlsx_path=v05_path,
-            prev_xlsx_path=v04_path,
+            prev_xlsx_path=(repo_root / "authoring/khshab-G2-MATH_v0.4_official.xlsx") if (repo_root / "authoring/khshab-G2-MATH_v0.4_official.xlsx").exists() else v04_path,
             converter_result=conv_v05,
             delivery_md_path=repo_root / "authoring/WAVE4-CH4-KH-G2-MATH-v0.5.fa.md",
             self_audit_checks=checks_20,

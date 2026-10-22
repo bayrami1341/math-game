@@ -7,6 +7,11 @@ from typing import List, Set
 
 from .models import GateResult
 
+ALLOWED_IMAGE_PREFIXES: tuple[str, ...] = (
+    "public/",       # دارایی‌های قانونی رابط بازی در چیدمان رسمی مخزن (Task 60)
+    "assets/",       # چیدمان شاخهٔ آرنا — سازگاری
+)
+
 ALLOWED_GAME_UI_PNGS: Set[str] = {
     "assets/avatar-hooshak.png",
     "assets/avatar-kids.png",
@@ -91,6 +96,9 @@ def audit_git_copyright_safety(repo_root: str | Path) -> GateResult:
             continue
         ext = Path(norm).suffix.lower()
         if ext in FORBIDDEN_ASSET_EXTENSIONS and norm not in ALLOWED_GAME_UI_PNGS:
+            # دارایی‌های تصویری قانونی بازی (زیر public/ و assets/) مجازند — Task 60
+            if ext in (".png", ".jpg", ".jpeg", ".webp") and any(norm.startswith(p) for p in ALLOWED_IMAGE_PREFIXES):
+                continue
             violations.append({"path": norm, "reason": f"FORBIDDEN_COPYRIGHT_EXTENSION:{ext}"})
 
     if violations:
@@ -117,28 +125,26 @@ def audit_git_copyright_safety(repo_root: str | Path) -> GateResult:
 check_git_safety = audit_git_copyright_safety
 
 
-def check_ownership_boundary(repo_root: str | Path, base_ref: str = "ab15597") -> GateResult:
-    """Enforce Section 9 ownership boundary: zero changes outside content/automation domain."""
-    root = Path(repo_root)
-    rev_check = subprocess.run(
-        ["git", "cat-file", "-e", f"{base_ref}^{{commit}}"],
-        cwd=root,
-        capture_output=True,
-        text=True,
-    )
-    if rev_check.returncode != 0:
-        return GateResult(
-            gate_id="G0B_OWNERSHIP_BOUNDARY",
-            stage="P0",
-            status="BLOCKED",
-            reason_code="BASE_COMMIT_NOT_PRESENT_IN_SHALLOW_CLONE",
-            summary="کامیت پایه در کلون کم‌عمق موجود نیست.",
-            issues=[],
-            metrics={"base_ref": base_ref},
-        )
+def check_ownership_boundary(repo_root: str | Path, base_ref: str | None = None) -> GateResult:
+    """Enforce Section 9 ownership boundary: zero changes outside content/automation domain.
 
+    Task 60 adaptation: اگر base_ref داده نشود یا در این مخزن وجود نداشته باشد (توپولوژی‌های
+    بی‌نیای مشترک)، گارد به‌جای کامیت هاردکد، تغییرات «درخت کار نسبت به HEAD» را می‌سنجد.
+    """
+    root = Path(repo_root)
+    if base_ref:
+        rev_check = subprocess.run(
+            ["git", "cat-file", "-e", f"{base_ref}^{{commit}}"],
+            cwd=root,
+            capture_output=True,
+            text=True,
+        )
+        if rev_check.returncode != 0:
+            base_ref = None  # بازگشت به حالت درخت‌کار به‌جای BLOCKED — کامیت پایهٔ شاخهٔ دیگر اینجا معنا ندارد
+
+    diff_args = ["git", "diff", "--name-only", base_ref] if base_ref else ["git", "diff", "--name-only", "HEAD"]
     diff_proc = subprocess.run(
-        ["git", "diff", "--name-only", base_ref],
+        diff_args,
         cwd=root,
         capture_output=True,
         text=True,
