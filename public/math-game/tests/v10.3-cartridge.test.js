@@ -183,14 +183,18 @@ test('13. چندخشابی: خشاب G2 منتشرشده با قرارداد پ�
   assert.equal(g2.cartridgeId, 'KH-G2-MATH');
   const v = validateCartridge(g2);
   assert.equal(v.ok, true, 'خطاها: ' + v.errors.join(' | '));
-  // موج ۲ ادغام شد: ۸ اسکلت سبز + ۱۸ ردیف صفحه‌ای زرد فصل ۱
-  assert.equal(v.stats.lessons, 26);
+  // موج ۳ ادغام شد: ۸ اسکلت سبز + ۱۸ ردیف فصل ۱ + ۱۸ ردیف فصل ۲ (ص ۱۹–۳۶)
+  assert.equal(v.stats.lessons, 44);
   assert.equal(v.stats.lessonsConfirmed, 8);
-  assert.equal(v.stats.atlasReal + v.stats.atlasProposed, 8);
-  // بانک سؤال موج ۲: ۴۰ سؤال همه زرد «نیاز به تأیید»
-  assert.equal(v.stats.questions, 40);
+  assert.equal(v.stats.atlasReal + v.stats.atlasProposed, 11);
+  // بانک سؤال موج ۳: ۶۸ سؤال (۴۰ فصل ۱ + ۲۸ فصل ۲) همه زرد «نیاز به تأیید»
+  assert.equal(v.stats.questions, 68);
   assert.equal(v.stats.questionsConfirmed, 0);
-  assert.equal(v.stats.questionsProposed, 40);
+  assert.equal(v.stats.questionsProposed, 68);
+  // رگرسیون تاریخی: Q-1011 باید «۱۳ مثلث» باشد (شمارش ماشینی PDF — حادثهٔ ۱۳≠۱۶)
+  const q1011 = g2.questionBank.find(q => q.id === 'Q-1011');
+  assert.ok(q1011, 'Q-1011 باید در بانک باشد');
+  assert.match(q1011.prompt || q1011.text || '', /۱۳/, 'Q-1011 باید ۱۳ مثلث بگوید نه ۱۶');
   assert.equal(v.gate.red, 0, 'هیچ قرمزی مجاز نیست');
   // خشاب G2 با expectedId خودش هم دقیقاً سازگار است (رفتار لودر مرورگر)
   assert.equal(validateCartridge(g2, 'KH-G2-MATH').ok, true);

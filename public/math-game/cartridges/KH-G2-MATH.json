@@ -1,9 +1,9 @@
 {
   "formatVersion": "1.0",
   "cartridgeId": "KH-G2-MATH",
-  "generatedAt": "2026-10-21T19:14:20.406Z",
+  "generatedAt": "2026-10-22T09:48:42.830Z",
   "source": {
-    "file": "khshab-G2-MATH_v0.3.1.xlsx",
+    "file": "khshab-G2-MATH_v0.4.xlsx",
     "tool": "cartridge-converter v1.1 (چندخشابی)"
   },
   "identity": [
@@ -508,6 +508,294 @@
       "source": "پیشنهاد AI — موتور تألیف v۱.۰؛ تأیید: کتاب فیزیکی معلم — چاپ چهاردهم ۱۴۰۴ + راستی‌آزمایی عکس (شناسنامه/فهرست/پایان C205) + تأیید شفاهی معلم",
       "status": "تأییدشده",
       "note": "اسکلت موج ۱: عنوان و صفحهٔ آغاز از فهرست تصویری و صفحهٔ آغاز فصل (چاپ چهاردهم، ۱۴۰۴)؛ پایان گستره = آخرین صفحهٔ شماره‌دار کتاب، ۱۴۴ (شمارهٔ چاپی روی همان صفحه). این ردیف لنگر فصل ۸ است؛ ردیف‌های درسی داخل فصل در موج عمق‌کاوی با شناسه‌های همین باند ساخته می‌شوند. خواندن و ساختن نمودار با موتور ضرب هم‌خانواده نیست؛ مدل گرافی‌اش در موج عمق‌کاوی تعیین می‌شود."
+    },
+    {
+      "id": "L-201",
+      "page": "۱۹",
+      "chapter": "۲",
+      "title": "آغاز فصل: جمع و تفریق اعداد دو رقمی",
+      "objective": "دانش‌آموز بتواند تعداد بازیکنان و یاران ذخیره را برای یک تیم با جمع بیابد.",
+      "vocabulary": "فوتبال، تیم، نفر",
+      "activityType": "پرسش آغاز فصل: ۱۱ بازیکن و ۷ یار ذخیره",
+      "visual": "M_GROUPS — ۱۱ بازیکن و ۷ ذخیره، دو گروه برای جمع",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 27 (✓)؛ ص کتاب 19 / PDF 25 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-202",
+      "page": "۲۰",
+      "chapter": "۲",
+      "title": "جمع و تفریق ده‌تایی — فعّالیت",
+      "objective": "دانش‌آموز بتواند جمع و تفریق ده‌تایی‌ها را با دسته و محور محاسبه کند.",
+      "vocabulary": "دستهٔ ده‌تایی، محور",
+      "activityType": "فعّالیت بالای صفحه؛ نکتهٔ ده‌تایی؛ تقریب بزن در جعبهٔ پایین",
+      "visual": "M_BUNDLES — ۴ دستهٔ ده‌تایی و ۲ دستهٔ ده‌تایی؛ حاصل ۶ دسته",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1041، Q-1042، Q-1043، Q-1044",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 28 (✗)؛ ص کتاب 20 / PDF 26؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-203",
+      "page": "۲۱",
+      "chapter": "۲",
+      "title": "کار در کلاس + فعّالیت",
+      "objective": "دانش‌آموز بتواند عبارت‌های یک‌رقمی و ده‌تایی متناظر را با شکل و محور حل کند.",
+      "vocabulary": "دستهٔ ده‌تایی، محور",
+      "activityType": "کار در کلاس بالای صفحه؛ فعّالیت جمع‌نویسی و محور پایین",
+      "visual": "M_NUMBERLINE — محور ۰ تا ۱۰۰ با پرش‌های ده‌تایی",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 29 (✗)؛ ص کتاب 21 / PDF 27؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-204",
+      "page": "۲۲",
+      "chapter": "۲",
+      "title": "تمرین + کامل کن",
+      "objective": "دانش‌آموز بتواند تساوی دسته‌های ده‌تایی و جای عدد روی محور را کامل کند.",
+      "vocabulary": "دستهٔ ده‌تایی، محور",
+      "activityType": "تمرین و کامل کن: دسته‌بندی، رنگ‌کردن، محور",
+      "visual": "M_NUMBERLINE — نشانه‌گذاری ۱۷، ۲۵ و ۳۲ روی محور",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 30 (✓)؛ ص کتاب 22 / PDF 28 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-205",
+      "page": "۲۳",
+      "chapter": "۲",
+      "title": "جمع و تفریق — فعّالیت",
+      "objective": "دانش‌آموز بتواند جمع و تفریق یک‌رقمی را با رسم شکل، محور یا چوب‌خط انجام دهد.",
+      "vocabulary": "محور، چوب‌خط، رسم شکل",
+      "activityType": "فعّالیت: سه راه نمایش و محاسبه",
+      "visual": "M_NUMBERLINE — محور ۰ تا ۲۰ برای جمع و تفریق",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1045، Q-1046، Q-1047، Q-1048",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 31 (✓)؛ ص کتاب 23 / PDF 29 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-206",
+      "page": "۲۴",
+      "chapter": "۲",
+      "title": "کار در کلاس + فعّالیت",
+      "objective": "دانش‌آموز بتواند حاصل جمع و تفریق یک‌رقمی را در جدول و با رنگ‌کردن مربع‌ها بیابد.",
+      "vocabulary": "جدول، مربّع، جمع، تفریق",
+      "activityType": "کار در کلاس: جدول؛ فعّالیت پایین: رنگ‌کردن یا خط‌زدن مربع‌ها",
+      "visual": "M_ARRAY — مربع‌های رنگ‌شده یا خط‌خورده برای محاسبه",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 32 (✗)؛ ص کتاب 24 / PDF 30؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-207",
+      "page": "۲۵",
+      "chapter": "۲",
+      "title": "تمرین + کار در کلاس",
+      "objective": "دانش‌آموز بتواند جمع دو عدد یک‌رقمی را با ساختن ده و جمع دوقلوها توضیح دهد.",
+      "vocabulary": "انگشتان دست، دستهٔ ده‌تایی، جدول عددها",
+      "activityType": "تمرین مسئله؛ کار در کلاس: روش‌های ۷+۶؛ خلّاق باش",
+      "visual": "M_BUNDLES — دستهٔ ده‌تایی از ۷ و ۳، همراه ۳ یکی",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 33 (✓)؛ ص کتاب 25 / PDF 31 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-208",
+      "page": "۲۶",
+      "chapter": "۲",
+      "title": "حلّ مسئله + الگویابی کن",
+      "objective": "دانش‌آموز بتواند همهٔ عددهای دو رقمی با رقم‌های داده‌شده را منظّم بنویسد.",
+      "vocabulary": "یکان، دهگان، نظم، الگو",
+      "activityType": "حلّ مسئله بالا: نمودار درختی و جمع‌های ۶؛ الگویابی کن پایین",
+      "visual": "M_PATTERN — شاخه‌های رقم دهگان ۵/۷ و رقم یکان ۳",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 34 (✗)؛ ص کتاب 26 / PDF 32؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-209",
+      "page": "۲۷",
+      "chapter": "۲",
+      "title": "الگوسازی + کامل کن",
+      "objective": "دانش‌آموز بتواند حالت‌های رنگ‌آمیزی را با نظم فهرست کند و دقیقه‌های ساعت را بخواند.",
+      "vocabulary": "مربّع، مثلّث، ساعت، دقیقه",
+      "activityType": "الگوسازی بالا؛ کامل کن: ساعت در جعبهٔ میانی",
+      "visual": "M_PATTERN — دو رنگ مربع در برابر سه رنگ مثلث",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 35 (✗)؛ ص کتاب 27 / PDF 33؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-210",
+      "page": "۲۸",
+      "chapter": "۲",
+      "title": "جمع و تفریق دو عدد دو رقمی — فعّالیت",
+      "objective": "دانش‌آموز بتواند جمع و تفریق بدون تبدیل را با جداکردن ده‌تایی و یکی انجام دهد.",
+      "vocabulary": "ده‌تایی، یکی، جمع، تفریق",
+      "activityType": "فعّالیت: ۱۴+۲۳ و ۴۷−۲۲ با دسته‌ها",
+      "visual": "M_BUNDLES — ۱۴ (۱ ده‌تایی و ۴ یکی) + ۲۳ (۲ ده‌تایی و ۳ یکی)",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1049، Q-1050، Q-1051، Q-1052",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 36 (✓)؛ ص کتاب 28 / PDF 34 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-211",
+      "page": "۲۹",
+      "chapter": "۲",
+      "title": "فعّالیت + کار در کلاس",
+      "objective": "دانش‌آموز بتواند جمع و تفریق دو رقمی را مرحله‌ای با ده‌تایی و یکی توضیح دهد.",
+      "vocabulary": "جدول، ده‌تایی، یکی",
+      "activityType": "فعّالیت جدول؛ کار در کلاس: ۳۴+۲۳ و ۴۷−۲۲؛ الگویابی ساعت",
+      "visual": "M_PLACEVALUE — ۳۴+۲۰=۵۴ سپس ۵۴+۳=۵۷",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 37 (✓)؛ ص کتاب 29 / PDF 35 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-212",
+      "page": "۳۰",
+      "chapter": "۲",
+      "title": "تمرین + تقریب بزن",
+      "objective": "دانش‌آموز بتواند جمع یا تفریق را با شکل و محور حل کند و نزدیکی یک عدد به دهگان را بسنجد.",
+      "vocabulary": "محور، تقریب، عدد",
+      "activityType": "تمرین محاسبه؛ تقریب بزن: جای ۲۳ و ۳۷ و ۴۱ و ۵۸",
+      "visual": "M_NUMBERLINE — ۲۳ بین ۲۰ و ۳۰ و نزدیک‌تر به ۲۰",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 38 (✓)؛ ص کتاب 30 / PDF 36 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-213",
+      "page": "۳۱",
+      "chapter": "۲",
+      "title": "جمع و تفریق دو عدد (ادامه) — فعّالیت",
+      "objective": "دانش‌آموز بتواند جمعِ با تبدیل یکان به دهگان و تفریق مرحله‌ای را با دسته‌ها نشان دهد.",
+      "vocabulary": "دستهٔ ده‌تایی، یکی، جدول",
+      "activityType": "فعّالیت: ۲۴+۳۷=۶۱ و ۳۵−۱۷ (مثال کتاب، حاصل ۱۸)؛ تکمیل جدول",
+      "visual": "M_BUNDLES — ۲۴+۳۰=۵۴ سپس ۵۴+۷=۶۱؛ تبدیل ۱۱ یکی",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1053، Q-1054، Q-1055، Q-1056",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 39 (✗)؛ ص کتاب 31 / PDF 37؛ اصلاح ستون «اصلاح آرنا» مقدم بر نقشهٔ خام. موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است. | بازرس دوم: PDF ص۳۷ «تفریق 35-17» را نشان می‌دهد؛ ادعای «۵۷−۱۴» حکم آرنا نادرست بود و اصلاح شد."
+    },
+    {
+      "id": "L-214",
+      "page": "۳۲",
+      "chapter": "۲",
+      "title": "کار در کلاس + کامل کن",
+      "objective": "دانش‌آموز بتواند جمع و تفریق را با جابه‌جایی ده‌تایی و یکی در جدول ۱ تا ۹۹ انجام دهد.",
+      "vocabulary": "جدول اعداد، ده‌تایی، یکی",
+      "activityType": "کار در کلاس: ۲۴+۳۲ و ۴۷−۳۴؛ کامل کن: ساعت",
+      "visual": "M_CHART — جدول ۱ تا ۹۹: جابه‌جایی سطر و خانه",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1057، Q-1058، Q-1059، Q-1060",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 40 (✓)؛ ص کتاب 32 / PDF 38 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-215",
+      "page": "۳۳",
+      "chapter": "۲",
+      "title": "تمرین + تقریب بزن",
+      "objective": "دانش‌آموز بتواند مسئلهٔ جمع و تفریق را حل و سپس جواب تقریبی را با گردکردن دهگان پیدا کند.",
+      "vocabulary": "جمع، تفریق، دقیقه، تقریب",
+      "activityType": "تمرین: ۲۶+۱۷ و ۵۵−۲۹؛ تقریب بزن: ۴۷+۲۱",
+      "visual": "M_NUMBERLINE — ۴۷ نزدیک ۵۰ و ۲۱ نزدیک ۲۰",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1061، Q-1062، Q-1063، Q-1064",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 41 (✓)؛ ص کتاب 33 / PDF 39 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-216",
+      "page": "۳۴",
+      "chapter": "۲",
+      "title": "مرور فصل + فرهنگ نوشتن + تمرین",
+      "objective": "دانش‌آموز بتواند حاصل عبارت‌های گل‌ها را حساب و بر پایهٔ بازهٔ جدول رنگ طبقه‌بندی کند.",
+      "vocabulary": "جدول رنگ، جمع، تفریق",
+      "activityType": "مرور فصل: فرهنگ نوشتن و تمرین ۱؛ بازه‌ها طبق اصلاح آرنا",
+      "visual": "M_CHART — ۱۰ گل و چهار بازهٔ رنگی: ۱۰–۲۰، ۱۰۰–۱۱۰، ۲۰–۳۰، ۱۰۰–۱۰۵",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "Q-1065، Q-1066، Q-1067، Q-1068",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 42 (✓)؛ ص کتاب 34 / PDF 40 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-217",
+      "page": "۳۵",
+      "chapter": "۲",
+      "title": "ادامهٔ مرور فصل",
+      "objective": "دانش‌آموز بتواند جمع و تفریق تقریبی و شمار حالت‌های رقم دهگان و یکان را حل کند.",
+      "vocabulary": "جمع، تفریق، دایره، مستطیل",
+      "activityType": "مرور فصل: تمرین‌های ۲ تا ۵؛ حالت‌های رنگ و مسئلهٔ صدف",
+      "visual": "M_PATTERN — ۲ انتخاب یکان و ۳ انتخاب دهگان: ۶ عدد",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 43 (✓)؛ ص کتاب 35 / PDF 41 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
+    },
+    {
+      "id": "L-218",
+      "page": "۳۶",
+      "chapter": "۲",
+      "title": "معمّا + فرهنگ خواندن",
+      "objective": "دانش‌آموز بتواند ارزش یک رقم را در جای یکان و دهگانِ عدد توضیح دهد.",
+      "vocabulary": "شکل شطرنجی، رقم، ارزش مکانی",
+      "activityType": "معمّای پوشاندن بدون چرخاندن + فرهنگ خواندن",
+      "visual": "M_PLACEVALUE — رقم ۲ در یکانِ ۲۲ ارزش ۲ و در دهگان ارزش ۲۰",
+      "practicePotential": "متوسط",
+      "engineCompat": "خارج از موتور",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "نقشهٔ مادر ردیف 44 (✓)؛ ص کتاب 36 / PDF 42 موتور فعلی ضرب‌محور است؛ تعاملیِ جمع/تفریق نیازمند توسعه است."
     }
   ],
   "errorAtlas": [
@@ -614,6 +902,45 @@
       "source": "کد تازه — پیشنهاد AI موتور تألیف v۱.۰",
       "status": "تأییدشده",
       "note": "کد تازهٔ این موج — ستاره‌دار در فصل ۱؛ بیشترین کاربرد: ص ۵، ۱۰، ۱۲ — پذیرفته‌شده در گیت موج ۲ (معلّم)؛ پسوند «(پیشنهاد)» برای ثبات شناسه ماند و در نسخهٔ قالب بعدی پاک می‌شود."
+    },
+    {
+      "code": "E_CARRY_MISS",
+      "nameFa": "جاانداختن انتقال ده‌تایی",
+      "category": "راهبردی",
+      "description": "وقتی جمع یکی‌ها به ۱۰ می‌رسد، ده‌تایی تازه را در جواب منظور نمی‌کند.",
+      "behavioralSignal": "۲۴+۳۷ را ۵۱ می‌نویسد.",
+      "questionPattern": "دو عدد دورقمی با جمع یکی‌ها ≥۱۰؛ گزینهٔ بی‌انتقال",
+      "intervention": "۱۱ یکی را به ۱ ده‌تایی و ۱ یکی تبدیل کند.",
+      "priority": "بالا",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "پیشنهاد تشخیصی فصل ۲؛ در classifyAttempt فعلی (ضرب‌محور) پیاده نشده؛ نیازمند تأیید معلم و توسعهٔ موتور."
+    },
+    {
+      "code": "E_BORROW_MISS",
+      "nameFa": "جاانداختن قرض در تفریق",
+      "category": "راهبردی",
+      "description": "برای کم‌کردن یکی‌ها یک ده‌تایی باز نمی‌کند یا رقم‌ها را وارونه کم می‌کند.",
+      "behavioralSignal": "۶۲−۳۸ را ۳۴ می‌نویسد.",
+      "questionPattern": "تفریق با یکان کوچک‌ترِ عدد اول؛ گزینهٔ بی‌قرض",
+      "intervention": "یک ده‌تایی را به ۱۰ یکی باز کند و دوباره کم کند.",
+      "priority": "بالا",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "پیشنهاد تشخیصی فصل ۲؛ در classifyAttempt فعلی (ضرب‌محور) پیاده نشده؛ نیازمند تأیید معلم و توسعهٔ موتور."
+    },
+    {
+      "code": "E_ROUND_NEAREST",
+      "nameFa": "گردکردن به دهگان نادرست",
+      "category": "مفهومی",
+      "description": "به‌جای نزدیک‌ترین دهگان، دهگان دورتر یا عدد اصلی را برمی‌گزیند.",
+      "behavioralSignal": "۴۷ را ۴۰ تقریب می‌زند.",
+      "questionPattern": "تقریب عدد دو رقمی و جمع/تفریق تقریبی",
+      "intervention": "جای عدد را میان دو دهگان روی محور علامت بزند.",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "پیشنهاد تشخیصی فصل ۲؛ در classifyAttempt فعلی (ضرب‌محور) پیاده نشده؛ نیازمند تأیید معلم و توسعهٔ موتور."
     }
   ],
   "questionBank": [
@@ -2096,6 +2423,1042 @@
       "note": "ضد J12 — کار دفترچه‌ای (لاتین): 5+5=10; 10+5=15; 15+5=20؛ پاسخ جدا حساب شد.",
       "math": null,
       "answerValue": 20
+    },
+    {
+      "id": "Q-1041",
+      "anchorId": "L-202",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "۳ دستهٔ ده‌تایی و ۴ دستهٔ ده‌تایی روی هم چند یکی دارند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۰",
+        "۷",
+        "۶۰",
+        "۸۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ZERO_PLACE_MISS؛ ج→E_TABLE_NEIGHBOUR؛ د→E_TABLE_NEIGHBOUR",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_TABLE_NEIGHBOUR"
+        },
+        {
+          "letter": "د",
+          "claim": "E_TABLE_NEIGHBOUR"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۷۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 30+40=70; independently checked: answer=70; wrong=[(7, 'E_ZERO_PLACE_MISS'), (60, 'E_TABLE_NEIGHBOUR'), (80, 'E_TABLE_NEIGHBOUR')]. لنگر ص 20 / PDF 26؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 70
+    },
+    {
+      "id": "Q-1042",
+      "anchorId": "L-202",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۹۰ منهای ۳۰ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶",
+        "۶۰",
+        "۵۰",
+        "۷۰"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ج→E_TABLE_NEIGHBOUR؛ د→E_TABLE_NEIGHBOUR",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_TABLE_NEIGHBOUR"
+        },
+        {
+          "letter": "د",
+          "claim": "E_TABLE_NEIGHBOUR"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۶۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 90-30=60; independently checked: answer=60; wrong=[(6, 'E_ZERO_PLACE_MISS'), (50, 'E_TABLE_NEIGHBOUR'), (70, 'E_TABLE_NEIGHBOUR')]. لنگر ص 20 / PDF 26؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 60
+    },
+    {
+      "id": "Q-1043",
+      "anchorId": "L-202",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "از ۸ دستهٔ ده‌تایی، ۵ دسته برداریم و ۲ دسته اضافه کنیم؛ چند یکی می‌ماند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵",
+        "۳۰",
+        "۵۰",
+        "۷۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_SUB_CONFUSION؛ د→E_ADD_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۵۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 80-50+20=50; independently checked: answer=50; wrong=[(5, 'E_ZERO_PLACE_MISS'), (30, 'E_SUB_CONFUSION'), (70, 'E_ADD_CONFUSION')]. لنگر ص 20 / PDF 26؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 50
+    },
+    {
+      "id": "Q-1044",
+      "anchorId": "L-202",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "روی محور ده‌تایی از ۲۰ سه پرش به جلو می‌رویم؛ به چند می‌رسیم؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۲۳",
+        "۴۰",
+        "۶۰",
+        "۵۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_SKIP_UNDERCOUNT؛ ج→E_TABLE_NEIGHBOUR",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SKIP_UNDERCOUNT"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_TABLE_NEIGHBOUR"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۵۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 20+3*10=50; independently checked: answer=50; wrong=[(23, 'E_ZERO_PLACE_MISS'), (40, 'E_SKIP_UNDERCOUNT'), (60, 'E_TABLE_NEIGHBOUR')]. لنگر ص 20 / PDF 26؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 50
+    },
+    {
+      "id": "Q-1045",
+      "anchorId": "L-205",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۷ + ۶ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۳",
+        "۱۲",
+        "۱۴",
+        "۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_DOUBLE_OFF؛ ج→E_DOUBLE_OFF؛ د→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۱۳؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 7+6=13; independently checked: answer=13; wrong=[(12, 'E_DOUBLE_OFF'), (14, 'E_DOUBLE_OFF'), (1, 'E_SUB_CONFUSION')]. لنگر ص 23 / PDF 29؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 13
+    },
+    {
+      "id": "Q-1046",
+      "anchorId": "L-205",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۱۶ − ۹ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶",
+        "۷",
+        "۸",
+        "۲۵"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_DOUBLE_OFF؛ ج→E_DOUBLE_OFF؛ د→E_ADD_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۷؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 16-9=7; independently checked: answer=7; wrong=[(6, 'E_DOUBLE_OFF'), (8, 'E_DOUBLE_OFF'), (25, 'E_ADD_CONFUSION')]. لنگر ص 23 / PDF 29؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 7
+    },
+    {
+      "id": "Q-1047",
+      "anchorId": "L-205",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "ابتدا ۸ چوب‌خط و بعد ۷ چوب‌خط بکشیم؛ در کل چند چوب‌خط داریم؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۴",
+        "۱۶",
+        "۱۵",
+        "۱"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_DOUBLE_OFF؛ ب→E_DOUBLE_OFF؛ د→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۱۵؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 8+7=15; independently checked: answer=15; wrong=[(14, 'E_DOUBLE_OFF'), (16, 'E_DOUBLE_OFF'), (1, 'E_SUB_CONFUSION')]. لنگر ص 23 / PDF 29؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 15
+    },
+    {
+      "id": "Q-1048",
+      "anchorId": "L-205",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "روی محور از ۱۴، ۶ خانه عقب برویم؛ کجا می‌ایستیم؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷",
+        "۹",
+        "۲۰",
+        "۸"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_DOUBLE_OFF؛ ب→E_DOUBLE_OFF؛ ج→E_ADD_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۸؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 14-6=8; independently checked: answer=8; wrong=[(7, 'E_DOUBLE_OFF'), (9, 'E_DOUBLE_OFF'), (20, 'E_ADD_CONFUSION')]. لنگر ص 23 / PDF 29؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 8
+    },
+    {
+      "id": "Q-1049",
+      "anchorId": "L-210",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۳۲ + ۲۴ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۶",
+        "۵۲",
+        "۳۶",
+        "۵۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_GROUPS؛ ج→E_GROUPS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۵۶؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 32+24=56; independently checked: answer=56; wrong=[(52, 'E_GROUPS'), (36, 'E_GROUPS'), (55, 'E_DOUBLE_OFF')]. لنگر ص 28 / PDF 34؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 56
+    },
+    {
+      "id": "Q-1050",
+      "anchorId": "L-210",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۷۶ − ۳۲ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۶",
+        "۴۴",
+        "۵۴",
+        "۴۳"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_GROUPS؛ ج→E_GROUPS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۴۴؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 76-32=44; independently checked: answer=44; wrong=[(46, 'E_GROUPS'), (54, 'E_GROUPS'), (43, 'E_DOUBLE_OFF')]. لنگر ص 28 / PDF 34؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 44
+    },
+    {
+      "id": "Q-1051",
+      "anchorId": "L-210",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "۵۱ تا مهره داشتیم؛ ۲۳ تا اضافه و ۱۲ تا کم کردیم. چند مهره ماند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۴",
+        "۵۰",
+        "۶۲",
+        "۶۳"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_SUB_CONFUSION؛ ب→E_GROUPS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۶۲؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 51+23-12=62; independently checked: answer=62; wrong=[(74, 'E_SUB_CONFUSION'), (50, 'E_GROUPS'), (63, 'E_DOUBLE_OFF')]. لنگر ص 28 / PDF 34؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 62
+    },
+    {
+      "id": "Q-1052",
+      "anchorId": "L-210",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "۴ دستهٔ ده‌تایی و ۳ یکی داریم. ۲ دستهٔ ده‌تایی و ۵ یکی می‌افزاییم؛ حاصل چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۸",
+        "۶۳",
+        "۶۹",
+        "۶۸"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_GROUPS؛ ب→E_GROUPS؛ ج→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۶۸؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 43+25=68; independently checked: answer=68; wrong=[(48, 'E_GROUPS'), (63, 'E_GROUPS'), (69, 'E_DOUBLE_OFF')]. لنگر ص 28 / PDF 34؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 68
+    },
+    {
+      "id": "Q-1053",
+      "anchorId": "L-213",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۲۶ + ۳۷ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۳",
+        "۵۳",
+        "۶۲",
+        "۶۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_CARRY_MISS؛ ج→E_DOUBLE_OFF؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۶۳؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 26+37=63; independently checked: answer=63; wrong=[(53, 'E_CARRY_MISS'), (62, 'E_DOUBLE_OFF'), (64, 'E_DOUBLE_OFF')]. لنگر ص 31 / PDF 37؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 63
+    },
+    {
+      "id": "Q-1054",
+      "anchorId": "L-213",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۴۸ + ۱۵ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۳",
+        "۶۳",
+        "۶۲",
+        "۶۴"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ج→E_DOUBLE_OFF؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۶۳؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 48+15=63; independently checked: answer=63; wrong=[(53, 'E_CARRY_MISS'), (62, 'E_DOUBLE_OFF'), (64, 'E_DOUBLE_OFF')]. لنگر ص 31 / PDF 37؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 63
+    },
+    {
+      "id": "Q-1055",
+      "anchorId": "L-213",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "یک ظرف ۲۷ مهره و ظرف دیگر ۳۶ مهره دارد؛ ۵ مهره را جدا می‌کنیم. چند مهره می‌ماند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۸",
+        "۶۳",
+        "۵۸",
+        "۵۷"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ب→E_SUB_CONFUSION؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۵۸؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 27+36-5=58; independently checked: answer=58; wrong=[(48, 'E_CARRY_MISS'), (63, 'E_SUB_CONFUSION'), (57, 'E_DOUBLE_OFF')]. لنگر ص 31 / PDF 37؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 58
+    },
+    {
+      "id": "Q-1056",
+      "anchorId": "L-213",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "در جمع ۳۸ + ۲۷ ابتدا ده‌تایی‌ها و بعد یکی‌ها را می‌افزاییم؛ نتیجه چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۵",
+        "۵۸",
+        "۶۶",
+        "۶۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ب→E_GROUPS؛ ج→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۶۵؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 38+20=58;58+7=65; independently checked: answer=65; wrong=[(55, 'E_CARRY_MISS'), (58, 'E_GROUPS'), (66, 'E_DOUBLE_OFF')]. لنگر ص 31 / PDF 37؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 65
+    },
+    {
+      "id": "Q-1057",
+      "anchorId": "L-214",
+      "domain": "CORE",
+      "cpa": "تصویری",
+      "prompt": "در جدول اعداد، از ۶۲ سه ردیف بالا و ۸ خانه عقب برویم؛ به چند می‌رسیم؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۲۴",
+        "۳۴",
+        "۳۲",
+        "۲۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_BORROW_MISS؛ ج→E_GROUPS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۲۴؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 62-30-8=24; independently checked: answer=24; wrong=[(34, 'E_BORROW_MISS'), (32, 'E_GROUPS'), (25, 'E_DOUBLE_OFF')]. لنگر ص 32 / PDF 38؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 24
+    },
+    {
+      "id": "Q-1058",
+      "anchorId": "L-214",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۷۳ − ۲۸ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۵",
+        "۴۵",
+        "۴۴",
+        "۴۶"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_BORROW_MISS؛ ج→E_DOUBLE_OFF؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۴۵؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 73-28=45; independently checked: answer=45; wrong=[(55, 'E_BORROW_MISS'), (44, 'E_DOUBLE_OFF'), (46, 'E_DOUBLE_OFF')]. لنگر ص 32 / PDF 38؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 45
+    },
+    {
+      "id": "Q-1059",
+      "anchorId": "L-214",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "از ۸۱ مهره، ۳۷ مهره برداریم و ۵ مهره اضافه کنیم؛ چند مهره می‌ماند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۴",
+        "۴۴",
+        "۴۹",
+        "۴۸"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_BORROW_MISS؛ ب→E_GROUPS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۴۹؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 81-37+5=49; independently checked: answer=49; wrong=[(54, 'E_BORROW_MISS'), (44, 'E_GROUPS'), (48, 'E_DOUBLE_OFF')]. لنگر ص 32 / PDF 38؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 49
+    },
+    {
+      "id": "Q-1060",
+      "anchorId": "L-214",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "در جدول از ۵۴ دو ردیف بالا و ۶ خانه عقب برویم؛ به چند می‌رسیم؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۸",
+        "۳۴",
+        "۲۹",
+        "۲۸"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_BORROW_MISS؛ ب→E_GROUPS؛ ج→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۲۸؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 54-20-6=28; independently checked: answer=28; wrong=[(38, 'E_BORROW_MISS'), (34, 'E_GROUPS'), (29, 'E_DOUBLE_OFF')]. لنگر ص 32 / PDF 38؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 28
+    },
+    {
+      "id": "Q-1061",
+      "anchorId": "L-215",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "آوا ۲۸ دقیقه مطالعه و ۱۶ دقیقه تمرین کرد. در کل چند دقیقه کار کرد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۴",
+        "۳۴",
+        "۴۳",
+        "۱۲"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_CARRY_MISS؛ ج→E_DOUBLE_OFF؛ د→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۴۴؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 28+16=44; independently checked: answer=44; wrong=[(34, 'E_CARRY_MISS'), (43, 'E_DOUBLE_OFF'), (12, 'E_SUB_CONFUSION')]. لنگر ص 33 / PDF 39؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 44
+    },
+    {
+      "id": "Q-1062",
+      "anchorId": "L-215",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "از ۶۵ دقیقه، ۲۷ دقیقه گذشته است. چند دقیقه باقی مانده؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۲",
+        "۳۸",
+        "۳۷",
+        "۹۲"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_BORROW_MISS؛ ج→E_DOUBLE_OFF؛ د→E_ADD_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۳۸؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 65-27=38; independently checked: answer=38; wrong=[(42, 'E_BORROW_MISS'), (37, 'E_DOUBLE_OFF'), (92, 'E_ADD_CONFUSION')]. لنگر ص 33 / PDF 39؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 38
+    },
+    {
+      "id": "Q-1063",
+      "anchorId": "L-215",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "یک کلاس ۴۹ برگه داشت، ۲۳ برگه دریافت کرد و ۱۸ برگه مصرف کرد. چند برگه ماند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۴",
+        "۷۲",
+        "۵۴",
+        "۵۳"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ب→E_SUB_CONFUSION؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۵۴؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 49+23-18=54; independently checked: answer=54; wrong=[(44, 'E_CARRY_MISS'), (72, 'E_SUB_CONFUSION'), (53, 'E_DOUBLE_OFF')]. لنگر ص 33 / PDF 39؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 54
+    },
+    {
+      "id": "Q-1064",
+      "anchorId": "L-215",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "مینا ۵۲ برچسب داشت. ۲۸ تا بخشید و ۱۷ تا خرید. اکنون چند برچسب دارد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۱",
+        "۲۴",
+        "۴۰",
+        "۴۱"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_BORROW_MISS؛ ب→E_GROUPS؛ ج→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_GROUPS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۴۱؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 52-28+17=41; independently checked: answer=41; wrong=[(51, 'E_BORROW_MISS'), (24, 'E_GROUPS'), (40, 'E_DOUBLE_OFF')]. لنگر ص 33 / PDF 39؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 41
+    },
+    {
+      "id": "Q-1065",
+      "anchorId": "L-216",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "حاصل تقریبی ۴۷ + ۲۱ با گردکردن به نزدیک‌ترین دهگان چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۰",
+        "۶۰",
+        "۸۰",
+        "۶۸"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ROUND_NEAREST؛ ج→E_ROUND_NEAREST؛ د→E_ROUND_NEAREST",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ROUND_NEAREST"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۷۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 47~50;21~20;50+20=70; independently checked: answer=70; wrong=[(60, 'E_ROUND_NEAREST'), (80, 'E_ROUND_NEAREST'), (68, 'E_ROUND_NEAREST')]. لنگر ص 34 / PDF 40؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 70
+    },
+    {
+      "id": "Q-1066",
+      "anchorId": "L-216",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "حاصل تقریبی ۸۱ − ۲۸ با گردکردن به نزدیک‌ترین دهگان چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۰",
+        "۵۰",
+        "۴۰",
+        "۵۳"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_ROUND_NEAREST؛ ج→E_ROUND_NEAREST؛ د→E_ROUND_NEAREST",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ROUND_NEAREST"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق: ۵۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 81~80;28~30;80-30=50; independently checked: answer=50; wrong=[(60, 'E_ROUND_NEAREST'), (40, 'E_ROUND_NEAREST'), (53, 'E_ROUND_NEAREST')]. لنگر ص 34 / PDF 40؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 50
+    },
+    {
+      "id": "Q-1067",
+      "anchorId": "L-216",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "حاصل تقریبی ۳۹ + ۲۵ با گردکردن به نزدیک‌ترین دهگان چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۰",
+        "۸۰",
+        "۷۰",
+        "۶۴"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ROUND_NEAREST؛ ب→E_ROUND_NEAREST؛ د→E_ROUND_NEAREST",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ROUND_NEAREST"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۷۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 39~40;25~30;40+30=70; independently checked: answer=70; wrong=[(60, 'E_ROUND_NEAREST'), (80, 'E_ROUND_NEAREST'), (64, 'E_ROUND_NEAREST')]. لنگر ص 34 / PDF 40؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 70
+    },
+    {
+      "id": "Q-1068",
+      "anchorId": "L-216",
+      "domain": "SIDE",
+      "cpa": "علامتی",
+      "prompt": "حاصل تقریبی ۸۹ − ۵۱ با گردکردن به نزدیک‌ترین دهگان چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۰",
+        "۵۰",
+        "۳۸",
+        "۴۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_ROUND_NEAREST؛ ب→E_ROUND_NEAREST؛ ج→E_ROUND_NEAREST",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ROUND_NEAREST"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق: ۴۰؛ محاسبهٔ مستقل در یادداشت. گزینه‌های دیگر راه‌حل درست این سؤال نیستند.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 89~90;51~50;90-50=40; independently checked: answer=40; wrong=[(30, 'E_ROUND_NEAREST'), (50, 'E_ROUND_NEAREST'), (38, 'E_ROUND_NEAREST')]. لنگر ص 34 / PDF 40؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 40
     }
   ],
   "glossary": [
@@ -2216,13 +3579,13 @@
       "اطلس: E_SKIP_UNDERCOUNT پیشنهادی است ولی هم‌نام کد واقعی موتور است"
     ],
     "stats": {
-      "lessons": 26,
+      "lessons": 44,
       "lessonsConfirmed": 8,
       "atlasReal": 2,
-      "atlasProposed": 6,
-      "questions": 40,
+      "atlasProposed": 9,
+      "questions": 68,
       "questionsConfirmed": 0,
-      "questionsProposed": 40
+      "questionsProposed": 68
     },
     "gate": {
       "red": 0,
