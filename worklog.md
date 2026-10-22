@@ -1402,3 +1402,26 @@ Work Log:
 
 Stage Summary:
 - برای انتشار CI: مالک یا scope توکن را به workflow ارتقا می‌دهد یا خودش فایل را پوش می‌کند؛ سپس: git cherry-pick 15995f4 && git push origin HEAD:v10.3-beta
+
+---
+Task ID: 61-release
+Agent: Z.ai Code (main)
+Task: دریافت توکن workflow از مالک → انتشار فایل CI (گام ۲) → سبزکردن اولین ران واقعی khshab-gate
+
+Work Log:
+- توکن جدید مالک (classic، اسکوپ repo+workflow+write:packages) از چت دریافت و در remote نصب شد؛ curl اعتبار‌سنجی: 200 + اسکوپ‌ها تأیید
+- کشف: origin/main روی گیت‌هاب کامیت بی‌ریشهٔ «Add files via upload» (5ad6659، index.html بازی «نبرد ضرب‌ها» ۱۲۰۷ خطی آپلود دستی مالک) داشت و با تاریخچهٔ محلی بی‌نیای بود
+- انتشار CI: cherry-pick 15995f4 روی main (920a8a8) → push موفق v10.3-beta (690f540..920a8a8) — مانع چندوقت scope workflow برطرف شد
+- آشتی main: merge --allow-unrelated-histories 5ad6659 → a1a4b01 (index.html مالک حفظ + تاریخچهٔ کامل بازگشت) → push موفق main
+- اولین ران واقعی CI: هر دو شاخه FAILURE — همهٔ مراحل تا «تست موتور» سبز؛ فقط «check-wave سر G2 (self-baseline)» قرمز با ownership_boundary=FAIL (لیست تخلف در خروجی چاپ نمی‌شد)
+- ریشه‌یابی: npm install در tools/cartridge-converter فایل package-lock.json می‌ساخت (ردیابی‌نشده) → زیر پیشوند ممنوعهٔ tools/ (§9) → گارد درست قرمز می‌کرد؛ گارد پیش از آن (قبل از npm) سبز بود چون هنوز فایلی تولید نشده بود
+- فیکس ۳وجهی: (۱) کامیت package-lock.json مبدل (۲۰۳۰ بایت، npm install --package-lock-only) (۲) npm ci به‌جای npm install در workflow (هرگز lockfile نمی‌نویسد) (۳) خروجی گیت‌ها حالا copyright_guard_issues و ownership_boundary_issues را هم چاپ می‌کند (افزودنی، بدون شکستن قرارداد) + gitignore download/convert-report-*.md
+- شبیه‌سازی کامل ۸ مرحله‌ای workflow در کلون تمیز (/tmp/ci-repro): همه exit 0 — شامل اولین اجرای تاریخ‌ساز G3 self-baseline (overall: PASS_READY_FOR_SECOND_INSPECTOR، heads G3 v0.7 تأیید)
+- پوش 3305fec → هر دو شاخه؛ ران بعدی: main success ✓ + v10.3-beta success ✓ (اسکریپت بکاپ خودکار هم v10.3-beta را پیش از من پوش کرد — حلقهٔ بکاپ کاملاً وصل شد)
+- کشف جانبی: انشعابات آرنا به‌روز شدند (arena/0eb22280: a53a766→714338c، arena/6b8310f7: a8541a5→06d7b7d) — تحویل جدید آرنا در صف بررسی
+
+Stage Summary:
+- CI رسمی روشن است: هر push/PR روی v10.3-beta/main/arena/** اکنون به‌طور خودکار گیت کامل (حق‌نشر G0 + مرز مالکیت G0B + مانیفست OFFICIAL-HEADS + تست موتور ۸۱تایی + مبدل روی سرهای G2/G3) را اجرا می‌کند و fail-closed است
+- گیت self-baseline اکنون خودتوضیح است: فایل متخلف در لاگ CI دیده می‌شود
+- توکن قدیمی مالک دیگر استفاده نمی‌شود (پاک‌سازی اختیاری در GitHub → Tokens)
+- کار بعدی طبیعی: بررسی تحویل جدید آرنا در دو انشعاب به‌روزشده با پایهٔ v0.5
