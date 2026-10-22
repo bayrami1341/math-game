@@ -45,8 +45,10 @@ try:
   run(['tar','-xf',str(archive),'-C',str(runner)])
   run(['npm','install','--no-audit','--no-fund','--silent'],cwd=runner/'tools/cartridge-converter',timeout=120)
   tests=run(['node','--test','public/math-game/tests/v10.3-cartridge.test.js','public/math-game/tests/v10.3-families.test.js'],cwd=runner,timeout=120)
-  assert re.search(r'# pass 28\b',tests) and re.search(r'# fail 0\b',tests),'Official fixture test count changed; review output'
-  steps.append('۲۸/۲۸ آزمون نسخهٔ رسمی: PASS')
+  tap={key:int(value) for key,value in re.findall(r'^# (tests|pass|fail|cancelled|skipped|todo) (\d+)\s*$',tests,re.M)}
+  assert set(tap)=={'tests','pass','fail','cancelled','skipped','todo'},'Official fixture TAP summary missing; review output'
+  assert tap['tests']>=28 and tap['pass']==tap['tests'] and all(tap[k]==0 for k in ('fail','cancelled','skipped','todo')),f'Official fixture tests regressed: {tap}'
+  steps.append(f"{tap['pass']}/{tap['tests']} آزمون نسخهٔ رسمی: PASS (حداقل پوشش تاریخی: ۲۸)")
   output=run(['node','tools/cartridge-converter/convert.mjs',str(CANDIDATE)],cwd=runner,timeout=120)
   assert '0 قرمز، 2 زرد' in output,output[-800:]
   data=runner/'public/math-game/cartridges/KH-G2-MATH.json';assert data.exists()
