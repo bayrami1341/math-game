@@ -49,13 +49,17 @@ read_queue() {
 import json
 r = json.load(open('blueprints/registry.json', encoding='utf-8'))
 for b in sorted(r['blueprints'], key=lambda x: (x.get('priority') or 999)):
-    print(b['id'], b['status'], b.get('priority') or 999)
+    print(b['id'], b['status'], b.get('priority') or 999, (b.get('assignee') or '').replace(' ', '_'))
 PY
 }
 
 # ── قاعدهٔ رد خودکار — بازگشت ۰ با دلیل = رد؛ بازگشت ۱ = در صف بماند ─────────
 skip_reason() {
-  local bp="$1"
+  local bp="$1" assignee="${2:-}"
+  if [[ "$assignee" == *arena* ]]; then
+    echo "قلمرو آرنا (assignee: $assignee) — زنجیرهٔ z.ai دخالت نمی‌کند (قرارداد مالکیت G0B)"
+    return 0
+  fi
   if [ "$bp" = "BP-012" ]; then
     local stamps strand_ok
     stamps="$(python3 -c "
@@ -166,11 +170,18 @@ sync_clean() {
 # ── حالت dry-run (T2) — بدون هیچ نوشتنی ──────────────────────────────────────
 if [ "$MODE" = "dry-run" ]; then
   echo "═══ DRY-RUN زنجیرهٔ اجرا (هیچ تغییری اعمال نمی‌شود) ═══"
-  read_queue | while read -r id status prio; do
+  read_queue | while read -r id status prio assignee; do
     case "$status" in
       verified|done)          printf "  ✅ %s (p%s) — %s [بسته]\n" "$id" "$prio" "$status" ;;
       delivered)              printf "  🔁 %s (p%s) — %s → گیت+CI+وارسی\n" "$id" "$prio" "$status" ;;
-      executing|approved)     printf "  🔜 %s (p%s) — %s → بدنه با دستِ ربات\n" "$id" "$prio" "$status" ;;
+      executing|approved)
+        if [[ "$assignee" == *arena* ]]; then
+          printf "  ⏭  %s (p%s) — %s [قلمرو آرنا]\n" "$id" "$prio" "$status"
+        elif skip_reason "$id" "$assignee" >/dev/null 2>&1; then
+          printf "  ⏭  %s (p%s) — %s [رد خودکار — پیش‌شرط غایب]\n" "$id" "$prio" "$status"
+        else
+          printf "  🔜 %s (p%s) — %s → بدنه با دستِ ربات\n" "$id" "$prio" "$status"
+        fi ;;
       block)                  printf "  ⛔ %s (p%s) — %s [مسدود]\n" "$id" "$prio" "$status" ;;
       *)                      printf "  ·    %s (p%s) — %s [خارج از صف]\n" "$id" "$prio" "$status" ;;
     esac
@@ -216,15 +227,15 @@ fi
 sync_clean || exit 3
 
 processed=0
-while read -r id status prio; do
+while read -r id status prio assignee; do
   case "$status" in
     verified|done|block|awaiting_approval|draft) continue ;;
   esac
   if [ -n "$ONLY_BP" ] && [ "$id" != "$ONLY_BP" ]; then continue; fi
 
-  if skip_reason "$id"; then
-    reason="$(skip_reason "$id" 2>/dev/null; true)"
-    echo "⏭  SKIP $id — ${reason#؛}"
+  if skip_reason "$id" "$assignee"; then
+    local_reason="$(skip_reason "$id" "$assignee" 2>/dev/null; true)"
+    echo "⏭  SKIP $id — $local_reason"
     continue
   fi
 
