@@ -136,27 +136,33 @@ class GeometryMeasureSolverPlugin(DomainSolverPlugin):
             if "مساحت" in stem and "محیط" not in stem:
                 return self.solve({"op": "area_square", "side": nums[0]}), {"kind": "area_square"}
 
-        # 2. Compound metric conversions (`کیلوگرم و ... گرم چند گرم`, `کیلومتر و ... متر چند متر`, `متر و ... سانتی‌متر`)
-        for maj_lbl, min_lbl, pair_key in (
-            ("کیلوگرم", "گرم", "kg_g"),
-            ("کیلومتر", "متر", "km_m"),
-            ("لیتر", "میلی", "L_mL"),
-            ("متر", "سانتی", "m_cm"),
-            ("سانتی", "میلی", "cm_mm"),
-        ):
-            if maj_lbl in stem and min_lbl in stem and ("چند " + min_lbl in stem):
-                if len(nums) == 2:
-                    return (
-                        self.solve({"op": "compound_to_minor", "unit_pair": pair_key, "major": nums[0], "minor": nums[1]}),
-                        {"kind": "compound_to_minor", "unit_pair": pair_key},
-                    )
-                if len(nums) == 1:
-                    return (
-                        self.solve({"op": "compound_to_minor", "unit_pair": pair_key, "major": nums[0], "minor": 0}),
-                        {"kind": "compound_to_minor", "unit_pair": pair_key},
-                    )
+        # 2. Non-zero start ruler measurement (must precede compound conversion to avoid misclassification)
+        if "خط‌کش" in stem and "از عدد" in stem and "تا عدد" in stem and len(nums) == 2:
+            a, b = min(nums), max(nums)
+            return b - a, {"kind": "ruler_offset", "start": a, "end": b}
+        # 3. Compound metric conversions (`کیلوگرم و ... گرم چند گرم`, `کیلومتر و ... متر چند متر`, `متر و ... سانتی‌متر`)
+        #    Guard: never trigger on ruler items (already handled above).
+        if "خط‌کش" not in stem:
+            for maj_lbl, min_lbl, pair_key in (
+                ("کیلوگرم", "گرم", "kg_g"),
+                ("کیلومتر", "متر", "km_m"),
+                ("لیتر", "میلی", "L_mL"),
+                ("متر", "سانتی", "m_cm"),
+                ("سانتی", "میلی", "cm_mm"),
+            ):
+                if maj_lbl in stem and min_lbl in stem and ("چند " + min_lbl in stem):
+                    if len(nums) == 2:
+                        return (
+                            self.solve({"op": "compound_to_minor", "unit_pair": pair_key, "major": nums[0], "minor": nums[1]}),
+                            {"kind": "compound_to_minor", "unit_pair": pair_key},
+                        )
+                    if len(nums) == 1:
+                        return (
+                            self.solve({"op": "compound_to_minor", "unit_pair": pair_key, "major": nums[0], "minor": 0}),
+                            {"kind": "compound_to_minor", "unit_pair": pair_key},
+                        )
 
-        # 3. Afternoon 12h -> 24h clock conversion (`ساعت ۴ بعدازظهر ... چند است`)
+        # 4. Afternoon 12h -> 24h clock conversion (`ساعت ۴ بعدازظهر ... چند است`)
         if ("بعدازظهر" in stem or "بعد از ظهر" in stem or "عصر" in stem or "شب" in stem) and "ساعت" in stem:
             m_hm = re.search(r"(\d{1,2})\s*:\s*(\d{2})", s)
             if m_hm:
@@ -168,6 +174,11 @@ class GeometryMeasureSolverPlugin(DomainSolverPlugin):
             if len(hour_candidates) == 1 and "دقیقه" not in stem:
                 ans = self.solve({"op": "clock_to_24h", "hour_12": hour_candidates[0], "period": "pm", "hour_only": True})
                 return ans, {"kind": "clock_24h_int"}
+        # 5. Polygon symmetry axes / polygon vertices (`تعداد خط‌های تقارن` / `تعداد ضلع‌ها`)
+        if "خط تقارن" in stem or "خط‌های تقارن" in stem:
+            for shape_kw, ax in (("مربع", 4), ("مربّع", 4), ("مستطیل", 2), ("متساوی‌الاضلاع", 3)):
+                if shape_kw in stem and not nums:
+                    return ax, {"kind": "symmetry_axes"}
         return None, {}
 
     def simulate_mechanisms_from_stem(
@@ -225,4 +236,19 @@ class GeometryMeasureSolverPlugin(DomainSolverPlugin):
                     ).items():
                         if any(values_equal(wrong_val, v) for v in vals):
                             matched.add(code)
+        if "خط‌کش" in stem and "از عدد" in stem and "تا عدد" in stem and len(nums) == 2 and isinstance(wrong_val, int):
+            a, b = min(nums), max(nums)
+            if wrong_val == b:
+                matched.add("E_RULER_NONZERO_START")
+            if wrong_val == a + b:
+                matched.add("E_ADD_CONFUSION")
+            if abs(wrong_val - (b - a)) == 1:
+                matched.add("E_DOUBLE_OFF")
+        if ("خط تقارن" in stem or "خط‌های تقارن" in stem) and isinstance(wrong_val, int) and isinstance(correct_val, int):
+            if wrong_val == correct_val // 2 or wrong_val == correct_val * 2:
+                matched.add("E_SYM_AXIS_MISCOUNT")
+            if wrong_val in (4, 2) and wrong_val != correct_val:
+                matched.add("E_POLYGON_SIDE_CONFUSION")
+            if abs(wrong_val - correct_val) == 1:
+                matched.add("E_DOUBLE_OFF")
         return matched

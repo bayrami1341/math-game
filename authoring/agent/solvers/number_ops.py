@@ -138,6 +138,35 @@ class NumberOpsSolverPlugin(DomainSolverPlugin):
                 if label in stem:
                     ans = self.solve({"op": "place_value", "number": n_big, "place_power": power})
                     return ans, {"kind": "multigrade_place_value", "number": n_big, "place_power": power}
+        # Place-value bundle composition (`۲ بستهٔ هزارتایی، ۰ صدتایی، ۴ ده‌تایی و ۷ یکی`)
+        if ("هزارتایی" in stem or "صدتایی" in stem) and "ده‌تایی" in stem and "یکی" in stem:
+            m_th = re.search(r"(\d+)\s*(?:بستهٔ\s*)?هزارتایی", s)
+            m_hu = re.search(r"(\d+)\s*(?:بستهٔ\s*)?صدتایی", s)
+            m_te = re.search(r"(\d+)\s*(?:بستهٔ\s*)?ده‌تایی", s)
+            m_on = re.search(r"(\d+)\s*یکی", s)
+            if m_hu and m_te and m_on:
+                val = (
+                    (int(m_th.group(1)) * 1000 if m_th else 0)
+                    + int(m_hu.group(1)) * 100
+                    + int(m_te.group(1)) * 10
+                    + int(m_on.group(1))
+                )
+                return val, {"kind": "bundle_compose"}
+        # Constant-step sequence (`در الگوی عددی ۱، ۵، ۹، ۱۳ عدد بعدی چند است؟`)
+        if ("الگوی عددی" in stem or "دنباله" in stem) and "عدد بعدی" in stem and len(nums) >= 3:
+            step = nums[1] - nums[0]
+            if all(nums[i + 1] - nums[i] == step for i in range(len(nums) - 1)):
+                return nums[-1] + step, {"kind": "arithmetic_sequence", "step": step}
+        # Direct multi-digit addition / subtraction (`حاصل ۳۱۳ + ۳۲۵ چند است؟`)
+        m_add = re.search(r"(\d+)\s*\+\s*(\d+)", s)
+        if m_add and len(nums) == 2 and "/" not in s and "*" not in s:
+            return self.solve({"op": "column_add", "operands": [int(m_add.group(1)), int(m_add.group(2))]}), {"kind": "direct_add"}
+        m_sub = re.search(r"(\d+)\s*-\s*(\d+)", s)
+        if m_sub and len(nums) == 2 and "/" not in s and "*" not in s and int(m_sub.group(1)) >= int(m_sub.group(2)):
+            return self.solve({"op": "column_sub", "a": int(m_sub.group(1)), "b": int(m_sub.group(2))}), {"kind": "direct_sub"}
+        if ("نزدیک‌ترین دهگان" in stem or "نزدیک ترین دهگان" in stem) and len(nums) == 1:
+            ans = self.solve({"op": "round", "number": nums[0], "place_power": 1, "mode": "half_up"})
+            return ans, {"kind": "round_tens", "number": nums[0]}
         if ("نزدیک‌ترین صدگان" in stem or "نزدیک ترین صدگان" in stem) and len(nums) == 1:
             ans = self.solve({"op": "round", "number": nums[0], "place_power": 2, "mode": "half_up"})
             return ans, {"kind": "round_hundreds", "number": nums[0]}
@@ -199,4 +228,26 @@ class NumberOpsSolverPlugin(DomainSolverPlugin):
                 ).items():
                     if wrong_val in vals:
                         matched.add(code)
+
+        if ("هزارتایی" in stem or "صدتایی" in stem) and "ده‌تایی" in stem and "یکی" in stem:
+            cs = str(correct_val)
+            if "0" in cs and wrong_val == int(cs.replace("0", "") or "0"):
+                matched.add("E_ZERO_PLACE_MISS")
+            if wrong_val == sum(int(d) for d in cs):
+                matched.add("E_UNIT_VALUE_CONFUSION")
+            if len(cs) >= 2 and wrong_val == int(cs[:-2] + cs[-1] + cs[-2]):
+                matched.add("E_PLACE_SWAP")
+            if len(cs) >= 3 and wrong_val == int(cs[::-1]):
+                matched.add("E_PLACE_SWAP")
+
+        if ("الگوی عددی" in stem or "دنباله" in stem) and len(nums) >= 3:
+            step = nums[1] - nums[0]
+            if wrong_val == nums[-1] + step - 1 or wrong_val == nums[-1]:
+                matched.add("E_SKIP_UNDERCOUNT")
+            if wrong_val == nums[-1] + step + 1 or wrong_val == nums[-1] + 2 * step:
+                matched.add("E_SKIP_OVERCOUNT")
+            if wrong_val == step:
+                matched.add("E_GROUPS")
+            if abs(wrong_val - correct_val) == 1:
+                matched.add("E_DOUBLE_OFF")
         return matched

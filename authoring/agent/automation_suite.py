@@ -664,15 +664,64 @@ def count_visual_components(
 # ==============================================================================
 # Function 7 (§8.7): Official Z.ai Converter Runner & Parser (`run_converter_and_parse_report`)
 # ==============================================================================
+def _git_common_repo_root(repo_root: Path) -> Optional[Path]:
+    if not (repo_root / ".git").exists():
+        return None
+    proc = subprocess.run(
+        ["git", "rev-parse", "--git-common-dir"],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0 or not proc.stdout.strip():
+        return None
+    common_git = Path(proc.stdout.strip())
+    if not common_git.is_absolute():
+        common_git = (repo_root / common_git).resolve()
+    else:
+        common_git = common_git.resolve()
+    parent = common_git.parent
+    return parent if parent != repo_root else None
+
+
 def _locate_node_modules_with_xlsx(repo_root: Path) -> Optional[Path]:
+    common_root = _git_common_repo_root(repo_root)
     candidates = [
         repo_root / "node_modules",
         repo_root / "tools/cartridge-converter/node_modules",
-        Path("/tmp/khshab_node_deps/node_modules"),
     ]
+    if common_root is not None:
+        candidates.extend([
+            common_root / "node_modules",
+            common_root / "tools/cartridge-converter/node_modules",
+        ])
+    candidates.extend([
+        Path("/tmp/khshab_node_deps/node_modules"),
+        Path("/home/z/my-project/tools/cartridge-converter/node_modules"),
+    ])
     for c in candidates:
         if (c / "xlsx").exists():
             return c
+    return None
+
+
+def _resolve_ssot_bytes(repo_root: Path, rel_path: str) -> Optional[bytes]:
+    direct = repo_root / rel_path
+    if direct.exists():
+        return direct.read_bytes()
+    if not (repo_root / ".git").exists():
+        return None
+    common_root = _git_common_repo_root(repo_root)
+    if common_root is not None and (common_root / rel_path).exists():
+        return (common_root / rel_path).read_bytes()
+    for ref in ("origin/v10.3-beta", "v10.3-beta", "origin/main", "main"):
+        proc = subprocess.run(
+            ["git", "show", f"{ref}:{rel_path}"],
+            cwd=repo_root,
+            capture_output=True,
+        )
+        if proc.returncode == 0 and proc.stdout:
+            return proc.stdout
     return None
 
 
@@ -685,11 +734,16 @@ def run_converter_and_parse_report(
     """Execute Z.ai's official SSOT `convert.mjs` in an isolated staging dir; write official report to `download/`."""
     root = Path(repo_root).resolve()
     wb_file = Path(xlsx_path).resolve()
-    # Task 60 (SSOT): خوانش مستقیم از منبع واحد حقیقت repo_root بدون هیچ کپی موازی
-    ssot_convert = root / "tools/cartridge-converter/convert.mjs"
-    ssot_schema = root / "public/math-game/src/v10/station/cartridge-schema.js"
-    ssot_errors = root / "public/math-game/src/v10/station/errors.js"
-    missing = [str(p.relative_to(root)) for p in (ssot_convert, ssot_schema, ssot_errors) if not p.exists()]
+    # Task 60 (SSOT): خوانش مستقیم از منبع واحد حقیقت repo_root / git-common-dir / ref رسمی بدون هیچ کپی موازی
+    ssot_rel_paths = (
+        "tools/cartridge-converter/convert.mjs",
+        "public/math-game/src/v10/station/cartridge-schema.js",
+        "public/math-game/src/v10/station/errors.js",
+    )
+    resolved_blobs: Dict[str, Optional[bytes]] = {
+        rel: _resolve_ssot_bytes(root, rel) for rel in ssot_rel_paths
+    }
+    missing = [rel for rel, blob in resolved_blobs.items() if blob is None]
     if missing:
         return {
             "status": "BLOCKED",
@@ -730,9 +784,9 @@ def run_converter_and_parse_report(
         (tmp_root / "package.json").write_text('{"type": "module"}\n', encoding="utf-8")
         os.symlink(node_modules, tmp_root / "node_modules")
 
-        shutil.copy2(ssot_convert, conv_dir / "convert.mjs")
-        shutil.copy2(ssot_schema, station_dir / "cartridge-schema.js")
-        shutil.copy2(ssot_errors, station_dir / "errors.js")
+        (conv_dir / "convert.mjs").write_bytes(resolved_blobs["tools/cartridge-converter/convert.mjs"] or b"")
+        (station_dir / "cartridge-schema.js").write_bytes(resolved_blobs["public/math-game/src/v10/station/cartridge-schema.js"] or b"")
+        (station_dir / "errors.js").write_bytes(resolved_blobs["public/math-game/src/v10/station/errors.js"] or b"")
 
         proc = subprocess.run(
             ["node", str(conv_dir / "convert.mjs"), str(wb_file)],

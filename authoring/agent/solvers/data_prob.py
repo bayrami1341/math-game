@@ -102,6 +102,17 @@ class DataProbSolverPlugin(DomainSolverPlugin):
                 self.solve({"op": "pictograph_value", "symbol_count": nums[1], "scale_per_symbol": nums[0]}),
                 {"kind": "pictograph_value"},
             )
+        # Tally bundles (`۳ دستهٔ ۵تایی چوب‌خط و ۲ خط تکی روی هم چند رأی است؟`)
+        if "چوب‌خط" in stem or "چوب خط" in stem:
+            m_t = re.search(r"(\d+)\s*دستهٔ?\s*5\s*تایی.*?(\d+)\s*خط", s)
+            if m_t:
+                return int(m_t.group(1)) * 5 + int(m_t.group(2)), {"kind": "tally_bundles"}
+        # Two-column bar chart difference (`در نمودار ستونی ستون اول ۹ و ستون دوم ۴ است؛ اختلاف دو ستون چند است؟`)
+        if "نمودار ستونی" in stem and len(nums) == 2:
+            if "اختلاف" in stem or "بیشتر" in stem or "کمتر" in stem:
+                return abs(nums[0] - nums[1]), {"kind": "bar_diff"}
+            if "مجموع" in stem or "روی هم" in stem:
+                return nums[0] + nums[1], {"kind": "bar_sum"}
         return None, {}
 
     def simulate_mechanisms_from_stem(
@@ -136,4 +147,30 @@ class DataProbSolverPlugin(DomainSolverPlugin):
                     ).items():
                         if any(values_equal(wrong_val, v) for v in vals):
                             matched.add(code)
+        if ("چوب‌خط" in stem or "چوب خط" in stem) and isinstance(wrong_val, int):
+            m_t = re.search(r"(\d+)\s*دستهٔ?\s*5\s*تایی.*?(\d+)\s*خط", s)
+            if m_t:
+                b_cnt, s_cnt = int(m_t.group(1)), int(m_t.group(2))
+                if wrong_val == b_cnt * 4 + s_cnt:
+                    matched.add("E_TALLY_BUNDLE_4_VS_5")
+                if wrong_val == b_cnt + s_cnt:
+                    matched.add("E_GROUPS")
+                if abs(wrong_val - (b_cnt * 5 + s_cnt)) == 1:
+                    matched.add("E_DOUBLE_OFF")
+        if "نمودار ستونی" in stem and len(nums) == 2 and isinstance(wrong_val, int):
+            a, b = nums[0], nums[1]
+            if ("اختلاف" in stem or "بیشتر" in stem or "کمتر" in stem):
+                if wrong_val == a + b:
+                    matched.add("E_ADD_CONFUSION")
+                if wrong_val in (a, b):
+                    matched.add("E_TABLE_NEIGHBOUR")
+                if abs(wrong_val - abs(a - b)) == 1:
+                    matched.add("E_DOUBLE_OFF")
+            elif ("مجموع" in stem or "روی هم" in stem):
+                if wrong_val == abs(a - b):
+                    matched.add("E_SUB_CONFUSION")
+                if wrong_val in (a, b):
+                    matched.add("E_TABLE_NEIGHBOUR")
+                if abs(wrong_val - (a + b)) == 1:
+                    matched.add("E_DOUBLE_OFF")
         return matched

@@ -26,6 +26,7 @@ google_drive/
 authoring/local_viewer_cache/
 authoring/build_preview/
 authoring/.cache/
+download/
 __pycache__/
 *.py[cod]
 .pytest_cache/

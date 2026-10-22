@@ -240,11 +240,13 @@ def extract_grounded_domain(stem: str) -> Set[int]:
     # Context-conditional curriculum constants (prevents `60` or `1000` masking stale note edits!)
     domain: Set[int] = {0, 1, 2, 10, 100}
     if any(k in stem for k in ("ساعت", "دقیقه", "ثانیه", "ظهر", "عصر")):
-        domain.update({12, 24, 60})
-    if any(k in stem for k in ("کیلو", "لیتر", "میلی")):
+        domain.update({12, 15, 24, 30, 60})
+    if any(k in stem for k in ("کیلو", "لیتر", "میلی", "هزارتایی", "هزارگان")):
         domain.add(1000)
-    if "مربع" in stem:
+    if "مربع" in stem or "مربّع" in stem:
         domain.add(4)
+    if "چوب‌خط" in stem or "چوب خط" in stem:
+        domain.add(5)
     for n in base_nums:
         domain.update({n, n * 10, n * 100, n * 1000, (n // 10) * 10})
         for d in str(abs(n)):
