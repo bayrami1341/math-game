@@ -411,10 +411,15 @@ def verify_bidirectional_anchors(wb_path: str | Path) -> GateResult:
 # ==============================================================================
 def verify_cpa_and_answer_balance(
     wb_path: str | Path,
-    new_wave_start_qid: Optional[str] = "Q-1069",
-    new_wave_chapter: str = "۴",
+    new_wave_start_qid: Optional[str] = None,
+    new_wave_chapter: Optional[str] = None,
 ) -> GateResult:
-    """Verify `AUD-06` CPA triad, balanced `الف/ب/ج/د` key distribution, and deep-lesson coverage."""
+    """Verify `AUD-06` CPA triad, balanced `الف/ب/ج/د` key distribution, and deep-lesson coverage.
+
+    BP-001: پیش‌فرض‌ها دیگر هاردکدِ خانواده‌محور (QID شروع موج / فصل مشخص) نیستند؛
+    None یعنی «بدون تفکیک موج». پروفایل هر خانواده از authoring/agent/wave_registry.json
+    با wave_registry.wave_segment_params خوانده و صریحاً پاس داده می‌شود.
+    """
     wb = openpyxl.load_workbook(wb_path, data_only=False)
     ws_qb = wb["بانک سؤال"]
     ws_s1 = wb["نقشهٔ کتاب (S1)"]

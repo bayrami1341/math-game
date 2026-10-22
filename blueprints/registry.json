@@ -1,8 +1,8 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 2,
-  "updated_at": "2026-10-22T18:12:56.392Z",
-  "updated_by": "owner-cli:مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی و همه اتفاقات در راستای توسعه برنامه و اهداف اصلی باشد»",
+  "version": 4,
+  "updated_at": "2026-10-22T18:30:11.409Z",
+  "updated_by": "agent:z.ai",
   "blueprints": [
     {
       "id": "BP-000",
@@ -70,14 +70,14 @@
       "title": "رفع بدهی ۶۰-bis: فیکسچر pytest ایزوله + حذف هاردکد Q-1069 از automation_suite",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "approved",
+      "status": "delivered",
       "priority": 2,
       "created_by": "z.ai",
       "created_at": "2026-10-22T18:30:00Z",
       "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی و همه اتفاقات در راستای توسعه برنامه و اهداف اصلی باشد»",
       "approved_at": "2026-10-22T18:12:56.392Z",
       "dispatched_at": null,
-      "delivered_at": null,
+      "delivered_at": "2026-10-22T18:30:11.409Z",
       "verified_at": null,
       "context": "یافتهٔ Task 60: تست‌های pytest ایجنت به فضای کاری شاخهٔ آرنا (authoring/audit/*.json، /tmp/c205_secure_vault) وابسته‌اند و new_wave_start_qid=Q-1069 هاردکد است (باگ دامنه برای خانواده‌های غیر G2).",
       "tasks": [
@@ -111,7 +111,7 @@
         "issue": null,
         "notes": null
       },
-      "notes": "دستورکار ۶۰–۶۶، گام ۶۰-bis"
+      "notes": "دستورکار ۶۰–۶۶، گام ۶۰-bis\n[2026-10-22T18:22:20.389Z] شروع اجرا پس از تأیید مالک در چت\n[2026-10-22T18:30:11.409Z] T1: سوییت ایزوله authoring/tests (۱۱/۱۱). T2: رزالور wave_registry + حذف هاردکد از گیت‌ها (rg=0 در منطق؛ استثنای مستند: spec-of-record و قالب گزارش). T3: G2 self-baseline PASS کامل، G3 PASS_READY (cpa FAIL = legacy مستند AUD-06)، JS 81/81، G0/G0B/heads سبز"
     },
     {
       "id": "BP-002",

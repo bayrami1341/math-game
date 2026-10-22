@@ -461,9 +461,13 @@ def inspect_cartridge_workbook(
     observation_json_path: Optional[str | Path] = None,
     runtime_error_codes: Optional[Set[str]] = None,
     strict_diagnostic_quality: bool = False,
-    new_wave_start_qid: Optional[str] = "Q-1069",
+    new_wave_start_qid: Optional[str] = None,
 ) -> Dict[str, GateResult]:
-    """Run all 4 Stage-P4 independent gates on a real `.xlsx` cartridge workbook."""
+    """Run all 4 Stage-P4 independent gates on a real `.xlsx` cartridge workbook.
+
+    BP-001: پیش‌فرض دیگر هیچ QID هاردکد خانواده‌محوری ندارد؛ تفکیک موج فقط با
+    پارامتر صریح (از authoring/agent/wave_registry.json) فعال می‌شود.
+    """
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
     obs = (
         json.loads(Path(observation_json_path).read_text(encoding="utf-8"))

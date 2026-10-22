@@ -37,6 +37,7 @@ from .governance import (
 )
 from .models import GateResult, file_sha256
 from .validators import inspect_cartridge_workbook
+from .wave_registry import wave_segment_params
 
 RUNTIME_CODES = {
     "E_ADD_CONFUSION",
@@ -152,17 +153,24 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
     if vault_pdf.exists() and not chunk_plan_path.exists():
         plan_and_verify_pdf_chunks(vault_pdf, output_json_path=chunk_plan_path)
 
+    # BP-001: پروفایل موج ۴ G2 از مانیفست رسمی خوانده می‌شود — نه هاردکد
+    _wave = wave_segment_params("KH-G2-MATH", "v0.5", repo_root)
+
     p4_gates = inspect_cartridge_workbook(
         v05_path,
         repo_root / "authoring/audit/observation_C205.json",
         RUNTIME_CODES,
         strict_diagnostic_quality=False,
-        new_wave_start_qid="Q-1069",
+        new_wave_start_qid=_wave["new_wave_start_qid"],
     )
 
     g_stamps = verify_official_stamps(v05_path, v031_off_path)
     g_anchors = verify_bidirectional_anchors(v05_path)
-    g_cpa = verify_cpa_and_answer_balance(v05_path, new_wave_start_qid="Q-1069", new_wave_chapter="۴")
+    g_cpa = verify_cpa_and_answer_balance(
+        v05_path,
+        new_wave_start_qid=_wave["new_wave_start_qid"],
+        new_wave_chapter=_wave["new_wave_chapter"],
+    )
     g_inc16 = audit_historical_incidents_16(
         v05_path,
         v031_off_path,
