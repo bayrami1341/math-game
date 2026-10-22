@@ -1390,3 +1390,15 @@ Stage Summary:
 - KH-G2-MATH رسماً ۶۲ درس/۹۲ سؤال شد؛ موج ۵ آرنا آزاد است (پایه = v0.5 با SHA اعلامی در OFFICIAL-HEADS.json)
 - گارد حادثهٔ #۷ خودکار شد: هر تحویل آینده با پایهٔ کهنه در همان check-wave می‌میرد
 - CI اعلامی است تا اولین ران واقعی گیت‌هاب؛ کارهای باقی: گام ۳ (داشبورد: inspect + مُهر معلم)، گام ۴ (۳ آشکارساز errors-v103)، گام ۵ (رندرر SVG ۱۴مدلی)، ۶۰-bis (فیکسچر pytest + رفع هاردکد Q-1069)
+
+---
+Task ID: 61-note
+Agent: Z.ai Code (main)
+Task: وضعیت انتشار فایل CI
+
+Work Log:
+- پوش v10.3-beta با فایل workflow رد شد: توکن PAT فعلی scope «workflow» ندارد (refusing to allow a Personal Access Token to create or update workflow)
+- اقدام: کامیت CI (15995f4) روی شاخهٔ محلی ci-pending حفظ شد؛ خط v10.3-beta بدون فایل workflow پوش می‌شود
+
+Stage Summary:
+- برای انتشار CI: مالک یا scope توکن را به workflow ارتقا می‌دهد یا خودش فایل را پوش می‌کند؛ سپس: git cherry-pick 15995f4 && git push origin HEAD:v10.3-beta
