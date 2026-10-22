@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 18,
-  "updated_at": "2026-10-22T22:56:12.784Z",
+  "version": 20,
+  "updated_at": "2026-10-22T22:58:41.536Z",
   "updated_by": "agent:z.ai",
   "blueprints": [
     {
@@ -453,15 +453,15 @@
       "title": "ماشین انتشار نسخه: ارتقای هستهٔ مرکزی به v10.3.0-beta.1 + یادداشت انتشار + تگ + همگام‌سازی دو شاخه",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "approved",
+      "status": "verified",
       "priority": 12,
       "created_by": "z.ai",
       "created_at": "2026-10-22T21:05:00Z",
       "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
       "approved_at": "2026-10-22T22:19:38.008Z",
       "dispatched_at": null,
-      "delivered_at": null,
-      "verified_at": null,
+      "delivered_at": "2026-10-22T22:58:41.513Z",
+      "verified_at": "2026-10-22T22:58:41.536Z",
       "context": "نسخهٔ جاری 10.3.0-beta.0 است. پس از A1..A3، انتشار بتا.۱ ماشین‌اجراست. ترتیب اجرا: A4 (آخر رشتهٔ A).",
       "tasks": [
         {
@@ -494,7 +494,7 @@
         "issue": null,
         "notes": null
       },
-      "notes": "ترتیب A4 — فقط پس از سبزی BP-008، BP-006 و BP-010."
+      "notes": "ترتیب A4 — فقط پس از سبزی BP-008، BP-006 و BP-010.\n[2026-10-22T22:58:41.513Z] bump 10.3.0-beta.1 + RELEASE-NOTES + release-check PASS + tag v10.3.0-beta.1 pushed + هر دو شاخه هم‌هد 1c5f3ea\n[2026-10-22T22:58:41.536Z] گزارشنامهٔ /tmp/rc-beta1.log: PASS — در انتظار تأیید نهایی CI ران تگ"
     },
     {
       "id": "BP-010",
