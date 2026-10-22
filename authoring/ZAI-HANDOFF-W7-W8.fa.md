@@ -41,3 +41,15 @@
 2. **تعمیم `classifyAttempt` در `errors.js` برای الگوهای غیرضرب:**
    - هم‌اکنون در `cartridge-schema.js` فقط صورت‌سؤال‌های منطبق با الگوی ضرب ساده (`/([0-9۰-۹]+)\s*[×x]\s*([0-9۰-۹]+)/`) به `classifyAttempt` متصل‌اند و سایر کدهای جدید با وضعیت `«نیاز به تأیید»` در `اطلس خطا` پذیرفته می‌شوند.
    - در `authoring/agent/solvers/{number_ops,mult_div,fractions,geometry_measure,data_prob}.py` تمام توابع شبیه‌ساز علّی این ۵ خانواده با امضای استاندارد پیاده‌سازی و تست شده‌اند و منطق ریاضی آن‌ها مستقیماً قابل پورت یک‌به‌یک به `errors.js` است.
+
+---
+
+## ۳. وضعیت تحویل نهایی `v2.4` (اوت ۱۴۰۴)
+
+- **شاخهٔ تحویل آرنا:** `arena/0eb22280-math-game` @ `211ee45` (`final v2.4`) — پوش شده به `origin/arena/0eb22280-math-game`
+- **تگ نهایی:** `v2.4-final` روی `211ee45` (پیام: `v2.4-final: نسخه نهایی آرنا — W1-W6 100% + autopilot PASS (50 passed) + Achilles v2.3`)
+- **PR #2:** `arena/0eb22280-math-game → v10.3-beta` — `OPEN`، چک `Validate official-base reconciliation and candidate` = **SUCCESS** (`2026-10-22T21:07:54Z`)
+  - **یادداشت ادغام:** به‌دلیل ریشه‌های نامرتبط (`arena` از `ab15597` و `v10.3-beta` از `697a452`)، گیت‌هاب `CONFLICTING` گزارش می‌دهد. طبق قانون `§9` آرنا مجاز به `git merge origin/v10.3-beta --allow-unrelated-histories` نیست؛ ادغام باید در سمت `Z.ai` با `squash` یا `rebase --allow-unrelated-histories` انجام شود (یا PR باز بماند تا هندآف W7/W8 کامل شود).
+- **تست نهایی آرنا:** `50 passed, 4 skipped` روی `211ee45` (۱۲ تست W1-W6 + ۵ تست مرزی Achilles + ۶ تست حل‌گر چندپایه + ۲ تست خودترمیم)
+- **پایلوت کور:** `evidence→skill→question→cartridge` با `observation_C205.json` (۱۵۲ page) + `wave_spec_G3_test_v08.json` → `PASS` (`SHA b0b32bea... red 0 yellow 7`) و `achilles_gate` ایزوله `PASS`
+- **گزارش صبحگاهی نهایی:** `authoring/MORNING-REPORT.fa.md` @ `2026-10-22T21:07:25Z` — `1 completed KH-G3-MATH PASS`، `G0 PASS`، `approval_proof SHA 576e6f89...`
