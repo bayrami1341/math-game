@@ -1,0 +1,45 @@
+name: G2 cartridge technical gate
+
+on:
+  push:
+    branches: [arena/6b8310f7-math-game]
+    paths:
+      - 'authoring/**'
+      - '.github/workflows/g2-cartridge-gate.yml'
+  pull_request:
+    paths:
+      - 'authoring/**'
+      - '.github/workflows/g2-cartridge-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  technical-gate:
+    name: Validate official-base reconciliation and candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch the current official G2 baseline
+        run: git fetch origin refs/heads/v10.3-beta:refs/remotes/origin/v10.3-beta
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install read-only workbook auditor
+        run: python -m pip install 'openpyxl==3.1.5'
+      - name: Run fail-closed technical gate (not a teacher seal)
+        run: python authoring/tools/g2_gate.py --report /tmp/g2-technical-gate.fa.md
+      - name: Keep the mechanical report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: g2-technical-gate
+          path: /tmp/g2-technical-gate.fa.md
+          if-no-files-found: warn
