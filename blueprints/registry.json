@@ -1,8 +1,8 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 21,
-  "updated_at": "2026-10-22T23:01:46.313Z",
-  "updated_by": "agent:z.ai",
+  "version": 22,
+  "updated_at": "2026-10-22T23:10:47.000Z",
+  "updated_by": "z.ai — نقشهٔ شیفت شب (ROADMAP-NIGHTSHIFT-v1) + ثبت BP-013/BP-014",
   "blueprints": [
     {
       "id": "BP-000",
@@ -642,6 +642,108 @@
         "notes": null
       },
       "notes": "ترتیب B3 — شروع فقط با تأیید مالکِ آمادگی؛ مُهر معلم شبیه‌سازی نمی‌شود."
+    },
+    {
+      "id": "BP-013",
+      "title": "آرنا-واچ چراغ خاموش — پایش شبانهٔ شاخه‌های arena/** و اجرای خط دریافت محتوا در صورت پوش جدید",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 15,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T23:40:00.000Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "حکم BP-008: دو شاخهٔ آرنا (arena/0eb22280 و arena/6b8310f7) قرمزِ ادغام با لیست اصلاح مشخص. آرنا ممکن است در شیفت شب اصلاح پوش کند یا [ARENA-ACK] قرارداد حداقلی را ثبت کند. این نقشه واچ بین‌گامی را ماشین‌اجرا می‌کند: بین هر گام شیفت شب + پس از هر پوش موفق، یک دور پایش.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "پایش دوره‌ای refs شاخه‌های arena/** + سرِ worklog شاخه‌ها + issue #4 (ردیابی پوش جدید و [ARENA-ACK])",
+          "automated": true
+        },
+        {
+          "id": "T2",
+          "desc": "در صورت پوش جدید: اجرای کامل خط دریافت قالب BP-008 (fetch → دیفرانسیل → G0/G0B → مبدل رسمی روی درفت‌ها → حکم)",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "سبز کامل → ادغام + به‌روزرسانی OFFICIAL-HEADS + انتشار cartridges/KH-G*.json؛ قرمز → کامنت حکم دقیق روی issue #4 + رکورد worklog",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "هر تغییر شبانهٔ آرنا حکم مستند داشته باشد (worklog + issue)",
+        "هیچ ادغامی بدون سبزی کامل گیت‌ها انجام نشود",
+        "هیچ تغییری روی شاخه‌های آرنا اعمال نشود (فقط خواندن)"
+      ],
+      "artifacts": [
+        "worklog.md",
+        "blueprints/registry.json"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "مرجع قالب: BP-008 (خط دریافت محتوا — قالب همیشگی)"
+      },
+      "notes": "ممنوع: force-push، تغییر شاخه‌های آرنا، ادغام با گیت قرمز. پایش read-only است."
+    },
+    {
+      "id": "BP-014",
+      "title": "پیش‌بارگذاری صبح — اسکلت مُهر معلم + پیش‌نویس DRAFT یادداشت انتشار پایدار + گزارش شیفت شب",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 16,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T23:40:00.000Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "BP-012 شب اجرا نمی‌شود (پیش‌شرط انسانی: مُهر واقعی معلم). این نقشه فقط زمین صبح را آماده می‌کند: اسکلت خالی بانک مُهر، پیش‌نویس برچسب‌خوردهٔ DRAFT یادداشت انتشار، تست دود جریان مُهر در داشبورد، و گزارش صبح برای تصمیم مالک/معلم.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "ساخت اسکلت خالی authoring/teacher-stamps.json (فقط ساختار + قاعدهٔ اعتبار — بدون هیچ مُهر)",
+          "automated": true
+        },
+        {
+          "id": "T2",
+          "desc": "پیش‌نویس RELEASE-NOTES-v10.3.0.md با برچسب DRAFT و جای‌خالی صریح مُهرها (بدون bump نسخه و بدون تگ)",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "تست دود جریان مُهر در داشبورد معلم (صفحهٔ بازرسی) — بدون ثبت هیچ مُهر واقعی",
+          "automated": true
+        },
+        {
+          "id": "T4",
+          "desc": "گزارش صبح: worklog append + کامنت issue #4 + چک‌لیست اقدام انسانی (مُهر معلم، تصمیم BP-012، حکم‌های آرنا)",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "هیچ تگ 10.3.0 و هیچ bump نسخهٔ پایدار ساخته نشود",
+        "teacher-stamps.json فقط اسکلت خالی باشد",
+        "گزارش صبح روی worklog و issue #4 منتشر شده باشد"
+      ],
+      "artifacts": [
+        "authoring/teacher-stamps.json",
+        "public/math-game/RELEASE-NOTES-v10.3.0.md",
+        "worklog.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "دنبالهٔ منطقی BP-012 — خروجی این نقشه ورودی مستقیم جلسهٔ صبح مالک/معلم است"
+      },
+      "notes": "مرز سخت: این نقشه هرگز جای BP-012 را نمی‌گیرد؛ انتشار پایدار فقط با مُهر واقعی معلم."
     }
   ]
 }
