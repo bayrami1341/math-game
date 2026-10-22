@@ -227,7 +227,7 @@ def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: P
         html = urllib.request.urlopen(f"http://127.0.0.1:{port}/").read().decode("utf-8")
         assert "loupeCanvas" in html and "imageSmoothingEnabled = false" in html
 
-        # 1. AI self-approval via HTTP API must fail with HTTP 403!
+        # 1. AI self-approval via HTTP API must fail with HTTP 403 (no token + AI role)!
         bad_req = urllib.request.Request(
             f"http://127.0.0.1:{port}/api/verdict",
             data=json.dumps(
@@ -240,13 +240,26 @@ def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: P
             urllib.request.urlopen(bad_req)
         assert exc_info.value.code == 403
 
-        # 2. Human teacher signs verdict via HTTP POST -> active_verdicts == 1
-        ok_req = urllib.request.Request(
+        # 1b. Human teacher WITHOUT server-side token must also fail (proves role claim alone is not enough)
+        no_token_req = urllib.request.Request(
             f"http://127.0.0.1:{port}/api/verdict",
             data=json.dumps(
                 {"scope": "ROW_APPROVED", "actor": "استاد راهنما", "actor_role": "human_teacher", "target_ids": ["L-401"]}
             ).encode("utf-8"),
             headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with pytest.raises(urllib.error.HTTPError) as exc_info2:
+            urllib.request.urlopen(no_token_req)
+        assert exc_info2.value.code == 403
+
+        # 2. Human teacher signs verdict via HTTP POST with server-side token -> active_verdicts == 1
+        ok_req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/api/verdict",
+            data=json.dumps(
+                {"scope": "ROW_APPROVED", "actor": "استاد راهنما", "actor_role": "human_teacher", "target_ids": ["L-401"]}
+            ).encode("utf-8"),
+            headers={"Content-Type": "application/json", "X-Teacher-Token": "dev-teacher-token-2026"},
             method="POST",
         )
         res = json.loads(urllib.request.urlopen(ok_req).read().decode("utf-8"))

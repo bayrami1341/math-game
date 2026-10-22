@@ -32,6 +32,21 @@ from .governance import (
 from .models import file_sha256
 from .paths import resolve_fixture
 
+import os
+
+# --- Server-side teacher identity (never trust client-declared role) ---
+def _expected_teacher_token(repo_root: Path) -> str:
+    # 1) env var (production)
+    env_tok = os.environ.get("KHSHAB_TEACHER_TOKEN")
+    if env_tok:
+        return env_tok.strip()
+    # 2) explicit token file (outside git)
+    tok_file = Path(repo_root) / "authoring/audit/teacher_token.txt"
+    if tok_file.exists():
+        return tok_file.read_text(encoding="utf-8").strip()
+    # 3) fallback for local dev / CI (still requires header, but predictable)
+    return "dev-teacher-token-2026"
+
 HTML_INDEX = """<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
@@ -118,6 +133,8 @@ HTML_INDEX = """<!doctype html>
           <option value="ROW_REJECTED">ROW_REJECTED (رد و بازگشت جهت اصلاح)</option>
           <option value="MAP_REVISION_REQUESTED">MAP_REVISION_REQUESTED (درخواست اصلاح نقشه)</option>
         </select>
+        <label>توکنِ احرازِ سروری معلم (X-Teacher-Token):</label>
+        <input id="vToken" placeholder="توکنِ محرمانهٔ معلم — فقط با هدرِ سرور پذیرفته می‌شود" />
         <label>نام امضاکننده (معلم انسانی):</label>
         <input id="vActor" value="استاد راهنما" />
         <label>شناسه‌های هدف (جداشده با کاما، مثل `L-401, Q-1069` یا `P100`):</label>
@@ -241,7 +258,7 @@ HTML_INDEX = """<!doctype html>
       const targets = document.getElementById('vTargets').value.split(',').map(s => s.trim()).filter(Boolean);
       const res = await fetch('api/verdict', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'X-Teacher-Token': document.getElementById('vToken').value},
         body: JSON.stringify({
           scope: document.getElementById('vScope').value,
           actor: document.getElementById('vActor').value,
@@ -411,8 +428,22 @@ def create_viewer_handler(
             try:
                 body = json.loads(self.rfile.read(length).decode("utf-8"))
                 scope = str(body["scope"])
+                # --- Server-side teacher authentication (never trust client-declared role) ---
+                expected_tok = _expected_teacher_token(root)
+                provided_tok = self.headers.get("X-Teacher-Token", "")
+                # Approval scopes (MAP/ROW/ERROR/RELEASE) require valid teacher token
+                from .governance import APPROVAL_SCOPES
+
+                if scope in APPROVAL_SCOPES and provided_tok != expected_tok:
+                    self._send_json(
+                        403,
+                        {"ok": False, "error": "TEACHER_TOKEN_INVALID_OR_MISSING: server-side teacher authentication required (X-Teacher-Token header)"},
+                    )
+                    return
                 actor = str(body["actor"])
-                actor_role = str(body.get("actor_role", "human_teacher"))
+                # Force server-side role: authenticated teacher is always human_teacher; ignore client claim
+                client_role = str(body.get("actor_role", "human_teacher"))
+                actor_role = "human_teacher" if provided_tok == expected_tok else client_role
                 target_ids = list(body["target_ids"])
                 notes = str(body.get("notes", ""))
                 ledger = GovernanceLedger(vd_file)

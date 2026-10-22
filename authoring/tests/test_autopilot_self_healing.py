@@ -98,10 +98,12 @@ def test_autopilot_requires_single_approval_then_self_heals_six_defect_classes(t
     pre = sup.run_waves([bad_spec_path, wave5_path], approve_once=False)
     assert pre["status"] == "AWAITING_SINGLE_APPROVAL"
 
-    # 2. With `--approve-once`, supervisor diagnoses & heals ALL 6 defects AND holds Wave 5 cleanly!
+    # 2. With `--approve-once` (bound to roadmap SHA + domain), supervisor diagnoses & heals ALL 6 defects AND holds Wave 5 cleanly!
+    # HELD must NOT be counted as PASS — overall status must reflect held (point 3)
     report_md = tmp_path / "MORNING-REPORT.fa.md"
     res = sup.run_waves([bad_spec_path, wave5_path], approve_once=True, report_markdown_path=report_md)
-    assert res["status"] == "PASS", res
+    assert res["status"] != "PASS", f"HELD wave must not be counted as PASS, got {res['status']}"
+    assert res["status"] in ("PARTIAL_WITH_HELD", "HELD_AWAITING_HEAD", "PARTIAL_WITH_BLOCKERS"), res
     assert "wave-sabotaged-self-heal-test" in res["completed_wave_ids"]
     assert "wave-5-g2-must-hold" in res["held_wave_ids"]
     assert res["healed_incident_count"] >= 6

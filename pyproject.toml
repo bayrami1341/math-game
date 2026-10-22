@@ -3,6 +3,10 @@ name = "math-game-authoring-pipeline"
 version = "2.0.0"
 description = "Evidence-based, multi-grade, self-healing textbook cartridge authoring & governance pipeline"
 requires-python = ">=3.10"
+dependencies = [
+    "openpyxl==3.1.5",
+    "pymupdf>=1.23",
+]
 
 [project.scripts]
 khshab-agent = "authoring.agent.cli:main"
