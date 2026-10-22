@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 5,
-  "updated_at": "2026-10-22T18:36:32.033Z",
+  "version": 6,
+  "updated_at": "2026-10-22T18:43:46.237Z",
   "updated_by": "agent:z.ai",
   "blueprints": [
     {
@@ -165,14 +165,14 @@
       "title": "گام ۵ — رندرر SVG چهارده‌مدلی برای مدل‌های سؤال",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "approved",
+      "status": "delivered",
       "priority": 4,
       "created_by": "z.ai",
       "created_at": "2026-10-22T18:30:00Z",
       "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی و همه اتفاقات در راستای توسعه برنامه و اهداف اصلی باشد»",
       "approved_at": "2026-10-22T18:12:56.392Z",
       "dispatched_at": null,
-      "delivered_at": null,
+      "delivered_at": "2026-10-22T18:43:46.237Z",
       "verified_at": null,
       "context": "دستورکار ۶۰–۶۶ گام ۵: رندرر SVG برای ۱۴ مدل سؤال خشاب‌ها تا پیش‌نمایش بدون Excel ممکن شود.",
       "tasks": [
@@ -199,7 +199,7 @@
         "issue": null,
         "notes": null
       },
-      "notes": ""
+      "notes": "[2026-10-22T18:43:46.237Z] ماژول model-figures.js: پارس گرامر ۷.۳ + قالب فشرده + وایت‌لیست ۱۴مدلی + رندر RTL + تضمین INC-09 با کلاس‌های mf-* + renderVisualColumn (فالبک متنی) + سیم به station/index.js — ۱۹ تست جدید، npm test 106/106، نمونه‌ها در authoring/build_preview/model-figures/"
     },
     {
       "id": "BP-004",
