@@ -565,3 +565,21 @@ def test_auto_fn9_and_fn10_chunk_planner_and_all_16_historical_incidents():
     )
     assert inc_v05.status == "PASS", inc_v05.issues
     assert inc_v05.metrics["passed_incidents"] == 16
+
+
+def test_generic_agent_cli_works_across_grades_including_grade3(tmp_path):
+    from authoring.agent.cli import run_generic_wave_check
+
+    # Build a real Grade-3 (`KH-G3-MATH`) workbook in `tmp_path` to prove `khshab-agent` is 100% grade-agnostic
+    g3_path = tmp_path / "khshab-G3-MATH_v0.7.xlsx"
+    shutil.copy2(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", g3_path)
+    wb = openpyxl.load_workbook(g3_path)
+    wb["شناسنامهٔ خشاب"].cell(3, 2).value = "KH-G3-MATH"
+    wb["شناسنامهٔ خشاب"].cell(5, 2).value = "سوم ابتدایی"
+    wb["شناسنامهٔ خشاب"].cell(7, 2).value = "0.7"
+    wb.save(g3_path)
+
+    res_g3 = run_generic_wave_check(REPO_ROOT, candidate_xlsx=g3_path)
+    assert res_g3["overall_gate_status"] == "PASS_READY_FOR_SECOND_INSPECTOR", res_g3
+    assert res_g3["gates"]["zai_converter"]["red"] == 0
+    Path(res_g3["gates"]["zai_converter"]["report_path"]).unlink(missing_ok=True)
