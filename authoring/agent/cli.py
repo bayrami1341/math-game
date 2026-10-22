@@ -38,7 +38,11 @@ from .governance import (
 )
 from .models import GateResult, file_sha256
 from .paths import resolve_confidential_pdf, resolve_fixture, resolve_official_cartridge
+from .autopilot import AutopilotSupervisor
+from .reconcile import reconcile_chunk_directory
 from .validators import inspect_cartridge_workbook
+from .viewer import serve_viewer
+from .wave_exporter import export_wave_cartridge
 
 RUNTIME_CODES = {
     "E_ADD_CONFUSION",
@@ -362,6 +366,40 @@ def main(argv: list[str] | None = None) -> int:
     p_heads.add_argument("--repo-root", default=".")
     p_heads.add_argument("--verify", action="store_true")
 
+
+    p_bwave = sub.add_parser("build-wave", help="تولید غیرمخرب خشاب هر پایه از WaveSpec v2 JSON (W1)")
+    p_bwave.add_argument("--repo-root", default=".")
+    p_bwave.add_argument("--wave-spec", required=True)
+    p_bwave.add_argument("--base-xlsx", default=None)
+    p_bwave.add_argument("--output", required=True)
+    p_bwave.add_argument("--registry", default=None)
+
+    p_rchunk = sub.add_parser("reconcile-chunks", help="آشتی‌دهی اتمی هم‌پوشانی تکه‌های JSON نقشهٔ صفحات (W5)")
+    p_rchunk.add_argument("--chunks-dir", required=True)
+    p_rchunk.add_argument("--output", default=None)
+
+    p_view = sub.add_parser("serve-viewer", help="میز کار چندپایه با ذره‌بین پیکسلی 8x و امضای معلم (W6)")
+    p_view.add_argument("--repo-root", default=".")
+    p_view.add_argument("--pdf", default="/tmp/khshab_secure_vault/C205.pdf")
+    p_view.add_argument("--book-manifest", default=None)
+    p_view.add_argument("--pagemap", default=None)
+    p_view.add_argument("--cartridge", default=None)
+    p_view.add_argument("--verdicts-path", default=None)
+    p_view.add_argument("--host", default="0.0.0.0")
+    p_view.add_argument("--port", type=int, default=8765)
+
+    p_auto = sub.add_parser("autopilot", help="ناظر خودمختار شبانه با خودترمیمی ریشه‌ای و همگام‌سازی GitHub")
+    p_auto.add_argument("--repo-root", default=".")
+    p_auto.add_argument("--official-ref-root", default=None)
+    p_auto.add_argument("--state-dir", default="/tmp/khshab_autopilot_state")
+    p_auto.add_argument("--approve-once", action="store_true")
+    p_auto.add_argument("--target-waves", nargs="+", required=True)
+    p_auto.add_argument("--max-heal-rounds", type=int, default=3)
+    p_auto.add_argument("--git-sync", action="store_true")
+    p_auto.add_argument("--git-push", action="store_true")
+    p_auto.add_argument("--pr-number", type=int, default=None)
+    p_auto.add_argument("--morning-report", default=None)
+
     args = parser.parse_args(argv)
     root = Path(getattr(args, "repo_root", ".")).resolve()
 
@@ -423,6 +461,55 @@ def main(argv: list[str] | None = None) -> int:
         ledger.save()
         print(json.dumps({"recorded": v.verdict_id, "target_sha256": target_sha}, ensure_ascii=False))
         return 0
+    if args.cmd == "build-wave":
+        g_exp, out_sha, details = export_wave_cartridge(
+            args.wave_spec,
+            repo_root=root,
+            out_xlsx_path=args.output,
+            out_registry_path=args.registry,
+            base_xlsx_override=args.base_xlsx,
+        )
+        print(json.dumps({"gate": g_exp.to_dict(), "output_sha256": out_sha, "details": details}, ensure_ascii=False, indent=2))
+        return 0 if g_exp.status == "PASS" else 1
+
+    if args.cmd == "reconcile-chunks":
+        rep = reconcile_chunk_directory(args.chunks_dir)
+        if args.output:
+            Path(args.output).write_text(json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({k: rep[k] for k in ("compared_page_count", "disputed_page_count", "disputed_pages", "field_verdict_counts")}, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.cmd == "serve-viewer":
+        serve_viewer(
+            root,
+            Path(args.pdf),
+            args.host,
+            args.port,
+            book_manifest_path=Path(args.book_manifest) if args.book_manifest else None,
+            pagemap_path=Path(args.pagemap) if args.pagemap else None,
+            cartridge_path=Path(args.cartridge) if args.cartridge else None,
+            verdicts_path=Path(args.verdicts_path) if args.verdicts_path else None,
+        )
+        return 0
+
+    if args.cmd == "autopilot":
+        sup = AutopilotSupervisor(
+            root,
+            official_ref_root=Path(args.official_ref_root) if args.official_ref_root else None,
+            state_dir=Path(args.state_dir),
+            max_heal_rounds=args.max_heal_rounds,
+        )
+        res = sup.run_waves(
+            args.target_waves,
+            approve_once=args.approve_once,
+            git_sync=args.git_sync,
+            git_push=args.git_push,
+            pr_number=args.pr_number,
+            report_markdown_path=Path(args.morning_report) if args.morning_report else None,
+        )
+        print(json.dumps(res, ensure_ascii=False, indent=2))
+        return 0 if res["status"] in ("PASS", "AWAITING_SINGLE_APPROVAL") else 1
+
     return 1
 
 

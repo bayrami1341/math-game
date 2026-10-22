@@ -1,0 +1,358 @@
+{
+  "schema_version": "2.0.0",
+  "wave_id": "wave-b-g3-skeleton-sync-and-multidomain-pilot",
+  "family_id": "KH-G3-MATH",
+  "book_code": "C305",
+  "base_cartridge_filename": "khshab-G3-MATH_v0.7.xlsx",
+  "expected_official_base_sha256": "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb",
+  "verified_pagemap_path": "authoring/PAGE-MAP-KH-G3-MATH-v1_verified.xlsx",
+  "verified_pagemap_sha256": "4ce57f88b1d6754901626d315f150a5197dc86568cdff2cca9671c424d1d1af3",
+  "insert_s1_after_key": null,
+  "min_question_id_start": 301,
+  "semantic_prefix": "g3_wave_b_test",
+  "runtime_error_codes": [
+    "E_ADD_CONFUSION",
+    "E_ANCHOR_DRIFT",
+    "E_COMMUTATIVE_FAIL",
+    "E_DISTRIBUTIVE_LEAK",
+    "E_DOUBLING_HALVING",
+    "E_FATIGUE_SLIP",
+    "E_IDENTITY_CONFUSION",
+    "E_PERSISTENT_GUESSING",
+    "E_PLACE_SHIFT",
+    "E_SKIP_OVERCOUNT",
+    "E_SKIP_UNDERCOUNT",
+    "E_ZERO_PROPERTY"
+  ],
+  "authorized_patches": [
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-A1",
+      "col_letter": "B",
+      "expected_old_value": "؟ (پیشنهاد: ۲-۳۵)",
+      "new_value": "۲۵ تا ۴۲",
+      "reason": "تطبیق با نقشهٔ مادر تأییدشدهٔ C305 فصل ۲ (عددهای چهاررقمی)"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-A1",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۲",
+      "reason": "ثبت شمارهٔ فصل واقعی ۲ از نقشهٔ مادر تأییدشدهٔ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-A2",
+      "col_letter": "B",
+      "expected_old_value": "؟",
+      "new_value": "۹۷ تا ۱۱۴",
+      "reason": "تطبیق با نقشهٔ مادر تأییدشدهٔ C305 فصل ۶ (جمع و تفریق)"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-A2",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۶",
+      "reason": "ثبت شمارهٔ فصل واقعی ۶ از نقشهٔ مادر تأییدشدهٔ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-B1",
+      "col_letter": "B",
+      "expected_old_value": "؟ (≈۳۶ تا ۵۵)",
+      "new_value": "۴۳ تا ۶۰",
+      "reason": "تطبیق با نقشهٔ مادر تأییدشدهٔ C305 فصل ۳ (عددهای کسری)"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-B1",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۳",
+      "reason": "ثبت شمارهٔ فصل واقعی ۳ از نقشهٔ مادر تأییدشدهٔ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-C1",
+      "col_letter": "B",
+      "expected_old_value": "؟",
+      "new_value": "۷۹ تا ۹۶",
+      "reason": "تطبیق با نقشهٔ مادر تأییدشدهٔ C305 فصل ۵ (محیط و مساحت)"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-C1",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۵",
+      "reason": "ثبت شمارهٔ فصل واقعی ۵ از نقشهٔ مادر تأییدشدهٔ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-C1",
+      "col_letter": "E",
+      "expected_old_value": "؟",
+      "new_value": "محاسبهٔ محیط چندضلعی‌ها و مساحت مستطیل و تشخیص خط تقارن",
+      "reason": "تکمیل هدف رفتاری فصل ۵ از نقشهٔ مادر C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-C1",
+      "col_letter": "F",
+      "expected_old_value": "؟",
+      "new_value": "محیط، مساحت، واحد مربع، تقارن",
+      "reason": "تکمیل واژگان کلیدی فصل ۵ از نقشهٔ مادر C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-E1",
+      "col_letter": "B",
+      "expected_old_value": "؟",
+      "new_value": "۳۱ تا ۳۹",
+      "reason": "تطبیق با صفحات اندازه‌گیری طول و جرم فصل ۲ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-E1",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۲",
+      "reason": "ثبت شمارهٔ فصل ۲ برای واحدهای مرکب طول و جرم در C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-E1",
+      "col_letter": "E",
+      "expected_old_value": "؟",
+      "new_value": "تبدیل واحدهای مرکب طول و جرم (متر/سانتی‌متر، کیلومتر/متر، کیلوگرم/گرم)",
+      "reason": "تکمیل هدف رفتاری از صفحات ۳۱ تا ۳۹ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-E1",
+      "col_letter": "F",
+      "expected_old_value": "؟",
+      "new_value": "متر، سانتی‌متر، کیلومتر، کیلوگرم، گرم",
+      "reason": "تکمیل واژگان کلیدی اندازه‌گیری فصل ۲ C305"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-F1",
+      "col_letter": "B",
+      "expected_old_value": "؟",
+      "new_value": "۱۱۵ تا ۱۳۲",
+      "reason": "تطبیق با نقشهٔ مادر تأییدشدهٔ C305 فصل ۷ (آمار و احتمال)"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "key": "L-F1",
+      "col_letter": "C",
+      "expected_old_value": "؟",
+      "new_value": "۷",
+      "reason": "ثبت شمارهٔ فصل واقعی ۷ از نقشهٔ مادر تأییدشدهٔ C305"
+    }
+  ],
+  "s1_rows": [
+    {
+      "id": "L-101",
+      "page": "۷ تا ۲۴",
+      "chapter": "۱",
+      "title": "ساعت در بعدازظهر و کاربرد اندازه‌گیری و محیط و تقسیم",
+      "objective": "دانش‌آموز بتواند ساعت بعدازظهر، واحد مرکب جرم، محیط مستطیل و باقی‌ماندهٔ تقسیم را حساب کند.",
+      "vocab": "بعدازظهر، کیلوگرم، گرم، محیط، باقی‌مانده",
+      "activity": "فعّالیت و کار در کلاس + تمرین",
+      "figure": "نوع: M_CLOCK_TIME؛ ساعت:۴؛ دقیقه:۰؛ رنگ: آبی؛ پرسش: «ساعت ۴ بعدازظهر چند است؟»",
+      "potential": "بالا",
+      "engine": "تعاملی-عمیق",
+      "anchor": "Q-301 تا Q-304",
+      "note": "شاهد مستقیم نقشهٔ مادر تأییدشدهٔ C305.pdf (آفست چاپی صفر: ص چاپی = ص PDF)."
+    }
+  ],
+  "atlas_rows": [
+    {
+      "code_raw": "E_CLOCK_12_24_CONFUSION",
+      "cell_code": "E_CLOCK_12_24_CONFUSION (پیشنهاد)",
+      "name_fa": "فراموشی افزودن ۱۲ در ساعت بعدازظهر",
+      "category": "مفهومی",
+      "description": "در بیان ساعت بعدازظهر به صورت ۲۴ساعته، همان عدد ۱۲ساعته را بدون افزودن ۱۲ می‌نویسد.",
+      "sample_sign": "ساعت ۴ بعدازظهر را ۴ می‌نویسد.",
+      "diagnostic_prompt": "تبدیل ساعت بعدازظهر به نماد ۲۴ساعته",
+      "intervention": "نمایش دو حلقهٔ ۱ تا ۱۲ صبح و ۱۳ تا ۲۴ بعدازظهر روی ساعت آموزشی.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۱ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_CLOCK_PLUS_10_ERROR",
+      "cell_code": "E_CLOCK_PLUS_10_ERROR (پیشنهاد)",
+      "name_fa": "افزودن ۱۰ به‌جای ۱۲ در ساعت بعدازظهر",
+      "category": "محاسباتی",
+      "description": "در تبدیل ساعت بعدازظهر، به دلیل عادت به مبنای ده، عدد ۱۰ را به‌جای ۱۲ اضافه می‌کند.",
+      "sample_sign": "ساعت ۴ بعدازظهر را ۱۴ می‌نویسد.",
+      "diagnostic_prompt": "تبدیل ساعت بعدازظهر به نماد ۲۴ساعته",
+      "intervention": "شمارش ساعت‌به‌ساعت از ۱۲ ظهر تا ساعت هدف.",
+      "priority": "متوسط",
+      "note": "پیشنهاد تشخیصی فصل ۱ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_DOUBLE_OFF",
+      "cell_code": "E_DOUBLE_OFF (پیشنهاد)",
+      "name_fa": "لغزش یک‌واحدی در شمارش",
+      "category": "محاسباتی",
+      "description": "در شمارش گام‌به‌گام یک واحد کمتر یا بیشتر می‌شمارد.",
+      "sample_sign": "در ۱۲+۴ عدد ۱۵ می‌نویسد.",
+      "diagnostic_prompt": "شمارش روبه‌جلو و تقسیم با باقی‌مانده",
+      "intervention": "علامت‌گذاری مبدأ شمارش روی محور.",
+      "priority": "متوسط",
+      "note": "هم‌نام کد پایهٔ دوم برای یکپارچگی اطلس؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_UNIT_FACTOR_WRONG_POWER",
+      "cell_code": "E_UNIT_FACTOR_WRONG_POWER (پیشنهاد)",
+      "name_fa": "ضریب توان ده نادرست در تبدیل واحد",
+      "category": "مفهومی",
+      "description": "کیلوگرم یا کیلومتر را به‌جای ۱۰۰۰ در ۱۰۰ ضرب می‌کند.",
+      "sample_sign": "۲ کیلوگرم و ۷۰۰ گرم را ۹۰۰ گرم می‌گیرد (۲۰۰+۷۰۰).",
+      "diagnostic_prompt": "تبدیل کیلوگرم و گرم به گرم",
+      "intervention": "جدول تناسب ۱ کیلوگرم = ۱۰۰۰ گرم کنار وزنهٔ واقعی.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۲ ص ۳۸–۳۹ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_UNIT_RAW_SUM",
+      "cell_code": "E_UNIT_RAW_SUM (پیشنهاد)",
+      "name_fa": "جمع خام عددهای دو واحد ناهم‌جنس",
+      "category": "مفهومی",
+      "description": "عدد کیلوگرم و عدد گرم را بدون یکسان‌سازی واحد مستقیماً با هم جمع می‌کند.",
+      "sample_sign": "۲ کیلوگرم و ۷۰۰ گرم را ۷۰۲ گرم می‌نویسد.",
+      "diagnostic_prompt": "تبدیل واحد مرکب جرم و طول",
+      "intervention": "رنگ‌کردن واحدها پیش از هر عمل جمع.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۲ ص ۳۹ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_PERIMETER_AREA_CONFUSION",
+      "cell_code": "E_PERIMETER_AREA_CONFUSION (پیشنهاد)",
+      "name_fa": "خلط فرمول محیط و مساحت مستطیل",
+      "category": "مفهومی",
+      "description": "هنگام محاسبهٔ محیط مستطیل، طول و عرض را در هم ضرب می‌کند.",
+      "sample_sign": "محیط مستطیل ۵ در ۳ را ۱۵ می‌نویسد.",
+      "diagnostic_prompt": "محاسبهٔ محیط مستطیل روی شبکه",
+      "intervention": "حرکت انگشت دورتادور مرز شکل پیش از نوشتن رابطه.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۵ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_HALF_PERIMETER",
+      "cell_code": "E_HALF_PERIMETER (پیشنهاد)",
+      "name_fa": "محاسبهٔ نیم‌محیط به‌جای محیط کامل مستطیل",
+      "category": "راهبردی",
+      "description": "فقط یک طول و یک عرض مستطیل را جمع می‌کند و دو ضلع روبه‌رو را جا می‌اندازد.",
+      "sample_sign": "محیط مستطیل ۵ در ۳ را ۸ می‌نویسد.",
+      "diagnostic_prompt": "محاسبهٔ محیط مستطیل با دادهٔ طول و عرض",
+      "intervention": "نوشتن اندازهٔ هر ۴ ضلع روی چهار طرف شکل.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۵ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_INCOMPLETE_SIDES",
+      "cell_code": "E_INCOMPLETE_SIDES (پیشنهاد)",
+      "name_fa": "جمع سه ضلع از چهار ضلع مستطیل",
+      "category": "محاسباتی",
+      "description": "در جمع اضلاع مستطیل تنها سه ضلع را جمع می‌زند.",
+      "sample_sign": "محیط مستطیل ۵ در ۳ را ۱۳ می‌نویسد.",
+      "diagnostic_prompt": "محاسبهٔ محیط مستطیل",
+      "intervention": "خط‌زدن تک‌تک اضلاع شمرده‌شده.",
+      "priority": "متوسط",
+      "note": "پیشنهاد تشخیصی فصل ۵ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_REMAINDER_QUOTIENT_SWAP",
+      "cell_code": "E_REMAINDER_QUOTIENT_SWAP (پیشنهاد)",
+      "name_fa": "جابه‌جایی خارج‌قسمت و باقی‌مانده در تقسیم",
+      "category": "مفهومی",
+      "description": "وقتی باقی‌ماندهٔ تقسیم خواسته شده، خارج‌قسمت را به عنوان پاسخ می‌نویسد یا برعکس.",
+      "sample_sign": "باقی‌ماندهٔ تقسیم ۲۳ بر ۵ را ۴ می‌نویسد.",
+      "diagnostic_prompt": "تشخیص باقی‌مانده از خارج‌قسمت در تقسیم",
+      "intervention": "مشخص‌کردن دسته‌های کامل با حلقه و دانه‌های آزاد با رنگ متمایز.",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۸ کتاب C305؛ نیازمند حکم معلم."
+    },
+    {
+      "code_raw": "E_REMAINDER_GE_DIVISOR",
+      "cell_code": "E_REMAINDER_GE_DIVISOR (پیشنهاد)",
+      "name_fa": "توقف زودهنگام دسته‌بندی و باقی‌ماندهٔ بزرگ‌تر یا مساوی مقسوم‌علیه",
+      "category": "مفهومی",
+      "description": "یک دسته کمتر می‌سازد و باقی‌مانده‌ای بزرگ‌تر یا مساوی مقسوم‌علیه باقی می‌گذارد.",
+      "sample_sign": "باقی‌ماندهٔ تقسیم ۲۳ بر ۵ را ۸ می‌نویسد (۳×۵+۸).",
+      "diagnostic_prompt": "کنترل شرط باقی‌مانده کوچک‌تر از مقسوم‌علیه",
+      "intervention": "پرسش کلیدی: آیا با دانه‌های باقی‌مانده می‌توان یک بستهٔ دیگر ساخت؟",
+      "priority": "بالا",
+      "note": "پیشنهاد تشخیصی فصل ۸ کتاب C305؛ نیازمند حکم معلم."
+    }
+  ],
+  "question_rows": [
+    {
+      "qid": "Q-301",
+      "anchor": "L-101",
+      "scope": "CORE",
+      "cpa": "تصویری",
+      "level": "آسان",
+      "stem": "عقربهٔ ساعت ۴ بعدازظهر را نشان می‌دهد؛ این زمان در ساعت شبانه‌روزی چند است؟",
+      "opts": ["۱۶", "۴", "۱۴", "۱۵"],
+      "ans": "الف",
+      "map": "ب→E_CLOCK_12_24_CONFUSION؛ ج→E_CLOCK_PLUS_10_ERROR؛ د→E_DOUBLE_OFF",
+      "trace": "12 + 4 = 16",
+      "answer_val": 16,
+      "wrong_spec": [[4, "E_CLOCK_12_24_CONFUSION"], [14, "E_CLOCK_PLUS_10_ERROR"], [15, "E_DOUBLE_OFF"]],
+      "page_ref": "ص 18 / PDF 18"
+    },
+    {
+      "qid": "Q-302",
+      "anchor": "L-101",
+      "scope": "CORE",
+      "cpa": "مجسم",
+      "level": "متوسط",
+      "stem": "جرم یک بسته ۲ کیلوگرم و ۷۰۰ گرم است؛ این جرم چند گرم است؟",
+      "opts": ["۷۰۲", "۲۷۰۰", "۹۰۰", "۲۷۰"],
+      "ans": "ب",
+      "map": "الف→E_UNIT_RAW_SUM؛ ج→E_UNIT_FACTOR_WRONG_POWER؛ د→E_ZERO_PLACE_MISS",
+      "trace": "2 * 1000 + 700 = 2700",
+      "answer_val": 2700,
+      "wrong_spec": [[702, "E_UNIT_RAW_SUM"], [900, "E_UNIT_FACTOR_WRONG_POWER"], [270, "E_ZERO_PLACE_MISS"]],
+      "page_ref": "ص 39 / PDF 39"
+    },
+    {
+      "qid": "Q-303",
+      "anchor": "L-101",
+      "scope": "DEPTH",
+      "cpa": "تصویری",
+      "level": "متوسط",
+      "stem": "طول یک مستطیل ۵ سانتی‌متر و عرض آن ۳ سانتی‌متر است؛ محیط این مستطیل چند سانتی‌متر است؟",
+      "opts": ["۱۵", "۸", "۱۶", "۱۳"],
+      "ans": "ج",
+      "map": "الف→E_PERIMETER_AREA_CONFUSION؛ ب→E_HALF_PERIMETER؛ د→E_INCOMPLETE_SIDES",
+      "trace": "2 * (5 + 3) = 16",
+      "answer_val": 16,
+      "wrong_spec": [[15, "E_PERIMETER_AREA_CONFUSION"], [8, "E_HALF_PERIMETER"], [13, "E_INCOMPLETE_SIDES"]],
+      "page_ref": "ص 82 / PDF 82"
+    },
+    {
+      "qid": "Q-304",
+      "anchor": "L-101",
+      "scope": "SIDE",
+      "cpa": "علامتی",
+      "level": "متوسط",
+      "stem": "باقی‌ماندهٔ تقسیم ۲۳ بر ۵ چند است؟",
+      "opts": ["۴", "۰", "۸", "۳"],
+      "ans": "د",
+      "map": "الف→E_REMAINDER_QUOTIENT_SWAP؛ ب→E_REMAINDER_DROP؛ ج→E_REMAINDER_GE_DIVISOR",
+      "trace": "23 % 5 = 3",
+      "answer_val": 3,
+      "wrong_spec": [[4, "E_REMAINDER_QUOTIENT_SWAP"], [0, "E_REMAINDER_DROP"], [8, "E_REMAINDER_GE_DIVISOR"]],
+      "page_ref": "ص 146 / PDF 146"
+    }
+  ],
+  "deferred_proposals": []
+}

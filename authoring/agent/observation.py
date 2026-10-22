@@ -1,26 +1,29 @@
-"""Stage P1: Authentic Observation Layer for `C205.pdf`.
+"""Stage P1: Book-Agnostic PDF Observation Layer (`W4` — `C105..C605`).
 
-Key guarantees:
+Capabilities:
 1. Never fabricates PDF observations when the source PDF is absent (`SOURCE_PDF_MISSING` -> `BLOCKED`).
 2. Enforces exact SHA-256 lock against `BookManifest` (`EDITION_SHA_MISMATCH` -> `FAIL`).
-3. Detects Adobe InDesign CS6 ME mixed Arabic-Indic (`٠..٩`) + ASCII (`0..9`) digit tokens,
-   spatial RTL layout hazards, graphical-only regions, and extracts exact printed red-tulip
-   footer page numbers across all 144 body pages using glyph-level bounding boxes.
-4. Renders crops/pages ONLY to quarantine directory `/tmp/c205_secure_vault/` outside Git.
-5. Attaches curated high-DPI visual observations (with exact `bbox_normalized` and crop SHA-256)
-   explicitly tagged as `pdf_crop_150dpi`, never hiding unobservable elements (`?` / `UNOBSERVABLE`).
+3. Extracts glyph-sorted printed corner footer badges across Iranian InDesign layouts (`0.855 <= ny0 <= 0.980`,
+   covering both `C205.pdf` at `ny0≈0.895` and `C305.pdf` at `ny0=695.4/793.7=0.8761`, with Arabic-Indic +
+   ASCII digits and occluded pasteboard ghost filtering).
+4. Geometrically detects outlined vector banner capsules (`detect_vector_banner_regions`) in the top 25% of
+   each page via `page.get_drawings()` whenever text spans are absent inside the vector capsule (`C305` pp. 52, 55, 100),
+   flagging `VECTOR_OUTLINE_BANNER_NEEDS_VISION` and rendering a `300 DPI` crop into `/tmp` quarantine.
+5. Renders sharp counting crops (`render_counting_crop_nearest`) at `300 DPI` + `PIL.Image.NEAREST` strictly
+   inside `/tmp` quarantine (never inside Git) with optional automatic purge (`purge_quarantine_vault`).
 """
 
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import re
+import shutil
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 import pymupdf
+from PIL import Image
 
 from .models import (
     Claim,
@@ -44,9 +47,7 @@ TO_ASCII_DIGIT_MAP = str.maketrans(
     ASCII_DIGITS + ASCII_DIGITS,
 )
 
-MIXED_ENCODING_RE = re.compile(
-    r"(?:[0-9]+[٠-٩۰-۹]+|[٠-٩۰-۹]+[0-9]+)"
-)
+MIXED_ENCODING_RE = re.compile(r"(?:[0-9]+[٠-٩۰-۹]+|[٠-٩۰-۹]+[0-9]+)")
 
 KNOWN_MARGIN_TABS = [
     "مرور فصل",
@@ -62,6 +63,8 @@ KNOWN_MARGIN_TABS = [
     "تمرین",
     "معمّا",
     "معما",
+    "سرگرمی و معمّا",
+    "سرگرمی و معّما",
 ]
 
 KNOWN_RED_BOXES = [
@@ -73,7 +76,24 @@ KNOWN_RED_BOXES = [
     "خلّاق باش",
     "خلاق باش",
     "حدس بزن",
+    "اندازه‌گیری کن",
+    "انجام بده",
+    "بشمار و بگو",
+    "دلیل بیاور",
 ]
+
+
+def load_curated_claims_json(json_path: Optional[str | Path] = None) -> Dict[int, Dict[str, Any]]:
+    path = Path(json_path) if json_path else (Path(__file__).resolve().parent / "fixtures" / "curated_claims_C205.json")
+    if not path.exists():
+        return {}
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    pages = raw.get("pages", raw)
+    return {int(k): v for k, v in pages.items()}
+
+
+# Loaded cleanly from pure data file `authoring/agent/fixtures/curated_claims_C205.json` (`W4`)
+CURATED_VISUAL_OBSERVATIONS_C205: Dict[int, Dict[str, Any]] = load_curated_claims_json()
 
 
 def normalize_persian_label(text: str) -> str:
@@ -102,11 +122,7 @@ def normalize_digits_to_ascii(text: str) -> str:
 
 
 def extract_footer_book_page_from_glyphs(page: pymupdf.Page) -> Tuple[Optional[int], bool]:
-    """Read the printed red-tulip corner badge using raw character coordinates sorted left-to-right (`x0`),
-    respecting ISO-32000 back-to-front painting order when pasteboard ghost spans sit underneath a badge
-    (e.g., `PDF 47` / Book p. 41 in `C205.pdf`, where `'4 0 '` sits underneath the top painted `'4 1'`!).
-    Returns `(footer_page_number, occluded_ghost_detected)`.
-    """
+    """Read printed corner footer badge across InDesign textbook layouts (`0.855 <= ny0 <= 0.980`)."""
     w, h = page.rect.width, page.rect.height
     raw = page.get_text("rawdict")
 
@@ -126,11 +142,11 @@ def extract_footer_book_page_from_glyphs(page: pymupdf.Page) -> Tuple[Optional[i
                         continue
                     bx0, by0, bx1, by1 = ch["bbox"]
                     nx0, ny0, nx1, ny1 = bx0 / w, by0 / h, bx1 / w, by1 / h
-                    if ny0 >= 0.885 and ny1 <= 0.965:
+                    if ny0 >= 0.855 and ny1 <= 0.980:
                         ascii_d = c.translate(TO_ASCII_DIGIT_MAP)
-                        if nx1 <= 0.19:
+                        if nx1 <= 0.21:
                             left_digits.append((nx0, ny0, nx1, ny1, ascii_d, paint_seq))
-                        elif nx0 >= 0.81:
+                        elif nx0 >= 0.79:
                             right_digits.append((nx0, ny0, nx1, ny1, ascii_d, paint_seq))
 
     occluded_detected = False
@@ -138,7 +154,6 @@ def extract_footer_book_page_from_glyphs(page: pymupdf.Page) -> Tuple[Optional[i
     for group in (left_digits, right_digits):
         if not group:
             continue
-        # Remove earlier-painted glyphs that horizontally overlap >45% with a later-painted glyph
         visible: List[Tuple[float, str]] = []
         for idx_a, (ax0, _, ax1, _, ad, aseq) in enumerate(group):
             aw = max(1e-6, ax1 - ax0)
@@ -156,10 +171,88 @@ def extract_footer_book_page_from_glyphs(page: pymupdf.Page) -> Tuple[Optional[i
         ordered = "".join(d for _, d in sorted(visible, key=lambda item: item[0]))
         if ordered.isdigit():
             val = int(ordered)
-            if 1 <= val <= 200:
+            if 1 <= val <= 250:
                 candidates.append(val)
 
     return (candidates[0] if candidates else None), occluded_detected
+
+
+def _bbox_overlap_ratio(inner: List[float], outer: List[float]) -> float:
+    ix0 = max(inner[0], outer[0])
+    iy0 = max(inner[1], outer[1])
+    ix1 = min(inner[2], outer[2])
+    iy1 = min(inner[3], outer[3])
+    if ix1 <= ix0 or iy1 <= iy0:
+        return 0.0
+    inter = (ix1 - ix0) * (iy1 - iy0)
+    area_in = max(1e-9, (inner[2] - inner[0]) * (inner[3] - inner[1]))
+    return inter / area_in
+
+
+def detect_vector_banner_regions(
+    page: pymupdf.Page,
+    text_bboxes_norm: List[List[float]],
+) -> List[List[float]]:
+    """Detect outlined InDesign banner capsules in top 25% of `page` that lack text layer blocks (`W4`).
+
+    In Iranian textbook PDFs (e.g. `C305.pdf` pp. 52, 55, 100), lesson/tab header capsules are often
+    converted to vector curves (`Create Outlines`): `get_text("blocks")` returns empty there, while
+    `page.get_drawings()` exposes the exact colored capsule rectangle in `[0.005..0.25]` page height!
+    """
+    w, h = page.rect.width, page.rect.height
+    candidates: List[List[float]] = []
+
+    for dr in page.get_drawings():
+        rect = dr.get("rect")
+        if rect is None:
+            continue
+        fill = dr.get("fill")
+        color = dr.get("color")
+        # Ignore pure white page-background fills or hairlines
+        if fill is not None and len(fill) >= 3 and min(fill[:3]) > 0.96 and color is None:
+            continue
+        nx0 = round(max(0.0, rect.x0 / w), 4)
+        ny0 = round(max(0.0, rect.y0 / h), 4)
+        nx1 = round(min(1.0, rect.x1 / w), 4)
+        ny1 = round(min(1.0, rect.y1 / h), 4)
+        nw = nx1 - nx0
+        nh = ny1 - ny0
+        # Header capsule geometry: top quarter of page, capsule-shaped width & height (not full-page border)
+        if not (0.002 <= ny0 <= 0.24 and ny1 <= 0.27):
+            continue
+        if not (0.10 <= nw <= 0.92 and 0.018 <= nh <= 0.14):
+            continue
+        box = [nx0, ny0, nx1, ny1]
+        has_text_inside = any(_bbox_overlap_ratio(tb, box) >= 0.20 for tb in text_bboxes_norm)
+        if not has_text_inside:
+            candidates.append(box)
+
+    # Merge overlapping vector paths belonging to the same banner capsule (e.g., capsule fill + outline glyphs)
+    merged: List[List[float]] = []
+    for box in sorted(candidates, key=lambda b: (b[1], b[0])):
+        fused = False
+        for m in merged:
+            if _bbox_overlap_ratio(box, m) >= 0.35 or _bbox_overlap_ratio(m, box) >= 0.35:
+                m[0] = round(min(m[0], box[0]), 4)
+                m[1] = round(min(m[1], box[1]), 4)
+                m[2] = round(max(m[2], box[2]), 4)
+                m[3] = round(max(m[3], box[3]), 4)
+                fused = True
+                break
+        if not fused:
+            merged.append(list(box))
+    return merged
+
+
+def _ensure_safe_ephemeral_vault(vault_dir: str | Path) -> Path:
+    vault = Path(vault_dir).resolve()
+    if not str(vault).startswith("/tmp/"):
+        # Enforce §9 copyright rule: page renders/crops MUST live exclusively under `/tmp`!
+        vault = Path("/tmp") / f"khshab_vault_{vault.name}"
+    crops_dir = vault / "crops"
+    crops_dir.mkdir(parents=True, exist_ok=True)
+    os.chmod(vault, 0o700)
+    return vault
 
 
 def render_region_crop_to_vault(
@@ -169,349 +262,80 @@ def render_region_crop_to_vault(
     vault_dir: Path,
     dpi: int = 150,
 ) -> Tuple[Path, str]:
-    """Render a normalized bbox crop strictly into `/tmp/c205_secure_vault/crops/` and return `(path, sha256)`."""
-    crops_dir = vault_dir / "crops"
-    crops_dir.mkdir(parents=True, exist_ok=True)
-    os.chmod(vault_dir, 0o700)
+    """Render a normalized bbox crop strictly into `/tmp/.../crops/` and return `(path, sha256)`."""
+    vault = _ensure_safe_ephemeral_vault(vault_dir)
+    crops_dir = vault / "crops"
 
     page = doc[pdf_page - 1]
     w, h = page.rect.width, page.rect.height
     x0, y0, x1, y1 = bbox_norm
     clip = pymupdf.Rect(max(0.0, x0 * w), max(0.0, y0 * h), min(w, x1 * w), min(h, y1 * h))
     pix = page.get_pixmap(dpi=dpi, clip=clip)
-    tag = f"pdf_{pdf_page:03d}_{int(x0*1000):04d}_{int(y0*1000):04d}_{int(x1*1000):04d}_{int(y1*1000):04d}.png"
+    tag = f"pdf_{pdf_page:03d}_{int(x0*1000):04d}_{int(y0*1000):04d}_{int(x1*1000):04d}_{int(y1*1000):04d}_{dpi}dpi.png"
     out_path = crops_dir / tag
     pix.save(str(out_path))
     return out_path, file_sha256(str(out_path))
 
 
-# High-DPI visually verified observations from direct 150-DPI inspection of C205.pdf (`sha256: a93934b6...46de`).
-# Every entry specifies exact `bbox_normalized` so `observe_pdf` computes real crop SHA-256 directly from `C205.pdf`!
-CURATED_VISUAL_OBSERVATIONS_C205: Dict[int, Dict[str, Any]] = {
-    2: {
-        "primary_banner": None,
-        "all_tabs": [],
-        "page_type": "شناسنامه",
-        "regions": [
-            {
-                "bbox": [0.10, 0.08, 0.90, 0.92],
-                "field": "colophon_edition",
-                "raw": "ریاضی ـ دوم دبستان ـ ۲۰۵ | چاپ چهاردهم ۱۴۰۴ | شابک 978-964-05-2078-9",
-                "value": {"book_code": "205", "edition": 14, "year": 1404, "isbn": "978-964-05-2078-9"},
-                "role": "edition_identity",
-            }
-        ],
-    },
-    6: {
-        "primary_banner": "فهرست",
-        "all_tabs": ["فهرست"],
-        "page_type": "فهرست",
-        "regions": [
-            {
-                "bbox": [0.06, 0.05, 0.94, 0.94],
-                "field": "chapter_toc",
-                "raw": "فصل ۱ ص ۱ عدد و رقم | فصل ۲ ص ۱۹ جمع و تفریق اعداد دو رقمی | فصل ۳ ص ۳۷ اشکال هندسی | فصل ۴ ص ۵۵ عددهای سه رقمی | فصل ۵ ص ۷۳ اندازه‌گیری | فصل ۶ ص ۹۱ جمع و تفریق اعداد سه رقمی | فصل ۷ ص ۱۰۹ کسر و احتمال | فصل ۸ ص ۱۲۷ آمار و نمودار",
-                "value": [
-                    {"ch": 1, "start": 1, "title": "عدد و رقم"},
-                    {"ch": 2, "start": 19, "title": "جمع و تفریق اعداد دو رقمی"},
-                    {"ch": 3, "start": 37, "title": "اشکال هندسی"},
-                    {"ch": 4, "start": 55, "title": "عددهای سه رقمی"},
-                    {"ch": 5, "start": 73, "title": "اندازه‌گیری"},
-                    {"ch": 6, "start": 91, "title": "جمع و تفریق اعداد سه رقمی"},
-                    {"ch": 7, "start": 109, "title": "کسر و احتمال"},
-                    {"ch": 8, "start": 127, "title": "آمار و نمودار"},
-                ],
-                "role": "table_of_contents",
-            }
-        ],
-    },
-    9: {
-        "primary_banner": "فعّالیت",
-        "all_tabs": ["فعّالیت"],
-        "page_type": "فعالیت",
-        "regions": [
-            {
-                "bbox": [0.10, 0.09, 0.92, 0.50],
-                "field": "flower_tally_table",
-                "raw": "جدول شمارش چوب‌خط ۵ ستونی (۵ نوع گل؛ ستون اول //// = ۴)",
-                "value": {"columns": 5, "sample_tally": 4},
-                "role": "tally_table",
-            },
-            {
-                "bbox": [0.06, 0.52, 0.91, 0.90],
-                "field": "elephant_wonder_grid",
-                "raw": "جدول شگفت‌انگیز داخل فیل آبی: شبکهٔ ۹×۹ سودوکو با نواحی ۳×۳ نارنجی و ارقام یک‌رقمی ۱ تا ۹",
-                "value": {"grid": "9x9", "digits": "1..9"},
-                "role": "logic_grid",
-            },
-        ],
-    },
-    22: {
-        "primary_banner": "مرور فصل",
-        "all_tabs": ["مرور فصل", "فرهنگ نوشتن", "تمرین"],
-        "page_type": "مرور فصل",
-        "regions": [
-            {
-                "bbox": [0.36, 0.00, 0.61, 0.13],
-                "field": "primary_banner",
-                "raw": "مرور فصل",
-                "value": "مرور فصل",
-                "role": "top_ribbon_banner",
-            },
-            {
-                "bbox": [0.08, 0.42, 0.94, 0.92],
-                "field": "review_exercises",
-                "raw": "تمرین موارد ۱ تا ۴: ساخت عدد با ۷ و ۸؛ با ۶ و ۰ و ۱؛ ۸+۹ و ۱۷−۸؛ ۶ کادر جمع برابر ۵",
-                "value": {"exercise_count": 4, "sum_boxes": 6, "sum_target": 5},
-                "role": "exercise_block",
-            },
-        ],
-    },
-    26: {
-        "primary_banner": "جمع و تفریق ده‌تایی",
-        "all_tabs": ["جمع و تفریق ده‌تایی", "فعّالیت", "تقریب بزن"],
-        "page_type": "فعالیت",
-        "regions": [
-            {
-                "bbox": [0.50, 0.07, 0.92, 0.30],
-                "field": "top_lesson_and_tab",
-                "raw": "عنوان درس: جمع و تفریق ده‌تایی + تاب فعّالیت",
-                "value": {"lesson_title": "جمع و تفریق ده‌تایی", "first_tab": "فعّالیت"},
-                "role": "header_sequence",
-            },
-            {
-                "bbox": [0.07, 0.65, 0.93, 0.90],
-                "field": "bottom_red_box",
-                "raw": "جعبهٔ قرمز پایین صفحه: تقریب بزن (سه محور ۰ تا ۴۰ با پرش ده‌تایی)",
-                "value": "تقریب بزن",
-                "role": "red_box",
-            },
-        ],
-    },
-    27: {
-        "primary_banner": "کار در کلاس",
-        "all_tabs": ["کار در کلاس", "فعّالیت"],
-        "page_type": "کار در کلاس + فعالیت",
-        "regions": [
-            {
-                "bbox": [0.06, 0.08, 0.94, 0.56],
-                "field": "top_section",
-                "raw": "کار در کلاس (موارد ۱ و ۲: حساب یکی‌ها و ده‌تایی‌ها + دسته‌بندی مربع‌ها)",
-                "value": {"tab": "کار در کلاس", "items": [1, 2]},
-                "role": "section_block",
-            },
-            {
-                "bbox": [0.06, 0.57, 0.94, 0.92],
-                "field": "bottom_section",
-                "raw": "فعّالیت (موارد ۱ و ۲: نوشتن جمع برای دسته‌های ده‌تایی + نمایش روی محور ۰ تا ۱۰۰)",
-                "value": {"tab": "فعّالیت", "items": [1, 2]},
-                "role": "section_block",
-            },
-        ],
-    },
-    30: {
-        "primary_banner": "کار در کلاس",
-        "all_tabs": ["کار در کلاس", "فعّالیت"],
-        "page_type": "کار در کلاس + فعالیت",
-        "regions": [
-            {
-                "bbox": [0.07, 0.13, 0.92, 0.44],
-                "field": "kar_dar_kelas_box",
-                "raw": "کار در کلاس: ۱۴−۶، ۱۲−۹، ۷+۵، ۸+۹ و ۱۹−۹، ۱۷−۸، ۷+۶، ۶+۹",
-                "value": ["۱۴−۶", "۱۲−۹", "۷+۵", "۸+۹", "۱۹−۹", "۱۷−۸", "۷+۶", "۶+۹"],
-                "role": "expression_set",
-            },
-            {
-                "bbox": [0.07, 0.44, 0.92, 0.86],
-                "field": "faaliyat_items",
-                "raw": "فعّالیت شامل مورد ۱ (۷+۹، ۱۸−۹، ۱۷−۹ با مربع‌ها) و مورد ۲ (جدول‌های جمع و تفریق پایین صفحه)",
-                "value": {"owner_tab": "فعّالیت", "items": [1, 2]},
-                "role": "section_ownership",
-            },
-        ],
-    },
-    31: {
-        "primary_banner": "کار در کلاس",
-        "all_tabs": ["کار در کلاس", "تمرین", "خلاق باش"],
-        "page_type": "کار در کلاس + تمرین",
-        "regions": [
-            {
-                "bbox": [0.09, 0.50, 0.80, 0.62],
-                "field": "story_problems_p25",
-                "raw": "مورد ۲: امین ۹ صفحه خوانده و ۸ صفحهٔ دیگر خواند (۹+۸)؛ مورد ۳: ریحانه ۱۴ تخم‌مرغ، ۶ مصرف شد (۱۴−۶)",
-                "value": {"amin": "9+8", "reyhaneh": "14-6"},
-                "role": "word_problems",
-            }
-        ],
-    },
-    32: {
-        "primary_banner": "حلّ مسئله",
-        "all_tabs": ["حلّ مسئله", "الگویابی کن"],
-        "page_type": "حلّ مسئله",
-        "regions": [
-            {
-                "bbox": [0.08, 0.13, 0.91, 0.30],
-                "field": "combinatorial_digits_p26",
-                "raw": "مورد ۱ حلّ مسئله: رقم‌های یکان ۳ و ۴ و رقم دهگان ۵ و ۷ → ۵۳، ۵۴، ۷۳، ۷۴ (۴ عدد)",
-                "value": {"ones": [3, 4], "tens": [5, 7], "numbers": [53, 54, 73, 74]},
-                "role": "combinatorics",
-            },
-            {
-                "bbox": [0.07, 0.60, 0.93, 0.87],
-                "field": "pattern_box_p26",
-                "raw": "الگویابی کن: ۷۱،۷۲،۷۳ (چپ به راست +۱)؛ ۲،۴،۶،۸ (+۲)؛ ۳،۶،۹،۱۲ (+۳)",
-                "value": ["71,72,73", "2,4,6,8", "3,6,9,12"],
-                "role": "number_patterns",
-            },
-        ],
-    },
-    33: {
-        "primary_banner": "الگوسازی",
-        "all_tabs": ["الگوسازی", "کامل کن"],
-        "page_type": "الگوسازی + کامل کن",
-        "regions": [
-            {
-                "bbox": [0.09, 0.06, 0.92, 0.42],
-                "field": "coloring_combinatorics_p27",
-                "raw": "الگوسازی: مثلث با ۲ رنگ (آبی یا قرمز) و مربع با ۳ رنگ (قهوه‌ای، سبز و زرد) → ۶ حالت",
-                "value": {"triangle_colors": 2, "square_colors": 3, "total_states": 6},
-                "role": "combinatorics",
-            },
-            {
-                "bbox": [0.07, 0.44, 0.93, 0.86],
-                "field": "clock_magnifier_p27",
-                "raw": "کامل کن: ۳ ساعت آبی با ذره‌بین روی دقیقه‌ها؛ هر قسمت کوچک یک دقیقه است",
-                "value": {"clock_count": 3, "unit_rule": "1 small tick = 1 minute"},
-                "role": "clock_reading",
-            },
-        ],
-    },
-    37: {
-        "primary_banner": "جمع و تفریق دو عدد (ادامه)",
-        "all_tabs": ["جمع و تفریق دو عدد (ادامه)", "فعّالیت"],
-        "page_type": "فعالیت",
-        "regions": [
-            {
-                "bbox": [0.08, 0.50, 0.90, 0.90],
-                "field": "step_subtraction_p31",
-                "raw": "مورد ۲ فعّالیت: تفریق نمونه ۳۵−۱۷ (۳۵−۱۰=۲۵، ۲۵−۷=۱۸) و دو تمرین ۵۲−۱۴ و ۴۳−۲۷",
-                "value": {"worked": "35-17=18", "practice": ["52-14", "43-27"]},
-                "role": "step_subtraction",
-            }
-        ],
-    },
-    39: {
-        "primary_banner": "تمرین",
-        "all_tabs": ["تمرین", "تقریب بزن"],
-        "page_type": "تمرین",
-        "regions": [
-            {
-                "bbox": [0.11, 0.13, 0.68, 0.21],
-                "field": "vertical_expressions_p33",
-                "raw": "مورد ۱ تمرین ص ۳۳ (راست به چپ): ۵۹+۲۷، ۵۴−۲۱، ۶۰−۱۴، ۲۳+۵۷",
-                "value": ["59+27", "54-21", "60-14", "23+57"],
-                "role": "vertical_arithmetic",
-            },
-            {
-                "bbox": [0.67, 0.901, 0.903, 0.942],
-                "field": "tie_rule_footnote_p33",
-                "raw": "عدد ۲۵ را به صورت تقریبی ۳۰ بنویسید.",
-                "value": {"input": 25, "approx_ten": 30, "rule": "half_up_explicit_footnote"},
-                "role": "pedagogical_rule",
-            },
-        ],
-    },
-    40: {
-        "primary_banner": "مرور فصل",
-        "all_tabs": ["مرور فصل", "فرهنگ نوشتن", "تمرین"],
-        "page_type": "مرور فصل",
-        "regions": [
-            {
-                "bbox": [0.07, 0.55, 0.29, 0.67],
-                "field": "flower_color_table_p34",
-                "raw": "جدول رنگ گل‌ها: سبز ۱۰ تا ۲۰ | آبی ۲۱ تا ۳۰ | قرمز ۳۱ تا ۴۰ | زرد ۴۱ تا ۵۰",
-                "value": {"سبز": [10, 20], "آبی": [21, 30], "قرمز": [31, 40], "زرد": [41, 50]},
-                "role": "lookup_table",
-            }
-        ],
-    },
-    63: {
-        "primary_banner": "فعّالیت",
-        "all_tabs": ["فعّالیت", "الگویابی کن"],
-        "page_type": "فعالیت",
-        "regions": [
-            {
-                "bbox": [0.06, 0.26, 0.90, 0.42],
-                "field": "coin_equivalences_p57",
-                "raw": "مورد ۱: ۲۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۲: ۸۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۳: ۱۰۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی",
-                "value": [
-                    {"item": 1, "quantity": 20, "unit_denomination_rial": 1, "target_denomination_rial": 10},
-                    {"item": 2, "quantity": 80, "unit_denomination_rial": 1, "target_denomination_rial": 10},
-                    {"item": 3, "quantity": 100, "unit_denomination_rial": 1, "target_denomination_rial": 10},
-                ],
-                "role": "quantity_with_denomination",
-            },
-            {
-                "bbox": [0.07, 0.61, 0.93, 0.89],
-                "field": "skip_patterns_p57",
-                "raw": "الگویابی کن: ۴، ۸، ۱۲ (+۴) | ۳، ۶، ۹ (+۳) | ۷، ۱۴، ۲۱ (+۷)",
-                "value": ["4,8,12", "3,6,9", "7,14,21"],
-                "role": "number_patterns",
-            },
-        ],
-    },
-    71: {
-        "primary_banner": "کار در کلاس",
-        "all_tabs": ["کار در کلاس", "تقریب بزن"],
-        "page_type": "کار در کلاس",
-        "regions": [
-            {
-                "bbox": [0.07, 0.63, 0.93, 0.91],
-                "field": "truncation_rounding_rule_p65",
-                "raw": "تقریب بزن ص ۶۵: با حذف رقم یکان و قرار دادن صفر به‌جای آن (۷۳۱→۷۳۰، ۶۳۵، ۵۹۶) و با حذف رقم یکان و دهگان (۱۲۴→۱۰۰، ۲۳۵، ۴۱۷)",
-                "value": {"ones_truncation_sample": "731->730", "tens_ones_truncation_sample": "124->100"},
-                "role": "pedagogical_rule",
-            }
-        ],
-    },
-    144: {
-        "primary_banner": "تمرین",
-        "all_tabs": ["تمرین", "کامل کن"],
-        "page_type": "تمرین",
-        "regions": [
-            {
-                "bbox": [0.06, 0.08, 0.94, 0.95],
-                "field": "sarvestan_trees_and_library_p138",
-                "raw": "ص چاپی ۱۳۸: تمرین ۱ درخت‌های سرو شهر سروستان (سعدی ۵۰، حافظ ۴۰، مولوی ۶۵؛ هر ۱۰ درخت ۱ نماد) + تمرین ۲ کتابخانهٔ شهید فهمیده (هر ۱۰۰ کتاب ۱ نماد) + کامل کن",
-                "value": {"printed_book_page": 138, "streets": {"سعدی": 50, "حافظ": 40, "مولوی": 65}},
-                "role": "page_identity_and_table",
-            }
-        ],
-    },
-    145: {
-        "primary_banner": "انتخاب نمودار",
-        "all_tabs": ["انتخاب نمودار", "فعّالیت"],
-        "page_type": "درس",
-        "regions": [
-            {
-                "bbox": [0.05, 0.07, 0.94, 0.95],
-                "field": "saeed_schedule_chart_p139",
-                "raw": "ص چاپی ۱۳۹: انتخاب نمودار + فعّالیت — کارهای روز تعطیل سعید از ۸ صبح تا ۸ بعدازظهر (نوار ساعتی و نمودار ستونی)",
-                "value": {"printed_book_page": 139, "lesson_title": "انتخاب نمودار"},
-                "role": "page_identity_and_chart",
-            }
-        ],
-    },
-}
+def render_counting_crop_nearest(
+    pdf_or_doc: pymupdf.Document | str | Path,
+    pdf_page: int,
+    bbox_norm: List[float],
+    vault_dir: str | Path = "/tmp/khshab_counting_vault",
+    dpi: int = 300,
+    nearest_zoom: int = 4,
+) -> Tuple[Path, str, Tuple[int, int]]:
+    """Render a counting figure at `300 DPI` and upscale with `Image.NEAREST` in `/tmp` quarantine (`W4`).
+
+    Prevents bicubic/bilinear blur when counting tiny ones-cubes (`ص ۱۰۰` -> `۲۰۴۷`) or bottle crates (`ص ۱۳۰` -> `۶`).
+    """
+    vault = _ensure_safe_ephemeral_vault(vault_dir)
+    close_after = False
+    if isinstance(pdf_or_doc, (str, Path)):
+        doc = pymupdf.open(str(pdf_or_doc))
+        close_after = True
+    else:
+        doc = pdf_or_doc
+    try:
+        page = doc[pdf_page - 1]
+        w, h = page.rect.width, page.rect.height
+        x0, y0, x1, y1 = bbox_norm
+        clip = pymupdf.Rect(max(0.0, x0 * w), max(0.0, y0 * h), min(w, x1 * w), min(h, y1 * h))
+        pix = page.get_pixmap(dpi=dpi, clip=clip, alpha=False)
+        img = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
+        if nearest_zoom > 1:
+            img = img.resize((img.width * nearest_zoom, img.height * nearest_zoom), resample=Image.NEAREST)
+        out_path = vault / "crops" / (
+            f"count_p{pdf_page:03d}_{int(x0*1000):04d}_{int(y0*1000):04d}_"
+            f"{int(x1*1000):04d}_{int(y1*1000):04d}_{dpi}dpi_x{nearest_zoom}nearest.png"
+        )
+        img.save(out_path, format="PNG")
+        return out_path, file_sha256(str(out_path)), img.size
+    finally:
+        if close_after:
+            doc.close()
+
+
+def purge_quarantine_vault(vault_dir: str | Path) -> bool:
+    """Purge temporary rendered crops from `/tmp` upon completion (`§9` clean room hygiene)."""
+    v = Path(vault_dir).resolve()
+    if str(v).startswith("/tmp/") and v.exists():
+        shutil.rmtree(v, ignore_errors=True)
+        return True
+    return False
 
 
 def observe_pdf(
     manifest_path: str | Path,
     pdf_path: str | Path,
-    vault_dir: str | Path = "/tmp/c205_secure_vault",
+    vault_dir: str | Path = "/tmp/khshab_secure_vault",
+    *,
+    curated_claims_path: Optional[str | Path] = None,
+    purge_vault_after_run: bool = False,
 ) -> Tuple[GateResult, Dict[str, Any]]:
-    """Run complete Stage P1 observation over `C205.pdf` with strict edition & missing-file gates."""
+    """Run complete book-agnostic Stage P1 observation over any textbook PDF (`C105..C605`)."""
     manifest = json.loads(Path(manifest_path).read_text(encoding="utf-8"))
+    book_code = str(manifest.get("book_code", "BOOK")).upper()
     pdf_file = Path(pdf_path)
 
     if not pdf_file.exists():
@@ -521,252 +345,323 @@ def observe_pdf(
                 stage="P1",
                 status="BLOCKED",
                 reason_code="SOURCE_PDF_MISSING",
-                summary=f"فایل منبع PDF در مسیر قرنطینه یافت نشد ({pdf_file}). هیچ خروجی جعلی ساخته نشد.",
-                metrics={"expected_path": str(pdf_file)},
+                summary=f"فایل منبع PDF ({book_code}) در مسیر قرنطینه یافت نشد ({pdf_file}). هیچ خروجی جعلی ساخته نشد.",
+                metrics={"expected_path": str(pdf_file), "book_code": book_code},
             ),
             {},
         )
 
     actual_sha = file_sha256(str(pdf_file))
-    expected_sha = manifest["source_pdf"]["sha256"]
-    if actual_sha != expected_sha:
+    expected_sha = manifest["source_pdf"].get("sha256")
+    if expected_sha and actual_sha != expected_sha:
         return (
             GateResult(
                 gate_id="G1_OBSERVATION_INGEST",
                 stage="P1",
                 status="FAIL",
                 reason_code="EDITION_SHA_MISMATCH",
-                summary="هش SHA-256 فایل PDF با شناسنامهٔ رسمی چاپ چهاردهم ۱۴۰۴ مطابقت ندارد.",
-                metrics={"expected_sha256": expected_sha, "actual_sha256": actual_sha},
+                summary=f"هش SHA-256 فایل PDF با شناسنامهٔ رسمی کتاب `{book_code}` مطابقت ندارد.",
+                metrics={"expected_sha256": expected_sha, "actual_sha256": actual_sha, "book_code": book_code},
             ),
             {},
         )
 
     doc = pymupdf.open(str(pdf_file))
-    if len(doc) != manifest["source_pdf"]["pdf_page_count"]:
+    expected_pages = manifest["source_pdf"].get("pdf_page_count")
+    if expected_pages is not None and len(doc) != int(expected_pages):
+        doc.close()
         return (
             GateResult(
                 gate_id="G1_OBSERVATION_INGEST",
                 stage="P1",
                 status="FAIL",
                 reason_code="PAGE_COUNT_MISMATCH",
-                summary=f"تعداد صفحات PDF ({len(doc)}) با شناسنامه ({manifest['source_pdf']['pdf_page_count']}) مغایر است.",
-                metrics={"expected": manifest["source_pdf"]["pdf_page_count"], "actual": len(doc)},
+                summary=f"تعداد صفحات PDF ({len(doc)}) با شناسنامه ({expected_pages}) مغایر است.",
+                metrics={"expected": expected_pages, "actual": len(doc)},
             ),
             {},
         )
 
-    vault = Path(vault_dir)
-    offset = manifest["pagination"]["pdf_minus_book_offset"]
-    body_start = manifest["pagination"]["body_pdf_page_start"]
-    body_end = manifest["pagination"]["body_pdf_page_end"]
-    chapter_opener_pdfs = {c["pdf_start"] for c in manifest["chapters"]}
+    vault = _ensure_safe_ephemeral_vault(vault_dir)
+    offset = int(manifest["pagination"]["pdf_minus_book_offset"])
+    body_start = int(manifest["pagination"]["body_pdf_page_start"])
+    body_end = int(manifest["pagination"]["body_pdf_page_end"])
+    body_page_count = max(0, body_end - body_start + 1)
+    chapter_opener_pdfs = {int(c["pdf_start"]) for c in manifest.get("chapters", [])}
+    non_footer_pdfs = set(manifest["pagination"].get("pages_without_footer", [])) | chapter_opener_pdfs
+
+    curated_map: Dict[int, Dict[str, Any]] = {}
+    if curated_claims_path is not None:
+        curated_map = load_curated_claims_json(curated_claims_path)
+    elif book_code == "C205":
+        curated_map = CURATED_VISUAL_OBSERVATIONS_C205
 
     quality_scores: List[PageQualityScore] = []
     regions_by_page: Dict[int, List[PageRegion]] = {}
     claims: List[Claim] = []
     evidence_ledger: Dict[str, EvidenceRef] = {}
     footer_mismatches: List[Dict[str, Any]] = []
+    vector_banner_pages: List[int] = []
 
-    for idx in range(len(doc)):
-        pdf_p = idx + 1
-        page = doc[idx]
-        w, h = page.rect.width, page.rect.height
-        expected_book = (pdf_p - offset) if (body_start <= pdf_p <= body_end) else None
+    try:
+        for idx in range(len(doc)):
+            pdf_p = idx + 1
+            page = doc[idx]
+            w, h = page.rect.width, page.rect.height
+            expected_book = (pdf_p - offset) if (body_start <= pdf_p <= body_end) else None
 
-        if expected_book is None or pdf_p in chapter_opener_pdfs:
-            extracted_footer, occluded_ghost = None, False
-            footer_status = "FRONT_OR_BACK_MATTER"
-        else:
-            extracted_footer, occluded_ghost = extract_footer_book_page_from_glyphs(page)
-            if extracted_footer == expected_book:
-                footer_status = "MATCH"
-            elif extracted_footer is None:
-                footer_status = "MISSING"
-                footer_mismatches.append({"pdf_page": pdf_p, "expected": expected_book, "actual": None})
+            if expected_book is None or pdf_p in non_footer_pdfs:
+                extracted_footer, occluded_ghost = None, False
+                footer_status = "FRONT_OR_BACK_MATTER"
             else:
-                footer_status = "MISMATCH"
-                footer_mismatches.append({"pdf_page": pdf_p, "expected": expected_book, "actual": extracted_footer})
+                extracted_footer, occluded_ghost = extract_footer_book_page_from_glyphs(page)
+                if extracted_footer == expected_book:
+                    footer_status = "MATCH"
+                elif extracted_footer is None:
+                    footer_status = "MISSING"
+                    footer_mismatches.append({"pdf_page": pdf_p, "expected": expected_book, "actual": None})
+                else:
+                    footer_status = "MISMATCH"
+                    footer_mismatches.append({"pdf_page": pdf_p, "expected": expected_book, "actual": extracted_footer})
 
-        d = page.get_text("dict")
-        raw_page_text = page.get_text("text")
-        mixed_tokens = MIXED_ENCODING_RE.findall(raw_page_text)
-        images = page.get_images(full=True)
-        drawings = page.get_drawings()
+            d = page.get_text("dict")
+            raw_page_text = page.get_text("text")
+            mixed_tokens = MIXED_ENCODING_RE.findall(raw_page_text)
+            images = page.get_images(full=True)
+            drawings = page.get_drawings()
 
-        page_regions: List[PageRegion] = []
-        raw_blocks_sorted: List[Tuple[float, float, List[float], str]] = []
-        span_count = 0
+            page_regions: List[PageRegion] = []
+            raw_blocks_sorted: List[Tuple[float, float, List[float], str]] = []
+            text_bboxes_norm: List[List[float]] = []
+            span_count = 0
 
-        for b in d.get("blocks", []):
-            if b.get("type") != 0:
-                continue
-            bx0, by0, bx1, by1 = b["bbox"]
-            lines_txt = []
-            for ln in b.get("lines", []):
-                span_count += len(ln.get("spans", []))
-                lines_txt.append("".join(sp.get("text", "") for sp in ln.get("spans", [])))
-            joined = " ".join(lines_txt).strip()
-            if not joined:
-                continue
-            nbbox = [round(bx0 / w, 4), round(by0 / h, 4), round(bx1 / w, 4), round(by1 / h, 4)]
-            # Sort top-to-bottom in vertical bands of 3% page height, right-to-left (`-nx1`) for Persian RTL
-            raw_blocks_sorted.append((round(nbbox[1] / 0.03), -nbbox[2], nbbox, joined))
+            for b in d.get("blocks", []):
+                if b.get("type") != 0:
+                    continue
+                bx0, by0, bx1, by1 = b["bbox"]
+                lines_txt = []
+                for ln in b.get("lines", []):
+                    span_count += len(ln.get("spans", []))
+                    lines_txt.append("".join(sp.get("text", "") for sp in ln.get("spans", [])))
+                joined = " ".join(lines_txt).strip()
+                if not joined:
+                    continue
+                nbbox = [round(bx0 / w, 4), round(by0 / h, 4), round(bx1 / w, 4), round(by1 / h, 4)]
+                text_bboxes_norm.append(nbbox)
+                raw_blocks_sorted.append((round(nbbox[1] / 0.03), -nbbox[2], nbbox, joined))
 
-        raw_blocks_sorted.sort(key=lambda item: (item[0], item[1]))
-        vertical_stack_count = 0
+            raw_blocks_sorted.sort(key=lambda item: (item[0], item[1]))
+            vertical_stack_count = 0
 
-        for order_i, (_, _, nbbox, raw_txt) in enumerate(raw_blocks_sorted, start=1):
-            clean_lbl = normalize_persian_label(raw_txt)
-            has_mixed = bool(MIXED_ENCODING_RE.search(raw_txt))
-            if re.search(r"[+\-−]\s*[0-9٠-٩۰-۹]+", raw_txt):
-                vertical_stack_count += 1
+            for order_i, (_, _, nbbox, raw_txt) in enumerate(raw_blocks_sorted, start=1):
+                clean_lbl = normalize_persian_label(raw_txt)
+                has_mixed = bool(MIXED_ENCODING_RE.search(raw_txt))
+                if re.search(r"[+\-−]\s*[0-9٠-٩۰-۹]+", raw_txt):
+                    vertical_stack_count += 1
 
-            rkind = "BODY_TEXT"
-            if nbbox[1] >= 0.885 and (nbbox[2] <= 0.20 or nbbox[0] >= 0.80):
-                rkind = "FOOTER_PAGE_NUMBER"
-            elif any(clean_lbl == normalize_persian_label(rb) for rb in KNOWN_RED_BOXES):
-                rkind = "RED_BOX_HEADER"
-            elif any(clean_lbl == normalize_persian_label(mt) for mt in KNOWN_MARGIN_TABS):
-                rkind = "MARGIN_TAB"
-            elif nbbox[1] <= 0.16 and nbbox[0] >= 0.35 and len(clean_lbl) <= 40:
-                rkind = "LESSON_BANNER"
-            elif nbbox[1] >= 0.88 and "تقریبی" in clean_lbl:
-                rkind = "FOOTNOTE_RULE"
+                rkind = "BODY_TEXT"
+                if nbbox[1] >= 0.855 and (nbbox[2] <= 0.21 or nbbox[0] >= 0.79):
+                    rkind = "FOOTER_PAGE_NUMBER"
+                elif any(clean_lbl == normalize_persian_label(rb) for rb in KNOWN_RED_BOXES):
+                    rkind = "RED_BOX_HEADER"
+                elif any(clean_lbl == normalize_persian_label(mt) for mt in KNOWN_MARGIN_TABS):
+                    rkind = "MARGIN_TAB"
+                elif nbbox[1] <= 0.16 and nbbox[0] >= 0.35 and len(clean_lbl) <= 40:
+                    rkind = "LESSON_BANNER"
+                elif nbbox[1] >= 0.88 and "تقریبی" in clean_lbl:
+                    rkind = "FOOTNOTE_RULE"
 
-            reg_id = f"C205-P{pdf_p:03d}-R{order_i:02d}"
-            page_regions.append(
-                PageRegion(
-                    region_id=reg_id,
-                    pdf_page=pdf_p,
-                    book_page=expected_book,
-                    reading_order=order_i,
-                    region_kind=rkind,
-                    bbox_normalized=nbbox,
-                    raw_text=raw_txt,
-                    normalized_text=normalize_digits_to_persian(clean_lbl),
-                    has_mixed_digits=has_mixed,
-                )
-            )
-
-        regions_by_page[pdf_p] = page_regions
-
-        # Emit atomic footer page claim when present
-        if expected_book is not None and extracted_footer is not None:
-            ev_id = f"EV-TEXT-FOOTER-P{pdf_p:03d}"
-            footer_bbox = [0.04, 0.89, 0.16, 0.96] if expected_book % 2 == 1 else [0.84, 0.89, 0.96, 0.96]
-            evidence_ledger[ev_id] = EvidenceRef(
-                evidence_id=ev_id,
-                book_code="C205",
-                source_sha256=actual_sha,
-                pdf_page=pdf_p,
-                book_page=expected_book,
-                evidence_kind="pdf_text_bbox",
-                bbox_normalized=footer_bbox,
-                note=f"Glyph-level left-to-right footer number extraction = {extracted_footer}",
-            )
-            claims.append(
-                Claim(
-                    claim_id=f"CLM-FOOTER-P{pdf_p:03d}",
-                    pdf_page=pdf_p,
-                    book_page=expected_book,
-                    region_id=f"C205-P{pdf_p:03d}-FOOTER",
-                    field_name="printed_footer_number",
-                    raw_reading=str(extracted_footer),
-                    normalized_value=extracted_footer,
-                    unit_or_role="book_page_number",
-                    confidence="HIGH",
-                    evidence_refs=[ev_id],
-                )
-            )
-
-        # Attach real high-DPI crop SHA-256 + atomic visual claims on curated pages
-        if pdf_p in CURATED_VISUAL_OBSERVATIONS_C205:
-            curated = CURATED_VISUAL_OBSERVATIONS_C205[pdf_p]
-            for c_idx, reg_info in enumerate(curated["regions"], start=1):
-                _, crop_sha = render_region_crop_to_vault(doc, pdf_p, reg_info["bbox"], vault)
-                ev_crop_id = f"EV-CROP150-P{pdf_p:03d}-{c_idx:02d}"
-                evidence_ledger[ev_crop_id] = EvidenceRef(
-                    evidence_id=ev_crop_id,
-                    book_code="C205",
-                    source_sha256=actual_sha,
-                    pdf_page=pdf_p,
-                    book_page=expected_book,
-                    evidence_kind="pdf_crop_150dpi",
-                    bbox_normalized=reg_info["bbox"],
-                    crop_sha256=crop_sha,
-                    note="Direct 150-DPI visual region crop rendered in quarantine vault",
-                )
-                claims.append(
-                    Claim(
-                        claim_id=f"CLM-VIS-P{pdf_p:03d}-{c_idx:02d}",
+                reg_id = f"{book_code}-P{pdf_p:03d}-R{order_i:02d}"
+                page_regions.append(
+                    PageRegion(
+                        region_id=reg_id,
                         pdf_page=pdf_p,
                         book_page=expected_book,
-                        region_id=f"C205-P{pdf_p:03d}-VIS{c_idx:02d}",
-                        field_name=reg_info["field"],
-                        raw_reading=reg_info["raw"],
-                        normalized_value=reg_info["value"],
-                        unit_or_role=reg_info["role"],
-                        confidence="HIGH",
-                        evidence_refs=[ev_crop_id],
-                        observer_id="visual_crop_observer_150dpi",
+                        reading_order=order_i,
+                        region_kind=rkind,
+                        bbox_normalized=nbbox,
+                        raw_text=raw_txt,
+                        normalized_text=normalize_digits_to_persian(clean_lbl),
+                        has_mixed_digits=has_mixed,
                     )
                 )
 
-        # Compute objective PageQualityScore + hazards
-        hazards: List[str] = []
-        if occluded_ghost:
-            hazards.append("OCCLUDED_GHOST_TEXT_UNDER_FOOTER")
-        if mixed_tokens:
-            hazards.append(f"MIXED_DIGIT_ENCODING:{len(mixed_tokens)}")
-        if len(raw_page_text.strip()) < 80:
-            hazards.append("SPARSE_TEXT_LAYER")
-        if len(images) >= 4 or len(drawings) >= 120:
-            hazards.append("HEAVY_VECTOR_OR_RASTER_GRAPHICS")
-        if vertical_stack_count > 0:
-            hazards.append(f"VERTICAL_ARITHMETIC_STACK:{vertical_stack_count}")
-        if footer_status in {"MISSING", "MISMATCH"}:
-            hazards.append(f"FOOTER_{footer_status}")
+            # Geometric Vector-Outline Banner Capsule Detection (`W4` — e.g., C305 pp. 52, 55, 100)
+            vector_capsules = detect_vector_banner_regions(page, text_bboxes_norm)
+            if vector_capsules:
+                vector_banner_pages.append(pdf_p)
+                for v_idx, vbox in enumerate(vector_capsules, start=1):
+                    _, crop_sha, _ = render_counting_crop_nearest(doc, pdf_p, vbox, vault, dpi=300, nearest_zoom=2)
+                    ev_vec_id = f"EV-VECBANNER-P{pdf_p:03d}-{v_idx:02d}"
+                    evidence_ledger[ev_vec_id] = EvidenceRef(
+                        evidence_id=ev_vec_id,
+                        book_code=book_code,
+                        source_sha256=actual_sha,
+                        pdf_page=pdf_p,
+                        book_page=expected_book,
+                        evidence_kind="pdf_crop_300dpi_nearest",
+                        bbox_normalized=vbox,
+                        crop_sha256=crop_sha,
+                        note="Vector outline capsule in top 25% without text layer — auto-cropped at 300 DPI",
+                    )
+                    reg_id = f"{book_code}-P{pdf_p:03d}-VEC{v_idx:02d}"
+                    page_regions.append(
+                        PageRegion(
+                            region_id=reg_id,
+                            pdf_page=pdf_p,
+                            book_page=expected_book,
+                            reading_order=len(page_regions) + 1,
+                            region_kind="VECTOR_OUTLINE_BANNER",
+                            bbox_normalized=vbox,
+                            raw_text="[VECTOR_OUTLINE_BANNER]",
+                            normalized_text="[VECTOR_OUTLINE_BANNER]",
+                        )
+                    )
+                    claims.append(
+                        Claim(
+                            claim_id=f"CLM-VECBANNER-P{pdf_p:03d}-{v_idx:02d}",
+                            pdf_page=pdf_p,
+                            book_page=expected_book,
+                            region_id=reg_id,
+                            field_name="vector_outline_banner",
+                            raw_reading="VECTOR_OUTLINE_BANNER_NEEDS_VISION",
+                            normalized_value={"bbox_normalized": vbox, "status": "NEEDS_VISION_OR_TEACHER"},
+                            unit_or_role="top_capsule_outline",
+                            confidence="UNOBSERVABLE",
+                            evidence_refs=[ev_vec_id],
+                            observer_id="vector_capsule_detector_v2",
+                        )
+                    )
 
-        if "SPARSE_TEXT_LAYER" in hazards or "HEAVY_VECTOR_OR_RASTER_GRAPHICS" in hazards or mixed_tokens:
-            vis_dep = "HIGH" if ("SPARSE_TEXT_LAYER" in hazards or len(drawings) >= 120) else "MEDIUM"
-            rec_action = "CROP_VERIFICATION_REQUIRED"
-        else:
-            vis_dep = "LOW"
-            rec_action = "TEXT_PLUS_BBOX"
+            regions_by_page[pdf_p] = page_regions
 
-        q_score = round(
-            max(
-                0.15,
-                1.0
-                - (0.25 if "SPARSE_TEXT_LAYER" in hazards else 0.0)
-                - min(0.25, 0.03 * len(mixed_tokens))
-                - (0.20 if len(drawings) >= 120 else 0.0)
-                - (0.35 if footer_status in {"MISSING", "MISMATCH"} else 0.0),
-            ),
-            3,
-        )
+            if expected_book is not None and extracted_footer is not None:
+                ev_id = f"EV-TEXT-FOOTER-P{pdf_p:03d}"
+                footer_bbox = [0.04, 0.86, 0.19, 0.97] if expected_book % 2 == 1 else [0.81, 0.86, 0.96, 0.97]
+                evidence_ledger[ev_id] = EvidenceRef(
+                    evidence_id=ev_id,
+                    book_code=book_code,
+                    source_sha256=actual_sha,
+                    pdf_page=pdf_p,
+                    book_page=expected_book,
+                    evidence_kind="pdf_text_bbox",
+                    bbox_normalized=footer_bbox,
+                    note=f"Glyph-level left-to-right footer number extraction = {extracted_footer}",
+                )
+                claims.append(
+                    Claim(
+                        claim_id=f"CLM-FOOTER-P{pdf_p:03d}",
+                        pdf_page=pdf_p,
+                        book_page=expected_book,
+                        region_id=f"{book_code}-P{pdf_p:03d}-FOOTER",
+                        field_name="printed_footer_number",
+                        raw_reading=str(extracted_footer),
+                        normalized_value=extracted_footer,
+                        unit_or_role="book_page_number",
+                        confidence="HIGH",
+                        evidence_refs=[ev_id],
+                    )
+                )
 
-        quality_scores.append(
-            PageQualityScore(
-                pdf_page=pdf_p,
-                expected_book_page=expected_book,
-                extracted_footer_book_page=extracted_footer,
-                footer_alignment_status=footer_status,
-                text_char_count=len(raw_page_text.strip()),
-                span_count=span_count,
-                image_count=len(images),
-                drawing_path_count=len(drawings),
-                mixed_encoding_token_count=len(mixed_tokens),
-                vertical_stack_candidate_count=vertical_stack_count,
-                visual_dependency=vis_dep,
-                recommended_action=rec_action,
-                quality_score=q_score,
-                hazards=hazards,
+            if pdf_p in curated_map:
+                curated = curated_map[pdf_p]
+                for c_idx, reg_info in enumerate(curated["regions"], start=1):
+                    _, crop_sha = render_region_crop_to_vault(doc, pdf_p, reg_info["bbox"], vault)
+                    ev_crop_id = f"EV-CROP150-P{pdf_p:03d}-{c_idx:02d}"
+                    evidence_ledger[ev_crop_id] = EvidenceRef(
+                        evidence_id=ev_crop_id,
+                        book_code=book_code,
+                        source_sha256=actual_sha,
+                        pdf_page=pdf_p,
+                        book_page=expected_book,
+                        evidence_kind="pdf_crop_150dpi",
+                        bbox_normalized=reg_info["bbox"],
+                        crop_sha256=crop_sha,
+                        note="Direct 150-DPI visual region crop rendered in quarantine vault",
+                    )
+                    claims.append(
+                        Claim(
+                            claim_id=f"CLM-VIS-P{pdf_p:03d}-{c_idx:02d}",
+                            pdf_page=pdf_p,
+                            book_page=expected_book,
+                            region_id=f"{book_code}-P{pdf_p:03d}-VIS{c_idx:02d}",
+                            field_name=reg_info["field"],
+                            raw_reading=reg_info["raw"],
+                            normalized_value=reg_info["value"],
+                            unit_or_role=reg_info["role"],
+                            confidence="HIGH",
+                            evidence_refs=[ev_crop_id],
+                            observer_id="visual_crop_observer_150dpi",
+                        )
+                    )
+
+            hazards: List[str] = []
+            if vector_capsules:
+                hazards.append("VECTOR_OUTLINE_BANNER_NEEDS_VISION")
+            if occluded_ghost:
+                hazards.append("OCCLUDED_GHOST_TEXT_UNDER_FOOTER")
+            if mixed_tokens:
+                hazards.append(f"MIXED_DIGIT_ENCODING:{len(mixed_tokens)}")
+            if len(raw_page_text.strip()) < 80:
+                hazards.append("SPARSE_TEXT_LAYER")
+            if len(images) >= 4 or len(drawings) >= 120:
+                hazards.append("HEAVY_VECTOR_OR_RASTER_GRAPHICS")
+            if vertical_stack_count > 0:
+                hazards.append(f"VERTICAL_ARITHMETIC_STACK:{vertical_stack_count}")
+            if footer_status in {"MISSING", "MISMATCH"}:
+                hazards.append(f"FOOTER_{footer_status}")
+
+            if (
+                "VECTOR_OUTLINE_BANNER_NEEDS_VISION" in hazards
+                or "SPARSE_TEXT_LAYER" in hazards
+                or "HEAVY_VECTOR_OR_RASTER_GRAPHICS" in hazards
+                or mixed_tokens
+            ):
+                vis_dep = (
+                    "HIGH"
+                    if ("SPARSE_TEXT_LAYER" in hazards or "VECTOR_OUTLINE_BANNER_NEEDS_VISION" in hazards or len(drawings) >= 120)
+                    else "MEDIUM"
+                )
+                rec_action = "CROP_VERIFICATION_REQUIRED"
+            else:
+                vis_dep = "LOW"
+                rec_action = "TEXT_PLUS_BBOX"
+
+            q_score = round(
+                max(
+                    0.15,
+                    1.0
+                    - (0.25 if "SPARSE_TEXT_LAYER" in hazards else 0.0)
+                    - (0.15 if "VECTOR_OUTLINE_BANNER_NEEDS_VISION" in hazards else 0.0)
+                    - min(0.25, 0.03 * len(mixed_tokens))
+                    - (0.20 if len(drawings) >= 120 else 0.0)
+                    - (0.35 if footer_status in {"MISSING", "MISMATCH"} else 0.0),
+                ),
+                3,
             )
-        )
 
-    doc.close()
+            quality_scores.append(
+                PageQualityScore(
+                    pdf_page=pdf_p,
+                    expected_book_page=expected_book,
+                    extracted_footer_book_page=extracted_footer,
+                    footer_alignment_status=footer_status,
+                    text_char_count=len(raw_page_text.strip()),
+                    span_count=span_count,
+                    image_count=len(images),
+                    drawing_path_count=len(drawings),
+                    mixed_encoding_token_count=len(mixed_tokens),
+                    vertical_stack_candidate_count=vertical_stack_count,
+                    visual_dependency=vis_dep,
+                    recommended_action=rec_action,
+                    quality_score=q_score,
+                    hazards=hazards,
+                )
+            )
+    finally:
+        doc.close()
+        if purge_vault_after_run:
+            purge_quarantine_vault(vault)
 
     gate = GateResult(
         gate_id="G1_OBSERVATION_INGEST",
@@ -774,17 +669,21 @@ def observe_pdf(
         status="PASS" if len(footer_mismatches) == 0 else "FAIL",
         reason_code="OBSERVATION_COMPLETE" if len(footer_mismatches) == 0 else "FOOTER_ALIGNMENT_FAILURE",
         summary=(
-            f"مشاهدهٔ کامل ۱۵۲ صفحهٔ C205.pdf انجام شد؛ انطباق شمارهٔ چاپی پاصفحه: "
-            f"{144 - len(footer_mismatches)}/144 صفحه؛ {len(evidence_ledger)} شاهد ناحیه‌ای ثبت شد."
+            f"مشاهدهٔ کامل {len(quality_scores)} صفحهٔ {book_code} انجام شد؛ "
+            f"انطباق پاصفحه: {body_page_count - len(footer_mismatches)}/{body_page_count}؛ "
+            f"کپسول برداری شناسایی‌شده: {len(vector_banner_pages)} صفحه؛ "
+            f"{len(evidence_ledger)} شاهد ناحیه‌ای ثبت شد."
         ),
         metrics={
+            "book_code": book_code,
             "pdf_sha256": actual_sha,
             "total_pdf_pages": len(quality_scores),
-            "body_pages_checked": 144,
-            "chapter_opener_pages_no_footer": len(chapter_opener_pdfs),
+            "body_pages_checked": body_page_count,
+            "chapter_opener_pages_no_footer": len(non_footer_pdfs),
             "body_non_opener_footer_exact_matches": sum(
                 1 for q in quality_scores if q.footer_alignment_status == "MATCH"
             ),
+            "vector_outline_banner_pages": vector_banner_pages,
             "pages_with_mixed_digit_encoding": sum(1 for q in quality_scores if q.mixed_encoding_token_count > 0),
             "pages_requiring_crop_verification": sum(
                 1 for q in quality_scores if q.recommended_action != "TEXT_PLUS_BBOX"
@@ -797,14 +696,14 @@ def observe_pdf(
     )
 
     payload = {
-        "schema_version": "1.0.0",
-        "book_code": "C205",
+        "schema_version": "2.0.0",
+        "book_code": book_code,
         "source_pdf_sha256": actual_sha,
         "quality_scores": [q.to_dict() for q in quality_scores],
         "golden_and_curated_regions": {
             str(p): [r.to_dict() for r in regs]
             for p, regs in regions_by_page.items()
-            if p in CURATED_VISUAL_OBSERVATIONS_C205 or (61 <= p <= 78) or (25 <= p <= 42)
+            if p in curated_map or p in set(vector_banner_pages) or (61 <= p <= 78) or (25 <= p <= 42)
         },
         "claims": [c.to_dict() for c in claims],
         "evidence_ledger": {k: v.to_dict() for k, v in evidence_ledger.items()},

@@ -1,19 +1,13 @@
-"""Stage P4: Independent Anti-J12 Solver, Causal Distractor Mechanism Verifier & Workbook Inspector.
+"""Stage P4: Multi-Grade Anti-J12 Solver, Causal Distractor Verifier & Dynamic Page-Map Inspector (`W2`).
 
-Implements strict, non-circular verification across all 4 required layers:
-- `G3_ANTI_J12`: Zero ASCII digits in Persian student-facing cells (`صورت سؤال`, `گزینهٔ الف..د`,
-  `معیار تصحیح`); mandatory Latin calculation trace with zero Persian digits inside trace;
-  4 unique non-empty options; exact letter coverage in `نقشهٔ گزینه→خطای مفهومی`.
-- `G4_INDEPENDENT_SOLVER`: Independent STEM parser/solver + safe AST evaluator on every equation in
-  the Latin trace + STEM-to-TRACE numeric grounding so mutating `صورت سؤال` without updating
-  `یادداشت` ALWAYS triggers `STEM_TRACE_MISMATCH`.
-- `G5_DISTRACTOR_CAUSALITY`: Causal cognitive error simulator for Grade 2 addition, subtraction,
-  carry, borrow vs smaller-from-larger, place-value digit permutation, placeholder zero omission,
-  coin/bundle unit confusion, partial step stop, skip-counting, table neighbours, truncation rounding,
-  nearest-ten rounding, and exact-vs-approximate confusion — plus explicit tie-rule evidence
-  verification (`EV-CROP150-P039-02`) for midpoint `...5` rounding (`Q-1067`).
-- `G6_WORKBOOK_STRUCTURE`: Sheet presence, header invariance, sentinel `یادداشت` position,
-  merged cell integrity, valid `L-` anchors, valid `E_` codes, and non-recycling IDs.
+Upgrades over v1.0:
+- Eliminates ALL hardcoded chapter page ranges (`{1: (1,18), ...}`) and hardcoded `+6` PDF offsets:
+  `load_chapter_bounds_from_pagemap(...)` loads exact chapter intervals `(lo, hi)`, `max_book_page`,
+  and `proven_offset` dynamically from `PAGE-MAP-KH-G*-MATH-v1_verified.xlsx` / `_audited.xlsx`.
+- Integrates all 5 multi-grade domain plugins in `authoring.agent.solvers` (`number_ops`,
+  `mult_div`, `fractions`, `geometry_measure`, `data_prob`) supporting integers, exact `Fraction`s,
+  and `HH:MM` 24-hour times across `G1..G6`.
+- Supports both standard 7-sheet templates (`پروتکل ممیزی`) and `G3 v0.7` (`سجل ممیزی`).
 """
 
 from __future__ import annotations
@@ -22,14 +16,24 @@ import ast
 import json
 import operator as op
 import re
+from collections import Counter
+from fractions import Fraction
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 import openpyxl
 from openpyxl.utils import get_column_letter
 
 from .id_allocator import normalize_error_code
 from .models import GateResult
+from .paths import resolve_fixture
+from .solvers import (
+    AnswerValue,
+    parse_exact_value,
+    simulate_mechanisms_with_plugins,
+    solve_with_plugins,
+    values_equal,
+)
 
 ASCII_DIGIT_RE = re.compile(r"[0-9]")
 PERSIAN_DIGIT_RE = re.compile(r"[۰-۹٠-٩]")
@@ -52,6 +56,7 @@ PERSIAN_NUMBER_WORDS = {
     "شصت": 60, "هفتاد": 70, "هشتاد": 80, "نود": 90,
     "صد": 100, "دویست": 200, "سیصد": 300, "چهارصد": 400,
     "پانصد": 500, "ششصد": 600, "هفتصد": 700, "هشتصد": 800, "نهصد": 900,
+    "هزار": 1000,
 }
 
 SAFE_BINOPS = {
@@ -59,6 +64,7 @@ SAFE_BINOPS = {
     ast.Sub: op.sub,
     ast.Mult: op.mul,
     ast.FloorDiv: op.floordiv,
+    ast.Mod: op.mod,
 }
 SAFE_UNARYOPS = {ast.UAdd: op.pos, ast.USub: op.neg}
 
@@ -67,11 +73,107 @@ def to_ascii_str(s: str) -> str:
     return str(s or "").translate(PERSIAN_TO_ASCII)
 
 
-def parse_option_numeric_value(text: str) -> Optional[int]:
-    """Parse either a plain integer option (`۶۵`) or a symbolic arithmetic option (`۷+۸`)."""
-    t = to_ascii_str(text).replace("−", "-").replace("×", "*").strip()
+def load_chapter_bounds_from_pagemap(pagemap_xlsx_path: str | Path) -> Dict[str, Any]:
+    """Read dynamic per-chapter printed page bounds `(min_page, max_page)` and `proven_offset`
+    directly from `PAGE-MAP-KH-G*-MATH-v1_verified.xlsx` / `_audited.xlsx` (zero hardcoded numbers!).
+    """
+    p = Path(pagemap_xlsx_path)
+    if not p.exists():
+        return {"chapters": {}, "max_book_page": None, "proven_offset": None, "source": None}
+
+    wb = openpyxl.load_workbook(p, data_only=True)
+    if "نقشهٔ صفحه‌ها" not in wb.sheetnames:
+        return {"chapters": {}, "max_book_page": None, "proven_offset": None, "source": str(p)}
+
+    ws = wb["نقشهٔ صفحه‌ها"]
+    chapter_pages: Dict[str, List[int]] = {}
+    offsets: Counter = Counter()
+    all_book_pages: List[int] = []
+
+    for r in range(2, ws.max_row + 1):
+        raw_bp = to_ascii_str(ws.cell(r, 1).value or "").strip()
+        raw_pdf = to_ascii_str(ws.cell(r, 2).value or "").strip()
+        raw_ch = to_ascii_str(ws.cell(r, 3).value or "").strip()
+        if not re.fullmatch(r"\d+", raw_bp):
+            continue
+        bp = int(raw_bp)
+        all_book_pages.append(bp)
+        if re.fullmatch(r"\d+", raw_pdf):
+            offsets[int(raw_pdf) - bp] += 1
+        if re.fullmatch(r"\d+", raw_ch):
+            chapter_pages.setdefault(raw_ch, []).append(bp)
+
+    chapters: Dict[Any, Tuple[int, int]] = {}
+    for ch_num, vals in chapter_pages.items():
+        if vals:
+            bounds_pair = (min(vals), max(vals))
+            chapters[ch_num] = bounds_pair
+            if ch_num.isdigit():
+                chapters[int(ch_num)] = bounds_pair
+    proven_offset = offsets.most_common(1)[0][0] if offsets else None
+    return {
+        "chapters": chapters,
+        "max_book_page": max(all_book_pages) if all_book_pages else None,
+        "proven_offset": proven_offset,
+        "source": str(p),
+    }
+
+
+def resolve_pagemap_for_workbook(workbook_path: str | Path, repo_root: Optional[str | Path] = None) -> Optional[Path]:
+    """Locate the matching `PAGE-MAP-KH-G*-MATH-v1_{verified,audited,v1}.xlsx` for a cartridge workbook."""
+    wb_p = Path(workbook_path).resolve()
+    wb = openpyxl.load_workbook(wb_p, data_only=True)
+    family_id = ""
+    if "شناسنامهٔ خشاب" in wb.sheetnames:
+        ws_id = wb["شناسنامهٔ خشاب"]
+        for r in range(1, min(12, ws_id.max_row + 1)):
+            v = str(ws_id.cell(r, 2).value or "").strip()
+            if v.startswith("KH-G"):
+                family_id = v.split()[0]
+                break
+    if not family_id:
+        m = re.search(r"khshab-(G\d+-MATH)", wb_p.name)
+        if m:
+            family_id = f"KH-{m.group(1)}"
+    if not family_id:
+        return None
+
+    roots: List[Path] = []
+    if repo_root is not None:
+        roots.append(Path(repo_root).resolve())
+    # Walk ancestors of workbook_path + package repo root
+    for anc in [wb_p.parent, wb_p.parent.parent, wb_p.parent.parent.parent, Path(__file__).resolve().parents[2]]:
+        if anc not in roots and anc.exists():
+            roots.append(anc)
+
+    suffixes = (
+        f"PAGE-MAP-{family_id}-v1_verified.xlsx",
+        f"PAGE-MAP-{family_id}-v1_audited.xlsx",
+        f"PAGE-MAP-{family_id}-v1.xlsx",
+    )
+    for rt in roots:
+        for suf in suffixes:
+            for cand in (
+                rt / "authoring" / suf,
+                rt / "authoring/agent/fixtures" / suf,
+                rt / "download" / suf,
+                rt / suf,
+            ):
+                if cand.exists():
+                    return cand
+    return None
+
+
+def parse_option_numeric_value(text: str) -> Optional[AnswerValue]:
+    """Parse integer (`۶۵`), symbolic arithmetic (`۷+۸`), exact fraction (`۳/۸`), or 24h clock (`۱۵:۳۰`)."""
+    t = to_ascii_str(text).replace("−", "-").replace("×", "*").replace("؍", "/").strip()
     if re.fullmatch(r"-?\d+", t):
         return int(t)
+    if re.fullmatch(r"\d{1,2}:\d{2}", t):
+        hh, mm = t.split(":")
+        return f"{int(hh):02d}:{int(mm):02d}"
+    if re.fullmatch(r"-?\d+\s*/\s*\d+", t):
+        return parse_exact_value(t)
     if re.fullmatch(r"\d+(?:\s*[+\-*]\s*\d+)+", t):
         return eval_safe_arith_ast(t)
     return None
@@ -94,11 +196,40 @@ def eval_safe_arith_ast(expr: str) -> int:
     return _walk(node)
 
 
+def eval_trace_side_exact(expr: str) -> AnswerValue:
+    """Evaluate LHS/RHS of a Latin trace supporting exact `Fraction(a, b)`, `HH:MM`, or integer AST."""
+    clean = expr.strip()
+    if re.fullmatch(r"\d{1,2}:\d{2}", clean):
+        hh, mm = clean.split(":")
+        return f"{int(hh):02d}:{int(mm):02d}"
+    if "/" in clean and "//" not in clean:
+        # Safe exact rational arithmetic (`Fraction(a, b) +/- Fraction(c, d)` or `a/b`)
+        node = ast.parse(clean, mode="eval")
+
+        def _walk_frac(n) -> Fraction:
+            if isinstance(n, ast.Expression):
+                return _walk_frac(n.body)
+            if isinstance(n, ast.Constant) and isinstance(n.value, int):
+                return Fraction(int(n.value))
+            if isinstance(n, ast.UnaryOp) and type(n.op) in SAFE_UNARYOPS:
+                return SAFE_UNARYOPS[type(n.op)](_walk_frac(n.operand))
+            if isinstance(n, ast.BinOp):
+                if isinstance(n.op, ast.Div):
+                    return Fraction(_walk_frac(n.left), _walk_frac(n.right))
+                if type(n.op) in SAFE_BINOPS:
+                    return SAFE_BINOPS[type(n.op)](_walk_frac(n.left), _walk_frac(n.right))
+            raise ValueError(f"Unsupported rational AST node: {ast.dump(n)}")
+
+        res_f = _walk_frac(node)
+        return int(res_f) if res_f.denominator == 1 else res_f
+    return eval_safe_arith_ast(clean)
+
+
 def extract_grounded_domain(stem: str) -> Set[int]:
-    """Compute the mathematically grounded set of numbers derivable from the numbers in `stem`."""
+    """Compute the mathematically grounded set of numbers derivable from the numbers & units in `stem`."""
     ascii_s = to_ascii_str(stem)
     base_nums = [int(m) for m in re.findall(r"\d+", ascii_s)]
-    clean_words = re.sub(r"[«»؟،.:()؛\-−+]", " ", stem)
+    clean_words = re.sub(r"[«»؟،.:()؛\-−+/]", " ", stem)
     for phrase, val in (("ششصد و چهل و سه", 643), ("چهارصد و پنج", 405)):
         if phrase in stem:
             base_nums.append(val)
@@ -106,9 +237,16 @@ def extract_grounded_domain(stem: str) -> Set[int]:
         if tok in PERSIAN_NUMBER_WORDS:
             base_nums.append(PERSIAN_NUMBER_WORDS[tok])
 
+    # Context-conditional curriculum constants (prevents `60` or `1000` masking stale note edits!)
     domain: Set[int] = {0, 1, 2, 10, 100}
+    if any(k in stem for k in ("ساعت", "دقیقه", "ثانیه", "ظهر", "عصر")):
+        domain.update({12, 24, 60})
+    if any(k in stem for k in ("کیلو", "لیتر", "میلی")):
+        domain.add(1000)
+    if "مربع" in stem:
+        domain.add(4)
     for n in base_nums:
-        domain.update({n, n * 10, n * 100, (n // 10) * 10})
+        domain.update({n, n * 10, n * 100, n * 1000, (n // 10) * 10})
         for d in str(abs(n)):
             domain.add(int(d))
     for i in range(len(base_nums)):
@@ -125,8 +263,8 @@ def half_up_round_ten(n: int) -> int:
     return base + 10 if rem >= 5 else base
 
 
-def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Optional[int], List[int]]:
-    """Extract the Latin trace expression, its independently evaluated integer answer,
+def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Optional[AnswerValue], List[int]]:
+    """Extract the Latin trace expression, its independently evaluated exact answer,
     and external input integers that are NOT already derived from prior steps in the chain.
     """
     if not note or "لاتین" not in note:
@@ -140,9 +278,9 @@ def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Opt
         raise ValueError(f"PERSIAN_DIGIT_IN_LATIN_TRACE:{raw_trace}")
 
     steps = [s.strip() for s in raw_trace.split(";") if s.strip()]
-    derived_intermediates: Set[int] = set()
+    derived_intermediates: Set[AnswerValue] = set()
     external_inputs: List[int] = []
-    computed_val: Optional[int] = None
+    computed_val: Optional[AnswerValue] = None
 
     for st in steps:
         clean_st = re.sub(r"\([^)]*\)$", "", st).strip()
@@ -185,18 +323,20 @@ def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Opt
             derived_intermediates.add(res_sw)
         elif ">" in clean_st or "<" in clean_st:
             op_chr = ">" if ">" in clean_st else "<"
-            l_i, r_i = [int(x.strip()) for x in clean_st.split(op_chr, 1)]
-            ok = (l_i > r_i) if op_chr == ">" else (l_i < r_i)
+            l_s, r_s = [x.strip() for x in clean_st.split(op_chr, 1)]
+            l_v, r_v = eval_trace_side_exact(l_s), eval_trace_side_exact(r_s)
+            ok = (Fraction(l_v) > Fraction(r_v)) if op_chr == ">" else (Fraction(l_v) < Fraction(r_v))
             if not ok:
                 raise ValueError(f"COMPARISON_TRACE_FALSE:{clean_st}")
-            external_inputs.append(r_i)
-            computed_val = l_i
-            derived_intermediates.add(l_i)
+            for tok_i in (int(x) for x in re.findall(r"\d+", r_s)):
+                external_inputs.append(tok_i)
+            computed_val = l_v
+            derived_intermediates.add(l_v)
         elif "=" in clean_st:
             lhs, rhs = clean_st.split("=", 1)
-            lhs_val = eval_safe_arith_ast(lhs)
-            rhs_val = eval_safe_arith_ast(rhs)
-            if lhs_val != rhs_val:
+            lhs_val = eval_trace_side_exact(lhs)
+            rhs_val = eval_trace_side_exact(rhs)
+            if not values_equal(lhs_val, rhs_val):
                 raise ValueError(f"TRACE_EQUATION_FALSE:{lhs}={rhs} (got {lhs_val})")
             for tok_i in (int(x) for x in re.findall(r"\d+", lhs)):
                 if tok_i not in derived_intermediates:
@@ -204,7 +344,7 @@ def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Opt
             derived_intermediates.add(lhs_val)
             computed_val = lhs_val
         else:
-            val_only = eval_safe_arith_ast(clean_st)
+            val_only = eval_trace_side_exact(clean_st)
             for tok_i in (int(x) for x in re.findall(r"\d+", clean_st)):
                 if tok_i not in derived_intermediates:
                     external_inputs.append(tok_i)
@@ -214,13 +354,13 @@ def parse_trace_from_note(note: str, stem: str = "") -> Tuple[Optional[str], Opt
     return raw_trace, computed_val, external_inputs
 
 
-def solve_stem_independently(stem: str) -> Tuple[Optional[int], Dict[str, Any]]:
-    """Bounded independent mathematical solver directly over the Persian `صورت سؤال` (anti-J12)."""
+def solve_stem_independently(stem: str) -> Tuple[Optional[AnswerValue], Dict[str, Any]]:
+    """Bounded independent mathematical solver over Persian `صورت سؤال` (`G1..G6`, anti-J12)."""
     s = to_ascii_str(stem).replace("−", "-").replace("×", "*").strip()
     nums = [int(x) for x in re.findall(r"\d+", s)]
 
     m_expr = re.search(r"(\d+(?:\s*[+\-*]\s*\d+)+)", s)
-    if m_expr and "تقریبی" not in s:
+    if m_expr and "تقریبی" not in s and "/" not in s:
         expr = m_expr.group(1)
         val = eval_safe_arith_ast(expr)
         tokens = [int(t) for t in re.findall(r"\d+", expr)]
@@ -242,6 +382,8 @@ def solve_stem_independently(stem: str) -> Tuple[Optional[int], Dict[str, Any]]:
 
     if "حذف رقم" in s and len(nums) == 1:
         n = nums[0]
+        if "صدگان" in s:
+            return (n // 1000) * 1000, {"kind": "truncate_thousands", "operands": [n]}
         if "دهگان" in s:
             return (n // 100) * 100, {"kind": "truncate_hundreds", "operands": [n]}
         return (n // 10) * 10, {"kind": "truncate_tens", "operands": [n]}
@@ -254,13 +396,14 @@ def solve_stem_independently(stem: str) -> Tuple[Optional[int], Dict[str, Any]]:
     if "ارزش مکانی رقم" in s and len(nums) == 2:
         n_big, d_small = (nums[0], nums[1]) if nums[0] > nums[1] else (nums[1], nums[0])
         digits_str = str(n_big)
-        idx = digits_str.index(str(d_small))
-        power = 10 ** (len(digits_str) - 1 - idx)
-        return d_small * power, {"kind": "place_value_worth", "operands": [n_big, d_small]}
+        if str(d_small) in digits_str:
+            idx = digits_str.index(str(d_small))
+            power = 10 ** (len(digits_str) - 1 - idx)
+            return d_small * power, {"kind": "place_value_worth", "operands": [n_big, d_small]}
 
-    if len(nums) == 1 and "رقم یکان" in s and "دهگان" not in s:
+    if len(nums) == 1 and "رقم یکان" in s and "دهگان" not in s and "هزار" not in s:
         return nums[0] % 10, {"kind": "digit_query_ones", "operands": nums}
-    if len(nums) == 1 and "رقم دهگان" in s and "یکان" not in s:
+    if len(nums) == 1 and "رقم دهگان" in s and "یکان" not in s and "هزار" not in s:
         return (nums[0] // 10) % 10, {"kind": "digit_query_tens", "operands": nums}
     if len(nums) == 1 and "جابه‌جایی" in s:
         n = nums[0]
@@ -277,6 +420,11 @@ def solve_stem_independently(stem: str) -> Tuple[Optional[int], Dict[str, Any]]:
         return 643, {"kind": "word_to_num", "operands": [643]}
     if "چهارصد و پنج" in stem:
         return 405, {"kind": "word_to_num", "operands": [405]}
+
+    # Delegate across all 5 Multi-Grade Domain Solver Plugins (`W2`: G1..G6)
+    plug_ans, plug_meta = solve_with_plugins(stem)
+    if plug_ans is not None:
+        return plug_ans, plug_meta
 
     return None, {"kind": "contextual_story", "operands": nums}
 
@@ -302,11 +450,14 @@ def parse_option_error_map(map_str: str) -> Dict[str, str]:
 def simulate_plausible_mechanisms(
     stem: str,
     note: str,
-    correct_val: int,
-    wrong_val: int,
+    correct_val: AnswerValue,
+    wrong_val: AnswerValue,
 ) -> Set[str]:
-    """Causal mechanism simulator reproducing wrong options from Grade 2 cognitive error mechanisms."""
-    matched: Set[str] = set()
+    """Causal mechanism simulator reproducing wrong options across `G1..G6` cognitive error domains."""
+    matched: Set[str] = set(simulate_mechanisms_with_plugins(stem, note, correct_val, wrong_val))
+    if not isinstance(correct_val, int) or not isinstance(wrong_val, int):
+        return matched
+
     ascii_stem = to_ascii_str(stem).replace("−", "-")
     raw_nums = [int(x) for x in re.findall(r"\d+", ascii_stem)]
     for w_tok, w_val in PERSIAN_NUMBER_WORDS.items():
@@ -317,7 +468,6 @@ def simulate_plausible_mechanisms(
     c_str = str(abs(correct_val))
     w_str = str(abs(wrong_val))
 
-    # 1. E_DOUBLE_OFF: +/-1 off or +/-pattern-step off
     if abs(diff) == 1:
         matched.add("E_DOUBLE_OFF")
     seq_nums = [int(x) for x in re.findall(r"\d+", ascii_stem.split(":")[-1])]
@@ -326,7 +476,6 @@ def simulate_plausible_mechanisms(
         if step > 0 and abs(diff) in {1, step}:
             matched.add("E_DOUBLE_OFF")
 
-    # 2. E_PLACE_SWAP: any digit permutation (`326->362`, `643->634`, `809->908`, `340->430`, `81->18`)
     if len(c_str) >= 2 and sorted(c_str) == sorted(w_str) and wrong_val != correct_val:
         matched.add("E_PLACE_SWAP")
     for n in raw_nums:
@@ -344,7 +493,6 @@ def simulate_plausible_mechanisms(
         if wrong_val == 83:
             matched.add("E_PLACE_SWAP")
 
-    # 3. E_ZERO_PLACE_MISS: dropping/misplacing placeholder `0`
     no_zero = c_str.replace("0", "")
     if no_zero and int(no_zero) == wrong_val and wrong_val != correct_val:
         matched.add("E_ZERO_PLACE_MISS")
@@ -353,11 +501,10 @@ def simulate_plausible_mechanisms(
     if "محور ده‌تایی" in stem and len(raw_nums) >= 2 and wrong_val == raw_nums[0] + raw_nums[1]:
         matched.add("E_ZERO_PLACE_MISS")
 
-    # 4. E_UNIT_VALUE_CONFUSION: summing digits without place weights (`6+4+3=13`, `4+0+5=9`, `3+2+6=11`, `6+3=9`)
     digit_sum = sum(int(d) for d in c_str)
     if digit_sum == wrong_val and wrong_val != correct_val:
         matched.add("E_UNIT_VALUE_CONFUSION")
-    non_unit_nums = [x for x in raw_nums if x not in {1, 10, 100}]
+    non_unit_nums = [x for x in raw_nums if x not in {1, 10, 100, 1000}]
     if non_unit_nums and sum(non_unit_nums) == wrong_val and wrong_val != correct_val:
         matched.add("E_UNIT_VALUE_CONFUSION")
     if raw_nums and wrong_val == sum(raw_nums) and wrong_val != correct_val:
@@ -369,7 +516,6 @@ def simulate_plausible_mechanisms(
     ):
         matched.add("E_UNIT_VALUE_CONFUSION")
 
-    # 5. E_ADD_CONFUSION & E_SUB_CONFUSION (including place-scaled & trace operator inversion `+ <-> -`)
     if len(raw_nums) >= 2:
         a, b = raw_nums[0], raw_nums[1]
         if a + b == wrong_val and correct_val != a + b:
@@ -383,7 +529,6 @@ def simulate_plausible_mechanisms(
     if m_lhs:
         lhs_expr = m_lhs.group(1).strip()
         if "+" in lhs_expr:
-            # Flipping the last `+` to `-` in the true arithmetic expression = pure subtraction confusion
             flipped = lhs_expr[::-1].replace("+", "-", 1)[::-1]
             try:
                 if eval_safe_arith_ast(flipped) == wrong_val and wrong_val != correct_val:
@@ -401,7 +546,6 @@ def simulate_plausible_mechanisms(
         if seq_nums[-1] - step == wrong_val:
             matched.add("E_SUB_CONFUSION")
 
-    # 6. Carry & Borrow mechanisms (`E_CARRY_MISS`, `E_BORROW_MISS`, `E_SMALLER_FROM_LARGER`)
     if len(raw_nums) >= 2:
         a, b = raw_nums[0], raw_nums[1]
         if (a % 10) + (b % 10) >= 10 and wrong_val == correct_val - 10:
@@ -413,7 +557,6 @@ def simulate_plausible_mechanisms(
             if wrong_val == smaller_from_larger and wrong_val != correct_val + 10:
                 matched.add("E_SMALLER_FROM_LARGER")
 
-    # 7. E_SKIP_UNDERCOUNT vs E_TABLE_NEIGHBOUR vs E_GROUPS vs E_PARTIAL_STEP_STOP
     if ("پرش" in stem or "شمارش" in stem or "چوب خط" in stem or "چندجمله‌ای" in stem or "الگو" in stem):
         if wrong_val < correct_val and abs(diff) in {1, 2, 4, 5, 8, 10, 20}:
             matched.add("E_SKIP_UNDERCOUNT")
@@ -425,7 +568,6 @@ def simulate_plausible_mechanisms(
         elif any(k in stem for k in ("دسته", "بسته", "طبقه", "مهره", "مداد", "+")) and "ابتدا ده‌تایی‌ها" not in stem:
             matched.add("E_GROUPS")
 
-    # 8. Rounding & exact-vs-approx (`E_ROUND_NEAREST`, `E_APPROX_EXACT_CONFUSION`)
     if "تقریب" in stem or "نزدیک" in stem:
         if len(raw_nums) >= 2 and ("+" in ascii_stem or "-" in ascii_stem):
             exact = raw_nums[0] + raw_nums[1] if "+" in ascii_stem else raw_nums[0] - raw_nums[1]
@@ -464,8 +606,10 @@ def inspect_cartridge_workbook(
     base_workbook_path: Optional[str | Path] = None,
     new_wave_start_qid: Optional[str] = None,
     wave_qids: Optional[Set[str]] = None,
+    pagemap_xlsx_path: Optional[str | Path] = None,
+    repo_root: Optional[str | Path] = None,
 ) -> Dict[str, GateResult]:
-    """Run all 4 Stage-P4 independent gates on a real `.xlsx` cartridge workbook."""
+    """Run all 4 Stage-P4 independent gates on any `.xlsx` cartridge workbook (`G1..G6`)."""
     if wave_qids is None and base_workbook_path is not None and Path(base_workbook_path).exists():
         from .automation_suite import derive_wave_scope_from_diff, diff_workbooks_by_key
 
@@ -486,18 +630,19 @@ def inspect_cartridge_workbook(
 
     known_runtime = set(runtime_error_codes or set())
     struct_issues: List[Dict[str, Any]] = []
-    required_sheets = [
+    core_sheets = [
         "راهنما",
         "شناسنامهٔ خشاب",
         "نقشهٔ کتاب (S1)",
         "اطلس خطا",
         "بانک سؤال",
         "واژه‌نامهٔ ستون‌ها",
-        "پروتکل ممیزی",
     ]
-    for sh in required_sheets:
+    for sh in core_sheets:
         if sh not in wb.sheetnames:
             struct_issues.append({"error": "MISSING_SHEET", "sheet": sh})
+    if "پروتکل ممیزی" not in wb.sheetnames and "سجل ممیزی" not in wb.sheetnames:
+        struct_issues.append({"error": "MISSING_SHEET", "sheet": "پروتکل ممیزی | سجل ممیزی"})
 
     if struct_issues:
         return {
@@ -506,11 +651,12 @@ def inspect_cartridge_workbook(
                 stage="P4",
                 status="FAIL",
                 reason_code="MISSING_REQUIRED_SHEETS",
-                summary="شیت‌های الزامی قالب ۷ شیتی ناقص است.",
+                summary="شیت‌های الزامی قالب خشاب ناقص است.",
                 issues=struct_issues,
             )
         }
 
+    is_standard_7sheet = "پروتکل ممیزی" in wb.sheetnames
     for sname, header_row, expected_cols in (
         ("نقشهٔ کتاب (S1)", 2, 14),
         ("اطلس خطا", 3, 11),
@@ -524,7 +670,7 @@ def inspect_cartridge_workbook(
         merges = {str(m) for m in ws.merged_cells.ranges}
         last_letter = get_column_letter(expected_cols)
         tail_merge = f"A{ws.max_row}:{last_letter}{ws.max_row}"
-        if f"A1:{last_letter}1" not in merges or tail_merge not in merges:
+        if f"A1:{last_letter}1" not in merges or (is_standard_7sheet and tail_merge not in merges):
             struct_issues.append(
                 {
                     "sheet": sname,
@@ -546,14 +692,19 @@ def inspect_cartridge_workbook(
         if not seen_sentinel:
             struct_issues.append({"sheet": sname, "error": "MISSING_SENTINEL_ROW"})
 
+    # Dynamic chapter page bounds loaded from verified PAGE-MAP (zero hardcoded numbers in Python!)
+    resolved_pm = Path(pagemap_xlsx_path) if pagemap_xlsx_path else resolve_pagemap_for_workbook(workbook_path, repo_root)
+    pm_bounds_info = load_chapter_bounds_from_pagemap(resolved_pm) if resolved_pm else {
+        "chapters": {}, "max_book_page": None, "proven_offset": None, "source": None
+    }
+    ch_bounds: Dict[str, Tuple[int, int]] = pm_bounds_info["chapters"]
+    proven_offset: Optional[int] = pm_bounds_info["proven_offset"]
+
     ws_s1 = wb["نقشهٔ کتاب (S1)"]
     s1_ids: Set[str] = set()
     s1_ai_wave_lids: Set[str] = set()
     s1_declared_qrefs: Dict[str, List[str]] = {}
-    ch_bounds = {
-        "۱": (1, 18), "۲": (19, 36), "۳": (37, 54), "۴": (55, 72),
-        "۵": (73, 90), "۶": (91, 108), "۷": (109, 126), "۸": (127, 144),
-    }
+
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
         if lid == "یادداشت" or not lid:
@@ -561,24 +712,27 @@ def inspect_cartridge_workbook(
         if lid in s1_ids:
             struct_issues.append({"sheet": "نقشهٔ کتاب (S1)", "row": r, "error": f"DUPLICATE_L_ID:{lid}"})
         s1_ids.add(lid)
-        if "موتور تألیف" in str(ws_s1.cell(r, 13).value or ""):
+        if "موتور تألیف" in str(ws_s1.cell(r, 12).value or "") or "موتور تألیف" in str(ws_s1.cell(r, 13).value or ""):
             s1_ai_wave_lids.add(lid)
         s1_declared_qrefs[lid] = _extract_q_refs_py(str(ws_s1.cell(r, 11).value or ""))
         page_str = to_ascii_str(ws_s1.cell(r, 2).value or "").strip()
-        ch_str = str(ws_s1.cell(r, 3).value or "").strip()
+        ch_ascii = to_ascii_str(ws_s1.cell(r, 3).value or "").strip()
         note_s1 = str(ws_s1.cell(r, 14).value or "")
-        if ch_str in ch_bounds and re.fullmatch(r"\d+", page_str):
-            bp = int(page_str)
-            lo, hi = ch_bounds[ch_str]
-            if not (lo <= bp <= hi):
-                struct_issues.append(
-                    {"sheet": "نقشهٔ کتاب (S1)", "row": r, "id": lid, "error": f"PAGE_OUT_OF_CHAPTER_BOUNDS:{bp} not in {lo}..{hi}"}
-                )
-            m_pdf = re.search(r"PDF\s*(\d+)", to_ascii_str(note_s1))
-            if m_pdf and int(m_pdf.group(1)) != bp + 6:
-                struct_issues.append(
-                    {"sheet": "نقشهٔ کتاب (S1)", "row": r, "id": lid, "error": f"PAGE_OFFSET_MISMATCH:book={bp},pdf={m_pdf.group(1)}"}
-                )
+        if ch_ascii in ch_bounds and page_str and "؟" not in page_str:
+            lo, hi = ch_bounds[ch_ascii]
+            page_nums = [int(n) for n in re.findall(r"\d+", page_str)]
+            for bp in page_nums:
+                if not (lo <= bp <= hi):
+                    struct_issues.append(
+                        {"sheet": "نقشهٔ کتاب (S1)", "row": r, "id": lid, "error": f"PAGE_OUT_OF_CHAPTER_BOUNDS:{bp} not in {lo}..{hi}"}
+                    )
+            if re.fullmatch(r"\d+", page_str) and proven_offset is not None:
+                bp_single = int(page_str)
+                m_pdf = re.search(r"PDF\s*(\d+)", to_ascii_str(note_s1))
+                if m_pdf and int(m_pdf.group(1)) != bp_single + proven_offset:
+                    struct_issues.append(
+                        {"sheet": "نقشهٔ کتاب (S1)", "row": r, "id": lid, "error": f"PAGE_OFFSET_MISMATCH:book={bp_single},pdf={m_pdf.group(1)}"}
+                    )
 
     ws_ea = wb["اطلس خطا"]
     atlas_codes: Set[str] = set(known_runtime)
@@ -599,10 +753,8 @@ def inspect_cartridge_workbook(
 
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if qid == "یادداشت":
+        if qid == "یادداشت" or not qid:
             break
-        if not qid:
-            continue
         checked_q_count += 1
         anc_id = str(ws_qb.cell(r, 2).value or "").strip()
         is_new_wave = (
@@ -619,12 +771,14 @@ def inspect_cartridge_workbook(
             struct_issues.append({"sheet": "بانک سؤال", "row": r, "error": f"DUPLICATE_Q_ID:{qid}"})
         seen_qids.add(qid)
 
-        anchor = str(ws_qb.cell(r, 2).value or "").strip()
-        if anchor not in s1_ids:
-            struct_issues.append({"sheet": "بانک سؤال", "row": r, "qid": qid, "error": f"UNKNOWN_ANCHOR:{anchor}"})
+        if anc_id not in s1_ids:
+            struct_issues.append({"sheet": "بانک سؤال", "row": r, "qid": qid, "error": f"UNKNOWN_ANCHOR:{anc_id}"})
         else:
-            actual_q_by_anchor.setdefault(anchor, []).append(qid)
+            actual_q_by_anchor.setdefault(anc_id, []).append(qid)
 
+        # If `wave_qids` is explicitly supplied (`is not None`) and this row belongs to an older legacy wave
+        # that used pre-v1.0 prose maps (e.g., G3 v0.7 `Q-101..Q-206`), only enforce full anti-J12 trace/map
+        # syntax on rows that either belong to `wave_qids` OR carry an anti-J12 trace or `strict_diagnostic_quality`.
         stem = str(ws_qb.cell(r, 5).value or "")
         opts = [str(ws_qb.cell(r, c).value or "") for c in range(7, 11)]
         ans_letter = str(ws_qb.cell(r, 11).value or "").strip()
@@ -650,6 +804,13 @@ def inspect_cartridge_workbook(
 
         if ans_letter not in CHOICE_INDEX:
             j12_issues.append({"qid": qid, "row": r, "error": f"INVALID_ANSWER_LETTER:{ans_letter}"})
+            continue
+
+        is_legacy_prose_row = (wave_qids is not None and not is_new_wave and "لاتین" not in note and not strict_diagnostic_quality)
+        if is_legacy_prose_row:
+            for code in re.findall(r"E_[A-Z0-9_]+", map_str):
+                if code not in atlas_codes:
+                    struct_issues.append({"sheet": "بانک سؤال", "row": r, "qid": qid, "error": f"UNREGISTERED_ERROR_CODE:{code}"})
             continue
 
         try:
@@ -687,28 +848,28 @@ def inspect_cartridge_workbook(
             j12_issues.append({"qid": qid, "row": r, "error": "MISSING_LATIN_TRACE_IN_NOTE"})
             continue
 
-        opt_ints = [parse_option_numeric_value(o) for o in opts]
-        chosen_opt_int = opt_ints[CHOICE_INDEX[ans_letter]]
-        if chosen_opt_int != trace_val:
+        opt_vals = [parse_option_numeric_value(o) for o in opts]
+        chosen_opt_val = opt_vals[CHOICE_INDEX[ans_letter]]
+        if not values_equal(chosen_opt_val, trace_val):
             solver_issues.append(
                 {
                     "qid": qid,
                     "row": r,
                     "error": "ANSWER_KEY_MISMATCH",
-                    "trace_computed": trace_val,
-                    "selected_option": chosen_opt_int,
+                    "trace_computed": str(trace_val),
+                    "selected_option": str(chosen_opt_val),
                 }
             )
 
         stem_val, stem_meta = solve_stem_independently(stem)
-        if stem_val is not None and stem_val != trace_val:
+        if stem_val is not None and not values_equal(stem_val, trace_val):
             solver_issues.append(
                 {
                     "qid": qid,
                     "row": r,
                     "error": "STEM_TRACE_MISMATCH",
-                    "stem_computed": stem_val,
-                    "trace_computed": trace_val,
+                    "stem_computed": str(stem_val),
+                    "trace_computed": str(trace_val),
                 }
             )
 
@@ -724,7 +885,6 @@ def inspect_cartridge_workbook(
                 }
             )
 
-        # Pedagogy tie-rule check (`39 + 25` midpoint `25 -> 30` requires `EV-CROP150-P039-02`)
         if stem_meta.get("has_half_tie") and not has_p33_tie_evidence:
             causal_hard_failures.append(
                 {
@@ -739,7 +899,7 @@ def inspect_cartridge_workbook(
         collapsed_all_same = len(distinct_codes) == 1
 
         for letter, claimed_code in err_map.items():
-            w_val = opt_ints[CHOICE_INDEX[letter]]
+            w_val = opt_vals[CHOICE_INDEX[letter]]
             if w_val is None:
                 continue
             plausible = simulate_plausible_mechanisms(stem, note, trace_val, w_val)
@@ -748,7 +908,7 @@ def inspect_cartridge_workbook(
                     "qid": qid,
                     "row": r,
                     "option": letter,
-                    "option_value": w_val,
+                    "option_value": str(w_val),
                     "claimed_code": claimed_code,
                     "plausible_codes": sorted(plausible),
                     "error": "MECHANISM_MISMATCH",
@@ -762,7 +922,7 @@ def inspect_cartridge_workbook(
                     "qid": qid,
                     "row": r,
                     "option": letter,
-                    "option_value": w_val,
+                    "option_value": str(w_val),
                     "claimed_code": claimed_code,
                     "competing_codes": sorted(plausible),
                     "error": "COMPETING_ERROR_AMBIGUITY",
@@ -781,7 +941,6 @@ def inspect_cartridge_workbook(
             else:
                 legacy_diagnostic_warnings.append(collapse_item)
 
-    # Bidirectional T7 cross-ownership check (identical contract to `src/v10/station/cartridge-schema.js`)
     for lid, declared_qs in s1_declared_qrefs.items():
         actual_qs = sorted(actual_q_by_anchor.get(lid, []))
         if declared_qs != actual_qs:
@@ -801,8 +960,14 @@ def inspect_cartridge_workbook(
             stage="P4",
             status="PASS" if not struct_issues else "FAIL",
             reason_code="WORKBOOK_STRUCTURE_VALID" if not struct_issues else struct_issues[0]["error"],
-            summary=f"ساختار ۷ شیت، ردیف‌های نگهبان، ادغام‌ها، لنگرهای S1 و کدهای اطلس بررسی شد ({len(struct_issues)} خطا).",
-            metrics={"s1_count": len(s1_ids), "atlas_code_count": len(atlas_codes), "question_count": checked_q_count},
+            summary=f"ساختار شیت‌ها، ردیف‌های نگهبان، مرزهای پویا از نقشهٔ مادر، لنگرهای S1 و کدهای اطلس بررسی شد ({len(struct_issues)} خطا).",
+            metrics={
+                "s1_count": len(s1_ids),
+                "atlas_code_count": len(atlas_codes),
+                "question_count": checked_q_count,
+                "pagemap_bounds_source": pm_bounds_info["source"],
+                "proven_offset": proven_offset,
+            },
             issues=struct_issues,
         ),
         "G3_ANTI_J12": GateResult(
@@ -827,10 +992,17 @@ def inspect_cartridge_workbook(
             gate_id="G5_DISTRACTOR_CAUSALITY",
             stage="P4",
             status="PASS" if not causal_hard_failures else "FAIL",
-            reason_code="CAUSAL_DISTRACTORS_VERIFIED" if not causal_hard_failures else causal_hard_failures[0]["error"],
+            reason_code=(
+                "CAUSAL_DISTRACTORS_VERIFIED"
+                if not causal_hard_failures
+                else next(
+                    (c["error"] for c in causal_hard_failures if c["error"] == "PEDAGOGY_BLOCKED"),
+                    causal_hard_failures[0]["error"],
+                )
+            ),
             summary=(
                 f"شبیه‌سازی علّی گزینه‌های انحرافی اجرا شد: {len(causal_hard_failures)} خطای مسدودکننده در موج جدید، "
-                f"{len(legacy_diagnostic_warnings)} هشدار تشخیصی در سؤالات میراثی v0.4."
+                f"{len(legacy_diagnostic_warnings)} هشدار تشخیصی در سؤالات میراثی."
             ),
             metrics={
                 "blocking_failures": len(causal_hard_failures),

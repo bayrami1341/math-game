@@ -279,10 +279,15 @@ def restore_official_stamps_overlay(wb: openpyxl.Workbook, official_ref_xlsx: st
     return applied
 
 
-def verify_official_stamps(candidate_xlsx: str | Path, official_ref_xlsx: str | Path) -> GateResult:
-    """Verify all official stamps (9 identity cells + 8 green skeleton rows + 2 green atlas rows + zero forged AI greens)."""
+def verify_official_stamps(
+    candidate_xlsx: str | Path,
+    official_ref_xlsx: str | Path,
+    allowed_cell_triples: Optional[Set[Tuple[str, str, int]]] = None,
+) -> GateResult:
+    """Verify all official stamps (9 identity cells + green skeleton/atlas rows + zero forged AI greens)."""
+    from openpyxl.utils import column_index_from_string
+
     diff = diff_workbooks_by_key(official_ref_xlsx, candidate_xlsx)
-    stamp_regressions = diff["changed_cells"] + diff["removed_rows"]
 
     # Also ensure NO newly added AI row forged a green `'تأییدشده'` stamp (Incident #5)
     wb = openpyxl.load_workbook(candidate_xlsx, data_only=False)
@@ -300,6 +305,14 @@ def verify_official_stamps(candidate_xlsx: str | Path, official_ref_xlsx: str | 
             if str(ws_o.cell(r, status_col).value or "").strip() == "تأییدشده":
                 greens.add(k)
         official_green_keys[sname] = greens
+
+    allowed = allowed_cell_triples or set()
+    stamp_regressions = [
+        c
+        for c in diff["changed_cells"]
+        if (c["key"] in official_green_keys.get(c["sheet"], set()))
+        or ((c["sheet"], c["key"], column_index_from_string(c["col_letter"])) not in allowed)
+    ] + diff["removed_rows"]
 
     forged_greens: List[Dict[str, Any]] = []
     for sname, status_col in (("نقشهٔ کتاب (S1)", 13), ("اطلس خطا", 10), ("بانک سؤال", 16)):
@@ -1034,6 +1047,231 @@ def plan_and_verify_pdf_chunks(
         Path(output_json_path).parent.mkdir(parents=True, exist_ok=True)
         Path(output_json_path).write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return result
+
+
+# ==============================================================================
+# W3: Universal 10 Multi-Grade Wave Invariants (`verify_universal_wave_invariants`)
+#     Separated Cleanly from `C205` Historical Benchmark Checks (`verify_c205_benchmark_incidents`)
+# ==============================================================================
+def verify_universal_wave_invariants(
+    candidate_xlsx: str | Path,
+    official_xlsx: Optional[str | Path] = None,
+    base_xlsx: Optional[str | Path] = None,
+    pagemap_verified_xlsx: Optional[str | Path] = None,
+    chunk_plan_path: Optional[str | Path] = None,
+    repo_root: Optional[str | Path] = None,
+    allowed_cell_triples: Optional[Set[Tuple[str, str, int]]] = None,
+) -> GateResult:
+    """Enforce ALL 10 grade-universal laws across `G1..G6` (`0` C205-hardcoded assumptions).
+
+    Explicitly records `is_empty_skeleton = True` when `active_s1_count == 0 and active_q_count == 0`
+    so official skeleton files (`G1, G4, G5, G6 v0.1`) pass structural checks with `0` false positives
+    while NEVER being misrepresented as populated question banks!
+    """
+    from .validators import load_chapter_bounds_from_pagemap, resolve_pagemap_for_workbook
+
+    wb = openpyxl.load_workbook(candidate_xlsx, data_only=False)
+    ws_s1 = wb["نقشهٔ کتاب (S1)"]
+    ws_ea = wb["اطلس خطا"]
+    ws_qb = wb["بانک سؤال"]
+
+    effective_base = base_xlsx if (base_xlsx and Path(base_xlsx).exists()) else None
+    kd = diff_workbooks_by_key(effective_base, candidate_xlsx) if effective_base else None
+    scope = derive_wave_scope_from_diff(kd)
+    wave_qids: Optional[Set[str]] = scope["wave_qids"] if kd is not None else None
+
+    s1_by_id: Dict[str, Tuple[int, List[Any]]] = {}
+    duplicate_l_ids: List[str] = []
+    for r in range(3, ws_s1.max_row + 1):
+        lid = str(ws_s1.cell(r, 1).value or "").strip()
+        if lid == "یادداشت" or not lid:
+            break
+        if lid in s1_by_id:
+            duplicate_l_ids.append(lid)
+        s1_by_id[lid] = (r, [ws_s1.cell(r, c).value for c in range(1, 15)])
+
+    atlas_codes: Set[str] = set()
+    for r in range(4, ws_ea.max_row + 1):
+        raw_c = str(ws_ea.cell(r, 1).value or "").strip()
+        if raw_c == "یادداشت" or not raw_c:
+            break
+        atlas_codes.add(re.sub(r"\s*\(پیشنهاد\)\s*", "", raw_c).strip())
+
+    qb_by_id: Dict[str, Tuple[int, List[Any]]] = {}
+    duplicate_q_ids: List[str] = []
+    for r in range(4, ws_qb.max_row + 1):
+        qid = str(ws_qb.cell(r, 1).value or "").strip()
+        if qid == "یادداشت" or not qid:
+            break
+        if qid in qb_by_id:
+            duplicate_q_ids.append(qid)
+        qb_by_id[qid] = (r, [ws_qb.cell(r, c).value for c in range(1, 18)])
+
+    pm_path = Path(pagemap_verified_xlsx) if pagemap_verified_xlsx else resolve_pagemap_for_workbook(candidate_xlsx, repo_root)
+    pm_info = load_chapter_bounds_from_pagemap(pm_path) if pm_path else {"max_book_page": None, "chapters": {}, "proven_offset": None, "source": None}
+    max_book_page = pm_info["max_book_page"]
+
+    stamps_gate = (
+        verify_official_stamps(candidate_xlsx, official_xlsx, allowed_cell_triples=allowed_cell_triples)
+        if (official_xlsx and Path(official_xlsx).exists())
+        else None
+    )
+    anchors_gate = verify_bidirectional_anchors(candidate_xlsx)
+    cpa_gate = verify_cpa_and_answer_balance(candidate_xlsx, diff_result=kd)
+
+    results: List[Dict[str, Any]] = []
+
+    def rec(inv_id: str, title: str, ok: bool, evidence: str) -> None:
+        results.append({"invariant_id": inv_id, "title": title, "status": "PASS" if ok else "FAIL", "evidence": evidence})
+
+    # U-01: Anti-J12 separate Latin calculation trace on AI-authored / wave questions
+    j12_target_qids = (
+        wave_qids
+        if wave_qids is not None
+        else {qid for qid, (_, v) in qb_by_id.items() if "موتور تألیف" in str(v[14] or "") or "لاتین" in str(v[16] or "")}
+    )
+    j12_bad = [qid for qid in sorted(j12_target_qids) if not re.search(r"[0-9]", str(qb_by_id[qid][1][16] or ""))]
+    rec("U-01", "ضد J12 — محاسبهٔ مستقل لاتین در یادداشت", len(j12_bad) == 0, f"bad_questions={j12_bad}")
+
+    # U-02: No fabricated out-of-range page numbers per grade's verified PAGE-MAP
+    bad_pages: List[str] = []
+    if max_book_page is not None:
+        for lid, (_, v) in s1_by_id.items():
+            raw_p = str(v[1] or "").strip()
+            if "؟" in raw_p:
+                continue
+            nums = [int(n) for n in re.findall(r"\d+", raw_p.translate(FA_TO_ASCII))]
+            if not nums or any(n < 1 or n > max_book_page for n in nums):
+                bad_pages.append(lid)
+    rec("U-02", "منع جعل شمارهٔ صفحه خارج از مرز نقشهٔ مادر همان پایه", len(bad_pages) == 0, f"max_page={max_book_page}, bad={bad_pages}")
+
+    # U-03: Zero invented terminology outside curriculum (`گذرنده`)
+    invented_hits = [lid for lid, (_, v) in s1_by_id.items() if "گذرنده" in " ".join(str(x or "") for x in v)]
+    rec("U-03", "منع واژگان ساختگی خارج از کتاب", len(invented_hits) == 0, f"hits={invented_hits}")
+
+    # U-04: Zero orphan `E_` codes missing from same workbook's `اطلس خطا` (`T5`)
+    orphan_e = [
+        f"{qid}:{code}"
+        for qid, (_, v) in qb_by_id.items()
+        for code in re.findall(r"E_[A-Z0-9_]+", str(v[11] or ""))
+        if code not in atlas_codes
+    ]
+    rec("U-04", "منع کد E_ بی‌صاحب خارج از اطلس همان ورک‌بوک (T5)", len(orphan_e) == 0, f"orphan_codes={orphan_e}")
+
+    # U-05: Zero forged green `'تأییدشده'` stamps on AI-proposed rows (`INC-05`)
+    forged = []
+    if stamps_gate is not None:
+        forged = [i for i in stamps_gate.issues if i.get("error") == "UNAUTHORIZED_GREEN_STAMP"]
+    else:
+        for lid, (_, v) in s1_by_id.items():
+            if "پیشنهاد AI" in str(v[11] or "") and str(v[12] or "").strip() == "تأییدشده":
+                forged.append(lid)
+        for qid, (_, v) in qb_by_id.items():
+            if "پیشنهاد AI" in str(v[14] or "") and str(v[15] or "").strip() == "تأییدشده":
+                forged.append(qid)
+    rec("U-05", "منع سبز دروغین بدون حکم معلم", len(forged) == 0, f"forged_greens={forged}")
+
+    # U-06: Bidirectional anchor equality `S1.K == Bank.B` (`T7`)
+    rec("U-06", "تطابق دوجانبهٔ مالکیت S1 و بانک سؤال (T7)", anchors_gate.status == "PASS", f"issues={anchors_gate.issues[:3]}")
+
+    # U-07: Official stamps preservation (`INC-07`)
+    stamps_ok = True if stamps_gate is None else (stamps_gate.status == "PASS")
+    rec("U-07", "سلامت کامل مُهرهای پایهٔ رسمی", stamps_ok, "no_official_ref" if stamps_gate is None else f"issues={len(stamps_gate.issues)}")
+
+    # U-08: Non-colliding unique Column-A keys (`INC-11`)
+    key_collision = duplicate_l_ids + duplicate_q_ids
+    rec("U-08", "یکتایی کلیدهای ستون A بدون برخورد یا بازیافت", len(key_collision) == 0, f"s1={len(s1_by_id)}, q={len(qb_by_id)}, dups={key_collision}")
+
+    # U-09: `AUD-06` CPA triad + answer balance
+    rec("U-09", "رعایت سه‌گانهٔ CPA و توازن کلید پاسخ (AUD-06)", cpa_gate.status == "PASS", f"issues={cpa_gate.issues[:3]}")
+
+    # U-10: Chunk plan constraints (`<=12` pages, `>=2` overlap, proven offset) when supplied
+    chunk_ok = True
+    if chunk_plan_path and Path(chunk_plan_path).exists():
+        cp = json.loads(Path(chunk_plan_path).read_text(encoding="utf-8"))
+        chunk_ok = (
+            cp.get("status") == "PASS"
+            and all(c["page_count"] <= 12 for c in cp.get("chunks", []))
+            and cp.get("overlap_pages", 0) >= 2
+            and cp.get("proven_offset") is not None
+        )
+    rec("U-10", " سلامت چانک‌بندی <=۱۲ صفحه با هم‌پوشانی >=۲ و آفست اثبات‌شده", chunk_ok, f"chunk_plan={chunk_plan_path}")
+
+    failed = [r for r in results if r["status"] != "PASS"]
+    is_empty_skeleton = len(s1_by_id) == 0 and len(qb_by_id) == 0
+    return GateResult(
+        stage="AUTO",
+        summary=(
+            "خشاب اسکلت خالی است (۰ درس فعال و ۰ سؤال فعال؛ ساختار پایه سالم است اما بانک محتوایی هنوز پر نشده است)."
+            if is_empty_skeleton and not failed
+            else f"کنترل ۱۰ قانون جهان‌شمول چندپایه اجرا شد ({10 - len(failed)}/10 PASS)."
+        ),
+        gate_id="G_AUTO_UNIVERSAL_10_INVARIANTS",
+        status="PASS" if not failed else "FAIL",
+        reason_code=(
+            "ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON"
+            if (is_empty_skeleton and not failed)
+            else ("ALL_10_UNIVERSAL_INVARIANTS_CLEAN" if not failed else "UNIVERSAL_INVARIANT_VIOLATION")
+        ),
+        issues=failed,
+        metrics={
+            "checked_invariants": 10,
+            "passed_invariants": 10 - len(failed),
+            "failed_invariants": len(failed),
+            "active_s1_rows": len(s1_by_id),
+            "active_questions": len(qb_by_id),
+            "is_empty_skeleton": is_empty_skeleton,
+            "pagemap_source": pm_info["source"],
+            "matrix": results,
+        },
+    )
+
+
+def verify_c205_benchmark_incidents(
+    candidate_xlsx: str | Path,
+    pdf_path: Optional[str | Path] = None,
+    chunk_plan_path: Optional[str | Path] = None,
+) -> List[Dict[str, Any]]:
+    """Run the `C205`-specific historical regression assertions (`INC-08, 09, 10, 13, 14, 16`)."""
+    wb = openpyxl.load_workbook(candidate_xlsx, data_only=False)
+    ws_s1, ws_qb = wb["نقشهٔ کتاب (S1)"], wb["بانک سؤال"]
+    s1_by_id: Dict[str, Tuple[int, List[Any]]] = {}
+    for r in range(3, ws_s1.max_row + 1):
+        lid = str(ws_s1.cell(r, 1).value or "").strip()
+        if lid == "یادداشت" or not lid:
+            break
+        s1_by_id[lid] = (r, [ws_s1.cell(r, c).value for c in range(1, 15)])
+    qb_by_id: Dict[str, Tuple[int, List[Any]]] = {}
+    for r in range(4, ws_qb.max_row + 1):
+        qid = str(ws_qb.cell(r, 1).value or "").strip()
+        if qid == "یادداشت" or not qid:
+            break
+        qb_by_id[qid] = (r, [ws_qb.cell(r, c).value for c in range(1, 18)])
+
+    out: List[Dict[str, Any]] = []
+    l114_ok = "L-114" in s1_by_id and s1_by_id["L-114"][1][3] == "شمارش ۴تا۴تا" and "دسته‌های ۵تایی" in str(s1_by_id["L-114"][1][6] or "")
+    out.append({"incident_id": "INC-08", "status": "PASS" if l114_ok else "FAIL"})
+    q1011_stem = str(qb_by_id.get("Q-1011", (0, [""] * 17))[1][4] or "")
+    q1011_ans_opt = str(qb_by_id.get("Q-1011", (0, [""] * 17))[1][8] or "")
+    tri_ok = "۱۳ مثلث" in q1011_stem and q1011_ans_opt == "۱۸"
+    if pdf_path and Path(pdf_path).exists():
+        tri_ok = tri_ok and (count_visual_components(pdf_path, 14, (55, 356, 520, 414))["count"] == 13)
+    out.append({"incident_id": "INC-09", "status": "PASS" if tri_ok else "FAIL"})
+    inc10_ok = (
+        extract_q_refs_canonical(str(s1_by_id.get("L-110", (0, [""] * 14))[1][10] or "")) == ["Q-1017", "Q-1018", "Q-1019"]
+        and extract_q_refs_canonical(str(s1_by_id.get("L-112", (0, [""] * 14))[1][10] or "")) == ["Q-1020"]
+    )
+    out.append({"incident_id": "INC-10", "status": "PASS" if inc10_ok else "FAIL"})
+    inc13_ok = "خلّق باش" in str(s1_by_id.get("L-112", (0, [""] * 14))[1][6] or "") and s1_by_id.get("L-118", (0, [""] * 14))[1][3] == "معمّا و فرهنگ خواندن"
+    out.append({"incident_id": "INC-13", "status": "PASS" if inc13_ok else "FAIL"})
+    hallucinated = [lid for lid in ("L-108", "L-109", "L-110", "L-111", "L-112") if any(bad in str(s1_by_id.get(lid, (0, [""] * 14))[1][3] or "") for bad in ("عدد صد", "ترتیب عددی"))]
+    out.append({"incident_id": "INC-14", "status": "PASS" if not hallucinated else "FAIL"})
+    offset_ok = True
+    if chunk_plan_path and Path(chunk_plan_path).exists():
+        cp = json.loads(Path(chunk_plan_path).read_text(encoding="utf-8"))
+        offset_ok = cp.get("proven_offset") == 6 and len(cp.get("review_palindrome_anchors", [])) >= 5
+    out.append({"incident_id": "INC-16", "status": "PASS" if offset_ok else "FAIL"})
+    return out
 
 
 # ==============================================================================

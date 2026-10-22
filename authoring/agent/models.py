@@ -1,10 +1,12 @@
-"""Canonical typed contracts and serialization schemas across stages P0–P6."""
+"""Canonical typed contracts and serialization schemas across stages P0–P6 and WaveSpec v2."""
 
 from __future__ import annotations
 
 import hashlib
 import json
 from dataclasses import asdict, dataclass, field
+from datetime import datetime, timezone
+from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
 GateStatus = Literal["PASS", "FAIL", "BLOCKED"]
@@ -16,9 +18,13 @@ ReconciliationStatus = Literal[
     "UNOBSERVABLE_NEEDS_HUMAN",
     "TEACHER_APPROVED",
 ]
-
-
-from datetime import datetime, timezone
+FieldReconcileVerdict = Literal[
+    "AGREED_UNVERIFIED",
+    "EVIDENCE_MATCHED",
+    "DISAGREEMENT",
+    "UNOBSERVABLE",
+    "LOGICAL_CONFLICT",
+]
 
 
 def utc_now_iso() -> str:
@@ -62,6 +68,7 @@ class EvidenceRef:
     evidence_kind: Literal[
         "pdf_text_bbox",
         "pdf_crop_150dpi",
+        "pdf_crop_300dpi_nearest",
         "physical_book_photo",
         "independent_computation",
         "teacher_verdict",
@@ -104,6 +111,7 @@ class PageRegion:
     region_kind: Literal[
         "CHAPTER_HEADER",
         "LESSON_BANNER",
+        "VECTOR_OUTLINE_BANNER",
         "MARGIN_TAB",
         "RED_BOX_HEADER",
         "FOOTNOTE_RULE",
@@ -214,3 +222,153 @@ class WaveManifest:
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
 
+
+# ==============================================================================
+# WaveSpec v2 (W1 — Grade-Agnostic Data-Driven Cartridge Wave Specification)
+# ==============================================================================
+
+
+@dataclass
+class AuthorizedCellPatch:
+    sheet: str
+    key: str
+    col_letter: str
+    new_value: Any
+    expected_old_value: Any = None
+    reason: str = ""
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class WaveS1RowSpec:
+    id: str
+    page: str
+    chapter: str
+    title: str
+    objective: str
+    vocab: str
+    activity: str
+    figure: str
+    potential: str
+    engine: str
+    anchor: str
+    note: str
+    source: str = "پیشنهاد AI — موتور تألیف v۱.۰"
+    status: str = "نیاز به تأیید"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class WaveAtlasRowSpec:
+    code_raw: str
+    cell_code: str
+    name_fa: str
+    category: str
+    description: str
+    sample_sign: str
+    diagnostic_prompt: str
+    intervention: str
+    priority: str
+    note: str
+    source: str = "پیشنهاد AI — موتور تألیف v۱.۰"
+    status: str = "نیاز به تأیید"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class WaveQuestionSpec:
+    anchor: str
+    scope: str
+    cpa: str
+    level: str
+    stem: str
+    opts: List[str]
+    ans: str
+    map: str
+    trace: str
+    answer_val: Any
+    wrong_spec: List[List[Any]] = field(default_factory=list)
+    page_ref: str = ""
+    qid: Optional[str] = None
+    semantic_key: Optional[str] = None
+    q_format: str = "چهارگزینه‌ای"
+    rubric: str = "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد."
+    note_override: Optional[str] = None
+    source: str = "پیشنهاد AI — موتور تألیف v۱.۰"
+    status: str = "نیاز به تأیید"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+@dataclass
+class WaveSpecV2:
+    wave_id: str
+    family_id: str
+    book_code: str
+    base_cartridge_filename: str
+    expected_official_base_sha256: str
+    verified_pagemap_path: Optional[str] = None
+    verified_pagemap_sha256: Optional[str] = None
+    insert_s1_after_key: Optional[str] = None
+    min_question_id_start: int = 1001
+    semantic_prefix: str = "wave"
+    runtime_error_codes: List[str] = field(default_factory=list)
+    authorized_patches: List[AuthorizedCellPatch] = field(default_factory=list)
+    s1_rows: List[WaveS1RowSpec] = field(default_factory=list)
+    atlas_rows: List[WaveAtlasRowSpec] = field(default_factory=list)
+    question_rows: List[WaveQuestionSpec] = field(default_factory=list)
+    deferred_proposals: List[Dict[str, Any]] = field(default_factory=list)
+    schema_version: str = "2.0.0"
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+    @classmethod
+    def from_dict(cls, raw: Dict[str, Any]) -> "WaveSpecV2":
+        return cls(
+            schema_version=str(raw.get("schema_version", "2.0.0")),
+            wave_id=raw["wave_id"],
+            family_id=raw["family_id"],
+            book_code=raw["book_code"],
+            base_cartridge_filename=raw["base_cartridge_filename"],
+            expected_official_base_sha256=raw["expected_official_base_sha256"],
+            verified_pagemap_path=raw.get("verified_pagemap_path"),
+            verified_pagemap_sha256=raw.get("verified_pagemap_sha256"),
+            insert_s1_after_key=raw.get("insert_s1_after_key"),
+            min_question_id_start=int(raw.get("min_question_id_start", 1001)),
+            semantic_prefix=str(raw.get("semantic_prefix", raw["wave_id"])),
+            runtime_error_codes=list(raw.get("runtime_error_codes", [])),
+            authorized_patches=[AuthorizedCellPatch(**p) for p in raw.get("authorized_patches", [])],
+            s1_rows=[WaveS1RowSpec(**r) for r in raw.get("s1_rows", [])],
+            atlas_rows=[WaveAtlasRowSpec(**r) for r in raw.get("atlas_rows", [])],
+            question_rows=[
+                WaveQuestionSpec(
+                    **{
+                        **q,
+                        "answer_val": q["answer_val"] if "answer_val" in q else q.get("answer_int"),
+                    }
+                )
+                for q in [
+                    {k: v for k, v in item.items() if k != "answer_int"}
+                    | ({"answer_val": item["answer_int"]} if "answer_val" not in item and "answer_int" in item else {})
+                    for item in raw.get("question_rows", [])
+                ]
+            ],
+            deferred_proposals=list(raw.get("deferred_proposals", [])),
+        )
+
+    @classmethod
+    def from_json_file(cls, path: str | Path) -> "WaveSpecV2":
+        return cls.from_dict(json.loads(Path(path).read_text(encoding="utf-8")))
+
+    def save_json(self, path: str | Path) -> None:
+        out = Path(path)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(self.to_dict(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
