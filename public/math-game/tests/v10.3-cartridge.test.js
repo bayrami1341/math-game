@@ -137,6 +137,46 @@ test('10. واحد راهنما: parseOptionValue و parseClaims', () => {
   assert.equal(claims[0].claim, 'E_ADD_CONFUSION');
 });
 
+test('10-الف. W8 (BP-007): مرزهای parseOptionValue — کسر، مخلوط، بازهٔ ±۱۰^۹، سازگاری گذشته', () => {
+  // ── کسر دقیق «a/b» ──
+  assert.deepEqual({ ...parseOptionValue('۳/۴') }, { frac: true, num: 3, den: 4 });
+  assert.deepEqual({ ...parseOptionValue('۴/۸') }, { frac: true, num: 1, den: 2 }, 'ساده‌سازی');
+  assert.deepEqual({ ...parseOptionValue('-۲/۴') }, { frac: true, num: -1, den: 2 }, 'علامت منفی روی صورت');
+  assert.equal(parseOptionValue('۲/−۴'), null, 'مخرج منفی بیرون قرارداد (هم‌رفتار مبدل آرنا)');
+  assert.equal(parseOptionValue('۳/۰'), null, 'مخرج صفر ممنوع');
+  assert.equal(parseOptionValue('۰/۵'), 0, 'کسر صفر → عدد خام');
+  // ── کسر صحیح‌ارزش → عدد خام (هم‌قرارداد گذشته) ──
+  assert.equal(parseOptionValue('۶/۳'), 2);
+  assert.equal(parseOptionValue('۸/۲'), 4);
+  // ── عدد مخلوط «k و a/b» ──
+  assert.deepEqual({ ...parseOptionValue('۲ و ۱/۲') }, { frac: true, num: 5, den: 2 });
+  assert.deepEqual({ ...parseOptionValue('۱و۳/۴') }, { frac: true, num: 7, den: 4 }, 'بدون فاصله');
+  assert.deepEqual({ ...parseOptionValue('−۲ و ۱/۲') }, { frac: true, num: -5, den: 2 }, 'علامت بر کل مخلوط');
+  assert.equal(parseOptionValue('۲ و ۱/۰'), null, 'مخرج صفر مخلوط ممنوع');
+  // ── بازهٔ رسمی ±۱٬۰۰۰٬۰۰۰٬۰۰۰ ──
+  assert.equal(parseOptionValue('۱۰۰۰۰۰۰۰۰۰'), 1_000_000_000);
+  assert.equal(parseOptionValue('-۱۰۰۰۰۰۰۰۰۰'), -1_000_000_000);
+  assert.equal(parseOptionValue('۱۰۰۰۰۰۰۰۰۱'), null, 'فراتر از سقف W8 → null');
+  assert.equal(parseOptionValue('۹۹۹۹۹۹۹۹۹۹۹۹۹'), null);
+  // ── ارقام عربی-هندی (هم‌راستا با مبدل آرنا) ──
+  assert.equal(parseOptionValue('٥'), 5);
+  assert.equal(parseOptionValue('٢٤'), 24);
+  // ── سازگاری گذشته: هیچ رفتار رسمی قبلی تغییر نکند (آزمون معکوس T3) ──
+  assert.equal(parseOptionValue('۳+۴'), 7);
+  assert.equal(parseOptionValue('۴×۵'), 20);
+  assert.equal(parseOptionValue('همان ۲۸'), 28);
+  assert.equal(parseOptionValue('—'), null);
+  assert.equal(parseOptionValue('۷'), 7);
+  assert.equal(parseOptionValue('۰'), 0);
+  assert.equal(parseOptionValue(null), null);
+  assert.equal(parseOptionValue(undefined), null);
+  // ورودی عددی
+  assert.equal(parseOptionValue(42), 42);
+  assert.equal(parseOptionValue(1_000_000_000), 1_000_000_000);
+  assert.equal(parseOptionValue(1_000_000_001), null);
+  assert.equal(parseOptionValue(3.5), null, 'اعشار هرگز در قرارداد نبود');
+});
+
 test('10-ب. extractQRefs: دو قالب بازه («تا» و خط‌تیره) + ارجاع تنها', () => {
   assert.deepEqual(extractQRefs('Q-101 تا Q-103'), ['Q-101', 'Q-102', 'Q-103']);
   assert.deepEqual(extractQRefs('E_TABLE_NEIGHBOUR (Q-1001-1004)'), ['Q-1001', 'Q-1002', 'Q-1003', 'Q-1004']);

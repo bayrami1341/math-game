@@ -48,23 +48,93 @@ export const KNOWN_HALF_MAPS = Object.freeze([
   { id: 'Q-109', letter: 'ج' }
 ]);
 
-const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
-const toLatin = s => String(s ?? '').replace(/[۰-۹]/g, d => String(FA_DIGITS.indexOf(d)));
+const FA_AR_DIGITS = '۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩'; // فارسی + عربی-هندی (W8 — هم‌راستا با مبدل آرنا)
+const toLatin = s => String(s ?? '').replace(/[۰-۹٠-٩]/g, d => String(FA_AR_DIGITS.indexOf(d) % 10));
 
-/** مقدار عددی یک گزینه: عدد خام / جمع / ضرب / «همان ۲۸» — وگرنه null */
+// ── W8 (BP-007): گسترش رسمی مقدار گزینه ─────────────────────────────────
+// بازهٔ رسمی مقدار عددی گزینه: ±۱٬۰۰۰٬۰۰۰٬۰۰۰ (فراتر → null — fail-closed).
+// کسر دقیق «a/b» و عدد مخلوط «k و a/b» با حساب گویای exact (بدون اعشار شناور).
+export const OPTION_VALUE_MAX_ABS = 1_000_000_000;
+
+const FRAC_MAX_ABS = Number.MAX_SAFE_INTEGER; // گارد دقت — فراتر → null (بیرون از واقعیت کتاب)
+
+const gcdInt = (a, b) => { while (b) { const t = a % b; a = b; b = t; } return a; };
+
+/** کسر دقیق ساده‌شده و منجمد — صورت می‌تواند منفی باشد، مخرج همیشه مثبت؛ نامعتبر → null */
+export function makeFrac(num, den) {
+  if (!Number.isInteger(num) || !Number.isInteger(den) || den === 0) return null;
+  if (Math.abs(num) > FRAC_MAX_ABS || Math.abs(den) > FRAC_MAX_ABS) return null;
+  let n = num, d = den;
+  if (d < 0) { n = -n; d = -d; }
+  const g = gcdInt(Math.abs(n), d) || 1;
+  return Object.freeze({ frac: true, num: n / g, den: d / g });
+}
+
+/** تشخیص مقدار کسر (خروجی parseOptionValue برای «a/b» و «k و a/b») */
+export function isFracValue(v) {
+  return !!v && typeof v === 'object' && v.frac === true
+    && Number.isInteger(v.num) && Number.isInteger(v.den) && v.den > 0;
+}
+
+/** مقدار دهدهی کسر — فقط برای نمایش/آمار؛ داوری رسمی همیشه با خود کسر دقیق است */
+export function fracToNumber(v) {
+  return isFracValue(v) ? v.num / v.den : null;
+}
+
+// درون‌بازدهٔ بازه: |num/den| ≤ OPTION_VALUE_MAX_ABS با مقایسهٔ ضرب‌زدوری دقیق
+const fracInRange = f => BigInt(Math.abs(f.num)) <= BigInt(OPTION_VALUE_MAX_ABS) * BigInt(f.den);
+
+/**
+ * مقدار عددی یک گزینه — قرارداد W8 (BP-007):
+ *   عدد صحیح ±۱۰^۹ | کسر «a/b» | مخلوط «k و a/b» | جمع خام «a+b» | ضرب خام «a×b» | «همان n»
+ * کسر صحیح‌ارزش (مثل ۶/۳) به عدد خام برمی‌گردد (هم‌قرارداد گذشته)؛ بقیهٔ کسرها
+ * شیء دقیق {frac,num,den} ساده‌شده می‌دهند. بیرون از قرارداد/بازه → null.
+ * سازگاری گذشته: رفتار روی دادهٔ رسمی موجود (صحیح/جمع/ضرب/همان) ذره‌ای تغییر نمی‌کند.
+ */
 export function parseOptionValue(raw) {
   if (raw === null || raw === undefined) return null;
+  if (typeof raw === 'number') {
+    return Number.isInteger(raw) && Math.abs(raw) <= OPTION_VALUE_MAX_ABS ? raw : null;
+  }
   const text = String(raw).trim();
-  const t = toLatin(text).replace(/\s+/g, '');
-  if (/^-?\d+$/.test(t)) return parseInt(t, 10);
+  const t = toLatin(text).replace(/−/g, '-').replace(/؍/g, '/').replace(/\s+/g, '');
+  // ۱) عدد صحیح در بازهٔ رسمی W8
+  if (/^-?\d+$/.test(t)) {
+    const v = parseInt(t, 10);
+    return Number.isInteger(v) && Math.abs(v) <= OPTION_VALUE_MAX_ABS ? v : null;
+  }
+  // ۲) کسر «a/b» — دقیق و ساده‌شده (مخرج صفر → null)
+  let m = /^(-?\d+)\/(\d+)$/.exec(t);
+  if (m) {
+    const f = makeFrac(parseInt(m[1], 10), parseInt(m[2], 10));
+    if (!f || !fracInRange(f)) return null;
+    return f.den === 1 ? f.num : f;
+  }
+  // ۳) مخلوط «k و a/b» — علامتِ k بر کل مقدار می‌نشیند: −۲ و ۱/۲ = −(۲ + ۱/۲)
+  m = /^(-?\d+)و(-?\d+)\/(\d+)$/.exec(t);
+  if (m) {
+    const k = BigInt(m[1]);
+    const n = BigInt(m[2]);
+    const d = BigInt(m[3]);
+    const sign = k < 0n ? -1n : 1n;
+    const numBig = sign * ((k < 0n ? -k : k) * d + n); // −(۲ و ۱/۲) = −(۲×۲+۱)/۲ = −۵/۲
+    const maxBig = BigInt(FRAC_MAX_ABS);
+    if (numBig > maxBig || numBig < -maxBig || d > maxBig) return null;
+    const f = makeFrac(Number(numBig), Number(d));
+    if (!f || !fracInRange(f)) return null;
+    return f.den === 1 ? f.num : f;
+  }
+  // ۴) جمع خام (قرارداد قبلی — دست‌نخورده)
   if (t.includes('+') && !t.includes('×') && t.split('+').every(p => /^\d+$/.test(p))) {
     return t.split('+').reduce((a, b) => a + parseInt(b, 10), 0);
   }
+  // ۵) ضرب خام (قرارداد قبلی — دست‌نخورده)
   if (t.includes('×') && !t.includes('+') && t.split('×').every(p => /^\d+$/.test(p))) {
     return t.split('×').reduce((a, b) => a * parseInt(b, 10), 1);
   }
-  const m = /همان\s*([۰-۹0-9]+)/.exec(text);
-  return m ? parseInt(toLatin(m[1]), 10) : null;
+  // ۶) «همان n» (قرارداد قبلی)
+  const m2 = /همان\s*([۰-۹0-9]+)/.exec(text);
+  return m2 ? parseInt(toLatin(m2[1]), 10) : null;
 }
 
 /** فرم ضربِ خام «a×b = ؟» — فقط این ردیف‌ها کلید پاسخ‌شان با حاصل بازحساب می‌شود */
@@ -239,7 +309,15 @@ export function validateCartridge(c, expectedId = null) {
     if (!Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) err(`${q.id}: پاسخ‌نام خارج از بازه`);
     for (let i = 0; i < 4; i++) {
       const v = parseOptionValue(q.options[i]);
-      if (v !== null && (v < 0 || v > 9999)) err(`${q.id} گ${OPTION_LETTERS[i]}: عدد خارج از دامنهٔ کتاب (۹۹۹۹ — T4)`);
+      if (v === null) continue;
+      if (isFracValue(v)) {
+        // W8: کسر هم همان قاعدهٔ دامنهٔ کتاب را دارد — ۰ ≤ num/den ≤ ۹۹۹۹ (مقایسهٔ ضرب‌زدوری دقیق)
+        if (v.num < 0 || v.num > 9999 * v.den) {
+          err(`${q.id} گ${OPTION_LETTERS[i]}: کسر خارج از دامنهٔ کتاب (۰..۹۹۹۹ — T4/W8)`);
+        }
+      } else if (v < 0 || v > 9999) {
+        err(`${q.id} گ${OPTION_LETTERS[i]}: عدد خارج از دامنهٔ کتاب (۹۹۹۹ — T4)`);
+      }
     }
 
     // کلید پاسخ: ابتدا فرم خام (a×b=؟)، سپس رسید ممیزی
