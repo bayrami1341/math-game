@@ -1,9 +1,9 @@
 {
   "formatVersion": "1.0",
   "cartridgeId": "KH-G2-MATH",
-  "generatedAt": "2026-10-22T09:48:42.830Z",
+  "generatedAt": "2026-10-22T12:31:52.058Z",
   "source": {
-    "file": "khshab-G2-MATH_v0.4.xlsx",
+    "file": "khshab-G2-MATH_v0.5.xlsx",
     "tool": "cartridge-converter v1.1 (چندخشابی)"
   },
   "identity": [
@@ -444,6 +444,294 @@
       "source": "پیشنهاد AI — موتور تألیف v۱.۰؛ تأیید: کتاب فیزیکی معلم — چاپ چهاردهم ۱۴۰۴ + راستی‌آزمایی عکس (شناسنامه/فهرست/پایان C205) + تأیید شفاهی معلم",
       "status": "تأییدشده",
       "note": "اسکلت موج ۱: عنوان و صفحهٔ آغاز از فهرست تصویری و صفحهٔ آغاز فصل (چاپ چهاردهم، ۱۴۰۴)؛ پایان گستره = صفحهٔ آغاز فصل بعد منهای ۱ (هر فصل ۱۸ صفحه). این ردیف لنگر فصل ۴ است؛ ردیف‌های درسی داخل فصل در موج عمق‌کاوی با شناسه‌های همین باند ساخته می‌شوند. موتور فعلی بازی ضرب‌محور است؛ اجرای عمیق این فصل نیازمند توسعهٔ متوسط موتور (بسته‌های ده‌تایی/ارزش مکانی) است."
+    },
+    {
+      "id": "L-401",
+      "page": "۵۵",
+      "chapter": "۴",
+      "title": "آغاز فصل: عددهای سه رقمی (آیا می‌دانید)",
+      "objective": "دانش‌آموز بتواند کاربرد دسته‌بندی صدتایی اسکناس‌ها را در شمارش آسان توضیح دهد.",
+      "vocabulary": "صدتایی، بسته، اسکناس",
+      "activityType": "آغاز فصل: آیا می‌دانید + گفت‌وگوی کلاسی",
+      "visual": "نوع: M_BUNDLES؛ صدتایی:۱؛ ده‌تایی:۰؛ تک:۰؛ رنگ: آبی؛ پرسش: «یک بستهٔ صدتایی چند تایی است؟»",
+      "practicePotential": "کم",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 55 / PDF 61 (چاپ چهاردهم ۱۴۰۴)؛ صفحهٔ آغاز فصل فاقد شمارهٔ پاصفحه است."
+    },
+    {
+      "id": "L-402",
+      "page": "۵۶",
+      "chapter": "۴",
+      "title": "معرّفی پول — ساختن عدد صد (فعّالیت + کار در کلاس)",
+      "objective": "دانش‌آموز بتواند از کنار هم گذاشتن ۱۰ دستهٔ ده‌تایی یا ۹۹ و ۱ یکی، عدد ۱۰۰ را بسازد.",
+      "vocabulary": "صد، دستهٔ ده‌تایی، مربّع",
+      "activityType": "فعّالیت دو نفره + کار در کلاس: ساخت ۱۰۰ و الگوی مربعی",
+      "visual": "نوع: M_BUNDLES؛ ده‌تایی:۱۰؛ تک:۰؛ رنگ: سبز؛ پرسش: «۱۰ دستهٔ ده‌تایی کنار هم چه عددی می‌سازد؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 56 / PDF 62؛ تطابق پاصفحه تایید شد."
+    },
+    {
+      "id": "L-403",
+      "page": "۵۷",
+      "chapter": "۴",
+      "title": "فعّالیت سکّه‌ها + الگویابی کن",
+      "objective": "دانش‌آموز بتواند برابری سکّه‌های ۱ ریالی با سکّه‌های ۱۰ ریالی را حساب کند و الگوهای ۴، ۳ و ۷تایی را ادامه دهد.",
+      "vocabulary": "ریال، سکّه، الگو",
+      "activityType": "فعّالیت برابری سکه‌ها + جعبهٔ الگویابی کن",
+      "visual": "نوع: M_MONEY؛ سکهٔ ۱۰ریالی:۱۰؛ سکهٔ ۱ریالی:۰؛ رنگ: زرد؛ پرسش: «۱۰ سکهٔ ۱۰ ریالی چند ریال می‌شود؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1069، Q-1070، Q-1071، Q-1072",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "شاهد کراپ ۱۵۰ DPI در EV-CROP150-P063-01 و EV-CROP150-P063-02 (ص چاپی 57 / PDF 63)."
+    },
+    {
+      "id": "L-404",
+      "page": "۵۸",
+      "chapter": "۴",
+      "title": "تمرین + کامل کن (محور تا ۱۰۰، سکّه‌ها و ساعت)",
+      "objective": "دانش‌آموز بتواند جمع و تفریق‌های مکمل ۱۰۰، ارزش دسته‌های سکه و زمان بعد از ساعت داده‌شده را بیابد.",
+      "vocabulary": "محور، ریال، دقیقه، ساعت",
+      "activityType": "تمرین (۳ مورد) + کامل کن (ساعت)",
+      "visual": "نوع: M_NUMBERLINE؛ از:۰؛ تا:۱۰۰؛ پرش:۱۰؛ جهت: چپ‌به‌راست؛ رنگ: آبی؛ پرسش: «پس از ۷۰ با سه پرش ده‌تایی به چند می‌رسیم؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 58 / PDF 64؛ دسته‌های سکه: ۳۰، ۵۰، ۵۳ و ۱۰۰ ریال."
+    },
+    {
+      "id": "L-405",
+      "page": "۵۹",
+      "chapter": "۴",
+      "title": "معرّفی عددهای سه رقمی — فعّالیت",
+      "objective": "دانش‌آموز بتواند عدد سه‌رقمی را با دسته، چرتکه و جدول ارزش مکانی بسازد و به رقم و حروف بنویسد.",
+      "vocabulary": "صدگان، دهگان، یکان، چرتکه",
+      "activityType": "فعّالیت کلاسی و دونفره با دستهٔ صدتایی، چرتکه و جدول ص-د-ی",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۲؛ دهگان:۳؛ یکان:۱؛ رنگ: سبز و آبی؛ پرسش: «این جدول چه عددی را نشان می‌دهد؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1073، Q-1074، Q-1075، Q-1076",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 59 / PDF 65؛ تطابق پاصفحه ۵۹ تأیید شد."
+    },
+    {
+      "id": "L-406",
+      "page": "۶۰",
+      "chapter": "۴",
+      "title": "کار در کلاس (جدول صدگان، دهگان و یکان)",
+      "objective": "دانش‌آموز بتواند عدد متناظر با شکل دسته‌ها و سکه‌ها را در جدول ارزش مکانی بنویسد.",
+      "vocabulary": "یکان، دهگان، صدگان، جدول",
+      "activityType": "کار در کلاس: خواندن ۴ شکل بسته و سکه در جدول ارزش مکانی",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۳؛ دهگان:۰؛ یکان:۴؛ رنگ: سبز و زرد؛ پرسش: «عددی با ۳ صدتایی و ۴ یکی چیست؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 60 / PDF 66؛ شامل صفر در دهگان و یکان."
+    },
+    {
+      "id": "L-407",
+      "page": "۶۱",
+      "chapter": "۴",
+      "title": "تمرین + خلّاق باش (رقم، حروف و باز کردن عدد سه‌رقمی)",
+      "objective": "دانش‌آموز بتواند عدد سه‌رقمی را بین رقم، حروف و صورت گسترده تبدیل کند و سکهٔ ۲۵۰ ریالی را خرد کند.",
+      "vocabulary": "حروف، رقم، سکّه، کاشی‌کاری",
+      "activityType": "تمرین (۵ مورد) + خلّاق باش (رنگ‌آمیزی کاشی شش‌ضلعی با ۴ رنگ)",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۵؛ دهگان:۶؛ یکان:۴؛ رنگ: آبی و نارنجی؛ پرسش: «صورت گستردهٔ ۵۶۴ چیست؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1077، Q-1078، Q-1079، Q-1080",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 61 / PDF 67؛ تطابق پاصفحه ۶۱ تأیید شد."
+    },
+    {
+      "id": "L-408",
+      "page": "۶۲",
+      "chapter": "۴",
+      "title": "حلّ مسئله + الگویابی کن (کارت‌های رقم و الگوهای هندسی)",
+      "objective": "دانش‌آموز بتواند همهٔ عددهای سه‌رقمی ممکن با سه کارت رقم (با و بدون صفر) را بسازد و علت تفاوت تعداد حالت‌ها را بگوید.",
+      "vocabulary": "کارت، سه رقمی، الگو، کاشی",
+      "activityType": "حلّ مسئله (کارت‌های ۲،۳،۵ و ۹،۰،۷) + الگویابی کن (الگوی مثلثی و مربعی)",
+      "visual": "نوع: M_PATTERN؛ کارت‌ها:۹،۰،۷؛ تعداد_حالت:۴؛ رنگ: آبی؛ پرسش: «چند عدد سه‌رقمی با کارت‌های ۹ و ۰ و ۷ ساخته می‌شود؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 62 / PDF 68؛ تطابق پاصفحه ۶۲ تأیید شد."
+    },
+    {
+      "id": "L-409",
+      "page": "۶۳",
+      "chapter": "۴",
+      "title": "حذف حالت‌های نامطلوب + کامل کن (زمان بعد از ساعت)",
+      "objective": "دانش‌آموز بتواند از میان عددهای سه‌رقمی ساخته‌شده حالت‌های سازگار با شرط مسئله را برگزیند.",
+      "vocabulary": "نامطلوب، کوچک‌ترین، ربع، نیم ساعت",
+      "activityType": "حلّ مسئله به روش حذف حالت‌های نامطلوب + کامل کن (ساعت دیجیتال و عقربه‌ای)",
+      "visual": "نوع: M_CLOCK_TIME؛ ساعت:۲؛ دقیقه:۲۵؛ رنگ: آبی؛ پرسش: «نیم ساعت بعد چه ساعتی است؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 63 / PDF 69؛ تطابق پاصفحه ۶۳ تأیید شد."
+    },
+    {
+      "id": "L-410",
+      "page": "۶۴",
+      "chapter": "۴",
+      "title": "تقریب اعداد سه رقمی — فعّالیت (گام‌های ده‌تایی و صدتایی)",
+      "objective": "دانش‌آموز بتواند با افزودن پی‌درپی دسته‌های ده‌تایی یا صدتایی الگوی عددی بسازد و عددها را روی محور صدتایی نشان دهد.",
+      "vocabulary": "ارزش مکانی، چرتکه، محور، صدتایی",
+      "activityType": "فعّالیت با بسته، چرتکه و محور اعداد صدتایی تا ۹۰۰",
+      "visual": "نوع: M_NUMBERLINE؛ از:۱۰۰؛ تا:۹۰۰؛ پرش:۱۰۰؛ جهت: چپ‌به‌راست؛ رنگ: آبی؛ پرسش: «سه پرش صدتایی بعد از ۴۰۰ کدام عدد است؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1081، Q-1082، Q-1083، Q-1084",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 64 / PDF 70؛ تطابق پاصفحه ۶۴ تأیید شد."
+    },
+    {
+      "id": "L-411",
+      "page": "۶۵",
+      "chapter": "۴",
+      "title": "کار در کلاس + تقریب بزن (شمارش و تقریب با حذف رقم)",
+      "objective": "دانش‌آموز بتواند عددنویسی سه‌رقمی را با گام ۱، ۱۰ و ۱۰۰ ادامه دهد و تقریب عدد سه‌رقمی را با حذف یکان یا دهگان و یکان بنویسد.",
+      "vocabulary": "تقریبی، حذف رقم، صفر",
+      "activityType": "کار در کلاس (۴ دنباله) + جعبهٔ تقریب بزن",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۷؛ دهگان:۳؛ یکان:۰؛ رنگ: آبی و خاکستری؛ پرسش: «با حذف یکان از ۷۳۱ چه عددی می‌ماند؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1085، Q-1086، Q-1087، Q-1088",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "شاهد کراپ ۱۵۰ DPI در EV-CROP150-P071-01 (ص چاپی 65 / PDF 71): تقریب با حذف رقم نه گردکردن مرسوم."
+    },
+    {
+      "id": "L-412",
+      "page": "۶۶",
+      "chapter": "۴",
+      "title": "تمرین + خلّاق باش (جدول ده‌تایی تا ۱۰۰۰ و تقارن دوجهته)",
+      "objective": "دانش‌آموز بتواند جدول اعداد ۱۰ تا ۱۰۰۰ را کامل کند و تقارن افقی و عمودی شکل را رنگ بزند.",
+      "vocabulary": "جدول اعداد، در حدود، تقارن افقی، تقارن عمودی",
+      "activityType": "تمرین (جدول ۱۰×۱۰ تا ۱۰۰۰ و تخمین تصویری) + خلّاق باش (تقارن)",
+      "visual": "نوع: M_CHART؛ ردیف:۱۰؛ ستون:۱۰؛ گام:۱۰؛ رنگ: سبز؛ پرسش: «آخرین خانهٔ جدول ده‌تایی چه عددی است؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 66 / PDF 72؛ تطابق پاصفحه ۶۶ تأیید شد."
+    },
+    {
+      "id": "L-413",
+      "page": "۶۷",
+      "chapter": "۴",
+      "title": "آمادگی برای جمع و تفریق — فعّالیت",
+      "objective": "دانش‌آموز بتواند جمع و تفریق در همسایگی عدد ۱۰۰ را با جدول ۸۱ تا ۱۱۰ و جمع و تفریق صدتایی‌ها را ذهنی انجام دهد.",
+      "vocabulary": "صدتایی، رو به جلو، رو به عقب، ذهنی",
+      "activityType": "فعّالیت: جدول اتوبوسی ۸۱ تا ۱۱۰، عبور از مرز ۱۰۰ و صدتایی‌های مضرب ۱۰۰",
+      "visual": "نوع: M_CHART؛ ردیف:۳؛ ستون:۱۰؛ شروع:۸۱؛ پایان:۱۱۰؛ رنگ: زرد و آبی؛ پرسش: «۶ خانه بعد از ۹۸ در جدول کدام عدد است؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-1089، Q-1090، Q-1091، Q-1092",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 67 / PDF 73؛ تطابق پاصفحه ۶۷ تأیید شد."
+    },
+    {
+      "id": "L-414",
+      "page": "۶۸",
+      "chapter": "۴",
+      "title": "کار در کلاس (جمع و تفریق روی محور صدتایی و محور ۹۰ تا ۱۰۹)",
+      "objective": "دانش‌آموز بتواند جمع و تفریق مضرب‌های صد و عبور از مرز صد را روی محور و به صورت ذهنی حساب کند.",
+      "vocabulary": "محور، صدتایی، ذهنی",
+      "activityType": "کار در کلاس (۳ مورد): محور ۰ تا ۹۰۰، محور ۹۰ تا ۱۰۹ و محاسبهٔ ذهنی",
+      "visual": "نوع: M_NUMBERLINE؛ از:۹۰؛ تا:۱۰۹؛ پرش:۱؛ جهت: چپ‌به‌راست؛ رنگ: آبی؛ پرسش: «۹ واحد عقب‌تر از ۱۰۷ روی محور چند است؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 68 / PDF 74؛ تطابق پاصفحه ۶۸ تأیید شد."
+    },
+    {
+      "id": "L-415",
+      "page": "۶۹",
+      "chapter": "۴",
+      "title": "تمرین + خلّاق باش (مسئله‌های امتیاز، تقریب صدتایی و ترکیب سکه)",
+      "objective": "دانش‌آموز بتواند مسئله‌های افزایش/کاهش امتیاز در مرز صد، جمع و تفریق تقریبی با حذف رقم و نزدیکی به دهگان را حل کند.",
+      "vocabulary": "امتیاز، تقریبی، نزدیک‌تر، ترکیب سکه",
+      "activityType": "تمرین (۵ مورد) + خلّاق باش (ساختن ۳۰۰ ریال با سکه‌های ۱۰۰ و ۵۰ ریالی)",
+      "visual": "نوع: M_NUMBERLINE؛ از:۳۷۰؛ تا:۳۸۰؛ نقطه:۳۷۲؛ رنگ: آبی و قرمز؛ پرسش: «عدد ۳۷۲ به کدام سر محور نزدیک‌تر است؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 69 / PDF 75؛ تطابق پاصفحه ۶۹ تأیید شد."
+    },
+    {
+      "id": "L-416",
+      "page": "۷۰",
+      "chapter": "۴",
+      "title": "مرور فصل + فرهنگ نوشتن + تمرین",
+      "objective": "دانش‌آموز بتواند قاعدهٔ الگوی صدتایی را توضیح دهد و عدد سکه‌ها، چرتکه‌ها و کارت‌های رقم را بنویسد.",
+      "vocabulary": "الگوی عددی، چرتکه، کارت رقم",
+      "activityType": "مرور فصل: فرهنگ نوشتن + تمرین‌های ۱ تا ۳",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۷؛ دهگان:۵؛ یکان:۲؛ رنگ: آبی؛ پرسش: «بزرگ‌ترین عدد با کارت‌های ۲ و ۵ و ۷ چیست؟»",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 70 / PDF 76؛ روبان زرد مرور فصل بالای صفحه."
+    },
+    {
+      "id": "L-417",
+      "page": "۷۱",
+      "chapter": "۴",
+      "title": "ادامهٔ مرور فصل (تمرین‌های ۴ تا ۸)",
+      "objective": "دانش‌آموز بتواند عدد سه‌رقمی شرط‌دار بسازد، نزدیکی به دهگان را تشخیص دهد و عدد را به صورت بازشده بنویسد.",
+      "vocabulary": "صورت بازشده، نزدیک‌تر، یکان، دهگان",
+      "activityType": "ادامهٔ مرور فصل: تمرین‌های ۴ تا ۸",
+      "visual": "نوع: M_PLACEVALUE؛ صدگان:۲؛ دهگان:۰؛ یکان:۵؛ رنگ: سبز؛ پرسش: «صورت گستردهٔ ۲۰۵ کدام است؟»",
+      "practicePotential": "بالا",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 71 / PDF 77؛ تطابق پاصفحه ۷۱ تأیید شد."
+    },
+    {
+      "id": "L-418",
+      "page": "۷۲",
+      "chapter": "۴",
+      "title": "معمّا + فرهنگ خواندن (پنتومینوهای ۵ مربعی و تاریخچهٔ پول)",
+      "objective": "دانش‌آموز بتواند شکل‌های متشکل از ۵ مربع برابر را بدون تکرار دوران‌یافته رسم کند و علت پیدایش پول را بخواند.",
+      "vocabulary": "قطعه، مربّع مساوی، چرخیده، کالا، سکه",
+      "activityType": "معمّا (۱۲ قطعهٔ ۵ مربعی روی صفحهٔ شطرنجی) + فرهنگ خواندن",
+      "visual": "—",
+      "practicePotential": "کم",
+      "engineCompat": "خارج از موتور",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "مشاهدهٔ مستقیم C205.pdf ص چاپی 72 / PDF 78؛ تطابق پاصفحه ۷۲ تأیید شد."
     },
     {
       "id": "L-500",
@@ -941,6 +1229,32 @@
       "source": "پیشنهاد AI — موتور تألیف v۱.۰",
       "status": "نیاز به تأیید",
       "note": "پیشنهاد تشخیصی فصل ۲؛ در classifyAttempt فعلی (ضرب‌محور) پیاده نشده؛ نیازمند تأیید معلم و توسعهٔ موتور."
+    },
+    {
+      "code": "E_UNIT_VALUE_CONFUSION",
+      "nameFa": "خلط تعداد بسته/سکه با ارزش ریالی یا مکانی",
+      "category": "مفهومی",
+      "description": "تعداد سکه، مهره یا دسته را بدون ضرب در ارزش واحد (۱۰ یا ۱۰۰) با خودِ ارزش برابر می‌گیرد یا به ستون نادرست می‌افزاید.",
+      "behavioralSignal": "۴ سکهٔ ۱۰ ریالی و ۵ سکهٔ ۱ ریالی را ۹ ریال می‌نویسد.",
+      "questionPattern": "تبدیل تعداد سکه یا بستهٔ ده/صدتایی به ارزش کل و برعکس",
+      "intervention": "نمایش هم‌زمان کارت تعداد دسته و کارت ارزش ریالی/مکانی در جدول ص-د-ی.",
+      "priority": "بالا",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "پیشنهاد تشخیصی فصل ۴ (شاهد ص ۵۷ تا ۶۱ کتاب C205.pdf)؛ همگام‌سازی‌شده با errors.js؛ نیازمند حکم معلم."
+    },
+    {
+      "code": "E_APPROX_EXACT_CONFUSION",
+      "nameFa": "نوشتن مقدار دقیق به‌جای مقدار تقریبی",
+      "category": "راهبردی",
+      "description": "در پرسش تقریب (حذف رقم یا نزدیک‌ترین دهگان)، به‌جای تقریب‌زدن، خودِ عدد یا حاصل دقیق را انتخاب می‌کند.",
+      "behavioralSignal": "تقریب ۶۳۴ با حذف یکان را ۶۳۴ می‌نویسد یا ۴۷+۲۱ تقریبی را ۶۸ می‌گیرد.",
+      "questionPattern": "تقریب عدد دو/سه‌رقمی در حضور گزینهٔ دقیق",
+      "intervention": "تفکیک دو مرحله روی کارت: اول تبدیل به عدد رُند (با صفر)، سپس محاسبه.",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "پیشنهاد تشخیصی فصل‌های ۲ و ۴ (شاهد ص ۳۳ و ۶۵ کتاب C205.pdf)؛ همگام‌سازی‌شده با errors.js؛ نیازمند حکم معلم."
     }
   ],
   "questionBank": [
@@ -3459,6 +3773,894 @@
       "note": "ضد J12 — کار دفترچه‌ای (لاتین): 89~90;51~50;90-50=40; independently checked: answer=40; wrong=[(30, 'E_ROUND_NEAREST'), (50, 'E_ROUND_NEAREST'), (38, 'E_ROUND_NEAREST')]. لنگر ص 34 / PDF 40؛ پرسش خودساخته، نه نقل کتاب.",
       "math": null,
       "answerValue": 40
+    },
+    {
+      "id": "Q-1069",
+      "anchorId": "L-403",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "ارزش ۶۰ سکّهٔ ۱ ریالی با ارزش چند سکّهٔ ۱۰ ریالی برابر است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶",
+        "۶۰",
+        "۵",
+        "۷۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_UNIT_VALUE_CONFUSION؛ ج→E_DOUBLE_OFF؛ د→E_ADD_CONFUSION",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 60 // 10 = 6; independently checked: answer=6; wrong=[(60, 'E_UNIT_VALUE_CONFUSION'), (5, 'E_DOUBLE_OFF'), (70, 'E_ADD_CONFUSION')]. لنگر ص 57 / PDF 63 (EV-CROP150-P063-01)؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 6
+    },
+    {
+      "id": "Q-1070",
+      "anchorId": "L-403",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "الگوی شمارش ۷تایی را ادامه دهید: ۷، ۱۴، ۲۱، … عدد بعدی چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۲۷",
+        "۲۸",
+        "۸۲",
+        "۱۴"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_DOUBLE_OFF؛ ج→E_PLACE_SWAP؛ د→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 21 + 7 = 28; independently checked: answer=28; wrong=[(27, 'E_DOUBLE_OFF'), (82, 'E_PLACE_SWAP'), (14, 'E_SUB_CONFUSION')]. لنگر ص 57 / PDF 63 (EV-CROP150-P063-02)؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 28
+    },
+    {
+      "id": "Q-1071",
+      "anchorId": "L-403",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "۴ سکّهٔ ۱۰ ریالی و ۵ سکّهٔ ۱ ریالی روی هم چند ریال می‌شوند؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۹",
+        "۵۴",
+        "۴۵",
+        "۴۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_UNIT_VALUE_CONFUSION؛ ب→E_PLACE_SWAP؛ د→E_ZERO_PLACE_MISS",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ZERO_PLACE_MISS"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 4 * 10 + 5 = 45; independently checked: answer=45; wrong=[(9, 'E_UNIT_VALUE_CONFUSION'), (54, 'E_PLACE_SWAP'), (40, 'E_ZERO_PLACE_MISS')]. لنگر ص 57 / PDF 63؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 45
+    },
+    {
+      "id": "Q-1072",
+      "anchorId": "L-403",
+      "domain": "SIDE",
+      "cpa": "علامتی",
+      "prompt": "در الگوی ۳، ۶، ۹، ۱۲، … پنجمین عدد کدام است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۴",
+        "۵۱",
+        "۹",
+        "۱۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_DOUBLE_OFF؛ ب→E_PLACE_SWAP؛ ج→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_DOUBLE_OFF"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 12 + 3 = 15; independently checked: answer=15; wrong=[(14, 'E_DOUBLE_OFF'), (51, 'E_PLACE_SWAP'), (9, 'E_SUB_CONFUSION')]. لنگر ص 57 / PDF 63؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 15
+    },
+    {
+      "id": "Q-1073",
+      "anchorId": "L-405",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "عددی با ۳ دستهٔ صدتایی، ۲ دستهٔ ده‌تایی و ۶ یکی ساخته شده است؛ آن عدد چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۲۶",
+        "۳۶۲",
+        "۱۱",
+        "۳۲۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_PLACE_SWAP؛ ج→E_UNIT_VALUE_CONFUSION؛ د→E_ZERO_PLACE_MISS",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ZERO_PLACE_MISS"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 3 * 100 + 2 * 10 + 6 = 326; independently checked: answer=326; wrong=[(362, 'E_PLACE_SWAP'), (11, 'E_UNIT_VALUE_CONFUSION'), (320, 'E_ZERO_PLACE_MISS')]. لنگر ص 59 / PDF 65؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 326
+    },
+    {
+      "id": "Q-1074",
+      "anchorId": "L-405",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "الگوی صدتایی را ادامه دهید: ۲۰۰، ۳۰۰، ۴۰۰، … عدد بعدی چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۰",
+        "۵۰۰",
+        "۳۰۰",
+        "۴۱۰"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ج→E_SUB_CONFUSION؛ د→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 400 + 100 = 500; independently checked: answer=500; wrong=[(50, 'E_ZERO_PLACE_MISS'), (300, 'E_SUB_CONFUSION'), (410, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 59 / PDF 65؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 500
+    },
+    {
+      "id": "Q-1075",
+      "anchorId": "L-405",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "در چرتکه ۴ مهره در صدگان، ۰ مهره در دهگان و ۷ مهره در یکان است؛ چه عددی نشان داده شده؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۷",
+        "۷۰۴",
+        "۴۰۷",
+        "۱۱"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_PLACE_SWAP؛ د→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "د",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 4 * 100 + 0 * 10 + 7 = 407; independently checked: answer=407; wrong=[(47, 'E_ZERO_PLACE_MISS'), (704, 'E_PLACE_SWAP'), (11, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 59 / PDF 65؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 407
+    },
+    {
+      "id": "Q-1076",
+      "anchorId": "L-405",
+      "domain": "SIDE",
+      "cpa": "علامتی",
+      "prompt": "عدد «ششصد و چهل و سه» به رقم کدام است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۳۴",
+        "۶۴",
+        "۱۳",
+        "۶۴۳"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_PLACE_SWAP؛ ب→E_ZERO_PLACE_MISS؛ ج→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 6 * 100 + 4 * 10 + 3 = 643; independently checked: answer=643; wrong=[(634, 'E_PLACE_SWAP'), (64, 'E_ZERO_PLACE_MISS'), (13, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 59 / PDF 65؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 643
+    },
+    {
+      "id": "Q-1077",
+      "anchorId": "L-407",
+      "domain": "CORE",
+      "cpa": "تصویری",
+      "prompt": "در شکل جدول ارزش مکانی با ۵ صفحهٔ صدتایی، ۷ میلهٔ ده‌تایی و ۴ مهرهٔ یکی، کدام عدد سه‌رقمی نشان داده شده است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۷۴",
+        "۵۴۷",
+        "۵۷",
+        "۵۷۳"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_PLACE_SWAP؛ ج→E_ZERO_PLACE_MISS؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 500 + 70 + 4 = 574; independently checked: answer=574; wrong=[(547, 'E_PLACE_SWAP'), (57, 'E_ZERO_PLACE_MISS'), (573, 'E_DOUBLE_OFF')]. لنگر ص 61 / PDF 67؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 574
+    },
+    {
+      "id": "Q-1078",
+      "anchorId": "L-407",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "در عدد ۸۰۹، ارزش مکانی رقم ۸ چند است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۸",
+        "۸۰۰",
+        "۸۰",
+        "۹۰۸"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_UNIT_VALUE_CONFUSION؛ ج→E_ZERO_PLACE_MISS؛ د→E_PLACE_SWAP",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_PLACE_SWAP"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 8 * 100 = 800; independently checked: answer=800; wrong=[(8, 'E_UNIT_VALUE_CONFUSION'), (80, 'E_ZERO_PLACE_MISS'), (908, 'E_PLACE_SWAP')]. لنگر ص 61 / PDF 67؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 800
+    },
+    {
+      "id": "Q-1079",
+      "anchorId": "L-407",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "۳ سکّهٔ ۱۰۰ ریالی و ۴ سکّهٔ ۱۰ ریالی روی هم چند ریال است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۴",
+        "۴۳۰",
+        "۳۴۰",
+        "۷"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_PLACE_SWAP؛ د→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "د",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 3 * 100 + 4 * 10 = 340; independently checked: answer=340; wrong=[(34, 'E_ZERO_PLACE_MISS'), (430, 'E_PLACE_SWAP'), (7, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 61 / PDF 67؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 340
+    },
+    {
+      "id": "Q-1080",
+      "anchorId": "L-407",
+      "domain": "SIDE",
+      "cpa": "علامتی",
+      "prompt": "عدد «چهارصد و پنج» به رقم چگونه نوشته می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۴۵",
+        "۵۰۴",
+        "۹",
+        "۴۰۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_PLACE_SWAP؛ ج→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_PLACE_SWAP"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 4 * 100 + 0 * 10 + 5 = 405; independently checked: answer=405; wrong=[(45, 'E_ZERO_PLACE_MISS'), (504, 'E_PLACE_SWAP'), (9, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 61 / PDF 67؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 405
+    },
+    {
+      "id": "Q-1081",
+      "anchorId": "L-410",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "به عدد ۲۳۰ یک بستهٔ ده‌تایی اضافه کنیم؛ چه عددی به دست می‌آید؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۲۴۰",
+        "۳۳۰",
+        "۲۲۰",
+        "۲۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_UNIT_VALUE_CONFUSION؛ ج→E_SUB_CONFUSION؛ د→E_ZERO_PLACE_MISS",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ZERO_PLACE_MISS"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 230 + 10 = 240; independently checked: answer=240; wrong=[(330, 'E_UNIT_VALUE_CONFUSION'), (220, 'E_SUB_CONFUSION'), (24, 'E_ZERO_PLACE_MISS')]. لنگر ص 64 / PDF 70؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 240
+    },
+    {
+      "id": "Q-1082",
+      "anchorId": "L-410",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "الگوی ده‌تایی زیر را ادامه دهید: ۱۳۰، ۱۴۰، ۱۵۰، … عدد بعدی چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۶",
+        "۱۶۰",
+        "۲۵۰",
+        "۱۵۹"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ج→E_UNIT_VALUE_CONFUSION؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 150 + 10 = 160; independently checked: answer=160; wrong=[(16, 'E_ZERO_PLACE_MISS'), (250, 'E_UNIT_VALUE_CONFUSION'), (159, 'E_DOUBLE_OFF')]. لنگر ص 64 / PDF 70؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 160
+    },
+    {
+      "id": "Q-1083",
+      "anchorId": "L-410",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "روی چرتکه عدد ۳۱۵ است. اگر ۲ مهره به میلهٔ صدگان اضافه کنیم، عدد تازه چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۳۵",
+        "۱۱۵",
+        "۵۱۵",
+        "۵۱۴"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_UNIT_VALUE_CONFUSION؛ ب→E_SUB_CONFUSION؛ د→E_DOUBLE_OFF",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_DOUBLE_OFF"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 315 + 200 = 515; independently checked: answer=515; wrong=[(335, 'E_UNIT_VALUE_CONFUSION'), (115, 'E_SUB_CONFUSION'), (514, 'E_DOUBLE_OFF')]. لنگر ص 64 / PDF 70؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 515
+    },
+    {
+      "id": "Q-1084",
+      "anchorId": "L-410",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "روی محور صدتایی، ۳۰۰ واحد بعد از ۴۰۰ چه عددی قرار دارد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۰",
+        "۱۰۰",
+        "۴۳۰",
+        "۷۰۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_ZERO_PLACE_MISS؛ ب→E_SUB_CONFUSION؛ ج→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 400 + 300 = 700; independently checked: answer=700; wrong=[(70, 'E_ZERO_PLACE_MISS'), (100, 'E_SUB_CONFUSION'), (430, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 64 / PDF 70؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 700
+    },
+    {
+      "id": "Q-1085",
+      "anchorId": "L-411",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "با حذف رقم یکان و قرار دادن صفر به‌جای آن، تقریب عدد ۶۳۴ چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۳۰",
+        "۶۳۴",
+        "۶۳",
+        "۴۳۶"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_APPROX_EXACT_CONFUSION؛ ج→E_ZERO_PLACE_MISS؛ د→E_PLACE_SWAP",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_APPROX_EXACT_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_PLACE_SWAP"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): (634 // 10) * 10 = 630; independently checked: answer=630; wrong=[(634, 'E_APPROX_EXACT_CONFUSION'), (63, 'E_ZERO_PLACE_MISS'), (436, 'E_PLACE_SWAP')]. لنگر ص 65 / PDF 71 (EV-CROP150-P071-01)؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 630
+    },
+    {
+      "id": "Q-1086",
+      "anchorId": "L-411",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "با حذف رقم‌های یکان و دهگان و قرار دادن صفر، تقریب عدد ۲۴۷ چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۲۴۷",
+        "۲۰۰",
+        "۲۰",
+        "۷۴۲"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_APPROX_EXACT_CONFUSION؛ ج→E_ZERO_PLACE_MISS؛ د→E_PLACE_SWAP",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_APPROX_EXACT_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_PLACE_SWAP"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): (247 // 100) * 100 = 200; independently checked: answer=200; wrong=[(247, 'E_APPROX_EXACT_CONFUSION'), (20, 'E_ZERO_PLACE_MISS'), (742, 'E_PLACE_SWAP')]. لنگر ص 65 / PDF 71 (EV-CROP150-P071-01)؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 200
+    },
+    {
+      "id": "Q-1087",
+      "anchorId": "L-411",
+      "domain": "DEPTH",
+      "cpa": "مجسم",
+      "prompt": "در شمارش یکی‌یکی رو به جلو، سومین عدد بعد از ۱۰۸ چیست؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۰۵",
+        "۱۱۰",
+        "۱۱۱",
+        "۱۳۸"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_SUB_CONFUSION؛ ب→E_SKIP_UNDERCOUNT؛ د→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_SKIP_UNDERCOUNT"
+        },
+        {
+          "letter": "د",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 108 + 3 = 111; independently checked: answer=111; wrong=[(105, 'E_SUB_CONFUSION'), (110, 'E_SKIP_UNDERCOUNT'), (138, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 65 / PDF 71؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 111
+    },
+    {
+      "id": "Q-1088",
+      "anchorId": "L-411",
+      "domain": "SIDE",
+      "cpa": "تصویری",
+      "prompt": "عدد ۳۷۲ روی محور به کدام دهگان نزدیک‌تر است: ۳۷۰ یا ۳۸۰؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۸۰",
+        "۳۷۲",
+        "۳۷",
+        "۳۷۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_ROUND_NEAREST؛ ب→E_APPROX_EXACT_CONFUSION؛ ج→E_ZERO_PLACE_MISS",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ROUND_NEAREST"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_APPROX_EXACT_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 370; independently checked: answer=370; wrong=[(380, 'E_ROUND_NEAREST'), (372, 'E_APPROX_EXACT_CONFUSION'), (37, 'E_ZERO_PLACE_MISS')]. لنگر ص 69 و 71 / PDF 75,77؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 370
+    },
+    {
+      "id": "Q-1089",
+      "anchorId": "L-413",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "حاصل جمع ۲۰۰ + ۵۰۰ چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۰۰",
+        "۷۰",
+        "۳۰۰",
+        "۷"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ZERO_PLACE_MISS؛ ج→E_SUB_CONFUSION؛ د→E_UNIT_VALUE_CONFUSION",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SUB_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "E_UNIT_VALUE_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 200 + 500 = 700; independently checked: answer=700; wrong=[(70, 'E_ZERO_PLACE_MISS'), (300, 'E_SUB_CONFUSION'), (7, 'E_UNIT_VALUE_CONFUSION')]. لنگر ص 67 / PDF 73؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 700
+    },
+    {
+      "id": "Q-1090",
+      "anchorId": "L-413",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "حاصل جمع ۹۶ + ۷ با شمارش رو به جلو چند است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۹۳",
+        "۱۰۳",
+        "۱۳",
+        "۸۹"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ج→E_ZERO_PLACE_MISS؛ د→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 96 + 7 = 103; independently checked: answer=103; wrong=[(93, 'E_CARRY_MISS'), (13, 'E_ZERO_PLACE_MISS'), (89, 'E_SUB_CONFUSION')]. لنگر ص 67 / PDF 73؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 103
+    },
+    {
+      "id": "Q-1091",
+      "anchorId": "L-413",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "حاصل تفریق ۱۰۴ − ۶ با حرکت رو به عقب چند می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۱۰",
+        "۱۰۸",
+        "۹۸",
+        "۸۹"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ADD_CONFUSION؛ ب→E_BORROW_MISS؛ د→E_PLACE_SWAP",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_BORROW_MISS"
+        },
+        {
+          "letter": "د",
+          "claim": "E_PLACE_SWAP"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 104 - 6 = 98; independently checked: answer=98; wrong=[(110, 'E_ADD_CONFUSION'), (108, 'E_BORROW_MISS'), (89, 'E_PLACE_SWAP')]. لنگر ص 67 / PDF 73؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 98
+    },
+    {
+      "id": "Q-1092",
+      "anchorId": "L-413",
+      "domain": "SIDE",
+      "cpa": "مجسم",
+      "prompt": "در مسابقه‌ای پویا ۹۷ امتیاز داشت و ۸ امتیاز دیگر گرفت. اکنون چند امتیاز دارد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۹۵",
+        "۱۵",
+        "۸۹",
+        "۱۰۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→E_CARRY_MISS؛ ب→E_ZERO_PLACE_MISS؛ ج→E_SUB_CONFUSION",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS"
+        },
+        {
+          "letter": "ب",
+          "claim": "E_ZERO_PLACE_MISS"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SUB_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "پاسخ دقیق و تک‌گزینه‌ای؛ محاسبهٔ مستقل لاتین و علیت هر سه گزینهٔ انحرافی در یادداشت ثبت شد.",
+      "source": "پیشنهاد AI — موتور تألیف v۱.۰",
+      "status": "نیاز به تأیید",
+      "note": "ضد J12 — کار دفترچه‌ای (لاتین): 97 + 8 = 105; independently checked: answer=105; wrong=[(95, 'E_CARRY_MISS'), (15, 'E_ZERO_PLACE_MISS'), (89, 'E_SUB_CONFUSION')]. لنگر ص 69 / PDF 75؛ پرسش خودساخته، نه نقل کتاب.",
+      "math": null,
+      "answerValue": 105
     }
   ],
   "glossary": [
@@ -3579,13 +4781,13 @@
       "اطلس: E_SKIP_UNDERCOUNT پیشنهادی است ولی هم‌نام کد واقعی موتور است"
     ],
     "stats": {
-      "lessons": 44,
+      "lessons": 62,
       "lessonsConfirmed": 8,
       "atlasReal": 2,
-      "atlasProposed": 9,
-      "questions": 68,
+      "atlasProposed": 11,
+      "questions": 92,
       "questionsConfirmed": 0,
-      "questionsProposed": 68
+      "questionsProposed": 92
     },
     "gate": {
       "red": 0,
