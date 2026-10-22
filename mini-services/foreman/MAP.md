@@ -19,6 +19,7 @@
 - **CLI:** `bun scripts/blueprint.ts list|show|approve|set-status|validate`.
 - **نقشهٔ راه نسخهٔ بعدی:** `blueprints/ROADMAP-v10.3.0-beta.1.fa.md` — دو رشتهٔ اجرا A (بتا.۱: BP-008→BP-006→BP-010→BP-009) و B (پایدار: BP-007→BP-011→BP-012)؛ رانرهای آینده: `scripts/release-check.sh` (BP-010) و `scripts/run-approved.sh` (BP-011).
 - **نقشهٔ راه شیفت شب (NIGHTSHIFT v1):** `blueprints/ROADMAP-NIGHTSHIFT-v1.fa.md` — رشتهٔ N: N1=BP-007 (W8، در حال اجرا) → N2=BP-011 (رانر) → N3=BP-013 (آرنا-واچ بین‌گامی) → N4=BP-014 (پیش‌بارگذاری صبح + گزارش). ممنوعیت مطلق شب: تگ v10.3.0، شبیه‌سازی مُهر معلم، ادغام آرنا با گیت قرمز. ران‌بوک حلقهٔ اجرا در §۴ همان سند.
+- **رانر زنجیره (BP-011 — فعال):** `bash scripts/run-approved.sh dry-run|run|self-test [--bp BP-xxx]` — گیت بین‌گام (release-check) + گذار delivered→verified بعد از سبزی CI + ردِ خودکار BP-012 بدون مُهر معلم؛ قرمزی = block + توقف (کد ۱)؛ مستند: `blueprints/README.md` §موتور زنجیرهٔ اجرا.
 - گارد sync: کامیت‌های ربات با Contents API انجام می‌شود و `git pull --rebase` محلی فقط وقتی درخت تمیز است.
 
 ## ۲) تقسیم کار (قرارداد مالکیت — بخش ۹)

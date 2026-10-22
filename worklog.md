@@ -1637,3 +1637,20 @@ Stage Summary:
 - BP-007: delivered — W8 رسمی‌شده: هر سه تسک سبز، پذیرش (acceptance) هر دو بند محقق
 - قرارداد نو برای کارتریج‌های آینده: op spec ساختاریافته (مثل math.f1/f2 فعلی) → classifyW8/solveW8؛ کدهای W8 «پیشنهادی»اند تا مُهر معلم (BP-012)
 - بعدی طبق NIGHTSHIFT: N2 — BP-011 موتور زنجیرهٔ run-approved.sh
+
+---
+Task ID: BP-011 (N2 — رشتهٔ B2)
+Agent: Z.ai Code (main)
+Task: موتور زنجیرهٔ اجرا scripts/run-approved.sh — ادامهٔ خودکار نقشه‌ها به ترتیب اولویت با گیت بین‌گام
+
+Work Log:
+- T1: رانر سه‌حالته run|dry-run|self-test با فیلتر --bp؛ گاهِ بین‌گام = validate رجیستری + release-check (همان ۶ گام BP-010)؛ گذار delivered→verified پس از poll سبزی CI روی هد (API گیت‌هاب، تا ۶ دقیقه)؛ commit/push خودکار؛ block_record در قرمزی = set-status block + worklog + پوش + کد خروج ۱
+- T2: dry-run سبز — ترتیب صحیح صف بر اولویت (BP-005 تا BP-014)، بدون هیچ نوشتنی
+- T3: self-test سه‌گزاره‌ای سبز — (۱) dry-run exit ۰ (۲) SIMULATE_RED_GATE=1 → کد ۱ + BLOCK (۳) صفر جهش: SHA رجیستری و هد git دست‌نخورده
+- قاعدهٔ رد خودکار: BP-012 بدون مُهر معلم (شمارش stamps=۰) → skip مستند نه block — رانر ساختاراً نمی‌تواند انتشار پایدار را بدون مُهر انسانی جلو بکشد؛ تست عملی در dry-run: BP-012 در صف رد نخواهد شد به‌عنوان block
+- باگ میانه: صف در BP-005 (executing) با کد ۲ می‌ایستاد و به گیت نمی‌رسید — فیلتر --bp افزود شد (هم ابزار واقعی، هم مسیر self-test)
+- مستند: blueprints/README.md §موتور زنجیرهٔ اجرا + MAP کارگاه‌بان §رانر زنجیره
+
+Stage Summary:
+- BP-011: delivered — از این پس چرخهٔ «بدنه با دستِ ربات → رانر گیت+CI+وارسی → بعدی» ماشین‌شده است
+- بعدی: رانر واقعی روی BP-007 (delivered) برای نخستین وارسی خودکار، سپس N3 آرنا-واچ

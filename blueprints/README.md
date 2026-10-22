@@ -38,3 +38,20 @@ bash scripts/release-check.sh   # ۶ گام fail-closed؛ خروج ۰ = تگ م�
 ## اسکیمای وضعیت
 
 `draft → awaiting_approval → approved → executing → delivered → verified → done` (+ `blocked`/`rejected`)
+
+## ⛓️ موتور زنجیرهٔ اجرا (BP-011)
+
+```bash
+bash scripts/run-approved.sh dry-run            # ترتیب صف — بدون هیچ تغییری
+bash scripts/run-approved.sh run                # زنجیرهٔ واقعی: گیت → CI → verified → پوش → بعدی
+bash scripts/run-approved.sh run --bp BP-007    # فقط یک نقشه
+bash scripts/run-approved.sh self-test          # T3: قرمزی گیت شبیه‌سازی‌شده → توقف ایمن، صفر جهش
+```
+
+قرارداد: بدنهٔ هر نقشه با دستِ ربات/عامل اجرا و پوش می‌شود؛ رانر فقط **گیت بین‌گام** (validate رجیستری + release-check ۶گام) و **گذار delivered → verified** (پس از سبزی CI روی هد) را خودکار می‌کند و به نقشهٔ بعدی می‌رود.
+
+کدهای خروج: `0` تمیز | `1` گیت قرمز → `set-status block` + worklog + پوش + توقف | `2` بدنهٔ نقشهٔ بعدی اجرا نشده (توقف برای اجرای دستی) | `3` درخت کثیف/همگام‌سازی ناقص.
+
+قاعدهٔ رد خودکار (skip، نه block): پیش‌شرط انسانی/رشته‌ای غایب — نمونه: BP-012 فقط با مُهر واقعی معلم در `authoring/teacher-stamps.json` (شمارش ≥ ۱) + وارسی‌شدن BP-007. این یعنی رانر **هرگز** نمی‌تواند انتشار پایدار را بدون مُهر معلم به جلو بکشد.
+
+SELF-TEST سه‌گزاره‌ای ثبت‌شده (T3): (۱) dry-run تمیز exit ۰ (۲) `SIMULATE_RED_GATE=1` → کد ۱ + پیام BLOCK (۳) صفر جهش — SHA رجیستری و هد git دست‌نخورده. مسیر واقعی block از همان `set-status block` استاندارد می‌گذرد.
