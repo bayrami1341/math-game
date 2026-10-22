@@ -1,0 +1,400 @@
+{
+  "manifest_id": "WAVE-KH-G2-MATH-v0.5-CH4-PILOT",
+  "wave_id": "wave-4-pilot-chapter-4",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "snapshot_id": "master-map-C205-v2.0",
+  "snapshot_sha256": "ceaaf18bd11201a140fd519e54808e8fc7b07d57a7dde7ffc5f58b8521c21a77",
+  "pagemap_xlsx_sha256": "f0b6851986cebe211de841ca85aafb07753ab17287be1d9daafdedcec63a4822",
+  "base_cartridge_xlsx_sha256": "ad4761ba6c6720749cd2c51ddf82bee6cc78cfdb8a3399ae731bb3284640b798",
+  "output_cartridge_xlsx_sha256": "0d1979021245268f10086f9e5f0ff355f7ec4a7743b7d78e7d24945a676fdea9",
+  "converted_json_sha256": "e1ba554c923ec5814074aa85b221d5b89d8466b00cb20553b770ccbeffa0e487",
+  "generated_at_utc": "2026-10-22T10:00:25Z",
+  "gates": [
+    {
+      "gate_id": "G0_COPYRIGHT_GUARD",
+      "stage": "P0",
+      "status": "PASS",
+      "reason_code": "CLEAN_WORKSPACE",
+      "summary": "هیچ فایل PDF، تصویر کتاب یا کش قرنطینه‌نشده‌ای در مخزن وجود ندارد و قوانین .gitignore کامل است.",
+      "metrics": {
+        "checked_git_paths": 251,
+        "violation_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G6_WORKBOOK_STRUCTURE",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "WORKBOOK_STRUCTURE_VALID",
+      "summary": "ساختار ۷ شیت، ردیف‌های نگهبان، ادغام‌ها، لنگرهای S1 و کدهای اطلس بررسی شد (0 خطا).",
+      "metrics": {
+        "s1_count": 62,
+        "atlas_code_count": 20,
+        "question_count": 92
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G3_ANTI_J12",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "ANTI_J12_CLEAN",
+      "summary": "کنترل ضد J12 روی 92 سؤال اجرا شد (0 خطا).",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G4_INDEPENDENT_SOLVER",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "INDEPENDENT_SOLVER_VERIFIED",
+      "summary": "بازمحاسبهٔ مستقل صورت سؤال و ردپای لاتین روی 92 سؤال اجرا شد (0 خطا).",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G5_DISTRACTOR_CAUSALITY",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "CAUSAL_DISTRACTORS_VERIFIED",
+      "summary": "شبیه‌سازی علّی گزینه‌های انحرافی اجرا شد: 0 خطای مسدودکننده در موج جدید، 192 هشدار تشخیصی در سؤالات میراثی v0.4.",
+      "metrics": {
+        "blocking_failures": 0,
+        "legacy_diagnostic_warnings": 192
+      },
+      "issues": [
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "ب",
+          "option_value": 23,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "ج",
+          "option_value": 34,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "د",
+          "option_value": 14,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "option": "الف",
+          "option_value": 38,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "option": "ج",
+          "option_value": 49,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "الف",
+          "option_value": 21,
+          "claimed_code": "E_DOUBLE_OFF",
+          "competing_codes": [
+            "E_DOUBLE_OFF",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "ب",
+          "option_value": 16,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "د",
+          "option_value": 10,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_CARRY_MISS",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "option": "ب",
+          "option_value": 51,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "option": "ج",
+          "option_value": 62,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1005",
+          "row": 8,
+          "option": "ج",
+          "option_value": 47,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1006",
+          "row": 9,
+          "option": "ج",
+          "option_value": 83,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1007",
+          "row": 10,
+          "option": "ب",
+          "option_value": 8,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "الف",
+          "option_value": 81,
+          "claimed_code": "E_PLACE_SWAP",
+          "competing_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "ب",
+          "option_value": 91,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "ج",
+          "option_value": 82,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "ب",
+          "option_value": 35,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "ج",
+          "option_value": 12,
+          "claimed_code": "E_GROUPS",
+          "plausible_codes": [
+            "E_DOUBLE_OFF",
+            "E_PLACE_SWAP"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "د",
+          "option_value": 10,
+          "claimed_code": "E_DOUBLE_OFF",
+          "competing_codes": [
+            "E_DOUBLE_OFF",
+            "E_ZERO_PLACE_MISS"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1010",
+          "row": 13,
+          "option": "الف",
+          "option_value": 60,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1010",
+          "row": 13,
+          "option": "ج",
+          "option_value": 23,
+          "claimed_code": "E_SUB_CONFUSION",
+          "plausible_codes": [
+            "E_PLACE_SWAP"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1011",
+          "row": 14,
+          "option": "الف",
+          "option_value": 17,
+          "claimed_code": "E_DOUBLE_OFF",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        }
+      ]
+    },
+    {
+      "gate_id": "G7_TEACHER_GOVERNANCE_AND_RELEASE",
+      "stage": "P6",
+      "status": "BLOCKED",
+      "reason_code": "AWAITING_HUMAN_TEACHER_VERDICT",
+      "summary": "انتشار نهایی مسدود است (6 مانع فعال): 62 ردیف S1 زرد، 92 سؤال زرد، 13 کد خطای پیشنهادی و 29 تعارض باز در انتظار حکم معلّم.",
+      "metrics": {
+        "releasable": false,
+        "active_verdict_count": 0,
+        "invalidated_verdict_count": 0,
+        "unapproved_s1_count": 62,
+        "unapproved_question_count": 92,
+        "unapproved_error_code_count": 13,
+        "open_issue_count": 29,
+        "blocker_reasons": [
+          "OPEN_PAGE_MAP_ISSUES:29",
+          "MISSING_TEACHER_MAP_APPROVED_VERDICT",
+          "UNAPPROVED_ERROR_CODES:13",
+          "UNAPPROVED_S1_ROWS:62",
+          "UNAPPROVED_QUESTION_ROWS:92",
+          "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+        ]
+      },
+      "issues": [
+        {
+          "blocker": "OPEN_PAGE_MAP_ISSUES:29"
+        },
+        {
+          "blocker": "MISSING_TEACHER_MAP_APPROVED_VERDICT"
+        },
+        {
+          "blocker": "UNAPPROVED_ERROR_CODES:13"
+        },
+        {
+          "blocker": "UNAPPROVED_S1_ROWS:62"
+        },
+        {
+          "blocker": "UNAPPROVED_QUESTION_ROWS:92"
+        },
+        {
+          "blocker": "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+        }
+      ]
+    }
+  ],
+  "teacher_verdicts": [],
+  "releasable": false,
+  "release_blocker_reasons": [
+    "OPEN_PAGE_MAP_ISSUES:29",
+    "MISSING_TEACHER_MAP_APPROVED_VERDICT",
+    "UNAPPROVED_ERROR_CODES:13",
+    "UNAPPROVED_S1_ROWS:62",
+    "UNAPPROVED_QUESTION_ROWS:92",
+    "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+  ]
+}

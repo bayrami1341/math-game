@@ -1,0 +1,87 @@
+{
+  "observation_summary": {},
+  "open_issue_count": 29,
+  "gates": {
+    "G0_COPYRIGHT_GUARD": {
+      "status": "PASS",
+      "reason_code": "CLEAN_WORKSPACE",
+      "metrics": {
+        "checked_git_paths": 251,
+        "violation_count": 0
+      }
+    },
+    "G6_WORKBOOK_STRUCTURE": {
+      "status": "PASS",
+      "reason_code": "WORKBOOK_STRUCTURE_VALID",
+      "metrics": {
+        "s1_count": 62,
+        "atlas_code_count": 20,
+        "question_count": 92
+      }
+    },
+    "G3_ANTI_J12": {
+      "status": "PASS",
+      "reason_code": "ANTI_J12_CLEAN",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      }
+    },
+    "G4_INDEPENDENT_SOLVER": {
+      "status": "PASS",
+      "reason_code": "INDEPENDENT_SOLVER_VERIFIED",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      }
+    },
+    "G5_DISTRACTOR_CAUSALITY": {
+      "status": "PASS",
+      "reason_code": "CAUSAL_DISTRACTORS_VERIFIED",
+      "metrics": {
+        "blocking_failures": 0,
+        "legacy_diagnostic_warnings": 192
+      }
+    },
+    "G7_TEACHER_GOVERNANCE_AND_RELEASE": {
+      "status": "BLOCKED",
+      "reason_code": "AWAITING_HUMAN_TEACHER_VERDICT",
+      "metrics": {
+        "releasable": false,
+        "active_verdict_count": 0,
+        "invalidated_verdict_count": 0,
+        "unapproved_s1_count": 62,
+        "unapproved_question_count": 92,
+        "unapproved_error_code_count": 13,
+        "open_issue_count": 29,
+        "blocker_reasons": [
+          "OPEN_PAGE_MAP_ISSUES:29",
+          "MISSING_TEACHER_MAP_APPROVED_VERDICT",
+          "UNAPPROVED_ERROR_CODES:13",
+          "UNAPPROVED_S1_ROWS:62",
+          "UNAPPROVED_QUESTION_ROWS:92",
+          "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+        ]
+      }
+    }
+  },
+  "pending_teacher_review": {
+    "s1_count": 62,
+    "question_count": 92,
+    "error_codes": [
+      "E_PLACE_SWAP",
+      "E_ZERO_PLACE_MISS",
+      "E_ADD_CONFUSION",
+      "E_SUB_CONFUSION",
+      "E_DOUBLE_OFF",
+      "E_SKIP_UNDERCOUNT",
+      "E_GROUPS (پیشنهاد)",
+      "E_TABLE_NEIGHBOUR (پیشنهاد)",
+      "E_CARRY_MISS (پیشنهاد)",
+      "E_BORROW_MISS (پیشنهاد)",
+      "E_ROUND_NEAREST (پیشنهاد)",
+      "E_UNIT_VALUE_CONFUSION (پیشنهاد)",
+      "E_APPROX_EXACT_CONFUSION (پیشنهاد)"
+    ]
+  }
+}

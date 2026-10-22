@@ -65,11 +65,12 @@ async function main() {
   }
 
   const server = createServer({ service: new Service(store, { secret }), authenticate, mode, root, accounts,
-    allowedOrigins });
+    allowedOrigins, allowPreviewHosts: local });
   server.requestTimeout = 15000; server.headersTimeout = 10000;
 
   const port = Number(process.env.PORT || 9090);
-  server.listen(port, local ? '127.0.0.1' : '0.0.0.0', () => console.log(`Math Workshop v9 ${mode}: http://127.0.0.1:${port}/v9.html`));
+  const host = process.env.HOST || '0.0.0.0';
+  server.listen(port, host, () => console.log(`Math Workshop ${mode}: http://${host}:${port}/book.html`));
 }
 
 main().catch(error => { console.error(error.message); process.exitCode = 1; });

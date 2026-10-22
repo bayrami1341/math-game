@@ -1,0 +1,362 @@
+{
+  "schema_version": "1.0.0",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "total_decisions": 14,
+  "decisions": [
+    {
+      "decision_id": "DEC-P006-02",
+      "issue_id": "ISS-P006-RECONCILE",
+      "pdf_page": 6,
+      "book_page": null,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "فهرست",
+        "page_type": "فهرست",
+        "all_tabs": [
+          "فهرست"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P006-01"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P022-02",
+      "issue_id": "ISS-P022-RECONCILE",
+      "pdf_page": 22,
+      "book_page": 16,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "مرور فصل",
+        "page_type": "مرور فصل",
+        "all_tabs": [
+          "مرور فصل",
+          "فرهنگ نوشتن",
+          "تمرین"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P022-01",
+        "EV-CROP150-P022-02",
+        "EV-TEXT-FOOTER-P022"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P026-02",
+      "issue_id": "ISS-P026-RECONCILE",
+      "pdf_page": 26,
+      "book_page": 20,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "جمع و تفریق ده‌تایی",
+        "page_type": "فعالیت",
+        "all_tabs": [
+          "جمع و تفریق ده‌تایی",
+          "فعّالیت",
+          "تقریب بزن"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P026-01",
+        "EV-CROP150-P026-02",
+        "EV-TEXT-FOOTER-P026"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P027-02",
+      "issue_id": "ISS-P027-RECONCILE",
+      "pdf_page": 27,
+      "book_page": 21,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "کار در کلاس",
+        "page_type": "کار در کلاس + فعالیت",
+        "all_tabs": [
+          "کار در کلاس",
+          "فعّالیت"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P027-01",
+        "EV-CROP150-P027-02",
+        "EV-TEXT-FOOTER-P027"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P030-02",
+      "issue_id": "ISS-P030-RECONCILE",
+      "pdf_page": 30,
+      "book_page": 24,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "کار در کلاس",
+        "page_type": "کار در کلاس + فعالیت",
+        "all_tabs": [
+          "کار در کلاس",
+          "فعّالیت"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P030-01",
+        "EV-CROP150-P030-02",
+        "EV-TEXT-FOOTER-P030"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P031-02",
+      "issue_id": "ISS-P031-RECONCILE",
+      "pdf_page": 31,
+      "book_page": 25,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "کار در کلاس",
+        "page_type": "کار در کلاس + تمرین",
+        "all_tabs": [
+          "کار در کلاس",
+          "تمرین",
+          "خلاق باش"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P031-01",
+        "EV-TEXT-FOOTER-P031"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P032-02",
+      "issue_id": "ISS-P032-RECONCILE",
+      "pdf_page": 32,
+      "book_page": 26,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "حلّ مسئله",
+        "page_type": "حلّ مسئله",
+        "all_tabs": [
+          "حلّ مسئله",
+          "الگویابی کن"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P032-01",
+        "EV-CROP150-P032-02",
+        "EV-TEXT-FOOTER-P032"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P033-02",
+      "issue_id": "ISS-P033-RECONCILE",
+      "pdf_page": 33,
+      "book_page": 27,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "الگوسازی",
+        "page_type": "الگوسازی + کامل کن",
+        "all_tabs": [
+          "الگوسازی",
+          "کامل کن"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P033-01",
+        "EV-CROP150-P033-02",
+        "EV-TEXT-FOOTER-P033"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P037-02",
+      "issue_id": "ISS-P037-RECONCILE",
+      "pdf_page": 37,
+      "book_page": 31,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "جمع و تفریق دو عدد (ادامه)",
+        "page_type": "فعالیت",
+        "all_tabs": [
+          "جمع و تفریق دو عدد (ادامه)",
+          "فعّالیت"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P037-01",
+        "EV-TEXT-FOOTER-P037"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P039-01",
+      "issue_id": "ISS-P039-CHECKMARK-CONFLICT",
+      "pdf_page": 39,
+      "book_page": 33,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "تمرین",
+        "verified_claims": [
+          [
+            "59+27",
+            "54-21",
+            "60-14",
+            "23+57"
+          ],
+          {
+            "input": 25,
+            "approx_ten": 30,
+            "rule": "half_up_explicit_footnote"
+          }
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "بازبینی مستقیم کراپ ۱۵۰ DPI از فایل قرنطینه‌شدهٔ C205.pdf تناقض ستون اصلاح آرنا را برطرف کرد؛ تأیید نهایی انسانی همچنان منوط به حکم معلم است.",
+      "evidence_refs": [
+        "EV-CROP150-P039-01",
+        "EV-CROP150-P039-02",
+        "EV-TEXT-FOOTER-P039"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P040-01",
+      "issue_id": "ISS-P040-CHECKMARK-CONFLICT",
+      "pdf_page": 40,
+      "book_page": 34,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "مرور فصل",
+        "verified_claims": [
+          {
+            "سبز": [
+              10,
+              20
+            ],
+            "آبی": [
+              21,
+              30
+            ],
+            "قرمز": [
+              31,
+              40
+            ],
+            "زرد": [
+              41,
+              50
+            ]
+          }
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "بازبینی مستقیم کراپ ۱۵۰ DPI از فایل قرنطینه‌شدهٔ C205.pdf تناقض ستون اصلاح آرنا را برطرف کرد؛ تأیید نهایی انسانی همچنان منوط به حکم معلم است.",
+      "evidence_refs": [
+        "EV-CROP150-P040-01",
+        "EV-TEXT-FOOTER-P040"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P063-02",
+      "issue_id": "ISS-P063-RECONCILE",
+      "pdf_page": 63,
+      "book_page": 57,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "فعّالیت",
+        "page_type": "فعالیت",
+        "all_tabs": [
+          "فعّالیت",
+          "الگویابی کن"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P063-01",
+        "EV-CROP150-P063-02",
+        "EV-TEXT-FOOTER-P063"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P144-02",
+      "issue_id": "ISS-P144-RECONCILE",
+      "pdf_page": 144,
+      "book_page": 138,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "تمرین",
+        "page_type": "تمرین",
+        "all_tabs": [
+          "تمرین",
+          "کامل کن"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P144-01",
+        "EV-TEXT-FOOTER-P144"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    },
+    {
+      "decision_id": "DEC-P145-02",
+      "issue_id": "ISS-P145-RECONCILE",
+      "pdf_page": 145,
+      "book_page": 139,
+      "decided_by": "agent_crop_reconciler_v1",
+      "authority_level": "AUTOMATED_EVIDENCE_RECONCILIATION",
+      "chosen_value": {
+        "primary_banner": "انتخاب نمودار",
+        "page_type": "درس",
+        "all_tabs": [
+          "انتخاب نمودار",
+          "فعّالیت"
+        ]
+      },
+      "resulting_status": "VERIFIED_EVIDENCE",
+      "rationale_fa": "مشاهدهٔ مستقیم کراپ ۱۵۰ DPI و مختصات پاصفحه در C205.pdf مقدار واقعی چاپ چهاردهم ۱۴۰۴ را تثبیت کرد.",
+      "evidence_refs": [
+        "EV-CROP150-P145-01",
+        "EV-TEXT-FOOTER-P145"
+      ],
+      "timestamp_utc": "2026-10-22T00:00:00Z"
+    }
+  ]
+}

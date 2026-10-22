@@ -7,7 +7,7 @@ const { ApiError } = require('./service');
 
 const messages = { UNAUTHENTICATED: 'ورود لازم است.', FORBIDDEN: 'اجازهٔ این کار را ندارید.', INVALID_PAYLOAD: 'اطلاعات درخواست معتبر نیست.', INVITE_EXPIRED: 'دعوت معتبر نیست یا ظرفیت آن تمام شده است.', EVENT_CONFLICT: 'این پاسخ با سابقهٔ ثبت‌شده تفاوت دارد.', STALE_WRITER: 'جلسه در دستگاه دیگری فعال شده است.', RATE_LIMITED: 'کمی صبر کنید و دوباره تلاش کنید.', TEMPORARILY_UNAVAILABLE: 'ارتباط با سرور برقرار نشد؛ دوباره تلاش کنید.' };
 const statusFor = { UNAUTHENTICATED: 401, FORBIDDEN: 403, INVALID_PAYLOAD: 400, INVITE_EXPIRED: 403, EVENT_CONFLICT: 409, STALE_WRITER: 409, RATE_LIMITED: 429, TEMPORARILY_UNAVAILABLE: 503 };
-const rootFiles = new Set(['v9.html', 'v9-config.js', 'index.html', 'home.html', 'join.html', 'leaderboard.html', 'firebase-config.js', 'workshop-core.js', 'storage.js', 'errors.js', 'profile-manager.js', 'social-core.js', 'heroes-core.js', 'live-board.js']);
+const rootFiles = new Set(['v9.html', 'v10.html', 'book.html', 'v9-config.js', 'index.html', 'home.html', 'join.html', 'leaderboard.html', 'firebase-config.js', 'workshop-core.js', 'storage.js', 'errors.js', 'profile-manager.js', 'social-core.js', 'heroes-core.js', 'live-board.js']);
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.mp3': 'audio/mpeg' };
 
 function localAccounts() {
@@ -27,7 +27,7 @@ function readJson(req) {
   });
 }
 
-function createServer({ service, authenticate, mode, root, allowedOrigins = [], accounts = [], allowLocalNetwork = false }) {
+function createServer({ service, authenticate, mode, root, allowedOrigins = [], accounts = [], allowLocalNetwork = false, allowPreviewHosts = false }) {
   if (!['local', 'production'].includes(mode)) throw new Error('Explicit server mode required');
   if (mode === 'production' && accounts.length) throw new Error('Development accounts forbidden in production');
   const buckets = new Map();
@@ -46,13 +46,15 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
     res.setHeader('Cache-Control', 'no-store');
     try {
       const host = req.headers.host || '';
-      if (mode === 'local' && !/^(127\.0\.0\.1|localhost):\d+$/.test(host)) {
+      const isPreviewHost = allowPreviewHosts && /^[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.e2b\.app(?::\d+)?$/i.test(host);
+      if (mode === 'local' && !/^(127\.0\.0\.1|localhost):\d+$/.test(host) && !isPreviewHost) {
         const lanHost = /^((192\.168\.|10\.|172\.(1[6-9]|2\d|3[0-1])\.)[A-Za-z0-9:.-]+:\d+)$/.test(host);
         if (!allowLocalNetwork || !lanHost) throw new ApiError('FORBIDDEN');
       }
-      const sameOrigin = `${mode === 'local' ? 'http' : 'https'}://${host}`;
+      const sameOrigin = `${mode === 'local' && !isPreviewHost ? 'http' : 'https'}://${host}`;
+      const altPreviewOrigin = isPreviewHost ? `http://${host}` : null;
       const origin = req.headers.origin;
-      if (origin && origin !== sameOrigin && (mode === 'local' || !allowedOrigins.includes(origin))) throw new ApiError('FORBIDDEN');
+      if (origin && origin !== sameOrigin && origin !== altPreviewOrigin && (mode === 'local' || !allowedOrigins.includes(origin))) throw new ApiError('FORBIDDEN');
       if (origin) { res.setHeader('Access-Control-Allow-Origin', origin); res.setHeader('Vary', 'Origin'); }
       if (req.method === 'OPTIONS') {
         res.writeHead(204, { 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS', 'Access-Control-Allow-Headers': 'Authorization, Content-Type' }); return res.end();
@@ -76,7 +78,7 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
       }
       if (req.method !== 'GET') return send(404, { ok: false, error: { code: 'INVALID_PAYLOAD' } });
       let file = decodeURIComponent(url.pathname).replace(/^\/+/, '') || 'v9.html';
-      if (!rootFiles.has(file) && !/^(src|styles|assets)\/[A-Za-z0-9_./-]+$/.test(file)) return send(404, { ok: false });
+      if (!rootFiles.has(file) && !/^(src|styles|assets|cartridges)\/[A-Za-z0-9_./-]+$/.test(file)) return send(404, { ok: false });
       if (file.split('/').some(part => part.startsWith('.'))) return send(404, { ok: false });
       const absolute = path.resolve(root, file);
       if (!absolute.startsWith(path.resolve(root) + path.sep)) return send(404, { ok: false });

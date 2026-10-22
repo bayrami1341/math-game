@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0.0",
+  "target_workbook": "authoring/khshab-G2-MATH_v0.4.xlsx",
+  "target_workbook_sha256": "ad4761ba6c6720749cd2c51ddf82bee6cc78cfdb8a3399ae731bb3284640b798",
+  "applied_structural_patches_in_v05": [
+    {
+      "patch_id": "PATCH-T7-001A",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "row": 13,
+      "col": 11,
+      "entity_id": "L-110",
+      "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1020)",
+      "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1019)",
+      "reason": "در v0.3/v0.4 سؤال Q-1020 به L-112 لنگر خورده بود اما بازهٔ K13 در L-110 تا Q-1020 کشیده شده بود (نقض T7 در مبدل واقعی convert.mjs)."
+    },
+    {
+      "patch_id": "PATCH-T7-001B",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "row": 15,
+      "col": 11,
+      "entity_id": "L-112",
+      "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (تمرین صفحه)",
+      "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1020)",
+      "reason": "ثبت بازگشت متقابل Q-1020 در ستون لنگرهای پیشنهادی L-112 مطابق قانون مالکیت دوسویهٔ T7."
+    }
+  ],
+  "deferred_pedagogical_proposals_awaiting_teacher": [
+    {
+      "proposal_id": "PATCH-S1-L208",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-208",
+      "book_page": 26,
+      "pdf_page": 32,
+      "current_value": "M_PATTERN — شاخه‌های رقم دهگان ۵/۷ و رقم یکان ۳",
+      "proposed_value": "M_PATTERN — شاخه‌های رقم دهگان ۵ و ۷ و رقم یکان ۳ و ۴ (۴ عدد: ۵۳، ۵۴، ۷۳، ۷۴)",
+      "evidence_ref": "EV-CROP150-P032-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-S1-L209",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-209",
+      "book_page": 27,
+      "pdf_page": 33,
+      "current_value": "M_PATTERN — دو رنگ مربع در برابر سه رنگ مثلث",
+      "proposed_value": "M_PATTERN — دو رنگ مثلث (آبی، قرمز) در برابر سه رنگ مربع (قهوه‌ای، سبز، زرد)",
+      "evidence_ref": "EV-CROP150-P033-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-S1-L216",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-216",
+      "book_page": 34,
+      "pdf_page": 40,
+      "current_value": "M_CHART — ۱۰ گل و چهار بازهٔ رنگی: ۱۰–۲۰، ۱۰۰–۱۱۰، ۲۰–۳۰، ۱۰۰–۱۰۵",
+      "proposed_value": "M_CHART — ۱۰ گل و چهار بازهٔ رنگی مجزا: سبز ۱۰–۲۰، آبی ۲۱–۳۰، قرمز ۳۱–۴۰، زرد ۴۱–۵۰",
+      "evidence_ref": "EV-CROP150-P040-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1044",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1044",
+      "book_page": 20,
+      "pdf_page": 26,
+      "issue": "COMPETING_ERROR_AMBIGUITY: گزینهٔ ب=۴۰ هم‌زمان با E_SKIP_UNDERCOUNT و E_TABLE_NEIGHBOUR تولید می‌شود.",
+      "proposed_action": "بازنگری گزینه‌ها یا ثبت صریح اولویت تشخیصی توسط معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1056",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1056",
+      "book_page": 31,
+      "pdf_page": 37,
+      "issue": "MISLABELED_MECHANISM: گزینهٔ ب=۵۸ حاصل توقف در گام میانی 38+20=58 است نه E_GROUPS.",
+      "proposed_action": "تغییر برچسب گزینهٔ ب به E_PARTIAL_STEP_STOP پس از تصویب معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1062",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1062",
+      "book_page": 33,
+      "pdf_page": 39,
+      "issue": "SUBTYPE_CONFLATION: گزینهٔ الف=۴۲ در ۶۵−۲۷ حاصل تفریق کوچک‌تر از بزرگ‌تر (|5-7|=2) است نه صرف جاانداختن قرض (۴۸).",
+      "proposed_action": "تفکیک E_SMALLER_FROM_LARGER از E_BORROW_MISS پس از تصویب معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1065-Q1068",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1065..Q-1068",
+      "book_page": 34,
+      "pdf_page": 39,
+      "issue": "COLLAPSED_DISTRACTOR_LABELS: گزینهٔ پاسخ دقیق (۶۸، ۵۳، ۶۴، ۳۸) باید E_APPROX_EXACT_CONFUSION برچسب بخورد؛ شاهد قاعدهٔ ۲۵→۳۰ برای Q-1067 در EV-CROP150-P039-02 ثبت شد.",
+      "evidence_ref": "EV-CROP150-P039-02",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    }
+  ],
+  "proposals": [
+    {
+      "proposal_id": "PATCH-S1-L208",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-208",
+      "book_page": 26,
+      "pdf_page": 32,
+      "current_value": "M_PATTERN — شاخه‌های رقم دهگان ۵/۷ و رقم یکان ۳",
+      "proposed_value": "M_PATTERN — شاخه‌های رقم دهگان ۵ و ۷ و رقم یکان ۳ و ۴ (۴ عدد: ۵۳، ۵۴، ۷۳، ۷۴)",
+      "evidence_ref": "EV-CROP150-P032-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-S1-L209",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-209",
+      "book_page": 27,
+      "pdf_page": 33,
+      "current_value": "M_PATTERN — دو رنگ مربع در برابر سه رنگ مثلث",
+      "proposed_value": "M_PATTERN — دو رنگ مثلث (آبی، قرمز) در برابر سه رنگ مربع (قهوه‌ای، سبز، زرد)",
+      "evidence_ref": "EV-CROP150-P033-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-S1-L216",
+      "sheet": "نقشهٔ کتاب (S1)",
+      "entity_id": "L-216",
+      "book_page": 34,
+      "pdf_page": 40,
+      "current_value": "M_CHART — ۱۰ گل و چهار بازهٔ رنگی: ۱۰–۲۰، ۱۰۰–۱۱۰، ۲۰–۳۰، ۱۰۰–۱۰۵",
+      "proposed_value": "M_CHART — ۱۰ گل و چهار بازهٔ رنگی مجزا: سبز ۱۰–۲۰، آبی ۲۱–۳۰، قرمز ۳۱–۴۰، زرد ۴۱–۵۰",
+      "evidence_ref": "EV-CROP150-P040-01",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1044",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1044",
+      "book_page": 20,
+      "pdf_page": 26,
+      "issue": "COMPETING_ERROR_AMBIGUITY: گزینهٔ ب=۴۰ هم‌زمان با E_SKIP_UNDERCOUNT و E_TABLE_NEIGHBOUR تولید می‌شود.",
+      "proposed_action": "بازنگری گزینه‌ها یا ثبت صریح اولویت تشخیصی توسط معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1056",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1056",
+      "book_page": 31,
+      "pdf_page": 37,
+      "issue": "MISLABELED_MECHANISM: گزینهٔ ب=۵۸ حاصل توقف در گام میانی 38+20=58 است نه E_GROUPS.",
+      "proposed_action": "تغییر برچسب گزینهٔ ب به E_PARTIAL_STEP_STOP پس از تصویب معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1062",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1062",
+      "book_page": 33,
+      "pdf_page": 39,
+      "issue": "SUBTYPE_CONFLATION: گزینهٔ الف=۴۲ در ۶۵−۲۷ حاصل تفریق کوچک‌تر از بزرگ‌تر (|5-7|=2) است نه صرف جاانداختن قرض (۴۸).",
+      "proposed_action": "تفکیک E_SMALLER_FROM_LARGER از E_BORROW_MISS پس از تصویب معلم.",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    },
+    {
+      "proposal_id": "PATCH-QB-Q1065-Q1068",
+      "sheet": "بانک سؤال",
+      "entity_id": "Q-1065..Q-1068",
+      "book_page": 34,
+      "pdf_page": 39,
+      "issue": "COLLAPSED_DISTRACTOR_LABELS: گزینهٔ پاسخ دقیق (۶۸، ۵۳، ۶۴، ۳۸) باید E_APPROX_EXACT_CONFUSION برچسب بخورد؛ شاهد قاعدهٔ ۲۵→۳۰ برای Q-1067 در EV-CROP150-P039-02 ثبت شد.",
+      "evidence_ref": "EV-CROP150-P039-02",
+      "status": "PROPOSED_AWAITING_TEACHER_APPROVAL"
+    }
+  ]
+}

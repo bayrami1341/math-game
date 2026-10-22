@@ -4,3 +4,26 @@ node_modules/
 .env.*
 !.env.example
 firebase-debug.log*
+test-results/
+playwright-report/
+.DS_Store
+
+# Copyrighted textbook assets & local observation caches (NEVER commit to Git)
+*.pdf
+*.PDF
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.webp
+*.WEBP
+!assets/*.png
+google_drive/
+.vault/
+authoring/local_viewer_cache/
+authoring/.cache/
+__pycache__/
+*.py[cod]
+.pytest_cache/

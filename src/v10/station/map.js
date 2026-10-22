@@ -84,7 +84,7 @@ export function createStationMap(stationState = { completed: [], current: 1, cel
         action: 'show-done-message',
         buildingId: id,
         state: BUILDING_STATE.DONE,
-        message: getDoneMessage(),
+        message: getDoneMessage(id),
         sound: null,
         staysOnMap: true
       };
