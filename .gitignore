@@ -70,3 +70,4 @@ db/*.db
 .zscripts/dev.pid
 authoring/build_preview/
 authoring/local_viewer_cache/
+download/convert-report-*.md

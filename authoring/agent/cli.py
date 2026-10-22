@@ -73,7 +73,10 @@ def run_generic_wave_check(
 
     gates: Dict[str, Any] = {
         "copyright_guard": g_git.status,
+        # Task 61-CIfix: فهرست فایل‌های متخلف در خروجی چاپ می‌شود تا لاگ CI خودتوضیح باشد
+        "copyright_guard_issues": g_git.issues,
         "ownership_boundary": g_own.status,
+        "ownership_boundary_issues": g_own.issues,
         "bidirectional_anchors": {"status": g_anchors.status, "issues": g_anchors.issues, "metrics": g_anchors.metrics},
         "cpa_and_balance": {"status": g_cpa.status, "issues": g_cpa.issues, "metrics": g_cpa.metrics},
         "zai_converter": conv,

@@ -65,7 +65,7 @@ jobs:
       # ── وابستگی‌های اجرایی ──
       - name: وابستگی‌های مبدل رسمی (xlsx)
         working-directory: tools/cartridge-converter
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: وابستگی‌ها و تست‌های موتور بازی
         working-directory: public/math-game
