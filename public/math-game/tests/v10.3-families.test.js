@@ -16,9 +16,9 @@ import {
   classifyV103
 } from '../src/v10/station/errors-v103.js';
 
-test('1. ثبت ۸ کد خانوادهٔ ۲و۳: متادیتا کامل + زنجیرهٔ PRIORITY_V103', () => {
+test('1. ثبت ۱۱ کد خانوادهٔ ۲و۳: متادیتا کامل + زنجیرهٔ PRIORITY_V103', () => {
   const codes = Object.keys(CODES_V103);
-  assert.equal(codes.length, 8);
+  assert.equal(codes.length, 11);
   for (const code of codes) {
     const m = CODES_V103[code];
     assert.equal(typeof m.nameFa, 'string', `نام فارسی ${code}`);
@@ -26,14 +26,15 @@ test('1. ثبت ۸ کد خانوادهٔ ۲و۳: متادیتا کامل + زن�
     assert.ok([1, 2, 3].includes(m.family), `خانوادهٔ ${code}`);
     assert.ok(['مفهومی', 'راهبردی', 'محاسباتی'].includes(m.severity), `شدت ${code}`);
   }
-  // خانواده‌ها: گره/قرض خانوادهٔ ۲، چهاررقمی خانوادهٔ ۳
+  // خانواده‌ها: گره/قرض خانوادهٔ ۲، چهاررقمی/ارزش مکانی خانوادهٔ ۳
   assert.equal(CODES_V103.E_CARRY_MISS.family, 2);
   assert.equal(CODES_V103.E_BORROW_MISS.family, 2);
   assert.equal(CODES_V103.E_ZERO_PLACE_MISS.family, 3);
-  // زنجیرهٔ برچسب‌گذاری: همهٔ ۸ کد، دقیقاً با همین ترتیب
+  // زنجیرهٔ برچسب‌گذاری: همهٔ ۱۱ کد، دقیقاً با همین ترتیب — سه کد تازه در انتها
   assert.deepEqual([...PRIORITY_V103], [
     'E_REMAINDER_DROP', 'E_OP_REVERSE', 'E_GROUP_VS_COUNT', 'E_FACT_CONFUSION',
-    'E_CARRY_MISS', 'E_BORROW_MISS', 'E_ZERO_PLACE_MISS', 'E_UNEQUAL_GROUP'
+    'E_CARRY_MISS', 'E_BORROW_MISS', 'E_ZERO_PLACE_MISS', 'E_UNEQUAL_GROUP',
+    'E_ROUND_NEAREST', 'E_UNIT_VALUE_CONFUSION', 'E_APPROX_EXACT_CONFUSION'
   ]);
 });
 

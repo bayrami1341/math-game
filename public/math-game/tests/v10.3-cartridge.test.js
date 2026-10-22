@@ -199,3 +199,160 @@ test('13. چندخشابی: خشاب G2 منتشرشده با قرارداد پ�
   // خشاب G2 با expectedId خودش هم دقیقاً سازگار است (رفتار لودر مرورگر)
   assert.equal(validateCartridge(g2, 'KH-G2-MATH').ok, true);
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BP-002 / Task 63 — سه آشکارساز تکمیلی errors-v103 (E_ROUND_NEAREST،
+// E_UNIT_VALUE_CONFUSION، E_APPROX_EXACT_CONFUSION)
+// پوشش: نمونه‌های طلایی خشاب G2، مرزها و دامنهٔ ۰..۹۹۹۹، گاردهای سخت،
+// تفکیک مسئولیت با E_ROUND_NEAREST، عدم تداخل PRIORITY_V103، فاز fuzz بی‌استثنا
+// ─────────────────────────────────────────────────────────────────────────────
+import {
+  CODES_V103,
+  PRIORITY_V103,
+  classifyColumnSum,
+  classifyDivisionAttempt,
+  classifyFourDigit,
+  classifyRoundNearest,
+  classifyUnitValue,
+  classifyApproxExact,
+  classifyV103
+} from '../src/v10/station/errors-v103.js';
+
+test('BP-002 الف) ثبت سه کد جدید: متادیتا هم‌خوان خشاب G2 + جملهٔ کارت معلم', () => {
+  for (const code of ['E_ROUND_NEAREST', 'E_UNIT_VALUE_CONFUSION', 'E_APPROX_EXACT_CONFUSION']) {
+    const m = CODES_V103[code];
+    assert.ok(m, `${code} در CODES_V103 ثبت نیست`);
+    assert.ok(m.nameFa.length > 5, `نام فارسی ${code}`);
+    assert.ok(['مفهومی', 'راهبردی'].includes(m.severity), `شدت ${code} — هم‌خوان category خشاب`);
+  }
+  // خانواده‌ها: گردکردن/تقریب خانوادهٔ عملیات (۱)؛ ارزش مکانی خانوادهٔ ۳
+  assert.equal(CODES_V103.E_ROUND_NEAREST.family, 1);
+  assert.equal(CODES_V103.E_APPROX_EXACT_CONFUSION.family, 1);
+  assert.equal(CODES_V103.E_UNIT_VALUE_CONFUSION.family, 3);
+  // هر سه در انتهای زنجیرهٔ اولویت‌اند — هیچ برچسب قبلی جابه‌جا نشده
+  const head = PRIORITY_V103.slice(0, 8);
+  assert.deepEqual(head, [
+    'E_REMAINDER_DROP', 'E_OP_REVERSE', 'E_GROUP_VS_COUNT', 'E_FACT_CONFUSION',
+    'E_CARRY_MISS', 'E_BORROW_MISS', 'E_ZERO_PLACE_MISS', 'E_UNEQUAL_GROUP'
+  ]);
+  assert.deepEqual(PRIORITY_V103.slice(8), [
+    'E_ROUND_NEAREST', 'E_UNIT_VALUE_CONFUSION', 'E_APPROX_EXACT_CONFUSION'
+  ]);
+});
+
+test('BP-002 ب) E_ROUND_NEAREST — نمونهٔ طلایی ۲۶×۳=۷۸→۸۰ + مرزها', () => {
+  // طلایی: پاسخ دقیق ۷۸، گردشدهٔ دهگانی ۸۰
+  assert.equal(classifyRoundNearest(78, 78), null, 'پاسخ دقیق — خطا نیست');
+  assert.equal(classifyRoundNearest(78, 80), 'E_ROUND_NEAREST', 'گرد به دهگان');
+  assert.equal(classifyRoundNearest(78, 100), 'E_ROUND_NEAREST', 'گرد به صدگان');
+  assert.equal(classifyRoundNearest(47, 50), 'E_ROUND_NEAREST', 'نیم‌بالا: ۴۷→۵۰');
+  assert.equal(classifyRoundNearest(43, 40), 'E_ROUND_NEAREST', 'نیم‌پایین: ۴۳→۴۰');
+  // خودِ عدد از قبل گرد است — هیچ «گردکردنی» ممکن نیست
+  assert.equal(classifyRoundNearest(80, 90), null, '۸۰ گرد است؛ ۹۰ الگوی گردکردن به نزدیک‌ترین نیست');
+  assert.equal(classifyRoundNearest(300, 300), null);
+  // بی‌الگو: پاسخ اشتباهِ غیرگرد
+  assert.equal(classifyRoundNearest(78, 79), null);
+  // گاردهای سخت: بیرون دامنهٔ کتاب، اعشار، رشته
+  assert.equal(classifyRoundNearest(78, 80.5), null);
+  assert.equal(classifyRoundNearest(78, '۸۰'), null);
+  assert.equal(classifyRoundNearest(99999, 100000), null);
+  assert.equal(classifyRoundNearest(-4, -10), null);
+  assert.equal(classifyRoundNearest(78, 10000), null, 'سقف دامنهٔ پاسخ ۹۹۹۹');
+  // دیسپچر
+  assert.equal(classifyV103({ op: 'round', a: 78 }, 80), 'E_ROUND_NEAREST');
+});
+
+test('BP-002 ج) E_UNIT_VALUE_CONFUSION — سه الگو: جمع ارقام، رقم لخت، افتادن ستون', () => {
+  // الگوی ۱ — جمع ارقام (نمونهٔ ص ۵۷: ۳ صدتایی+۴ دهتایی → ۷ به‌جای ۳۴۰)
+  assert.equal(classifyUnitValue(340, 7), 'E_UNIT_VALUE_CONFUSION');
+  assert.equal(classifyUnitValue(45, 9), 'E_UNIT_VALUE_CONFUSION', '۴ ده‌ریالی+۵ یک‌ریالی → ۹ ریال');
+  // الگوی ۲ — رقم لخت به‌جای ارزش جایگاه (۸۰۹ → ۸)
+  assert.equal(classifyUnitValue(809, 8), 'E_UNIT_VALUE_CONFUSION');
+  assert.equal(classifyUnitValue(45, 4), 'E_UNIT_VALUE_CONFUSION', 'رقم دهگان به‌جای ۴۰');
+  // الگوی ۳ — افتادن یک ستون ارزش (۳۴۰ → ۳۴)
+  assert.equal(classifyUnitValue(340, 34), 'E_UNIT_VALUE_CONFUSION');
+  assert.equal(classifyUnitValue(700, 70), 'E_UNIT_VALUE_CONFUSION');
+  // درست/بی‌الگو
+  assert.equal(classifyUnitValue(340, 340), null, 'ارزش درست');
+  assert.equal(classifyUnitValue(809, 17), 'E_UNIT_VALUE_CONFUSION', '۸+۰+۹=۱۷ — شمردن رقم‌ها به‌جای ارزش');
+  // گاردها
+  assert.equal(classifyUnitValue(5, 5), null);
+  assert.equal(classifyUnitValue(5, 9), null, 'تک‌رقمی — خلط بی‌معنا');
+  assert.equal(classifyUnitValue(340, '۳۴'), null);
+  assert.equal(classifyUnitValue(340, 3.4), null);
+  assert.equal(classifyUnitValue(34000, 3400), null, 'بیرون دامنهٔ کتاب');
+  // دیسپچر
+  assert.equal(classifyV103({ op: 'unit', a: 340 }, 7), 'E_UNIT_VALUE_CONFUSION');
+});
+
+test('BP-002 چ) E_APPROX_EXACT_CONFUSION — جابه‌جایی تقریب/دقیق + تفکیک از E_ROUND_NEAREST', () => {
+  // mode='approx': پرسش تقریب، خودِ عدد آورده شده
+  assert.equal(classifyApproxExact(47, 47, { mode: 'approx' }), 'E_APPROX_EXACT_CONFUSION');
+  assert.equal(classifyApproxExact(47, 50, { mode: 'approx' }), null, 'تقریب درست به دهگان');
+  assert.equal(classifyApproxExact(47, 0, { mode: 'approx' }), null, 'تقریبِ خیلی دور — بی‌الگو');
+  // عدد از قبل گرد: «تقریب ۴۰» = ۴۰ بی‌الگوست
+  assert.equal(classifyApproxExact(40, 40, { mode: 'approx' }), null);
+  // mode='exact': برشِ غیرنزدیک (حذف رقم) — ۴۸ برش=۴۰ ولی نزدیک=۵۰
+  assert.equal(classifyApproxExact(48, 40, { mode: 'exact' }), 'E_APPROX_EXACT_CONFUSION');
+  assert.equal(classifyApproxExact(48, 50, { mode: 'exact' }), null, '۵۰ گرد نزدیک است → قلمرو E_ROUND_NEAREST');
+  assert.equal(classifyRoundNearest(48, 50), 'E_ROUND_NEAREST', 'تفکیک مسئولیت تأیید شد');
+  assert.equal(classifyApproxExact(248, 240, { mode: 'exact' }), 'E_APPROX_EXACT_CONFUSION', '۲۴۰ برش دهگانی است (نزدیک ۲۵۰) → حذف رقم');
+  assert.equal(classifyApproxExact(242, 240, { mode: 'exact' }), null, '۲۴۰ گردِ نزدیک ۲۴۲ است → قلمرو E_ROUND_NEAREST');
+  assert.equal(classifyRoundNearest(242, 240), 'E_ROUND_NEAREST', 'تفکیک مسئولیت در حالت مرزی');
+  assert.equal(classifyApproxExact(360, 300, { mode: 'exact' }), 'E_APPROX_EXACT_CONFUSION', 'برش صدگانیِ دور: نزدیک ۳۶۰، ۴۰۰ است نه ۳۰۰');
+  assert.equal(classifyApproxExact(248, 200, { mode: 'exact' }), null, '۲۰۰ گردِ نزدیک ۲۴۸ است → قلمرو E_ROUND_NEAREST');
+  assert.equal(classifyRoundNearest(248, 200), 'E_ROUND_NEAREST');
+  // درست
+  assert.equal(classifyApproxExact(48, 48, { mode: 'exact' }), null);
+  // mode نامعلوم/گاردها
+  assert.equal(classifyApproxExact(48, 40, {}), null);
+  assert.equal(classifyApproxExact(48, 40, null), null, 'بدون opts هم هرگز استثنا نمی‌دهد');
+  assert.equal(classifyApproxExact(48, '۴۰', { mode: 'exact' }), null);
+  assert.equal(classifyApproxExact(48, 40.5, { mode: 'exact' }), null);
+  // دیسپچر
+  assert.equal(classifyV103({ op: 'approx', a: 47, mode: 'approx' }, 47), 'E_APPROX_EXACT_CONFUSION');
+});
+
+test('BP-002 ح) عدم تداخل اولویت: آشکارسازهای جدید هرگز برچسب کدهای موج الف قبلی را نمی‌دوزند', () => {
+  // ورودی‌های متنوع به سه آشکارساز جدید — هرگز کدی بیرون از سه‌تایی جدید برنمی‌گردد
+  const NEW = new Set(['E_ROUND_NEAREST', 'E_UNIT_VALUE_CONFUSION', 'E_APPROX_EXACT_CONFUSION']);
+  const OLD_FIRST8 = PRIORITY_V103.slice(0, 8);
+  const samples = [
+    [classifyRoundNearest(78, 80)],
+    [classifyUnitValue(340, 7)],
+    [classifyApproxExact(47, 47, { mode: 'approx' })],
+    [classifyRoundNearest(9999, 10000)],
+    [classifyUnitValue(0, 0)],
+    [classifyApproxExact(0, 0, { mode: 'exact' })]
+  ].flat();
+  for (const code of samples) {
+    if (code !== null) assert.ok(NEW.has(code), `کد ناشناخته برگشت: ${code}`);
+  }
+  // و برعکس: آشکارسازهای قدیمی هرگز سه کد جدید را برنمی‌گردانند
+  assert.equal(classifyColumnSum(358, 246, 594), 'E_CARRY_MISS');
+  assert.ok(!NEW.has(classifyColumnSum(358, 246, 594)));
+  assert.equal(classifyDivisionAttempt(19, 4, 5, { totalDivision: true }), 'E_REMAINDER_DROP');
+  assert.equal(classifyFourDigit(4070, 470), 'E_ZERO_PLACE_MISS');
+});
+
+test('BP-002 خ) فاز fuzz — ۲۰٬۰۰۰ ورودی تصادفی/مرزی، صفر استثنا، خروجی همیشه کد شناخته یا null', () => {
+  const all = new Set([...Object.keys(CODES_V103)]);
+  let seed = 20260101;
+  const rnd = (n) => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed % n; };
+  for (let i = 0; i < 20000; i++) {
+    const a = rnd(12000) - 1000;               // شامل خارج دامنه
+    const b = rnd(2) === 0 ? rnd(10000) : 'x'; // شامل نوع بد
+    const s = rnd(3) === 0 ? rnd(10500) : 1.5; // شامل اعشار
+    const mode = rnd(3) === 0 ? 'approx' : rnd(2) === 0 ? 'exact' : '؟';
+    let r1, r2, r3;
+    assert.doesNotThrow(() => { r1 = classifyRoundNearest(a, s); });
+    assert.doesNotThrow(() => { r2 = classifyUnitValue(a, s); });
+    assert.doesNotThrow(() => { r3 = classifyApproxExact(a, s, { mode }); });
+    for (const r of [r1, r2, r3]) {
+      if (r !== null) assert.ok(all.has(r), `خروجی ناشناخته: ${r}`);
+    }
+    assert.doesNotThrow(() => classifyV103({ op: 'round', a }, s));
+    assert.doesNotThrow(() => classifyV103({ op: 'unit', a }, s));
+    assert.doesNotThrow(() => classifyV103({ op: 'approx', a, mode }, s));
+  }
+});

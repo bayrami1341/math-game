@@ -43,7 +43,12 @@ export const CODES_V103 = Object.freeze({
   E_OP_REVERSE:      { nameFa: 'عمل جایگزین‌شده', family: 1, severity: 'راهبردی' },
   E_GROUP_VS_COUNT:  { nameFa: 'خلط گروه و شمارش', family: 1, severity: 'مفهومی' },
   E_FACT_CONFUSION:  { nameFa: 'خلط فکت جدول', family: 1, severity: 'محاسباتی' },
-  E_UNEQUAL_GROUP:   { nameFa: 'دسته‌های نابرابر', family: 1, severity: 'مفهومی' }
+  E_UNEQUAL_GROUP:   { nameFa: 'دسته‌های نابرابر', family: 1, severity: 'مفهومی' },
+  // موج الف — سه کد «پیشنهادِ» ثبت‌شده در خشاب‌های G2/G3 (Task 63 / BP-002):
+  // متادیتا هم‌خوان با cartridges/KH-G2-MATH.json (category مفهومی/راهبردی).
+  E_ROUND_NEAREST:         { nameFa: 'گردکردن به دهگان نادرست', family: 1, severity: 'مفهومی' },
+  E_UNIT_VALUE_CONFUSION:  { nameFa: 'خلط تعداد بسته/سکه با ارزش ریالی یا مکانی', family: 3, severity: 'مفهومی' },
+  E_APPROX_EXACT_CONFUSION: { nameFa: 'نوشتن مقدار دقیق به‌جای مقدار تقریبی', family: 1, severity: 'راهبردی' }
 });
 
 // جملهٔ کارت معلم: یک جملهٔ تشخیصی + دو نمونهٔ رفتاری — بدون کودک‌ستیزی.
@@ -56,10 +61,14 @@ export const CODE_SENTENCES_V103 = Object.freeze({
   E_OP_REVERSE: 'به‌جای تقسیم عمل دیگری به کار برده — نمونه: ۱۲÷۳ را ۹ (تفریق) یا ۱۵ (جمع) یا ۳۶ (ضرب) نوشته.',
   E_GROUP_VS_COUNT: 'اندازهٔ گروه و شمارش را با هم خلط کرده — نمونه: ۱۸÷۶ را ۶ (اندازهٔ گروه) یا ۱۸ (تعداد کل) نوشته.',
   E_FACT_CONFUSION: 'فکت جدول ضرب را با فکت همسایه خلط کرده — نمونه: ۲۴÷۴ را ۸ نوشته (فکت ۲۴÷۳) و ۶۰÷۵ را ۱۰ نوشته (فکت ۶۰÷۶).',
-  E_UNEQUAL_GROUP: 'در دسته‌بندی گروه‌های هم‌اندازه نساخته — نمونه: ۱۲ شیء را در دسته‌هایی نابرابر چیده و شمارش جهشی را از دست داده.'
+  E_UNEQUAL_GROUP: 'در دسته‌بندی گروه‌های هم‌اندازه نساخته — نمونه: ۱۲ شیء را در دسته‌هایی نابرابر چیده و شمارش جهشی را از دست داده.',
+  E_ROUND_NEAREST: 'در پرسش دقیق، جواب را به دهگان/صدگان نزدیک گرد کرده — نمونه: ۲۶×۳ را ۷۸ دقیق نمی‌نویسد و ۸۰ می‌نویسد؛ یا حاصل ۴۷+۳۲ را ۸۰ (به‌جای ۷۹) ثبت کرده.',
+  E_UNIT_VALUE_CONFUSION: 'تعداد سکه/دسته را با ارزشش یکی گرفته — نمونه: ۴ سکهٔ ۱۰ ریالی و ۵ سکهٔ ۱ ریالی را ۹ ریال (به‌جای ۴۵) نوشته و در ۸۰۹، رقم ۸ را به‌جای ۸۰۰ می‌خواند.',
+  E_APPROX_EXACT_CONFUSION: 'پرسش تقریب و دقیق را با هم عوض کرده — نمونه: در «تقریب ۴۷ به دهگان» خودِ ۴۷ را نوشته و در پرسش دقیق، حذف‌رقمی (۴۸→۴۰) به‌جای محاسبهٔ دقیق آورده.'
 });
 
 // زنجیرهٔ برچسب‌گذاری موج الف: اولین الگوی برنده، برچسب می‌گیرد.
+// سه کد تازه در انتهای زنجیره‌اند تا هیچ برچسب موجودِ موج الف تغییر نکند.
 export const PRIORITY_V103 = Object.freeze([
   'E_REMAINDER_DROP',
   'E_OP_REVERSE',
@@ -68,7 +77,10 @@ export const PRIORITY_V103 = Object.freeze([
   'E_CARRY_MISS',
   'E_BORROW_MISS',
   'E_ZERO_PLACE_MISS',
-  'E_UNEQUAL_GROUP'
+  'E_UNEQUAL_GROUP',
+  'E_ROUND_NEAREST',
+  'E_UNIT_VALUE_CONFUSION',
+  'E_APPROX_EXACT_CONFUSION'
 ]);
 
 /** اولین کدِ زنده در زنجیرهٔ PRIORITY_V103 — بین کاندیدهای همزمان */
@@ -242,6 +254,102 @@ export function classifyV103(spec, submitted) {
     case 'mulcol': return classifyColumnMultiply(a, b, submitted);
     case 'div':    return classifyDivisionAttempt(a, b, submitted, spec);
     case 'read':   return classifyFourDigit(a, submitted);
+    case 'round':  return classifyRoundNearest(a, submitted);
+    case 'unit':   return classifyUnitValue(a, submitted);
+    case 'approx': return classifyApproxExact(a, submitted, spec);
     default:       return null; // op نامعلوم — صادقانه بی‌الگو
   }
+}
+
+// ── موج الف — سه آشکارساز تکمیلی (Task 63 / BP-002) ─────────────────────────
+// قرارداد همان پنج آشکارساز بالا: Pure، گارد سخت، «صادقانه بی‌الگو» (null)،
+// بدون هیچ وابستگی به DOM/FS. متادیتا و جمله‌ها هم‌خوان با خشاب رسمی G2.
+
+/** نزدیک‌ترین دهگان (گرد کردن نیم‌بالا — سبک کتاب پایهٔ دوم) */
+function nearestTen(n) { return Math.round(n / 10) * 10; }
+/** نزدیک‌ترین صدگان (گرد کردن نیم‌بالا) */
+function nearestHundred(n) { return Math.round(n / 100) * 100; }
+
+/**
+ * E_ROUND_NEAREST — در پرسشِ «دقیق»، پاسخِ گردشده به دهگان/صدگان نزدیک.
+ * نمونهٔ طلایی: حاصل دقیق ۲۶×۳=۷۸ اما دانش‌آموز ۸۰ می‌نویسد (نزدیک‌ترین دهگان).
+ * اگر خودِ مقدار دقیق از قبل گرد باشد (۴۰، ۳۰۰، …) هیچ گردکردنی الگو نیست — null.
+ * خروجی: کد یا null (درست / بی‌الگو).
+ */
+export function classifyRoundNearest(trueValue, submitted) {
+  if (!isInt(trueValue) || !isInt(submitted)) return null;
+  if (trueValue < 0 || trueValue > MAX_BOOK || submitted < 0 || submitted > MAX_BOOK) return null;
+  if (submitted === trueValue) return null; // دقیق و درست — خطا نیست
+
+  for (const near of [nearestTen(trueValue), nearestHundred(trueValue)]) {
+    if (near !== trueValue && submitted === near) return 'E_ROUND_NEAREST';
+  }
+  return null; // صادقانه بی‌الگو
+}
+
+/**
+ * E_UNIT_VALUE_CONFUSION — شمردن «تعداد نماد» به‌جای محاسبهٔ «ارزش».
+ * سه الگوی عددی روی ارزش هدف (مثل ۴۵ ریال از ۴ سکهٔ ده‌ریالی و ۵ یک‌ریالی):
+ *   ۱. جمع ارقام ارزش هدف: ۴+۵=۹ (سکه‌ها شمرده شده، ارزش نه) — نمونهٔ ص ۵۷: ۳۴۰→۷
+ *   ۲. نوشتن رقمِ لخت به‌جای ارزش جایگاه: ۸۰۹→۸ (رقم صدگان به‌جای ۸۰۰)
+ *   ۳. افتادن یک ستون ارزش: ۳۴۰→۳۴ (خواندن ۳۴ به‌جای ۳۴۰ — همان «ستون نادرست» خشاب)
+ * خروجی: کد یا null (درست / بی‌الگو).
+ */
+export function classifyUnitValue(targetValue, submitted) {
+  if (!isInt(targetValue) || !isInt(submitted)) return null;
+  if (targetValue < 0 || targetValue > MAX_BOOK || submitted < 0 || submitted > MAX_BOOK) return null;
+  if (submitted === targetValue) return null; // درست — خطا نیست
+  if (targetValue < 10) return null; // تک‌رقمی: ارزش = تعداد؛ خلط بی‌معنا
+
+  // ۱. جمع ارقام
+  let digitSum = 0;
+  for (let t = targetValue; t > 0; t = Math.floor(t / 10)) digitSum += t % 10;
+  if (submitted === digitSum) return 'E_UNIT_VALUE_CONFUSION';
+
+  // ۲. رقم لخت به‌جای ارزش جایگاه (هر جایگاه غیرصفر)
+  for (let i = 0; i < 4; i++) {
+    const d = digitAt(targetValue, i);
+    if (d !== 0 && submitted === d && d !== targetValue) return 'E_UNIT_VALUE_CONFUSION';
+  }
+
+  // ۳. افتادن یک ستون (تقسیم بر ۱۰ بی‌باقیمانده)
+  if (targetValue % 10 === 0 && submitted === targetValue / 10) return 'E_UNIT_VALUE_CONFUSION';
+
+  return null; // صادقانه بی‌الگو
+}
+
+/**
+ * E_APPROX_EXACT_CONFUSION — جابه‌جایی «تقریب» و «دقیق».
+ *   mode==='approx' (پرسش تقریب): خودِ عددِ غیرقابل‌گرد آورده شده → کد.
+ *   mode==='exact'  (پرسش دقیق): حذف‌رقمی (برش به دهگان/صدگان که گردِ نزدیک
+ *     «نیست») آورده شده → کد. اگر برش، نزدیک‌ترین گرد باشد، الگوی اختصاصی‌تر
+ *     E_ROUND_NEAREST است و اینجا صادقانه null می‌ماند (تفکیک مسئولیت).
+ * خروجی: کد یا null (درست / بی‌الگو / بیرون قرارداد mode).
+ */
+export function classifyApproxExact(trueValue, submitted, opts = {}) {
+  if (!isInt(trueValue) || !isInt(submitted)) return null;
+  if (trueValue < 0 || trueValue > MAX_BOOK || submitted < 0 || submitted > MAX_BOOK) return null;
+  const o = (opts && typeof opts === 'object') ? opts : {}; // گارد مضاعف — هرگز استثنا نمی‌دهد
+
+  if (o.mode === 'approx') {
+    if (submitted === trueValue && nearestTen(trueValue) !== trueValue) return 'E_APPROX_EXACT_CONFUSION';
+    return null; // تقریب درست یا عددِ از قبل گرد — بی‌الگو
+  }
+
+  if (o.mode === 'exact') {
+    if (submitted === trueValue) return null; // دقیق و درست
+    // برش به دهگان/صدگان (حذف رقم با جایگاه دست‌نخوردهٔ باقی‌مانده) — هر برش فقط
+    // با نزدیک‌ترین گردِ «هم‌جایگاهِ» خودش مقایسه می‌شود؛ برشِ نزدیک = قلمرو E_ROUND_NEAREST.
+    const trunc10 = Math.floor(trueValue / 10) * 10;
+    const trunc100 = Math.floor(trueValue / 100) * 100;
+    if (trunc10 !== trueValue && trunc10 > 0 && submitted === trunc10 && trunc10 !== nearestTen(trueValue)) {
+      return 'E_APPROX_EXACT_CONFUSION';
+    }
+    if (trunc100 !== trueValue && trunc100 > 0 && submitted === trunc100 && trunc100 !== nearestHundred(trueValue)) {
+      return 'E_APPROX_EXACT_CONFUSION';
+    }
+    return null; // گرد نزدیک → قلمرو E_ROUND_NEAREST؛ بقیه — بی‌الگو
+  }
+
+  return null; // mode نامعلوم — صادقانه بی‌الگو
 }
