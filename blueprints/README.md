@@ -27,6 +27,14 @@ bun scripts/blueprint.ts validate                # اعتبارسنجی رجیس
 
 هر تغییر وضعیت با کامیت روی `main` ثبت و پوش می‌شود؛ کارگاه‌بان تابلوی گیت‌هاب را خودکار به‌روز می‌کند.
 
+## 🛡️ گیت سخت انتشار (BP-010)
+
+```bash
+bash scripts/release-check.sh   # ۶ گام fail-closed؛ خروج ۰ = تگ مجاز
+```
+
+گام‌ها: سازگاری نسخه (package.json ↔ RELEASE-NOTES ↔ سورس) · G0/G0B · OFFICIAL-HEADS verify · پایتست ایجنت (W7) · npm test موتور · مبدل رسمی G2/G3 + تطبیق کارتریج منتشرشده با هَد (ضد آلودگی auto-backup). تست منفی ثبت‌شده: دستکاری SHA مانیفست → FAIL (هم گام ۳، هم پایتست لایهٔ دوم گرفت). قرمزی = **ساخت تگ ممنوع**.
+
 ## اسکیمای وضعیت
 
 `draft → awaiting_approval → approved → executing → delivered → verified → done` (+ `blocked`/`rejected`)
