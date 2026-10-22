@@ -1,8 +1,8 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 8,
-  "updated_at": "2026-10-22T19:00:00Z",
-  "updated_by": "z.ai",
+  "version": 9,
+  "updated_at": "2026-10-22T21:05:00Z",
+  "updated_by": "z.ai — نقشهٔ راه نسخهٔ بعدی (ROADMAP-v10.3.0-beta.1) + BP-008..BP-012",
   "blueprints": [
     {
       "id": "BP-000",
@@ -213,6 +213,152 @@
       "artifacts": ["public/math-game/src/v10/station/cartridge-schema.js", "public/math-game/src/v10/station/errors.js", "public/math-game/src/v10/station/errors-v103.js"],
       "links": { "pr": "https://github.com/bayrami1341/math-game/pull/2", "issue": null, "notes": "منبع: authoring/ZAI-HANDOFF-W7-W8.fa.md §2 — errors.js فعلاً منجمد؛ این نقشه با تأیید مالک، انجمادِ هدفمند بخش مشخص را مجاز می‌کند." },
       "notes": "تأیید مالک فقط با «تایید BP-007» روی تابلو یا چت."
+    },
+    {
+      "id": "BP-008",
+      "title": "بازرسی دوم هدهای معلق آرنا (714338c / 06d7b7d) + ادغام رسمی، به‌روزرسانی مانیفست و انتشار JSON — قالب همیشگی خط دریافت محتوا",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 9,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "دو هد معلق arena/0eb22280→714338c و arena/6b8310f7→06d7b7d در نوبت بازرسی‌اند. این نقشه خط لولهٔ استاندارد «دریافت←گیت←حکم←ادغام» را برای هر تحویل آیندهٔ آرنا (خروجی BP-005) هم بنا می‌کند. ترتیب اجرا: A1 از ROADMAP-v10.3.0-beta.1.",
+      "tasks": [
+        { "id": "T1", "desc": "fetch + بازرسی تفاضلی هر دو هد: مرز مالکیت (فقط authoring/**) + تطبیق پایه با OFFICIAL-HEADS (ضد INC-07)", "automated": false },
+        { "id": "T2", "desc": "اجرای گیت‌های fail-closed روی worktree ایزوله: G0 حق‌نشر، G0B، heads verify، تست موتور، مبدل رسمی (صفر قرمز)", "automated": true },
+        { "id": "T3", "desc": "حکم مستند در worklog: سبز = ادغام رسمی به v10.3-beta/main؛ قرمز = کامنت اصلاح/rebase برای آرنا", "automated": false },
+        { "id": "T4", "desc": "در صورت ادغام: به‌روزرسانی OFFICIAL-HEADS.json + انتشار cartridges/KH-G*.json + تست ۸۱ و CI سبز", "automated": false }
+      ],
+      "acceptance": [
+        "حکم هر دو هد مستند در worklog با شواهد گیت",
+        "اگر ادغام: مانیفست و کارتریج منتشرشده هم‌SHA با هَد جدید باشند",
+        "CI هر دو شاخهٔ main و v10.3-beta سبز بماند"
+      ],
+      "artifacts": ["public/math-game/authoring/OFFICIAL-HEADS.json", "public/math-game/cartridges/", "worklog.md"],
+      "links": { "pr": null, "issue": "https://github.com/bayrami1341/math-game/issues/4", "notes": "هدهای موضوع: 714338c (arena/0eb22280) و 06d7b7d (arena/6b8310f7)" },
+      "notes": "ترتیب A1 — پیش از BP-006. خروجی BP-005 آرنا نیز از همین خط لوله عبور می‌کند."
+    },
+    {
+      "id": "BP-009",
+      "title": "ماشین انتشار نسخه: ارتقای هستهٔ مرکزی به v10.3.0-beta.1 + یادداشت انتشار + تگ + همگام‌سازی دو شاخه",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 12,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "نسخهٔ جاری 10.3.0-beta.0 است. پس از A1..A3، انتشار بتا.۱ ماشین‌اجراست. ترتیب اجرا: A4 (آخر رشتهٔ A).",
+      "tasks": [
+        { "id": "T1", "desc": "bump نسخه به 10.3.0-beta.1 در public/math-game/package.json + هم‌سازی رشته‌های نسخه در docs/بنرها", "automated": false },
+        { "id": "T2", "desc": "نگارش RELEASE-NOTES-v10.3.0-beta.1.md (خلاصهٔ رشتهٔ A: ادغام محتوا، W7، گیت انتشار)", "automated": false },
+        { "id": "T3", "desc": "اجرای release-check (BP-010) و سپس tag v10.3.0-beta.1 + push تگ و هر دو شاخه", "automated": true }
+      ],
+      "acceptance": [
+        "rg برای نسخه‌های قدیمی ناسازگار = صفر",
+        "تگ v10.3.0-beta.1 روی origin و CI تگ سبز",
+        "main و v10.3-beta هم‌هد یا هم‌محتوا"
+      ],
+      "artifacts": ["public/math-game/package.json", "public/math-game/RELEASE-NOTES-v10.3.0-beta.1.md"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": "ترتیب A4 — فقط پس از سبزی BP-008، BP-006 و BP-010."
+    },
+    {
+      "id": "BP-010",
+      "title": "گیت سخت انتشار scripts/release-check.sh — fail-closed پیش از هر تگ",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 11,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "هدف مالک: انتشار نسخه تکرارپذیر و ربات‌اجراشدنی باشد. این اسکریپت «گزارشنامهٔ انتشار» می‌سازد؛ قرمزی هر گام = ممنوعیت تگ. ترتیب اجرا: A3.",
+      "tasks": [
+        { "id": "T1", "desc": "پیاده‌سازی اسکریپت: سازگاری نسخه در کل مخزن + heads verify + npm test + مبدل self-baseline G2/G3 + تطبیق SHA کارتریج منتشرشده با هَد + (شرطی) pytest پس از BP-006", "automated": false },
+        { "id": "T2", "desc": "تست منفی: تزریق خطای آزمایشی (SHA دستکاری‌شده) → exit≠۰ و پیام قابل‌فهم", "automated": true },
+        { "id": "T3", "desc": "ثبت گزارشنامهٔ سبز فعلی در worklog + مستند در blueprints/README", "automated": true }
+      ],
+      "acceptance": [
+        "اجرای اسکریپت روی وضعیت فعلی = exit 0",
+        "تست منفی exit≠۰ بدهد (fail-closed اثبات‌شده)",
+        "مراحل CI دست‌نخورده بمانند"
+      ],
+      "artifacts": ["scripts/release-check.sh", "worklog.md", "blueprints/README.md"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": "ترتیب A3 — پیش‌نیاز BP-009."
+    },
+    {
+      "id": "BP-011",
+      "title": "موتور زنجیرهٔ اجرا scripts/run-approved.sh — ادامهٔ خودکار نقشه‌های تأییدشده به ترتیب اولویت با گیت بین گام‌ها",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 13,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "دستور مالک: «ربات بتواند اتوماتیک کار را ادامه دهد». رانر نقشه‌های approved را به ترتیب priority می‌پیماید؛ بین هر نقشه گیت‌های fail-closed (validate رجیستری + npm test + مبدل)؛ هر گذار وضعیت = کامیت روی main + append worklog؛ توقف کامل روی قرمزی یا فرمان «فریز». ترتیب اجرا: B2.",
+      "tasks": [
+        { "id": "T1", "desc": "پیاده‌سازی رانر: list→order→(بدنهٔ نقشه دست ربات اجراست)→gate→set-status delivered/verified→commit/push→بعدی", "automated": false },
+        { "id": "T2", "desc": "dry-run روی وضعیت فعلی: ترتیب صحیح رشته‌ها بدون تغییر هیچ وضعیتی", "automated": true },
+        { "id": "T3", "desc": "شبیه‌سازی گیت قرمز → توقف ایمن زنجیره + رکورد block؛ سپس مستند در blueprints/README و MAP کارگاه‌بان", "automated": true }
+      ],
+      "acceptance": [
+        "dry-run ترتیب A1..A4 سپس B1..B3 را نشان دهد بدون هیچ تغییر وضعیت",
+        "قرمزی گیت = توقف زنجیره با رکورد block (تست‌شده)",
+        "هیچ گذار وضعیتی بدون گیت سبز ممکن نباشد"
+      ],
+      "artifacts": ["scripts/run-approved.sh", "blueprints/README.md", "mini-services/foreman/MAP.md"],
+      "links": { "pr": null, "issue": null, "notes": null },
+      "notes": "ترتیب B2 — پس از BP-007. تا سبزشدن، پیمایش دستی طبق ROADMAP معتبر است."
+    },
+    {
+      "id": "BP-012",
+      "title": "انتشار پایدار v10.3.0 — خروج از بتا پس از سبزی کامل رشته‌ها و مُهرهای واقعی معلم",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "awaiting_approval",
+      "priority": 14,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "پیش‌شرط‌های سخت: BP-008/006/010/009 = done (رشتهٔ A) و BP-007/011 = verified (رشتهٔ B) و مُهر معلم روی ۴۸ سؤال + ۵۴ ردیف «پیشنهادی» G2 v0.5 (کار انسانی معلم — ربات فقط گزارش می‌سازد). ترتیب اجرا: B3.",
+      "tasks": [
+        { "id": "T1", "desc": "ساخت گزارش جامع مُهرها و وضعیت گیت‌ها برای تصمیم مالک/معلم", "automated": true },
+        { "id": "T2", "desc": "bump به 10.3.0 + RELEASE-NOTES پایدار + release-check سبز + tag v10.3.0", "automated": false },
+        { "id": "T3", "desc": "اعلام انتشار روی تابلوی مرکزی + به‌روزرسانی MAP و GOVERNANCE در صورت نیاز", "automated": true }
+      ],
+      "acceptance": [
+        "release-check سبز با نسخهٔ 10.3.0",
+        "تگ v10.3.0 روی origin و CI سبز",
+        "هیچ سؤال «پیشنهادی» بدون مُهر معلم در بانک فعال نباشد"
+      ],
+      "artifacts": ["public/math-game/RELEASE-NOTES-v10.3.0.md", "authoring/teacher-stamps.json", "blueprints/registry.json"],
+      "links": { "pr": null, "issue": "https://github.com/bayrami1341/math-game/issues/4", "notes": null },
+      "notes": "ترتیب B3 — شروع فقط با تأیید مالکِ آمادگی؛ مُهر معلم شبیه‌سازی نمی‌شود."
     }
   ]
 }

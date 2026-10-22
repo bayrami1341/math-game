@@ -17,6 +17,7 @@
 - **فرمان فریز:** کامنت `فریز` روی تابلو = توقف تأیید/دیسپچ (مادهٔ ۸).
 - **امنیت:** تأیید فقط از حساب `bayrami1341`؛ تلاش دیگران با پاسخ رد ربات.
 - **CLI:** `bun scripts/blueprint.ts list|show|approve|set-status|validate`.
+- **نقشهٔ راه نسخهٔ بعدی:** `blueprints/ROADMAP-v10.3.0-beta.1.fa.md` — دو رشتهٔ اجرا A (بتا.۱: BP-008→BP-006→BP-010→BP-009) و B (پایدار: BP-007→BP-011→BP-012)؛ رانرهای آینده: `scripts/release-check.sh` (BP-010) و `scripts/run-approved.sh` (BP-011).
 - گارد sync: کامیت‌های ربات با Contents API انجام می‌شود و `git pull --rebase` محلی فقط وقتی درخت تمیز است.
 
 ## ۲) تقسیم کار (قرارداد مالکیت — بخش ۹)
