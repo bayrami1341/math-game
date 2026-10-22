@@ -400,10 +400,13 @@ def export_pilot_cartridge_v05(
 
     wb = openpyxl.load_workbook(base_v04_xlsx)
 
-    # Restore Z.ai's official merged stamps & Second-Inspector fixes from `khshab-G2-MATH_v0.3.1_official.xlsx`
-    # (Incidents #7, #8, #9, #10, #13 in `انتقال تجربه v۱.۰`) under an explicit closed cell whitelist!
+    # If input base already carries official stamps (e.g. Z.ai's Task-58 `khshab-G2-MATH_v0.4_official.xlsx` `a2f61058...`),
+    # `changed_cells` is literally `0` (`PURE ADDITIVE OVERLAY`); otherwise restore from `khshab-G2-MATH_v0.3.1_official.xlsx`.
+    official_v04_ref = Path(base_v04_xlsx).with_name("khshab-G2-MATH_v0.4_official.xlsx")
     official_ref = Path(base_v04_xlsx).with_name("khshab-G2-MATH_v0.3.1_official.xlsx")
-    if official_ref.exists():
+    if Path(base_v04_xlsx).resolve() == official_v04_ref.resolve():
+        scheduled_patches = []
+    elif official_ref.exists():
         scheduled_patches = restore_official_stamps_overlay(wb, official_ref)
     else:
         scheduled_patches = [

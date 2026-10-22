@@ -334,8 +334,10 @@ def test_p4_mutation_m6_page_offset_mismatch_in_s1_fails_structure(tmp_path: Pat
     """Mutation M6: جابه‌جایی صفحهٔ کتاب نسبت به PDF در شیت S1 → شکست قطعی `G6_WORKBOOK_STRUCTURE`."""
     mut = _copy_clean_v05(tmp_path)
     wb = openpyxl.load_workbook(mut)
-    # Row 47 = L-401 (Book p. 55 = PDF 61): corrupt page to 56 without updating PDF 61!
-    wb["نقشهٔ کتاب (S1)"].cell(47, 2, "۵۶")
+    # Look up `L-401` strictly by Column-A key (Incident #11: never hardcode physical row index!)
+    s1 = wb["نقشهٔ کتاب (S1)"]
+    r_l401 = next(r for r in range(3, s1.max_row + 1) if s1.cell(r, 1).value == "L-401")
+    s1.cell(r_l401, 2, "۵۶")
     wb.save(mut)
 
     res = inspect_cartridge_workbook(mut, REPO_ROOT / "authoring/audit/observation_C205.json", RUNTIME_CODES)
@@ -567,19 +569,22 @@ def test_auto_fn9_and_fn10_chunk_planner_and_all_16_historical_incidents():
     assert inc_v05.metrics["passed_incidents"] == 16
 
 
-def test_generic_agent_cli_works_across_grades_including_grade3(tmp_path):
+def test_generic_agent_cli_works_on_real_official_grade3_v07_and_pure_overlay_v05():
+    from authoring.agent.automation_suite import diff_workbooks_by_key
     from authoring.agent.cli import run_generic_wave_check
 
-    # Build a real Grade-3 (`KH-G3-MATH`) workbook in `tmp_path` to prove `khshab-agent` is 100% grade-agnostic
-    g3_path = tmp_path / "khshab-G3-MATH_v0.7.xlsx"
-    shutil.copy2(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", g3_path)
-    wb = openpyxl.load_workbook(g3_path)
-    wb["شناسنامهٔ خشاب"].cell(3, 2).value = "KH-G3-MATH"
-    wb["شناسنامهٔ خشاب"].cell(5, 2).value = "سوم ابتدایی"
-    wb["شناسنامهٔ خشاب"].cell(7, 2).value = "0.7"
-    wb.save(g3_path)
-
+    # 1) Real official Grade-3 cartridge (`KH-G3-MATH_v0.7.xlsx`, SHA `0e678e54...` from Task 59)
+    g3_path = REPO_ROOT / "authoring/khshab-G3-MATH_v0.7.xlsx"
     res_g3 = run_generic_wave_check(REPO_ROOT, candidate_xlsx=g3_path)
     assert res_g3["overall_gate_status"] == "PASS_READY_FOR_SECOND_INSPECTOR", res_g3
     assert res_g3["gates"]["zai_converter"]["red"] == 0
-    Path(res_g3["gates"]["zai_converter"]["report_path"]).unlink(missing_ok=True)
+    assert res_g3["gates"]["zai_converter"]["yellow"] == 7
+
+    # 2) Pure additive overlay check against Z.ai's official Task-58 `khshab-G2-MATH_v0.4_official.xlsx` (`a2f61058...`)
+    kd = diff_workbooks_by_key(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.4_official.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx",
+    )
+    assert kd["changed_cells"] == []
+    assert kd["removed_rows"] == []
+    assert kd["summary"]["added_row_count"] == 44  # 18 S1 + 2 Atlas + 24 Bank

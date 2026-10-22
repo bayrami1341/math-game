@@ -1,7 +1,7 @@
 # سند تحویل موج ۴ (فصل چهارم: عددهای سه‌رقمی) — `KH-G2-MATH v0.5`
 
 - **فایل تحویلی:** `/home/user/math-game/authoring/khshab-G2-MATH_v0.5.xlsx`
-- **SHA-256 دقیق فایل:** `e1bc0bbb5288685fd030cb62e4524217ca07e4372276a3b7a91e619b08f46a42`
+- **SHA-256 دقیق فایل:** `f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656`
 - **نسخهٔ پایهٔ مقایسه:** `/home/user/math-game/authoring/khshab-G2-MATH_v0.4.xlsx` (`(0, 4)` → `(0, 5)`)
 - **گزارش مبدّل رسمی (`cartridge-converter v1.1`):** `/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md` — حکم: **مجاز — JSON منتشر شد** (`0 قرمز، 2 زرد`)
 
@@ -19,9 +19,9 @@
 ## ۳. نتیجهٔ خودآزمایی ۲۰بندی ماشینی (اجراشده، نه ادعایی)
 | ردیف | عنوان کنترل ماشینی | وضعیت | شاهد / جزئیات |
 | :---: | :--- | :---: | :--- |
-| 1 | ۱. عدم نشت فایل PDF/تصویر/upload در Git (`G0`) | **PASS** | checked=262 |
+| 1 | ۱. عدم نشت فایل PDF/تصویر/upload در Git (`G0`) | **PASS** | checked=256 |
 | 2 | ۲. رعایت کامل مرز مالکیت نرم‌افزار Z.ai (`G0B` — §9) | **PASS** | OWNERSHIP_BOUNDARY_CLEAN |
-| 3 | ۳. اثبات قطعی آفست صفحات از پالیندروم و پاصفحه (`INC-16`) | **PASS** | C205 offset=+6 (136/136 footers + 8 chapter reviews) |
+| 3 | ۳. اثبات قطعی آفست صفحات از پالیندروم و پاصفحه (`INC-16`) | **PASS** | C205 offset=+6 |
 | 4 | ۴. چانک‌بندی <=۱۲ صفحه با هم‌پوشانی ۲ صفحه (`INC-15`) | **PASS** | 15 chunks, max=12, overlap=2, lanes=4 |
 | 5 | ۵. حفظ قرارداد ۱۳+۳ ستونی نقشهٔ مادر صفحات (`P3`) | **PASS** | sha256=f0b6851986cebe21... |
 | 6 | ۶. عدم بازیافت شناسه‌های `L- / E_ / Q-` | **PASS** | id_registry monotonic & immutable |
@@ -29,7 +29,7 @@
 | 8 | ۸. منع اکید سبز دروغین توسط هوش مصنوعی (`INC-05`) | **PASS** | forged_greens=0 |
 | 9 | ۹. منبع رسمی `پیشنهاد AI — موتور تألیف v۱.۰` در ردیف‌های جدید (§4.3) | **PASS** | 18 S1 + 2 Atlas + 24 Bank rows |
 | 10 | ۱۰. حفظ کامل سطر نگهبان `یادداشت` و ادغام‌های پایانی شیت‌ها (`G6`) | **PASS** | {'s1_count': 62, 'atlas_code_count': 20, 'question_count': 92} |
-| 11 | ۱۱. هم‌گامی دوطرفهٔ لنگرهای `S1.K ↔ Bank.B` (`T7` / `INC-06,10`) | **PASS** | {'checked_lessons': 62, 'mismatch_count': 0} |
+| 11 | ۱۱. هم‌گامی دوطرفهٔ `S1.K ↔ Bank.B` (`T7` / `INC-06,10`) | **PASS** | {'checked_lessons': 62, 'mismatch_count': 0} |
 | 12 | ۱۲. عدم وجود کد خطای بی‌صاحب خارج از اطلس (`T5` / `INC-04`) | **PASS** | 0 orphan E_ codes |
 | 13 | ۱۳. رعایت کامل قاعدهٔ ضد J12 و تفکیک ارقام فارسی/لاتین (`G3` / `INC-01`) | **PASS** | {'checked_questions': 92, 'issue_count': 0} |
 | 14 | ۱۴. بازحساب مستقل کلید پاسخ همهٔ ۹۲ سؤال (`G4`) | **PASS** | {'checked_questions': 92, 'issue_count': 0} |

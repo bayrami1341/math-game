@@ -6,7 +6,7 @@
       0,
       5
     ],
-    "sha256": "e1bc0bbb5288685fd030cb62e4524217ca07e4372276a3b7a91e619b08f46a42",
+    "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
     "pct_no_false_qmark": 100.0,
     "pct_anti_j12": 100.0,
     "pct_mapped_options": 100.0,
@@ -18,7 +18,7 @@
       "status": "PASS",
       "reason_code": "CLEAN_WORKSPACE",
       "metrics": {
-        "checked_git_paths": 262,
+        "checked_git_paths": 256,
         "violation_count": 0
       }
     },
@@ -26,7 +26,7 @@
       "status": "PASS",
       "reason_code": "OWNERSHIP_BOUNDARY_CLEAN",
       "metrics": {
-        "checked_changed_paths": 45,
+        "checked_changed_paths": 53,
         "violation_count": 0
       }
     },
@@ -113,7 +113,7 @@
         "v05_report": "/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md",
         "v04_red": 2,
         "v04_verdict": "مردود — انتشار JSON ممنوع",
-        "preview_json_sha256": "80aa1e52a860bba978dc0c58619ce17100dbeac6adc5f1e7322bbc10d139e6b7"
+        "preview_json_sha256": "b8e13e0ba1f08c3c9c9370c7f0e5404629e6aa9d440ef42a222b7feb364a2dfe"
       }
     },
     "G_AUTO_10_HISTORICAL_INCIDENTS_16": {

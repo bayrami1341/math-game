@@ -7,9 +7,9 @@
   "snapshot_sha256": "ceaaf18bd11201a140fd519e54808e8fc7b07d57a7dde7ffc5f58b8521c21a77",
   "pagemap_xlsx_sha256": "f0b6851986cebe211de841ca85aafb07753ab17287be1d9daafdedcec63a4822",
   "base_cartridge_xlsx_sha256": "ad4761ba6c6720749cd2c51ddf82bee6cc78cfdb8a3399ae731bb3284640b798",
-  "output_cartridge_xlsx_sha256": "e1bc0bbb5288685fd030cb62e4524217ca07e4372276a3b7a91e619b08f46a42",
-  "converted_json_sha256": "80aa1e52a860bba978dc0c58619ce17100dbeac6adc5f1e7322bbc10d139e6b7",
-  "generated_at_utc": "2026-10-22T10:31:54Z",
+  "output_cartridge_xlsx_sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+  "converted_json_sha256": "b8e13e0ba1f08c3c9c9370c7f0e5404629e6aa9d440ef42a222b7feb364a2dfe",
+  "generated_at_utc": "2026-10-22T11:44:36Z",
   "gates": [
     {
       "gate_id": "G0_COPYRIGHT_GUARD",
@@ -18,7 +18,7 @@
       "reason_code": "CLEAN_WORKSPACE",
       "summary": "هیچ فایل PDF، تصویر رندرشده، کراپ یا فایل پوشهٔ upload/ در مخزن Git وجود ندارد.",
       "metrics": {
-        "checked_git_paths": 262,
+        "checked_git_paths": 256,
         "violation_count": 0
       },
       "issues": []
@@ -30,7 +30,7 @@
       "reason_code": "OWNERSHIP_BOUNDARY_CLEAN",
       "summary": "تمامی فایل‌های نرم‌افزار Z.ai صددرصد دست‌نخورده باقی مانده‌اند (۰ تغییر خارج از قلمرو محتوا/اتوماسیون).",
       "metrics": {
-        "checked_changed_paths": 45,
+        "checked_changed_paths": 53,
         "violation_count": 0
       },
       "issues": []
@@ -419,7 +419,7 @@
         "v05_report": "/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md",
         "v04_red": 2,
         "v04_verdict": "مردود — انتشار JSON ممنوع",
-        "preview_json_sha256": "80aa1e52a860bba978dc0c58619ce17100dbeac6adc5f1e7322bbc10d139e6b7"
+        "preview_json_sha256": "b8e13e0ba1f08c3c9c9370c7f0e5404629e6aa9d440ef42a222b7feb364a2dfe"
       },
       "issues": []
     },
