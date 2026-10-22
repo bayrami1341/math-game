@@ -144,6 +144,7 @@ function loadState(): State {
     s.blueprints.dispatched ??= {};
     s.blueprints.warnedNonOwner ??= [];
     s.blueprints.events ??= [];
+    (s.blueprints as any).stampedIds ??= [];
     return s;
   } catch {
     return {
@@ -443,6 +444,57 @@ function registryFromOrigin(): Registry | null {
   const r = git(["show", `origin/main:${REGISTRY_PATH}`], REPO, 60_000);
   if (!r.ok) return null;
   try { return JSON.parse(r.out) as Registry; } catch { return null; }
+}
+
+/**
+ * BP-004 T3 — دیسپچ مُهرهای تازهٔ معلم به تابلوی مرکزی.
+ * مُهرها توسط داشبورد (POST /api/teacher-review/stamp) در authoring/teacher-stamps.json
+ * ثبت می‌شوند؛ کارگاه‌بان هر مُهرِ تازه را یک‌بار روی تابلو می‌برد (idهای ارسال‌شده
+ * در state ذخیره می‌شوند تا رأی تکراری نرود).
+ */
+async function dispatchTeacherStamps(state: State, token: string): Promise<number> {
+  const bp = state.blueprints as any;
+  bp.stampedIds ??= [];
+  const sent: string[] = Array.isArray(bp.stampedIds) ? bp.stampedIds : [];
+  let posted = 0;
+  let file: any = null;
+  try {
+    file = JSON.parse(readFileSync(path.join(REPO, "authoring/teacher-stamps.json"), "utf8"));
+  } catch {
+    return 0; // هنوز مُهری ثبت نشده — بی‌صدا
+  }
+  const stamps: any[] = Array.isArray(file?.stamps) ? file.stamps : [];
+  const issue = state.blueprints!.boardIssue;
+  if (!issue) return 0;
+  const VERDICT_FA: Record<string, string> = {
+    approve: "✅ تأیید معلم",
+    reject: "❌ رد معلم",
+    needs_changes: "🔧 نیازمند اصلاح",
+  };
+  for (const s of stamps) {
+    if (!s?.id || sent.includes(s.id)) continue;
+    const line = [
+      `**.stamp** ${VERDICT_FA[s.verdict] ?? s.verdict} — **${s.family}**`,
+      `- سر رسمی هنگام مُهر: \`${String(s.officialSha || "").slice(0, 12)}\` (فایل: \`${s.officialFile ?? "?"}\`)`,
+      `- نامزد: \`${s.candidateBranch ?? "—"}\` @ \`${String(s.candidateSha || "—").slice(0, 12)}\``,
+      s.note ? `- توضیح معلم: ${String(s.note).slice(0, 400)}` : null,
+      `- شناسهٔ مُهر: \`${s.id}\` — طبق مادهٔ ۷-ب GOVERNANCE، رأی تربیتی تفویض‌نشدنی است.`,
+    ].filter(Boolean).join("\n");
+    const c = await gh<any>(`/issues/${issue}/comments`, { method: "POST", body: JSON.stringify({ body: line }) }, token);
+    if (c.status === 201) {
+      sent.push(s.id);
+      posted++;
+      log(`🖊️ مُهر ${s.id} (${s.verdict}/${s.family}) به تابلو رفت`);
+    } else {
+      log(`⚠️ ارسال مُهر ${s.id} ناموفق: ${c.status}`);
+      break; // دور بعد دوباره تلاش می‌شود — ترتیب حفظ می‌ماند
+    }
+  }
+  if (posted) {
+    bp.stampedIds = sent;
+    bp.events.unshift(`🖊️ ${posted} مُهر معلم به تابلو رفت`);
+  }
+  return posted;
 }
 
 /**
@@ -828,11 +880,12 @@ async function scan(): Promise<{ processed: number; events: string[] }> {
       }
     }
 
-    // §۲ — سیستم مرکزی: تابلو + کامنت‌های مالک + موتور رجیستری
+    // §۲ — سیستم مرکزی: تابلو + کامنت‌های مالک + موتور رجیستری + مُهرهای معلم
     try {
       await ensureBoard(token, state);
       await processBoardComments(state, token);
       await processRegistryEngine(state, token);
+      await dispatchTeacherStamps(state, token);
     } catch (e: any) {
       log(`⚠️ خطای موتور مرکزی: ${e?.stack || e}`);
       events.push(`⚠️ موتور مرکزی: ${e?.message ?? e}`);

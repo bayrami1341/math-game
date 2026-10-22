@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 6,
-  "updated_at": "2026-10-22T18:43:46.237Z",
+  "version": 7,
+  "updated_at": "2026-10-22T18:49:21.682Z",
   "updated_by": "agent:z.ai",
   "blueprints": [
     {
@@ -206,14 +206,14 @@
       "title": "گام ۳ — داشبورد معلم: صفحهٔ بازرسی محتوا + مُهر رأی معلم",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "approved",
+      "status": "delivered",
       "priority": 5,
       "created_by": "z.ai",
       "created_at": "2026-10-22T18:30:00Z",
       "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی و همه اتفاقات در راستای توسعه برنامه و اهداف اصلی باشد»",
       "approved_at": "2026-10-22T18:12:56.392Z",
       "dispatched_at": null,
-      "delivered_at": null,
+      "delivered_at": "2026-10-22T18:49:21.682Z",
       "verified_at": null,
       "context": "دستورکار ۶۰–۶۶ گام ۳: معلم باید بتواند بدون گیت، نتیجهٔ گیت‌ها و تفاوت نسخهٔ محتوا را ببیند و رأی تربیتی‌اش را مهر کند؛ رأی در فایل ثبت رسمی می‌نشیند و کارگاه‌بان آن را به تابلو می‌برد.",
       "tasks": [
@@ -247,7 +247,7 @@
         "issue": null,
         "notes": null
       },
-      "notes": ""
+      "notes": "[2026-10-22T18:49:21.682Z] T1: صفحهٔ بازرسی (تب ششم داشبورد) با سرهای رسمی + حکم کارگاه‌بان؛ T2: POST /api/teacher-review/stamp با قفل SHA و نوشتن اتمی → authoring/teacher-stamps.json؛ T3: dispatchTeacherStamps در کارگاه‌بان — E2E زنده تست شد (مُهر آزمایشی پس از تأیید زنجیره پاک شد)"
     },
     {
       "id": "BP-005",

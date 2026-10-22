@@ -11,6 +11,7 @@ import {
   RefreshCw,
   ScanLine,
   Sparkles,
+  Stamp,
   Trophy,
   Users,
 } from "lucide-react";
@@ -22,6 +23,7 @@ import { StudentsTab } from "@/components/dashboard/students-tab";
 import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
 import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
 import { CartridgeTab } from "@/components/dashboard/cartridge-tab";
+import { TeacherReviewTab } from "@/components/dashboard/teacher-review-tab";
 import { LeaderboardTab } from "@/components/dashboard/leaderboard-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
 import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
@@ -29,7 +31,7 @@ import { fetchBottlenecks, fetchLeaderboard, fetchOverview, fetchStudents } from
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
 
-type TabKey = "overview" | "students" | "leaderboard" | "bottlenecks" | "cartridge";
+type TabKey = "overview" | "students" | "leaderboard" | "bottlenecks" | "cartridge" | "review";
 
 /** تاریخ شمسی امروز — فقط در کلاینت محاسبه می‌شود تا با SSR ناسازگار نشود */
 function useTodayFa(): string {
@@ -207,6 +209,10 @@ export default function TeacherDashboardPage() {
                 <Package className="size-4" aria-hidden />
                 کارگاه خشاب
               </TabsTrigger>
+              <TabsTrigger value="review" className="gap-1.5">
+                <Stamp className="size-4" aria-hidden />
+                بازرسی محتوا
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="mt-4">
@@ -250,6 +256,10 @@ export default function TeacherDashboardPage() {
 
             <TabsContent value="cartridge" className="mt-4">
               <CartridgeTab />
+            </TabsContent>
+
+            <TabsContent value="review" className="mt-4">
+              <TeacherReviewTab />
             </TabsContent>
           </Tabs>
         </div>
