@@ -1,0 +1,52 @@
+{
+  "bot": {
+    "name": "کارگاه‌بان (Foreman)",
+    "version": "1.0.0",
+    "port": 3030,
+    "language": "fa",
+    "role": "ناظر خودکار خط تولید محتوا — پایش، گیت ماشینی محلی، PR، اطلاع‌رسانی"
+  },
+  "repo": {
+    "owner": "bayrami1341",
+    "name": "math-game",
+    "localPath": "/home/z/my-project",
+    "apiRoot": "https://api.github.com/repos/bayrami1341/math-game",
+    "tokenSource": "پارس از git remote get-url origin — هرگز در فایل ذخیره نمی‌شود"
+  },
+  "branches": {
+    "watchPattern": "origin/arena/*",
+    "prBase": "v10.3-beta",
+    "mainLineage": ["main", "v10.3-beta"]
+  },
+  "contentHeads": {
+    "manifest": "public/math-game/authoring/OFFICIAL-HEADS.json",
+    "families": ["KH-G1-MATH", "KH-G2-MATH", "KH-G3-MATH", "KH-G4-MATH", "KH-G5-MATH", "KH-G6-MATH"],
+    "cartridgeGlobs": ["authoring/khshab-G*-MATH_v*.xlsx", "public/math-game/authoring/khshab-G*-MATH_v*.xlsx"],
+    "staleCode": "STALE_OFFICIAL_BASE_INCIDENT_07"
+  },
+  "machineChecks": [
+    "وجود فایل CI (khshab-gate.yml) روی هد تحویل",
+    "خودسازگاری مانیفست OFFICIAL-HEADS شاخهٔ آرنا (heads --verify)",
+    "هم‌گامی نسخه/SHA خشاب‌ها با سرهای رسمی main (گارد پایهٔ کهنه INC-07)",
+    "smoke: check-wave self-baseline روی خانوادهٔ هم‌گام (در صورت وجود مبدل در شاخه)"
+  ],
+  "humanStages": [
+    "بازرسی دوم محتوا — Z.ai",
+    "رأی معلم — مالک",
+    "ادغام رسمی در v10.3-beta — Z.ai"
+  ],
+  "endpoints": {
+    "GET /status": "خلاصهٔ JSON وضعیت",
+    "POST /scan": "اجرای فوری یک دور پایش",
+    "GET /": "بررسی حیات"
+  },
+  "intervals": {
+    "scanMsDefault": 600000,
+    "envOverride": "FOREMAN_INTERVAL_MS"
+  },
+  "communication": {
+    "withArena": "کامنت خودکار فارسی روی PR هر تحویل + PR از شاخهٔ arena/** به v10.3-beta",
+    "withZai": "BRIEF.md + state.json + foreman.log (خواندن در شروع هر نشست)",
+    "withOwner": "خلاصهٔ یک‌خطی در چت — کارگاه‌بان بی‌سروصدا کار می‌کند"
+  }
+}

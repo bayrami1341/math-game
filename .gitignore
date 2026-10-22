@@ -71,3 +71,8 @@ db/*.db
 authoring/build_preview/
 authoring/local_viewer_cache/
 download/convert-report-*.md
+
+# کارگاه‌بان — فایل‌های حالت زمان اجرا
+mini-services/foreman/state.json
+mini-services/foreman/foreman.log
+mini-services/foreman/BRIEF.md

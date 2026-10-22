@@ -1,0 +1,11 @@
+{
+  "name": "khshab-foreman",
+  "version": "1.0.0",
+  "description": "کارگاه‌بان — ربات ناظر خط تولید محتوا (پایش شاخه‌های آرنا، گیت ماشینی محلی، PR و رأی خودکار)",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts",
+    "scan": "bun index.ts --scan-once"
+  }
+}
