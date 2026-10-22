@@ -1,0 +1,51 @@
+{
+  "formatVersion": 1,
+  "updatedAt": "2026-10-22",
+  "updatedBy": "Z.ai — Task 65/66 (ادغام رسمی موج ۴ و بستهٔ تبادل استاندارد)",
+  "rules": {
+    "next_wave_base_must_match_sha256": true,
+    "stale_violation_code": "STALE_OFFICIAL_BASE_INCIDENT_07",
+    "note": "هر موج جدید فقط از فایلِ اعلام‌شدهٔ همین مانیفست شروع می‌شود؛ پس از هر ادغام رسمی، این فایل توسط موتور اصلی به‌روز می‌شود."
+  },
+  "heads": {
+    "KH-G1-MATH": {
+      "version": "v0.1",
+      "file": "public/math-game/authoring/khshab-G1-MATH_v0.1.xlsx",
+      "sha256": "4c5d5e1877e72a1b24c977b95cb19dfd29e480e5ed9e8d0d4e25bdfc86baf46c",
+      "status": "skeleton — در انتظار موتور شمارش (خانوادهٔ ۵)"
+    },
+    "KH-G2-MATH": {
+      "version": "v0.5",
+      "file": "public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx",
+      "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+      "status": "official — فصل ۱+۲+۴ ادغام‌شده (۶۲ درس / ۱۳ اطلس / ۹۲ سؤال)",
+      "publishedCartridge": "public/math-game/cartridges/KH-G2-MATH.json",
+      "teacherNote": "۴۸ سؤال و ۵۴ ردیف صفحه‌ای «پیشنهاد» در انتظار مُهر معلم"
+    },
+    "KH-G3-MATH": {
+      "version": "v0.7",
+      "file": "public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx",
+      "sha256": "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb",
+      "status": "official — موج A در حال اجرا (پیش‌فرض)؛ حکم نقشهٔ مادر G3 پیش آرنا",
+      "publishedCartridge": "public/math-game/cartridges/KH-G3-MATH.json"
+    },
+    "KH-G4-MATH": {
+      "version": "v0.1",
+      "file": "public/math-game/authoring/khshab-G4-MATH_v0.1.xlsx",
+      "sha256": "b354f68e4d4cc0372e6abf547c8340083ab335e2e7cf151fd6944422ba1a0ee3",
+      "status": "skeleton — در انتظار گیت بازخورد پایلوت"
+    },
+    "KH-G5-MATH": {
+      "version": "v0.1",
+      "file": "public/math-game/authoring/khshab-G5-MATH_v0.1.xlsx",
+      "sha256": "ddd86034dbf40518e1bb589c3baa85cb48734790c612ce6f93f09c7b41ea9871",
+      "status": "skeleton — در انتظار گیت بازخورد پایلوت"
+    },
+    "KH-G6-MATH": {
+      "version": "v0.1",
+      "file": "public/math-game/authoring/khshab-G6-MATH_v0.1.xlsx",
+      "sha256": "dd0c62ae543e43a71769e1ec05b3a3cdb7cc9027d418c8b49d302139dc61a5b6",
+      "status": "skeleton — در انتظار گیت بازخورد پایلوت"
+    }
+  }
+}

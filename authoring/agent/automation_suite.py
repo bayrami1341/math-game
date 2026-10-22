@@ -1085,3 +1085,86 @@ def audit_historical_incidents_16(
         issues=failed,
         metrics={"checked_incidents": 16, "passed_incidents": 16 - len(failed), "failed_incidents": len(failed), "matrix": results},
     )
+
+
+# ==============================================================================
+# Task 66 (گام ۷): مانیفست OFFICIAL-HEADS و گارد پایهٔ کهنه (`STALE_OFFICIAL_BASE_INCIDENT_07`)
+# ==============================================================================
+def check_official_heads(
+    repo_root: str | Path,
+    official_xlsx: Optional[str | Path] = None,
+) -> Dict[str, Any]:
+    """بررسی برابری SHA-256 فایل پایهٔ رسمی با مانیفست `OFFICIAL-HEADS.json`.
+
+    اگر فایل رسمیِ داده‌شده با سرِ اعلام‌شدهٔ خانوادهٔ خودش برابر نباشد، یعنی نویسنده
+    موج جدید را از پایهٔ کهنه شروع کرده (حادثهٔ تاریخی #۷) → FAIL با کد صریح.
+    """
+    root = Path(repo_root).resolve()
+    manifest_path = root / "public/math-game/authoring/OFFICIAL-HEADS.json"
+    if not manifest_path.exists():
+        return {"status": "WARN", "reason_code": "OFFICIAL_HEADS_MANIFEST_MISSING", "manifest": str(manifest_path)}
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    heads = manifest.get("heads", {})
+    if official_xlsx is None:
+        return {
+            "status": "PASS",
+            "reason_code": "NO_OFFICIAL_PROVIDED",
+            "heads": {k: v.get("version") for k, v in heads.items()},
+        }
+    off = Path(official_xlsx).resolve()
+    family = None
+    for key in heads:
+        if key.replace("KH-", "khshab-") + "_" in off.name:
+            family = key
+            break
+    if family is None:
+        return {"status": "WARN", "reason_code": "FAMILY_NOT_IN_MANIFEST", "file": off.name}
+    head = heads[family]
+    actual_sha = file_sha256(str(off))
+    if actual_sha == head.get("sha256"):
+        return {
+            "status": "PASS",
+            "family": family,
+            "expected_version": head.get("version"),
+            "sha256": actual_sha,
+        }
+    return {
+        "status": "FAIL",
+        "reason_code": manifest.get("rules", {}).get(
+            "stale_violation_code", "STALE_OFFICIAL_BASE_INCIDENT_07"
+        ),
+        "family": family,
+        "expected_version": head.get("version"),
+        "expected_sha256": head.get("sha256"),
+        "provided_file": off.name,
+        "provided_sha256": actual_sha,
+        "summary": "پایهٔ رسمی کهنه است — موج جدید فقط از سرِ اعلام‌شدهٔ OFFICIAL-HEADS.json شروع می‌شود (حادثهٔ #۷).",
+    }
+
+
+def verify_all_heads(repo_root: str | Path) -> Dict[str, Any]:
+    """خودسازگاری مانیفست: SHA هر فایل سرِ اعلام‌شده باید با فایل واقعی روی دیسک برابر باشد."""
+    root = Path(repo_root).resolve()
+    manifest_path = root / "public/math-game/authoring/OFFICIAL-HEADS.json"
+    if not manifest_path.exists():
+        return {"status": "FAIL", "reason_code": "OFFICIAL_HEADS_MANIFEST_MISSING"}
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    issues = []
+    for key, head in manifest.get("heads", {}).items():
+        f = root / head.get("file", "")
+        if not f.exists():
+            issues.append({"family": key, "error": "FILE_MISSING", "file": str(f)})
+            continue
+        actual = file_sha256(str(f))
+        if actual != head.get("sha256"):
+            issues.append({
+                "family": key,
+                "error": "SHA_MISMATCH",
+                "expected": head.get("sha256"),
+                "actual": actual,
+            })
+    return {
+        "status": "PASS" if not issues else "FAIL",
+        "checked_families": len(manifest.get("heads", {})),
+        "issues": issues,
+    }

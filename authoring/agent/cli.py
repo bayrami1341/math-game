@@ -26,6 +26,8 @@ from .automation_suite import (
     verify_cpa_and_answer_balance,
     verify_official_stamps,
     verify_wave_whitelist,
+    check_official_heads,
+    verify_all_heads,
 )
 from .git_guard import audit_git_copyright_safety, check_ownership_boundary
 from .governance import (
@@ -92,6 +94,8 @@ def run_generic_wave_check(
     if official_xlsx is not None and official_xlsx.exists():
         g_st = verify_official_stamps(candidate_xlsx, official_xlsx)
         gates["official_stamps"] = {"status": g_st.status, "issues": g_st.issues, "metrics": g_st.metrics}
+        # Task 66: گارد پایهٔ کهنه — پایهٔ رسمی داده‌شده باید سرِ اعلام‌شدهٔ OFFICIAL-HEADS باشد
+        gates["official_heads"] = check_official_heads(repo_root, official_xlsx)
 
     if delivery_md is not None and base_xlsx is not None and base_xlsx.exists():
         checks = [
@@ -116,6 +120,7 @@ def run_generic_wave_check(
         and conv["status"] == "PASS"
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
+        and (gates.get("official_heads", {}).get("status", "PASS") == "PASS")
     )
     return {
         "candidate": str(candidate_xlsx),
@@ -307,6 +312,10 @@ def main(argv: list[str] | None = None) -> int:
     p_verdict.add_argument("--actor-role", default="human_teacher")
     p_verdict.add_argument("--target-ids", nargs="+", required=True)
     p_verdict.add_argument("--target-file", required=True)
+
+    p_heads = sub.add_parser("heads", help="Task 66: راستی‌آزمایی مانیفست OFFICIAL-HEADS.json (خودسازگاری سرهای رسمی)")
+    p_heads.add_argument("--repo-root", default=".")
+    p_heads.add_argument("--verify", action="store_true")
     p_verdict.add_argument("--notes", default="")
 
     args = parser.parse_args(argv)
@@ -338,6 +347,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "keyed-diff":
         print(json.dumps(diff_workbooks_by_key(args.old_xlsx, args.new_xlsx), ensure_ascii=False, indent=2))
         return 0
+
+    if args.cmd == "heads":
+        res = verify_all_heads(root)
+        print(json.dumps(res, ensure_ascii=False, indent=2))
+        return 0 if res.get("status") == "PASS" else 1
 
     if args.cmd == "count-items":
         x0, y0, x1, y1 = [float(v.strip()) for v in args.bbox.split(",")]
