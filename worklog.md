@@ -1350,3 +1350,23 @@ Work Log:
 Stage Summary:
 - خشاب G3 رسماً در محل استاندارد authoring/ کنار سایر خشاب‌ها نشست و بستهٔ تحویل (فایل + SHA + سند) روی v10.3-beta برای کشیدن آرنا منتشر شد
 - کار باز مرتبط: حکم نقشهٔ مادر G3 هنوز پیش آرناست (بریف روی همین شاخه)
+
+---
+Task ID: 60 (+60-Pre)
+Agent: Z.ai Code (main)
+Task: اجرای گام‌های ۰ و ۱ از دستورکار تحویل آرنا (PR #1، شاخهٔ arena/0eb22280-math-game) — پاک‌سازی نشت حق‌نشر از Git + جذب رسمی khshab-agent
+
+Work Log:
+- راستی‌آزمایی تحویل: شاخهٔ arena/0eb22280-math-game (۴ کامیت جدید روی ab15597) + سند docs/ZAI-MASTER-PROMPT-TASKS-60-66.fa.md خوانده شد؛ ادعای «۰ تغییر روی فایل‌های نرم‌افزار» با دیف درخت تأیید شد
+- گام ۰ (60-Pre): ادعای نشت تأیید شد (۶۶ مسیر track‌شده شامل ۳ PDF حق‌نشر)؛ ۶۰ فایل با --cached از ایندکس خارج شد (دیسک محلی دست‌نخورده)؛ .gitignore با tool-results/، db/*.db، .zscripts/dev.pid، authoring/build_preview/، authoring/local_viewer_cache/ قفل شد؛ گارد fail-closed در scripts/auto-backup.sh (توقف کامیت) و scripts/gh-autosave.sh (توقف پوش) با bash -n معتبر؛ معیار پذیرش: git ls-files | rg '\.pdf$|^upload/|^tool-results/' = 0 ✓؛ کامیت 332dcfc پوش شد
+- گام ۱ (60): بستهٔ ایجنت (authoring/agent ۱۳ ماژول + README + tests + pyproject) نصب شد؛ آینهٔ مبدل (zai_converter_mirror) حذف و run_converter_and_parse_report مستقیماً به تک‌منبع رسمی (tools/cartridge-converter/convert.mjs + station/{cartridge-schema,errors}.js) سیم‌کشی شد با گارد MISSING_CONVERTER_SSOT؛ _locate_node_modules_with_xlsx مسیر tools/cartridge-converter/node_modules اضافه شد
+- دو گارد انطباق یافت: copyright_guard (لیست سفید PNG فقط چیدمان شاخهٔ آرنا را می‌شناخت) و ownership_boundary (base_ref هاردکد ab15597 بی‌نیای HEAD) — هر دو برای توپولوژی رسمی اصلاح شد (ALLOWED_IMAGE_PREFIXES: public/، assets/ + بازگشت به دیف HEAD)
+- اجرای زندهٔ CLI: check-wave G2 v0.5 (candidate vs رسمی v0.4) = PASS_READY_FOR_SECOND_INSPECTOR (هر ۶ گیت PASS، مبدل ۰ قرمز/۲ زرد) ✓؛ check-wave G3 v0.7 self-baseline = PASS_READY_FOR_SECOND_INSPECTOR (مبدل ۰/۷ ✓؛ cpa_and_balance داخلی FAIL = همان مشخصات legacy مستند AUD-06، نیازمند پروفایل legacy — نقص جدیدی نیست)؛ keyed-diff v0.4↔v0.5 = ۴۴+/۰−/۰ تغییر سلول؛ count-items دود-تست = PASS (count=19)
+- ⚠️ کشف مهم ۱: keyed-diff تأیید کرد فایل v0.5 افزودهٔ محض است و Q-1011 دست‌نخورده (۱۳ رسمی حفظ شده) — اما متن گزارش آرنا (خط «بازگردانی اصلاح شمارش ماشینی Q-1011 (۱۳ مثلث → ۱۸)») تغییری را ادعا می‌کند که در فایل وجود ندارد = متن گزارش نادرست/فریبنده؛ باید در سند تحویل اصلاح شود (داده معتبر است، سند نه)
+- ⚠️ کشف مهم ۲: new_wave_start_qid="Q-1069" هاردکد در automation_suite است (باگ دامنه برای غیر-G2) + تست‌های pytest (۲۹/۳۱ شکست در مخزن من) به فضای کاری شاخهٔ آرنا (authoring/audit/*.json، /tmp/c205_secure_vault) وابسته‌اند — اقلام باز Task 60-bis
+- v0.5 هنوز ادغام رسمی نشد — طبق گام ۶ نیازمند بازرسی دوم §6.6 (نمونه‌گیری کور PDF ص ۵۵–۷۲) و تصمیم مالک/معلم است
+
+Stage Summary:
+- گام ۰ کامل و پوش‌شده (کامیت 332dcfc): مخزن از فایل‌های حق‌نشر پاک شد و دو گارد دائمی جلوی تکرار را می‌گیرد؛ توجه: فایل‌ها در تاریخچهٔ گیت قدیمی هنوز موجودند — پاک‌سازی کامل نیازمند rewrite تاریخچه + تصمیم مالک
+- گام ۱ کامل (کامیت f8706b2): ایجنت رسمی مخزن شد، SSOT برقرار، گیت کامل موج ۴ v0.5 = PASS_READY_FOR_SECOND_INSPECTOR
+- گام‌های ۲ تا ۷ (CI، داشبورد معلم، errors-v103، SVG رندرر، بازرسی دوم+ادغام v0.5، OFFICIAL-HEADS) باقی است — ترتیب دستورکار حفظ شود
