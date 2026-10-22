@@ -63,3 +63,10 @@ upload/
 # برش‌های تصویری موقت از PDF کتاب (حق نشر — هرگز کامیت نمی‌شود)
 tmp-scripts/*.png
 tmp-scripts/*.jpg
+
+# Task 60-Pre — گارد حق‌نشر و فایل‌های موقت (fail-closed)
+tool-results/
+db/*.db
+.zscripts/dev.pid
+authoring/build_preview/
+authoring/local_viewer_cache/

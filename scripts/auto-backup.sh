@@ -12,6 +12,12 @@ while true; do
   # فایل‌های تغییرکرده را بیاب (بدون پوشه‌های سنگین)
   if ! git diff --quiet HEAD 2>/dev/null || [ -n "$(git status --porcelain -uno 2>/dev/null)" ]; then
     git add -A >/dev/null 2>&1
+    # گارد حق‌نشر (fail-closed — Task 60-Pre): اگر فایل ممنوعه استیج شده باشد، کامیت متوقف می‌شود
+    if git diff --cached --name-only 2>/dev/null | grep -qE '\.pdf$|^upload/|^tool-results/|\.zscripts/dev\.pid'; then
+      echo "[$(date '+%H:%M')] 🚫 گارد حق‌نشر: فایل ممنوعه در استیج — کامیت متوقف شد"
+      git reset >/dev/null 2>&1
+      continue
+    fi
     if ! git diff --cached --quiet 2>/dev/null; then
       git commit -m "auto-backup $(date '+%Y-%m-%d %H:%M')" >/dev/null 2>&1
       echo "[$(date '+%H:%M')] کامیت محلی انجام شد"
