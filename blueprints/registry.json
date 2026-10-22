@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 14,
-  "updated_at": "2026-10-22T22:24:59.495Z",
+  "version": 16,
+  "updated_at": "2026-10-22T22:27:41.914Z",
   "updated_by": "agent:z.ai",
   "blueprints": [
     {
@@ -305,15 +305,15 @@
       "title": "W7 آرنا — افزودن گام پایتست ایجنت به CI khshab-gate (در انتظار تأیید مالک)",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "executing",
+      "status": "verified",
       "priority": 7,
       "created_by": "z.ai",
       "created_at": "2026-10-22T19:05:00Z",
       "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
       "approved_at": "2026-10-22T22:19:38.008Z",
       "dispatched_at": null,
-      "delivered_at": null,
-      "verified_at": null,
+      "delivered_at": "2026-10-22T22:27:41.891Z",
+      "verified_at": "2026-10-22T22:27:41.914Z",
       "context": "درخواست رسمی آرنا (authoring/ZAI-HANDOFF-W7-W8.fa.md @39ab27e): اجرای pytest authoring/tests روی هر ۶ سر رسمی در CI. بازرسی دوم Z.ai: ادعای «تضمین‌شده PASS» در محیط تمیز بازتولید نشد (۱۳/۱۴؛ تست بازسازی بیت‌به‌بیت v0.5 = f3140306 ≠ f1f339a0 — حساسیت خروجی اکسل به نسخهٔ openpyxl/ریفکتور excel_exporter آرنا). پیش‌نیاز رفع: هم‌گام‌سازی خروجی موج‌ساز آرنا یا سست‌کردن ادعای بیت‌به‌بیت با توافق مالک. پس از سبزشدن در سندباکس، گام CI افزوده می‌شود.",
       "tasks": [
         {
@@ -344,7 +344,7 @@
         "issue": null,
         "notes": "منبع: authoring/ZAI-HANDOFF-W7-W8.fa.md در arena/0eb22280"
       },
-      "notes": "تأیید مالک فقط با «تایید BP-006» روی تابلو یا چت.\n[2026-10-22T22:24:59.495Z] W7: پین openpyxl==3.1.5 + گام pytest در khshab-gate — محلی سبز، در انتظار ران CI"
+      "notes": "تأیید مالک فقط با «تایید BP-006» روی تابلو یا چت.\n[2026-10-22T22:24:59.495Z] W7: پین openpyxl==3.1.5 + گام pytest در khshab-gate — محلی سبز، در انتظار ران CI\n[2026-10-22T22:27:41.891Z] پین openpyxl==3.1.5 + گام pytest authoring/tests در khshab-gate؛ اولین ران سبز: b88b3e8\n[2026-10-22T22:27:41.914Z] CI success شامل گیت پایتست؛ مراحل قبلی دست‌نخورده سبز"
     },
     {
       "id": "BP-007",
