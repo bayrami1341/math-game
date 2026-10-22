@@ -1605,3 +1605,16 @@ Work Log:
 Stage Summary:
 - وضعیت صف برای دیسپچ شبانه: executing=BP-007 | approved=BP-011 | awaiting_approval=BP-013, BP-014 | blocked-انسانی=BP-012
 - با تأیید مالک («تایید همه» یا «تایید BP-013 و BP-014»)، حلقهٔ §۴ تا صبح بی‌توقف اجرا می‌شود و فقط با: فرمان فریز / قرمزی گیت (فقط همان رشته) / خارج‌ازدامنه متوقف می‌شود
+
+---
+Task ID: nightshift-dispatch
+Agent: Z.ai Code (main)
+Task: ثبت تأیید واحد مالک «تایید همه» (trace 1a165e609768e74d) و آغاز شیفت شب
+
+Work Log:
+- approve BP-013 و BP-014 با منبع تأیید «مالک-چت: تایید همه» → رجیستری v24، validator سبز
+- صف فعال شب: BP-007 (executing) → BP-011 (approved) → BP-013 → BP-014 | BP-012 قفل انسانی (مُهر معلم)
+- حلقهٔ §۴ نقشهٔ NIGHTSHIFT آغاز شد — N1 (W8) شروع می‌شود
+
+Stage Summary:
+- شیفت شب رسماً فعال؛ گیت‌های fail-closed بین هر گام؛ ممنوعیت‌های ۵گانهٔ سند NIGHTSHIFT حاکم
