@@ -104,6 +104,18 @@ def run_generic_wave_check(
         g_st = verify_official_stamps(candidate_xlsx, official_xlsx)
         gates["official_stamps"] = {"status": g_st.status, "issues": g_st.issues, "metrics": g_st.metrics}
 
+    # ─── دروازه پاشنه آشیل ───
+    try:
+        from .achilles_gate import verify_achilles_evidence_gate as _ach
+
+        obs_cand = repo_root / "authoring/audit/observation_C205.json"
+        if not obs_cand.exists():
+            obs_cand = repo_root / "authoring/agent/fixtures/observation_C205.json"
+        g_ach = _ach(candidate_xlsx, observation_json_path=obs_cand if obs_cand.exists() else None, repo_root=repo_root)
+        gates["achilles_evidence"] = {"status": g_ach.status, "reason_code": g_ach.reason_code, "issues": g_ach.issues, "metrics": g_ach.metrics}
+    except Exception as exc:  # pragma: no cover
+        gates["achilles_evidence"] = {"status": "FAIL", "reason_code": "ACHILLES_EXCEPTION", "issues": [{"error": str(exc)}]}
+
     if delivery_md is not None and base_xlsx is not None and base_xlsx.exists():
         checks = [
             ("ایمنی حق نشر Git (`G0`)", g_git.status == "PASS", g_git.reason_code),
@@ -128,6 +140,7 @@ def run_generic_wave_check(
         and (gates.get("official_head_check", {}).get("status", "PASS") != "FAIL")
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
+        and (gates.get("achilles_evidence", {}).get("status", "PASS") == "PASS")
     )
     overall_blocked = (
         g_git.status == "PASS"
@@ -137,6 +150,7 @@ def run_generic_wave_check(
         and (gates.get("official_head_check", {}).get("status", "PASS") != "FAIL")
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
+        and (gates.get("achilles_evidence", {}).get("status", "PASS") != "FAIL")
     )
     return {
         "candidate": str(candidate_xlsx),

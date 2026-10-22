@@ -55,6 +55,7 @@ from .observation import normalize_digits_to_persian, purge_quarantine_vault
 from .paths import resolve_fixture, resolve_official_cartridge
 from .reconcile import GeminiVisionReaderAdapter, OpenAICompatibleReaderAdapter
 from .solvers import solve_with_plugins
+from .achilles_gate import verify_achilles_evidence_gate
 from .validators import inspect_cartridge_workbook, resolve_pagemap_for_workbook
 from .wave_exporter import export_wave_cartridge
 
@@ -311,6 +312,7 @@ class SelfHealingEngine:
         spec: WaveSpecV2,
         known_atlas_codes: set[str],
         causal_issues: Optional[List[Dict[str, Any]]] = None,
+        achilles_issues: Optional[List[Dict[str, Any]]] = None,
     ) -> Tuple[WaveSpecV2, List[Dict[str, Any]]]:
         """Inspect and deterministically repair root-cause defects in a `WaveSpecV2` copy."""
         healed = copy.deepcopy(spec)
@@ -463,6 +465,24 @@ class SelfHealingEngine:
                         q.map = _format_choice_error_map(err_map, target_key)
                         _sync_wrong_spec(q)
                 actions.append({"rule": "H5_REBALANCE_CHOICE_KEYS", "count": len(healed.question_rows)})
+
+        # H8: Achilles — downgrade green hallucinated pages without crop/BBOX evidence (no forging!)
+        achilles_targets: Dict[str, str] = {}
+        for iss in (achilles_issues or []):
+            lid = str(iss.get("id") or iss.get("qid") or "").strip()
+            err = str(iss.get("error") or "")
+            if lid and err in ("MISSING_STRONG_EVIDENCE_FOR_GREEN", "GREEN_WITHOUT_EVIDENCE_MENTION_IN_NOTE", "PAGE_OFFSET_MISMATCH_HALLUCINATION", "DANGLING_EVIDENCE_REF", "GREEN_Q_WITH_YELLOW_ANCHOR"):
+                achilles_targets[lid] = err
+        if achilles_targets:
+            for s1 in healed.s1_rows:
+                if s1.id in achilles_targets and str(s1.status).strip() in FORBIDDEN_GREEN_LABELS:
+                    s1.status = "نیاز به تأیید"
+                    actions.append({"rule": "H8_ACHILLES_DOWNGRADE_GREEN_WITHOUT_EVIDENCE", "target": s1.id, "error": achilles_targets[s1.id]})
+            for idx, q in enumerate(healed.question_rows):
+                qid_val = q.qid or f"Q#{idx}"
+                if qid_val in achilles_targets and str(q.status).strip() in FORBIDDEN_GREEN_LABELS:
+                    q.status = "نیاز به تأیید"
+                    actions.append({"rule": "H8_ACHILLES_DOWNGRADE_GREEN_WITHOUT_EVIDENCE", "target": qid_val, "error": achilles_targets[qid_val]})
 
         return healed, actions
 
@@ -672,6 +692,13 @@ class AutopilotSupervisor:
                     pagemap_xlsx_path=pm,
                     wave_qids=wave_qids or None,
                 )
+                # ─── Achilles Heel gate (fail-closed evidence) ───
+                achilles_gate = verify_achilles_evidence_gate(
+                    out_xlsx,
+                    observation_json_path=obs_candidate if obs_candidate.exists() else None,
+                    pagemap_xlsx_path=pm,
+                    repo_root=self.repo_root,
+                )
                 from openpyxl.utils import column_index_from_string
 
                 allowed_triples = {
@@ -697,6 +724,7 @@ class AutopilotSupervisor:
 
                 all_green = (
                     all(gr.status == "PASS" for gr in p4.values())
+                    and achilles_gate.status == "PASS"
                     and u10.status == "PASS"
                     and conv["status"] in ("PASS", "SKIPPED_NO_CONVERTER")
                     and conv.get("red", 0) == 0
@@ -722,13 +750,17 @@ class AutopilotSupervisor:
 
                 last_failures = {
                     "p4": {k: v.issues for k, v in p4.items() if v.status != "PASS"},
+                    "achilles": achilles_gate.issues,
+                    "achilles_status": achilles_gate.status,
                     "u10": u10.issues,
                     "converter_status": conv["status"],
                     "converter_red": conv.get("red", -1),
                 }
                 causal_issues = p4["G5_DISTRACTOR_CAUSALITY"].issues
+                achilles_issues = achilles_gate.issues
             else:
                 causal_issues = []
+                achilles_issues = []
                 last_failures = {"export": g_exp.summary, "issues": g_exp.issues}
 
             if attempt < self.max_heal_rounds:
@@ -736,6 +768,7 @@ class AutopilotSupervisor:
                     current_spec,
                     known_atlas_codes=known_codes,
                     causal_issues=causal_issues,
+                    achilles_issues=achilles_issues,
                 )
                 if not new_actions:
                     break

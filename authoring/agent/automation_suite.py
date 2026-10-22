@@ -1251,26 +1251,92 @@ def verify_universal_wave_invariants(
         )
     rec("U-10", " سلامت چانک‌بندی <=۱۲ صفحه با هم‌پوشانی >=۲ و آفست اثبات‌شده", chunk_ok, f"chunk_plan={chunk_plan_path}")
 
+    # ─── U-ACHILLES: دروزاه پاشنه آشیل — سبز بدون کراپ/BBOX = هلوسه برگشت‌ناپذیر ───
+    try:
+        from .achilles_gate import verify_achilles_evidence_gate as _verify_achilles
+
+        obs_ach = None
+        if repo_root:
+            rr = Path(repo_root)
+            # Family-aware ledger resolution (C205 for G2, C305 for G3, …) — never cross-wire books
+            fam_digit = None
+            try:
+                ws_id_tmp = wb["شناسنامهٔ خشاب"]
+                for r_id in range(1, min(15, ws_id_tmp.max_row + 1)):
+                    v = str(ws_id_tmp.cell(r_id, 2).value or "")
+                    m = re.search(r"KH-G(\d)", v)
+                    if m:
+                        fam_digit = m.group(1)
+                        break
+                if not fam_digit:
+                    m2 = re.search(r"G(\d)", Path(candidate_xlsx).name)
+                    if m2:
+                        fam_digit = m2.group(1)
+            except Exception:
+                pass
+            candidates: List[Path] = []
+            if fam_digit:
+                candidates.extend([
+                    rr / f"authoring/audit/observation_C{fam_digit}05.json",
+                    rr / f"authoring/agent/fixtures/observation_C{fam_digit}05.json",
+                ])
+                # also try via resolve_fixture for that family
+                try:
+                    from .paths import resolve_fixture as _rf2
+
+                    cand2 = _rf2(rr, f"observation_C{fam_digit}05.json", f"authoring/audit/observation_C{fam_digit}05.json")
+                    if cand2.exists():
+                        candidates.append(cand2)
+                except Exception:
+                    pass
+            else:
+                # no family detected — try generic C205 only as last resort
+                candidates.extend([
+                    rr / "authoring/audit/observation_C205.json",
+                    rr / "authoring/agent/fixtures/observation_C205.json",
+                ])
+            for cand_obs in candidates:
+                if cand_obs and cand_obs.exists():
+                    obs_ach = cand_obs
+                    break
+            if obs_ach is None and fam_digit is None:
+                try:
+                    from .paths import resolve_fixture as _rf
+
+                    cand = _rf(rr, "observation_C205.json", "authoring/audit/observation_C205.json")
+                    if cand.exists():
+                        obs_ach = cand
+                except Exception:
+                    pass
+        ach_gate = _verify_achilles(candidate_xlsx, observation_json_path=obs_ach, pagemap_xlsx_path=pm_path, repo_root=repo_root)
+        rec("U-ACHILLES", "شاهد کراپ/BBOX برای هر صفحهٔ سبز — هلوسهٔ PDF ممنوع (پاشنه آشیل)", ach_gate.status == "PASS", ach_gate.summary)
+        # attach full achilles issues for autopsy if failed
+        if ach_gate.status != "PASS":
+            results[-1]["achilles_issues"] = ach_gate.issues[:5]
+    except Exception as exc:  # pragma: no cover — hard guard never breaks 10-law suite
+        rec("U-ACHILLES", "شاهد کراپ/BBOX — خطای اجرای دروازه", False, str(exc))
+
     failed = [r for r in results if r["status"] != "PASS"]
     is_empty_skeleton = len(s1_by_id) == 0 and len(qb_by_id) == 0
+    total_invariants = len(results)
     return GateResult(
         stage="AUTO",
         summary=(
             "خشاب اسکلت خالی است (۰ درس فعال و ۰ سؤال فعال؛ ساختار پایه سالم است اما بانک محتوایی هنوز پر نشده است)."
             if is_empty_skeleton and not failed
-            else f"کنترل ۱۰ قانون جهان‌شمول چندپایه اجرا شد ({10 - len(failed)}/10 PASS)."
+            else f"کنترل {total_invariants} قانون جهان‌شمول چندپایه اجرا شد ({total_invariants - len(failed)}/{total_invariants} PASS) — شامل پاشنه آشیل."
         ),
         gate_id="G_AUTO_UNIVERSAL_10_INVARIANTS",
         status="PASS" if not failed else "FAIL",
         reason_code=(
-            "ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON"
+            "ALL_UNIVERSAL_INVARIANTS_CLEAN_SKELETON"
             if (is_empty_skeleton and not failed)
-            else ("ALL_10_UNIVERSAL_INVARIANTS_CLEAN" if not failed else "UNIVERSAL_INVARIANT_VIOLATION")
+            else ("ALL_UNIVERSAL_INVARIANTS_CLEAN" if not failed else "UNIVERSAL_INVARIANT_VIOLATION")
         ),
         issues=failed,
         metrics={
-            "checked_invariants": 10,
-            "passed_invariants": 10 - len(failed),
+            "checked_invariants": total_invariants,
+            "passed_invariants": total_invariants - len(failed),
             "failed_invariants": len(failed),
             "active_s1_rows": len(s1_by_id),
             "active_questions": len(qb_by_id),

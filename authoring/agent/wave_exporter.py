@@ -31,6 +31,7 @@ from .automation_suite import (
 from .id_allocator import IDAllocator
 from .models import GateResult, WaveSpecV2, file_sha256
 from .paths import resolve_fixture, resolve_official_cartridge
+from .achilles_gate import verify_achilles_evidence_gate
 
 AI_SOURCE_TAG = "پیشنهاد AI — موتور تألیف v۱.۰"
 YELLOW_STATUS = "نیاز به تأیید"
@@ -360,7 +361,22 @@ def export_wave_cartridge(
         if (i.get("sheet"), i.get("key"), i.get("col_letter")) not in allowed_cell_triples
     ]
 
-    ok = legacy_diffs == 0 and anc_gate.status == "PASS" and len(unpatched_stamp_errors) == 0
+    # ─── دروازه پاشنه آشیل — fail-closed evidence gate (family-aware, never cross-wire) ───
+    obs_for_achilles = resolve_fixture(root, f"observation_{spec.book_code}.json", f"authoring/audit/observation_{spec.book_code}.json")
+    achilles_gate = verify_achilles_evidence_gate(
+        out_path,
+        observation_json_path=obs_for_achilles if obs_for_achilles.exists() else None,
+        repo_root=root,
+    )
+
+    ok = (
+        legacy_diffs == 0
+        and anc_gate.status == "PASS"
+        and len(unpatched_stamp_errors) == 0
+        and achilles_gate.status == "PASS"
+    )
+    if achilles_gate.status != "PASS":
+        ok = False
     details = {
         "wave_id": spec.wave_id,
         "family_id": spec.family_id,
@@ -371,16 +387,18 @@ def export_wave_cartridge(
         "applied_patches": applied_patches,
         "keyed_diff_summary": kd["summary"],
         "allocator": allocator,
+        "achilles_gate": achilles_gate.to_dict(),
     }
     gate = GateResult(
         gate_id="G3_WAVE_EXPORT",
         stage="P3",
         status="PASS" if ok else "FAIL",
-        reason_code="WAVE_EXPORT_CLEAN" if ok else "WAVE_EXPORT_INVARIANT_FAILURE",
+        reason_code="WAVE_EXPORT_CLEAN" if ok else (achilles_gate.reason_code if achilles_gate.status != "PASS" else "WAVE_EXPORT_INVARIANT_FAILURE"),
         summary=(
             f"موج `{spec.wave_id}` برای خانوادهٔ `{spec.family_id}` با {len(s1_rows)} ردیف S1، "
             f"{len(atlas_rows)} ردیف اطلس، {len(bank_rows)} سؤال و {len(applied_patches)} پچ مجاز ساخته شد "
             f"(تغییر خارج از لیست سفید: {legacy_diffs})."
+            + (f" — {achilles_gate.summary}" if achilles_gate.status != "PASS" else "")
         ),
         metrics={
             "family_id": spec.family_id,
@@ -392,7 +410,9 @@ def export_wave_cartridge(
             "added_questions": len(bank_rows),
             "output_sha256": sha,
             "id_counts": allocator.to_dict()["counts"],
+            "achilles_status": achilles_gate.status,
+            "achilles_reason": achilles_gate.reason_code,
         },
-        issues=wl_gate.issues + anc_gate.issues + unpatched_stamp_errors,
+        issues=wl_gate.issues + anc_gate.issues + unpatched_stamp_errors + achilles_gate.issues,
     )
     return gate, sha, details
