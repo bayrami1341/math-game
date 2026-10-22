@@ -1,4 +1,4 @@
-# دروازهٔ خودکار خط تولید محتوا — Task 61 (گام ۲ دستورکار ۶۰–۶۶)
+# دروازهٔ خودکار خط تولید محتوا — Task 61 (گام ۲) + W7/BP-006 (پایتست ایجنت + پین openpyxl)
 # هیچ تحویل محتوایی از شاخه‌های arena/** یا کامیت روی v10.3-beta بدون عبور از گیت‌های
 # ماشینی زیر پذیرفته نمی‌شود. همهٔ مراحل fail-closed هستند: نخستین شکست = توقف.
 name: khshab-gate
@@ -35,8 +35,9 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: وابستگی‌های ایجنت (openpyxl + pytest + pymupdf)
-        run: pip install --quiet pytest openpyxl pymupdf
+      # پین openpyxl==3.1.5 — قرارداد بیت‌به‌بیت خروجی اکسل (BP-006/W7، هم‌راستا با پین آرنا)
+      - name: وابستگی‌های ایجنت (pytest + openpyxl پین‌شده + pymupdf)
+        run: pip install --quiet pytest 'openpyxl==3.1.5' pymupdf
 
       # ── گیت ۰: حق‌نشر — هیچ PDF/تصویر کتاب/upload داخل Git (Task 60-Pre) ──
       - name: گارد حق‌نشر Git (G0)
@@ -61,6 +62,10 @@ jobs:
       # ── گیت ۱: خودسازگاری مانیفست OFFICIAL-HEADS (Task 66) ──
       - name: مانیفست سرهای رسمی (OFFICIAL-HEADS)
         run: python3 -m authoring.agent.cli heads --verify --repo-root .
+
+      # ── گیت ۱-ج (W7/BP-006): پایتست ایجنت — مانیفست ۶ خانواده + رجیستری موج + smoke رسمی ──
+      - name: پایتست ایجنت (authoring/tests)
+        run: python3 -m pytest authoring/tests -q
 
       # ── وابستگی‌های اجرایی ──
       - name: وابستگی‌های مبدل رسمی (xlsx)
