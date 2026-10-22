@@ -438,3 +438,130 @@ def test_p6_ai_cannot_forge_teacher_approval_and_sha_mutation_invalidates_verdic
     assert g7.status == "BLOCKED"
     assert g7.metrics["invalidated_verdict_count"] == 1
     assert any("INVALIDATED_STALE_VERDICTS:1" in b for b in g7.metrics["blocker_reasons"])
+
+
+# ==============================================================================
+# Stage P5/P6 + Handoff v1.0 (`انتقال تجربه`): Section 9 Boundary, 10 Automation Functions (§8) & 16 Incidents (§6)
+# ==============================================================================
+def test_section9_ownership_boundary_zero_software_mutations():
+    from authoring.agent.git_guard import check_ownership_boundary
+
+    res = check_ownership_boundary(REPO_ROOT)
+    assert res.status == "PASS", f"Section 9 boundary violated: {res.issues}"
+
+
+def test_auto_fn1_and_fn2_keyed_diff_and_closed_wave_whitelist(tmp_path):
+    from authoring.agent.automation_suite import diff_workbooks_by_key, verify_wave_whitelist
+
+    diff = diff_workbooks_by_key(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx",
+    )
+    # Every cell from Z.ai's official merged `v0.3.1` MUST be 100% preserved in `v0.5`!
+    assert diff["changed_cells"] == [], f"Unexpected edits to official v0.3.1 cells: {diff['changed_cells']}"
+    assert diff["removed_rows"] == []
+    assert len(diff["added_rows"]) == (18 + 18) + (3 + 2) + (28 + 24)  # Waves 3 + 4 rows across S1, Atlas, Bank
+
+    # Inject a single unwhitelisted cell tweak and prove `verify_wave_whitelist` turns RED
+    tampered = tmp_path / "tampered_v05.xlsx"
+    shutil.copy2(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", tampered)
+    wb = openpyxl.load_workbook(tampered)
+    wb["نقشهٔ کتاب (S1)"].cell(4, 5).value = "دستکاری خارج از whitelist"
+    wb.save(tampered)
+
+    bad_diff = diff_workbooks_by_key(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", tampered)
+    wl_res = verify_wave_whitelist(bad_diff, allowed_cell_triples=set(), allowed_added_keys=set())
+    assert wl_res.status == "FAIL"
+    assert wl_res.reason_code == "OUT_OF_WHITELIST_MUTATION"
+
+
+def test_auto_fn3_official_stamps_catches_v04_wipe_and_passes_v05():
+    from authoring.agent.automation_suite import verify_official_stamps
+
+    # Legacy `v0.4.xlsx` wiped official stamps (Incident #7) -> MUST FAIL
+    res_v04 = verify_official_stamps(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.4.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx",
+    )
+    assert res_v04.status == "FAIL"
+    assert res_v04.metrics["stamp_regression_count"] > 20
+
+    # Delivered `v0.5.xlsx` restores all official stamps & adds zero forged greens -> MUST PASS
+    res_v05 = verify_official_stamps(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx",
+    )
+    assert res_v05.status == "PASS", res_v05.issues
+
+
+def test_auto_fn4_and_fn5_anchors_cpa_triad_and_exact_6_6_6_6_balance():
+    from authoring.agent.automation_suite import (
+        verify_bidirectional_anchors,
+        verify_cpa_and_answer_balance,
+    )
+
+    assert verify_bidirectional_anchors(REPO_ROOT / "authoring/khshab-G2-MATH_v0.4.xlsx").status == "FAIL"
+    assert verify_bidirectional_anchors(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx").status == "PASS"
+
+    cpa_res = verify_cpa_and_answer_balance(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx")
+    assert cpa_res.status == "PASS", cpa_res.issues
+    assert cpa_res.metrics["wave_answer_distribution"] == {"الف": 6, "ب": 6, "ج": 6, "د": 6}
+
+
+def test_auto_fn6_machine_pixel_counter_counts_exact_13_triangles_on_c205_page8():
+    from authoring.agent.automation_suite import count_visual_components
+
+    vault_pdf = Path("/tmp/c205_secure_vault/C205.pdf")
+    res = count_visual_components(vault_pdf, pdf_page_1based=14, bbox_pt=(55, 356, 520, 414))
+    if vault_pdf.exists():
+        assert res["status"] == "PASS"
+        assert res["count"] == 13, f"Incident #9 verification: expected 13 triangles, got {res['count']}"
+    else:
+        assert res["status"] == "BLOCKED"
+
+
+def test_auto_fn7_real_zai_converter_blocks_v04_and_passes_v05():
+    from authoring.agent.automation_suite import run_converter_and_parse_report
+
+    r_v04 = run_converter_and_parse_report(REPO_ROOT / "authoring/khshab-G2-MATH_v0.4.xlsx", REPO_ROOT)
+    assert r_v04["status"] == "FAIL"
+    assert r_v04["red"] == 2  # L-110 & L-112 T7 ownership mismatch!
+
+    r_v05 = run_converter_and_parse_report(REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx", REPO_ROOT)
+    assert r_v05["status"] == "PASS", r_v05
+    assert r_v05["red"] == 0
+    assert Path(r_v05["report_path"]).exists()
+
+
+def test_auto_fn9_and_fn10_chunk_planner_and_all_16_historical_incidents():
+    from authoring.agent.automation_suite import (
+        audit_historical_incidents_16,
+        plan_and_verify_pdf_chunks,
+    )
+
+    vault_pdf = Path("/tmp/c205_secure_vault/C205.pdf")
+    if vault_pdf.exists():
+        cp = plan_and_verify_pdf_chunks(vault_pdf, max_chunk_pages=12, overlap_pages=2, parallel_lanes=4)
+        assert cp["status"] == "PASS"
+        assert cp["proven_offset"] == 6
+        assert len(cp["review_palindrome_anchors"]) >= 5
+        assert all(c["page_count"] <= 12 for c in cp["chunks"])
+
+    # Raw `v0.4` fails multiple historical incidents (#6, #7, #8, #9, #10, #13)
+    inc_v04 = audit_historical_incidents_16(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.4.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx",
+    )
+    assert inc_v04.status == "FAIL"
+    failed_ids = {i["incident_id"] for i in inc_v04.issues}
+    assert {"INC-06", "INC-07", "INC-08", "INC-09", "INC-10", "INC-13"}.issubset(failed_ids)
+
+    # Delivered `v0.5` passes ALL 16 out of 16 historical incidents (`16/16 PASS`)!
+    inc_v05 = audit_historical_incidents_16(
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx",
+        REPO_ROOT / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx",
+        pdf_path=vault_pdf if vault_pdf.exists() else None,
+        chunk_plan_path=REPO_ROOT / "authoring/audit/chunk_plan_C205.json",
+    )
+    assert inc_v05.status == "PASS", inc_v05.issues
+    assert inc_v05.metrics["passed_incidents"] == 16

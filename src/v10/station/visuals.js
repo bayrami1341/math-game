@@ -110,6 +110,9 @@ export function renderCellSVG(isLit = false) {
 }
 
 export function renderEqualGroupsSVG(groupsCount, itemsPerGroup) {
+  if (!groupsCount || !itemsPerGroup || groupsCount > 12 || itemsPerGroup > 12 || (groupsCount * itemsPerGroup) > 60) {
+    return null;
+  }
   let groupsHtml = '';
   for (let g = 0; g < groupsCount; g++) {
     let itemsHtml = '';

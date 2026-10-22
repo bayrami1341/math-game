@@ -1,12 +1,32 @@
 {
   "observation_summary": {},
   "open_issue_count": 29,
+  "delivery_kpis": {
+    "version_tuple": [
+      0,
+      5
+    ],
+    "sha256": "e1bc0bbb5288685fd030cb62e4524217ca07e4372276a3b7a91e619b08f46a42",
+    "pct_no_false_qmark": 100.0,
+    "pct_anti_j12": 100.0,
+    "pct_mapped_options": 100.0,
+    "passed_checks": 20,
+    "total_checks": 20
+  },
   "gates": {
     "G0_COPYRIGHT_GUARD": {
       "status": "PASS",
       "reason_code": "CLEAN_WORKSPACE",
       "metrics": {
-        "checked_git_paths": 251,
+        "checked_git_paths": 262,
+        "violation_count": 0
+      }
+    },
+    "G0B_OWNERSHIP_BOUNDARY": {
+      "status": "PASS",
+      "reason_code": "OWNERSHIP_BOUNDARY_CLEAN",
+      "metrics": {
+        "checked_changed_paths": 45,
         "violation_count": 0
       }
     },
@@ -41,6 +61,166 @@
       "metrics": {
         "blocking_failures": 0,
         "legacy_diagnostic_warnings": 192
+      }
+    },
+    "G_AUTO_03_OFFICIAL_STAMPS": {
+      "status": "PASS",
+      "reason_code": "ALL_OFFICIAL_STAMPS_INTACT",
+      "metrics": {
+        "verified_skeleton_green_rows": 8,
+        "verified_atlas_green_rows": 2,
+        "forged_green_count": 0
+      }
+    },
+    "G_AUTO_04_BIDIRECTIONAL_ANCHORS": {
+      "status": "PASS",
+      "reason_code": "BIDIRECTIONAL_ANCHORS_SYNCED",
+      "metrics": {
+        "checked_lessons": 62,
+        "mismatch_count": 0
+      }
+    },
+    "G_AUTO_05_CPA_AND_ANSWER_BALANCE": {
+      "status": "PASS",
+      "reason_code": "CPA_AND_ANSWER_BALANCE_CLEAN",
+      "metrics": {
+        "cpa_distribution": {
+          "علامتی": 58,
+          "تصویری": 22,
+          "مجسم": 12
+        },
+        "all_answer_distribution": {
+          "الف": 23,
+          "ب": 23,
+          "ج": 23,
+          "د": 23
+        },
+        "wave_answer_distribution": {
+          "الف": 6,
+          "ب": 6,
+          "ج": 6,
+          "د": 6
+        }
+      }
+    },
+    "G_AUTO_07_ZAI_CONVERTER": {
+      "status": "PASS",
+      "reason_code": "ZAI_CONVERTER_GREEN",
+      "metrics": {
+        "v05_red": 0,
+        "v05_yellow": 2,
+        "v05_verdict": "مجاز — JSON منتشر شد",
+        "v05_report": "/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md",
+        "v04_red": 2,
+        "v04_verdict": "مردود — انتشار JSON ممنوع",
+        "preview_json_sha256": "80aa1e52a860bba978dc0c58619ce17100dbeac6adc5f1e7322bbc10d139e6b7"
+      }
+    },
+    "G_AUTO_10_HISTORICAL_INCIDENTS_16": {
+      "status": "PASS",
+      "reason_code": "ALL_16_HISTORICAL_INCIDENTS_CLEAN",
+      "metrics": {
+        "checked_incidents": 16,
+        "passed_incidents": 16,
+        "failed_incidents": 0,
+        "matrix": [
+          {
+            "incident_id": "INC-01",
+            "title": "ضد J12 — محاسبهٔ مستقل لاتین در یادداشت",
+            "status": "PASS",
+            "evidence": "bad_questions=[]"
+          },
+          {
+            "incident_id": "INC-02",
+            "title": "منع جعل شمارهٔ صفحه خارج از کتاب C205",
+            "status": "PASS",
+            "evidence": "bad_page_rows=[]"
+          },
+          {
+            "incident_id": "INC-03",
+            "title": "منع واژگان ساختگی خارج از کتاب",
+            "status": "PASS",
+            "evidence": "hits=[]"
+          },
+          {
+            "incident_id": "INC-04",
+            "title": "منع کد E_ بی‌صاحب خارج از اطلس همان ورک‌بوک (T5)",
+            "status": "PASS",
+            "evidence": "orphan_codes=[]"
+          },
+          {
+            "incident_id": "INC-05",
+            "title": "منع سبز دروغین بدون حکم معلم",
+            "status": "PASS",
+            "evidence": "forged_greens=[]"
+          },
+          {
+            "incident_id": "INC-06",
+            "title": "تطابق مالکیت S1 و بانک سؤال (T7)",
+            "status": "PASS",
+            "evidence": "issues=[]"
+          },
+          {
+            "incident_id": "INC-07",
+            "title": "سلامت کامل مُهرهای رسمی ادغام v0.3.1",
+            "status": "PASS",
+            "evidence": "issues_count=0"
+          },
+          {
+            "incident_id": "INC-08",
+            "title": "اعمال واقعی اصلاحیه در سلول اکسل (L-114)",
+            "status": "PASS",
+            "evidence": "L-114='شمارش ۴تا۴تا'"
+          },
+          {
+            "incident_id": "INC-09",
+            "title": "شمارش ماشینی عناصر تصویری (Q-1011: ۱۳ مثلث → ۱۸)",
+            "status": "PASS",
+            "evidence": "stem='شکل زیر ۱۳ مثلث دارد. پنجمین عدد بعد از آن چند است؟', opt_c='۱۸'"
+          },
+          {
+            "incident_id": "INC-10",
+            "title": "هم‌گام‌سازی بازهٔ K در جابه‌جایی لنگر (L-110 / L-112)",
+            "status": "PASS",
+            "evidence": "Q-1017..1019 on L-110, Q-1020 on L-112"
+          },
+          {
+            "incident_id": "INC-11",
+            "title": "دیف کلیدمحور بر اساس ستون A بدون خطای جابه‌جایی سطر",
+            "status": "PASS",
+            "evidence": "unique_L_keys=62, unique_Q_keys=92"
+          },
+          {
+            "incident_id": "INC-12",
+            "title": "رعایت سه‌گانهٔ CPA طبق AUD-06",
+            "status": "PASS",
+            "evidence": "cpa_dist={'علامتی': 58, 'تصویری': 22, 'مجسم': 12}"
+          },
+          {
+            "incident_id": "INC-13",
+            "title": "وفاداری دقیق به املای بنر کتاب («خلّق باش» در L-112)",
+            "status": "PASS",
+            "evidence": "L-118='معمّا و فرهنگ خواندن'"
+          },
+          {
+            "incident_id": "INC-14",
+            "title": "منع عناوین حدسی («عدد صد» / «ترتیب عددی» در ص ۸–۱۲)",
+            "status": "PASS",
+            "evidence": "hallucinated=[]"
+          },
+          {
+            "incident_id": "INC-15",
+            "title": "خوانش چانکی <=۱۲ صفحه با هم‌پوشانی ۲ صفحه و ۴ مسیر موازی",
+            "status": "PASS",
+            "evidence": "chunk_plan=/home/user/math-game/authoring/audit/chunk_plan_C205.json"
+          },
+          {
+            "incident_id": "INC-16",
+            "title": "اثبات خودکار offset=+6 از پالیندروم مرور فصل و پاصفحه",
+            "status": "PASS",
+            "evidence": "C205 proven_offset=+6"
+          }
+        ]
       }
     },
     "G7_TEACHER_GOVERNANCE_AND_RELEASE": {

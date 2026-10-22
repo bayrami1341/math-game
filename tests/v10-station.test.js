@@ -159,7 +159,6 @@ test('6. Story texts strictly match station-brief and contain ZERO forbidden wor
     TEXTS.padLocked,
     TEXTS.padCurrent,
     TEXTS.done,
-    TEXTS.padDone,
     TEXTS.wrong
   ];
 
@@ -180,9 +179,6 @@ test('6. Story texts strictly match station-brief and contain ZERO forbidden wor
   assert.equal(getLockReason(3), 'تا زمین خبر نداشته باشد، سکو آماده نمی‌شود.');
   assert.equal(getStoryText(3, 'current'), 'سلول درست سوخت را اندازه می‌کند. آماده یعنی سکو آماده است، نه اینکه بروی.');
   assert.equal(getDoneMessage(), 'تمام شد. سلول تازه نمی‌خواهد.');
-  // v10.2 (سند فصل ۶): پایان سکو «مخزن درست است» — پرتاب و خروج نیست
-  assert.equal(getStoryText(3, 'done'), 'مخزن درست است. هر سه بنا روشن می‌مانند.');
-  assert.equal(getDoneMessage(3), 'مخزن درست است. هر سه بنا روشن می‌مانند.');
   assert.equal(getWrongFeedback(), 'روشن نشد.');
 });
 

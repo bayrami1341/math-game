@@ -26,33 +26,6 @@ export function createStationSheet({ currentBuilding, isFinished, completedBuild
     return (availableSides || []).map(id => SIDE_MISSIONS[id]).filter(Boolean);
   }
 
-  // دکمه‌های مأموریت جانبی: هر کدام اکشن شروع جلسهٔ جانبی را حمل می‌کنند
-  function getSideMissionButtons() {
-    return getAvailableSides().map(m => ({
-      id: m.id,
-      title: m.title,
-      icon: m.icon,
-      objective: m.objective,
-      questionCount: m.questionCount || 5,
-      action: 'start-side-mission',
-      missionId: m.id,
-      canProceed: true
-    }));
-  }
-
-  function onSideMissionButton(missionId) {
-    const mission = SIDE_MISSIONS[missionId];
-    if (!mission) {
-      return { action: 'stay-on-map', canProceed: false };
-    }
-    return {
-      action: 'start-side-mission',
-      missionId,
-      buildingId: mission.parentSectorId,
-      canProceed: true
-    };
-  }
-
   function onMainButton() {
     if (isFinished || !currentBuilding) {
       return {
@@ -72,8 +45,6 @@ export function createStationSheet({ currentBuilding, isFinished, completedBuild
     getMainButtonLabel,
     getSheetText,
     getAvailableSides,
-    getSideMissionButtons,
-    onSideMissionButton,
     onMainButton
   };
 }

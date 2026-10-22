@@ -16,9 +16,6 @@ function openMemoryLocal() {
 }
 
 export function openLocal(indexedDB = globalThis.indexedDB) {
-  // null صریح یعنی فراخوان خودش گواه «هیچ حافظه‌ای نیست» — صادقانه رد می‌کنیم (قرارداد v9).
-  // نبودِ حافظه در زمان اجرا (undefined یا بدشکل) یعنی محیط محدودشده — fallback درون‌حافظه‌ای.
-  if (indexedDB === null) return Promise.reject(new Error('حافظهٔ پایدار مرورگر در دسترس نیست.'));
   if (!indexedDB || typeof indexedDB.open !== 'function') return openMemoryLocal();
   return new Promise((resolve, reject) => {
     if (!indexedDB) return reject(new Error('حافظهٔ پایدار مرورگر در دسترس نیست.'));

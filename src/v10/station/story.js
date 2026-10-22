@@ -8,14 +8,11 @@ export const TEXTS = Object.freeze({
   padLocked: 'تا زمین خبر نداشته باشد، سکو آماده نمی‌شود.',
   padCurrent: 'سلول درست سوخت را اندازه می‌کند. آماده یعنی سکو آماده است، نه اینکه بروی.',
   done: 'تمام شد. سلول تازه نمی‌خواهد.',
-  // v10.2 (سند فصل ۶): پایان سکو «مخزن درست است» — پرتاب و خروج نیست
-  padDone: 'مخزن درست است. هر سه بنا روشن می‌مانند.',
   wrong: 'روشن نشد.'
 });
 
 export function getStoryText(buildingId, state) {
   if (state === 'done') {
-    if (buildingId === 3) return TEXTS.padDone;
     return TEXTS.done;
   }
   if (buildingId === 1 && state === 'current') {
@@ -38,8 +35,7 @@ export function getLockReason(buildingId) {
   return '';
 }
 
-export function getDoneMessage(buildingId) {
-  if (buildingId === 3) return TEXTS.padDone;
+export function getDoneMessage() {
   return TEXTS.done;
 }
 

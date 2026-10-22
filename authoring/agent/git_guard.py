@@ -1,38 +1,13 @@
-"""Copyright & repository hygiene guard (`G0_COPYRIGHT_GUARD`).
-
-Ensures no textbook PDF, page render, crop image, Google Drive download directory,
-or oversized verbatim textbook passage exists as tracked, staged, or unignored
-content inside the Git repository.
-"""
-
+"""Copyright, asset-leakage, AND §9 software-ownership boundary guard for Git."""
 from __future__ import annotations
 
-import os
 import subprocess
 from pathlib import Path
-from typing import Dict, List
+from typing import List, Set
 
 from .models import GateResult
 
-FORBIDDEN_EXTENSIONS = {
-    ".pdf",
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".webp",
-    ".bmp",
-    ".tiff",
-    ".gif",
-}
-
-FORBIDDEN_DIR_SEGMENTS = {
-    "google_drive",
-    ".vault",
-    "local_viewer_cache",
-}
-
-# Pre-existing game UI artwork committed prior to textbook pipeline (`ab15597`)
-BASELINE_GAME_UI_ASSETS = {
+ALLOWED_GAME_UI_PNGS: Set[str] = {
     "assets/avatar-hooshak.png",
     "assets/avatar-kids.png",
     "assets/avatar-pashmak.png",
@@ -47,90 +22,76 @@ BASELINE_GAME_UI_ASSETS = {
     "assets/bg-team.png",
 }
 
+FORBIDDEN_ASSET_EXTENSIONS: Set[str] = {
+    ".pdf",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".webp",
+    ".tiff",
+    ".bmp",
+}
 
-def scan_workspace_for_copyright_leaks(repo_root: str | Path) -> GateResult:
-    root = Path(repo_root).resolve()
-    violations: List[Dict[str, str]] = []
+FORBIDDEN_DIR_PREFIXES: tuple[str, ...] = (
+    "upload/",
+    "google_drive/",
+    ".vault/",
+    "authoring/local_viewer_cache/",
+)
 
-    # 1. Check git tracked + untracked-unignored files via `git status --porcelain --untracked-files=all`
-    proc = subprocess.run(
-        ["git", "status", "--porcelain", "--untracked-files=all"],
-        cwd=str(root),
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    if proc.returncode != 0:
-        return GateResult(
-            gate_id="G0_COPYRIGHT_GUARD",
-            stage="P0",
-            status="BLOCKED",
-            reason_code="GIT_STATUS_UNAVAILABLE",
-            summary="اجرای git status ممکن نشد.",
-            issues=[{"stderr": proc.stderr.strip()}],
-        )
+# Section 9 (`۹) مرز مالکیت — آرنا هرگز به این‌ها دست نمی‌زند`):
+# Software engine, converter, runtime error modules, server, styles, and live cartridges belong exclusively to Z.ai.
+FORBIDDEN_SOFTWARE_OWNERSHIP_PREFIXES: tuple[str, ...] = (
+    "workshop-core.js",
+    "v10.html",
+    "v9.html",
+    "book.html",
+    "errors.js",
+    "package.json",
+    "package-lock.json",
+    "src/",
+    "tools/",
+    "cartridges/",
+    "server/",
+    "styles/",
+    "upload/",
+)
 
-    tracked = subprocess.run(
+
+def audit_git_copyright_safety(repo_root: str | Path) -> GateResult:
+    """Ensure ZERO PDFs, page renders, image crops, or `upload/` textbook assets enter Git."""
+    root = Path(repo_root)
+    proc_tracked = subprocess.run(
         ["git", "ls-files"],
-        cwd=str(root),
+        cwd=root,
         capture_output=True,
         text=True,
-        check=False,
+        check=True,
     )
-    candidate_paths = set()
-    for line in tracked.stdout.splitlines():
-        if line.strip():
-            candidate_paths.add(line.strip())
-    for line in proc.stdout.splitlines():
-        if len(line) > 3:
-            rel = line[3:].strip().strip('"')
-            if " -> " in rel:
-                rel = rel.split(" -> ", 1)[1].strip('"')
-            candidate_paths.add(rel)
-
-    # Also walk non-ignored workspace directories excluding `.git` and `node_modules`
-    for dirpath, dirnames, filenames in os.walk(root):
-        rel_dir = Path(dirpath).relative_to(root)
-        dirnames[:] = [d for d in dirnames if d not in {".git", "node_modules", "__pycache__", ".pytest_cache"}]
-        for seg in rel_dir.parts:
-            if seg in FORBIDDEN_DIR_SEGMENTS:
-                violations.append(
-                    {"path": str(rel_dir), "reason": f"FORBIDDEN_DIRECTORY:{seg}"}
-                )
-        for fn in filenames:
-            rel_file = rel_dir / fn if str(rel_dir) != "." else Path(fn)
-            rel_str = rel_file.as_posix()
-            ext = rel_file.suffix.lower()
-            if ext in FORBIDDEN_EXTENSIONS and rel_str not in BASELINE_GAME_UI_ASSETS:
-                violations.append(
-                    {
-                        "path": rel_str,
-                        "reason": f"COPYRIGHT_BINARY_INSIDE_REPO:{ext}",
-                    }
-                )
-
-    for rel in sorted(candidate_paths):
-        p = Path(rel)
-        if p.suffix.lower() in FORBIDDEN_EXTENSIONS and rel not in BASELINE_GAME_UI_ASSETS:
-            entry = {"path": rel, "reason": f"GIT_VISIBLE_FORBIDDEN_ASSET:{p.suffix.lower()}"}
-            if entry not in violations:
-                violations.append(entry)
-
-    # Verify `.gitignore` covers PDF and image formats
-    gitignore_path = root / ".gitignore"
-    missing_patterns = []
-    if not gitignore_path.exists():
-        missing_patterns.append(".gitignore_missing")
-    else:
-        gi_text = gitignore_path.read_text(encoding="utf-8")
-        for pat in ("*.pdf", "*.png", "*.jpg", "*.jpeg", "*.webp", "google_drive/"):
-            if pat not in gi_text:
-                missing_patterns.append(pat)
-
-    if missing_patterns:
-        violations.append(
-            {"path": ".gitignore", "reason": f"MISSING_GITIGNORE_RULES:{','.join(missing_patterns)}"}
+    proc_untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    all_visible_paths: List[str] = sorted(
+        set(
+            line.strip()
+            for line in (proc_tracked.stdout.splitlines() + proc_untracked.stdout.splitlines())
+            if line.strip()
         )
+    )
+
+    violations = []
+    for rel in all_visible_paths:
+        norm = rel.replace("\\", "/")
+        if any(norm.startswith(pref) for pref in FORBIDDEN_DIR_PREFIXES):
+            violations.append({"path": norm, "reason": "FORBIDDEN_ASSET_DIRECTORY"})
+            continue
+        ext = Path(norm).suffix.lower()
+        if ext in FORBIDDEN_ASSET_EXTENSIONS and norm not in ALLOWED_GAME_UI_PNGS:
+            violations.append({"path": norm, "reason": f"FORBIDDEN_COPYRIGHT_EXTENSION:{ext}"})
 
     if violations:
         return GateResult(
@@ -138,19 +99,86 @@ def scan_workspace_for_copyright_leaks(repo_root: str | Path) -> GateResult:
             stage="P0",
             status="FAIL",
             reason_code="COPYRIGHT_LEAK_BLOCKED",
-            summary=f"{len(violations)} مورد نقض قرنطینهٔ حق نشر در فضای کاری شناسایی شد.",
-            metrics={"violation_count": len(violations)},
+            summary="فایل دارای حق نشر در مسیرهای ردیابی‌شده یا غیرمجاز Git شناسایی شد.",
             issues=violations,
+            metrics={"checked_git_paths": len(all_visible_paths), "violation_count": len(violations)},
         )
-
     return GateResult(
         gate_id="G0_COPYRIGHT_GUARD",
         stage="P0",
         status="PASS",
         reason_code="CLEAN_WORKSPACE",
-        summary="هیچ فایل PDF، تصویر کتاب یا کش قرنطینه‌نشده‌ای در مخزن وجود ندارد و قوانین .gitignore کامل است.",
-        metrics={"checked_git_paths": len(candidate_paths), "violation_count": 0},
+        summary="هیچ فایل PDF، تصویر رندرشده، کراپ یا فایل پوشهٔ upload/ در مخزن Git وجود ندارد.",
+        issues=[],
+        metrics={"checked_git_paths": len(all_visible_paths), "violation_count": 0},
     )
 
 
-audit_git_copyright_safety = scan_workspace_for_copyright_leaks
+check_git_safety = audit_git_copyright_safety
+
+
+def check_ownership_boundary(repo_root: str | Path, base_ref: str = "ab15597") -> GateResult:
+    """Enforce Section 9 ownership boundary: zero changes outside content/automation domain."""
+    root = Path(repo_root)
+    rev_check = subprocess.run(
+        ["git", "cat-file", "-e", f"{base_ref}^{{commit}}"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+    )
+    if rev_check.returncode != 0:
+        return GateResult(
+            gate_id="G0B_OWNERSHIP_BOUNDARY",
+            stage="P0",
+            status="BLOCKED",
+            reason_code="BASE_COMMIT_NOT_PRESENT_IN_SHALLOW_CLONE",
+            summary="کامیت پایه در کلون کم‌عمق موجود نیست.",
+            issues=[],
+            metrics={"base_ref": base_ref},
+        )
+
+    diff_proc = subprocess.run(
+        ["git", "diff", "--name-only", base_ref],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    untracked_proc = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    changed_paths = sorted(
+        set(
+            p.strip().replace("\\", "/")
+            for p in (diff_proc.stdout.splitlines() + untracked_proc.stdout.splitlines())
+            if p.strip()
+        )
+    )
+    violations = [
+        {"path": p, "reason": "OWNED_BY_MAIN_SOFTWARE_TEAM_SECTION_9"}
+        for p in changed_paths
+        if any(p == pref or p.startswith(pref) for pref in FORBIDDEN_SOFTWARE_OWNERSHIP_PREFIXES)
+    ]
+    if violations:
+        return GateResult(
+            gate_id="G0B_OWNERSHIP_BOUNDARY",
+            stage="P0",
+            status="FAIL",
+            reason_code="SOFTWARE_OWNERSHIP_BOUNDARY_VIOLATED",
+            summary="مرز مالکیت بخش ۹ نقض شده است.",
+            issues=violations,
+            metrics={"checked_changed_paths": len(changed_paths), "violation_count": len(violations)},
+        )
+    return GateResult(
+        gate_id="G0B_OWNERSHIP_BOUNDARY",
+        stage="P0",
+        status="PASS",
+        reason_code="OWNERSHIP_BOUNDARY_CLEAN",
+        summary="تمامی فایل‌های نرم‌افزار Z.ai صددرصد دست‌نخورده باقی مانده‌اند (۰ تغییر خارج از قلمرو محتوا/اتوماسیون).",
+        issues=[],
+        metrics={"checked_changed_paths": len(changed_paths), "violation_count": 0},
+    )

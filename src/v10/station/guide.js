@@ -17,10 +17,9 @@ export function createQuestionGuide(question) {
   if (!question || typeof question.f1 !== 'number' || typeof question.f2 !== 'number') {
     return null;
   }
-  // v10.2: دامنه‌های تازهٔ سکو — تصویر دسته‌ها برای صفر بی‌معناست و برای عامل‌های
-  // بزرگ‌تر از جدول (۱۴×۱۰، ۲×۲۱۳، ۳×۲۴) کشیدنی نیست؛ نردبان دامنه‌دار جای آن را می‌گیرد
-  if (question.f1 <= 0 || question.f2 <= 0) return null;
-  if (question.f1 > 12 || question.f2 > 12) return null;
+  if (question.f1 > 12 || question.f2 > 12) {
+    return null;
+  }
   const f1 = question.f1;
   const f2 = question.f2;
 

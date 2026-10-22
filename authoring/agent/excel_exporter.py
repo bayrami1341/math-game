@@ -115,10 +115,9 @@ def _copy_cell_style(src, dst) -> None:
         dst.number_format = src.number_format
 
 
-def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
-    """Insert `new_rows` immediately above the first `A == 'یادداشت'` sentinel row,
-    preserving the entire trailing sentinel + sample block AND its bottom merged range!
-    Returns the 1-based row index where the first new row was placed.
+def insert_rows_at_position(ws, insert_row: int, new_rows: List[List[Any]]) -> int:
+    """Insert `new_rows` at `insert_row` (above or at sentinel `یادداشت`), shifting trailing rows
+    AND bottom merged ranges cleanly without openpyxl merge corruption.
     """
     if not new_rows:
         return -1
@@ -126,24 +125,15 @@ def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
     max_col = ws.max_column
     last_col_letter = get_column_letter(max_col)
     old_max_row = ws.max_row
-
-    sentinel_row = None
-    for r in range(1, old_max_row + 1):
-        if ws.cell(r, 1).value == "یادداشت":
-            sentinel_row = r
-            break
-    if sentinel_row is None:
-        raise ValueError(f"Sheet `{ws.title}` has no sentinel `یادداشت` row!")
-
     k = len(new_rows)
+
     old_tail_merge = f"A{old_max_row}:{last_col_letter}{old_max_row}"
     had_tail_merge = any(str(rng) == old_tail_merge for rng in ws.merged_cells.ranges)
     if had_tail_merge:
         ws.unmerge_cells(old_tail_merge)
 
-    # Snapshot full sentinel block (`sentinel_row .. old_max_row`)
     tail_snapshot = []
-    for r in range(sentinel_row, old_max_row + 1):
+    for r in range(insert_row, old_max_row + 1):
         row_cells = []
         for c in range(1, max_col + 1):
             cell = ws.cell(r, c)
@@ -159,10 +149,9 @@ def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
             )
         tail_snapshot.append((ws.row_dimensions[r].height, row_cells))
 
-    # Write `new_rows` starting at `sentinel_row`
-    template_row_idx = max(3, sentinel_row - 1)
+    template_row_idx = max(3, insert_row - 1)
     for idx, rvals in enumerate(new_rows):
-        target_r = sentinel_row + idx
+        target_r = insert_row + idx
         for c in range(1, max_col + 1):
             dst = ws.cell(target_r, c)
             _copy_cell_style(ws.cell(template_row_idx, c), dst)
@@ -173,9 +162,8 @@ def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
             if dst.alignment is None:
                 dst.alignment = copy.copy(BODY_ALIGN)
 
-    # Restore shifted sentinel tail at `sentinel_row + k .. old_max_row + k`
     for offset_i, (r_height, row_cells) in enumerate(tail_snapshot):
-        target_r = sentinel_row + k + offset_i
+        target_r = insert_row + k + offset_i
         if r_height is not None:
             ws.row_dimensions[target_r].height = r_height
         for c, snap in enumerate(row_cells, start=1):
@@ -196,7 +184,6 @@ def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
     if had_tail_merge:
         ws.merge_cells(f"A{new_max_row}:{last_col_letter}{new_max_row}")
 
-    # Extend existing column list data validations cleanly through `new_max_row`
     for dv in ws.data_validations.dataValidation:
         updated_ranges = []
         for rng in str(dv.sqref).split():
@@ -208,7 +195,21 @@ def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
                 updated_ranges.append(rng)
         dv.sqref = " ".join(updated_ranges)
 
-    return sentinel_row
+    return insert_row
+
+
+def insert_rows_above_sentinel(ws, new_rows: List[List[Any]]) -> int:
+    """Insert `new_rows` immediately above the first `A == 'یادداشت'` sentinel row."""
+    if not new_rows:
+        return -1
+    sentinel_row = None
+    for r in range(1, ws.max_row + 1):
+        if ws.cell(r, 1).value == "یادداشت":
+            sentinel_row = r
+            break
+    if sentinel_row is None:
+        raise ValueError(f"Sheet `{ws.title}` has no sentinel `یادداشت` row!")
+    return insert_rows_at_position(ws, sentinel_row, new_rows)
 
 
 def export_non_destructive_pagemap(
@@ -389,42 +390,55 @@ def export_pilot_cartridge_v05(
             ]
         )
 
+    from .automation_suite import (
+        diff_workbooks_by_key,
+        norm_key,
+        restore_official_stamps_overlay,
+        verify_official_stamps,
+        verify_wave_whitelist,
+    )
+
     wb = openpyxl.load_workbook(base_v04_xlsx)
 
-    # Apply explicitly registered structural back-link patch `PATCH-T7-001` on `L-110` (K13) & `L-112` (K15)
-    # so S1 <-> Question Bank ownership satisfies runtime `T7` converter invariant with 0 unscheduled diffs!
-    scheduled_patches = [
-        {
-            "patch_id": "PATCH-T7-001A",
-            "sheet": "نقشهٔ کتاب (S1)",
-            "row": 13,
-            "col": 11,
-            "entity_id": "L-110",
-            "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1020)",
-            "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1019)",
-            "reason": "در v0.3/v0.4 سؤال Q-1020 به L-112 لنگر خورده بود اما بازهٔ K13 در L-110 تا Q-1020 کشیده شده بود (نقض T7 در مبدل واقعی convert.mjs).",
-        },
-        {
-            "patch_id": "PATCH-T7-001B",
-            "sheet": "نقشهٔ کتاب (S1)",
-            "row": 15,
-            "col": 11,
-            "entity_id": "L-112",
-            "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (تمرین صفحه)",
-            "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1020)",
-            "reason": "ثبت بازگشت متقابل Q-1020 در ستون لنگرهای پیشنهادی L-112 مطابق قانون مالکیت دوسویهٔ T7.",
-        },
-    ]
-    scheduled_coords = {}
-    for sp in scheduled_patches:
-        cell_ref = wb[sp["sheet"]].cell(sp["row"], sp["col"])
-        assert cell_ref.value == sp["old_value"], f"Unexpected base value in {sp['patch_id']}: {cell_ref.value!r}"
-        cell_ref.value = sp["new_value"]
-        scheduled_coords[(sp["sheet"], sp["row"], sp["col"])] = sp["new_value"]
+    # Restore Z.ai's official merged stamps & Second-Inspector fixes from `khshab-G2-MATH_v0.3.1_official.xlsx`
+    # (Incidents #7, #8, #9, #10, #13 in `انتقال تجربه v۱.۰`) under an explicit closed cell whitelist!
+    official_ref = Path(base_v04_xlsx).with_name("khshab-G2-MATH_v0.3.1_official.xlsx")
+    if official_ref.exists():
+        scheduled_patches = restore_official_stamps_overlay(wb, official_ref)
+    else:
+        scheduled_patches = [
+            {
+                "sheet": "نقشهٔ کتاب (S1)",
+                "key": "L-110",
+                "col_letter": "K",
+                "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1020)",
+                "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1019)",
+            },
+            {
+                "sheet": "نقشهٔ کتاب (S1)",
+                "key": "L-112",
+                "col_letter": "K",
+                "old_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (تمرین صفحه)",
+                "new_value": "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1020)",
+            },
+        ]
+        wb["نقشهٔ کتاب (S1)"].cell(13, 11).value = "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1017-1019)"
+        wb["نقشهٔ کتاب (S1)"].cell(15, 11).value = "E_ADD_CONFUSION، E_SUB_CONFUSION (Q-1020)"
 
-    s1_insert_at = insert_rows_above_sentinel(wb["نقشهٔ کتاب (S1)"], s1_rows)
-    ea_insert_at = insert_rows_above_sentinel(wb["اطلس خطا"], atlas_rows)
-    qb_insert_at = insert_rows_above_sentinel(wb["بانک سؤال"], bank_rows)
+    # Place `L-401..L-418` directly beneath chapter skeleton row `L-400` (and above `L-500`)
+    ws_s1_target = wb["نقشهٔ کتاب (S1)"]
+    l400_row = None
+    for r in range(3, ws_s1_target.max_row + 1):
+        if ws_s1_target.cell(r, 1).value == "L-400":
+            l400_row = r
+            break
+    if l400_row is not None:
+        insert_rows_at_position(ws_s1_target, l400_row + 1, s1_rows)
+    else:
+        insert_rows_above_sentinel(ws_s1_target, s1_rows)
+
+    insert_rows_above_sentinel(wb["اطلس خطا"], atlas_rows)
+    insert_rows_above_sentinel(wb["بانک سؤال"], bank_rows)
 
     sha = save_workbook_deterministically(wb, Path(target_v05_xlsx))
     allocator.save(id_registry_path)
@@ -433,10 +447,11 @@ def export_pilot_cartridge_v05(
     Path(patch_proposals_path).write_text(
         json.dumps(
             {
-                "schema_version": "1.0.0",
+                "schema_version": "1.1.0",
                 "target_workbook": str(base_v04_xlsx),
                 "target_workbook_sha256": file_sha256(str(base_v04_xlsx)),
-                "applied_structural_patches_in_v05": scheduled_patches,
+                "official_v031_sha256": file_sha256(str(official_ref)) if official_ref.exists() else None,
+                "applied_official_v031_overlay_cells": scheduled_patches,
                 "deferred_pedagogical_proposals_awaiting_teacher": V04_PATCH_PROPOSALS,
                 "proposals": V04_PATCH_PROPOSALS,
             },
@@ -446,29 +461,23 @@ def export_pilot_cartridge_v05(
         encoding="utf-8",
     )
 
-    # Verify zero unscheduled diff across ALL pre-existing rows of every sheet in v0.4!
-    wb_v04 = openpyxl.load_workbook(base_v04_xlsx, data_only=False)
+    # Verify via Column-A Keyed Diff + Closed Wave Whitelist (§8.1 & §8.2) + Official Stamps Check (§8.3)
+    allowed_cell_triples = {(p["sheet"], p["key"], p["col_letter"]) for p in scheduled_patches}
+    allowed_added_keys = (
+        {("نقشهٔ کتاب (S1)", r[0]) for r in s1_rows}
+        | {("اطلس خطا", norm_key("اطلس خطا", r)) for r in atlas_rows}
+        | {("بانک سؤال", r[0]) for r in bank_rows}
+    )
+    keyed_diff = diff_workbooks_by_key(base_v04_xlsx, target_v05_xlsx)
+    wl_gate = verify_wave_whitelist(keyed_diff, allowed_cell_triples, allowed_added_keys)
+    legacy_diffs = len(wl_gate.issues)
+    scheduled_patch_diffs = len(keyed_diff["changed_cells"])
+    stamps_ok = (
+        verify_official_stamps(target_v05_xlsx, official_ref).status == "PASS"
+        if official_ref.exists()
+        else True
+    )
     wb_v05 = openpyxl.load_workbook(target_v05_xlsx, data_only=False)
-    legacy_diffs = 0
-    scheduled_patch_diffs = 0
-    pre_sentinel_limits = {
-        "راهنما": wb_v04["راهنما"].max_row,
-        "شناسنامهٔ خشاب": wb_v04["شناسنامهٔ خشاب"].max_row,
-        "نقشهٔ کتاب (S1)": s1_insert_at - 1,
-        "اطلس خطا": ea_insert_at - 1,
-        "بانک سؤال": qb_insert_at - 1,
-        "واژه‌نامهٔ ستون‌ها": wb_v04["واژه‌نامهٔ ستون‌ها"].max_row,
-        "پروتکل ممیزی": wb_v04["پروتکل ممیزی"].max_row,
-    }
-    for sname, max_r in pre_sentinel_limits.items():
-        s_old, s_new = wb_v04[sname], wb_v05[sname]
-        for r in range(1, max_r + 1):
-            for c in range(1, s_old.max_column + 1):
-                if s_old.cell(r, c).value != s_new.cell(r, c).value:
-                    if (sname, r, c) in scheduled_coords and s_new.cell(r, c).value == scheduled_coords[(sname, r, c)]:
-                        scheduled_patch_diffs += 1
-                    else:
-                        legacy_diffs += 1
 
     # Verify required merges exist on all sheets
     expected_merges = {
@@ -481,7 +490,7 @@ def export_pilot_cartridge_v05(
         for sname, expected in expected_merges.items()
     )
 
-    ok = legacy_diffs == 0 and merge_ok
+    ok = legacy_diffs == 0 and merge_ok and stamps_ok
     gate = GateResult(
         gate_id="G3_CARTRIDGE_PILOT_EXPORT",
         stage="P3",

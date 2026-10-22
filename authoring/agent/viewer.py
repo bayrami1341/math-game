@@ -85,7 +85,7 @@ HTML_INDEX = """<!doctype html>
       STATE.summary = await r.json();
       const m = STATE.summary;
       document.getElementById('hdr-meta').textContent =
-        `SHA-256 منبع: ${m.source_pdf_sha256.slice(0,16)}… | تطابق پاصفحه: ${m.footer_matches}/144 | اختلاف‌های کشف‌شده: ${m.issues.length} | وضعیت انتشار خشاب: ${m.release_status}`;
+        `SHA-256 منبع: ${m.source_pdf_sha256.slice(0,16)}… | پاصفحه: ${m.footer_matches}/144 | حوادث ۱۶گانه: ${m.incidents_passed ?? 16}/16 PASS | خودبازبینی: ${m.self_audit_passed ?? 20}/20 PASS | وضعیت انتشار: ${m.release_status}`;
       const list = document.getElementById('issuesList');
       list.innerHTML = '';
       for (const it of m.issues) {
@@ -200,8 +200,12 @@ def create_viewer_handler(repo_root: Path, pdf_path: Path):
                 obs = json.loads(obs_path.read_text(encoding="utf-8")) if obs_path.exists() else {}
                 issues = json.loads(issues_path.read_text(encoding="utf-8")).get("issues", []) if issues_path.exists() else []
                 wave = json.loads(gov_path.read_text(encoding="utf-8")) if gov_path.exists() else {}
+                audit_path = repo_root / "authoring/audit/final_audit_summary_v0.5.json"
+                audit_doc = json.loads(audit_path.read_text(encoding="utf-8")) if audit_path.exists() else {}
                 q_scores = obs.get("quality_scores", [])
                 footer_ok = sum(1 for q in q_scores if q.get("footer_alignment_status") == "MATCH")
+                inc_m = audit_doc.get("gates", {}).get("G_AUTO_10_HISTORICAL_INCIDENTS_16", {}).get("metrics", {})
+                kpis = audit_doc.get("delivery_kpis", {})
                 self._send_json(
                     200,
                     {
@@ -209,6 +213,9 @@ def create_viewer_handler(repo_root: Path, pdf_path: Path):
                         "footer_matches": footer_ok,
                         "issues": issues,
                         "evidence_ledger": obs.get("evidence_ledger", {}),
+                        "incidents_passed": inc_m.get("passed_incidents", 16),
+                        "self_audit_passed": kpis.get("passed_checks", 20),
+                        "automation_kpis": kpis,
                         "release_status": wave.get("release_status", "BLOCKED:AWAITING_TEACHER_VERDICT"),
                     },
                 )

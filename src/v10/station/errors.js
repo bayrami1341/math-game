@@ -33,10 +33,7 @@ export const ERROR_CODES = Object.freeze({
   E_DISTRIBUTIVE_LEAK: 'جا ماندن یک جزء چندرقمی',
   // خطاهای توجه
   E_PERSISTENT_GUESSING: 'پاسخ‌های بی‌ربط',
-  E_FATIGUE_SLIP: 'لغزش بعد از تسلط',
-  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲ — پذیرش معلم؛ هنوز در classifyAttempt ضربی تولید نمی‌شوند)
-  E_GROUPS: 'بی‌توجهی به ساختار گروه',
-  E_TABLE_NEIGHBOUR: 'اشتباه همسایه‌های جدول'
+  E_FATIGUE_SLIP: 'لغزش بعد از تسلط'
 });
 
 // ترتیب شدت برای انتخاب «کد غالب» کارت معلم — خطاهای مفهومیِ شدت بالا اول
@@ -52,10 +49,7 @@ export const CODE_SEVERITY_ORDER = Object.freeze([
   'E_SKIP_UNDERCOUNT',
   'E_PERSISTENT_GUESSING',
   'E_FATIGUE_SLIP',
-  'E_DOUBLING_HALVING',
-  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲) — در بافت ضرب هرگز با کدهای بالا هم‌رخداد نیستند
-  'E_GROUPS',
-  'E_TABLE_NEIGHBOUR'
+  'E_DOUBLING_HALVING'
 ]);
 
 // جملهٔ کارت معلم: یک جمله + یک کد. درصد اطمینان، زمان واکنش و دستور درمان روی کارت نیست.
@@ -71,10 +65,7 @@ export const CODE_SENTENCES_FA = Object.freeze({
   E_COMMUTATIVE_FAIL: 'ترتیب تازه را مسئلهٔ تازه گرفته.',
   E_PERSISTENT_GUESSING: 'بی‌توجه پاسخ داده — سه پاسخ بی‌ربط پشت هم.',
   E_FATIGUE_SLIP: 'روی چیزی که بلد بود لغزش کرده.',
-  E_DOUBLING_HALVING: 'در دوبرابر کردن لغزش دارد — فقط در تمرین اختیاری معلم.',
-  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲)
-  E_GROUPS: 'به‌جای شمارش گروه‌ها، تک‌تک شمرده یا فقط تعداد گروه‌ها را نوشته.',
-  E_TABLE_NEIGHBOUR: 'به‌جای خانهٔ هدف، همسایهٔ بالا/پایین/چپ/راست جدول یا خط اعداد را نوشته.'
+  E_DOUBLING_HALVING: 'در دوبرابر کردن لغزش دارد — فقط در تمرین اختیاری معلم.'
 });
 
 /**
