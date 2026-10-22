@@ -461,9 +461,17 @@ def inspect_cartridge_workbook(
     observation_json_path: Optional[str | Path] = None,
     runtime_error_codes: Optional[Set[str]] = None,
     strict_diagnostic_quality: bool = False,
-    new_wave_start_qid: Optional[str] = "Q-1069",
+    base_workbook_path: Optional[str | Path] = None,
+    new_wave_start_qid: Optional[str] = None,
+    wave_qids: Optional[Set[str]] = None,
 ) -> Dict[str, GateResult]:
     """Run all 4 Stage-P4 independent gates on a real `.xlsx` cartridge workbook."""
+    if wave_qids is None and base_workbook_path is not None and Path(base_workbook_path).exists():
+        from .automation_suite import derive_wave_scope_from_diff, diff_workbooks_by_key
+
+        wave_qids = derive_wave_scope_from_diff(
+            diff_workbooks_by_key(base_workbook_path, workbook_path)
+        )["wave_qids"]
     wb = openpyxl.load_workbook(workbook_path, data_only=True)
     obs = (
         json.loads(Path(observation_json_path).read_text(encoding="utf-8"))
@@ -540,6 +548,7 @@ def inspect_cartridge_workbook(
 
     ws_s1 = wb["نقشهٔ کتاب (S1)"]
     s1_ids: Set[str] = set()
+    s1_ai_wave_lids: Set[str] = set()
     s1_declared_qrefs: Dict[str, List[str]] = {}
     ch_bounds = {
         "۱": (1, 18), "۲": (19, 36), "۳": (37, 54), "۴": (55, 72),
@@ -552,6 +561,8 @@ def inspect_cartridge_workbook(
         if lid in s1_ids:
             struct_issues.append({"sheet": "نقشهٔ کتاب (S1)", "row": r, "error": f"DUPLICATE_L_ID:{lid}"})
         s1_ids.add(lid)
+        if "موتور تألیف" in str(ws_s1.cell(r, 13).value or ""):
+            s1_ai_wave_lids.add(lid)
         s1_declared_qrefs[lid] = _extract_q_refs_py(str(ws_s1.cell(r, 11).value or ""))
         page_str = to_ascii_str(ws_s1.cell(r, 2).value or "").strip()
         ch_str = str(ws_s1.cell(r, 3).value or "").strip()
@@ -588,10 +599,21 @@ def inspect_cartridge_workbook(
 
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if qid == "یادداشت" or not qid:
+        if qid == "یادداشت":
             break
+        if not qid:
+            continue
         checked_q_count += 1
-        is_new_wave = bool(new_wave_start_qid and qid >= new_wave_start_qid)
+        anc_id = str(ws_qb.cell(r, 2).value or "").strip()
+        is_new_wave = (
+            (qid in wave_qids)
+            if wave_qids is not None
+            else (
+                bool(qid >= new_wave_start_qid)
+                if new_wave_start_qid
+                else (anc_id in s1_ai_wave_lids)
+            )
+        )
 
         if qid in seen_qids:
             struct_issues.append({"sheet": "بانک سؤال", "row": r, "error": f"DUPLICATE_Q_ID:{qid}"})

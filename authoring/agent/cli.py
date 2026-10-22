@@ -18,6 +18,7 @@ from typing import Any, Dict
 from .automation_suite import (
     audit_historical_incidents_16,
     count_visual_components,
+    derive_wave_scope_from_diff,
     diff_workbooks_by_key,
     manage_version_and_sha,
     plan_and_verify_pdf_chunks,
@@ -34,6 +35,7 @@ from .governance import (
     evaluate_release_readiness,
 )
 from .models import GateResult, file_sha256
+from .paths import resolve_confidential_pdf, resolve_fixture, resolve_official_cartridge
 from .validators import inspect_cartridge_workbook
 
 RUNTIME_CODES = {
@@ -66,16 +68,11 @@ def run_generic_wave_check(
     g_git = audit_git_copyright_safety(repo_root)
     g_own = check_ownership_boundary(repo_root)
     kd = diff_workbooks_by_key(base_xlsx, candidate_xlsx) if (base_xlsx is not None and base_xlsx.exists()) else None
-    added_wave_qids = (
-        {r["key"] for r in kd["added_rows"] if r["sheet"] == "بانک سؤال"}
-        if kd is not None
-        else None
-    )
     g_anchors = verify_bidirectional_anchors(candidate_xlsx)
     g_cpa = verify_cpa_and_answer_balance(
         candidate_xlsx,
-        wave_qids=added_wave_qids,
-        strict_all_rows_aud06=(kd is not None),
+        diff_result=kd,
+        strict_all_rows_aud06=False if kd is None else None,
     )
     conv = run_converter_and_parse_report(candidate_xlsx, repo_root)
 
@@ -124,10 +121,22 @@ def run_generic_wave_check(
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
     )
+    overall_blocked = (
+        g_git.status == "PASS"
+        and g_own.status != "FAIL"
+        and g_anchors.status == "PASS"
+        and conv["status"] == "BLOCKED"
+        and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
+        and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
+    )
     return {
         "candidate": str(candidate_xlsx),
         "sha256": file_sha256(str(candidate_xlsx)),
-        "overall_gate_status": "PASS_READY_FOR_SECOND_INSPECTOR" if overall_pass else "FAIL_STOP_WAVE",
+        "overall_gate_status": (
+            "PASS_READY_FOR_SECOND_INSPECTOR"
+            if overall_pass
+            else ("BLOCKED_CONVERTER_SSOT" if overall_blocked else "FAIL_STOP_WAVE")
+        ),
         "gates": gates,
     }
 
@@ -136,40 +145,68 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
     g0 = audit_git_copyright_safety(repo_root)
     g0b = check_ownership_boundary(repo_root)
 
-    obs = json.loads((repo_root / "authoring/audit/observation_C205.json").read_text(encoding="utf-8"))
-    iq = json.loads((repo_root / "authoring/audit/issue_queue_C205.json").read_text(encoding="utf-8"))
+    obs_path = resolve_fixture(repo_root, "observation_C205.json", "authoring/audit/observation_C205.json")
+    iq_path = resolve_fixture(repo_root, "issue_queue_C205.json", "authoring/audit/issue_queue_C205.json")
+    obs = json.loads(obs_path.read_text(encoding="utf-8"))
+    iq = json.loads(iq_path.read_text(encoding="utf-8"))
     open_issues = sum(1 for item in iq.get("issues", []) if item.get("status") != "RESOLVED")
 
-    pagemap_path = repo_root / "authoring/PAGE-MAP-KH-G2-MATH-v1_audited.xlsx"
-    v031_off_path = repo_root / "authoring/khshab-G2-MATH_v0.3.1_official.xlsx"
-    v04_path = repo_root / "authoring/khshab-G2-MATH_v0.4.xlsx"
-    v05_path = repo_root / "authoring/khshab-G2-MATH_v0.5.xlsx"
-    chunk_plan_path = repo_root / "authoring/audit/chunk_plan_C205.json"
-    vault_pdf = Path("/tmp/c205_secure_vault/C205.pdf")
+    pagemap_path = resolve_fixture(
+        repo_root,
+        "PAGE-MAP-KH-G2-MATH-v1_verified.xlsx",
+        "authoring/PAGE-MAP-KH-G2-MATH-v1_audited.xlsx",
+    )
+    v031_off_path = resolve_official_cartridge(
+        repo_root,
+        "khshab-G2-MATH_v0.3.1.xlsx",
+        fallback_authoring_name="khshab-G2-MATH_v0.3.1_official.xlsx",
+    )
+    v04_official_path = resolve_official_cartridge(
+        repo_root,
+        "khshab-G2-MATH_v0.4.xlsx",
+        fallback_authoring_name="khshab-G2-MATH_v0.4_official.xlsx",
+    )
+    v04_raw_buggy_path = resolve_fixture(
+        repo_root,
+        "khshab-G2-MATH_v0.4_raw_buggy.xlsx",
+        "authoring/khshab-G2-MATH_v0.4.xlsx",
+    )
+    v05_path = resolve_fixture(
+        repo_root,
+        "khshab-G2-MATH_v0.5.xlsx",
+        "authoring/khshab-G2-MATH_v0.5.xlsx",
+    )
+    chunk_plan_path = resolve_fixture(repo_root, "chunk_plan_C205.json", "authoring/audit/chunk_plan_C205.json")
+    book_manifest_path = resolve_fixture(repo_root, "book_manifest_C205.json", "authoring/data/book_manifest_C205.json")
+    snapshot_path = resolve_fixture(repo_root, "snapshot_C205.json", "authoring/snapshots/master-map-C205-v2.0/snapshot.json")
+    vault_pdf = resolve_confidential_pdf(repo_root, "C205")
     preview_json_path = repo_root / "authoring/build_preview/KH-G2-MATH.preview.json"
 
-    if vault_pdf.exists() and not chunk_plan_path.exists():
+    if vault_pdf is not None and not chunk_plan_path.exists():
         plan_and_verify_pdf_chunks(vault_pdf, output_json_path=chunk_plan_path)
+
+    kd_wave = diff_workbooks_by_key(v04_official_path, v05_path)
+    wave_scope = derive_wave_scope_from_diff(kd_wave)
 
     p4_gates = inspect_cartridge_workbook(
         v05_path,
-        repo_root / "authoring/audit/observation_C205.json",
+        obs_path,
         RUNTIME_CODES,
         strict_diagnostic_quality=False,
-        new_wave_start_qid="Q-1069",
+        wave_qids=wave_scope["wave_qids"],
     )
 
     g_stamps = verify_official_stamps(v05_path, v031_off_path)
     g_anchors = verify_bidirectional_anchors(v05_path)
-    g_cpa = verify_cpa_and_answer_balance(v05_path, new_wave_start_qid="Q-1069", new_wave_chapter="۴")
+    g_cpa = verify_cpa_and_answer_balance(v05_path, diff_result=kd_wave, strict_all_rows_aud06=True)
     g_inc16 = audit_historical_incidents_16(
         v05_path,
         v031_off_path,
-        pdf_path=vault_pdf if vault_pdf.exists() else None,
+        pdf_path=vault_pdf,
         chunk_plan_path=chunk_plan_path,
     )
 
-    conv_v04 = run_converter_and_parse_report(v04_path, repo_root)
+    conv_v04 = run_converter_and_parse_report(v04_raw_buggy_path, repo_root)
     conv_v05 = run_converter_and_parse_report(v05_path, repo_root, preview_json_out=preview_json_path)
     g_conv = GateResult(
         gate_id="G_AUTO_07_ZAI_CONVERTER",
@@ -182,10 +219,10 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
             "v05_red": conv_v05["red"],
             "v05_yellow": conv_v05["yellow"],
             "v05_verdict": conv_v05["verdict"],
-            "v05_report": conv_v05["report_path"],
+            "v05_report": conv_v05.get("report_path"),
             "v04_red": conv_v04["red"],
             "v04_verdict": conv_v04["verdict"],
-            "preview_json_sha256": conv_v05["preview_json_sha256"],
+            "preview_json_sha256": conv_v05.get("preview_json_sha256"),
         },
     )
 
@@ -231,14 +268,14 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
             ("۱۴. بازحساب مستقل کلید پاسخ همهٔ ۹۲ سؤال (`G4`)", p4_gates["G4_INDEPENDENT_SOLVER"].status == "PASS", str(p4_gates["G4_INDEPENDENT_SOLVER"].metrics)),
             ("۱۵. بازتولید علّی هر ۷۲ گزینهٔ نادرست موج ۴ (`G5`)", p4_gates["G5_DISTRACTOR_CAUSALITY"].status == "PASS", str(p4_gates["G5_DISTRACTOR_CAUSALITY"].metrics)),
             ("۱۶. رعایت سه‌گانهٔ `CPA` (`AUD-06` / `INC-12`) و پوشش سه‌لایه در دروس عمیق", g_cpa.status == "PASS", str(g_cpa.metrics.get("cpa_distribution"))),
-            ("۱۷. توازن دقیق کلید پاسخ در موج ۴ (`۶ الف / ۶ ب / ۶ ج / ۶ د`)", g_cpa.status == "PASS", str(g_cpa.metrics.get("wave_answer_distribution"))),
+            ("۱۷. توازن دقیق کلید پاسخ در موج جدید (`۶ الف / ۶ ب / ۶ ج / ۶ د`)", g_cpa.status == "PASS", str(g_cpa.metrics.get("wave_answer_distribution"))),
             ("۱۸. فرم استاندارد یک‌خطی ۱۴ مدل کاتالوگ `M_` بدون واژهٔ «تقریبی» (§5)", True, "17 visual models + 1 explicit `—`"),
             ("۱۹. عبور کامل از مبدّل رسمی `cartridge-converter v1.1` با `۰` خطای قرمز (`G_AUTO_07`)", conv_v05["status"] == "PASS", f"red={conv_v05['red']}, yellow={conv_v05['yellow']}"),
             ("۲۰. عبور کامل از ماتریس ۱۶ حادثهٔ تاریخی پروژه (`INC-01..INC-16`)", g_inc16.status == "PASS", f"{g_inc16.metrics['passed_incidents']}/16 PASS"),
         ]
         delivery_kpis = manage_version_and_sha(
             xlsx_path=v05_path,
-            prev_xlsx_path=(repo_root / "authoring/khshab-G2-MATH_v0.4_official.xlsx") if (repo_root / "authoring/khshab-G2-MATH_v0.4_official.xlsx").exists() else v04_path,
+            prev_xlsx_path=v04_official_path,
             converter_result=conv_v05,
             delivery_md_path=repo_root / "authoring/WAVE4-CH4-KH-G2-MATH-v0.5.fa.md",
             self_audit_checks=checks_20,
@@ -248,10 +285,10 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
             out_path=repo_root / "authoring/waves/wave_manifest_v0.5.json",
             manifest_id="WAVE-KH-G2-MATH-v0.5-CH4-PILOT",
             wave_id="wave-4-pilot-chapter-4",
-            book_manifest_path=repo_root / "authoring/data/book_manifest_C205.json",
-            snapshot_path=repo_root / "authoring/snapshots/master-map-C205-v2.0/snapshot.json",
+            book_manifest_path=book_manifest_path,
+            snapshot_path=snapshot_path,
             pagemap_xlsx_path=pagemap_path,
-            base_cartridge_path=v04_path,
+            base_cartridge_path=v04_official_path,
             output_cartridge_path=v05_path,
             converted_json_path=preview_json_path,
             gates=all_gates,

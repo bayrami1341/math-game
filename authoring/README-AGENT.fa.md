@@ -1,34 +1,30 @@
-# راهنمای ۱ صفحه‌ای ایجنت اتوماسیون خط تولید محتوا (`khshab-agent`)
+# راهنمای ایجنت اتوماسیون خط تولید محتوا (`khshab-agent`)
 
-این بسته یک **ایجنت عمومی و مستقل از پایه** برای خط تولید هر کتاب درسی (`G1`, `G2`, `G3`, ...) است — نه اسکریپت تک‌منظورهٔ یک پایه.
+- **همگام با کامیت رسمی مرجع:** `f36533b9d7dc3de320a532cb271e029affc7694d` (شاخهٔ `v10.3-beta` — شامل کامیت‌های `332dcfc`، `f8706b2` و `f36533b`)
+- **پوشهٔ رسمی فیکسچرهای غیرمحرمانهٔ تست (`B2`):** `authoring/agent/fixtures/`
+- **تطبیق مسیر دوگانه (`tests/conftest.py` و `authoring/agent/paths.py`):** اولویت اول با مسیر رسمی `public/math-game/authoring/` است و برای فایل‌های محرمانهٔ PDF در CI از `pytest.skip(reason=...)` صریح استفاده می‌شود.
+- **منبع واحد حقیقت مبدل (`B1`):** اجرای مستقیم `tools/cartridge-converter/convert.mjs` + `public/math-game/src/v10/station/{cartridge-schema.js,errors.js}` بدون هیچ کپی موازی (`zai_converter_mirror` به طور کامل حذف شده است).
+- **مشتق‌سازی خودکار دامنهٔ موج (`B3`):** تابع `derive_wave_scope_from_diff` شناسه‌های سؤال و درس‌های افزوده‌شدهٔ هر موج در هر پایه (`G1..G6`) را مستقیماً از `diff_workbooks_by_key` استخراج می‌کند (صفر هاردکد `Q-1069`).
 
-## چهار فرمان اصلی ایجنت برای هر کتاب و هر پایه
+---
 
-### ۱) شروع هر کتاب جدید (کشف خودکار آفست پالیندرومی + چانک‌بندی `<=12` صفحه با هم‌پوشانی `2`)
+## دستورات خط فرمان (`CLI`)
+
 ```bash
-python3 -m authoring.agent.cli init-book \
-  --pdf /path/to/quarantined/BOOK.pdf \
-  --out authoring/audit/chunk_plan.json
-```
+# ۱. کشف خودکار آفست پالیندرومی و برنامهٔ چانک <=۱۲ صفحه با هم‌پوشانی ۲ صفحه برای هر کتاب PDF جدید
+python3 -m authoring.agent.cli init-book --pdf /path/to/C305.pdf --out /tmp/chunk_plan_C305.json
 
-### ۲) گیت کامل کنترل هر موج اکسل (دیف کلیدمحور + لیست سفید + حفظ مُهرهای سبز + `convert.mjs` + گزارش تحویل و `SHA-256`)
-```bash
+# ۲. دیف کلیدمحور سلول‌به‌سلول بر پایهٔ ستون A بین هر دو نسخهٔ اکسل
+python3 -m authoring.agent.cli keyed-diff \
+  public/math-game/authoring/khshab-G2-MATH_v0.4.xlsx \
+  authoring/khshab-G2-MATH_v0.5.xlsx
+
+# ۳. بررسی کامل هر موج در هر پایه (G1..G6)
 python3 -m authoring.agent.cli check-wave \
-  --candidate authoring/khshab-GX-MATH_v0.Y.xlsx \
-  --base      authoring/khshab-GX-MATH_v0.X.xlsx \
-  --official  authoring/khshab-GX-MATH_official.xlsx \
-  --report-md authoring/DELIVERY-v0.Y.fa.md
-```
-اگر خروجی `PASS_READY_FOR_SECOND_INSPECTOR` بود موج اجازهٔ تحویل دارد؛ اگر `FAIL_STOP_WAVE` بود دقیقاً مختصات سلول خطادار چاپ می‌شود و موج متوقف می‌ماند.
+  --candidate authoring/khshab-G2-MATH_v0.5.xlsx \
+  --base public/math-game/authoring/khshab-G2-MATH_v0.4.xlsx \
+  --official public/math-game/authoring/khshab-G2-MATH_v0.3.1.xlsx
 
-### ۳) دیف کلیدمحور مستقل برای بازرس دوم (بدون خطای ناشی از جابه‌جایی ردیف)
-```bash
-python3 -m authoring.agent.cli keyed-diff old.xlsx new.xlsx
-```
-
-### ۴) شمارشگر پیکسلی شکل‌های کتاب (جلوگیری از خطای چشمی مدل‌های زبانی)
-```bash
-python3 -m authoring.agent.cli count-items \
-  --pdf /path/to/quarantined/BOOK.pdf \
-  --page 14 --bbox 55,356,520,414
+# ۴. اجرای مجموعهٔ تست‌های قابل‌حمل در چیدمان رسمی v10.3-beta یا CI
+python3 -m pytest tests/test_authoring_pipeline.py -v
 ```

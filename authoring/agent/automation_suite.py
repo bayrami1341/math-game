@@ -355,8 +355,10 @@ def verify_bidirectional_anchors(wb_path: str | Path) -> GateResult:
     row_of_l: Dict[str, int] = {}
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
-        if not lid or lid == "یادداشت":
+        if lid == "یادداشت":
             break
+        if not lid:
+            continue
         declared[lid] = extract_q_refs_canonical(str(ws_s1.cell(r, 11).value or ""))
         row_of_l[lid] = r
 
@@ -364,8 +366,10 @@ def verify_bidirectional_anchors(wb_path: str | Path) -> GateResult:
     orphan_questions: List[Dict[str, Any]] = []
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if not qid or qid == "یادداشت":
+        if qid == "یادداشت":
             break
+        if not qid:
+            continue
         anc = str(ws_qb.cell(r, 2).value or "").strip()
         if anc not in actual:
             orphan_questions.append({"qid": qid, "anchor": anc, "row": r, "error": "UNKNOWN_L_ANCHOR"})
@@ -409,14 +413,59 @@ def verify_bidirectional_anchors(wb_path: str | Path) -> GateResult:
 # ==============================================================================
 # Function 5 (§8.5): CPA Distribution & Answer-Key Balance (`verify_cpa_and_answer_balance`)
 # ==============================================================================
+def derive_wave_scope_from_diff(diff_result: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Derive wave QIDs, first QID, and added S1 lesson keys directly from `diff_workbooks_by_key` (zero grade hardcoding)."""
+    if not diff_result:
+        return {
+            "wave_qids": set(),
+            "first_wave_qid": None,
+            "added_s1_keys": set(),
+        }
+    wave_qids = {
+        str(r["key"]).strip()
+        for r in diff_result.get("added_rows", [])
+        if r.get("sheet") == "بانک سؤال" and str(r.get("key", "")).strip()
+    }
+    added_s1_keys = {
+        str(r["key"]).strip()
+        for r in diff_result.get("added_rows", [])
+        if r.get("sheet") == "نقشهٔ کتاب (S1)" and str(r.get("key", "")).strip()
+    }
+    return {
+        "wave_qids": wave_qids,
+        "first_wave_qid": min(wave_qids) if wave_qids else None,
+        "added_s1_keys": added_s1_keys,
+    }
+
+
 def verify_cpa_and_answer_balance(
     wb_path: str | Path,
+    base_xlsx_path: Optional[str | Path] = None,
+    diff_result: Optional[Dict[str, Any]] = None,
     new_wave_start_qid: Optional[str] = None,
     new_wave_chapter: Optional[str] = None,
     wave_qids: Optional[Set[str]] = None,
-    strict_all_rows_aud06: bool = True,
+    strict_all_rows_aud06: Optional[bool] = None,
 ) -> GateResult:
-    """Verify `AUD-06` CPA triad, balanced `الف/ب/ج/د` key distribution, and deep-lesson coverage."""
+    """Verify `AUD-06` CPA triad, balanced `الف/ب/ج/د` key distribution, and deep-lesson coverage across any grade (`G1..G6`)."""
+    effective_diff = diff_result
+    if effective_diff is None and base_xlsx_path is not None and Path(base_xlsx_path).exists():
+        effective_diff = diff_workbooks_by_key(base_xlsx_path, wb_path)
+
+    derived = derive_wave_scope_from_diff(effective_diff)
+    effective_wave_qids: Optional[Set[str]] = (
+        wave_qids if wave_qids is not None else (derived["wave_qids"] if effective_diff is not None else None)
+    )
+    derived_first_qid: Optional[str] = (
+        min(effective_wave_qids)
+        if effective_wave_qids
+        else new_wave_start_qid
+    )
+    added_s1_keys: Set[str] = derived["added_s1_keys"]
+    # When comparing against an existing base cartridge (which may carry legacy AUD-06 yellow warnings, e.g. G3 v0.7),
+    # default to enforcing AUD-06 strictly on newly added wave rows unless `strict_all_rows_aud06=True` is requested.
+    check_all_aud06 = (effective_diff is None and wave_qids is None) if strict_all_rows_aud06 is None else strict_all_rows_aud06
+
     wb = openpyxl.load_workbook(wb_path, data_only=False)
     ws_qb = wb["بانک سؤال"]
     ws_s1 = wb["نقشهٔ کتاب (S1)"]
@@ -430,16 +479,18 @@ def verify_cpa_and_answer_balance(
 
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if not qid or qid == "یادداشت":
+        if qid == "یادداشت":
             break
+        if not qid:
+            continue
         anc = str(ws_qb.cell(r, 2).value or "").strip()
         dom = str(ws_qb.cell(r, 3).value or "").strip()
         cpa = str(ws_qb.cell(r, 4).value or "").strip()
         ans = str(ws_qb.cell(r, 11).value or "").strip()
 
         in_wave = (
-            (qid in wave_qids)
-            if wave_qids is not None
+            (qid in effective_wave_qids)
+            if effective_wave_qids is not None
             else (qid >= new_wave_start_qid if new_wave_start_qid else False)
         )
         cpa_counts[cpa] += 1
@@ -447,7 +498,7 @@ def verify_cpa_and_answer_balance(
         by_anchor_domains.setdefault(anc, []).append(dom)
         by_anchor_cpas.setdefault(anc, set()).add(cpa)
 
-        if cpa not in VALID_CPA and (strict_all_rows_aud06 or in_wave):
+        if cpa not in VALID_CPA and (check_all_aud06 or in_wave):
             issues.append({"qid": qid, "cell": f"D{r}", "cpa": cpa, "error": "AUD_06_INVALID_CPA"})
         if ans not in VALID_ANSWERS:
             issues.append({"qid": qid, "cell": f"K{r}", "answer": ans, "error": "INVALID_ANSWER_LETTER"})
@@ -464,11 +515,14 @@ def verify_cpa_and_answer_balance(
 
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
-        if not lid or lid == "یادداشت":
+        if lid == "یادداشت":
             break
+        if not lid:
+            continue
         ch = str(ws_s1.cell(r, 3).value or "").strip()
         mode = str(ws_s1.cell(r, 10).value or "").strip()
-        if new_wave_chapter and ch == new_wave_chapter and not lid.endswith("00") and mode == "تعاملی-عمیق":
+        in_wave_s1 = (lid in added_s1_keys) or bool(new_wave_chapter and ch == new_wave_chapter)
+        if in_wave_s1 and not lid.endswith("00") and mode == "تعاملی-عمیق":
             doms = Counter(by_anchor_domains.get(lid, []))
             if doms["CORE"] < 2 or doms["DEPTH"] < 1 or doms["SIDE"] < 1:
                 issues.append({
@@ -490,7 +544,11 @@ def verify_cpa_and_answer_balance(
             status="FAIL",
             reason_code="CPA_OR_BALANCE_VIOLATION",
             issues=issues,
-            metrics={"cpa_distribution": dict(cpa_counts), "wave_answer_distribution": dict(ans_counts_wave)},
+            metrics={
+                "cpa_distribution": dict(cpa_counts),
+                "wave_answer_distribution": dict(ans_counts_wave),
+                "derived_first_wave_qid": derived_first_qid,
+            },
         )
     return GateResult(
         stage="AUTO",
@@ -503,6 +561,7 @@ def verify_cpa_and_answer_balance(
             "cpa_distribution": dict(cpa_counts),
             "all_answer_distribution": {k: ans_counts_all[k] for k in VALID_ANSWERS},
             "wave_answer_distribution": {k: ans_counts_wave[k] for k in VALID_ANSWERS},
+            "derived_first_wave_qid": derived_first_qid,
         },
     )
 
@@ -610,10 +669,24 @@ def run_converter_and_parse_report(
     download_dir: Optional[str | Path] = None,
     preview_json_out: Optional[str | Path] = None,
 ) -> Dict[str, Any]:
-    """Execute Z.ai's verbatim `convert.mjs` in an isolated staging dir; write official report to `download/`."""
+    """Execute Z.ai's official SSOT `convert.mjs` in an isolated staging dir; write official report to `download/`."""
     root = Path(repo_root).resolve()
     wb_file = Path(xlsx_path).resolve()
-    mirror_dir = root / "authoring/agent/zai_converter_mirror"
+    # Task 60 (SSOT): خوانش مستقیم از منبع واحد حقیقت repo_root بدون هیچ کپی موازی
+    ssot_convert = root / "tools/cartridge-converter/convert.mjs"
+    ssot_schema = root / "public/math-game/src/v10/station/cartridge-schema.js"
+    ssot_errors = root / "public/math-game/src/v10/station/errors.js"
+    missing = [str(p.relative_to(root)) for p in (ssot_convert, ssot_schema, ssot_errors) if not p.exists()]
+    if missing:
+        return {
+            "status": "BLOCKED",
+            "reason_code": "MISSING_CONVERTER_SSOT",
+            "reason_detail": "، ".join(missing),
+            "exit_code": None,
+            "red": None,
+            "yellow": None,
+            "verdict": "BLOCKED",
+        }
     dl_dir = Path(download_dir).resolve() if download_dir else (root / "download")
     dl_dir.mkdir(parents=True, exist_ok=True)
 
@@ -644,9 +717,9 @@ def run_converter_and_parse_report(
         (tmp_root / "package.json").write_text('{"type": "module"}\n', encoding="utf-8")
         os.symlink(node_modules, tmp_root / "node_modules")
 
-        shutil.copy2(mirror_dir / "convert.mjs", conv_dir / "convert.mjs")
-        shutil.copy2(mirror_dir / "cartridge-schema.js", station_dir / "cartridge-schema.js")
-        shutil.copy2(mirror_dir / "errors.js", station_dir / "errors.js")
+        shutil.copy2(ssot_convert, conv_dir / "convert.mjs")
+        shutil.copy2(ssot_schema, station_dir / "cartridge-schema.js")
+        shutil.copy2(ssot_errors, station_dir / "errors.js")
 
         proc = subprocess.run(
             ["node", str(conv_dir / "convert.mjs"), str(wb_file)],
@@ -749,8 +822,10 @@ def manage_version_and_sha(
     s1_wave_clean = 0
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
-        if not lid or lid == "یادداشت":
+        if lid == "یادداشت":
             break
+        if not lid:
+            continue
         if (lid in added_s1_keys) if added_s1_keys else (not lid.endswith("00")):
             for c in range(1, 15):
                 s1_wave_cells += 1
@@ -766,8 +841,10 @@ def manage_version_and_sha(
     total_distractors = 0
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if not qid or qid == "یادداشت":
+        if qid == "یادداشت":
             break
+        if not qid:
+            continue
         total_q += 1
         note = str(ws_qb.cell(r, 17).value or "")
         ans = str(ws_qb.cell(r, 11).value or "").strip()
@@ -851,28 +928,65 @@ def plan_and_verify_pdf_chunks(
 
         for idx in range(total_pages):
             pdf_p = idx + 1
-            txt = doc[idx].get_text("text")
-            # Check printed footer badge at bottom margin (`y > 700`)
-            blocks = doc[idx].get_text("blocks")
-            footer_nums = []
+            page = doc[idx]
+            txt = page.get_text("text")
+            y_min = page.rect.height - 110
+            blocks = page.get_text("blocks")
+            raw_tokens: List[Tuple[float, str]] = []
             for b in blocks:
-                if b[1] > 700:
+                if b[1] > y_min:
                     clean = b[4].translate(FA_TO_ASCII)
                     clean_digits = re.sub(r"\s+", "", clean)
                     if re.fullmatch(r"\d{1,3}", clean_digits):
-                        val = int(clean_digits)
-                        if 1 <= val <= 200:
-                            footer_nums.append((b[1], val))
-            if footer_nums:
-                # Take topmost/painted footer badge (`41` on PDF 47 sits at y=714 vs occluded `40` at y=714 -> check `pdf_p - val`)
-                best_book_p = max(v for _, v in footer_nums)
-                footer_offsets[pdf_p - best_book_p] += 1
-                if "مرور فصل" in txt:
-                    review_anchors.append({
-                        "pdf_page": pdf_p,
-                        "printed_book_page": best_book_p,
-                        "implied_offset": pdf_p - best_book_p,
-                    })
+                        raw_tokens.append((b[1], clean_digits))
+            if raw_tokens:
+                # Multi-digit palindromes (11, 22, ..., 99, 101, 111, 121, 131, 141) are 100% invariant
+                # to RTL/LTR glyph serialization in InDesign PDF exports (INC-16 mathematical prover).
+                page_candidates: Set[int] = set()
+                for _, tok in raw_tokens:
+                    v_fwd = int(tok)
+                    v_rev = int(tok[::-1])
+                    if 1 <= v_fwd <= 250:
+                        page_candidates.add(v_fwd)
+                    if 1 <= v_rev <= 250:
+                        page_candidates.add(v_rev)
+                    if len(tok) >= 2 and tok == tok[::-1] and 11 <= v_fwd <= 250:
+                        footer_offsets[pdf_p - v_fwd] += 1
+                        review_anchors.append({
+                            "pdf_page": pdf_p,
+                            "printed_book_page": v_fwd,
+                            "implied_offset": pdf_p - v_fwd,
+                            "anchor_kind": "palindrome_or_review" if ("مرور فصل" in txt or "فرهنگ نوشتن" in txt) else "palindrome_footer",
+                        })
+
+        if len(footer_offsets) == 1:
+            candidate_off = next(iter(footer_offsets.keys()))
+            verified_footer_count = 0
+            seen_anchor_pages = {a["pdf_page"] for a in review_anchors}
+            for idx in range(total_pages):
+                pdf_p = idx + 1
+                page = doc[idx]
+                txt = page.get_text("text")
+                y_min = page.rect.height - 110
+                page_vals: Set[int] = set()
+                for b in page.get_text("blocks"):
+                    if b[1] > y_min:
+                        tok = re.sub(r"\s+", "", b[4].translate(FA_TO_ASCII))
+                        if re.fullmatch(r"\d{1,3}", tok):
+                            page_vals.add(int(tok))
+                            page_vals.add(int(tok[::-1]))
+                expected_bp = pdf_p - candidate_off
+                if expected_bp in page_vals and expected_bp >= 1:
+                    verified_footer_count += 1
+                    if pdf_p not in seen_anchor_pages and ("مرور فصل" in txt or "فرهنگ نوشتن" in txt):
+                        review_anchors.append({
+                            "pdf_page": pdf_p,
+                            "printed_book_page": expected_bp,
+                            "implied_offset": candidate_off,
+                            "anchor_kind": "verified_chapter_review",
+                        })
+                        seen_anchor_pages.add(pdf_p)
+            footer_offsets = Counter({candidate_off: verified_footer_count})
     finally:
         doc.close()
 
@@ -940,22 +1054,28 @@ def audit_historical_incidents_16(
     s1_by_id: Dict[str, Tuple[int, List[Any]]] = {}
     for r in range(3, ws_s1.max_row + 1):
         lid = str(ws_s1.cell(r, 1).value or "").strip()
-        if not lid or lid == "یادداشت":
+        if lid == "یادداشت":
             break
+        if not lid:
+            continue
         s1_by_id[lid] = (r, [ws_s1.cell(r, c).value for c in range(1, 15)])
 
     atlas_codes: Set[str] = set()
     for r in range(3, ws_ea.max_row + 1):
         raw_c = str(ws_ea.cell(r, 1).value or "").strip()
-        if not raw_c or raw_c == "یادداشت":
+        if raw_c == "یادداشت":
             break
+        if not raw_c:
+            continue
         atlas_codes.add(re.sub(r"\s*\(پیشنهاد\)\s*", "", raw_c).strip())
 
     qb_by_id: Dict[str, Tuple[int, List[Any]]] = {}
     for r in range(4, ws_qb.max_row + 1):
         qid = str(ws_qb.cell(r, 1).value or "").strip()
-        if not qid or qid == "یادداشت":
+        if qid == "یادداشت":
             break
+        if not qid:
+            continue
         qb_by_id[qid] = (r, [ws_qb.cell(r, c).value for c in range(1, 18)])
 
     stamps_gate = verify_official_stamps(candidate_xlsx, official_ref_xlsx)
