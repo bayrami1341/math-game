@@ -1,5 +1,17 @@
 {
   "schema": "khshab.teacher-stamps/v1",
-  "updatedAt": "2026-10-22T19:10:00Z",
-  "stamps": []
+  "updatedAt": "2026-10-22T23:38:42.000Z",
+  "stamps": [],
+  "rule": {
+    "who": "فقط معلم انسانی (حساب مالک bayrami1341 به نمایندگی) — شبیه‌سازی/جعل ممنوع مطلق (BP-012، GOVERNANCE)",
+    "when": "پس از بازرسی صفحهٔ بازرسی محتوا در داشبورد (/) — کارت هر خانواده",
+    "verdicts": [
+      "approve",
+      "reject",
+      "needs_changes"
+    ],
+    "binding": "هر مُهر باید officialSha معتبر از public/math-game/authoring/OFFICIAL-HEADS.json باشد؛ SHA ناهم‌خوان در API رد می‌شود",
+    "effect": "انتشار پایدار v10.3.0 فقط پس از مُهر روی ۴۸ سؤال رسمی + ۵۴ ردیف «پیشنهادی» G2 v0.5 (run-approved.sh خودش این را می‌سنجد)",
+    "api": "GET/POST /api/teacher-review[/stamp] — POST بدون family/verdict معتبر → 400 (تست دود BP-014)"
+  }
 }
