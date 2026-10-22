@@ -17,6 +17,7 @@ from typing import Any, Dict
 
 from .automation_suite import (
     audit_historical_incidents_16,
+    check_official_heads,
     count_visual_components,
     derive_wave_scope_from_diff,
     diff_workbooks_by_key,
@@ -26,6 +27,7 @@ from .automation_suite import (
     verify_bidirectional_anchors,
     verify_cpa_and_answer_balance,
     verify_official_stamps,
+    verify_all_heads,
     verify_wave_whitelist,
 )
 from .git_guard import audit_git_copyright_safety, check_ownership_boundary
@@ -94,6 +96,7 @@ def run_generic_wave_check(
             gates["wave_whitelist"] = {"status": g_wl.status, "issues": g_wl.issues}
 
     if official_xlsx is not None and official_xlsx.exists():
+        gates["official_head_check"] = check_official_heads(repo_root, official_xlsx)
         g_st = verify_official_stamps(candidate_xlsx, official_xlsx)
         gates["official_stamps"] = {"status": g_st.status, "issues": g_st.issues, "metrics": g_st.metrics}
 
@@ -118,6 +121,7 @@ def run_generic_wave_check(
         and g_own.status != "FAIL"
         and g_anchors.status == "PASS"
         and conv["status"] == "PASS"
+        and (gates.get("official_head_check", {}).get("status", "PASS") != "FAIL")
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
     )
@@ -126,6 +130,7 @@ def run_generic_wave_check(
         and g_own.status != "FAIL"
         and g_anchors.status == "PASS"
         and conv["status"] == "BLOCKED"
+        and (gates.get("official_head_check", {}).get("status", "PASS") != "FAIL")
         and (gates.get("official_stamps", {}).get("status", "PASS") == "PASS")
         and (gates.get("wave_whitelist", {}).get("status", "PASS") == "PASS")
     )
@@ -353,6 +358,10 @@ def main(argv: list[str] | None = None) -> int:
     p_verdict.add_argument("--target-file", required=True)
     p_verdict.add_argument("--notes", default="")
 
+    p_heads = sub.add_parser("heads", help="Task 66: راستی‌آزمایی مانیفست OFFICIAL-HEADS.json")
+    p_heads.add_argument("--repo-root", default=".")
+    p_heads.add_argument("--verify", action="store_true")
+
     args = parser.parse_args(argv)
     root = Path(getattr(args, "repo_root", ".")).resolve()
 
@@ -382,6 +391,11 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "keyed-diff":
         print(json.dumps(diff_workbooks_by_key(args.old_xlsx, args.new_xlsx), ensure_ascii=False, indent=2))
         return 0
+
+    if args.cmd == "heads":
+        res = verify_all_heads(root)
+        print(json.dumps(res, ensure_ascii=False, indent=2))
+        return 0 if res.get("status") == "PASS" else 1
 
     if args.cmd == "count-items":
         x0, y0, x1, y1 = [float(v.strip()) for v in args.bbox.split(",")]
