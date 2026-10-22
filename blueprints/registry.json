@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 27,
-  "updated_at": "2026-10-22T23:36:26.459Z",
+  "version": 28,
+  "updated_at": "2026-10-22T23:37:04.923Z",
   "updated_by": "agent:z",
   "blueprints": [
     {
@@ -550,7 +550,7 @@
       "title": "موتور زنجیرهٔ اجرا scripts/run-approved.sh — ادامهٔ خودکار نقشه‌های تأییدشده به ترتیب اولویت با گیت بین گام‌ها",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "delivered",
+      "status": "verified",
       "priority": 13,
       "created_by": "z.ai",
       "created_at": "2026-10-22T21:05:00Z",
@@ -558,7 +558,7 @@
       "approved_at": "2026-10-22T22:19:38.008Z",
       "dispatched_at": null,
       "delivered_at": "2026-10-22T23:34:57.544Z",
-      "verified_at": null,
+      "verified_at": "2026-10-22T23:37:04.923Z",
       "context": "دستور مالک: «ربات بتواند اتوماتیک کار را ادامه دهد». رانر نقشه‌های approved را به ترتیب priority می‌پیماید؛ بین هر نقشه گیت‌های fail-closed (validate رجیستری + npm test + مبدل)؛ هر گذار وضعیت = کامیت روی main + append worklog؛ توقف کامل روی قرمزی یا فرمان «فریز». ترتیب اجرا: B2.",
       "tasks": [
         {
@@ -592,7 +592,7 @@
         "issue": null,
         "notes": null
       },
-      "notes": "ترتیب B2 — پس از BP-007. تا سبزشدن، پیمایش دستی طبق ROADMAP معتبر است.\n[2026-10-22T23:34:57.544Z] رانر سه‌حالته ساخته شد: dry-run (T2 سبز) + run با گیت release-check و گذار verified + self-test سه‌گزاره‌ای (T3 سبز) + ردِ خودکار BP-012 بدون مُهر"
+      "notes": "ترتیب B2 — پس از BP-007. تا سبزشدن، پیمایش دستی طبق ROADMAP معتبر است.\n[2026-10-22T23:34:57.544Z] رانر سه‌حالته ساخته شد: dry-run (T2 سبز) + run با گیت release-check و گذار verified + self-test سه‌گزاره‌ای (T3 سبز) + ردِ خودکار BP-012 بدون مُهر\n[2026-10-22T23:37:04.923Z] وارسی خودکار زنجیرهٔ run-approved (گیت + CI سبز)"
     },
     {
       "id": "BP-012",
