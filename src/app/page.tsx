@@ -6,6 +6,7 @@ import {
   AlertTriangle,
   Gamepad2,
   GraduationCap,
+  Grid3x3,
   LayoutDashboard,
   RefreshCw,
   ScanLine,
@@ -19,13 +20,14 @@ import { OverviewTab } from "@/components/dashboard/overview-tab";
 import { StudentsTab } from "@/components/dashboard/students-tab";
 import { StudentDetailSheet } from "@/components/dashboard/student-detail-sheet";
 import { BottlenecksTab } from "@/components/dashboard/bottlenecks-tab";
+import { DomainMatrixTab } from "@/components/dashboard/domain-matrix-tab";
 import { AiReportDialog } from "@/components/dashboard/ai-report-dialog";
 import { ScanPaperDialog } from "@/components/dashboard/scan-paper-dialog";
 import { fetchBottlenecks, fetchOverview, fetchStudents } from "@/components/dashboard/api";
 import { faRelative } from "@/lib/dashboard/constants";
 import { useToast } from "@/hooks/use-toast";
 
-type TabKey = "overview" | "students" | "bottlenecks";
+type TabKey = "overview" | "students" | "bottlenecks" | "matrix";
 
 /** تاریخ شمسی امروز — فقط در کلاینت محاسبه می‌شود تا با SSR ناسازگار نشود */
 function useTodayFa(): string {
@@ -184,6 +186,10 @@ export default function TeacherDashboardPage() {
                 <AlertTriangle className="size-4" aria-hidden />
                 گلوگاه‌های یادگیری
               </TabsTrigger>
+              <TabsTrigger value="matrix" className="gap-1.5">
+                <Grid3x3 className="size-4" aria-hidden />
+                ماتریس دامنه‌ها
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="mt-4">
@@ -214,6 +220,10 @@ export default function TeacherDashboardPage() {
                 onSelectStudent={openStudent}
                 onOpenAiReport={() => setAiOpen(true)}
               />
+            </TabsContent>
+
+            <TabsContent value="matrix" className="mt-4">
+              <DomainMatrixTab />
             </TabsContent>
           </Tabs>
         </div>

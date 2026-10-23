@@ -10,6 +10,7 @@ import type {
   StudentDetailResponse,
   StudentsResponse,
 } from "@/lib/dashboard/types";
+import type { MatrixView, StepZeroReceipt } from "@/lib/dashboard/domain-matrix";
 
 async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, { cache: "no-store", ...init });
@@ -85,4 +86,49 @@ export async function postAiReport(): Promise<string> {
   }
   const data = (await res.json()) as { report: string };
   return data.report;
+}
+
+// ---------- ماتریس دامنه‌ها (گام صفر) ----------
+
+export interface DomainMatrixResponse extends MatrixView {
+  receipts: StepZeroReceipt[];
+  alreadyStamped: boolean;
+}
+
+export const fetchDomainMatrix = () =>
+  fetchJson<DomainMatrixResponse>("/api/domain-matrix");
+
+export interface StampReceiptResponse {
+  receipt: StepZeroReceipt;
+  receipts: StepZeroReceipt[];
+}
+
+export interface DomainMatrixStampBody {
+  teacherName: string;
+  matrixSha256: string;
+  confirmations: {
+    chaptersMatchBook: boolean;
+    minCountsAgreed: boolean;
+    questionTypesAgreed: boolean;
+  };
+  note?: string;
+}
+
+/** ثبت مُهر گام صفر — پیام خطای سرور عیناً به کاربر نمایش داده می‌شود (fail-closed) */
+export async function postDomainMatrixStamp(
+  body: DomainMatrixStampBody
+): Promise<StampReceiptResponse> {
+  const res = await fetch("/api/domain-matrix/stamp", {
+    method: "POST",
+    cache: "no-store",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = (await res.json()) as Partial<StampReceiptResponse> & {
+    error?: string;
+  };
+  if (!res.ok) {
+    throw new Error(data.error ?? `خطای سرور (${res.status})`);
+  }
+  return data as StampReceiptResponse;
 }
