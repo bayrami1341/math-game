@@ -1,8 +1,8 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 55,
-  "updated_at": "2026-10-23T14:00:00.000Z",
-  "updated_by": "z.ai — BP-022 (M09/M10/PR2) delivered",
+  "version": 56,
+  "updated_at": "2026-10-23T16:30:00.000Z",
+  "updated_by": "z.ai — BP-023 الحاق پروتکل G2",
   "blueprints": [
     {
       "id": "BP-000",
@@ -1286,6 +1286,77 @@
       ],
       "links": [
         "reports/pr2-conflict-resolution-v1.fa.md"
+      ]
+    },
+    {
+      "id": "BP-023",
+      "title": "الحاق پروتکل ریزربات‌های G2 به BP-021 — تطبیق حاکمیتی + T3 امنیت مُهر + گیت منبع v2 + نگاشت ۹ سناریو (فرمان مالک trace 1a1683b2622c3d35)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "delivered",
+      "priority": 24,
+      "created_by": "z.ai — فرمان مالک: تطبیق پروتکل آرنا با GOVERNANCE/foreman/schema + اولویت T3 + گیت منبع fail-closed برای manifest ناقص + تفکیک چهار گیت + ثبت commit/CI/آزمون شکست عمدی",
+      "created_at": "2026-10-23T16:00:00.000Z",
+      "approved_by": "مالک-چت: فرمان مستقیم پنج‌بندی + نگاشت ۹ سناریو (trace 1a1683b2622c3d35)",
+      "approved_at": "2026-10-23T16:00:00.000Z",
+      "delivered_at": "2026-10-23T16:30:00.000Z",
+      "verified_at": null,
+      "context": "پروتکل ریزربات‌های G2 نسخهٔ ۱ (آرنا، arena/6b8310f7 @cf5472d) برای خط محتوای خودش لازم‌الاجرا و برای هسته فقط پیشنهاد قرارداد بود. این BP مواد پروتکل را بند‌به‌بند با GOVERNANCE/foreman/schema تطبیق داد (reports/g2-microbot-protocol-adaptation-v1.fa.md): ۸ ACCEPT، ۳ نیازمند تغییر قرارداد (T14/T15/T16)، ۲ BLOCKED زیرساختی؛ تعارض‌ها با گزینه/پیامد جدا شدند و هیچ‌کدام خاموش حل نشدند.",
+      "tasks": [
+        "T3 (BP-021): امنیت ثبت مُهر سمت سرور — توکن TEACHER_STAMP_TOKEN، fail-closed ۵۰۳ بدون توکن، رد ۴۰۱ ناشناس/جعل نقش/توکن غلط، مقایسهٔ زمان-ایم، قرنطینهٔ by/role/actor_role/authenticated (فقط claimedBy/claimedRole برای audit)، هویت رکورد فقط سمت سرور + UI توکن معلم",
+        "Z01-hardening: گیت منبع نسخهٔ ۲ — manifest ناقص/صفر (size_bytes=0، pages=0، فیلد غایب، SHA بدشکل) → BLOCKED/MANIFEST_INCOMPLETE_*؛ نگاشت کد علل پایدار (EDITION_SHA_MISMATCH و…)",
+        "NEG-TEST: scripts/test-source-gate-negative.py — ۱۱ آزمون منفی + pin مثبت روی vault واقعی؛ scripts/test-source-gate-ci.py — همان مکانیزم روی بایت مصنوعی برای CI (بایت کتاب هرگز به CI نمی‌آید)",
+        "CI: دو گام تازه در khshab-gate — گیت ۴ (آزمون منفی گیت منبع) و گیت ۵ (امنیت ثبت مُهر)",
+        "CAP-MAP: نگاشت ۹ سناریوی G2 آرنا به قابلیت واقعی موتور — reports/g2-capability-reply-v1.json (reply_contract کامل) + tests/v10.5-g2-capability-mapping.test.js؛ قرارداد M09 → v1.1.0 با پیوست قابلیت",
+        "T14 (PROPOSED): رجیستری ماشینی ریزربات‌ها khshab.microbot-registry/v1 — منتظر پذیرش مالک",
+        "T15 (PROPOSED): الحاق واژگان وضعیت‌شاهد به GOVERNANCE مادهٔ ۹ — منتظر فرمان مالک",
+        "T16 (PROPOSED): کلید job استاندارد پروتکل در ریزربات نسخهٔ بعد — گره به T6"
+      ],
+      "acceptance": [
+        "پروتکل آرنا بند‌به‌بند با حکم ACCEPT/نیازمند تغییر قرارداد/BLOCKED + دلیل + صاحب کار ثبت شده باشد — سبز: ۱۳ بند در ماتریس",
+        "ادعای by/role ارسالی ربات هرگز رأی معلم نسازد و مسیر بدون توکن تنظیم‌شده در دسترس نباشد — سبز: ۸/۸ تست (ناشناس ۴۰۱، جعل نقش ۴۰۱، توکن غلط ۴۰۱، بدون توکن ۵۰۳)",
+        "حذف/صفرکردن size_bytes و pages در گیت منبع PASS ندهد — سبز: ۱۱ منفی رد + pin معتبر C205 سبز ماند (PASS با source_key پین‌شده)",
+        "هر ۹ سناریو به نسخه/قابلیت واقعی موتور نگاشت شود با تست تعاملی درست/غلط/مرزی — سبز: ۱۱ تست تازه؛ موتور ۱۹۴/۱۹۴؛ pytest ۲۱/۲۱",
+        "چهار گیت (منبع/وسعت‌عمق/موتور/رأی) جدا اعلام شوند و صف بادوام فقط پس از تست قطع/بازیابی «مستقر» شود — سبز: جدول تفکیک + NOT_DEPLOYED صادقانه",
+        "commit/PR + نسخهٔ قرارداد + لینک CI + آزمون شکست عمدی در worklog ثبت شود؛ مشخص باشد چه چیزی اجرا می‌شود و چه چیزی PROPOSED/NOT_DEPLOYED است — سبز: بخش ۴ گزارش تطبیق + worklog Task 31"
+      ],
+      "artifacts": [
+        "reports/g2-microbot-protocol-adaptation-v1.fa.md",
+        "reports/g2-capability-reply-v1.json",
+        "src/lib/stamp-auth.ts",
+        "src/app/api/teacher-review/stamp/route.ts",
+        "src/components/dashboard/teacher-review-tab.tsx",
+        "scripts/accept-source-gate.py (v2)",
+        "scripts/test-source-gate-negative.py",
+        "scripts/test-source-gate-ci.py",
+        "scripts/test-stamp-auth.ts",
+        "public/math-game/tests/v10.5-g2-capability-mapping.test.js",
+        "public/math-game/authoring/OPERATION-CONTRACT.json (v1.1.0)",
+        ".github/workflows/khshab-gate.yml (گیت ۴ و ۵)"
+      ],
+      "notes": [
+        "هیچ merge از PRهای آرنا، هیچ انتقال دسته‌جمعی فایل، هیچ مُهر و هیچ رأیی انجام نشد — مجوز ضمنی از پیام مالک استنتاج نشد",
+        "تعارض‌های چهارگانه (dispatch_count دامنه، حدهای G2 در برابر سناریوها، میزبانی T4، bind دوسویه) با گزینه/پیامد برای تصمیم مالک باز ماندند",
+        "foreman اکنون گوش نمی‌دهد؛ صف بادوام/worker = NOT_DEPLOYED؛ هیچ ادعای ۲۴ساعته",
+        "پذیرش خروجی موتور «پس از آزمون مصرف‌کننده» ثبت می‌شود — ارسال سند به‌تنهایی پذیرش نیست"
+      ],
+      "links": [
+        {
+          "kind": "protocol",
+          "ref": "authoring/G2-MICROBOT-BINDING-PROTOCOL-v1.fa.md (arena/6b8310f7 @cf5472d)"
+        },
+        {
+          "kind": "report",
+          "ref": "reports/g2-microbot-protocol-adaptation-v1.fa.md"
+        },
+        {
+          "kind": "capability-reply",
+          "ref": "reports/g2-capability-reply-v1.json"
+        },
+        {
+          "kind": "parent-track",
+          "ref": "BP-021 (T3، Z01-hardening، T14/T15/T16 جدید)"
+        }
       ]
     }
   ]

@@ -1,6 +1,6 @@
 {
   "schema": "khshab.operation-contract/v1",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "createdAt": "2026-10-23",
   "status": "پیش‌نویس — معتبر پس از مُهر گام صفر معلم؛ تا آن زمان هیچ محتوایی از این قرارداد «رسمی» اعلام نمی‌شود",
   "owner": {
@@ -14,77 +14,479 @@
     "futureQuestions": "سؤال تازه می‌تواند op + opSpec (شیء مشخصات) + answerFormat بدهد؛ مسیریاب بر اساس op به موتور درست می‌رود"
   },
   "responseTypes": {
-    "گزینه‌ای": { "payload": "index 0..3", "classification": "اطلس-لنگر (claims/optionErrorMap) — بدون طبقه‌بندی عددی" },
-    "عدد": { "payload": "int", "classification": "موتور عملیات (attempt/v103/w8 بر اساس op)" },
-    "کسر": { "payload": "«a/b» یا «a b/c» فارسی/لاتین", "classification": "classifyW8 با حساب گویای exact (BigInt)" },
-    "محور عددی": { "payload": "عدد روی محور + tolerance از renderHint", "classification": "مقایسهٔ تلورانس؛ کد ساختاری W8 اگر op داشته باشد" },
-    "زوج‌سازی": { "payload": "جفت‌های انتخابی", "classification": "بررسی جفت درست؛ کد ساختاری W8 اگر op داشته باشد" },
-    "شکل/نمودار": { "payload": "subkind + مقدار", "classification": "بررسی subkind؛ کد ساختاری W8 اگر op داشته باشد" }
+    "گزینه‌ای": {
+      "payload": "index 0..3",
+      "classification": "اطلس-لنگر (claims/optionErrorMap) — بدون طبقه‌بندی عددی"
+    },
+    "عدد": {
+      "payload": "int",
+      "classification": "موتور عملیات (attempt/v103/w8 بر اساس op)"
+    },
+    "کسر": {
+      "payload": "«a/b» یا «a b/c» فارسی/لاتین",
+      "classification": "classifyW8 با حساب گویای exact (BigInt)"
+    },
+    "محور عددی": {
+      "payload": "عدد روی محور + tolerance از renderHint",
+      "classification": "مقایسهٔ تلورانس؛ کد ساختاری W8 اگر op داشته باشد"
+    },
+    "زوج‌سازی": {
+      "payload": "جفت‌های انتخابی",
+      "classification": "بررسی جفت درست؛ کد ساختاری W8 اگر op داشته باشد"
+    },
+    "شکل/نمودار": {
+      "payload": "subkind + مقدار",
+      "classification": "بررسی subkind؛ کد ساختاری W8 اگر op داشته باشد"
+    }
   },
   "books": {
     "KH-G2-MATH": {
       "label": "ریاضی دوم دبستان — چاپ چهاردهم ۱۴۰۴",
       "numberRange": {
-        "default": [0, 9999],
-        "sum": [0, 100],
-        "sub": [0, 100],
+        "default": [
+          0,
+          9999
+        ],
+        "sum": [
+          0,
+          100
+        ],
+        "sub": [
+          0,
+          100
+        ],
         "mulcol": null,
-        "div": [0, 100],
-        "read": [0, 9999]
+        "div": [
+          0,
+          100
+        ],
+        "read": [
+          0,
+          9999
+        ]
       },
-      "fraction": { "denMax": 8, "numMax": 8, "opAllow": ["frac_part_whole", "frac_compare", "frac_of_quantity"] },
+      "fraction": {
+        "denMax": 8,
+        "numMax": 8,
+        "opAllow": [
+          "frac_part_whole",
+          "frac_compare",
+          "frac_of_quantity"
+        ]
+      },
       "status": "پیش‌نویس — نیاز به تأیید معلم"
     },
     "KH-G3-MATH": {
       "label": "ریاضی سوم دبستان",
       "numberRange": {
-        "default": [0, 9999],
-        "sum": [0, 9999],
-        "sub": [0, 9999],
-        "mulcol": [0, 9999],
-        "div": [0, 9999],
-        "read": [0, 9999]
+        "default": [
+          0,
+          9999
+        ],
+        "sum": [
+          0,
+          9999
+        ],
+        "sub": [
+          0,
+          9999
+        ],
+        "mulcol": [
+          0,
+          9999
+        ],
+        "div": [
+          0,
+          9999
+        ],
+        "read": [
+          0,
+          9999
+        ]
       },
-      "fraction": { "denMax": 12, "numMax": 12, "opAllow": ["frac_part_whole", "frac_equiv_num", "frac_add", "frac_sub", "frac_compare", "frac_of_quantity"] },
+      "fraction": {
+        "denMax": 12,
+        "numMax": 12,
+        "opAllow": [
+          "frac_part_whole",
+          "frac_equiv_num",
+          "frac_add",
+          "frac_sub",
+          "frac_compare",
+          "frac_of_quantity"
+        ]
+      },
       "status": "پیش‌نویس — نیاز به تأیید معلم"
     }
   },
   "rangeRule": "حد per-book است، نه سقف عمومی: عملیاتی که در کتاب پایه پشتیبانی آموزشی ندارد (مثل mulcol در G2) با null مسدود می‌شود (out-of-book-range)؛ سقف سخت ماژول‌ها (۰..۹۹۹۹ خانوادهٔ ۲/۳ و گارد W8) فقط پشتیبان است",
   "operations": {
-    "mult_fact": { "engine": "attempt", "faName": "فکت ضرب", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["f1", "f2"] },
-    "sum": { "engine": "v103", "faName": "جمع ستونی", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "sub": { "engine": "v103", "faName": "تفریق ستونی", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "mulcol": { "engine": "v103", "faName": "ضرب ستونی چهاررقمی", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "div": { "engine": "v103", "faName": "تقسیم", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b", "totalDivision?"] },
-    "read": { "engine": "v103", "faName": "خواندن چهاررقمی/ارزش مکانی", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a"] },
-    "frac_part_whole": { "engine": "w8", "faName": "کسر جزء از کل", "responseTypes": ["کسر", "گزینه‌ای"], "specFields": ["shaded", "total"] },
-    "frac_equiv_num": { "engine": "w8", "faName": "کسر هم‌ارز", "responseTypes": ["کسر", "گزینه‌ای"], "specFields": ["num", "den", "target_den"] },
-    "frac_add": { "engine": "w8", "faName": "جمع کسر", "responseTypes": ["کسر", "گزینه‌ای"], "specFields": ["f1", "f2"] },
-    "frac_sub": { "engine": "w8", "faName": "تفریق کسر", "responseTypes": ["کسر", "گزینه‌ای"], "specFields": ["f1", "f2"] },
-    "frac_compare": { "engine": "w8", "faName": "مقایسهٔ کسر", "responseTypes": ["گزینه‌ای", "کسر"], "specFields": ["f1", "f2"] },
-    "frac_of_quantity": { "engine": "w8", "faName": "کسر از مقدار", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["fraction", "quantity"] },
-    "perimeter_rect": { "engine": "w8", "faName": "محیط مستطیل", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["sides|a,b"] },
-    "perimeter_square": { "engine": "w8", "faName": "محیط مربع", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["side"] },
-    "perimeter_polygon": { "engine": "w8", "faName": "محیط چندضلعی", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["lengths"] },
-    "area_rect": { "engine": "w8", "faName": "مساحت مستطیل", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "area_square": { "engine": "w8", "faName": "مساحت مربع", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["side"] },
-    "compound_to_minor": { "engine": "w8", "faName": "تبدیل یکاها", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["value", "unit"] },
-    "clock_to_24h": { "engine": "w8", "faName": "ساعت به ۲۴ساعته", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["hours", "minutes"] },
-    "clock_elapsed": { "engine": "w8", "faName": "طول بازهٔ ساعت", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["from", "to"] },
-    "ruler_offset": { "engine": "w8", "faName": "خط‌کش با آفست", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["startValue", "endValue"] },
-    "symmetry_axes": { "engine": "w8", "faName": "شمار محور تقارن", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["shape", "axes"] },
-    "probability": { "engine": "w8", "faName": "احتمال ساده", "responseTypes": ["کسر", "گزینه‌ای"], "specFields": ["favorable", "outcomes"] },
-    "pictograph_value": { "engine": "w8", "faName": "نمودار تصویری", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["scale", "symbols"] },
-    "table_query": { "engine": "w8", "faName": "پرس‌وجوی جدول", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["row", "col"] },
-    "divide_qr": { "engine": "w8", "faName": "تقسیم با خارج‌قسمت/باقیمانده/سقف", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["dividend", "divisor", "target"] },
-    "place_value": { "engine": "w8", "faName": "ارزش مکانی (عمومی)", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["value", "place"] },
-    "column_add": { "engine": "w8", "faName": "جمع ستونی عمومی (تا ۱۰ رقم)", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "column_sub": { "engine": "w8", "faName": "تفریق ستونی عمومی (تا ۱۰ رقم)", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["a", "b"] },
-    "round": { "engine": "w8", "faName": "گردکردن", "responseTypes": ["عدد", "گزینه‌ای"], "specFields": ["value", "to"] }
+    "mult_fact": {
+      "engine": "attempt",
+      "faName": "فکت ضرب",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "f1",
+        "f2"
+      ]
+    },
+    "sum": {
+      "engine": "v103",
+      "faName": "جمع ستونی",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "sub": {
+      "engine": "v103",
+      "faName": "تفریق ستونی",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "mulcol": {
+      "engine": "v103",
+      "faName": "ضرب ستونی چهاررقمی",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "div": {
+      "engine": "v103",
+      "faName": "تقسیم",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b",
+        "totalDivision?"
+      ]
+    },
+    "read": {
+      "engine": "v103",
+      "faName": "خواندن چهاررقمی/ارزش مکانی",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a"
+      ]
+    },
+    "frac_part_whole": {
+      "engine": "w8",
+      "faName": "کسر جزء از کل",
+      "responseTypes": [
+        "کسر",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "shaded",
+        "total"
+      ]
+    },
+    "frac_equiv_num": {
+      "engine": "w8",
+      "faName": "کسر هم‌ارز",
+      "responseTypes": [
+        "کسر",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "num",
+        "den",
+        "target_den"
+      ]
+    },
+    "frac_add": {
+      "engine": "w8",
+      "faName": "جمع کسر",
+      "responseTypes": [
+        "کسر",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "f1",
+        "f2"
+      ]
+    },
+    "frac_sub": {
+      "engine": "w8",
+      "faName": "تفریق کسر",
+      "responseTypes": [
+        "کسر",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "f1",
+        "f2"
+      ]
+    },
+    "frac_compare": {
+      "engine": "w8",
+      "faName": "مقایسهٔ کسر",
+      "responseTypes": [
+        "گزینه‌ای",
+        "کسر"
+      ],
+      "specFields": [
+        "f1",
+        "f2"
+      ]
+    },
+    "frac_of_quantity": {
+      "engine": "w8",
+      "faName": "کسر از مقدار",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "fraction",
+        "quantity"
+      ]
+    },
+    "perimeter_rect": {
+      "engine": "w8",
+      "faName": "محیط مستطیل",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "sides|a,b"
+      ]
+    },
+    "perimeter_square": {
+      "engine": "w8",
+      "faName": "محیط مربع",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "side"
+      ]
+    },
+    "perimeter_polygon": {
+      "engine": "w8",
+      "faName": "محیط چندضلعی",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "lengths"
+      ]
+    },
+    "area_rect": {
+      "engine": "w8",
+      "faName": "مساحت مستطیل",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "area_square": {
+      "engine": "w8",
+      "faName": "مساحت مربع",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "side"
+      ]
+    },
+    "compound_to_minor": {
+      "engine": "w8",
+      "faName": "تبدیل یکاها",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "value",
+        "unit"
+      ]
+    },
+    "clock_to_24h": {
+      "engine": "w8",
+      "faName": "ساعت به ۲۴ساعته",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "hours",
+        "minutes"
+      ]
+    },
+    "clock_elapsed": {
+      "engine": "w8",
+      "faName": "طول بازهٔ ساعت",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "from",
+        "to"
+      ]
+    },
+    "ruler_offset": {
+      "engine": "w8",
+      "faName": "خط‌کش با آفست",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "startValue",
+        "endValue"
+      ]
+    },
+    "symmetry_axes": {
+      "engine": "w8",
+      "faName": "شمار محور تقارن",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "shape",
+        "axes"
+      ]
+    },
+    "probability": {
+      "engine": "w8",
+      "faName": "احتمال ساده",
+      "responseTypes": [
+        "کسر",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "favorable",
+        "outcomes"
+      ]
+    },
+    "pictograph_value": {
+      "engine": "w8",
+      "faName": "نمودار تصویری",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "scale",
+        "symbols"
+      ]
+    },
+    "table_query": {
+      "engine": "w8",
+      "faName": "پرس‌وجوی جدول",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "row",
+        "col"
+      ]
+    },
+    "divide_qr": {
+      "engine": "w8",
+      "faName": "تقسیم با خارج‌قسمت/باقیمانده/سقف",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "dividend",
+        "divisor",
+        "target"
+      ]
+    },
+    "place_value": {
+      "engine": "w8",
+      "faName": "ارزش مکانی (عمومی)",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "value",
+        "place"
+      ]
+    },
+    "column_add": {
+      "engine": "w8",
+      "faName": "جمع ستونی عمومی (تا ۱۰ رقم)",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "column_sub": {
+      "engine": "w8",
+      "faName": "تفریق ستونی عمومی (تا ۱۰ رقم)",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "a",
+        "b"
+      ]
+    },
+    "round": {
+      "engine": "w8",
+      "faName": "گردکردن",
+      "responseTypes": [
+        "عدد",
+        "گزینه‌ای"
+      ],
+      "specFields": [
+        "value",
+        "to"
+      ]
+    }
   },
   "codeRegistry": {
     "rule": "وضعیت هر کد تشخیصی در رکورد تلاش‌نگار ثبت می‌شود: «رسمی» = در اطلس رسمی کارتریج؛ «پیشنهادی» = کاندید تا مُهر انسانی (قاعدهٔ BP-012) — کدهای پیشنهادی هرگز به اطلس رسمی/انتشار/سر رسمی نمی‌روند",
-    "officialSources": ["public/math-game/src/v10/station/errors.js ERROR_CODES", "public/math-game/src/v10/station/errors-v103.js CODES_V103", "errorAtlas در cartridges/KH-G2-MATH.json و KH-G3-MATH.json"],
+    "officialSources": [
+      "public/math-game/src/v10/station/errors.js ERROR_CODES",
+      "public/math-game/src/v10/station/errors-v103.js CODES_V103",
+      "errorAtlas در cartridges/KH-G2-MATH.json و KH-G3-MATH.json"
+    ],
     "proposedSource": "public/math-game/src/v10/station/errors-w8.js CODES_W8 (همه ۳۳ کد)",
     "invariant": "تقاطع CODES_W8 با اطلس رسمی باید همیشه تهی باشد — تست قرارداد این را قفل می‌کند"
   },
@@ -98,5 +500,18 @@
     "livePath": "app.js handleCartridgeAnswerSubmit → classifyCartridgeAttempt",
     "legacyPathUnchanged": "app.js مسیر رویه‌ای ضرب (f1×f2) دست‌نخورده",
     "driftGuard": "تست قرارداد: JSON و JS (OP_ENGINES/DEFAULT_BOOK_LIMITS) باید هم‌خوان بمانند"
+  },
+  "changelog": [
+    {
+      "version": "1.1.0",
+      "date": "2026-10-23",
+      "change": "پیوست قابلیت: نگاشت ۹ سناریوی G2 آرنا به قابلیت واقعی موتور (reports/g2-capability-reply-v1.json + تست v10.5) — هیچ حدی باز نشد؛ همهٔ گسترش‌ها تصمیم انسانی معلّق شدند؛ K2 گارد per-book روی سناریوها آزموده شد"
+    }
+  ],
+  "capabilityReply": {
+    "file": "reports/g2-capability-reply-v1.json",
+    "schema": "g2-engine-capability-replies/v1",
+    "test": "tests/v10.5-g2-capability-mapping.test.js",
+    "note": "هر ۹ case نگاشت شده؛ SUPPORTED فقط در scope موتور — نه وسعت/عمق کتاب"
   }
 }

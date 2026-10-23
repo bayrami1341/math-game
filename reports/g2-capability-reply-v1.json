@@ -1,0 +1,102 @@
+{
+  "schema": "g2-engine-capability-replies/v1",
+  "generated_at": "2026-10-23",
+  "reply_to": "authoring/G2-ENGINE-CAPABILITY-REQUEST-v1.json (arena/6b8310f7-math-game @776ce64)",
+  "engine_version_commit": "@GIT_HEAD@",
+  "engine_schema_version": "khshab.operation-contract/v1@1.1.0",
+  "interaction_test_link": "public/math-game/tests/v10.5-g2-capability-mapping.test.js (node --test، سبز روی همین کامیت؛ CI: khshab-gate)",
+  "truth_scope": "این پاسخ فقط قابلیت موتور را نگاشت می‌کند؛ هیچ ادعایی دربارهٔ پوشش وسعت/عمق کتاب C205 نمی‌کند (origin سناریوها = SYNTHETIC_INTERACTION_FIXTURES_NOT_PRINTED_EXERCISES)",
+  "w8_status": "همهٔ کدهای W8 «پیشنهادی» هستند تا مُهر انسانی معلم — هیچ کد W8 به اطلس رسمی ننوشته می‌شود",
+  "cases": [
+    {
+      "case_id": "G2-CAP-01",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH6_ADD_REGROUP",
+      "engine_mapping": "op=sum → موتور v103 (errors-v103.js)؛ پذیرش ۴۳۴ و رد عددی پاسخ غلط کار می‌کند؛ گارد per-book پیش‌نویس G2 (sum=[0,100]) بازهٔ سه‌رقمی را «بی‌الگو با دلیل» می‌کند",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: op='sum', opSpec={a:278,b:156}, answerFormat='عدد'|'گزینه‌ای'؛ classification: classifyV103",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-01",
+      "limitations_and_next_action": "پروب ۴۲۴ کد اختصاصی ارزش-مکانی در اطلس ندارد (null صادقانه) — کد پیشنهادی تازه فقط با مُهر معلم؛ گسترش حد sum برای G2 تصمیم انسانی است، هرگز خودکار باز نمی‌شود"
+    },
+    {
+      "case_id": "G2-CAP-02",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH6_SUB_REGROUP",
+      "engine_mapping": "op=sub → v103؛ قرض از صفر محاسبه درست است؛ پروب «بدون‌قرض» (۳۲۵) با E_BORROW_MISS رد می‌شود",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: op='sub', opSpec={a:402,b:187}, answerFormat='عدد'؛ classification: classifyV103",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-02",
+      "limitations_and_next_action": "پروب ۲۲۵ کد اختصاصی ندارد (null صادقانه)؛ حد پیش‌نویس G2 sub=[0,100] سه‌رقمی را مسدود می‌کند — تصمیم معلم لازم؛ هیچ گسترش خودکار"
+    },
+    {
+      "case_id": "G2-CAP-03",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH7_TENTHS_EQUAL_PARTS",
+      "engine_mapping": "قالب شکل/نمودار + زیرقالب fraction-shape با cells:10 بازیپذیر؛ پاسخ 1/10 پارس و ارزیابی می‌شود",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: answerFormat='شکل/نمودار', renderHint='subkind:fraction-shape;cells:10', answerFrac={num:1,den:10}؛ classification: classifyW8 (frac_part_whole) — پیشنهادی",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-03",
+      "limitations_and_next_action": "دو حد: (۱) اعتبارسنجی «مساحت نابرابر نباید ۱/۱۰ شمرده شود» پیاده نیست (سلول‌ها هم‌شمارش‌اند) → گیت authoring فقط شکل مساوی صادر کند + NEEDS_IMPLEMENTATION برای شاهد رد؛ (۲) حدهای پیش‌نویس G2 denMax=8 → den=10 بیرون بازه — دهم در برنامهٔ پایهٔ دوم است؛ اصلاح حد فقط با مُهر معلم"
+    },
+    {
+      "case_id": "G2-CAP-04",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH7_BAG_CHANCE",
+      "engine_mapping": "بخش «انتخاب» با قالب گزینه‌ای واقعاً بازیپذیر؛ طبقه‌بندی op=probability در خانوادهٔ W8 (پیشنهادی) هست",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: op='probability', answerFormat='گزینه‌ای', options=['قرمز','آبی'], answerValue=0؛ classification: classifyW8 — پیشنهادی",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-04",
+      "limitations_and_next_action": "شبیه‌سازی بذر-دار با جایگزینی + ثبت فراوانی NOT_SUPPORTED است (هیچ زیرقالبی ندارد) — اگر آموزشاً لازم شد، قرارداد تازهٔ نتیجهٔ بذر-دار با نسخهٔ جدید پروتکل و شاهد قطعیت‌نکردن طراحی می‌شود؛ هیچ ادعای قطعیت در بازخورد فعلی نیست"
+    },
+    {
+      "case_id": "G2-CAP-05",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH7_SPINNER_CHANCE",
+      "engine_mapping": "همان مسیر CAP-04: گزینه‌ای بازیپذیر + طبقه‌بندی probability (W8 پیشنهادی)؛ رندر بومی گردونه وجود ندارد",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: op='probability', answerFormat='گزینه‌ای'؛ subkind گردونه در FIGURE_SUBKINDS نیست (تست‌شده)",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-05",
+      "limitations_and_next_action": "رندر بومی گردونه = NOT_SUPPORTED؛ در صورت نیاز آموزشی: زیرقالب spinner با قرارداد قطاع‌های هم‌مساحت الزامی (پروب نابرابر آرنا) در نسخهٔ قرارداد بعدی"
+    },
+    {
+      "case_id": "G2-CAP-06",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED",
+      "candidate_family": "CH8_BAR_CHART",
+      "engine_mapping": "زیرقالب bar-chart در شکل/نمودار بازیپذیر؛ پاسخ عددی ۵ با موتور عددی ارزیابی می‌شود؛ طبقه‌بندی خطا op=table_query (W8 پیشنهادی)",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: answerFormat='شکل/نمودار', renderHint='subkind:bar-chart', answerValue=5 یا op='table_query' با opSpec",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-06 (و E2E شش‌قالبی: خواندن نمودار ۶→درست)",
+      "limitations_and_next_action": "اعتبارسنجی برچسب محور/مقیاس واحد/خط پایهٔ صفر در گیت مبدل/authoring اعمال می‌شود نه رندر زنده — قید صریح قرارداد نویسه‌نگار بچ‌های تازه"
+    },
+    {
+      "case_id": "G2-CAP-07",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "NEEDS_IMPLEMENTATION",
+      "candidate_family": "CH8_PICTOGRAPH",
+      "engine_mapping": "طبقه‌بندی op=pictograph_value در W8 (پیشنهادی) آماده است؛ اما رندر بومی نمودار تصویری وجود ندارد",
+      "actual_payload_or_mapping_to_current_schema": "امروز: فقط گزینه‌ای/عدد با صورت‌مسئلهٔ متنی؛ زیرقالب pictograph در FIGURE_SUBKINDS نیست (تست‌شده)",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-07",
+      "limitations_and_next_action": "طراحی زیرقالب pictograph با فیلد الزامی key (بدون کلید = بی‌الگو — عین پروب آرنا: «۳ نماد بدون کلید نه ۳ است نه ۶»)؛ پیاده‌سازی پس از تأیید معلم در نسخهٔ قرارداد بعدی"
+    },
+    {
+      "case_id": "G2-CAP-08",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "SUPPORTED_WITH_LIMITS",
+      "candidate_family": "CH8_SELECT_REPRESENTATION",
+      "engine_mapping": "بخش «انتخاب» با گزینه‌ای بازیپذیر؛ توضیح آزاد عمداً در قرارداد نیست — ارزیابی متن حکم انسانی می‌خواهد",
+      "actual_payload_or_mapping_to_current_schema": "cartridge: answerFormat='گزینه‌ای' + note؛ توضیح معلم‌محور به صف بازبینی (M12) می‌رود؛ responseTypes فاقد «توضیح آزاد» (تست‌شده)",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-08",
+      "limitations_and_next_action": "جایگزین‌های تربیتی فقط با scope انسانی پذیرفته می‌شوند؛ هیچ پاسخ کتاب-خاص از فیکسچر مصنوعی هاردکد نمی‌شود (پروب آرنا)"
+    },
+    {
+      "case_id": "G2-CAP-09",
+      "engine_version_commit": "@GIT_HEAD@",
+      "capability_status": "NEEDS_IMPLEMENTATION",
+      "candidate_family": "CH8_SYMMETRY_TILING",
+      "engine_mapping": "طبقه‌بندی op=symmetry_axes در W8 (پیشنهادی) آماده؛ تعامل فعلی «انتخاب شکل درست از گزینه‌های SVG» است — بازتاب کشیدنی شبکه‌ای پیاده نیست",
+      "actual_payload_or_mapping_to_current_schema": "امروز: subkind:symmetry = سنجش گزینه‌ای تصویری؛ درخواست grid_shape_drag به قرارداد تازه نیاز دارد",
+      "interaction_test_link": "v10.5-g2-capability-mapping.test.js › G2-CAP-09",
+      "limitations_and_next_action": "پیاده‌سازی درگ بازتاب حول محور ثابت با ردِ صریح چرخش (پروب آرنا) در نسخهٔ قرارداد بعدی؛ تا آن زمان هیچ ادعای SUPPORTED برای این مکانیک نمی‌کنیم"
+    }
+  ]
+}

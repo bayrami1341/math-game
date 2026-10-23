@@ -20,6 +20,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ErrorCard, EmptyState } from "@/components/dashboard/state-views";
 import { useToast } from "@/hooks/use-toast";
@@ -101,14 +102,35 @@ export function TeacherReviewTab() {
     refetchInterval: 60_000,
   });
 
+  // توکن معلم — فقط سمت سرور اعتبار می‌گیرد (T3). در sessionStorage می‌ماند تا
+  // بارگذاری مجدد صفحه نیاز به تکرار نداشته باشد؛ هرگز به سرور دیگری نمی‌رود.
+  const [stampToken, setStampToken] = useState<string>(
+    () => (typeof window !== "undefined" ? sessionStorage.getItem("khshab-stamp-token") ?? "" : "")
+  );
+  const rememberToken = (t: string) => {
+    setStampToken(t);
+    if (typeof window !== "undefined") {
+      if (t) sessionStorage.setItem("khshab-stamp-token", t);
+      else sessionStorage.removeItem("khshab-stamp-token");
+    }
+  };
+
   const stampMutation = useMutation({
     mutationFn: async (args: { family: string; verdict: StampRow["verdict"] }) => {
       const candidate = reviewQuery.data?.candidates.find((c) =>
         c.verdict?.startsWith("GREEN")
       );
+      if (!stampToken.trim()) {
+        throw new Error(
+          "ثبت مُهر نیازمند توکن احراز هویت معلم است — توکن را در کادر پایین وارد کنید (T3)."
+        );
+      }
       const res = await fetch("/api/teacher-review/stamp", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${stampToken.trim()}`,
+        },
         body: JSON.stringify({
           family: args.family,
           verdict: args.verdict,
@@ -119,7 +141,13 @@ export function TeacherReviewTab() {
       });
       if (!res.ok) {
         const j = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(j.error || `خطای سرور (${res.status})`);
+        const hint =
+          res.status === 503
+            ? " (سرور توکن تنظیم نکرده — fail-closed)"
+            : res.status === 401
+              ? " (توکن نامعتبر یا غایب — نقش ارسالی جای احراز هویت را نمی‌گیرد)"
+              : "";
+        throw new Error((j.error || `خطای سرور (${res.status})`) + hint);
       }
       return (await res.json()) as { ok: boolean; stamp: StampRow };
     },
@@ -229,6 +257,22 @@ export function TeacherReviewTab() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
+            <div className="rounded-md border border-amber-200 bg-amber-50 p-3 space-y-2">
+              <label htmlFor="stamp-token" className="block text-xs font-medium text-amber-900">
+                توکن احراز هویت معلم (T3) — هویت ثبت مُهر فقط با این توکن سمت سرور اثبات می‌شود؛
+                نام یا نقش ارسالی جای آن را نمی‌گیرد.
+              </label>
+              <Input
+                id="stamp-token"
+                type="password"
+                dir="ltr"
+                autoComplete="off"
+                value={stampToken}
+                onChange={(e) => rememberToken(e.target.value)}
+                placeholder="TEACHER_STAMP_TOKEN"
+                aria-label="توکن احراز هویت معلم"
+              />
+            </div>
             <Textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}

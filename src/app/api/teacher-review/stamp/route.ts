@@ -1,12 +1,20 @@
-// POST /api/teacher-review/stamp — ثبت مُهر رأی تربیتی معلم (BP-004 T2)
+// POST /api/teacher-review/stamp — ثبت مُهر رأی تربیتی معلم (BP-004 T2 + T3/BP-021)
+// ─── حفاظت سمت سرور (T3 — فرمان مالک، الحاق پروتکل ریزربات‌های G2 بند ۲) ───
+//   * هویت و اختیار فقط با توکن سرور (TEACHER_STAMP_TOKEN) اثبات می‌شود؛
+//   * by/role/actor_role/authenticated ارسالی کلاینت هرگز رأی معلم نمی‌سازد؛
+//   * بدون توکن تنظیم‌شده، مسیر ۵۰۳ می‌دهد (fail-closed) — بدون حفاظت در دسترس نیست؛
+//   * منطق امنیتی در src/lib/stamp-auth.ts است — آزمون مستقیم: scripts/test-stamp-auth.ts
+//
 // مُهر در authoring/teacher-stamps.json (فایل ثبت رسمی) append می‌شود؛
-// کارگاه‌بان در چرخهٔ اسکن بعدی آن را به تابلوی مرکزی دیسپچ می‌کند (T3).
+// کارگاه‌بان در چرخهٔ اسکن بعدی آن را به تابلوی مرکزی دیسپچ می‌کند.
 // قفل یکپارچگی: SHA سر رسمیِ لحظهٔ مُهر در رکورد ذخیره می‌شود (سبک GovernanceLedger).
 
 import { NextResponse } from "next/server";
 import { readFile, writeFile, rename } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
+
+import { authorizeStampRequest, sanitizeStampBody } from "@/lib/stamp-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -20,7 +28,11 @@ type StampBody = {
   candidateSha?: string;
   verdict?: "approve" | "reject" | "needs_changes";
   note?: string;
+  // فیلدهای هویتی زیر از کلاینت هرگز معتبر نیستند — قرنطینه می‌شوند (audit جعل)
   by?: string;
+  role?: string;
+  actor_role?: string;
+  authenticated?: boolean;
 };
 
 type OfficialHeads = {
@@ -36,6 +48,10 @@ type StampsFile = {
 const VALID_VERDICTS = new Set(["approve", "reject", "needs_changes"]);
 
 export async function POST(req: Request) {
+  // ── گیت احراز هویت — قبل از هر خواندن/نوشتن ──
+  const auth = authorizeStampRequest(req);
+  if (!auth.ok) return auth.response;
+
   let body: StampBody;
   try {
     body = (await req.json()) as StampBody;
@@ -43,7 +59,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "بدن درخواست JSON نیست" }, { status: 400 });
   }
 
-  const { family, candidateBranch, candidateSha, verdict, note = "", by = "معلم" } = body;
+  const { family, candidateBranch, candidateSha, verdict, note = "" } = body;
 
   if (!family || !VALID_VERDICTS.has(verdict ?? "")) {
     return NextResponse.json(
@@ -75,6 +91,8 @@ export async function POST(req: Request) {
   }
   if (!Array.isArray(stampsFile.stamps)) stampsFile.stamps = [];
 
+  // رکورد: هویت فقط از سرور؛ ادعاهای کلاینت قرنطینه‌شده
+  const sanitized = sanitizeStampBody(body as Record<string, unknown>, auth.identity);
   const record = {
     id: `TS-${Date.now().toString(36)}-${randomUUID().slice(0, 8)}`,
     ts: new Date().toISOString(),
@@ -84,8 +102,7 @@ export async function POST(req: Request) {
     candidateBranch: candidateBranch ?? null,
     candidateSha: candidateSha ?? null,
     verdict,
-    note: String(note).slice(0, 2000),
-    by,
+    ...sanitized,
   };
 
   stampsFile.schema = stampsFile.schema || "khshab.teacher-stamps/v1";
@@ -98,4 +115,16 @@ export async function POST(req: Request) {
   await rename(tmp, STAMPS_PATH);
 
   return NextResponse.json({ ok: true, stamp: record });
+}
+
+// GET فقط وضعیت حفاظت را می‌گوید (بدون هیچ راز): برای آزمون «مسیر بدون حفاظت در دسترس نیست»
+export async function GET() {
+  const configured = Boolean(process.env.TEACHER_STAMP_TOKEN?.trim());
+  return NextResponse.json({
+    ok: true,
+    endpoint: "/api/teacher-review/stamp",
+    protection: configured ? "ACTIVE (server-side token required)" : "FAIL-CLOSED (no token configured — all writes rejected 503)",
+    anonymousWriteAllowed: false,
+    clientIdentityFieldsTrusted: false,
+  });
 }

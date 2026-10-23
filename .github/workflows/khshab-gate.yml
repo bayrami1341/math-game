@@ -106,3 +106,13 @@ jobs:
         run: |
           bash scripts/check-domain-claims.sh --self-test
           bash scripts/check-domain-claims.sh
+
+      # ── گیت ۴ (BP-023): گیت منبع — آزمون منفی fail-closed روی بایت مصنوعی ──
+      # (حذف/صفرکردن size_bytes و pages، SHA غلط، فایل غایب، manifest خراب — همه باید رد شوند؛
+      #  pin معتبر منبع واقعی C205 فقط در محیط vault اجرا می‌شود و بایتش هرگز به CI نمی‌آید)
+      - name: گیت منبع — آزمون منفی fail-closed (BP-023)
+        run: python3 scripts/test-source-gate-ci.py
+
+      # ── گیت ۵ (BP-023/T3): امنیت ثبت مهر — دسترسی ناشناس و جعل نقش رد می‌شود ──
+      - name: امنیت ثبت مُهر — ناشناس/جعل نقش/توکن غلط/بدون‌توکن رد (T3/BP-023)
+        run: bun scripts/test-stamp-auth.ts
