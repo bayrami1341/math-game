@@ -1,0 +1,330 @@
+{
+  "schema": "G2_CH1_EXISTING_STANDARD_REVIEW_MAP_v1",
+  "official_sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+  "candidate_sha256": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+  "status": "CH1_OFFICIAL_CANDIDATE_CELL_IDENTICAL_NOT_BOOK_VERIFIED",
+  "chapter": 1,
+  "s1_page_rows": 18,
+  "q_rows": 40,
+  "pages_scanned_by_arena_in_this_run": 0,
+  "new_teacher_approvals": 0,
+  "source_offset_verified": false,
+  "workbook_mutated": false,
+  "comparison_color_rule": "GREEN/RED/ORANGE is a sidecar review result, NEVER write to S1.M or Q.P",
+  "pages": [
+    {
+      "book_page_candidate": 1,
+      "pdf_page_expected_unverified": 7,
+      "s1_id": "L-101",
+      "s1_row": 4,
+      "s1_cells_to_compare": "D4:H4,K4:L4,N4",
+      "s1_stamp_cell_read_only": "M4",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 2,
+      "pdf_page_expected_unverified": 8,
+      "s1_id": "L-102",
+      "s1_row": 5,
+      "s1_cells_to_compare": "D5:H5,K5:L5,N5",
+      "s1_stamp_cell_read_only": "M5",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 3,
+      "pdf_page_expected_unverified": 9,
+      "s1_id": "L-103",
+      "s1_row": 6,
+      "s1_cells_to_compare": "D6:H6,K6:L6,N6",
+      "s1_stamp_cell_read_only": "M6",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 4,
+      "pdf_page_expected_unverified": 10,
+      "s1_id": "L-104",
+      "s1_row": 7,
+      "s1_cells_to_compare": "D7:H7,K7:L7,N7",
+      "s1_stamp_cell_read_only": "M7",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 5,
+      "pdf_page_expected_unverified": 11,
+      "s1_id": "L-105",
+      "s1_row": 8,
+      "s1_cells_to_compare": "D8:H8,K8:L8,N8",
+      "s1_stamp_cell_read_only": "M8",
+      "q_ids": [
+        "Q-1001",
+        "Q-1002",
+        "Q-1003",
+        "Q-1004"
+      ],
+      "q_rows": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 6,
+      "pdf_page_expected_unverified": 12,
+      "s1_id": "L-106",
+      "s1_row": 9,
+      "s1_cells_to_compare": "D9:H9,K9:L9,N9",
+      "s1_stamp_cell_read_only": "M9",
+      "q_ids": [
+        "Q-1005",
+        "Q-1006",
+        "Q-1007",
+        "Q-1008"
+      ],
+      "q_rows": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 7,
+      "pdf_page_expected_unverified": 13,
+      "s1_id": "L-107",
+      "s1_row": 10,
+      "s1_cells_to_compare": "D10:H10,K10:L10,N10",
+      "s1_stamp_cell_read_only": "M10",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 8,
+      "pdf_page_expected_unverified": 14,
+      "s1_id": "L-108",
+      "s1_row": 11,
+      "s1_cells_to_compare": "D11:H11,K11:L11,N11",
+      "s1_stamp_cell_read_only": "M11",
+      "q_ids": [
+        "Q-1009",
+        "Q-1010",
+        "Q-1011",
+        "Q-1012"
+      ],
+      "q_rows": [
+        12,
+        13,
+        14,
+        15
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 9,
+      "pdf_page_expected_unverified": 15,
+      "s1_id": "L-109",
+      "s1_row": 12,
+      "s1_cells_to_compare": "D12:H12,K12:L12,N12",
+      "s1_stamp_cell_read_only": "M12",
+      "q_ids": [
+        "Q-1013",
+        "Q-1014",
+        "Q-1015",
+        "Q-1016"
+      ],
+      "q_rows": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 10,
+      "pdf_page_expected_unverified": 16,
+      "s1_id": "L-110",
+      "s1_row": 13,
+      "s1_cells_to_compare": "D13:H13,K13:L13,N13",
+      "s1_stamp_cell_read_only": "M13",
+      "q_ids": [
+        "Q-1017",
+        "Q-1018",
+        "Q-1019"
+      ],
+      "q_rows": [
+        20,
+        21,
+        22
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 11,
+      "pdf_page_expected_unverified": 17,
+      "s1_id": "L-111",
+      "s1_row": 14,
+      "s1_cells_to_compare": "D14:H14,K14:L14,N14",
+      "s1_stamp_cell_read_only": "M14",
+      "q_ids": [
+        "Q-1021",
+        "Q-1022",
+        "Q-1023",
+        "Q-1024"
+      ],
+      "q_rows": [
+        24,
+        25,
+        26,
+        27
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 12,
+      "pdf_page_expected_unverified": 18,
+      "s1_id": "L-112",
+      "s1_row": 15,
+      "s1_cells_to_compare": "D15:H15,K15:L15,N15",
+      "s1_stamp_cell_read_only": "M15",
+      "q_ids": [
+        "Q-1020"
+      ],
+      "q_rows": [
+        23
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 13,
+      "pdf_page_expected_unverified": 19,
+      "s1_id": "L-113",
+      "s1_row": 16,
+      "s1_cells_to_compare": "D16:H16,K16:L16,N16",
+      "s1_stamp_cell_read_only": "M16",
+      "q_ids": [
+        "Q-1025",
+        "Q-1026",
+        "Q-1027",
+        "Q-1028",
+        "Q-1029",
+        "Q-1030",
+        "Q-1031",
+        "Q-1032"
+      ],
+      "q_rows": [
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 14,
+      "pdf_page_expected_unverified": 20,
+      "s1_id": "L-114",
+      "s1_row": 17,
+      "s1_cells_to_compare": "D17:H17,K17:L17,N17",
+      "s1_stamp_cell_read_only": "M17",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 15,
+      "pdf_page_expected_unverified": 21,
+      "s1_id": "L-115",
+      "s1_row": 18,
+      "s1_cells_to_compare": "D18:H18,K18:L18,N18",
+      "s1_stamp_cell_read_only": "M18",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 16,
+      "pdf_page_expected_unverified": 22,
+      "s1_id": "L-116",
+      "s1_row": 19,
+      "s1_cells_to_compare": "D19:H19,K19:L19,N19",
+      "s1_stamp_cell_read_only": "M19",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 17,
+      "pdf_page_expected_unverified": 23,
+      "s1_id": "L-117",
+      "s1_row": 20,
+      "s1_cells_to_compare": "D20:H20,K20:L20,N20",
+      "s1_stamp_cell_read_only": "M20",
+      "q_ids": [
+        "Q-1033",
+        "Q-1034",
+        "Q-1035",
+        "Q-1036",
+        "Q-1037",
+        "Q-1038",
+        "Q-1039",
+        "Q-1040"
+      ],
+      "q_rows": [
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43
+      ],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    },
+    {
+      "book_page_candidate": 18,
+      "pdf_page_expected_unverified": 24,
+      "s1_id": "L-118",
+      "s1_row": 21,
+      "s1_cells_to_compare": "D21:H21,K21:L21,N21",
+      "s1_stamp_cell_read_only": "M21",
+      "q_ids": [],
+      "q_rows": [],
+      "visual_status": "NOT_SCANNED_IN_ARENA",
+      "scope": "S1_AND_LINKED_Q_NOT_PRINTED_BOOK_VERIFIED"
+    }
+  ]
+}
