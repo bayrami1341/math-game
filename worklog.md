@@ -1639,3 +1639,4 @@ Work Log:
 
 Stage Summary:
 - کار بعدیِ قطعی: mount امن C205 در vault خارج Git + اعتبارسنجی SHA/چاپ/offset، سپس غربال صفحه‌ها و تألیف زرد؛ استقرار worker/queue/داشبورد و حل PR آشیل در قلمرو Z.ai؛ حکم آموزشی/انتشار فقط مرجع انسانی.
+- پس از stage انتخابی (۳۳ فایل کوچک، بدون PDF/تصویر/کلید)، whitespace-check و ۱۱ آزمون PASS، commit `c60ae9e` روی همان شاخه push شد؛ Git clean است. بررسی PR #3: `OPEN/CONFLICTING`، بنابراین merge انجام نشد. در لحظهٔ بررسی، Actions برای commit جدید هنوز در فهرست نبود؛ CI قدیمی موفق را نتیجهٔ commit تازه حساب نمی‌کنیم.
