@@ -865,3 +865,130 @@ main.main-shell {
   .teacher-relabel-row button { flex: 1 1 auto; }
   .question-visual .equal-group { padding: 3px 4px; }
 }
+
+/* ─── وضعیت خشاب محتوا (v10.3): خط تکمیلی جعبهٔ راهنمای نقشه — اطلاع‌رسانی صادقانه ─── */
+.cartridge-status {
+  border-top: 1px solid var(--surface-border);
+  margin-top: 10px;
+  padding-top: 8px;
+  font-size: 11px;
+  line-height: 1.8;
+  color: var(--text-muted);
+  text-align: start;
+  overflow-wrap: anywhere;
+}
+.cartridge-status .cartridge-status-meta { font-size: 10px; opacity: 0.85; }
+
+/* ─── انتخابگر خشاب (v10.3.1): چیپ‌های کتاب فعال — چندخشابی ─── */
+.cartridge-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 2px 0 8px;
+}
+.cartridge-chip {
+  appearance: none;
+  border: 1px solid var(--surface-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 10.5px;
+  line-height: 1;
+  padding: 9px 12px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+.cartridge-chip:hover,
+.cartridge-chip:focus-visible {
+  border-color: rgba(126, 240, 255, 0.55);
+  color: var(--text-body, inherit);
+  outline: none;
+}
+.cartridge-chip.is-active {
+  border-color: rgba(126, 240, 255, 0.85);
+  background: rgba(126, 240, 255, 0.12);
+  color: var(--text-body, inherit);
+  font-weight: 700;
+}
+.cartridge-chip.is-invalid {
+  border-style: dashed;
+  color: #ffb4a8;
+}
+
+/* ─── BP-016 فاز الف: قالب‌های پاسخ کارتریج — گزینه‌ای/عدد/کسر ─── */
+.answer-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin: 4px 0;
+}
+.answer-option {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: rgba(126, 240, 255, 0.04);
+  color: var(--text-body, #e8f6ff);
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 10px 12px;
+  min-height: 44px; /* هدف لمسی ۴۴px */
+  cursor: pointer;
+  text-align: start;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+.answer-option:hover,
+.answer-option:focus-visible {
+  border-color: rgba(126, 240, 255, 0.6);
+  background: rgba(126, 240, 255, 0.1);
+  outline: none;
+}
+.answer-option:active { transform: scale(0.98); }
+.answer-option-letter {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(126, 240, 255, 0.14);
+  font-size: 11px;
+  font-weight: 700;
+}
+.answer-option-text { flex: 1 1 auto; overflow-wrap: anywhere; }
+@media (max-width: 380px) {
+  .answer-options { grid-template-columns: 1fr; }
+}
+
+/* دکمهٔ تمرین با خشاب فعال (BP-016 فاز الف) */
+.cartridge-practice-button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(126, 240, 255, 0.55);
+  border-radius: 10px;
+  background: rgba(126, 240, 255, 0.1);
+  color: var(--text-body, #e8f6ff);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 10px 14px;
+  margin-top: 8px;
+  min-height: 44px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.cartridge-practice-button:hover,
+.cartridge-practice-button:focus-visible {
+  background: rgba(126, 240, 255, 0.18);
+  border-color: rgba(126, 240, 255, 0.85);
+  outline: none;
+}

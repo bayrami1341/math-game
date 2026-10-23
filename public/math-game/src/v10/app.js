@@ -39,6 +39,12 @@ import {
   renderCellSVG,
   renderEqualGroupsSVG
 } from './station/index.js';
+// خشاب محتوا (v10.3): فقط مصرف‌کنندهٔ لودر خشاب — بدون اثر بر موتور v10.2 (fail-closed)
+// چندخشابی (v10.3.1): CARTRIDGE_ID فقط خشاب «پیش‌فرض» است؛ انتخاب کاربر از فهرست نصب‌شده‌ها می‌آید
+import { loadCartridge, listAvailableCartridges } from './station/cartridge.js';
+import { CARTRIDGE_ID } from './station/cartridge-schema.js';
+// BP-016 فاز الف: قالب‌های پاسخ گزینه‌ای/عدد/کسر + پل کارتریج → نشست بازی
+import { adaptCartridgeQuestions, checkCartridgeAnswer, effectiveFormat, FORMAT_MCQ, FORMAT_NUMBER, FORMAT_FRACTION } from './station/answer-formats.js';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
@@ -48,11 +54,15 @@ const normalizeDigits = val => String(val || '')
   .replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
   .replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
 const FA_DIGITS = '۰۱۲۳۴۵۶۷۸۹';
-// تایپ زندهٔ فارسی: رقم لاتین/عربی همان لحظه فارسی نمایش داده می‌شود؛ نویسهٔ غیررقمی حذف می‌شود (سازگار با normalizeDigits چک پاسخ)
+// تایپ زندهٔ فارسی: رقم لاتین/عربی همان لحظه فارسی می‌شود؛ نویسهٔ غیرمجاز حذف می‌شود.
+// BP-016 فاز الف: «/» و فاصله برای ورودی کسر/مخلوط (مثلاً «۳/۴» یا «۱ ۱/۲») حفظ می‌شود —
+// پارسر کسر (parseUserFraction) ارقام فارسی را می‌فهمد؛ جریان ضرب قدیمی بدون «/» دست‌نخورده است.
 const fafyAnswerInput = val => String(val || '')
   .replace(/[0-9]/g, d => FA_DIGITS[Number(d)])
   .replace(/[٠-٩]/g, d => FA_DIGITS['٠١٢٣٤٥٦٧٨٩'.indexOf(d)])
-  .replace(/[^۰-۹]/g, '');
+  .replace(/[^۰-۹/ ]/g, '')
+  .replace(/ {2,}/g, ' ')
+  .replace(/\s*\/\s*/g, '/');
 
 // گریز امن HTML برای ورودی آزاد معلم (یادداشت کارت)
 const escHtml = val => String(val ?? '')
@@ -712,6 +722,28 @@ function renderQuestionView() {
     visEl.innerHTML = canVisual ? renderEqualGroupsSVG(question.f1, question.f2) : '';
   }
 
+  // BP-016 فاز الف — سؤال کارتریجی: صورت کتاب + قالب پاسخ (گزینه‌ای/عدد/کسر)
+  if (question.prompt) {
+    $('question-building-name').textContent = `📦 تمرین خشاب ${session.cartridgeId || 'کتاب'}`;
+    $('question-sensation').textContent = 'تمرین با سؤال‌های کتاب درسی';
+    if (visEl) { visEl.hidden = true; visEl.innerHTML = ''; }
+    $('question-equation').textContent = question.prompt; // textContent = ایمن در برابر تزریق
+    configureAnswerArea(question);
+    hintLevel = 0;
+    legacyGuideShown = false;
+    hintCooldownUntil = 0;
+    clearHintCooldownTimer();
+    questionStartedAt = Date.now();
+    const cartridgeGuideBtn = $('question-guide-button');
+    if (cartridgeGuideBtn) {
+      cartridgeGuideBtn.disabled = false;
+      cartridgeGuideBtn.textContent = guideButtonLabel();
+      cartridgeGuideBtn.classList.remove('attract');
+    }
+    renderGuideArea(question);
+    return;
+  }
+
   $('question-equation').textContent = `${fa(question.f1)} × ${fa(question.f2)} = ؟`;
   $('answer-input').value = '';
   $('answer-input').focus();
@@ -731,15 +763,256 @@ function renderQuestionView() {
   renderGuideArea(question);
 }
 
+// ─── BP-016 فاز الف: قالب‌های پاسخ کارتریج (گزینه‌ای/عدد/کسر) ─────────────────
+
+const OPTION_LETTERS_FA = ['الف', 'ب', 'ج', 'د'];
+
+/** آماده‌سازی ناحیهٔ پاسخ بر اساس قالب سؤال کارتریجی */
+function configureAnswerArea(question) {
+  const fmt = effectiveFormat(question);
+  const input = $('answer-input');
+  const form = $('question-form');
+  const submitBtn = form?.querySelector('button[type="submit"]');
+  let opts = $('answer-options');
+  if (!opts && form) {
+    opts = document.createElement('div');
+    opts.id = 'answer-options';
+    opts.className = 'answer-options';
+    opts.setAttribute('role', 'group');
+    opts.setAttribute('aria-label', 'گزینه‌های پاسخ');
+    form.prepend(opts);
+  }
+  if (!opts) return;
+  opts.innerHTML = '';
+
+  if (fmt === FORMAT_MCQ) {
+    // گزینه‌ای: دکمه‌های گزینه؛ ورودی متنی مخفی
+    opts.hidden = false;
+    if (input) input.hidden = true;
+    if (submitBtn) submitBtn.hidden = true;
+    (question.options || []).forEach((optText, i) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'answer-option';
+      btn.dataset.index = String(i);
+      const letter = document.createElement('span');
+      letter.className = 'answer-option-letter';
+      letter.textContent = OPTION_LETTERS_FA[i] ?? String(i + 1);
+      const text = document.createElement('span');
+      text.className = 'answer-option-text';
+      text.textContent = optText; // textContent — ایمن در برابر تزریق
+      btn.append(letter, text);
+      btn.addEventListener('click', () => { void handleAnswerSubmit(String(i)); });
+      opts.append(btn);
+    });
+  } else {
+    // عدد/کسر: همان ورودی متنی با تنظیم قالب
+    opts.hidden = true;
+    if (input) {
+      input.hidden = false;
+      input.value = '';
+      if (fmt === FORMAT_NUMBER) { input.maxLength = 4; input.placeholder = 'پاسخ را عدد وارد کن'; }
+      else if (fmt === FORMAT_FRACTION) { input.maxLength = 10; input.placeholder = 'مثلاً ۳/۴ یا ۱ ۱/۲'; }
+      else { input.maxLength = 3; input.placeholder = ''; }
+      input.focus();
+    }
+    if (submitBtn) submitBtn.hidden = false;
+  }
+}
+
+/** مسیر سنجش سؤال کارتریجی — مشترک برای هر سه قالب فاز الف */
+async function handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec) {
+  const session = state.session;
+  const verdict = checkCartridgeAnswer(question, userAnswer);
+  const result = stationLayer.cells.onAnswer(verdict.correct);
+
+  if (!verdict.correct) {
+    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — برای سؤال ضربی هم کد ساختاری اطلس محاسبه می‌شود
+    const submittedNum = Number(verdict.normalized);
+    const structuralCode = (question.f1 != null && question.f2 != null && Number.isFinite(submittedNum))
+      ? classifyAttempt({ f1: question.f1, f2: question.f2, submitted: submittedNum })
+      : null;
+    session.wrongAttempts = session.wrongAttempts || [];
+    session.wrongAttempts.push({
+      questionId: question.questionId,
+      f1: question.f1 ?? null,
+      f2: question.f2 ?? null,
+      submitted: Number.isFinite(submittedNum) ? submittedNum : null,
+      submittedRaw: String(userAnswer ?? '').slice(0, 40),
+      format: question.answerFormat || 'گزینه‌ای',
+      domainCode: question.domainCode || null,
+      code: structuralCode || null,
+      behavioral: null,
+      timeSec: elapsedSec,
+      at: new Date().toISOString()
+    });
+    $('question-feedback').textContent = 'درست نیست — یک بار دیگر با دقت فکر کن!';
+    void playStationAudio(result.sound);
+    // نردبان خودکار پلهٔ ۱ — فقط برای سؤال‌های ضربی که نردبان دارند
+    if (hintLevel === 0 && question.f1 != null && question.f2 != null) {
+      hintLevel = 1;
+      session.hintsMax = Math.max(session.hintsMax || 0, hintLevel);
+      const autoBtn = $('question-guide-button');
+      if (autoBtn) autoBtn.classList.add('attract');
+      showGuideStepUp(question);
+    }
+    return;
+  }
+
+  void playStationAudio(result.sound);
+  $('question-feedback').textContent = '';
+  if (question.f1 != null && question.f2 != null) {
+    session.acceptedFacts = session.acceptedFacts || [];
+    session.acceptedFacts.push({ f1: question.f1, f2: question.f2 });
+  }
+
+  const eventId = 'evt_' + crypto.randomUUID();
+  session.answers = session.answers || {};
+  session.answers[question.questionId] = {
+    eventId,
+    questionId: question.questionId,
+    answer: verdict.normalized,
+    submittedAt: new Date().toISOString()
+  };
+  session.receipts = session.receipts || {};
+  session.receipts[eventId] = {
+    eventId,
+    questionId: question.questionId,
+    correct: true,
+    status: 'ACKNOWLEDGED',
+    timeSec: elapsedSec,
+    serverTime: new Date().toISOString()
+  };
+
+  if (result.action === 'next-question') {
+    activeQuestionIndex++;
+    showGuide = false;
+    await saveState(state);
+    renderQuestionView();
+  } else if (result.action === 'building-complete') {
+    await finalizeCartridgePracticeSession(session);
+  }
+}
+
+/** بستن نشست تمرین خشاب — رکورد + تلاش‌نگار محلی (پل داشبورد دامنه‌ای با T5 می‌آید) */
+async function finalizeCartridgePracticeSession(session) {
+  session.status = 'FINALIZED';
+  session.score = session.questions.length;
+  session.total = session.questions.length;
+
+  state.stationRecords = keepStationRecord(state.stationRecords || [], session, {
+    status: 'FINALIZED',
+    score: session.score,
+    total: session.total
+  });
+
+  state.attemptLog = state.attemptLog || [];
+  const wrongCodes = {};
+  for (const w of session.wrongAttempts || []) {
+    if (w?.code) wrongCodes[w.code] = (wrongCodes[w.code] || 0) + 1;
+    else wrongCodes.UNCLASSIFIED = (wrongCodes.UNCLASSIFIED || 0) + 1;
+  }
+  if ((wrongCodes.UNCLASSIFIED || 0) >= 3) {
+    wrongCodes.E_PERSISTENT_GUESSING = wrongCodes.UNCLASSIFIED;
+  }
+  const attemptEntry = {
+    eventId: 'evt_' + crypto.randomUUID(),
+    activityId: session.activityId,
+    sectorId: session.sectorId,
+    depth: null,
+    missionId: null,
+    type: 'cartridge-practice',
+    total: session.total,
+    correct: session.questions.filter(q => session.answers?.[q.questionId]).length,
+    wrongCount: (session.wrongAttempts || []).length,
+    wrongCodes,
+    wrongExamples: (session.wrongAttempts || []).slice(0, 3).map(w => ({
+      f1: w.f1, f2: w.f2, submitted: w.submitted, format: w.format
+    })),
+    hintsMax: session.hintsMax || 0,
+    completedAt: new Date().toISOString()
+  };
+  state.attemptLog = state.attemptLog.slice(-499).concat(attemptEntry);
+  await saveState(state);
+
+  currentView = 'map';
+  showGuide = false;
+  void playStationAudio(SOUND_EVENTS.pathLit);
+  void refreshTeacherMissions();
+  render();
+}
+
+// ─── BP-016 فاز الف: نشست تمرین با خشاب فعال ─────────────────────────────────
+
+let lastLoadedCartridge = null; // آخرین خشاب بارگذاری‌شده در جعبهٔ خشاب — برای دکمهٔ تمرین
+
+function startCartridgePracticeSession(cartridge, adapted) {
+  if (!cartridge || !Array.isArray(adapted?.questions) || adapted.questions.length === 0) return;
+  state.session = {
+    sessionId: 'sess_' + crypto.randomUUID(),
+    activityId: `cartridge-practice-${cartridge.cartridgeId}`, // هویت پایدار — «بهترین رکورد» هر خشاب
+    sectorId: 1,
+    activity: 'practice',
+    activityType: 'cartridge-practice',
+    depth: null,
+    missionId: null,
+    rulesVersion: RULES_VERSION,
+    questionSetVersion: `cartridge-${cartridge.cartridgeId}`,
+    cartridgeId: cartridge.cartridgeId,
+    questions: adapted.questions,
+    answers: {},
+    receipts: {},
+    status: 'IN_PROGRESS',
+    bottleneckHits: [],
+    fluentCount: 0,
+    wrongAttempts: [],
+    acceptedFacts: [],
+    hintsMax: 0
+  };
+  activeQuestionIndex = 0;
+  currentView = 'question';
+  showGuide = false;
+  render();
+}
+
+async function startCartridgePractice() {
+  const box = $('cartridge-status');
+  let cartridge = lastLoadedCartridge;
+  if (!cartridge) {
+    const id = readSavedCartridgeId() || CARTRIDGE_ID;
+    const result = await loadCartridge(`cartridges/${id}.json`, { fresh: true });
+    cartridge = result?.ok ? result.cartridge : null;
+  }
+  if (!cartridge) return;
+  const adapted = adaptCartridgeQuestions(cartridge, { limit: 10, shuffle: true });
+  if (!adapted.questions.length) {
+    if (box) {
+      const warn = document.createElement('div');
+      warn.className = 'cartridge-status-line';
+      warn.textContent = `⚠️ هیچ سؤال قابل بازی در قالب‌های فاز الف (گزینه‌ای/عدد/کسر) در خشاب ${cartridge.cartridgeId} نیست — ${fa(adapted.skipped)} سؤال قالب‌های فاز ب/ج.`;
+      box.prepend(warn);
+    }
+    return;
+  }
+  startCartridgePracticeSession(cartridge, adapted);
+}
+
 async function handleAnswerSubmit(userAnswer) {
   const session = state.session;
   const question = session.questions[activeQuestionIndex];
-  const expected = question.f1 * question.f2;
-  const isCorrect = Number(normalizeDigits(userAnswer)) === expected;
   // زمان‌سنجی سؤال (گرد تا یک دهم ثانیه) — برای receipt و تلاش‌نگار
   const elapsedSec = questionStartedAt
     ? Math.round(((Date.now() - questionStartedAt) / 1000) * 10) / 10
     : 0;
+
+  // BP-016 فاز الف — سؤال کارتریجی (قالب گزینه‌ای/عدد/کسر)
+  if (question?.prompt) {
+    await handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec);
+    return;
+  }
+
+  const expected = question.f1 * question.f2;
+  const isCorrect = Number(normalizeDigits(userAnswer)) === expected;
 
   const result = stationLayer.cells.onAnswer(isCorrect);
 
@@ -1286,9 +1559,156 @@ function setupEvents() {
   }
 }
 
+// ─── خشاب محتوا (v10.3): سیم‌کشی وضعیت خشاب به جعبهٔ راهنمای نقشه ───
+// فقط اطلاع‌رسانی است: تولید سؤال/نردبان/قفل‌ها از محتوای داخلی خود موتور می‌آیند.
+// چندخشابی (v10.3.1): انتخابگر خشاب نصب‌شده — فهرست از داشبورد، انتخاب در localStorage،
+// و در استقرار استاتیک (بدون داشبورد) بی‌صدا فقط خشاب پیش‌فرض.
+// fail-closed مضاعف: هر خطا در همین تابع گیر می‌افتد و هیچ مسیر بوتی نمی‌شکند.
+const CARTRIDGE_STORAGE_KEY = 'station_active_cartridge';
+let cartridgeListCache = null; // فهرست نصب‌شده‌ها — یک‌بار در بوتی خوانده می‌شود
+
+function readSavedCartridgeId() {
+  try {
+    const v = localStorage.getItem(CARTRIDGE_STORAGE_KEY);
+    return v && /^KH-[A-Za-z0-9_-]+$/.test(v) ? v : null;
+  } catch { return null; } // حافظهٔ محلی اختیاری است
+}
+
+function persistCartridgeId(id) {
+  try { localStorage.setItem(CARTRIDGE_STORAGE_KEY, id); } catch { /* اختیاری */ }
+}
+
+function defaultCartridgeIdFrom(list) {
+  const saved = readSavedCartridgeId();
+  if (saved && list.some(x => x.id === saved)) return saved;
+  if (list.some(x => x.id === CARTRIDGE_ID)) return CARTRIDGE_ID;
+  const firstValid = list.find(x => x.valid !== false);
+  return (firstValid || list[0])?.id || CARTRIDGE_ID;
+}
+
+function cartridgeChipLabel(item) {
+  const q = item?.stats?.questions;
+  const parts = [item.id];
+  if (item.valid === false) parts.push('⚠ نامعتبر');
+  else if (typeof q === 'number') parts.push(`${fa(q)} سؤال`);
+  return parts.join(' — ');
+}
+
+/** رندر کامل جعبهٔ خشاب: انتخابگر (در صورت چندخشابی) + خط وضعیت خشاب انتخابی */
+async function renderCartridgeBox(box, list, selectedId) {
+  box.textContent = '';
+  if (list.length > 1) {
+    const picker = document.createElement('div');
+    picker.className = 'cartridge-picker';
+    picker.setAttribute('role', 'group');
+    picker.setAttribute('aria-label', 'انتخاب خشاب محتوا (کتاب فعال)');
+    for (const item of list) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cartridge-chip'
+        + (item.id === selectedId ? ' is-active' : '')
+        + (item.valid === false ? ' is-invalid' : '');
+      btn.textContent = cartridgeChipLabel(item);
+      btn.setAttribute('aria-pressed', String(item.id === selectedId));
+      if (item.title) btn.title = item.title;
+      btn.addEventListener('click', () => { void selectCartridge(box, item.id); });
+      picker.append(btn);
+    }
+    box.append(picker);
+  }
+
+  const result = await loadCartridge(`cartridges/${selectedId}.json`, { fresh: true });
+  if (result?.ok) {
+    const { cartridge, validation } = result;
+    lastLoadedCartridge = cartridge; // BP-016 فاز الف — برای دکمهٔ «تمرین با این خشاب»
+    const s = validation?.stats || {};
+    const g = validation?.gate || {};
+    const mainText = [
+      `📦 خشاب محتوا: ${cartridge.cartridgeId}`,
+      `سؤال‌ها: ${fa(s.questions ?? 0)} (${fa(s.questionsConfirmed ?? 0)} تأیید + ${fa(s.questionsProposed ?? 0)} پیشنهاد)`,
+      `اطلس خطا: ${fa(s.atlasReal ?? 0)} واقعی + ${fa(s.atlasProposed ?? 0)} پیشنهادی`,
+      `درس‌ها: ${fa(s.lessons ?? 0)} (${fa(s.lessonsConfirmed ?? 0)} تأیید)`,
+      `گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`
+    ].join(' — ');
+    const src = cartridge.source || {};
+    const metaText = [
+      src.file ? `منبع: ${src.file}` : null,
+      src.tool ? `ابزار: ${src.tool}` : null,
+      cartridge.generatedAt ? `زمان تولید: ${fa(String(cartridge.generatedAt).replace('T', ' ').replace(/\.\d+Z$/, ' UTC'))}` : null
+    ].filter(Boolean).join(' — ');
+    const main = document.createElement('div');
+    main.className = 'cartridge-status-line';
+    main.textContent = mainText;
+    const meta = document.createElement('div');
+    meta.className = 'cartridge-status-meta';
+    meta.textContent = metaText;
+    box.append(main, meta);
+    // BP-016 فاز الف — دکمهٔ تمرین با خشاب فعال (قالب‌های گزینه‌ای/عدد/کسر)
+    const playable = adaptCartridgeQuestions(cartridge, { limit: 0, shuffle: false }).questions.length;
+    const practiceBtn = document.createElement('button');
+    practiceBtn.type = 'button';
+    practiceBtn.className = 'cartridge-practice-button';
+    practiceBtn.textContent = playable > 0
+      ? `▶ تمرین با این خشاب (${fa(playable)} سؤال قابل بازی)`
+      : '▶ تمرین با این خشاب';
+    practiceBtn.setAttribute('aria-label', 'شروع جلسهٔ تمرین با سؤال‌های خشاب فعال');
+    practiceBtn.addEventListener('click', () => { void startCartridgePractice(); });
+    box.append(practiceBtn);
+    box.hidden = false;
+    console.info('[cartridge]', `خشاب ${cartridge.cartridgeId} بارگذاری و اعتبارسنجی شد — ${fa(s.questions ?? 0)} سؤال (${fa(s.questionsConfirmed ?? 0)} تأیید)، گیت مبدل: ${g.verdict || 'نامشخص'} (${fa(g.red ?? 0)} قرمز / ${fa(g.yellow ?? 0)} زرد)`);
+  } else {
+    // fail-closed: پیام صادقانه، بدون شکستن بازی
+    const detail = result?.error || 'خطای ناشناخته';
+    const errs = Array.isArray(result?.validation?.errors) ? result.validation.errors : [];
+    const main = document.createElement('div');
+    main.className = 'cartridge-status-line';
+    main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
+    const meta = document.createElement('div');
+    meta.className = 'cartridge-status-meta';
+    meta.textContent = [detail].concat(errs).join(' — ');
+    box.append(main, meta);
+    box.hidden = false;
+    console.warn('[cartridge]', 'بارگذاری ناموفق —', detail, errs);
+  }
+}
+
+async function selectCartridge(box, id) {
+  persistCartridgeId(id);
+  const list = cartridgeListCache || [{ id, valid: true, title: null, stats: null, gate: null }];
+  await renderCartridgeBox(box, list, id);
+}
+
+async function initCartridgeStatus() {
+  const box = $('cartridge-status');
+  if (!box) return;
+  try {
+    const items = await listAvailableCartridges();
+    cartridgeListCache = items && items.length
+      ? items
+      : [{ id: CARTRIDGE_ID, valid: true, title: null, stats: null, gate: null }];
+    await renderCartridgeBox(box, cartridgeListCache, defaultCartridgeIdFrom(cartridgeListCache));
+  } catch (e) {
+    try {
+      box.textContent = '';
+      const main = document.createElement('div');
+      main.className = 'cartridge-status-line';
+      main.textContent = '⚠️ خشاب محتوا بارگذاری نشد — بازی با محتوای داخلی ادامه می‌دهد.';
+      const meta = document.createElement('div');
+      meta.className = 'cartridge-status-meta';
+      meta.textContent = `خطای غیرمنتظره: ${e?.message || e}`;
+      box.append(main, meta);
+      box.hidden = false;
+    } catch { /* DOM در دسترس نیست — بی‌صدا */ }
+    console.warn('[cartridge]', 'initCartridgeStatus ناموفق —', e);
+  }
+}
+
 export async function initApp() {
   local = await openLocal(); // موتور v9 خودش globalThis.indexedDB را تزریق می‌کند
   setupEvents();
+
+  // خشاب محتوا (v10.3): بارگذاری غیرمسدودکننده — بدون await در مسیر بوت
+  void initCartridgeStatus();
 
   // uid پایدار (رفع باگ v10.1.2): پیشرفت پس از بستن مرورگر می‌ماند
   actor = { uid: stableUid(), teacher: false };

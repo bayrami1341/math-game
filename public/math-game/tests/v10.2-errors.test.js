@@ -13,16 +13,16 @@ import {
   dominantCode
 } from '../src/v10/station/errors.js';
 
-test('1. اطلس دقیقاً ۱۲ کد دارد و هر کد جملهٔ کارت معلم و شدت دارد', () => {
+test('1. اطلس ۱۴ کد دارد (۱۲ کد ضرب + ۲ کد تازهٔ خشاب G2 با پذیرش معلم) و هر کد جملهٔ کارت معلم و شدت دارد', () => {
   const codes = Object.keys(ERROR_CODES);
-  assert.equal(codes.length, 12);
+  assert.equal(codes.length, 14);
   for (const code of codes) {
     assert.equal(typeof CODE_SENTENCES_FA[code], 'string', `جملهٔ ${code}`);
     assert.ok(CODE_SENTENCES_FA[code].length > 5);
     assert.ok(CODE_SEVERITY_ORDER.includes(code), `${code} در ترتیب شدت`);
     assert.ok(!CODE_SENTENCES_FA[code].includes('اشتباه کردی'), 'جملهٔ کودک‌ستیز ممنوع');
   }
-  assert.equal(CODE_SEVERITY_ORDER.length, 12);
+  assert.equal(CODE_SEVERITY_ORDER.length, 14);
 });
 
 test('2. E_ADD_CONFUSION: حاصل برابر جمع دو عامل (نمونهٔ سند: ۳×۶→۹، ۴×۵→۹)', () => {

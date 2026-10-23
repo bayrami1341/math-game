@@ -33,7 +33,10 @@ export const ERROR_CODES = Object.freeze({
   E_DISTRIBUTIVE_LEAK: 'جا ماندن یک جزء چندرقمی',
   // خطاهای توجه
   E_PERSISTENT_GUESSING: 'پاسخ‌های بی‌ربط',
-  E_FATIGUE_SLIP: 'لغزش بعد از تسلط'
+  E_FATIGUE_SLIP: 'لغزش بعد از تسلط',
+  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲ — پذیرش معلم؛ هنوز در classifyAttempt ضربی تولید نمی‌شوند)
+  E_GROUPS: 'بی‌توجهی به ساختار گروه',
+  E_TABLE_NEIGHBOUR: 'اشتباه همسایه‌های جدول'
 });
 
 // ترتیب شدت برای انتخاب «کد غالب» کارت معلم — خطاهای مفهومیِ شدت بالا اول
@@ -49,7 +52,10 @@ export const CODE_SEVERITY_ORDER = Object.freeze([
   'E_SKIP_UNDERCOUNT',
   'E_PERSISTENT_GUESSING',
   'E_FATIGUE_SLIP',
-  'E_DOUBLING_HALVING'
+  'E_DOUBLING_HALVING',
+  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲) — در بافت ضرب هرگز با کدهای بالا هم‌رخداد نیستند
+  'E_GROUPS',
+  'E_TABLE_NEIGHBOUR'
 ]);
 
 // جملهٔ کارت معلم: یک جمله + یک کد. درصد اطمینان، زمان واکنش و دستور درمان روی کارت نیست.
@@ -65,19 +71,29 @@ export const CODE_SENTENCES_FA = Object.freeze({
   E_COMMUTATIVE_FAIL: 'ترتیب تازه را مسئلهٔ تازه گرفته.',
   E_PERSISTENT_GUESSING: 'بی‌توجه پاسخ داده — سه پاسخ بی‌ربط پشت هم.',
   E_FATIGUE_SLIP: 'روی چیزی که بلد بود لغزش کرده.',
-  E_DOUBLING_HALVING: 'در دوبرابر کردن لغزش دارد — فقط در تمرین اختیاری معلم.'
+  E_DOUBLING_HALVING: 'در دوبرابر کردن لغزش دارد — فقط در تمرین اختیاری معلم.',
+  // کدهای تازهٔ خشاب G2 (گیت معلم موج ۲)
+  E_GROUPS: 'به‌جای شمارش گروه‌ها، تک‌تک شمرده یا فقط تعداد گروه‌ها را نوشته.',
+  E_TABLE_NEIGHBOUR: 'به‌جای خانهٔ هدف، همسایهٔ بالا/پایین/چپ/راست جدول یا خط اعداد را نوشته.'
 });
 
 /**
  * طبقه‌بندی ساختاری یک پاسخ نادرست از روی خود سه‌تایی (f1, f2, پاسخ‌داده‌شده).
  * خروجی: کد خطا یا null (پاسخ درست / بی‌الگو).
  * بی‌الگو بودن خودش شاهد است: سه پاسخ بی‌الگو در یک جلسه = E_PERSISTENT_GUESSING.
+ *
+ * W8 (BP-007 — انجمادِ هدفمند با تأیید مالک): دامنهٔ ورودی به عوامل ۶رقمی و
+ * پاسخ تا ۱۰ رقم گسترش یافت (هم‌راستا با بازهٔ رسمی parseOptionValue).
+ * منطق الگوها ذره‌ای تغییر نکرده — روی دامنهٔ قبلی (۰..۹۹۹) رفتار یکسان است
+ * (آزمون معکوس ۱۰۷/۱۰۷ + مبدل رسمی فقط-timestamp).
+ * دقت: حاصل ≤ ۹۹۹۹۹۸۰۰۰۰۰۱ ≈ ۱۰^۱۲ < ۲^۵۳ — تمام حساب‌ها exact می‌مانند.
+ * سقف submitted = حاصلِ بیشینه × ۱۰ (کفِ الگوی لغزش صفر) ≈ ۱۰^۱۳ — باز هم exact.
  */
 export function classifyAttempt(input = {}) {
   const { f1, f2, submitted } = input || {};
   if (!isInt(f1) || !isInt(f2) || !isInt(submitted)) return null;
-  if (f1 < 0 || f2 < 0 || f1 > 999 || f2 > 999) return null;
-  if (submitted < 0 || submitted > 9999) return null;
+  if (f1 < 0 || f2 < 0 || f1 > 999999 || f2 > 999999) return null;
+  if (submitted < 0 || submitted > 9999999999999) return null;
 
   const p = f1 * f2;
   if (submitted === p) return null; // پاسخ درست — خطا نیست

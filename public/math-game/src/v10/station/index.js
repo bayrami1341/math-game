@@ -81,3 +81,4 @@ export * from './sheet.js';
 export * from './sounds.js';
 export * from './visuals.js';
 export * from './errors.js';
+export * from './model-figures.js'; // BP-003: رندرر ۱۴مدلی با fallback متنی امن

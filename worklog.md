@@ -532,3 +532,26 @@ Work Log:
 Stage Summary:
 - 「学段就绪」从此可测量、不可声明：真实覆盖 = G2 92/242（0%域覆盖）、G3 20/452（0%域覆盖），112 题全部为无领域代码的单一选择题格式
 - 步骤 1（BP-015）完成并 CI 绿；下一步=步骤 2（BP-016 六题型引擎，待业主批准）+ 与 Arena 的领域批次生产（D4 起步，每批教师盖章）
+
+---
+Task ID: 27
+Agent: Z.ai Code (main)
+Task: 业主「تایید همه」→ BP-016 批准 + فاز الف（三题型引擎）完整交付
+
+Work Log:
+- 业主批准记录：approved_by = «مالک-چت: «تایید همه» (trace 1a1671c94a3e8149)» → BP-016 executing（registry v39→41）
+- 架构发现：v10 引擎此前只校验卡匣、从不播放（程序化 f1×f2 生成）——فاز الف 修建「卡匣→游戏」之桥
+- 新模块 answer-formats.js（纯函数）：格式识别（向后兼容：无 answerFormat=选择题）、分数/带分数解析（gcd 化简+波斯/阿拉伯数字）、三格式判定、adaptCartridgeQuestions（提取 f1/f2 供错误图谱、跳过 ب/ج 格式并计数）
+- 引擎 schema：عدد/کسر 直答格式（无选项，answerValue/answerFrac）+ 直答格式反 J12（30×4 必须=120）；选择题旧行为零改动（回归门）
+- app.js：卡匣题分支（书题干+textContent 防注入）、configureAnswerArea（الف/ب/ج/د 按钮或格式化输入框）、handleCartridgeAnswerSubmit（追加式试错日志含 domainCode/format）、finalizeCartridgePracticeSession、稳定 activityId、卡匣盒新增「练习此卡匣（n 题可玩）」按钮
+- fafyAnswerInput 修复：保留 «/» 与空格（分数输入），旧乘法流不变
+- KH-DEMO-MATH.json：三格式参考样例卡匣（گزینه‌ای D4/عدد D3/کسر D5，诚实标注「نمونه/نیاز به تأیید」）
+- 事故与修复：误覆盖已有 /api/cartridges route（教师卡匣工坊 + ?id= 详情）→ 恢复原版（其 {cartridges} 契约本就与加载器兼容）+ 补齐沙盒缺失的 cartridge-core.ts
+- 测试：16 新测试（解析/格式/判定/桥/schema/J12/G2+G3 回归门）→ 引擎 150/150；pytest 21/21
+- E2E（agent-browser）：访客→地图→G3 练习（3 题选择题全对）→DEMO：选择题✓→分数 «۲/۴»≡«۱/۲» 等价接受✓→数字 ۱۵✓→会话完成回地图；控制台零错误；/api/cartridges 四卡匣 valid
+- C 提交链推送 main（aace208→12506db）；远端 CI completed/success
+
+Stage Summary:
+- 112 道书题（G2/G3）今日起可玩；عدد/کسر 格式就绪等待领域内容波次
+- فاز ب（数轴/配对）与 فاز ج（图形/图表）+ T5 领域站点（G3 3→8、G2 6 站）待后续夜班
+- BP-016 保持 executing 至 فاز ج + T5 完成

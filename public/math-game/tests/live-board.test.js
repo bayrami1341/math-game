@@ -134,14 +134,72 @@ function join(p, name = 'تینا', code = '123456') {
   p.el('join-form').listeners.submit({ preventDefault() {} });
 }
 
-function board(db, localStorage) {
+// ── لیدربرد آفلاین (صفحهٔ بازطراحی‌شده — ماژول ESM با وابستگی‌های تزریق‌شده) ──
+const BOARD_MODULE = read('leaderboard.html')
+  .match(/<script type="module">([\s\S]*?)<\/script>/)[1]
+  .replace(/^[^\S\n]*import[^\n]*$/gm, '');
+
+function boardElement() {
+  const el = {
+    value: '', children: [], listeners: {}, style: {}, hidden: false, focus() {},
+    classList: { add() {}, remove() {} },
+    appendChild(child) { this.children.push(child); },
+    addEventListener(type, callback) { this.listeners[type] = callback; }
+  };
+  let text = '';
+  Object.defineProperty(el, 'textContent', {
+    get: () => text,
+    set(value) { text = String(value); this.children = []; }
+  });
+  let html = '';
+  Object.defineProperty(el, 'innerHTML', {
+    get: () => html,
+    set(value) { html = String(value); this.children = []; }
+  });
+  return el;
+}
+
+function boardPage() {
+  const elements = new Map();
+  const context = vm.createContext({
+    localStorage: storage(), console: { log() {}, warn() {}, error() {} },
+    document: {
+      getElementById(id) {
+        if (!elements.has(id)) elements.set(id, boardElement());
+        return elements.get(id);
+      },
+      createElement: boardElement
+    },
+    setTimeout: () => 0
+  });
+  context.window = context;
+  return { context, el(id) { return context.document.getElementById(id); } };
+}
+
+const localOf = entries => ({ get: async key => entries.has(key) ? entries.get(key) : null });
+
+async function offlineBoard(openLocalImpl) {
+  const p = boardPage();
+  p.context.openLocal = openLocalImpl;
+  p.context.studentKey = (uid, sid) => 'station_' + (uid || 'nouid') + '_' + sid;
+  p.context.stationPower = records => (records && records.length ? 70 : 0);
+  p.context.stationSystems = records => [1, 2, 3].map(id => ({ sectorId: id, percent: records && records.length ? id * 25 : 0 }));
+  vm.runInContext(BOARD_MODULE, p.context, { filename: 'leaderboard.html (module)' });
+  for (let i = 0; i < 6; i++) await settle();
+  return p;
+}
+
+// ── شنود زندهٔ Firebase (API لایو — صفحهٔ نمایشش به لیدربرد آفلاین منتقل شد) ──
+function boardListener(db, localStorage, handlers = {}) {
   const p = page(localStorage);
   p.context.fbDB = db;
   p.run('live-board.js');
-  p.inline('leaderboard.html');
-  p.event('pageshow');
-  return p;
+  const updates = [];
+  const room = String(localStorage.getItem('demo_class_code') || '123456');
+  const stop = p.context.LiveBoard.listen(room, rows => updates.push(rows), handlers.onError, handlers.onConnection);
+  return { p, updates, stop };
 }
+const lastRows = b => b.updates.at(-1).map(r => [r.name, String(r.score)]);
 
 function game(db, localStorage) {
   const p = page(localStorage);
@@ -168,7 +226,6 @@ function finish(p, correctCount, sector = 1) {
 }
 
 const settle = () => new Promise(resolve => setImmediate(resolve));
-const scores = p => p.el('list').children.map(item => item.children.slice(0, 2).map(child => child.textContent));
 
 for (const code of ['123456', '۱۲۳۴۵۶', '١٢٣٤٥٦', '۱2٣۴5٦']) {
   test('join normalizes classroom digits: ' + code, () => {
@@ -216,20 +273,20 @@ test('two independent players reach the same live board with actual sector score
   const a = page(), b = page();
   join(a, 'علی', '۱۲۳۴۵۶');
   join(b, 'مینا', '123456');
-  const boardA = board(db, a.context.localStorage);
-  const boardB = board(db, b.context.localStorage);
+  const boardA = boardListener(db, a.context.localStorage);
+  const boardB = boardListener(db, b.context.localStorage);
   const otherStorage = storage();
   otherStorage.setItem('demo_class_code', '654321');
-  const otherBoard = board(db, otherStorage);
-  assert.match(boardA.el('status').textContent, /هنوز/);
+  const otherBoard = boardListener(db, otherStorage);
+  assert.deepEqual(boardA.updates.at(-1), []); // هنوز اتاق خالی است
   const gameA = game(db, a.context.localStorage);
   const gameB = game(db, b.context.localStorage);
   finish(gameA, 2);
   finish(gameB, 5);
   await settle();
-  assert.deepEqual(scores(boardA), [['مینا', '5'], ['علی', '2']]);
-  assert.deepEqual(scores(boardB), scores(boardA));
-  assert.deepEqual(scores(otherBoard), []);
+  assert.deepEqual(lastRows(boardA), [['مینا', '5'], ['علی', '2']]);
+  assert.deepEqual(lastRows(boardB), lastRows(boardA));
+  assert.deepEqual(lastRows(otherBoard), []);
   assert.equal(gameA.context.AppStorage.getAll()[0].origin, 'core');
   assert.equal(gameA.context.AppStorage.getAll()[0].details[0].correctCount, 2);
   // Repainting the completion screen must not submit duplicate writes.
@@ -240,7 +297,7 @@ test('two independent players reach the same live board with actual sector score
   // A new sector overwrites that player's previous result; it does not add it.
   finish(gameA, 1, 2);
   await settle();
-  assert.deepEqual(scores(boardA), [['مینا', '5'], ['علی', '1']]);
+  assert.deepEqual(lastRows(boardA), [['مینا', '5'], ['علی', '1']]);
 });
 
 test('pending score writes are not duplicated by repainting', async () => {
@@ -295,52 +352,86 @@ test('a player outside a live classroom does not submit to Firebase', () => {
   assert.equal(db.writes, 0);
 });
 
-test('missing room, blocked storage, and missing Firebase show a visible message', () => {
-  assert.match(board(database(), storage()).el('status').textContent, /کد کلاس نیست/);
-  const s = storage();
-  s.setItem('demo_class_code', '123456');
-  assert.match(board(null, s).el('status').textContent, /Firebase آماده نیست/);
-  const p = board(database(), { getItem() { throw new Error('blocked'); } });
-  assert.match(p.el('status').textContent, /دریافت نتایج ممکن نشد/);
+test('offline leaderboard ranks device profiles by station power and session count', async () => {
+  const data = new Map();
+  data.set('station_profiles_index', [
+    { studentId: 's1', displayName: 'تینا', role: 'astronaut' },
+    { studentId: 's2', displayName: 'علی', role: 'pilot' },
+    { studentId: 's3', displayName: 'مینا', role: 'scientist' }
+  ]);
+  data.set('station_nouid_s1', { stationRecords: [{ type: 'building-complete' }], attemptLog: [{}, {}, {}, {}, {}] });
+  data.set('station_nouid_s2', { stationRecords: [], attemptLog: [{}] });
+  data.set('station_nouid_s3', { stationRecords: [{}, {}], attemptLog: [{}, {}] });
+  const p = await offlineBoard(async () => localOf(data));
+  const status = p.el('status');
+  assert.equal(status.hidden, true);
+  const html = p.el('list').innerHTML;
+  const names = [...html.matchAll(/<span class="name">([^<]*)<\/span>/g)].map(m => m[1]);
+  assert.deepEqual(names, ['تینا', 'مینا', 'علی']); // قدرت برابر → شمار جلسهٔ بیشتر بالاتر
+  assert.ok(html.includes('🥇'));
+  assert.ok(html.includes('۵ جلسهٔ ثبت‌شده'));
+  assert.ok(html.includes('۷۰٪'));
 });
 
-test('listener permission errors clear stale scores and display a visible error', async () => {
+test('offline leaderboard shows the inviting empty state when no profiles exist', async () => {
+  const p = await offlineBoard(async () => localOf(new Map()));
+  assert.match(p.el('status').innerHTML, /هنوز هیچ پرونده‌ای روی این دستگاه ساخته نشده/);
+});
+
+test('blocked persistent storage shows a visible offline leaderboard error', async () => {
+  const p = await offlineBoard(async () => { throw new Error('blocked'); });
+  assert.match(p.el('status').textContent, /حافظهٔ پایدار مرورگر در دسترس نیست/);
+});
+
+test('the offline leaderboard needs no Firebase, classroom code, or live listeners', async () => {
+  const data = new Map();
+  data.set('station_profiles_index', [{ studentId: 's1', displayName: 'تینا', role: 'astronaut' }]);
+  data.set('station_nouid_s1', { stationRecords: [{}], attemptLog: [{}] });
+  const p = await offlineBoard(async () => localOf(data)); // بدون fbDB و بدون کد کلاس
+  assert.equal(p.el('status').hidden, true);
+  assert.match(p.el('list').innerHTML, /تینا/);
+  const moduleSource = read('leaderboard.html');
+  assert.ok(!moduleSource.includes('demo_class_code'));
+  assert.ok(!moduleSource.includes('live-board.js'));
+});
+
+test('listener permission errors are reported to the live board listener', async () => {
   const db = database();
   const p = page();
   join(p);
-  const b = board(db, p.context.localStorage);
-  const g = game(db, p.context.localStorage);
-  finish(g, 2);
+  let failed = false;
+  const b = boardListener(db, p.context.localStorage, { onError: () => { failed = true; } });
+  finish(game(db, p.context.localStorage), 2);
   await settle();
-  assert.equal(scores(b).length, 1);
+  assert.equal(lastRows(b).length, 1);
   db.denyReads('123456');
-  assert.match(b.el('status').textContent, /دریافت نتایج ممکن نشد/);
-  assert.deepEqual(scores(b), []);
+  assert.equal(failed, true);
+  b.stop();
 });
 
-test('leaving and restoring the leaderboard cleans up and reconnects listeners', () => {
+test('leaving the live board cleans up and rejoining reconnects listeners', () => {
   const db = database();
   const p = page();
-  join(p);
-  const b = board(db, p.context.localStorage);
+  p.context.fbDB = db;
+  p.run('live-board.js');
+  const stop = p.context.LiveBoard.listen('123456', () => {});
   assert.equal(db.listenerCount('123456'), 1);
-  b.event('pageshow');
-  assert.equal(db.listenerCount('123456'), 1);
-  b.event('pagehide');
+  stop();
   assert.equal(db.listenerCount('123456'), 0);
-  b.event('pageshow');
+  const stop2 = p.context.LiveBoard.listen('123456', () => {});
   assert.equal(db.listenerCount('123456'), 1);
+  stop2();
 });
 
-test('player names render as text rather than HTML', async () => {
-  const db = database();
-  const p = page();
+test('player names render as text rather than HTML on the offline board', async () => {
+  const data = new Map();
   const name = '<img src=x onerror=alert(1)>';
-  join(p, name);
-  const b = board(db, p.context.localStorage);
-  finish(game(db, p.context.localStorage), 0);
-  await settle();
-  assert.deepEqual(scores(b), [[name, '0']]);
+  data.set('station_profiles_index', [{ studentId: 's1', displayName: name, role: 'astronaut' }]);
+  data.set('station_nouid_s1', { stationRecords: [{}], attemptLog: [] });
+  const p = await offlineBoard(async () => localOf(data));
+  const html = p.el('list').innerHTML;
+  assert.ok(!html.includes('<img'), 'tag characters must be stripped from names');
+  assert.ok(html.includes('img src=x onerror=alert(1)'));
 });
 
 test('Firebase is optional for local play and reports missing database to listeners', async () => {
@@ -371,7 +462,7 @@ test('arcade sector and final completion publish each sector rather than cumulat
   const db = database();
   const p = page();
   join(p, 'بازیکن متحرک');
-  const b = board(db, p.context.localStorage);
+  const b = boardListener(db, p.context.localStorage);
   const g = game(db, p.context.localStorage);
   ['src/games/multiplication-1x1/config.js', 'src/games/multiplication-1x1/game.js',
     'src/ui/ui-controller.js'].forEach(file => g.run(file));
@@ -392,7 +483,7 @@ test('arcade sector and final completion publish each sector rather than cumulat
   controller._bindGame();
   engine.proceed();
   await settle();
-  assert.deepEqual(scores(b), [['بازیکن متحرک', '4']]);
+  assert.deepEqual(lastRows(b), [['بازیکن متحرک', '4']]);
   assert.equal(engine.liveSectorResults[1].liveSubmission.player.sector, 1);
   controller._renderS(g.context.SECTORS[1]);
   await settle();
@@ -401,14 +492,14 @@ test('arcade sector and final completion publish each sector rather than cumulat
   engine.modulesAttached = 7;
   engine.proceed();
   await settle();
-  assert.deepEqual(scores(b), [['بازیکن متحرک', '3']]);
+  assert.deepEqual(lastRows(b), [['بازیکن متحرک', '3']]);
   engine.mainCount = 7;
   engine.modulesAttached = 12;
   engine.proceed();
   await settle();
   assert.equal(engine.state, 'DONE');
   assert.equal(engine.liveSectorResults[3].liveScoreSent, true);
-  assert.deepEqual(scores(b), [['بازیکن متحرک', '5']]);
+  assert.deepEqual(lastRows(b), [['بازیکن متحرک', '5']]);
   assert.equal(db.writes, 3);
 });
 
@@ -458,21 +549,21 @@ test('a missing or incompatible old player id is replaced by a stable valid Fire
   }
 });
 
-test('disconnected leaderboard labels stale rows and reconnect does not leak listeners', async () => {
+test('connection state changes reach the live board listener without leaking', async () => {
   const db = database();
   const p = page();
   join(p);
-  const b = board(db, p.context.localStorage);
   finish(game(db, p.context.localStorage), 2);
   await settle();
+  const states = [];
+  const b = boardListener(db, p.context.localStorage, { onConnection: ok => states.push(ok) });
+  assert.deepEqual(states, [true]);
   db.connected = false;
-  assert.match(b.el('status').textContent, /ممکن است قدیمی/);
-  assert.equal(scores(b).length, 1);
+  assert.deepEqual(states, [true, false]);
   db.connected = true;
-  assert.match(b.el('status').textContent, /نتایج زنده/);
-  b.el('refresh').listeners.click();
+  assert.deepEqual(states, [true, false, true]);
   assert.equal(db.listenerCount('123456'), 1);
   assert.equal(db.connectionListenerCount, 1);
-  b.event('pagehide');
+  b.stop();
   assert.equal(db.connectionListenerCount, 0);
 });
