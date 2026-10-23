@@ -43,8 +43,21 @@ import {
 // چندخشابی (v10.3.1): CARTRIDGE_ID فقط خشاب «پیش‌فرض» است؛ انتخاب کاربر از فهرست نصب‌شده‌ها می‌آید
 import { loadCartridge, listAvailableCartridges } from './station/cartridge.js';
 import { CARTRIDGE_ID } from './station/cartridge-schema.js';
-// BP-016 فاز الف: قالب‌های پاسخ گزینه‌ای/عدد/کسر + پل کارتریج → نشست بازی
-import { adaptCartridgeQuestions, checkCartridgeAnswer, effectiveFormat, FORMAT_MCQ, FORMAT_NUMBER, FORMAT_FRACTION } from './station/answer-formats.js';
+// BP-016 فاز الف + BP-017 فاز ب/ج: موتور ۶-قالبی — قالب‌ها، پل کارتریج → نشست، نردبان قالبی
+import {
+  adaptCartridgeQuestions,
+  checkCartridgeAnswer,
+  effectiveFormat,
+  formatHint,
+  numberLineParams,
+  FORMAT_MCQ,
+  FORMAT_NUMBER,
+  FORMAT_FRACTION,
+  FORMAT_NUMBER_LINE,
+  FORMAT_MATCHING,
+  FORMAT_FIGURE,
+  FORMAT_HINT_FORMATS
+} from './station/answer-formats.js';
 
 const $ = id => document.getElementById(id);
 const config = window.MathGameV9Config || {};
@@ -80,6 +93,8 @@ let currentView = 'map'; // 'map' | 'question'
 let activeQuestionIndex = 0;
 let showGuide = false; // فقط راهنمای نقشه (map-guide-info) — راهنمای سؤال با نردبان محلی مدیریت می‌شود
 let stationLayer = null;
+// BP-017: وضعیت تعاملی قالب‌های ب/ج (محور عددی/زوج‌سازی/رنگ‌آمیزی) برای سؤال جاری
+let cartridgeInteractive = null;
 
 // ─── نردبان داربست ۷پله‌ای (CEAP §8) + ضد تکدی سرنخ (§3.2) ───
 let hintLevel = 0;                 // پلهٔ جاری نردبان در سؤال جاری
@@ -296,6 +311,11 @@ async function speakCurrentQuestion() {
   const question = session?.questions?.[activeQuestionIndex];
   const btn = $('question-speak');
   if (!question || !btn) return;
+  // BP-017: سؤال کارتریجی — صورت کتاب خودش خوانده می‌شود (فاز الف/ب/ج)
+  if (question.prompt) {
+    await speakFa(String(question.prompt), btn);
+    return;
+  }
   const w1 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f1))] ?? String(question.f1);
   const w2 = DIGIT_WORDS[Math.min(12, Math.max(0, question.f2))] ?? String(question.f2);
   await speakFa(`${w1} ضربدر ${w2} چند می‌شود؟`, btn);
@@ -442,7 +462,10 @@ function buildTeacherErrorCards(profileId, attempts, overrides) {
     const key = `${profileId}:${a.eventId}`;
     const ov = overrides?.[key];
     const examples = (a.wrongExamples || [])
-      .map(w => `${fa(w.f1)}×${fa(w.f2)} را ${fa(w.submitted)} نوشته`)
+      .map(w => (Number.isFinite(w?.f1) && Number.isFinite(w?.f2))
+        ? `${fa(w.f1)}×${fa(w.f2)} را ${fa(w.submitted)} نوشته`
+        // BP-017: سؤال‌های قالبی (فاز ب/ج) عامل عددی ندارند — نمونهٔ صادقانه با قالب/زیرقالب
+        : `تمرین ${w?.format || 'کتاب'}${w?.subkind ? ` (${w.subkind})` : ''} — پاسخ: ${w?.submittedRaw ?? '—'}`)
       .join(' • ');
     const labelChip = ov?.label
       ? `<span class="teacher-label-chip teacher-label-${ov.label}">${RELABEL_LABELS_FA[ov.label] || ''}</span>`
@@ -636,10 +659,29 @@ function applyHintCooldown(seconds) {
   }, seconds * 1000);
 }
 
-// رندر ناحیهٔ راهنمای سؤال بر اساس وضعیت محلی (نردبان یا fallback قدیمی)
+// رندر ناحیهٔ راهنمای سؤال بر اساس وضعیت محلی (نردبان، نردبان قالبی، یا fallback قدیمی)
 function renderGuideArea(question) {
   const area = $('question-guide-area');
   if (!area) return;
+  // BP-017 T4 — سؤال کارتریجی قالبی (محور عددی/زوج‌سازی/شکل-نمودار): نردبان formatHint
+  if (question?.prompt && FORMAT_HINT_FORMATS.includes(question.answerFormat)) {
+    if (hintLevel > 0) {
+      const stepText = formatHint(question.answerFormat, question, hintLevel - 1);
+      if (stepText) {
+        area.hidden = false;
+        area.innerHTML = '';
+        const p = document.createElement('p');
+        p.className = 'guide-box';
+        p.textContent = stepText;
+        area.append(p);
+        return;
+      }
+    }
+    area.hidden = true;
+    area.innerHTML = '';
+    return;
+  }
+
   const ladder = question ? buildLadder({ f1: question.f1, f2: question.f2 }) : null;
 
   if (ladder && hintLevel > 0) {
@@ -669,6 +711,15 @@ function renderGuideArea(question) {
 
 // یک پله بالا رفتن نردبان + رندر + اعلام صوتی پله (v10.1.2) — نقطهٔ مشترک دکمهٔ راهنما و نردبان خودکار
 function showGuideStepUp(question) {
+  // BP-017 T4 — نردبان قالبی برای قالب‌های ب/ج (formatHint خالص از answer-formats)
+  if (question?.prompt && FORMAT_HINT_FORMATS.includes(question.answerFormat)) {
+    renderGuideArea(question);
+    const btn = $('question-guide-button');
+    if (btn) btn.textContent = guideButtonLabel();
+    const stepText = formatHint(question.answerFormat, question, Math.max(0, hintLevel - 1));
+    if (stepText) void speakFa(stepText);
+    return { formatHint: true };
+  }
   const ladder = buildLadder({ f1: question.f1, f2: question.f2 });
   if (ladder) {
     legacyGuideShown = false;
@@ -767,7 +818,465 @@ function renderQuestionView() {
 
 const OPTION_LETTERS_FA = ['الف', 'ب', 'ج', 'د'];
 
-/** آماده‌سازی ناحیهٔ پاسخ بر اساس قالب سؤال کارتریجی */
+// ─── BP-017 فاز ب/ج: رندر تعاملی محور عددی/زوج‌سازی/شکل-نمودار ───
+// همهٔ رندرها با DOM API و textContent چیده می‌شوند (بدون innerHTML برای دادهٔ خشاب — ضدتزریق)
+// CSS پایه از کلاس‌های موجود (.answer-option و…) + استایل درون‌خطی — فایل CSS خارج از قلمرو این تسک است.
+
+const ACCENT = '126, 240, 255'; // رنگ تأکید هم‌خانوادهٔ تم (cyan)
+const WRONG_COLOR = '#ff9b8a'; // قرمز ملایمِ فلش جفت غلط
+
+/** سازندهٔ کمکی نود SVG */
+function svgNode(tag, attrs = {}) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, String(v));
+  return el;
+}
+
+/** محور عددی (T1): SVG خط‌کش مقیاس‌دار + دکمه‌های درجه (هدف لمسی ۴۴px) */
+function buildNumberLineArea(question, state) {
+  const params = question.numberLine || numberLineParams(question);
+  const wrap = document.createElement('div');
+  if (!params) {
+    const note = document.createElement('p');
+    note.textContent = 'پارامترهای محور عددی این سؤال کامل نیست — به ناظر محتوا گزارش شود.';
+    wrap.append(note);
+    return wrap;
+  }
+  const pitch = 40;
+  const W = params.ticks * pitch + 40;
+  const svg = svgNode('svg', {
+    viewBox: `0 0 ${W} 64`, width: '100%', style: `max-width:${W}px;display:block;margin:0 auto;`,
+    role: 'img', 'aria-label': `محور عددی از ${fa(params.min)} تا ${fa(params.max)}`
+  });
+  const y = 26;
+  svg.append(svgNode('line', { x1: 16, y1: y, x2: W - 16, y2: y, stroke: `rgba(${ACCENT},0.75)`, 'stroke-width': 2 }));
+  svg.append(svgNode('polygon', { points: `${W - 16},${y - 5} ${W - 6},${y} ${W - 16},${y + 5}`, fill: `rgba(${ACCENT},0.75)` }));
+
+  const applySelection = () => {
+    for (const t of state.tickEls) {
+      const on = state.value !== null && t.value === state.value;
+      t.circle.setAttribute('fill', on ? `rgba(${ACCENT},0.9)` : `rgba(${ACCENT},0.1)`);
+      t.circle.setAttribute('stroke', on ? `rgba(${ACCENT},1)` : `rgba(${ACCENT},0.6)`);
+      t.circle.setAttribute('r', on ? '8' : '6');
+      t.button.setAttribute('aria-pressed', on ? 'true' : 'false');
+      t.button.style.background = on ? `rgba(${ACCENT},0.18)` : '';
+      t.button.style.borderColor = on ? `rgba(${ACCENT},0.85)` : '';
+    }
+  };
+  for (let i = 0; i <= params.ticks; i++) {
+    const value = params.min + i * params.step;
+    const x = 20 + i * pitch;
+    svg.append(svgNode('line', { x1: x, y1: y - 6, x2: x, y2: y + 6, stroke: `rgba(${ACCENT},0.75)`, 'stroke-width': 2 }));
+    const label = svgNode('text', { x, y: y + 26, 'text-anchor': 'middle', 'font-size': 13, fill: 'currentColor' });
+    label.textContent = fa(value);
+    svg.append(label);
+    const circle = svgNode('circle', { cx: x, cy: y, r: 6, fill: `rgba(${ACCENT},0.1)`, stroke: `rgba(${ACCENT},0.6)`, 'stroke-width': 2, style: 'cursor:pointer;' });
+    const press = () => { state.value = value; applySelection(); };
+    circle.addEventListener('click', press);
+    // دسترس‌پذیری کیبورد روی خود SVG
+    circle.setAttribute('tabindex', '0');
+    circle.setAttribute('role', 'button');
+    circle.setAttribute('aria-label', `نقطهٔ ${fa(value)}`);
+    circle.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); press(); }
+    });
+    svg.append(circle);
+    state.tickEls.push({ value, circle, button: null });
+  }
+  wrap.append(svg);
+
+  // دکمه‌های درجه — مسیر دسترس‌پذیر/لمسی (حداقل ۴۴px)
+  const row = document.createElement('div');
+  row.setAttribute('role', 'group');
+  row.setAttribute('aria-label', 'درجه‌های محور عددی');
+  row.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0 4px;';
+  for (let i = 0; i <= params.ticks; i++) {
+    const value = params.min + i * params.step;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'answer-option';
+    btn.style.cssText = 'flex:0 1 auto;min-width:44px;justify-content:center;padding:8px 10px;';
+    btn.textContent = fa(value);
+    btn.setAttribute('aria-pressed', 'false');
+    btn.setAttribute('aria-label', `انتخاب نقطهٔ ${fa(value)}`);
+    btn.addEventListener('click', () => { state.value = value; applySelection(); });
+    row.append(btn);
+    state.tickEls[i].button = btn;
+  }
+  wrap.append(row);
+
+  const send = document.createElement('button');
+  send.type = 'button';
+  send.className = 'primary-button';
+  send.textContent = 'ثبت نقطهٔ انتخاب‌شده';
+  send.addEventListener('click', () => {
+    if (state.value === null) {
+      $('question-feedback').textContent = 'اول یک نقطه روی محور انتخاب کن.';
+      return;
+    }
+    void handleAnswerSubmit(state.value);
+  });
+  wrap.append(send);
+  return wrap;
+}
+
+/** زوج‌سازی (T2): دو ستون دکمه‌ای — چپ ثابت، راست شافل؛ جفت درست می‌ماند، غلط فلش قرمز */
+function buildMatchingArea(question, state) {
+  const matches = question.matches || [];
+  const wrap = document.createElement('div');
+  // دادهٔ نمایشی محلی — session.questions هرگز با نودهای DOM آلوده نمی‌شود
+  const items = matches.map((m, i) => ({ left: String(m.left), right: String(m.right), leftIdx: i, btnL: null, btnR: null }));
+  // شافل نمایشی ستون راست — ایندکس اصلی حفظ می‌شود (قرارداد سنجش: جفت درست leftIdx=rightIdx)
+  const order = items.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  state.order = order;
+
+  const status = document.createElement('p');
+  status.className = 'question-feedback';
+  status.setAttribute('role', 'status');
+  status.setAttribute('aria-live', 'polite');
+  status.style.cssText = 'font-size:12px;margin:2px 0;';
+  state.statusEl = status;
+
+  const board = document.createElement('div');
+  board.style.cssText = 'display:flex;gap:10px;width:100%;';
+  const colL = document.createElement('div');
+  const colR = document.createElement('div');
+  colL.style.cssText = 'flex:1 1 0;display:flex;flex-direction:column;gap:8px;';
+  colR.style.cssText = 'flex:1 1 0;display:flex;flex-direction:column;gap:8px;';
+  board.append(colL, colR);
+
+  let sendBtn = null;
+
+  const applyPairState = () => {
+    for (const m of items) {
+      const paired = state.pairs.some(p => p[0] === m.leftIdx);
+      m.btnL.disabled = paired;
+      m.btnR.disabled = paired;
+      for (const b of [m.btnL, m.btnR]) {
+        b.style.opacity = paired ? '0.85' : '';
+        b.style.borderColor = paired ? `rgba(${ACCENT},0.9)` : '';
+        b.style.background = paired ? `rgba(${ACCENT},0.14)` : '';
+        b.setAttribute('aria-disabled', paired ? 'true' : 'false');
+      }
+      m.btnL.textContent = `${paired ? '⇄ ' : ''}${m.left}`;
+    }
+    status.textContent = `${fa(state.pairs.length)} از ${fa(items.length)} جفت ساخته شد.`;
+    if (sendBtn) sendBtn.disabled = state.pairs.length !== items.length;
+  };
+
+  const refreshSelectedVisual = () => {
+    for (const m of items) {
+      const selL = state.leftSel === m.leftIdx;
+      m.btnL.setAttribute('aria-pressed', selL ? 'true' : 'false');
+      if (!m.btnL.disabled) {
+        m.btnL.style.borderColor = selL ? `rgba(${ACCENT},0.9)` : '';
+        m.btnL.style.background = selL ? `rgba(${ACCENT},0.2)` : '';
+      }
+    }
+  };
+
+  const flashWrong = (m) => {
+    for (const b of [m.btnL, m.btnR]) {
+      b.style.borderColor = WRONG_COLOR;
+      b.style.background = 'rgba(255,155,138,0.16)';
+    }
+    setTimeout(() => {
+      for (const b of [m.btnL, m.btnR]) {
+        b.style.borderColor = '';
+        b.style.background = '';
+      }
+      state.leftSel = null;
+      applyPairState();
+      refreshSelectedVisual();
+    }, 600);
+  };
+
+  for (const m of items) {
+    const btnL = document.createElement('button');
+    btnL.type = 'button';
+    btnL.className = 'answer-option';
+    btnL.textContent = m.left;
+    btnL.dataset.leftIdx = String(m.leftIdx);
+    btnL.setAttribute('aria-pressed', 'false');
+    btnL.addEventListener('click', () => {
+      if (btnL.disabled) return;
+      state.leftSel = state.leftSel === m.leftIdx ? null : m.leftIdx;
+      refreshSelectedVisual();
+    });
+    const btnR = document.createElement('button');
+    btnR.type = 'button';
+    btnR.className = 'answer-option';
+    btnR.textContent = m.right;
+    btnR.dataset.rightIdx = String(m.leftIdx); // ایندکس اصلی — شافل فقط نمایشی است
+    btnR.addEventListener('click', () => {
+      if (btnR.disabled) return;
+      if (state.leftSel === null) {
+        status.textContent = 'اول یک آیتم از ستون چپ را انتخاب کن.';
+        return;
+      }
+      if (state.leftSel === m.leftIdx) {
+        state.pairs.push([state.leftSel, m.leftIdx]);
+        state.leftSel = null;
+        applyPairState();
+      } else {
+        flashWrong(items[state.leftSel]);
+        void playStationAudio(SOUND_EVENTS.wrong);
+      }
+    });
+    colL.append(btnL);
+    colR.append(btnR);
+    m.btnL = btnL;
+    m.btnR = btnR;
+  }
+  // شافل نمایشی: بعد از ساخت، دکمه‌های ستون راست را به ترتیب شافل بچین
+  for (const i of order) colR.append(items[i].btnR);
+
+  const send = document.createElement('button');
+  send.type = 'button';
+  send.className = 'primary-button';
+  send.textContent = 'ثبت جفت‌ها';
+  send.disabled = true;
+  send.addEventListener('click', () => {
+    if (state.pairs.length !== items.length) return;
+    void handleAnswerSubmit({ pairs: state.pairs.map(p => [p[0], p[1]]) });
+  });
+  sendBtn = send;
+  applyPairState();
+  wrap.append(status, board, send);
+  return wrap;
+}
+
+/** «کسر روی شکل»: شبکهٔ خانه‌ها با رنگ‌آمیزی لمسی/کیبوردی (T3) */
+function buildFractionShapeArea(question, state) {
+  const cells = question.cells ?? question.answerFrac?.den ?? 2;
+  const wrap = document.createElement('div');
+  // ستون‌بندی: مقسوم‌علیه‌ای از cells که به جذر نزدیک‌تر است؛ در غیر این صورت یک ردیف
+  let cols = cells;
+  let best = Infinity;
+  for (let d = 1; d <= cells; d++) {
+    if (cells % d === 0 && Math.abs(d - Math.sqrt(cells)) < best) { best = Math.abs(d - Math.sqrt(cells)); cols = d; }
+  }
+  const rows = Math.ceil(cells / cols);
+  const unit = 50;
+  const W = cols * unit + 4;
+  const H = rows * unit + 4;
+  const svg = svgNode('svg', {
+    viewBox: `0 0 ${W} ${H}`, width: '100%', style: `max-width:${W}px;display:block;margin:0 auto;`,
+    role: 'group', 'aria-label': `شکل ${fa(cells)} خانه‌ای`
+  });
+  const counter = document.createElement('p');
+  counter.className = 'question-feedback';
+  counter.setAttribute('role', 'status');
+  counter.setAttribute('aria-live', 'polite');
+  counter.style.cssText = 'font-size:12px;margin:2px 0;';
+  const updateCounter = () => { counter.textContent = `${fa(state.shaded.size)} خانه رنگ شده است.`; };
+  for (let i = 0; i < cells; i++) {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const rect = svgNode('rect', {
+      x: col * unit + 4, y: row * unit + 4, width: unit - 8, height: unit - 8, rx: 9,
+      fill: `rgba(${ACCENT},0.06)`, stroke: `rgba(${ACCENT},0.5)`, 'stroke-width': 2,
+      style: 'cursor:pointer;', tabindex: '0', role: 'button', 'aria-pressed': 'false',
+      'aria-label': `خانهٔ ${fa(i + 1)}`
+    });
+    const toggle = () => {
+      if (state.shaded.has(i)) state.shaded.delete(i); else state.shaded.add(i);
+      rect.setAttribute('fill', state.shaded.has(i) ? `rgba(${ACCENT},0.55)` : `rgba(${ACCENT},0.06)`);
+      rect.setAttribute('aria-pressed', state.shaded.has(i) ? 'true' : 'false');
+      updateCounter();
+    };
+    rect.addEventListener('click', toggle);
+    rect.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+    svg.append(rect);
+    state.cellRects.push({ i, rect });
+  }
+  updateCounter();
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;';
+  const send = document.createElement('button');
+  send.type = 'button';
+  send.className = 'primary-button';
+  send.textContent = 'ثبت رنگ‌ها';
+  send.addEventListener('click', () => void handleAnswerSubmit(state.shaded.size));
+  const clear = document.createElement('button');
+  clear.type = 'button';
+  clear.className = 'secondary-button';
+  clear.textContent = 'پاک‌کردن رنگ‌ها';
+  clear.addEventListener('click', () => {
+    state.shaded.clear();
+    for (const { rect } of state.cellRects) {
+      rect.setAttribute('fill', `rgba(${ACCENT},0.06)`);
+      rect.setAttribute('aria-pressed', 'false');
+    }
+    updateCounter();
+  });
+  btnRow.append(send, clear);
+  wrap.append(svg, counter, btnRow);
+  return wrap;
+}
+
+/** «خانه‌شمار مساحت»: اشکال از پیش رسم‌شدهٔ روی شبکه — توکن‌های بستهٔ نمونه (T3) */
+const AREA_SHAPE_PRESETS = Object.freeze({
+  lshape4: [[0, 0], [0, 1], [0, 2], [1, 2]],
+  rect2x2: [[0, 0], [1, 0], [0, 1], [1, 1]],
+  ustep4: [[0, 0], [1, 0], [1, 1], [2, 1]],
+  tshape5: [[0, 0], [1, 0], [2, 0], [1, 1], [1, 2]],
+  plus5: [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2]],
+  lshape6: [[0, 0], [0, 1], [0, 2], [1, 2], [2, 2], [3, 2]],
+  rect2x3: [[0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1]],
+  lshape8: [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3], [2, 3], [3, 3], [4, 3]],
+  rect3x4: [
+    [0, 0], [1, 0], [2, 0], [0, 1], [1, 1], [2, 1],
+    [0, 2], [1, 2], [2, 2], [0, 3], [1, 3], [2, 3]
+  ]
+});
+
+function buildAreaCellsFigure(question) {
+  const wrap = document.createElement('div');
+  const token = question.figureShape;
+  const cells = token ? AREA_SHAPE_PRESETS[String(token)] : null;
+  if (!cells) {
+    const note = document.createElement('p');
+    note.className = 'question-feedback';
+    note.style.cssText = 'font-size:12px;';
+    note.textContent = `شکل نمایشی «${token || 'نامشخص'}» در بستهٔ رسم نیست — تعداد خانه‌ها را از صورت کتاب بشمار.`;
+    wrap.append(note);
+    return wrap;
+  }
+  const maxCol = Math.max(...cells.map(c => c[0]));
+  const maxRow = Math.max(...cells.map(c => c[1]));
+  const unit = 46;
+  const W = (maxCol + 1) * unit + 4;
+  const H = (maxRow + 1) * unit + 4;
+  const svg = svgNode('svg', {
+    viewBox: `0 0 ${W} ${H}`, width: '100%', style: `max-width:${W}px;display:block;margin:0 auto;`,
+    role: 'img', 'aria-label': 'شکل روی شبکهٔ مربعی'
+  });
+  const cellSet = new Set(cells.map(([c, r]) => `${c}:${r}`));
+  for (let c = 0; c <= maxCol; c++) {
+    for (let r = 0; r <= maxRow; r++) {
+      svg.append(svgNode('rect', {
+        x: c * unit + 4, y: r * unit + 4, width: unit - 4, height: unit - 4,
+        fill: cellSet.has(`${c}:${r}`) ? `rgba(${ACCENT},0.3)` : 'rgba(255,255,255,0.02)',
+        stroke: cellSet.has(`${c}:${r}`) ? `rgba(${ACCENT},0.7)` : `rgba(${ACCENT},0.15)`,
+        'stroke-width': 1.5
+      }));
+    }
+  }
+  wrap.append(svg);
+  return wrap;
+}
+
+/** «نمودار میله‌ای»: SVG ثابت از chartData (T3) */
+function buildBarChartFigure(question) {
+  const wrap = document.createElement('div');
+  const data = question.chartData || [];
+  if (!data.length) return wrap;
+  const values = data.map(d => Math.max(0, Number(d.value)));
+  const maxV = Math.max(...values, 1);
+  const stepNice = maxV <= 5 ? 1 : Math.ceil(maxV / 5);
+  const gridMax = Math.ceil(maxV / stepNice) * stepNice;
+  const chartH = 120;
+  const baseY = 150;
+  const axisX = 36;
+  const barSlot = 56;
+  const W = axisX + data.length * barSlot + 14;
+  const svg = svgNode('svg', {
+    viewBox: `0 0 ${W} 190`, width: '100%', style: `max-width:${W}px;display:block;margin:0 auto;`,
+    role: 'img', 'aria-label': 'نمودار میله‌ای'
+  });
+  const scale = chartH / gridMax;
+  for (let v = 0; v <= gridMax; v += stepNice) {
+    const y = baseY - v * scale;
+    svg.append(svgNode('line', { x1: axisX, y1: y, x2: W - 8, y2: y, stroke: v === 0 ? `rgba(${ACCENT},0.7)` : `rgba(${ACCENT},0.18)`, 'stroke-width': 1 }));
+    const lbl = svgNode('text', { x: axisX - 6, y: y + 4, 'text-anchor': 'end', 'font-size': 10, fill: 'currentColor' });
+    lbl.textContent = fa(v);
+    svg.append(lbl);
+  }
+  data.forEach((d, i) => {
+    const v = values[i];
+    const x = axisX + 10 + i * barSlot;
+    const bw = barSlot - 18;
+    const h = v * scale;
+    svg.append(svgNode('rect', {
+      x, y: baseY - h, width: bw, height: Math.max(h, v > 0 ? 2 : 0),
+      fill: `rgba(${ACCENT},0.45)`, stroke: `rgba(${ACCENT},0.85)`, 'stroke-width': 1.5, rx: 4
+    }));
+    const valLbl = svgNode('text', { x: x + bw / 2, y: baseY - h - 6, 'text-anchor': 'middle', 'font-size': 11, fill: 'currentColor' });
+    valLbl.textContent = fa(v);
+    const catLbl = svgNode('text', { x: x + bw / 2, y: baseY + 16, 'text-anchor': 'middle', 'font-size': 10, fill: 'currentColor' });
+    catLbl.textContent = d.label;
+    svg.append(valLbl, catLbl);
+  });
+  wrap.append(svg);
+  return wrap;
+}
+
+/** «تقارن»: کاتالوگ SVG کوچک شکل‌ها — توکن ناشناخته → جعبهٔ برچسب‌دار صادقانه (T3) */
+const SYMMETRY_FIGURE_TOKENS = Object.freeze(['heart', 'rect-v', 'tilt-arrow', 'scalene-tri', 'equilateral-tri', 'flag-f', 'star5', 'blob']);
+
+function symmetryFigureSVG(token) {
+  const svg = svgNode('svg', {
+    viewBox: '0 0 48 48', width: 40, height: 40, 'aria-hidden': 'true',
+    style: `flex:0 0 auto;stroke:rgba(${ACCENT},0.9);fill:rgba(${ACCENT},0.12);stroke-width:2;stroke-linejoin:round;`
+  });
+  const paths = {
+    heart: 'M24 42 C 10 32 4 22 8 14 C 11 8 20 8 24 15 C 28 8 37 8 40 14 C 44 22 38 32 24 42 Z',
+    'rect-v': null, // مستطیل — جدا
+    'tilt-arrow': null,
+    'scalene-tri': 'M8 40 L20 10 L42 30 Z',
+    'equilateral-tri': 'M24 8 L42 40 L6 40 Z',
+    'flag-f': 'M14 6 V42 M14 8 H34 V18 H22 V24 H30',
+    star5: 'M24 4 L29.9 18.1 L45 19 L33.4 28.9 L37.3 43.5 L24 35.4 L10.7 43.5 L14.6 28.9 L3 19 L18.1 18.1 Z',
+    blob: 'M12 20 L20 8 L34 12 L40 26 L30 42 L14 38 Z'
+  };
+  if (token === 'rect-v') {
+    svg.append(svgNode('rect', { x: 10, y: 14, width: 28, height: 20, rx: 2 }));
+  } else if (token === 'tilt-arrow') {
+    const g = svgNode('g', { transform: 'rotate(35 24 24)' });
+    g.append(svgNode('path', { d: 'M8 24 H32 M24 14 L34 24 L24 34', fill: 'none' }));
+    svg.append(g);
+  } else {
+    const d = paths[token] || paths.blob;
+    svg.append(svgNode('path', { d, fill: SYMMETRY_FIGURE_TOKENS.includes(token) ? 'rgba(126, 240, 255, 0.12)' : 'rgba(255,255,255,0.05)' }));
+  }
+  return svg;
+}
+
+function buildSymmetryArea(question, state) {
+  const wrap = document.createElement('div');
+  const grid = document.createElement('div');
+  grid.setAttribute('role', 'group');
+  grid.setAttribute('aria-label', 'گزینه‌های شکل');
+  grid.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;width:100%;';
+  (question.figureOptions || []).forEach((optText, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'answer-option';
+    btn.style.cssText = 'align-items:center;';
+    btn.append(symmetryFigureSVG(optText));
+    const label = document.createElement('span');
+    label.className = 'answer-option-text';
+    label.textContent = optText;
+    btn.append(label);
+    btn.setAttribute('aria-label', `گزینهٔ ${i + 1}: ${optText}`);
+    btn.addEventListener('click', () => {
+      state.symmetryIdx = i;
+      void handleAnswerSubmit(String(i));
+    });
+    grid.append(btn);
+  });
+  wrap.append(grid);
+  return wrap;
+}
+
+/** آماده‌سازی ناحیهٔ پاسخ بر اساس قالب سؤال کارتریجی (BP-016 فاز الف + BP-017 فاز ب/ج) */
 function configureAnswerArea(question) {
   const fmt = effectiveFormat(question);
   const input = $('answer-input');
@@ -784,6 +1293,8 @@ function configureAnswerArea(question) {
   }
   if (!opts) return;
   opts.innerHTML = '';
+  opts.style.display = '';
+  cartridgeInteractive = null;
 
   if (fmt === FORMAT_MCQ) {
     // گزینه‌ای: دکمه‌های گزینه؛ ورودی متنی مخفی
@@ -805,22 +1316,94 @@ function configureAnswerArea(question) {
       btn.addEventListener('click', () => { void handleAnswerSubmit(String(i)); });
       opts.append(btn);
     });
-  } else {
-    // عدد/کسر: همان ورودی متنی با تنظیم قالب
-    opts.hidden = true;
-    if (input) {
-      input.hidden = false;
-      input.value = '';
-      if (fmt === FORMAT_NUMBER) { input.maxLength = 4; input.placeholder = 'پاسخ را عدد وارد کن'; }
-      else if (fmt === FORMAT_FRACTION) { input.maxLength = 10; input.placeholder = 'مثلاً ۳/۴ یا ۱ ۱/۲'; }
-      else { input.maxLength = 3; input.placeholder = ''; }
-      input.focus();
-    }
-    if (submitBtn) submitBtn.hidden = false;
+    return;
   }
+
+  if (fmt === FORMAT_NUMBER_LINE) {
+    // محور عددی: SVG خط‌کش + دکمه‌های درجه + دکمهٔ ثبت (T1)
+    opts.hidden = false;
+    opts.style.display = 'block';
+    if (input) input.hidden = true;
+    if (submitBtn) submitBtn.hidden = true;
+    const state = { value: null, tickEls: [] };
+    cartridgeInteractive = state;
+    opts.append(buildNumberLineArea(question, state));
+    return;
+  }
+
+  if (fmt === FORMAT_MATCHING) {
+    // زوج‌سازی: دو ستون — چپ ثابت، راست شافل؛ تکمیل همهٔ جفت‌ها → ثبت (T2)
+    opts.hidden = false;
+    opts.style.display = 'block';
+    if (input) input.hidden = true;
+    if (submitBtn) submitBtn.hidden = true;
+    const state = { leftSel: null, pairs: [], order: [] };
+    cartridgeInteractive = state;
+    opts.append(buildMatchingArea(question, state));
+    return;
+  }
+
+  if (fmt === FORMAT_FIGURE) {
+    const sk = question.subkind;
+    if (sk === 'fraction-shape') {
+      // کسر روی شکل: خانه‌ها را رنگ کن؛ ثبت = تعداد خانه‌های رنگ‌شده (T3)
+      opts.hidden = false;
+      opts.style.display = 'block';
+      if (input) input.hidden = true;
+      if (submitBtn) submitBtn.hidden = true;
+      const state = { shaded: new Set(), cellRects: [] };
+      cartridgeInteractive = state;
+      opts.append(buildFractionShapeArea(question, state));
+      return;
+    }
+    if (sk === 'area-cells' || sk === 'bar-chart') {
+      // خانه‌شمار مساحت / نمودار میله‌ای: شکل ثابت + همان ورودی عددی (T3)
+      opts.hidden = false;
+      opts.style.display = 'block';
+      if (input) {
+        input.hidden = false;
+        input.value = '';
+        input.maxLength = 4;
+        input.placeholder = 'پاسخ را عدد وارد کن';
+        input.focus();
+      }
+      if (submitBtn) submitBtn.hidden = false;
+      opts.append(sk === 'area-cells' ? buildAreaCellsFigure(question) : buildBarChartFigure(question));
+      return;
+    }
+    if (sk === 'symmetry') {
+      // تقارن: انتخاب شکل از میان گزینه‌های تصویری — سنجش گزینه‌ای (T3)
+      opts.hidden = false;
+      opts.style.display = 'block';
+      if (input) input.hidden = true;
+      if (submitBtn) submitBtn.hidden = true;
+      const state = { symmetryIdx: null };
+      cartridgeInteractive = state;
+      opts.append(buildSymmetryArea(question, state));
+      return;
+    }
+    // زیرقالب ناشناخته — صادقانه: این سؤال نباید تا اینجا می‌رسید (isPlayable گارد دارد)
+    opts.hidden = false;
+    const note = document.createElement('p');
+    note.textContent = 'زیرقالب این سؤال شناخته نشد — به ناظر محتوا گزارش شود.';
+    opts.append(note);
+    return;
+  }
+
+  // عدد/کسر: همان ورودی متنی با تنظیم قالب
+  opts.hidden = true;
+  if (input) {
+    input.hidden = false;
+    input.value = '';
+    if (fmt === FORMAT_NUMBER) { input.maxLength = 4; input.placeholder = 'پاسخ را عدد وارد کن'; }
+    else if (fmt === FORMAT_FRACTION) { input.maxLength = 10; input.placeholder = 'مثلاً ۳/۴ یا ۱ ۱/۲'; }
+    else { input.maxLength = 3; input.placeholder = ''; }
+    input.focus();
+  }
+  if (submitBtn) submitBtn.hidden = false;
 }
 
-/** مسیر سنجش سؤال کارتریجی — مشترک برای هر سه قالب فاز الف */
+/** مسیر سنجش سؤال کارتریجی — مشترک برای همهٔ قالب‌ها (فاز الف + فاز ب/ج) */
 async function handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec) {
   const session = state.session;
   const verdict = checkCartridgeAnswer(question, userAnswer);
@@ -840,6 +1423,8 @@ async function handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec) {
       submitted: Number.isFinite(submittedNum) ? submittedNum : null,
       submittedRaw: String(userAnswer ?? '').slice(0, 40),
       format: question.answerFormat || 'گزینه‌ای',
+      // BP-017 T4 — اطلس دامنه‌ای: زیرقالب شکل/نمودار برای کلیدهای format:/subkind: ثبت می‌شود
+      subkind: question.subkind || null,
       domainCode: question.domainCode || null,
       code: structuralCode || null,
       behavioral: null,
@@ -848,8 +1433,14 @@ async function handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec) {
     });
     $('question-feedback').textContent = 'درست نیست — یک بار دیگر با دقت فکر کن!';
     void playStationAudio(result.sound);
-    // نردبان خودکار پلهٔ ۱ — فقط برای سؤال‌های ضربی که نردبان دارند
+    // نردبان خودکار پلهٔ ۱ — سؤال‌های ضربی: نردبان کتاب؛ قالب‌های ب/ج: نردبان formatHint
     if (hintLevel === 0 && question.f1 != null && question.f2 != null) {
+      hintLevel = 1;
+      session.hintsMax = Math.max(session.hintsMax || 0, hintLevel);
+      const autoBtn = $('question-guide-button');
+      if (autoBtn) autoBtn.classList.add('attract');
+      showGuideStepUp(question);
+    } else if (hintLevel === 0 && FORMAT_HINT_FORMATS.includes(question.answerFormat)) {
       hintLevel = 1;
       session.hintsMax = Math.max(session.hintsMax || 0, hintLevel);
       const autoBtn = $('question-guide-button');
@@ -908,9 +1499,20 @@ async function finalizeCartridgePracticeSession(session) {
 
   state.attemptLog = state.attemptLog || [];
   const wrongCodes = {};
+  // BP-017 T4 — اطلس دامنه‌ای: تلاش‌های غلط قالب‌های ب/ج (بدون f1/f2 عددی) با کلیدهای
+  // format:<قالب> / subkind:<زیرقالب> / دامنه:<کد دامنه> ثبت می‌شوند؛ کد ساختاری عددی
+  // (f1/f2 ضربی) و رفتار UNCLASSIFIED مسیرهای قدیمی دقیقاً دست‌نخورده می‌مانند.
+  const NEW_ATLAS_FORMATS = [FORMAT_NUMBER_LINE, FORMAT_MATCHING, FORMAT_FIGURE];
   for (const w of session.wrongAttempts || []) {
-    if (w?.code) wrongCodes[w.code] = (wrongCodes[w.code] || 0) + 1;
-    else wrongCodes.UNCLASSIFIED = (wrongCodes.UNCLASSIFIED || 0) + 1;
+    if (w?.code) {
+      wrongCodes[w.code] = (wrongCodes[w.code] || 0) + 1;
+    } else if (w?.format && NEW_ATLAS_FORMATS.includes(w.format)) {
+      wrongCodes[`format:${w.format}`] = (wrongCodes[`format:${w.format}`] || 0) + 1;
+      if (w.subkind) wrongCodes[`subkind:${w.subkind}`] = (wrongCodes[`subkind:${w.subkind}`] || 0) + 1;
+      if (w.domainCode) wrongCodes[`دامنه:${w.domainCode}`] = (wrongCodes[`دامنه:${w.domainCode}`] || 0) + 1;
+    } else {
+      wrongCodes.UNCLASSIFIED = (wrongCodes.UNCLASSIFIED || 0) + 1;
+    }
   }
   if ((wrongCodes.UNCLASSIFIED || 0) >= 3) {
     wrongCodes.E_PERSISTENT_GUESSING = wrongCodes.UNCLASSIFIED;
@@ -927,7 +1529,8 @@ async function finalizeCartridgePracticeSession(session) {
     wrongCount: (session.wrongAttempts || []).length,
     wrongCodes,
     wrongExamples: (session.wrongAttempts || []).slice(0, 3).map(w => ({
-      f1: w.f1, f2: w.f2, submitted: w.submitted, format: w.format
+      f1: w.f1, f2: w.f2, submitted: w.submitted, format: w.format,
+      subkind: w.subkind ?? null, submittedRaw: w.submittedRaw ?? null
     })),
     hintsMax: session.hintsMax || 0,
     completedAt: new Date().toISOString()
@@ -989,7 +1592,7 @@ async function startCartridgePractice() {
     if (box) {
       const warn = document.createElement('div');
       warn.className = 'cartridge-status-line';
-      warn.textContent = `⚠️ هیچ سؤال قابل بازی در قالب‌های فاز الف (گزینه‌ای/عدد/کسر) در خشاب ${cartridge.cartridgeId} نیست — ${fa(adapted.skipped)} سؤال قالب‌های فاز ب/ج.`;
+      warn.textContent = `⚠️ هیچ سؤال قابل بازی در ۶ قالب موتور در خشاب ${cartridge.cartridgeId} نیست — ${fa(adapted.skipped)} سؤال بدشکل/ناشناخته رد شد (skippedInvalid).`;
       box.prepend(warn);
     }
     return;

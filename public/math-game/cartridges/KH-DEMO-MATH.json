@@ -3,22 +3,22 @@
   "cartridgeId": "KH-DEMO-MATH",
   "generatedAt": "2026-10-23T00:00:00.000Z",
   "source": {
-    "file": "BP-016 فاز الف — نمونهٔ مرجع سه‌قالب",
-    "tool": "bp016-phase-alpha-demo (Z.ai)"
+    "file": "BP-017 فاز ب/ج — نمونهٔ مرجع ۶-قالبی",
+    "tool": "bp017-multiformat-demo (Z.ai)"
   },
   "identity": {
     "family": "KH-DEMO-MATH",
-    "title": "نمونهٔ چند-قالبی فاز الف (گزینه‌ای/عدد/کسر)",
-    "note": "خشاب نمایشی برای موتور چند-قالبی — محتوای آموزشی رسمی نیست و منتظر مُهر معلم نیست؛ الگوی ساخت برای موج‌های دامنه‌دار آرنا (BP-016)"
+    "title": "نمونهٔ چند-قالبی ۶-قالبی (گزینه‌ای/عدد/کسر/محور عددی/زوج‌سازی/شکل-نمودار)",
+    "note": "خشاب نمایشی برای موتور چند-قالبی — محتوای آموزشی رسمی نیست و منتظر مُهر معلم نیست؛ الگوی ساخت برای موج‌های دامنه‌دار آرنا (BP-016 فاز الف + BP-017 فاز ب/ج)"
   },
   "bookMap": [
     {
       "id": "L-901",
-      "title": "نمونهٔ سه‌قالب",
+      "title": "نمونهٔ شش‌قالب",
       "grade": "نمونه",
       "chapter": "—",
       "engineCompat": "تعاملی-عمیق",
-      "anchorsRaw": "Q-9901 Q-9902 Q-9903",
+      "anchorsRaw": "Q-9901 تا Q-9908",
       "status": "نیاز به تأیید"
     }
   ],
@@ -90,6 +90,117 @@
       "status": "نیاز به تأیید",
       "note": "",
       "math": "1/2"
+    },
+    {
+      "id": "Q-9904",
+      "anchorId": "L-901",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "cpa": "تصویری",
+      "answerFormat": "محور عددی",
+      "prompt": "خرگوش از صفر شروع می‌کند و ۳ پرشِ ۲تایی می‌زند؛ روی محور عددی، نقطهٔ پایان را نشان بده.",
+      "answerValue": 6,
+      "renderHint": "subkind:number-line;min:0;max:10;step:1;tolerance:0.001",
+      "optionErrorMap": "",
+      "claims": "",
+      "level": "آسان",
+      "criteria": "ضرب به‌مثابه پرش‌های مساوی روی محور — کلیک روی درجهٔ درست با تلورانس",
+      "source": "نمونهٔ BP-017 فاز ب (نویسنده: Z.ai) — بدون مُهر",
+      "status": "نیاز به تأیید",
+      "note": "",
+      "math": "3×2 (محور پرشی)"
+    },
+    {
+      "id": "Q-9905",
+      "anchorId": "L-901",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "cpa": "علامتی",
+      "answerFormat": "زوج‌سازی",
+      "prompt": "هر ضرب را به حاصلش وصل کن.",
+      "matches": [
+        { "left": "۳ × ۴", "right": "۱۲" },
+        { "left": "۲ × ۵", "right": "۱۰" },
+        { "left": "۲ × ۲", "right": "۴" }
+      ],
+      "optionErrorMap": "",
+      "claims": "",
+      "level": "آسان",
+      "criteria": "بازیابی خانوادهٔ ضرب در حد روانی — جفت‌سازی کامل و دقیق",
+      "source": "نمونهٔ BP-017 فاز ب (نویسنده: Z.ai) — بدون مُهر",
+      "status": "نیاز به تأیید",
+      "note": "",
+      "math": "matching"
+    },
+    {
+      "id": "Q-9906",
+      "anchorId": "L-901",
+      "domain": "DEPTH",
+      "domainCode": "D5",
+      "qType": "کسر روی شکل",
+      "cpa": "تصویری",
+      "answerFormat": "شکل/نمودار",
+      "prompt": "دوچهارمِ شکل را با کلیک کردن، خانه‌به‌خانه رنگ‌آمیزی کن.",
+      "answerFrac": {
+        "num": 2,
+        "den": 4
+      },
+      "renderHint": "subkind:fraction-shape;cells:4",
+      "optionErrorMap": "",
+      "claims": "",
+      "level": "آسان",
+      "criteria": "هم‌ارزی ۲/۴ ≡ ۱/۲ روی شکل — رنگ ۲ خانه از ۴ خانه (پس از ساده‌سازی)",
+      "source": "نمونهٔ BP-017 فاز ج (نویسنده: Z.ai) — بدون مُهر",
+      "status": "نیاز به تأیید",
+      "note": "",
+      "math": "2/4 ≡ 1/2"
+    },
+    {
+      "id": "Q-9907",
+      "anchorId": "L-901",
+      "domain": "DEPTH",
+      "domainCode": "D6",
+      "qType": "مساحت با شمارش خانه",
+      "cpa": "تصویری",
+      "answerFormat": "شکل/نمودار",
+      "prompt": "مساحت شکل چند خانهٔ مربعی است؟ تعداد خانه‌ها را بنویس.",
+      "answerValue": 6,
+      "renderHint": "subkind:area-cells;shape:lshape6",
+      "optionErrorMap": "",
+      "claims": "",
+      "level": "آسان",
+      "criteria": "اندازه‌گیری مساحت با شمارش خانه‌های واحد روی شبکه",
+      "source": "نمونهٔ BP-017 فاز ج (نویسنده: Z.ai) — بدون مُهر",
+      "status": "نیاز به تأیید",
+      "note": "",
+      "math": "area-cells=6"
+    },
+    {
+      "id": "Q-9908",
+      "anchorId": "L-901",
+      "domain": "DEPTH",
+      "domainCode": "D7",
+      "qType": "خواندن نمودار ستونی",
+      "cpa": "تصویری",
+      "answerFormat": "شکل/نمودار",
+      "prompt": "کتاب‌فروشی مدرسه: ماهی که بیشترین فروش را داشته چند کتاب فروخته است؟ (از روی نمودار بخوان)",
+      "answerValue": 6,
+      "renderHint": "subkind:bar-chart",
+      "chartData": [
+        { "label": "مهر", "value": 4 },
+        { "label": "آبان", "value": 6 },
+        { "label": "آذر", "value": 2 }
+      ],
+      "optionErrorMap": "",
+      "claims": "",
+      "level": "آسان",
+      "criteria": "خواندن مقدار بلندترین میله از نمودار ستونی",
+      "source": "نمونهٔ BP-017 فاز ج (نویسنده: Z.ai) — بدون مُهر",
+      "status": "نیاز به تأیید",
+      "note": "",
+      "math": "bar-chart max=6"
     }
   ],
   "glossary": [
@@ -203,22 +314,22 @@
     }
   ],
   "auditTrail": {
-    "rows": 3,
-    "note": "نمونهٔ فاز الف — بدون ممیزی AUD"
+    "rows": 8,
+    "note": "نمونهٔ ۶-قالبی فاز الف/ب/ج — بدون ممیزی AUD"
   },
   "validation": {
     "ok": true,
     "warnings": [
-      "خشاب نمونه — محتوای آموزشی رسمی نیست؛ الگوی قالب برای موج‌های آرنا (BP-016)"
+      "خشاب نمونه — محتوای آموزشی رسمی نیست؛ الگوی قالب برای موج‌های آرنا (BP-016/BP-017)"
     ],
     "stats": {
       "lessons": 1,
       "lessonsConfirmed": 0,
       "atlasReal": 0,
       "atlasProposed": 0,
-      "questions": 3,
+      "questions": 8,
       "questionsConfirmed": 0,
-      "questionsProposed": 3
+      "questionsProposed": 8
     },
     "gate": {
       "red": 0,
