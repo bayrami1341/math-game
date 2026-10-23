@@ -1,8 +1,8 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 54,
-  "updated_at": "2026-10-23T09:08:37.376Z",
-  "updated_by": "agent:z",
+  "version": 55,
+  "updated_at": "2026-10-23T14:00:00.000Z",
+  "updated_by": "z.ai — BP-022 (M09/M10/PR2) delivered",
   "blueprints": [
     {
       "id": "BP-000",
@@ -1221,6 +1221,72 @@
         "/home/z/vault/c205/vault-manifest.json (بیرون Git — فقط مسیر و SHA ارجاع می‌شود)"
       ],
       "notes": "[2026-10-23T09:08:37.376Z] T1 (Z01) تحویل شد — vault + گیت پذیرش سبز + دو آزمون ابطال"
+    },
+    {
+      "id": "BP-022",
+      "title": "قرارداد M09 + اتصال M10 به runtime + حدهای per-book + گزارش PR #2 (فرمان مالک trace 1a1681e84a8d3cad)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "delivered",
+      "priority": 23,
+      "created_by": "z.ai — درخواست دقیق مالک: رفع ابهام PR #2، قرارداد M09، اتصال M10، دامنه/کسر per-book، مبدل/CI تکرارپذیر، پاسخ قابل‌ممیزی",
+      "created_at": "2026-10-23T14:00:00.000Z",
+      "approved_by": "مالک-چت: درخواست مستقیم شش‌قلمی (trace 1a1681e84a8d3cad)",
+      "approved_at": "2026-10-23T14:00:00.000Z",
+      "delivered_at": "2026-10-23T14:00:00.000Z",
+      "verified_at": null,
+      "context": "شش قلم فرمان مالک: (۱) فهرست تعارض PR #2 + راهکار رسمی یک‌طرفه بدون merge/push؛ (۲) قرارداد نسخه‌دار M09 برای operation/نوع پاسخ/دامنه/بازخورد با سازگاری کامل کارتریج‌های فعلی؛ (۳) اتصال M10 به مسیر زندهٔ classifyAttempt→v103→w8 + آزمون E2E از کارتریج تا تعامل؛ (۴) حدهای per-book/per-grade نه سقف عمومی + ماندن کدهای W8 پیشنهادی تا مُهر انسانی؛ (۵) گزارش مبدل/CI تکرارپذیر با احترام به حضور از پیشِ W7؛ (۶) پاسخ قابل‌ممیزی با commit/hash/مالکیت/آزمون‌ها/موارد انسانی",
+      "tasks": [
+        {
+          "id": "T1",
+          "title": "گزارش PR #2 — پروب ادغام واقعی محلی (بدون merge/push) + راهکار یک‌طرفهٔ رسمی",
+          "status": "delivered",
+          "witness": "reports/pr2-conflict-resolution-v1.fa.md — ۱۵ فایل تعارض واقعی، merge-exit=1، abort موفق"
+        },
+        {
+          "id": "T2",
+          "title": "M09 — OPERATION-CONTRACT.json (khshab.operation-contract/v1) + تست ضد واگرایی JSON↔JS",
+          "status": "delivered",
+          "witness": "public/math-game/authoring/OPERATION-CONTRACT.json"
+        },
+        {
+          "id": "T3",
+          "title": "M10 — errors-router.js + سیم‌کشی مسیر زندهٔ کارتریج (app.js) با مسیر میراثی دست‌نخورده",
+          "status": "delivered",
+          "witness": "src/v10/station/errors-router.js + handleCartridgeAnswerSubmit"
+        },
+        {
+          "id": "T4",
+          "title": "حدهای per-book/per-grade (mulcol در G2 مسدود؛ sum در G2 تا ۱۰۰؛ کسر با denMax/numMax/opAllow) + قفل BP-012 روی کدهای W8",
+          "status": "delivered",
+          "witness": "tests/v10.3-errors-router.test.js — گستره/گارد کسر/قفل اطلس"
+        },
+        {
+          "id": "T5",
+          "title": "مبدل و CI تکرارپذیر — اجرای واقعی روی سرهای رسمی G2/G3 (۰ قرمز) + استناد به حضور از پیشِ W7 در workflow",
+          "status": "delivered",
+          "witness": "خروجی مبدل: G2 ۰قرمز/۲زرد، G3 ۰قرمز/۷زرد + گام‌های W7 در khshab-gate.yml"
+        }
+      ],
+      "acceptance": [
+        "موتور ۱۸۳/۱۸۳ سبز (۱۱ تست تازهٔ قرارداد/مسیریاب) و pytest ۲۱/۲۱ — صفر رگرسیون",
+        "هیچ کد تازهٔ W8 در اطلس رسمی نیست (قفل تست BP-012)؛ کدهای W8 با وضعیت «پیشنهادی» در تلاش‌نگار ثبت می‌شوند",
+        "سؤال بدون op = عین رفتار امروز (مسیر میراثی ف1×ف2 دست‌نخورده)",
+        "PR #2: هیچ merge/push انجام نشده؛ فقط تحلیل + راهکار"
+      ],
+      "artifacts": [
+        "public/math-game/authoring/OPERATION-CONTRACT.json",
+        "public/math-game/src/v10/station/errors-router.js",
+        "public/math-game/tests/v10.3-errors-router.test.js",
+        "reports/pr2-conflict-resolution-v1.fa.md"
+      ],
+      "notes": [
+        "یافتهٔ مهم مبدل (برای M10/Z09): بازتولید JSON از xlsx رسمی، بچ‌های ادغام‌شدهٔ بیرون-xlsx (مثل D4-G3) را حذف می‌کند — bind دوسویهٔ Excel-SHA↔JSON-SHA الزامی است؛ به تصمیم انسانی ارجاع شد",
+        "W7 طبق فرمان مالک «کار مانده» معرفی نشد — حضور آن در workflow رسمی استناد شد"
+      ],
+      "links": [
+        "reports/pr2-conflict-resolution-v1.fa.md"
+      ]
     }
   ]
 }
