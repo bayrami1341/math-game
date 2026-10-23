@@ -694,6 +694,19 @@ def run_converter_and_parse_report(
                 dst_json.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(src_json, dst_json)
 
+        # BP-015 T4: شمارش پوشش دامنه «در همان گذر» — روی JSON تولیدشدهٔ مبدل.
+        # افزودنی و غیربلوک‌کننده: خطای لایهٔ دامنه هرگز حکم مبدل را قرمز نمی‌کند؛ فقط گزارش می‌شود.
+        domain_coverage: Optional[Dict[str, Any]] = None
+        if generated_jsons:
+            try:
+                from .domain_matrix import compute_domain_coverage, load_matrix
+                cart = json.loads(Path(generated_jsons[0]).read_text(encoding="utf-8"))
+                domain_coverage = compute_domain_coverage(
+                    cart, load_matrix(root / "public/math-game/authoring/DOMAIN-MATRIX.json")
+                )
+            except Exception as exc:  # noqa: BLE001 — گزارش‌دهی، نه بلوکه‌سازی
+                domain_coverage = {"error": str(exc)}
+
         red_m = re.search(r"\|\s*قرمز \(بلوکه‌کننده\)\s*\|\s*\*\*(\d+)\*\*\s*\|", report_text)
         yel_m = re.search(r"\|\s*زرد \(هشدار\)\s*\|\s*(\d+)\s*\|", report_text)
         verdict_m = re.search(r"\*\*حکم گیت مبدل:\s*([^*]+)\*\*", report_text)
@@ -723,6 +736,7 @@ def run_converter_and_parse_report(
             "warnings": warnings,
             "report_path": str(saved_report_path) if saved_report_path else None,
             "preview_json_sha256": preview_json_sha,
+            "domain_coverage": domain_coverage,
             "stdout": proc.stdout,
             "stderr": proc.stderr,
         }

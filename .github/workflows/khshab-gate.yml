@@ -90,3 +90,19 @@ jobs:
             --candidate public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx \
             --base public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx \
             --official public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx
+
+      # ── گیت ۳ (BP-015): پوشش دامنه‌دار — «آماده» ادعا نمی‌شود، اندازه‌گیری می‌شود ──
+      - name: نصب Bun (برای گزارش پوشش)
+        uses: oven-sh/setup-bun@v2
+
+      - name: گزارش پوشش دامنه‌ای (هر دو خانوادهٔ رسمی)
+        run: |
+          bun scripts/coverage-report.ts \
+            --cartridge public/math-game/cartridges/KH-G2-MATH.json \
+            --cartridge public/math-game/cartridges/KH-G3-MATH.json \
+            --markdown reports/coverage-current.md
+
+      - name: گیت ضد-ادعای آمادگی (fail-closed + سلف‌تست)
+        run: |
+          bash scripts/check-domain-claims.sh --self-test
+          bash scripts/check-domain-claims.sh

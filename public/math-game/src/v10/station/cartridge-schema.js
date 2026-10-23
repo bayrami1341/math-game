@@ -27,6 +27,10 @@ export const STATUS_PROPOSED = 'نیاز به تأیید';
 export const ENGINE_COMPAT_VALUES = Object.freeze(['تعاملی-عمیق', 'بانک تمرین', 'خارج از موتور']);
 export const DOMAIN_VALUES = Object.freeze(['CORE', 'DEPTH', 'SIDE']);
 export const CPA_VALUES = Object.freeze(['مجسم', 'تصویری', 'علامتی']);
+// BP-015: لایهٔ دامنهٔ قانونی D1..D8 + قالب‌های ۶گانهٔ پاسخ (DRAFT تا مُهر گام صفر معلم)
+// واژه‌نامهٔ نوع‌ها/حداقل‌ها: public/math-game/authoring/DOMAIN-MATRIX.json
+export const DOMAIN_CODE_PATTERN = Object.freeze(/^D[1-8]$/);
+export const ANSWER_FORMAT_VALUES = Object.freeze(['عدد', 'کسر', 'گزینه‌ای', 'محور عددی', 'زوج‌سازی', 'شکل/نمودار']);
 
 const REAL_CODES = Object.freeze(new Set(Object.keys(ERROR_CODES)));
 const OPTION_LETTERS = Object.freeze(['الف', 'ب', 'ج', 'د']);
@@ -305,6 +309,15 @@ export function validateCartridge(c, expectedId = null) {
     }
     if (q.domain && !DOMAIN_VALUES.includes(q.domain)) warn(`${q.id}: دامنهٔ خارج از واژه‌نامه: ${q.domain}`);
     if (q.cpa && !CPA_VALUES.includes(q.cpa)) warn(`${q.id}: لایهٔ CPA خارج از واژه‌نامه: «${q.cpa}» (زرد AUD-06)`);
+    // BP-015 T1 — فیلدهای دامنه‌دار: نرم (هشدار؛ سؤال میراثی بدون دامنه ایراد ندارد)
+    if (q.domainCode && !DOMAIN_CODE_PATTERN.test(String(q.domainCode).trim())) {
+      warn(`${q.id}: کد دامنهٔ نامعتبر: «${q.domainCode}» — الگوی مجاز D1..D8 (BP-015)`);
+    }
+    if (q.qType && typeof q.qType !== 'string') warn(`${q.id}: qType باید رشته باشد (BP-015)`);
+    if (q.answerFormat && !ANSWER_FORMAT_VALUES.includes(q.answerFormat)) {
+      warn(`${q.id}: قالب پاسخ خارج از واژه‌نامهٔ ۶-قالبی: «${q.answerFormat}» (BP-015)`);
+    }
+    if (q.renderHint && typeof q.renderHint !== 'string') warn(`${q.id}: renderHint باید رشته باشد (BP-015)`);
     if (!Array.isArray(q.options) || q.options.length !== 4) { err(`${q.id}: تعداد گزینه‌ها ≠ ۴`); continue; }
     if (!Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) err(`${q.id}: پاسخ‌نام خارج از بازه`);
     for (let i = 0; i < 4; i++) {
