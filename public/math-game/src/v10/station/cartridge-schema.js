@@ -350,6 +350,108 @@ export function validateCartridge(c, expectedId = null) {
       }
       continue;
     }
+    // ── BP-017 — قالب‌های فاز ب/ج: محور عددی / زوج‌سازی / شکل-نمودار ──
+    // سیاست: دادهٔ لازم هر قالب سخت (قرمز) و renderHint غایب/بدشکل نرم (زرد) است —
+    // سؤال میراثی (۹۲+۲۰) بدون این قالب‌هاست و رفتار قدیمی ذره‌ای تغییر نمی‌کند.
+    if (effFmt === 'محور عددی') {
+      const v = Number(q.answerValue);
+      if (!Number.isSafeInteger(v) || v < 0 || v > 9999) {
+        err(`${q.id}: «محور عددی» به answerValue عددی ۰..۹۹۹۹ نیاز دارد (BP-017)`);
+      } else {
+        const hint = String(q.renderHint ?? '').trim();
+        if (!hint) {
+          warn(`${q.id}: «محور عددی» بدون renderHint — پیش‌فرض موتور (۰..۱۰ گام ۱، تلورانس نصف گام) (BP-017)`);
+        } else {
+          const sub = /(?:^|;)\s*min\s*:\s*(-?\d+(?:\.\d+)?)/.exec(hint);
+          const smx = /(?:^|;)\s*max\s*:\s*(-?\d+(?:\.\d+)?)/.exec(hint);
+          const sst = /(?:^|;)\s*step\s*:\s*(-?\d+(?:\.\d+)?)/.exec(hint);
+          const min = sub ? Number(sub[1]) : 0;
+          const max = smx ? Number(smx[1]) : 10;
+          const step = sst && Number(sst[1]) > 0 ? Number(sst[1]) : 1;
+          const ticks = (max - min) / step;
+          if (!Number.isInteger(ticks) || ticks <= 0 || ticks > 60) {
+            warn(`${q.id}: شبکهٔ درجه‌های محور (min/max/step در renderHint) نمی‌بندد — سؤال skip خواهد شد (BP-017)`);
+          } else if (v < min || v > max) {
+            warn(`${q.id}: پاسخ ${v} بیرون از بازهٔ محور ${min}..${max} — سؤال skip خواهد شد (BP-017)`);
+          }
+        }
+      }
+      continue;
+    }
+    if (effFmt === 'زوج‌سازی') {
+      const ms = q.matches;
+      if (!Array.isArray(ms) || ms.length < 2 || ms.length > 5) {
+        err(`${q.id}: «زوج‌سازی» به matches آرایه‌ای ۲..۵ جفت نیاز دارد (BP-017)`);
+      } else {
+        const lefts = new Set();
+        const rights = new Set();
+        let shapeBad = false;
+        for (const m of ms) {
+          if (!m || typeof m.left !== 'string' || !m.left.trim() || typeof m.right !== 'string' || !m.right.trim()) { shapeBad = true; break; }
+          const l = m.left.trim();
+          const r = m.right.trim();
+          if (lefts.has(l) || rights.has(r)) { shapeBad = true; break; }
+          lefts.add(l); rights.add(r);
+        }
+        if (shapeBad) {
+          err(`${q.id}: هر جفت زوج‌سازی باید {left, right} رشته‌ایِ غیرتهی و یکتا باشد (BP-017)`);
+        }
+      }
+      continue;
+    }
+    if (effFmt === 'شکل/نمودار') {
+      const hint = String(q.renderHint ?? '').trim();
+      const skMatch = /(?:^|;)\s*subkind\s*:\s*([a-z0-9-]+)/.exec(hint);
+      const subkind = skMatch ? skMatch[1] : null;
+      const KNOWN_FIGURE = ['fraction-shape', 'area-cells', 'symmetry', 'bar-chart'];
+      if (!hint) {
+        warn(`${q.id}: «شکل/نمودار» بدون renderHint — زیرقالب نامشخص، سؤال skip خواهد شد (BP-017)`);
+      } else if (!subkind || !KNOWN_FIGURE.includes(subkind)) {
+        warn(`${q.id}: زیرقالب «${subkind ?? 'غایب'}» خارج از واژه‌نامهٔ شکل/نمودار — سؤال skip خواهد شد (BP-017)`);
+      } else if (subkind === 'fraction-shape') {
+        const f = q.answerFrac;
+        if (!f || !Number.isInteger(Number(f.num)) || !Number.isInteger(Number(f.den)) || Number(f.den) <= 0) {
+          err(`${q.id}: «کسر روی شکل» به answerFrac {num, den} معتبر نیاز دارد (BP-017)`);
+        } else {
+          const cellsMatch = /(?:^|;)\s*cells\s*:\s*(\d+)/.exec(hint);
+          if (!cellsMatch) {
+            warn(`${q.id}: «کسر روی شکل» بدون cells در renderHint — پیش‌فرض موتور = مخرج ساده‌شده (BP-017)`);
+          } else {
+            const cells = Number(cellsMatch[1]);
+            const g = (a, b) => { while (b) { const t = a % b; a = b; b = t; } return a; };
+            const den = Number(f.den) / (g(Math.abs(Number(f.num)), Math.abs(Number(f.den))) || 1);
+            if (cells < 2) {
+              warn(`${q.id}: cells باید ≥ ۲ باشد — سؤال skip خواهد شد (BP-017)`);
+            } else if (cells % den !== 0) {
+              warn(`${q.id}: cells=${cells} بر مخرج ساده‌شده (${den}) بخش‌پذیر نیست — رنگ‌آمیزی دقیق ممکن نیست (BP-017)`);
+            }
+          }
+        }
+      } else if (subkind === 'area-cells') {
+        const v = Number(q.answerValue);
+        if (!Number.isSafeInteger(v) || v < 0 || v > 9999) {
+          err(`${q.id}: «خانه‌شمار مساحت» به answerValue ۰..۹۹۹۹ نیاز دارد (BP-017)`);
+        }
+      } else if (subkind === 'bar-chart') {
+        const cd = q.chartData;
+        if (!Array.isArray(cd) || cd.length < 2 || cd.length > 8
+          || !cd.every(d => d && typeof d.label === 'string' && d.label.trim() && Number.isFinite(Number(d.value)))) {
+          err(`${q.id}: نمودار میله‌ای به chartData آرایه‌ای ۲..۸ {label, value} نیاز دارد (BP-017)`);
+        }
+        const v = Number(q.answerValue);
+        if (!Number.isSafeInteger(v) || v < 0 || v > 9999) {
+          err(`${q.id}: «نمودار میله‌ای» به answerValue ۰..۹۹۹۹ نیاز دارد (BP-017)`);
+        }
+      } else if (subkind === 'symmetry') {
+        const fo = q.figureOptions;
+        if (!Array.isArray(fo) || fo.length < 2 || !fo.every(o => typeof o === 'string' && o.trim())) {
+          err(`${q.id}: «تقارن» به figureOptions آرایه‌ای ≥۲ رشته نیاز دارد (BP-017)`);
+        } else if (!Number.isInteger(q.correct) || q.correct < 0 || q.correct >= fo.length) {
+          err(`${q.id}: پاسخ‌نام تقارن (correct) خارج از بازهٔ figureOptions است (BP-017)`);
+        }
+      }
+      continue;
+    }
     if (!Array.isArray(q.options) || q.options.length !== 4) { err(`${q.id}: تعداد گزینه‌ها ≠ ۴`); continue; }
     if (!Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) err(`${q.id}: پاسخ‌نام خارج از بازه`);
     for (let i = 0; i < 4; i++) {
