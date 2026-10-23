@@ -154,13 +154,15 @@ test('پل کارتریج: limit و shuffle کار می‌کند', () => {
   assert.equal(b.questions.length, 4);
 });
 
-test('پل کارتریج روی خشاب واقعی G3: هر ۲۰ سؤال گزینه‌ای قابل بازی‌اند', () => {
+test('پل کارتریج روی خشاب واقعی G3: هر ۱۲۰ سؤال (۲۰ میراثی + ۱۰۰ بچ D4 ربات) قابل بازی‌اند', () => {
   const g3 = readJson('../cartridges/KH-G3-MATH.json');
   const adapted = adaptCartridgeQuestions(g3, { limit: 0, shuffle: false });
-  assert.equal(adapted.total, 20);
+  // واقعیت پس از بچ اول D4-G3 (BP-019، seed 1404): ۱۲۰ سؤال — ۲۰ میراثی گزینه‌ای + ۱۰۰ دامنه‌دار (۶۱ گزینه‌ای + ۳۹ عدد)
+  assert.equal(adapted.total, 120);
   assert.equal(adapted.skipped, 0);
-  assert.equal(adapted.questions.length, 20);
-  assert.ok(adapted.questions.every(q => q.answerFormat === FORMAT_MCQ));
+  assert.equal(adapted.questions.length, 120);
+  assert.equal(adapted.questions.filter(q => q.answerFormat === FORMAT_MCQ).length, 81);
+  assert.equal(adapted.questions.filter(q => q.answerFormat === FORMAT_NUMBER).length, 39);
   // سؤال‌های «فرم خام a×b» عامل‌ها را برای اطلس خطا دارند؛ مسئله‌های متنی عمداً ندارند
   const withFactors = adapted.questions.filter(q => q.f1 !== null);
   assert.ok(withFactors.length >= 10, `انتظار حداقل ۱۰ سؤال با عامل صریح — یافت: ${withFactors.length}`);

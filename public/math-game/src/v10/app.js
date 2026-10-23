@@ -27,6 +27,13 @@ import {
   CODE_SENTENCES_FA,
   dominantCode
 } from './station/errors.js';
+// BP-022/M10 — مسیریاب یکنواخت attempt→v103→w8 (قرارداد M09: OPERATION-CONTRACT.json)
+import {
+  classifyCartridgeAttempt,
+  atlasClaimForWrongOption,
+  codeRegistryStatus,
+  DEFAULT_BOOK_LIMITS
+} from './station/errors-router.js';
 import {
   createStationLayer,
   COLORS,
@@ -1410,23 +1417,42 @@ async function handleCartridgeAnswerSubmit(question, userAnswer, elapsedSec) {
   const result = stationLayer.cells.onAnswer(verdict.correct);
 
   if (!verdict.correct) {
-    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — برای سؤال ضربی هم کد ساختاری اطلس محاسبه می‌شود
-    const submittedNum = Number(verdict.normalized);
-    const structuralCode = (question.f1 != null && question.f2 != null && Number.isFinite(submittedNum))
-      ? classifyAttempt({ f1: question.f1, f2: question.f2, submitted: submittedNum })
-      : null;
+    // تلاش‌نگار فقط‌الحاقی (CEAP §4.1) — BP-022/M10: مسیریاب یکنواخت attempt→v103→w8
+    // حدهای per-book/per-grade از قرارداد M09؛ کارتریج ناشناخته = بدون حدهای کتابی (فقط پشتوانهٔ ماژول‌ها)
+    const routerVerdict = classifyCartridgeAttempt({
+      question,
+      submitted: verdict.normalized,
+      bookLimits: DEFAULT_BOOK_LIMITS[session.cartridgeId] || null
+    });
+    const structuralCode = routerVerdict.code;
+    // اطلس-لنگر (بدون طبقه‌بندی عددی): برای گزینه‌ایِ بدون op، کدِ ادعاشدهٔ اطلس همان گزینهٔ غلط
+    let atlasClaim = null;
+    if (!structuralCode) {
+      const mcqIdx = /گزینهٔ\s*(\d+)/.exec(String(verdict.normalized ?? ''));
+      if (mcqIdx) atlasClaim = atlasClaimForWrongOption(question, Number(mcqIdx[1]) - 1);
+    }
+    const codeStatus = structuralCode
+      ? codeRegistryStatus(structuralCode, session.officialAtlasCodes)
+      : (atlasClaim?.status || null);
     session.wrongAttempts = session.wrongAttempts || [];
     session.wrongAttempts.push({
       questionId: question.questionId,
       f1: question.f1 ?? null,
       f2: question.f2 ?? null,
-      submitted: Number.isFinite(submittedNum) ? submittedNum : null,
+      submitted: (Number.isFinite(Number(verdict.normalized)) && String(verdict.normalized ?? '').trim() !== '' && !String(verdict.normalized).includes('/'))
+        ? Number(verdict.normalized) : null,
+      submittedNormalized: String(verdict.normalized ?? '').slice(0, 40),
       submittedRaw: String(userAnswer ?? '').slice(0, 40),
       format: question.answerFormat || 'گزینه‌ای',
       // BP-017 T4 — اطلس دامنه‌ای: زیرقالب شکل/نمودار برای کلیدهای format:/subkind: ثبت می‌شود
       subkind: question.subkind || null,
       domainCode: question.domainCode || null,
       code: structuralCode || null,
+      // BP-022/M09 — حاکمیت قرارداد: موتور تشخیص + وضعیت رجیستری + اطلس-لنگر گزینهٔ غلط
+      engine: routerVerdict.engine,
+      routerReason: routerVerdict.reason,
+      atlasCode: (!structuralCode && atlasClaim) ? atlasClaim.code : null,
+      codeStatus, // «رسمی» | «پیشنهادی» (کدهای W8 تا مُهر انسانی پیشنهادی می‌مانند) | null
       behavioral: null,
       timeSec: elapsedSec,
       at: new Date().toISOString()
@@ -1554,6 +1580,8 @@ function startCartridgePracticeSession(cartridge, adapted) {
   state.session = {
     sessionId: 'sess_' + crypto.randomUUID(),
     activityId: `cartridge-practice-${cartridge.cartridgeId}`, // هویت پایدار — «بهترین رکورد» هر خشاب
+    // BP-022/M09 — SSOT رسمی این خشاب: کدهای اطلس رسمی برای وضعیت‌گذاری درستِ رجیستری
+    officialAtlasCodes: Array.isArray(cartridge.errorAtlas) ? cartridge.errorAtlas.map(c => c.code).filter(Boolean) : [],
     sectorId: 1,
     activity: 'practice',
     activityType: 'cartridge-practice',

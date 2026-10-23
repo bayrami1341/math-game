@@ -34,13 +34,15 @@ test('1. خشاب منتشرشده از دیسک، اعتبارسنجی کامل
   assert.ok(published.source?.tool?.includes('cartridge-converter'), 'ابزار مبدل در source ثبت باشد');
 });
 
-test('2. آمار خشاب منتشرشده با حکم ممیزی AUD-01 هم‌خوان است', () => {
+test('2. آمار خشاب منتشرشده با حکم ممیزی هم‌خوان است (پس از بچ اول D4 ربات — BP-019)', () => {
   const v = validateCartridge(published);
   assert.deepEqual(v.stats, {
-    lessons: 16, lessonsConfirmed: 10,
+    // ۱۶ درس میراثی + ۴ درس بچ ربات (L-RB-D4-01..04 — نیاز به تأیید)
+    lessons: 20, lessonsConfirmed: 10,
     // atlasProposed: 8 = ۶ پیشنهاد AUD-01 + ۲ کد پیشنهادی خانوادهٔ ۲/۳ موج الف v0.7 (E_BORROW_MISS، E_ZERO_PLACE_MISS)
     atlasReal: 12, atlasProposed: 8,
-    questions: 20, questionsConfirmed: 13, questionsProposed: 7
+    // واقعیت پس از بچ اول: ۱۲۰ سؤال — ۱۳ میراثی تأییدشده + ۱۰۷ پیشنهادی (۷ میراثی + ۱۰۰ بچ D4)
+    questions: 120, questionsConfirmed: 13, questionsProposed: 107
   });
   assert.equal(v.gate.yellow, 7);
   assert.equal(v.warnings.length, 7);

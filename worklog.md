@@ -590,3 +590,22 @@ Work Log:
 Stage Summary:
 - Z01=已交付（有测试证人）；Z02–Z14=已登记计划（BP-021）+ 诚实状态表；Z15=承诺式答复已发（含端到端小型演示方案）
 - 下一步优先级：T3(投票安全) → T9(CI 四结果) → T2(页见证契约测试) → T6+T7(转换器 SHA 绑定+能力清单) → T4(foreman v3 持久队列) → T13(E2E 演示)
+---
+Task ID: 30
+Agent: Z.ai Code (main)
+Task: 业主六项指令 (trace 1a1681e84a8d3cad) → BP-022：PR#2 冲突报告、M09 契约、M10 接入 runtime、per-book 限界、可重复转换器报告、可审计答复
+
+Work Log:
+- 环境重置后重建：重新 clone 仓库 + vault 重建（同 SHA a93934b6…，gate PASS）
+- PR#2：本地真实 merge probe（临时分支 + --no-commit + abort）= 15 个真实冲突文件；产出 reports/pr2-conflict-resolution-v1.fa.md（单侧官方方案：全部取 main + 逐文件移植 Arena 特性）；未做任何 merge/push
+- M09：OPERATION-CONTRACT.json（khshab.operation-contract/v1，29 操作注册表：响应类型/引擎/per-book 限界/反馈策略）
+- M10：errors-router.js（attempt→v103→w8 单一路由）+ app.js 活动路径接线（遗留乘法路径零改动）；attempt 记录新增 engine/routerReason/atlasCode/codeStatus（只追加）
+- per-book 限界：G2 mulcol=null、sum/sub 0..100；G3 0..9999；分数 denMax/numMax/opAllow；BP-012 锁：W8 新码进官方图鉴 ⇒ 测试红
+- 测试：引擎 183/183（11 新测试）、pytest 21/21、registry v55 validate 绿
+- 转换器：官方头实测 G2 0红/2黄、G3 0红/7黄；发现并记录「xlsx 重建 JSON 会删除 D4 批次」→ 已 git 恢复官方 cartridge + 提请人工决策（Excel↔JSON 双向绑定）
+- 浏览器 E2E：KH-G3 练习错答→诚实反馈；36 对、20÷5=4 对→下一题；控制台零错误
+- 提交 4f48947 推送 main；远端 CI completed success
+
+Stage Summary:
+- M09/M10 全链交付且有测试证人；PR#2 状态从含糊变文件级明确（仍 OPEN，等业主裁决）
+- 人工决策项：PR#2 合并裁决、per-book 限界教师确认、W8 码盖章、转换器双向绑定方案
