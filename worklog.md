@@ -574,3 +574,19 @@ Stage Summary:
 - 六题型引擎全量可用（BP-017 verified）；项目史上首批域编码题 100 题进正式卡匣（全待教师盖章）
 - 自动生产环（BP-020 verified）就位：后续每域=一条命令；D3/D8 等生成器下轮补
 - BP-018（G3:8/G2:6 领域站点+教师瓶颈过滤）在队列；教师动作：矩阵第零步盖章 + D4 批次巡查盖章
+---
+Task ID: 29
+Agent: Z.ai Code (main)
+Task: 业主 Z01–Z15 精确请求 → 波斯语承诺式答复 + BP-021「信任轨道」注册 + Z01(P0) 实交付
+
+Work Log:
+- 逐项实证核查 Z01–Z15：C205.pdf 位于沙盒 upload/ — SHA-256=a93934b6…46de、11838641 字节、152 页（三项与业主口径一致）；C305 为另一文件（15919740B/152页）；/tmp/c205_secure_vault 不存在（旧会话易失）；foreman(3030) 当前未运行；/api/teacher-review/stamp 无鉴权、by 自由输入（=Z03 风险实锤）；engine 能力清单（SUPPORTED/…）不存在；仓库 CI=khshab-gate 17 步；arena 两分支为旧全树快照（merge 会回退 main 297/298 文件）→ 安全路径=仅择优移植 authoring/+download/
+- Z01 交付：/home/z/vault/c205/（Git 外）真实 vault + vault-manifest.json（出处/访问策略/保留策略/聊天分发禁令）+ scripts/accept-source-gate.py（fail-closed：存在/SHA/字节/页数/不在Git内 → PASS|BLOCKED|FAIL 带责任人与原因）
+- 门结果：PASS（source_key=C205:print-14:1404:a93934b6c418）→ reports/source-acceptance-c205.md（仅哈希与统计，零书籍字节）；两次废止测试：C305→exit1/FAIL；文件缺失→exit1/BLOCKED/SOURCE_ABSENT（责任人=业主+Z.ai）
+- BP-021（信任轨道 Z01–Z15，T1..T13 各带验收/证人/负责人）注册 → registry v54，status=executing（引用 trace 1a167fa5c4a957cd）；validate 绿
+- 提交 1de0635 推送 main；远端 CI 运行中
+- 遵守 ماده ۳：对业主消息全波斯语；绝不向聊天发送 PDF/token
+
+Stage Summary:
+- Z01=已交付（有测试证人）；Z02–Z14=已登记计划（BP-021）+ 诚实状态表；Z15=承诺式答复已发（含端到端小型演示方案）
+- 下一步优先级：T3(投票安全) → T9(CI 四结果) → T2(页见证契约测试) → T6+T7(转换器 SHA 绑定+能力清单) → T4(foreman v3 持久队列) → T13(E2E 演示)
