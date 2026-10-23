@@ -1,0 +1,2442 @@
+{
+  "schema": "G2_Q_DIVERSITY_PROXY_v1",
+  "input_sha256": {
+    "candidate": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+    "priority_queue": "f949a58ba7e2852e948170e7bee0a46312b762a7a318e0089fc10053928d3148",
+    "pagemap": "3bfd31b6f3ebfb4f6d8391c7dedd6c25b164b64140c32977fb2f3b2731db70b2",
+    "official": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+  },
+  "status": "PROVISIONAL_METADATA_ONLY_NOT_BOOK_DEPTH",
+  "source_visual_verified": false,
+  "engine_interaction_tested": false,
+  "teacher_approvals": 0,
+  "note": "Template hashing masks numbers only; different text can encode identical mechanics and identical text may need separate visual interpretation.",
+  "questions_counted": 104,
+  "chapter_summary": [
+    {
+      "chapter": 1,
+      "q_count": 40,
+      "pages_with_q": 9,
+      "pages_without_q": 9,
+      "observed_cpa": [
+        "تصویری",
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "observed_difficulty": [
+        "آسان",
+        "سخت",
+        "متوسط"
+      ],
+      "observed_domains": [
+        "CORE",
+        "DEPTH",
+        "SIDE"
+      ],
+      "distinct_literal_templates": 37,
+      "repeat_excess_after_number_mask": 3,
+      "top_page_q_count": 8,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 2,
+      "q_count": 28,
+      "pages_with_q": 7,
+      "pages_without_q": 11,
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "observed_difficulty": [
+        "آسان",
+        "متوسط"
+      ],
+      "observed_domains": [
+        "CORE",
+        "DEPTH",
+        "SIDE"
+      ],
+      "distinct_literal_templates": 21,
+      "repeat_excess_after_number_mask": 7,
+      "top_page_q_count": 4,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 3,
+      "q_count": 8,
+      "pages_with_q": 2,
+      "pages_without_q": 16,
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "observed_difficulty": [
+        "آسان",
+        "متوسط"
+      ],
+      "observed_domains": [
+        "CORE",
+        "DEPTH",
+        "SIDE"
+      ],
+      "distinct_literal_templates": 7,
+      "repeat_excess_after_number_mask": 1,
+      "top_page_q_count": 4,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 4,
+      "q_count": 24,
+      "pages_with_q": 6,
+      "pages_without_q": 12,
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "observed_difficulty": [
+        "آسان",
+        "متوسط"
+      ],
+      "observed_domains": [
+        "CORE",
+        "DEPTH",
+        "SIDE"
+      ],
+      "distinct_literal_templates": 24,
+      "repeat_excess_after_number_mask": 0,
+      "top_page_q_count": 4,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 5,
+      "q_count": 4,
+      "pages_with_q": 1,
+      "pages_without_q": 17,
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "observed_difficulty": [
+        "متوسط"
+      ],
+      "observed_domains": [
+        "CORE",
+        "DEPTH",
+        "SIDE"
+      ],
+      "distinct_literal_templates": 3,
+      "repeat_excess_after_number_mask": 1,
+      "top_page_q_count": 4,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 6,
+      "q_count": 0,
+      "pages_with_q": 0,
+      "pages_without_q": 18,
+      "observed_cpa": [],
+      "observed_structure": [],
+      "observed_difficulty": [],
+      "observed_domains": [],
+      "distinct_literal_templates": 0,
+      "repeat_excess_after_number_mask": 0,
+      "top_page_q_count": 0,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 7,
+      "q_count": 0,
+      "pages_with_q": 0,
+      "pages_without_q": 18,
+      "observed_cpa": [],
+      "observed_structure": [],
+      "observed_difficulty": [],
+      "observed_domains": [],
+      "distinct_literal_templates": 0,
+      "repeat_excess_after_number_mask": 0,
+      "top_page_q_count": 0,
+      "book_depth_verdict": "NOT_PROVEN"
+    },
+    {
+      "chapter": 8,
+      "q_count": 0,
+      "pages_with_q": 0,
+      "pages_without_q": 18,
+      "observed_cpa": [],
+      "observed_structure": [],
+      "observed_difficulty": [],
+      "observed_domains": [],
+      "distinct_literal_templates": 0,
+      "repeat_excess_after_number_mask": 0,
+      "top_page_q_count": 0,
+      "book_depth_verdict": "NOT_PROVEN"
+    }
+  ],
+  "pages": [
+    {
+      "chapter": 1,
+      "book_page": 1,
+      "s1_id": "L-101",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 2,
+      "s1_id": "L-102",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 3,
+      "s1_id": "L-103",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 4,
+      "s1_id": "L-104",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 5,
+      "s1_id": "L-105",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1001",
+        "Q-1002",
+        "Q-1003",
+        "Q-1004"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "1b02f0f5816835cf",
+        "5cfdbcac6e0f6c47",
+        "67b900432797c86c",
+        "9aa42944563d1a1f"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 6,
+      "s1_id": "L-106",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1005",
+        "Q-1006",
+        "Q-1007",
+        "Q-1008"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "0e173507431c80e3",
+        "2c455663bbbd7fb3",
+        "8366e7328f82e32d",
+        "d34389aa9e3c52b2"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 7,
+      "s1_id": "L-107",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 8,
+      "s1_id": "L-108",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1009",
+        "Q-1010",
+        "Q-1011",
+        "Q-1012"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "60619ec91158237c",
+        "89d8e04577101c0d",
+        "ae5ada6307829456",
+        "cd1d88f6eab4ffe0"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 9,
+      "s1_id": "L-109",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1013",
+        "Q-1014",
+        "Q-1015",
+        "Q-1016"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "3b0e49ac046d8888",
+        "46e211eebde7b6e0",
+        "88e902fd78a50d77",
+        "f889fc500aa4f877"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 10,
+      "s1_id": "L-110",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 3,
+      "q_ids": [
+        "Q-1017",
+        "Q-1018",
+        "Q-1019"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "cead14da759019a8"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 11,
+      "s1_id": "L-111",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1021",
+        "Q-1022",
+        "Q-1023",
+        "Q-1024"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "9637448c5962b984",
+        "a08e8782db630446",
+        "b4b88fce53b66f89",
+        "c68c6242ee272207"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 12,
+      "s1_id": "L-112",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 1,
+      "q_ids": [
+        "Q-1020"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "fc02906b9117c337"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 13,
+      "s1_id": "L-113",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 8,
+      "q_ids": [
+        "Q-1025",
+        "Q-1026",
+        "Q-1027",
+        "Q-1028",
+        "Q-1029",
+        "Q-1030",
+        "Q-1031",
+        "Q-1032"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "1eb33c31e370f804",
+        "2ca9ad1b095344fe",
+        "369d441c176a9867",
+        "5ceb2a59ebcd26db",
+        "9846cb2f0391f81d",
+        "9d8f56308b7877c3",
+        "a6ac336949eea979",
+        "af3e3394f38ef9cf"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 14,
+      "s1_id": "L-114",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 15,
+      "s1_id": "L-115",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 16,
+      "s1_id": "L-116",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 17,
+      "s1_id": "L-117",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 8,
+      "q_ids": [
+        "Q-1033",
+        "Q-1034",
+        "Q-1035",
+        "Q-1036",
+        "Q-1037",
+        "Q-1038",
+        "Q-1039",
+        "Q-1040"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "42e25f1971d51be7",
+        "8ef034ba5ba458d8",
+        "b4bcfb4ed8394c1d",
+        "d625a60d6ccc5766",
+        "e21d476c12ce6b12",
+        "e48318b8673f2307",
+        "e58a02e0124cc51c"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 1,
+      "book_page": 18,
+      "s1_id": "L-118",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 19,
+      "s1_id": "L-201",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 20,
+      "s1_id": "L-202",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1041",
+        "Q-1042",
+        "Q-1043",
+        "Q-1044"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "0e04606ca84f5d9a",
+        "7b3475dd073b93b2",
+        "dec3a7bff9348328",
+        "e6b3e43ee92e7588"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 21,
+      "s1_id": "L-203",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 22,
+      "s1_id": "L-204",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 23,
+      "s1_id": "L-205",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1045",
+        "Q-1046",
+        "Q-1047",
+        "Q-1048"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "09deb41c2ab058c2",
+        "26f73af05b3ac2f7",
+        "87b9802b157e3693",
+        "c4d74b4449a66efd"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 24,
+      "s1_id": "L-206",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 25,
+      "s1_id": "L-207",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 26,
+      "s1_id": "L-208",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 27,
+      "s1_id": "L-209",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 28,
+      "s1_id": "L-210",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1049",
+        "Q-1050",
+        "Q-1051",
+        "Q-1052"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "09deb41c2ab058c2",
+        "163d56c5570f766a",
+        "a10245d33dcb5e88",
+        "c4d74b4449a66efd"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 29,
+      "s1_id": "L-211",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 30,
+      "s1_id": "L-212",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 31,
+      "s1_id": "L-213",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1053",
+        "Q-1054",
+        "Q-1055",
+        "Q-1056"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "2cbc3218783d8f3d",
+        "89f62c92cceb1400",
+        "c4d74b4449a66efd"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 32,
+      "s1_id": "L-214",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1057",
+        "Q-1058",
+        "Q-1059",
+        "Q-1060"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "09deb41c2ab058c2",
+        "27419956d633403b",
+        "521fd9bca346f464",
+        "5b5baabe3b35ec8f"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 33,
+      "s1_id": "L-215",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1061",
+        "Q-1062",
+        "Q-1063",
+        "Q-1064"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "9b8a9624b7daaa32",
+        "c6041dd93e5f2164",
+        "c8321e99ed0228bd",
+        "ca3c096008a54c02"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 34,
+      "s1_id": "L-216",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1065",
+        "Q-1066",
+        "Q-1067",
+        "Q-1068"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "9502a9f11276a715",
+        "bb9b9529482b3313"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 35,
+      "s1_id": "L-217",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 2,
+      "book_page": 36,
+      "s1_id": "L-218",
+      "queue_priority": "NOT_QUEUED_EXISTING",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 37,
+      "s1_id": "L-301",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 38,
+      "s1_id": "L-302",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 39,
+      "s1_id": "L-303",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 40,
+      "s1_id": "L-304",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 41,
+      "s1_id": "L-305",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 42,
+      "s1_id": "L-306",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 43,
+      "s1_id": "L-307",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 44,
+      "s1_id": "L-308",
+      "queue_priority": "P1",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1093",
+        "Q-1094",
+        "Q-1095",
+        "Q-1096"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "32074466f7ce2ec9",
+        "36b8b4503003e9bb",
+        "789ddbcd6ba68103",
+        "8c9656ccf06efb1a"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 45,
+      "s1_id": "L-309",
+      "queue_priority": "P1",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1097",
+        "Q-1098",
+        "Q-1099",
+        "Q-1100"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "0d5e2a9a0e24c261",
+        "217a5e0bf8866336",
+        "4e4402f8abb9e642",
+        "789ddbcd6ba68103"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 46,
+      "s1_id": "L-310",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 47,
+      "s1_id": "L-311",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 48,
+      "s1_id": "L-312",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 49,
+      "s1_id": "L-313",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 50,
+      "s1_id": "L-314",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 51,
+      "s1_id": "L-315",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 52,
+      "s1_id": "L-316",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 53,
+      "s1_id": "L-10053",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 3,
+      "book_page": 54,
+      "s1_id": "L-10054",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 55,
+      "s1_id": "L-401",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 56,
+      "s1_id": "L-402",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 57,
+      "s1_id": "L-403",
+      "queue_priority": "P0",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1069",
+        "Q-1070",
+        "Q-1071",
+        "Q-1072"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "22a90bfe9427cdbe",
+        "289498e32f6c398d",
+        "734290acf9c98f2e",
+        "cc309e5ab0f5ec69"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 58,
+      "s1_id": "L-404",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 59,
+      "s1_id": "L-405",
+      "queue_priority": "P3",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1073",
+        "Q-1074",
+        "Q-1075",
+        "Q-1076"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "0f0dff457cd4bcd9",
+        "274053b03e9fe429",
+        "30932aa68b59e36a",
+        "508b3a2aec132c22"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 60,
+      "s1_id": "L-406",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 61,
+      "s1_id": "L-407",
+      "queue_priority": "P3",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1077",
+        "Q-1078",
+        "Q-1079",
+        "Q-1080"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "17bad3a643a42c23",
+        "854b70a1d60a5e69",
+        "a8ef0b1b0bf5565d",
+        "c4027baa2e80a64e"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 62,
+      "s1_id": "L-408",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 63,
+      "s1_id": "L-409",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 64,
+      "s1_id": "L-410",
+      "queue_priority": "P3",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1081",
+        "Q-1082",
+        "Q-1083",
+        "Q-1084"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "15a2ed79c6bb47c2",
+        "3f6b97637b556e5f",
+        "638506d708300f11",
+        "77ec66de64b27ad1"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 65,
+      "s1_id": "L-411",
+      "queue_priority": "P3",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1085",
+        "Q-1086",
+        "Q-1087",
+        "Q-1088"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "19cc9c283b31a9c0",
+        "6abda148daf17118",
+        "abac1e3b11fac2d9",
+        "da62ee1dcac23aad"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 66,
+      "s1_id": "L-412",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 67,
+      "s1_id": "L-413",
+      "queue_priority": "P3",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1089",
+        "Q-1090",
+        "Q-1091",
+        "Q-1092"
+      ],
+      "observed_cpa": [
+        "تصویری",
+        "علامتی",
+        "مجسم"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "0b9d1a70e9e8d492",
+        "3730f9b46bc41312",
+        "71c4d5b055568d1a",
+        "dea108c038410fcd"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 68,
+      "s1_id": "L-414",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 69,
+      "s1_id": "L-415",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 70,
+      "s1_id": "L-416",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 71,
+      "s1_id": "L-417",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 4,
+      "book_page": 72,
+      "s1_id": "L-418",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 73,
+      "s1_id": "L-10073",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 74,
+      "s1_id": "L-10074",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 75,
+      "s1_id": "L-10075",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 76,
+      "s1_id": "L-10076",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 77,
+      "s1_id": "L-10077",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 78,
+      "s1_id": "L-10078",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 79,
+      "s1_id": "L-10079",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 80,
+      "s1_id": "L-10080",
+      "queue_priority": "P0",
+      "q_count": 4,
+      "q_ids": [
+        "Q-1101",
+        "Q-1102",
+        "Q-1103",
+        "Q-1104"
+      ],
+      "observed_cpa": [
+        "علامتی"
+      ],
+      "observed_structure": [
+        "چهارگزینه‌ای"
+      ],
+      "template_fingerprints": [
+        "6ba28a76aa253a20",
+        "81b99859545f7fe5",
+        "fb8976e532227c86"
+      ],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 81,
+      "s1_id": "L-10081",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 82,
+      "s1_id": "L-10082",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 83,
+      "s1_id": "L-10083",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 84,
+      "s1_id": "L-10084",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 85,
+      "s1_id": "L-10085",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 86,
+      "s1_id": "L-10086",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 87,
+      "s1_id": "L-10087",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 88,
+      "s1_id": "L-10088",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 89,
+      "s1_id": "L-10089",
+      "queue_priority": "P0",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 5,
+      "book_page": 90,
+      "s1_id": "L-10090",
+      "queue_priority": "P3",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 91,
+      "s1_id": "L-10091",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 92,
+      "s1_id": "L-10092",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 93,
+      "s1_id": "L-10093",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 94,
+      "s1_id": "L-10094",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 95,
+      "s1_id": "L-10095",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 96,
+      "s1_id": "L-10096",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 97,
+      "s1_id": "L-10097",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 98,
+      "s1_id": "L-10098",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 99,
+      "s1_id": "L-10099",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 100,
+      "s1_id": "L-10100",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 101,
+      "s1_id": "L-10101",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 102,
+      "s1_id": "L-10102",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 103,
+      "s1_id": "L-10103",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 104,
+      "s1_id": "L-10104",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 105,
+      "s1_id": "L-10105",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 106,
+      "s1_id": "L-10106",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 107,
+      "s1_id": "L-10107",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 6,
+      "book_page": 108,
+      "s1_id": "L-10108",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 109,
+      "s1_id": "L-10109",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 110,
+      "s1_id": "L-10110",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 111,
+      "s1_id": "L-10111",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 112,
+      "s1_id": "L-10112",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 113,
+      "s1_id": "L-10113",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 114,
+      "s1_id": "L-10114",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 115,
+      "s1_id": "L-10115",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 116,
+      "s1_id": "L-10116",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 117,
+      "s1_id": "L-10117",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 118,
+      "s1_id": "L-10118",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 119,
+      "s1_id": "L-10119",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 120,
+      "s1_id": "L-10120",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 121,
+      "s1_id": "L-10121",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 122,
+      "s1_id": "L-10122",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 123,
+      "s1_id": "L-10123",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 124,
+      "s1_id": "L-10124",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 125,
+      "s1_id": "L-10125",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 7,
+      "book_page": 126,
+      "s1_id": "L-10126",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 127,
+      "s1_id": "L-10127",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 128,
+      "s1_id": "L-10128",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 129,
+      "s1_id": "L-10129",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 130,
+      "s1_id": "L-10130",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 131,
+      "s1_id": "L-10131",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 132,
+      "s1_id": "L-10132",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 133,
+      "s1_id": "L-10133",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 134,
+      "s1_id": "L-10134",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 135,
+      "s1_id": "L-10135",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 136,
+      "s1_id": "L-10136",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 137,
+      "s1_id": "L-10137",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 138,
+      "s1_id": "L-10138",
+      "queue_priority": "P0",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 139,
+      "s1_id": "L-10139",
+      "queue_priority": "P0",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 140,
+      "s1_id": "L-10140",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 141,
+      "s1_id": "L-10141",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 142,
+      "s1_id": "L-10142",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 143,
+      "s1_id": "L-10143",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    },
+    {
+      "chapter": 8,
+      "book_page": 144,
+      "s1_id": "L-10144",
+      "queue_priority": "P2",
+      "q_count": 0,
+      "q_ids": [],
+      "observed_cpa": [],
+      "observed_structure": [],
+      "template_fingerprints": [],
+      "book_variant_status": "UNVERIFIED_NO_PDF",
+      "runtime_status": "NOT_TESTED"
+    }
+  ]
+}
