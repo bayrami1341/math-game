@@ -1,0 +1,27 @@
+{
+  "schema": "g2-night-preflight-v1",
+  "generated_utc": "2026-10-23T02:23:35.202203+00:00",
+  "approval_scope": "user-approved-technical-work-only; not a teacher verdict or release",
+  "status": "PASS_INPUTS_ONLY",
+  "failures": [],
+  "branch": "arena/6b8310f7-math-game",
+  "head": "52387ba33c7e0ac5a4599b5472f2a8589407850f",
+  "official_ref": "origin/v10.3-beta",
+  "official_ref_commit": "24e61dd3cd2a0e3d74b3646a665b6ea3de077793",
+  "sha256": {
+    "candidate": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+    "priority_queue": "f949a58ba7e2852e948170e7bee0a46312b762a7a318e0089fc10053928d3148",
+    "pagemap": "3bfd31b6f3ebfb4f6d8391c7dedd6c25b164b64140c32977fb2f3b2731db70b2",
+    "official": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+  },
+  "queue_rows": 108,
+  "queue_priorities": {
+    "P0": 5,
+    "P1": 2,
+    "P2": 56,
+    "P3": 45
+  },
+  "source_status": "BLOCKED_SOURCE_UNAVAILABLE",
+  "source_sha256_expected": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "note": "Input consistency only; does not establish evidence coverage or permit promotion."
+}

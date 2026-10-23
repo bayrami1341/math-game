@@ -1,0 +1,177 @@
+{
+  "schema": "G2_CH6_8_PROVISIONAL_VARIANTS_v1",
+  "input_sha256": {
+    "candidate": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+    "priority_queue": "f949a58ba7e2852e948170e7bee0a46312b762a7a318e0089fc10053928d3148",
+    "pagemap": "3bfd31b6f3ebfb4f6d8391c7dedd6c25b164b64140c32977fb2f3b2731db70b2",
+    "official": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+  },
+  "pages_provisionally_classified": 54,
+  "question_rows_authored": 0,
+  "new_approvals": 0,
+  "source_status": "BLOCKED_PDF_NOT_VERIFIED",
+  "claim": "Planning from existing yellow S1 only. No page image or curriculum variant is independently confirmed.",
+  "families": [
+    {
+      "pages": "91",
+      "family": "CH6_INTRO_THREE_DIGITS",
+      "proposed_mechanic": "context_to_place_value",
+      "variant_axes_to_verify": "context;place-value",
+      "book_region_to_verify": "book_image"
+    },
+    {
+      "pages": "92-94",
+      "family": "CH6_COMPARE_PLACE_VALUES",
+      "proposed_mechanic": "compare_and_explain",
+      "variant_axes_to_verify": "2_or_3_digits;hundreds_tens_ones;comparison_sign;expression_comparison",
+      "book_region_to_verify": "base_ten_diagram"
+    },
+    {
+      "pages": "95-99",
+      "family": "CH6_DECOMPOSE_ADD_SUB",
+      "proposed_mechanic": "decompose_and_word_problem",
+      "variant_axes_to_verify": "hundreds_tens_ones;add_vs_sub;one_vs_two_steps;unit_in_context",
+      "book_region_to_verify": "wording_and_numbers"
+    },
+    {
+      "pages": "100-102",
+      "family": "CH6_ADD_REGROUP",
+      "proposed_mechanic": "build_and_regroup",
+      "variant_axes_to_verify": "ones_to_tens;tens_to_hundreds;expanded_vs_column;word_problem",
+      "book_region_to_verify": "place_value_blocks"
+    },
+    {
+      "pages": "103-105",
+      "family": "CH6_SUB_REGROUP",
+      "proposed_mechanic": "unbundle_and_subtract",
+      "variant_axes_to_verify": "no_borrow;ten_to_ones;hundred_to_tens;remaining_in_context",
+      "book_region_to_verify": "place_value_blocks"
+    },
+    {
+      "pages": "106-107",
+      "family": "CH6_MIXED_REVIEW",
+      "proposed_mechanic": "choose_strategy_and_check",
+      "variant_axes_to_verify": "compare;add;subtract;place_value_expansion;boundary_cases",
+      "book_region_to_verify": "book_exercises"
+    },
+    {
+      "pages": "108",
+      "family": "CH6_PIECE_PUZZLE",
+      "proposed_mechanic": "manipulative_puzzle",
+      "variant_axes_to_verify": "piece_placement;area_coverage",
+      "book_region_to_verify": "physical_pieces"
+    },
+    {
+      "pages": "109",
+      "family": "CH7_PART_WHOLE_INTRO",
+      "proposed_mechanic": "part_of_whole",
+      "variant_axes_to_verify": "equal_parts;spoken_fraction",
+      "book_region_to_verify": "book_image"
+    },
+    {
+      "pages": "110-112",
+      "family": "CH7_TENTHS_EQUAL_PARTS",
+      "proposed_mechanic": "measure_partition",
+      "variant_axes_to_verify": "equal_vs_unequal_parts;tenths;measurement;place_value",
+      "book_region_to_verify": "ruler_and_shapes"
+    },
+    {
+      "pages": "113-115",
+      "family": "CH7_FRACTION_REPRESENTATIONS",
+      "proposed_mechanic": "fold_color_locate",
+      "variant_axes_to_verify": "paper_folding;colored_parts;whole_unit;line_segment",
+      "book_region_to_verify": "partitioned_figures"
+    },
+    {
+      "pages": "116-117",
+      "family": "CH7_SIMPLER_PROBLEM",
+      "proposed_mechanic": "plan_then_solve",
+      "variant_axes_to_verify": "estimate_then_exact;small_to_large_case;nonvisual_reasoning",
+      "book_region_to_verify": "problem_text_and_figures"
+    },
+    {
+      "pages": "118-120",
+      "family": "CH7_BAG_CHANCE",
+      "proposed_mechanic": "predict_draw_record",
+      "variant_axes_to_verify": "possible_outcomes;relative_likelihood;draw_with_replacement;sample_variance",
+      "book_region_to_verify": "bag_and_tokens"
+    },
+    {
+      "pages": "121-123",
+      "family": "CH7_SPINNER_CHANCE",
+      "proposed_mechanic": "compare_spin_record",
+      "variant_axes_to_verify": "equal_regions;relative_likelihood;record_trails;sample_variance",
+      "book_region_to_verify": "spinner_regions"
+    },
+    {
+      "pages": "124-125",
+      "family": "CH7_FRACTION_CHANCE_REVIEW",
+      "proposed_mechanic": "represent_and_justify",
+      "variant_axes_to_verify": "fraction_of_parts;fraction_of_set;probability_comparison",
+      "book_region_to_verify": "book_figures"
+    },
+    {
+      "pages": "126",
+      "family": "CH7_SPATIAL_TRANSLATION",
+      "proposed_mechanic": "translate_without_rotation",
+      "variant_axes_to_verify": "position_only;rotation_as_negative_example",
+      "book_region_to_verify": "puzzle_shapes"
+    },
+    {
+      "pages": "127",
+      "family": "CH8_INTRO_DATA",
+      "proposed_mechanic": "notice_data_question",
+      "variant_axes_to_verify": "collect_data;interpret_purpose",
+      "book_region_to_verify": "book_image"
+    },
+    {
+      "pages": "128-130",
+      "family": "CH8_TALLY_AND_COUNT",
+      "proposed_mechanic": "collect_tally_summarize",
+      "variant_axes_to_verify": "data_collection;tally_groups;total;most_vs_least",
+      "book_region_to_verify": "tables_and_classroom_data"
+    },
+    {
+      "pages": "131-133",
+      "family": "CH8_BAR_CHART",
+      "proposed_mechanic": "plot_read_compare",
+      "variant_axes_to_verify": "axis_scale;one_unit_per_box;interval;missing_entry;compare",
+      "book_region_to_verify": "charts_and_tables"
+    },
+    {
+      "pages": "134-135",
+      "family": "CH8_UNKNOWN_AND_ROUTE",
+      "proposed_mechanic": "solve_unknown_or_route",
+      "variant_axes_to_verify": "missing_addend;reasoned_trial;graph_paths",
+      "book_region_to_verify": "diagram_and_values"
+    },
+    {
+      "pages": "136-138",
+      "family": "CH8_PICTOGRAPH",
+      "proposed_mechanic": "round_symbolize_read",
+      "variant_axes_to_verify": "round_to_tens;symbol_key;bar_vs_picture;remainder_representation",
+      "book_region_to_verify": "pictographs"
+    },
+    {
+      "pages": "139-141",
+      "family": "CH8_SELECT_REPRESENTATION",
+      "proposed_mechanic": "compare_chart_purpose",
+      "variant_axes_to_verify": "time_table;bar_chart;spinner_result;representation_choice",
+      "book_region_to_verify": "printed_charts"
+    },
+    {
+      "pages": "142-143",
+      "family": "CH8_SUMMARY_REPRESENT",
+      "proposed_mechanic": "collect_and_convert",
+      "variant_axes_to_verify": "tally_to_chart;round_then_symbolize;explain_choice",
+      "book_region_to_verify": "classroom_data"
+    },
+    {
+      "pages": "144",
+      "family": "CH8_SYMMETRY_TILING",
+      "proposed_mechanic": "tessellate_reflect",
+      "variant_axes_to_verify": "piece_fit;line_of_symmetry",
+      "book_region_to_verify": "physical_pieces"
+    }
+  ]
+}

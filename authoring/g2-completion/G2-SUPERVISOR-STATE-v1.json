@@ -1,0 +1,69 @@
+{
+  "status": "NOT_READY",
+  "tasks": [
+    {
+      "id": "G0_INPUTS",
+      "status": "PASS_INPUTS_ONLY",
+      "next": "Watch official/candidate SHA drift"
+    },
+    {
+      "id": "G1_C205_SOURCE",
+      "status": "BLOCKED_SOURCE_UNAVAILABLE",
+      "next": "Securely mount C205 outside Git; verify SHA, print, pagination and image regions"
+    },
+    {
+      "id": "G2_PAGE_EVIDENCE",
+      "status": "BLOCKED_SOURCE_DEPENDENCY",
+      "next": "Independently verify 108 queued pages and page-level image/numeric claims"
+    },
+    {
+      "id": "G3_BREADTH",
+      "status": "INVENTORY_ONLY_NOT_PROVEN",
+      "next": "Map all book objectives to executable experiences"
+    },
+    {
+      "id": "G4_DEPTH",
+      "status": "PROVISIONAL_ONLY",
+      "next": "Check every proposed variant against book and runtime"
+    },
+    {
+      "id": "G5_YELLOW_CONTENT",
+      "status": "PROVISIONAL_ONLY",
+      "next": "Evidence-bind, independently audit, engine-test, then assign IDs to approved-scope yellow candidates"
+    },
+    {
+      "id": "G6_INDEPENDENT_AUDIT",
+      "status": "NOT_DONE",
+      "next": "Second audit on actual content and textbook figures"
+    },
+    {
+      "id": "G7_RUNTIME",
+      "status": "NOT_TESTED_ON_COMPLETED_CARTRIDGE",
+      "next": "Run converter, real game interaction and regression on one completed SHA"
+    },
+    {
+      "id": "G8_OWNER_PACKET",
+      "status": "NOT_READY",
+      "next": "Prepare bounded decisions only after evidence/coverage checks"
+    }
+  ],
+  "blockers": [
+    "G1_C205_SOURCE: BLOCKED_SOURCE_UNAVAILABLE",
+    "G2_PAGE_EVIDENCE: BLOCKED_SOURCE_DEPENDENCY"
+  ],
+  "chapter_existing_q": [
+    40,
+    28,
+    8,
+    24,
+    4,
+    0,
+    0,
+    0
+  ],
+  "source_status": "BLOCKED_SOURCE_UNAVAILABLE",
+  "runner_status": "NOT_DEPLOYED_THIS_IS_ONE_SHOT_ONLY",
+  "authorization": "TECHNICAL_WORK_ONLY_NO_TEACHER_OR_RELEASE",
+  "schema": "G2_SUPERVISOR_SNAPSHOT_v1",
+  "observed_utc": "2026-10-23T06:30:09.147274+00:00"
+}
