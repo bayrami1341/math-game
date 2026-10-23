@@ -1,0 +1,1093 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at_utc": "2026-10-23T02:32:00Z",
+  "generated_by": "khshab-agent v2.4 — authoring/agent/handoff.py: build_handoff_index",
+  "purpose": "دسترسیِ مستقیمِ مدلِ مادر به موتورِ آشیل بدون واسطه‌گریِ پیام: فهرستِ ماژول‌ها، APIها، گیت‌ها و مرزهای مجوز با SHA-256 برای راستی‌آزمایی.",
+  "repository": {
+    "remote": "https://github.com/bayrami1341/math-game.git",
+    "branch": "arena/0eb22280-math-game",
+    "head_sha_at_generation": "f2d7f2467d786d67ac85b22b1d9d0a529140ef1b",
+    "head_subject": "docs(handoff): به‌روزرسانی نهایی W7/W8 — تگ v2.4-final + PR#2 CONFLICTING یادداشت (unrelated histories §9)",
+    "head_sha_caveat": "این شماره در لحظهٔ تولیدِ بسته ثبت شده است؛ خودِ بسته در commitِ بعدی منتشر می‌شود، پس شمارهٔ شاخه یک شماره جلوتر خواهد بود. معیارِ راستی‌آزماییِ محتوا، SHA-256ِ ماژول‌هاست (engine.modules) نه شمارهٔ commit.",
+    "tags": [
+      "v2.4-final"
+    ],
+    "pull_request": {
+      "number": 2,
+      "head_branch": "arena/0eb22280-math-game",
+      "base_branch": "v10.3-beta",
+      "note": "PR از سوی Z.ai باید squash/rebase شود؛ ادغامِ v10.3-beta در arena/** ممنوع است (unrelated histories)."
+    },
+    "official_reference_hint": "origin/v10.3-beta (فقط‌خواندنی برای آرنا)"
+  },
+  "engine": {
+    "name": "khshab-agent (آشیل = حالتِ سخت‌گیرِ همین ایجنت، نه رباتِ جدا)",
+    "entry_points": [
+      "authoring/agent/cli.py:main()",
+      "pyproject.toml [project.scripts] khshab-agent"
+    ],
+    "modules": [
+      {
+        "path": "authoring/agent/models.py",
+        "sha256": "0565a067313d4e40644dc009b092592cd100b8443abd536e3301034371a4a42a",
+        "bytes": 11079,
+        "lines": 377,
+        "public_api": [
+          "AuthorizedCellPatch",
+          "Claim",
+          "DecisionRecord",
+          "DiscrepancyIssue",
+          "EvidenceRef",
+          "GateResult",
+          "PageQualityScore",
+          "PageRegion",
+          "TeacherVerdict",
+          "WaveAtlasRowSpec",
+          "WaveManifest",
+          "WaveQuestionSpec",
+          "WaveS1RowSpec",
+          "WaveSpecV2",
+          "canonical_sha256_obj",
+          "file_sha256",
+          "utc_now_iso"
+        ],
+        "fail_closed_reason_codes": [],
+        "docstring_first_line": "Canonical typed contracts and serialization schemas across stages P0–P6 and WaveSpec v2."
+      },
+      {
+        "path": "authoring/agent/paths.py",
+        "sha256": "aebbf5e5bfe1b034a172e96941e60cc73f23a94b0e53715535deb49a1306dfee",
+        "bytes": 2210,
+        "lines": 68,
+        "public_api": [
+          "resolve_confidential_pdf",
+          "resolve_fixture",
+          "resolve_official_cartridge"
+        ],
+        "fail_closed_reason_codes": [],
+        "docstring_first_line": "Canonical dual-layout path resolver (`v10.3-beta` primary SSOT + `authoring/agent/fixtures/`)."
+      },
+      {
+        "path": "authoring/agent/id_allocator.py",
+        "sha256": "4f18eb9a73291b32becc53df6c03525582f9c572e9621df79da5fb2c3494ae18",
+        "bytes": 7173,
+        "lines": 155,
+        "public_api": [
+          "IDAllocator",
+          "ImmutableIDViolationError",
+          "normalize_error_code"
+        ],
+        "fail_closed_reason_codes": [],
+        "docstring_first_line": "Immutable, non-recyclable ID Registry & Deterministic Allocator (`L-`, `Q-`, `E_`)."
+      },
+      {
+        "path": "authoring/agent/excel_exporter.py",
+        "sha256": "0cd3eeb6cef4e24f771d3b15c87bfd586c0bdaad24070c339886d4fb49e2e6e3",
+        "bytes": 19463,
+        "lines": 429,
+        "public_api": [
+          "export_non_destructive_pagemap",
+          "export_pilot_cartridge_v05",
+          "insert_rows_above_sentinel",
+          "insert_rows_at_position",
+          "save_workbook_deterministically"
+        ],
+        "fail_closed_reason_codes": [
+          "PAGEMAP_COLUMN_CONTRACT_VIOLATION",
+          "PAGEMAP_NON_DESTRUCTIVE_OK",
+          "PILOT_V05_EXPORT_CLEAN"
+        ],
+        "docstring_first_line": "Stage P3: Non-Destructive `PAGE-MAP` & Cartridge Workbook Exporter with Bit-Exact Idempotency."
+      },
+      {
+        "path": "authoring/agent/observation.py",
+        "sha256": "cc3f338e795841bca751371dd096bac260ce92c960165c2e1186946798249abc",
+        "bytes": 30629,
+        "lines": 711,
+        "public_api": [
+          "detect_vector_banner_regions",
+          "extract_footer_book_page_from_glyphs",
+          "load_curated_claims_json",
+          "normalize_digits_to_ascii",
+          "normalize_digits_to_persian",
+          "normalize_persian_label",
+          "observe_pdf",
+          "purge_quarantine_vault",
+          "render_counting_crop_nearest",
+          "render_region_crop_to_vault"
+        ],
+        "fail_closed_reason_codes": [
+          "EDITION_SHA_MISMATCH",
+          "OBSERVATION_COMPLETE",
+          "PAGE_COUNT_MISMATCH",
+          "SOURCE_PDF_MISSING"
+        ],
+        "docstring_first_line": "Stage P1: Book-Agnostic PDF Observation Layer (`W4` — `C105..C605`)."
+      },
+      {
+        "path": "authoring/agent/reconcile.py",
+        "sha256": "e24f44d0710277e3dbdb4b0247aa1ba02f5c116219a270ee431e3fffd9ba3c2d",
+        "bytes": 31742,
+        "lines": 731,
+        "public_api": [
+          "GeminiVisionReaderAdapter",
+          "IsolationViolationError",
+          "JsonPassReaderAdapter",
+          "OpenAICompatibleReaderAdapter",
+          "ReaderAdapter",
+          "check_live_dual_model_availability",
+          "detect_overlapping_numeric_ranges",
+          "enforce_agreement_evidence_rule",
+          "extract_chunk_overlap_pairs",
+          "normalize_page_record",
+          "reconcile_chunk_directory",
+          "reconcile_field_claims",
+          "reconcile_pagemap_and_observations",
+          "run_isolated_reader_passes"
+        ],
+        "fail_closed_reason_codes": [
+          "EXTERNAL_DUAL_MODEL_API_UNCONFIGURED",
+          "LIVE_DUAL_MODEL_READY",
+          "SNAPSHOT_V2_BUILT_WITH_EVIDENCE_SEPARATION"
+        ],
+        "docstring_first_line": "Stage P2: Dual Independent Reader Adapters (`JsonPass`, `G.ai Gemini`, `Z.ai/OpenAI`)"
+      },
+      {
+        "path": "authoring/agent/wave_exporter.py",
+        "sha256": "4daa3958c1f2547fb26c092e0e4d2412f11192f399238cde9e19aff4f5f88e31",
+        "bytes": 16797,
+        "lines": 422,
+        "public_api": [
+          "export_wave_cartridge"
+        ],
+        "fail_closed_reason_codes": [
+          "MISSING_BASE_CARTRIDGE",
+          "PATCH_EXPECTED_OLD_VALUE_MISMATCH",
+          "PATCH_TARGET_KEY_NOT_FOUND",
+          "PATCH_TARGET_SHEET_NOT_FOUND",
+          "STALE_OFFICIAL_BASE_INCIDENT_07",
+          "UNAUTHORIZED_GREEN_STAMP",
+          "VERIFIED_PAGEMAP_SHA_MISMATCH",
+          "WAVE_EXPORT_CLEAN"
+        ],
+        "docstring_first_line": "Grade-Agnostic Data-Driven Wave Cartridge Exporter (`W1` — `WaveSpec v2`)."
+      },
+      {
+        "path": "authoring/agent/validators.py",
+        "sha256": "062d5610e8d2eb3874f7263930f79768dec40221cdc9cd7f89d40931d4e86af5",
+        "bytes": 45533,
+        "lines": 1015,
+        "public_api": [
+          "eval_safe_arith_ast",
+          "eval_trace_side_exact",
+          "extract_grounded_domain",
+          "half_up_round_ten",
+          "inspect_cartridge_workbook",
+          "load_chapter_bounds_from_pagemap",
+          "parse_option_error_map",
+          "parse_option_numeric_value",
+          "parse_trace_from_note",
+          "resolve_pagemap_for_workbook",
+          "simulate_plausible_mechanisms",
+          "solve_stem_independently",
+          "to_ascii_str"
+        ],
+        "fail_closed_reason_codes": [
+          "ANSWER_KEY_MISMATCH",
+          "ANTI_J12_CLEAN",
+          "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS",
+          "COLUMN_COUNT_MISMATCH",
+          "COMPETING_ERROR_AMBIGUITY",
+          "DUPLICATE_OR_EMPTY_OPTIONS",
+          "INDEPENDENT_SOLVER_VERIFIED",
+          "LATIN_DIGIT_IN_PERSIAN_FIELD",
+          "MECHANISM_MISMATCH",
+          "MISSING_LATIN_TRACE_IN_NOTE",
+          "MISSING_REQUIRED_SHEETS",
+          "MISSING_SENTINEL_ROW",
+          "MISSING_SHEET",
+          "PEDAGOGY_BLOCKED",
+          "ROW_PLACED_BELOW_SENTINEL_IGNORED_BY_CONVERTER",
+          "SENTINEL_MERGE_CORRUPTED",
+          "STEM_TRACE_MISMATCH",
+          "WORKBOOK_STRUCTURE_VALID",
+          "WRONG_LETTER_COVERAGE_MISMATCH"
+        ],
+        "docstring_first_line": "Stage P4: Multi-Grade Anti-J12 Solver, Causal Distractor Verifier & Dynamic Page-Map Inspector (`W2`)."
+      },
+      {
+        "path": "authoring/agent/achilles_gate.py",
+        "sha256": "fbb06f54e33cba3c444db06977af08ab9777868eba666975d5bbadceb5085520",
+        "bytes": 41984,
+        "lines": 869,
+        "public_api": [
+          "bind_evidence_to_source",
+          "verify_achilles_evidence_gate",
+          "verify_evidence_coverage_gate"
+        ],
+        "fail_closed_reason_codes": [
+          "ACHILLES_EVIDENCE_VERIFIED",
+          "ACHILLES_NO_LEDGER_BUT_NO_GREEN_RISK",
+          "BBOX_OUT_OF_NORMALIZED_RANGE",
+          "BBOX_ZERO_AREA",
+          "BOOK_CODE_MISMATCH",
+          "BOOK_MANIFEST_UNREADABLE",
+          "COVERAGE_COMPLETE",
+          "COVERAGE_INCOMPLETE_YELLOW_REMAINS",
+          "COVERAGE_UNKNOWN_NO_OBSERVATION",
+          "DANGLING_EVIDENCE_REF",
+          "EVIDENCE_LEDGER_UNREADABLE",
+          "EXPECTED_BOOK_CODE_MISMATCH",
+          "GREEN_Q_WITH_YELLOW_ANCHOR",
+          "GREEN_ROWS_WITHOUT_EVIDENCE",
+          "GREEN_WITHOUT_EVIDENCE_MENTION_IN_NOTE",
+          "INVALID_BBOX_SHAPE",
+          "INVALID_CROP_SHA256",
+          "INVALID_PDF_PAGE",
+          "INVALID_SOURCE_SHA256",
+          "LEDGER_SHA_NOT_MATCHING_REAL_PDF",
+          "LEDGER_SOURCE_BINDING_MISMATCH",
+          "MALFORMED_EVIDENCE_ID",
+          "MANIFEST_OFFSET_MISSING",
+          "MANIFEST_PRINT_SHA_MISMATCH",
+          "MISSING_EVIDENCE_LEDGER",
+          "MISSING_S1_SHEET",
+          "MISSING_STRONG_EVIDENCE_FOR_GREEN",
+          "OBSERVATION_BOOK_CODE_MISSING",
+          "OBSERVATION_PDF_SHA_INVALID",
+          "PAGE_OFFSET_MISMATCH_HALLUCINATION",
+          "PDF_SHA_MISMATCH",
+          "PRINT_EDITION_MISMATCH",
+          "PROVEN_OFFSET_CONFLICT",
+          "SOURCE_PDF_UNAVAILABLE",
+          "WORKBOOK_UNREADABLE"
+        ],
+        "docstring_first_line": "دروازه پاشنه آشیل — Achilles Heel Gate v2.2"
+      },
+      {
+        "path": "authoring/agent/automation_suite.py",
+        "sha256": "05fd9740320c47b31366272527ec4f0a8ecfc579d96baa0c63af5f62ef32f347",
+        "bytes": 76181,
+        "lines": 1631,
+        "public_api": [
+          "audit_historical_incidents_16",
+          "check_official_heads",
+          "count_visual_components",
+          "derive_wave_scope_from_diff",
+          "diff_workbooks_by_key",
+          "extract_q_refs_canonical",
+          "manage_version_and_sha",
+          "norm_key",
+          "parse_version_tuple",
+          "plan_and_verify_pdf_chunks",
+          "restore_official_stamps_overlay",
+          "run_converter_and_parse_report",
+          "sheet_header_row",
+          "verify_all_heads",
+          "verify_bidirectional_anchors",
+          "verify_c205_benchmark_incidents",
+          "verify_cpa_and_answer_balance",
+          "verify_official_stamps",
+          "verify_universal_wave_invariants",
+          "verify_wave_whitelist"
+        ],
+        "fail_closed_reason_codes": [
+          "ALL_16_HISTORICAL_INCIDENTS_CLEAN",
+          "ALL_OFFICIAL_STAMPS_INTACT",
+          "AUD_06_INVALID_CPA",
+          "BIDIRECTIONAL_ANCHORS_SYNCED",
+          "CPA_AND_ANSWER_BALANCE_CLEAN",
+          "CPA_OR_BALANCE_VIOLATION",
+          "FILE_MISSING",
+          "IMBALANCED_ANSWER_KEYS",
+          "INCOMPLETE_CPA_LADDER_FOR_CONCEPT",
+          "INSUFFICIENT_DEEP_LESSON_QUESTION_COVERAGE",
+          "INVALID_ANSWER_LETTER",
+          "OFFICIAL_STAMP_REGRESSION_OR_FORGERY",
+          "OUT_OF_WHITELIST_MUTATION",
+          "SHA_MISMATCH",
+          "T7_ANCHOR_MISMATCH",
+          "T7_ANCHOR_SYNC_FAILED",
+          "UNAUTHORIZED_GREEN_STAMP",
+          "UNKNOWN_L_ANCHOR",
+          "WHITELIST_STRICTLY_RESPECTED"
+        ],
+        "docstring_first_line": "Complete 10-Function Automation Suite (§8) + 16 Historical Incident Gates (§6) for Cartridge Production."
+      },
+      {
+        "path": "authoring/agent/governance.py",
+        "sha256": "d1246541556cae48058f09af48f6bfb0a00ea44c35fa2fe2537731fbbde42180",
+        "bytes": 15845,
+        "lines": 367,
+        "public_api": [
+          "GovernanceLedger",
+          "GovernanceViolationError",
+          "authenticate_teacher",
+          "build_and_save_wave_manifest",
+          "evaluate_release_readiness",
+          "expected_teacher_token",
+          "inspect_workbook_pending_approvals"
+        ],
+        "fail_closed_reason_codes": [
+          "RELEASE_AUTHORIZED"
+        ],
+        "docstring_first_line": "Stage P6: Scoped Teacher Verdicts, SHA-Bound Invalidation & Wave Provenance Governance (`G7`)."
+      },
+      {
+        "path": "authoring/agent/git_guard.py",
+        "sha256": "f6064a19dbc2da0ebed12ebd9f3b8dcee3492f31a2d4acf6a51dd67dfd5009a2",
+        "bytes": 6824,
+        "lines": 190,
+        "public_api": [
+          "audit_git_copyright_safety",
+          "check_ownership_boundary"
+        ],
+        "fail_closed_reason_codes": [
+          "CLEAN_WORKSPACE",
+          "COPYRIGHT_LEAK_BLOCKED",
+          "OWNERSHIP_BOUNDARY_CLEAN",
+          "SOFTWARE_OWNERSHIP_BOUNDARY_VIOLATED"
+        ],
+        "docstring_first_line": "Copyright, asset-leakage, AND §9 software-ownership boundary guard for Git."
+      },
+      {
+        "path": "authoring/agent/viewer.py",
+        "sha256": "a750eba08c9b5d11a1d58d49c901b75bbcdfcbb7564d157a56e424307d34a2d1",
+        "bytes": 27783,
+        "lines": 537,
+        "public_api": [
+          "create_viewer_handler",
+          "main",
+          "serve_viewer"
+        ],
+        "fail_closed_reason_codes": [
+          "NOT_FOUND",
+          "SOURCE_PDF_MISSING_IN_VAULT"
+        ],
+        "docstring_first_line": "Interactive Multi-Book Teacher Workbench (`W6` — `authoring/agent/viewer.py`)."
+      },
+      {
+        "path": "authoring/agent/autopilot.py",
+        "sha256": "0e69bfbd192f45755ae1bfec050b05e5f6361d3d0349b6774d1f5f06e667d5a1",
+        "bytes": 51430,
+        "lines": 979,
+        "public_api": [
+          "AutopilotStateStore",
+          "AutopilotSupervisor",
+          "GitHubSyncManager",
+          "SelfHealingEngine"
+        ],
+        "fail_closed_reason_codes": [
+          "CLEAN_OWNERSHIP_AND_COPYRIGHT",
+          "OWNERSHIP_OR_COPYRIGHT_VIOLATION"
+        ],
+        "docstring_first_line": "Persistent Self-Healing Unattended Autopilot (`authoring/agent/autopilot.py`)."
+      },
+      {
+        "path": "authoring/agent/cli.py",
+        "sha256": "3e0ac8cef2a2880bb0e04c84ebf4583e4a65ceff76b62d9034f219fd64d3151e",
+        "bytes": 34904,
+        "lines": 658,
+        "public_api": [
+          "build_parser",
+          "main",
+          "run_full_audit",
+          "run_generic_wave_check"
+        ],
+        "fail_closed_reason_codes": [
+          "ZAI_CONVERTER_GREEN"
+        ],
+        "docstring_first_line": "Book-Agnostic Content-Production Automation Agent CLI (`khshab-agent`)."
+      },
+      {
+        "path": "authoring/agent/handoff.py",
+        "sha256": "41daa285677524013b80eb1ba6383604f965a8a1d619eddf0df2c97fb9f722b7",
+        "bytes": 21620,
+        "lines": 463,
+        "public_api": [
+          "build_handoff_index",
+          "write_handoff_index"
+        ],
+        "fail_closed_reason_codes": [],
+        "docstring_first_line": "بستهٔ دسترسیِ ماشین‌خوان برای «مدلِ مادر» (موتور اصلی `Z.ai`)."
+      }
+    ]
+  },
+  "cli": {
+    "console_script": "khshab-agent = authoring.agent.cli:main",
+    "module_invocation": "python3 -m authoring.agent.cli <subcommand>",
+    "subcommands": [
+      {
+        "name": "audit",
+        "help": "اجرای کامل آزمون مرجع مخزن + ۱۶ حادثهٔ تاریخی",
+        "options": [
+          "--help",
+          "--repo-root",
+          "-h"
+        ]
+      },
+      {
+        "name": "autopilot",
+        "help": "ناظر خودمختار شبانه با خودترمیمی ریشه‌ای و همگام‌سازی GitHub",
+        "options": [
+          "--approve-once",
+          "--git-push",
+          "--git-sync",
+          "--help",
+          "--max-heal-rounds",
+          "--morning-report",
+          "--official-ref-root",
+          "--pr-number",
+          "--repo-root",
+          "--state-dir",
+          "--target-waves",
+          "-h"
+        ]
+      },
+      {
+        "name": "build-wave",
+        "help": "تولید غیرمخرب خشاب هر پایه از WaveSpec v2 JSON (W1)",
+        "options": [
+          "--base-xlsx",
+          "--help",
+          "--output",
+          "--registry",
+          "--repo-root",
+          "--wave-spec",
+          "-h"
+        ]
+      },
+      {
+        "name": "check-wave",
+        "help": "گیت کامل بررسی هر موج از هر پایه (G1/G2/G3/...): دیف کلیدمحور + لیست سفید + مُهرها + مبدل Z.ai + SHA-256",
+        "options": [
+          "--base",
+          "--candidate",
+          "--help",
+          "--official",
+          "--repo-root",
+          "--report-md",
+          "--whitelist",
+          "-h"
+        ]
+      },
+      {
+        "name": "count-items",
+        "help": "شمارشگر ماشینی شکل‌ها در ناحیهٔ تصویری هر صفحه از هر کتاب PDF",
+        "options": [
+          "--bbox",
+          "--help",
+          "--page",
+          "--pdf",
+          "-h"
+        ]
+      },
+      {
+        "name": "coverage",
+        "help": "گیتِ پوششِ شاهد (بند ۲/۴): شمارِ روشنِ ردیف‌های دارای/فاقد شاهد + اتصال به SHA واقعی PDF و manifest همان چاپ",
+        "options": [
+          "--book-manifest",
+          "--cartridge",
+          "--expected-book-code",
+          "--help",
+          "--observation",
+          "--pagemap",
+          "--pdf",
+          "--repo-root",
+          "-h"
+        ]
+      },
+      {
+        "name": "handoff-index",
+        "help": "بستهٔ دسترسیِ ماشین‌خوان برای مدلِ مادر: فهرستِ ماژول‌ها/CLI/گیت‌ها/مرزهای مجوز با SHA-256 (بدون مادهٔ محرمانه)",
+        "options": [
+          "--help",
+          "--official-ref-root",
+          "--output",
+          "--repo-root",
+          "-h"
+        ]
+      },
+      {
+        "name": "heads",
+        "help": "Task 66: راستی‌آزمایی مانیفست OFFICIAL-HEADS.json",
+        "options": [
+          "--help",
+          "--repo-root",
+          "--verify",
+          "-h"
+        ]
+      },
+      {
+        "name": "init-book",
+        "help": "گام ۰ برای هر کتاب PDF جدید: کشف آفست پالیندرومی + تولید برنامهٔ چانک <=۱۲ صفحه با هم‌پوشانی ۲",
+        "options": [
+          "--help",
+          "--lanes",
+          "--max-pages",
+          "--out",
+          "--overlap",
+          "--pdf",
+          "-h"
+        ]
+      },
+      {
+        "name": "keyed-diff",
+        "help": "دیف کلیدمحور سلول‌به‌سلول بر اساس ستون A بین هر دو فایل اکسل",
+        "options": [
+          "--help",
+          "-h",
+          "<new_xlsx>",
+          "<old_xlsx>"
+        ]
+      },
+      {
+        "name": "reconcile-chunks",
+        "help": "آشتی‌دهی اتمی هم‌پوشانی تکه‌های JSON نقشهٔ صفحات (W5)",
+        "options": [
+          "--chunks-dir",
+          "--help",
+          "--output",
+          "-h"
+        ]
+      },
+      {
+        "name": "record-verdict",
+        "help": "ثبت حکم رسمی معلم انسانی با قفل SHA-256",
+        "options": [
+          "--actor",
+          "--actor-role",
+          "--help",
+          "--notes",
+          "--repo-root",
+          "--scope",
+          "--target-file",
+          "--target-ids",
+          "--teacher-token-file",
+          "--verdict-id",
+          "-h"
+        ]
+      },
+      {
+        "name": "serve-viewer",
+        "help": "میز کار چندپایه با ذره‌بین پیکسلی 8x و امضای معلم (W6)",
+        "options": [
+          "--book-manifest",
+          "--cartridge",
+          "--help",
+          "--host",
+          "--pagemap",
+          "--pdf",
+          "--port",
+          "--repo-root",
+          "--verdicts-path",
+          "-h"
+        ]
+      }
+    ]
+  },
+  "gates": {
+    "hallucination_gate": {
+      "function": "authoring/agent/achilles_gate.py: verify_achilles_evidence_gate",
+      "gate_id": "G_ACHILLES_EVIDENCE",
+      "fail_closed_reason_codes": [
+        "ACHILLES_EVIDENCE_VERIFIED",
+        "ACHILLES_NO_LEDGER_BUT_NO_GREEN_RISK",
+        "BBOX_OUT_OF_NORMALIZED_RANGE",
+        "BBOX_ZERO_AREA",
+        "BOOK_CODE_MISMATCH",
+        "BOOK_MANIFEST_UNREADABLE",
+        "COVERAGE_COMPLETE",
+        "COVERAGE_INCOMPLETE_YELLOW_REMAINS",
+        "COVERAGE_UNKNOWN_NO_OBSERVATION",
+        "DANGLING_EVIDENCE_REF",
+        "EVIDENCE_LEDGER_UNREADABLE",
+        "EXPECTED_BOOK_CODE_MISMATCH",
+        "GREEN_Q_WITH_YELLOW_ANCHOR",
+        "GREEN_ROWS_WITHOUT_EVIDENCE",
+        "GREEN_WITHOUT_EVIDENCE_MENTION_IN_NOTE",
+        "INVALID_BBOX_SHAPE",
+        "INVALID_CROP_SHA256",
+        "INVALID_PDF_PAGE",
+        "INVALID_SOURCE_SHA256",
+        "LEDGER_SHA_NOT_MATCHING_REAL_PDF",
+        "LEDGER_SOURCE_BINDING_MISMATCH",
+        "MALFORMED_EVIDENCE_ID",
+        "MANIFEST_OFFSET_MISSING",
+        "MANIFEST_PRINT_SHA_MISMATCH",
+        "MISSING_EVIDENCE_LEDGER",
+        "MISSING_S1_SHEET",
+        "MISSING_STRONG_EVIDENCE_FOR_GREEN",
+        "OBSERVATION_BOOK_CODE_MISSING",
+        "OBSERVATION_PDF_SHA_INVALID",
+        "PAGE_OFFSET_MISMATCH_HALLUCINATION",
+        "PDF_SHA_MISMATCH",
+        "PRINT_EDITION_MISMATCH",
+        "PROVEN_OFFSET_CONFLICT",
+        "SOURCE_PDF_UNAVAILABLE",
+        "WORKBOOK_UNREADABLE"
+      ],
+      "semantics": "سبزِ بی‌شاهد = FAIL؛ PASS آن ادعایِ پوشش یا انتشار نیست."
+    },
+    "coverage_gate": {
+      "function": "authoring/agent/achilles_gate.py: verify_evidence_coverage_gate",
+      "gate_id": "G_ACHILLES_COVERAGE",
+      "cli": "khshab-agent coverage",
+      "metrics": [
+        "rows_with_evidence",
+        "rows_without_evidence",
+        "rows_mismatch",
+        "coverage_ratio",
+        "without_evidence_ids",
+        "proven_offset",
+        "ledger_size",
+        "observation_pdf_sha256",
+        "manifest_edition"
+      ],
+      "semantics": "ردیفِ بی‌شاهد زرد می‌ماند؛ هیچ ارتقای خودکار به سبز."
+    },
+    "source_binding": {
+      "function": "authoring/agent/achilles_gate.py: bind_evidence_to_source",
+      "anchors": [
+        "SHA-256 واقعیِ فایل PDF ورودی",
+        "book_code یکسان در observation/manifest/ledger",
+        "manifest همان چاپ (edition + source_pdf.sha256)",
+        "آفستِ اثبات‌شدهٔ صفحهٔ چاپی ↔ PDF"
+      ]
+    },
+    "universal_invariants": "authoring/agent/automation_suite.py: verify_universal_wave_invariants (U-01..U-10)",
+    "official_head_lock": "authoring/agent/automation_suite.py: check_official_heads (STALE_OFFICIAL_BASE_INCIDENT_07)",
+    "zai_converter": "tools/cartridge-converter/convert.mjs (فقط‌خواندنی؛ SSOT در مالکیتِ Z.ai)",
+    "release_gate": "authoring/agent/governance.py: evaluate_release_readiness (G7)"
+  },
+  "hard_invariants": [
+    {
+      "id": "INV-01",
+      "rule": "شناسه‌های L-/Q-/E_ بازتولیدناپذیر و غیرقابلِ بازیافتند (`id_allocator.ImmutableIDViolationError`).",
+      "verify": "authoring/tests/test_wave_exporter_and_w3_w6.py"
+    },
+    {
+      "id": "INV-02",
+      "rule": "لنگرِ دوطرفهٔ S1.K ↔ Bank.B باید دوسویه بماند (`T7_ANCHOR_MISMATCH`).",
+      "verify": "authoring/agent/validators.py: verify_bidirectional_anchors"
+    },
+    {
+      "id": "INV-03",
+      "rule": "موجِ جدید فقط از سرِ اعلام‌شدهٔ OFFICIAL-HEADS.json شروع می‌شود (`STALE_OFFICIAL_BASE_INCIDENT_07`).",
+      "verify": "authoring/tests/test_achilles_boundaries.py::test_stale_official_base_is_rejected_and_gate_is_precise"
+    },
+    {
+      "id": "INV-04",
+      "rule": "هیچ ردیفِ AI بدون شاهدِ کراپ/BBOX/SHA سبز نمی‌شود؛ سبزِ بی‌شاهد = FAIL.",
+      "verify": "authoring/agent/achilles_gate.py: verify_achilles_evidence_gate"
+    },
+    {
+      "id": "INV-05",
+      "rule": "پوششِ شاهد گیتِ *جدا* است؛ PASS هلوسه هیچ‌گاه «تکمیلِ مشاهده» یا «آمادگیِ انتشار» نیست.",
+      "verify": "authoring/agent/achilles_gate.py: verify_evidence_coverage_gate"
+    },
+    {
+      "id": "INV-06",
+      "rule": "اتصالِ شاهد به SHA واقعیِ PDF + کد کتاب + manifest همان چاپ + آفستِ اثبات‌شده؛ ناسازگاری fail-closed.",
+      "verify": "authoring/agent/achilles_gate.py: bind_evidence_to_source"
+    },
+    {
+      "id": "INV-07",
+      "rule": "مُهرِ معلم فقط با احراز هویتِ سمتِ سرور؛ رشتهٔ `actor_role` اعلامیِ فراخواننده کافی نیست.",
+      "verify": "authoring/agent/governance.py: authenticate_teacher + record_verdict"
+    },
+    {
+      "id": "INV-08",
+      "rule": "`--approve-once` فقط اجازهٔ اجرای فنیِ محدود است (`TECHNICAL_EXECUTION_ONLY`).",
+      "verify": "authoring/agent/autopilot.py: _roadmap_approval_proof"
+    },
+    {
+      "id": "INV-09",
+      "rule": "توافقِ دو خواننده بدون شاهد هرگز `EVIDENCE_MATCHED` نمی‌شود (`AGREED_UNVERIFIED`).",
+      "verify": "authoring/agent/reconcile.py: enforce_agreement_evidence_rule"
+    },
+    {
+      "id": "INV-10",
+      "rule": "PDF، عکسِ کتاب، کراپِ صفحه و نقلِ بیش از ۱۰ واژه از کتاب هرگز در Git نیست.",
+      "verify": "authoring/agent/git_guard.py: audit_git_copyright_safety"
+    }
+  ],
+  "zai_owned_paths_do_not_modify": [
+    "public/math-game/src/v10/**",
+    "public/math-game/workshop-core.js",
+    "public/math-game/v10.html",
+    "tools/cartridge-converter/**",
+    "public/math-game/cartridges/*.json"
+  ],
+  "not_granted": [
+    "TEACHER_VERDICT",
+    "RELEASE_AUTHORIZATION",
+    "OFFICIAL_HEAD_CHANGE",
+    "FINALITY_CLAIM",
+    "AUTO_GREEN_PROMOTION",
+    "GIT_PUSH_AUTOMATIC"
+  ],
+  "mother_ai_actions": [
+    {
+      "id": "W7",
+      "action": "افزودنِ خطِ CI به `.github/workflows/khshab-gate.yml` برای اجرای `pytest authoring/tests` با Python 3.12.",
+      "owner": "Z.ai",
+      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §1"
+    },
+    {
+      "id": "W8",
+      "action": "پورتِ `parseOptionValue` و `classifyAttempt` به `public/math-game/src/v10/workshop/cartridge-schema.js` و `errors.js`.",
+      "owner": "Z.ai",
+      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §2"
+    },
+    {
+      "id": "PR2",
+      "action": "حلِ `CONFLICTING` بودنِ PR #2 با `squash`/`rebase` (نه ادغامِ `v10.3-beta` در `arena/**`).",
+      "owner": "Z.ai",
+      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §3"
+    },
+    {
+      "id": "CANDIDATE",
+      "action": "mount کردنِ نامزدِ واقعیِ `KH-G2-MATH v1.2` (SHA `18e6b4fa…`) خارج از Git برای مقایسهٔ کلیدمحور.",
+      "owner": "مالک / Z.ai",
+      "reference": "authoring/G2-V12-CONNECTION-DRYRUN.fa.md §6"
+    },
+    {
+      "id": "STAMP",
+      "action": "صدورِ مُهرِ معلم برای ۴۸ سؤال و ۵۴ ردیفِ «پیشنهاد» و سپس به‌روزرسانیِ `OFFICIAL-HEADS.json`.",
+      "owner": "معلمِ انسانی (انحصاری)",
+      "reference": "authoring/MORNING-REPORT.fa.md + governance G7"
+    },
+    {
+      "id": "C305",
+      "action": "تهیهٔ `book_manifest_C305.json` و `observation_C305.json` از همان چاپ برای بازکردنِ اتصالِ پایهٔ سوم.",
+      "owner": "آرنا پس از تحویلِ PDFِ قرنطینه",
+      "reference": "authoring/USAGE-KHSHAB-AGENT-v24.fa.md §4"
+    }
+  ],
+  "confidentiality_policy": {
+    "never_in_bundle_or_git": [
+      "PDF کتاب‌ها",
+      "عکسِ صفحه/کراپِ تصویر",
+      "نقلِ بیش از ۱۰ واژه از کتاب",
+      "توکنِ معلم"
+    ],
+    "quarantine_locations": [
+      "/tmp/khshab_secure_vault",
+      "/tmp/khshab_counting_vault",
+      "upload/"
+    ],
+    "forbidden_suffixes": [
+      ".bmp",
+      ".gif",
+      ".jpeg",
+      ".jpg",
+      ".pdf",
+      ".png",
+      ".tif",
+      ".tiff",
+      ".webp"
+    ]
+  },
+  "official_heads": {
+    "available": true,
+    "manifest_path": "/tmp/v103_ref/public/math-game/authoring/OFFICIAL-HEADS.json",
+    "manifest_sha256": "96fd3c8a5dc4ba1f7b397769d841361767eabcc58cb570a991818ec7cc72b0ee",
+    "updated_at": "2026-10-22",
+    "updated_by": "Z.ai — Task 65/66 (ادغام رسمی موج ۴ و بستهٔ تبادل استاندارد)",
+    "rules": {
+      "next_wave_base_must_match_sha256": true,
+      "stale_violation_code": "STALE_OFFICIAL_BASE_INCIDENT_07",
+      "note": "هر موج جدید فقط از فایلِ اعلام‌شدهٔ همین مانیفست شروع می‌شود؛ پس از هر ادغام رسمی، این فایل توسط موتور اصلی به‌روز می‌شود."
+    },
+    "heads": {
+      "KH-G1-MATH": {
+        "version": "v0.1",
+        "sha256": "4c5d5e1877e72a1b24c977b95cb19dfd29e480e5ed9e8d0d4e25bdfc86baf46c",
+        "file": "public/math-game/authoring/khshab-G1-MATH_v0.1.xlsx",
+        "teacher_note": ""
+      },
+      "KH-G2-MATH": {
+        "version": "v0.5",
+        "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+        "file": "public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx",
+        "teacher_note": "۴۸ سؤال و ۵۴ ردیف صفحه‌ای «پیشنهاد» در انتظار مُهر معلم"
+      },
+      "KH-G3-MATH": {
+        "version": "v0.7",
+        "sha256": "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb",
+        "file": "public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx",
+        "teacher_note": ""
+      },
+      "KH-G4-MATH": {
+        "version": "v0.1",
+        "sha256": "b354f68e4d4cc0372e6abf547c8340083ab335e2e7cf151fd6944422ba1a0ee3",
+        "file": "public/math-game/authoring/khshab-G4-MATH_v0.1.xlsx",
+        "teacher_note": ""
+      },
+      "KH-G5-MATH": {
+        "version": "v0.1",
+        "sha256": "ddd86034dbf40518e1bb589c3baa85cb48734790c612ce6f93f09c7b41ea9871",
+        "file": "public/math-game/authoring/khshab-G5-MATH_v0.1.xlsx",
+        "teacher_note": ""
+      },
+      "KH-G6-MATH": {
+        "version": "v0.1",
+        "sha256": "dd0c62ae543e43a71769e1ec05b3a3cdb7cc9027d418c8b49d302139dc61a5b6",
+        "file": "public/math-game/authoring/khshab-G6-MATH_v0.1.xlsx",
+        "teacher_note": ""
+      }
+    }
+  },
+  "documents": [
+    {
+      "path": "authoring/USAGE-KHSHAB-AGENT-v24.fa.md",
+      "role": "راهنمای هم‌تراز با CLI (ماشین‌سنجیده)"
+    },
+    {
+      "path": "authoring/G2-V12-CONNECTION-DRYRUN.fa.md",
+      "role": "گزارش dry-run اتصالِ G2 v1.2"
+    },
+    {
+      "path": "authoring/MOTHER-AI-HANDOFF-v24.fa.md",
+      "role": "گزارشِ جامعِ تغییرات و تحلیل برای مدلِ مادر"
+    },
+    {
+      "path": "authoring/ACHILLES-ARCHITECTURE.fa.md",
+      "role": "معماریِ پاشنهٔ آشیل"
+    },
+    {
+      "path": "authoring/ROADMAP-KHSHAB-AGENT-v2.fa.md",
+      "role": "نقشهٔ فنیِ مصوبِ مالک"
+    },
+    {
+      "path": "authoring/ZAI-HANDOFF-W7-W8.fa.md",
+      "role": "هندآف W7/W8 به Z.ai"
+    }
+  ],
+  "verification": {
+    "test_command": "python -m pytest -q",
+    "expected_layout_note": "شاخهٔ محتواییِ آرنا + مرجعِ فقط‌خواندنیِ v10.3-beta",
+    "verify_any_file": "sha256sum <path> و مقایسه با همین بسته"
+  },
+  "fixtures_non_confidential": [
+    {
+      "path": "authoring/agent/fixtures/PAGE-MAP-KH-G2-MATH-v1_verified.xlsx",
+      "sha256": "7310680cfe62f4cad8e4222de6f3d32edc2c54bb24a9f586a610ef7e2ac192b8",
+      "bytes": 74878
+    },
+    {
+      "path": "authoring/agent/fixtures/book_manifest_C205.json",
+      "sha256": "356e6f160739d3a4cd43e39dd5d484ee2f71a399e6140d6a8fc05ef6afb1a0ff",
+      "bytes": 2802
+    },
+    {
+      "path": "authoring/agent/fixtures/chunk_plan_C205.json",
+      "sha256": "6f83cab3981f3369b24bd77dfadb33d28833dcf6d798b32347cd7e42da9877ae",
+      "bytes": 3341
+    },
+    {
+      "path": "authoring/agent/fixtures/curated_claims_C205.json",
+      "sha256": "b5d95d590b7c3100d2d3a162cae821d19df2c49c503f4cbd4d46deff987f7d8c",
+      "bytes": 18353
+    },
+    {
+      "path": "authoring/agent/fixtures/decisions_C205.json",
+      "sha256": "bf4793ac91f725f894400c16d5b9a46f2314d6a37609cd5d2639391403540b70",
+      "bytes": 12832
+    },
+    {
+      "path": "authoring/agent/fixtures/g3_overlap_chunks/pass_a.json",
+      "sha256": "3583a9d9fe501bed13f339fd0f28d957eb0dfc10c1f6d512bab64c02d51e6c2d",
+      "bytes": 11023
+    },
+    {
+      "path": "authoring/agent/fixtures/g3_overlap_chunks/pass_b.json",
+      "sha256": "7a89a09729ae9fdfda73af7a23b8fb6a9d7e8a993388522eb8796c3bca461f96",
+      "bytes": 10148
+    },
+    {
+      "path": "authoring/agent/fixtures/id_registry.json",
+      "sha256": "f3bf0d3a019207c19cf47697efae123360a0bf4a0e206eb386bd8a76473b271b",
+      "bytes": 7746
+    },
+    {
+      "path": "authoring/agent/fixtures/issue_queue_C205.json",
+      "sha256": "b23e3e52679c4c5fe930b15baadbdb06a3148c76134abba7147fd8920cd040b2",
+      "bytes": 48248
+    },
+    {
+      "path": "authoring/agent/fixtures/khshab-G2-MATH_v0.4_raw_buggy.xlsx",
+      "sha256": "ad4761ba6c6720749cd2c51ddf82bee6cc78cfdb8a3399ae731bb3284640b798",
+      "bytes": 46391
+    },
+    {
+      "path": "authoring/agent/fixtures/khshab-G2-MATH_v0.5.xlsx",
+      "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+      "bytes": 55750
+    },
+    {
+      "path": "authoring/agent/fixtures/observation_C205.json",
+      "sha256": "3c8c4297604630c53828b3db79b86ce96d8a9dbdd38a64cb155946b7d7a46003",
+      "bytes": 479959
+    },
+    {
+      "path": "authoring/agent/fixtures/snapshot_C205.json",
+      "sha256": "ceaaf18bd11201a140fd519e54808e8fc7b07d57a7dde7ffc5f58b8521c21a77",
+      "bytes": 134049
+    },
+    {
+      "path": "authoring/agent/fixtures/wave_spec_G2_ch4_v05.json",
+      "sha256": "7dea00a1642a92d65ce9a23296b785f8c1c9a9cc460be40667c3f0b401458e5c",
+      "bytes": 48079
+    },
+    {
+      "path": "authoring/agent/fixtures/wave_spec_G2_v12_incremental.json",
+      "sha256": "eeb58d6e1d69bc4368ef31b280c21febbc15094c72a50aeddcb0c6f987e3192f",
+      "bytes": 2948
+    },
+    {
+      "path": "authoring/agent/fixtures/wave_spec_G3_test_v08.json",
+      "sha256": "f0811a1a2f52914e880a26f2607b1a6911c9d12dbc10c479adc8b4db1a6d96ae",
+      "bytes": 17480
+    }
+  ],
+  "tests": [
+    {
+      "path": "authoring/tests/test_achilles_boundaries.py",
+      "sha256": "a2b8bc415122aaa058214218507fbe1acd70754c7e8a306f640350f0eb1ddef0",
+      "test_count": 6,
+      "tests": [
+        "test_achilles_is_khshab_agent_not_separate_reader",
+        "test_held_wave_is_not_counted_as_pass_and_converter_missing_blocks_delivery",
+        "test_g0_writable_path_branch_and_official_head_restrictions_with_intentional_failures",
+        "test_bit_for_bit_reconstruction_contract_and_semantic_equality",
+        "test_stale_official_base_is_rejected_and_gate_is_precise",
+        "test_persistent_queue_and_crash_recovery"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_achilles_v24_hardening.py",
+      "sha256": "9f3f893fa33ab3295c0022c783585f7a9d93929fe288d58d68af3c863afef575",
+      "test_count": 9,
+      "tests": [
+        "test_coverage_gate_reports_measurable_counts_and_keeps_rows_yellow",
+        "test_hallucination_pass_without_ledger_is_neither_coverage_nor_release",
+        "test_green_row_without_evidence_fails_coverage_gate",
+        "test_binding_requires_real_pdf_sha_book_code_and_same_print",
+        "test_coverage_gate_fails_closed_on_source_and_offset_mismatch",
+        "test_approve_once_is_technical_permission_not_teacher_verdict",
+        "test_record_verdict_cli_rejects_role_claim_without_server_token",
+        "test_record_verdict_cli_accepts_only_authenticated_teacher",
+        "test_approval_scope_verdict_cannot_be_minted_by_caller_string"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_autopilot_self_healing.py",
+      "sha256": "5639a541275a9d1f95182d642d7ff93205dae601500fec1914362a8f647f17e4",
+      "test_count": 2,
+      "tests": [
+        "test_autopilot_requires_single_approval_then_self_heals_six_defect_classes",
+        "test_g0_ownership_and_confidential_media_guard_blocks_illegal_commits"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_docs_cli_alignment.py",
+      "sha256": "4ed50251c3e5bed3bc46e595b56fa0507a35f278c10772deadcf3c776816df38",
+      "test_count": 8,
+      "tests": [
+        "test_usage_doc_exists_and_documents_real_subcommands",
+        "test_no_phantom_observe_subcommand_and_doc_states_the_correction",
+        "test_every_documented_command_parses_against_real_cli",
+        "test_documented_manifest_and_pdf_are_never_cross_paired",
+        "test_documented_autopilot_never_advertises_automatic_push_or_finality",
+        "test_documented_viewer_defaults_are_secure",
+        "test_teacher_token_file_is_outside_git",
+        "test_documented_commands_are_actually_executable"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_handoff_index.py",
+      "sha256": "b76b3bbb8c94598940a5b10b08a0040a5b28b614f9e2ca8a7f1501e92547b651",
+      "test_count": 7,
+      "tests": [
+        "test_bundle_is_generated_from_real_code_with_verifiable_hashes",
+        "test_bundle_lists_real_cli_subcommands_and_never_phantom_ones",
+        "test_bundle_contains_no_confidential_material",
+        "test_bundle_declares_permission_boundaries_and_mother_ai_actions",
+        "test_bundle_official_heads_snapshot_matches_zai_manifest",
+        "test_cli_handoff_index_writes_bundle_and_exits_zero",
+        "test_committed_index_matches_regenerated_bundle"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_multigrade_solvers.py",
+      "sha256": "2db0e1b50be50ad0c69281c64864202eef44a43d8f299626c0208d257bf1404f",
+      "test_count": 7,
+      "tests": [
+        "test_all_five_multigrade_solver_plugins_registered",
+        "test_number_ops_multidigit_place_value_column_ops_and_rounding",
+        "test_mult_div_exact_remainder_invariants_and_prose_solver",
+        "test_exact_fractions_solver_and_misconception_simulators_zero_float_error",
+        "test_geometry_compound_measurement_and_clock_solvers",
+        "test_data_prob_pictograph_crate_scale_and_spinner_probability",
+        "test_dynamic_pagemap_bounds_g2_and_g3_zero_hardcoded_offsets"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_wave_exporter_and_w3_w6.py",
+      "sha256": "a0504dfaaeb7d8e55b43155ab1a121ab374b9ac5014a684914f528194cb1140f",
+      "test_count": 6,
+      "tests": [
+        "test_w1_g2_wave_spec_produces_bit_for_bit_identical_sha256",
+        "test_w1_w3_g3_pilot_wave_and_all_six_official_heads",
+        "test_w4_synthetic_c305_vector_banner_capsule_and_300dpi_nearest_crop",
+        "test_w5_g3_overlap_reconciler_and_sacred_agreement_rule",
+        "test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation",
+        "test_viewer_rejects_unauthenticated_when_no_token_configured"
+      ]
+    },
+    {
+      "path": "tests/test_authoring_pipeline.py",
+      "sha256": "d70df11e0ca74db442f028dd2f605ac2d36b7419aaf95c523b5dbd74134e481e",
+      "test_count": 35,
+      "tests": [
+        "test_g0_copyright_guard_clean_on_active_repo",
+        "test_g0_copyright_guard_blocks_leaked_pdf_or_crop",
+        "test_section9_ownership_boundary_zero_software_mutations",
+        "test_b1_no_converter_mirror_and_ssot_guard",
+        "test_p1_missing_pdf_yields_honest_blocked_gate",
+        "test_p1_wrong_edition_sha256_yields_blocked_gate",
+        "test_p1_pdf47_occluded_pasteboard_ghost_filtered_in_real_ledger",
+        "test_p2_two_model_agreement_never_becomes_approved_or_verified",
+        "test_p3_pagemap_export_preserves_13_columns_and_is_bit_idempotent",
+        "test_p3_pagemap_rejects_broken_input_with_extra_column",
+        "test_p3_retired_id_cannot_ever_be_recycled",
+        "test_p3_cartridge_v05_zero_legacy_diff_and_bit_idempotency",
+        "test_p4_baseline_v05_passes_all_four_independent_gates",
+        "test_p4_mutation_m1_corrupt_digit_in_correct_option_fails_solver",
+        "test_p4_mutation_m2_wrong_answer_key_letter_fails_both_j12_and_solver",
+        "test_p4_mutation_m3_false_distractor_mechanism_fails_causality",
+        "test_p4_mutation_m3b_collapsed_identical_codes_fails_causality",
+        "test_p4_mutation_m4_ascii_digit_in_persian_stem_fails_anti_j12",
+        "test_p4_mutation_m4b_persian_digit_in_latin_trace_fails_anti_j12",
+        "test_p4_mutation_m5_stem_edited_without_updating_note_fails_solver",
+        "test_p4_mutation_m6_page_offset_mismatch_in_s1_fails_structure",
+        "test_p4_mutation_m7_broken_sentinel_merge_or_post_sentinel_row_fails",
+        "test_p4_pedagogy_tie_rule_q1067_blocked_without_crop_evidence",
+        "test_p4_strict_audit_catches_real_v04_diagnostic_bugs",
+        "test_p6_ai_cannot_forge_teacher_approval_and_sha_mutation_invalidates_verdicts",
+        "test_auto_fn1_and_fn2_keyed_diff_and_closed_wave_whitelist",
+        "test_auto_fn3_official_stamps_catches_v04_wipe_and_passes_v05",
+        "test_auto_fn4_and_fn5_anchors_cpa_triad_and_exact_6_6_6_6_balance",
+        "test_b3_wave_scope_derived_from_keyed_diff_multi_grade",
+        "test_auto_fn6_machine_pixel_counter_counts_exact_13_triangles_on_c205_page8",
+        "test_auto_fn7_real_zai_converter_blocks_v04_and_passes_v05",
+        "test_auto_fn9_and_fn10_chunk_planner_and_all_16_historical_incidents",
+        "test_c305_init_book_proves_zero_offset",
+        "test_generic_agent_cli_works_on_real_official_grade3_v07_and_pure_overlay_v05",
+        "test_b4_g3_pagemap_verified_contract_and_sha256"
+      ]
+    }
+  ]
+}

@@ -202,7 +202,10 @@ def test_w5_g3_overlap_reconciler_and_sacred_agreement_rule() -> None:
         zai.generate_json("test")
 
 
-def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: Path) -> None:
+def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: Path, monkeypatch) -> None:
+    # Secure default: viewer requires explicit KHSHAB_TEACHER_TOKEN outside Git
+    test_tok = "test-teacher-token-xyz-2026"
+    monkeypatch.setenv("KHSHAB_TEACHER_TOKEN", test_tok)
     src_pm = resolve_fixture(REPO_ROOT, "PAGE-MAP-KH-G2-MATH-v1_verified.xlsx", "authoring/PAGE-MAP-KH-G2-MATH-v1_audited.xlsx")
     src_wb = resolve_fixture(REPO_ROOT, "khshab-G2-MATH_v0.5.xlsx", "authoring/khshab-G2-MATH_v0.5.xlsx")
     pm_copy = tmp_path / "pagemap.xlsx"
@@ -259,7 +262,7 @@ def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: P
             data=json.dumps(
                 {"scope": "ROW_APPROVED", "actor": "استاد راهنما", "actor_role": "human_teacher", "target_ids": ["L-401"]}
             ).encode("utf-8"),
-            headers={"Content-Type": "application/json", "X-Teacher-Token": "dev-teacher-token-2026"},
+            headers={"Content-Type": "application/json", "X-Teacher-Token": test_tok},
             method="POST",
         )
         res = json.loads(urllib.request.urlopen(ok_req).read().decode("utf-8"))
@@ -282,3 +285,51 @@ def test_w6_live_viewer_http_loupe_signature_and_sha256_invalidation(tmp_path: P
     finally:
         server.shutdown()
         server.server_close()
+
+def test_viewer_rejects_unauthenticated_when_no_token_configured(tmp_path: Path, monkeypatch) -> None:
+    """Viewer با توکن پیش‌فرض قابل‌حدس نباید قابل‌استفاده باشد — بدون KHSHAB_TEACHER_TOKEN همه POSTها 403."""
+    monkeypatch.delenv("KHSHAB_TEACHER_TOKEN", raising=False)
+    # Ensure no token file exists for this test repo
+    tok_file = REPO_ROOT / "authoring/audit/teacher_token.txt"
+    # Temporarily move it if exists
+    backup = None
+    if tok_file.exists():
+        backup = tok_file.read_bytes()
+        tok_file.unlink()
+    src_pm = resolve_fixture(REPO_ROOT, "PAGE-MAP-KH-G2-MATH-v1_verified.xlsx", "authoring/PAGE-MAP-KH-G2-MATH-v1_audited.xlsx")
+    src_wb = resolve_fixture(REPO_ROOT, "khshab-G2-MATH_v0.5.xlsx", "authoring/khshab-G2-MATH_v0.5.xlsx")
+    pm_copy = tmp_path / "pagemap2.xlsx"
+    wb_copy = tmp_path / "cartridge2.xlsx"
+    pm_copy.write_bytes(src_pm.read_bytes())
+    wb_copy.write_bytes(src_wb.read_bytes())
+    handler = create_viewer_handler(REPO_ROOT, tmp_path / "missing.pdf", pagemap_path=pm_copy, cartridge_path=wb_copy, verdicts_path=tmp_path / "verdicts2.json")
+    server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+    port = server.server_address[1]
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        # Even with human_teacher role and correct token string, without server-side token configured it must fail
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/api/verdict",
+            data=json.dumps({"scope": "ROW_APPROVED", "actor": "استاد", "actor_role": "human_teacher", "target_ids": ["L-401"]}).encode("utf-8"),
+            headers={"Content-Type": "application/json", "X-Teacher-Token": "dev-teacher-token-2026"},
+            method="POST",
+        )
+        with pytest.raises(urllib.error.HTTPError) as exc:
+            urllib.request.urlopen(req)
+        assert exc.value.code == 403
+        # Also without header must fail
+        req2 = urllib.request.Request(
+            f"http://127.0.0.1:{port}/api/verdict",
+            data=json.dumps({"scope": "ROW_APPROVED", "actor": "استاد", "actor_role": "human_teacher", "target_ids": ["L-401"]}).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with pytest.raises(urllib.error.HTTPError) as exc2:
+            urllib.request.urlopen(req2)
+        assert exc2.value.code == 403
+    finally:
+        server.shutdown()
+        server.server_close()
+        if backup is not None:
+            tok_file.write_bytes(backup)

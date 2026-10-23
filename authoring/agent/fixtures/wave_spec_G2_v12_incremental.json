@@ -1,0 +1,56 @@
+{
+  "schema_version": "2.0.0",
+  "wave_id": "wave-g2-v12-plumbing-dryrun",
+  "family_id": "KH-G2-MATH",
+  "book_code": "C205",
+  "base_cartridge_filename": "khshab-G2-MATH_v0.5.xlsx",
+  "expected_official_base_sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+  "verified_pagemap_path": "authoring/PAGE-MAP-KH-G2-MATH-v1_verified.xlsx",
+  "verified_pagemap_sha256": "7310680cfe62f4cad8e4222de6f3d32edc2c54bb24a9f586a610ef7e2ac192b8",
+  "insert_s1_after_key": "L-218",
+  "min_question_id_start": 2000,
+  "semantic_prefix": "g2_v12_dryrun",
+  "runtime_error_codes": [
+    "E_ADD_CONFUSION",
+    "E_SUB_CONFUSION",
+    "E_PLACE_SWAP",
+    "E_SKIP_UNDERCOUNT"
+  ],
+  "authorized_patches": [],
+  "s1_rows": [
+    {
+      "id": "L-900",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "ردیفِ افزایشیِ خشک (dry-run) — بدون ادعای صفحه",
+      "objective": "فقط برای آزمودنِ زنجیرهٔ اتصالِ G2 v1.2؛ هیچ هدفِ آموزشیِ برگرفته از کتاب ادعا نمی‌شود.",
+      "vocab": "—",
+      "activity": "—",
+      "figure": "—",
+      "potential": "کم",
+      "engine": "بانک تمرین",
+      "anchor": "—",
+      "note": "dry-run افزایشیِ *فقط لوله‌کشی* بر پایهٔ رسمی v0.5 (f1f339…): بدون ادعای صفحه، بدون شکل، بدون سؤالِ ساختگی؛ هدف آزمودنِ قفلِ سرِ رسمی، یکتاییِ شناسه‌ها، عدمِ جابه‌جاییِ ردیفِ رسمی و گزارشِ پوششِ شاهد است. این ردیف‌ها زرد می‌مانند و هرگز خودکار سبز نمی‌شوند.",
+      "source": "پیشنهاد AI — موتور تألیف v۲.۴ (افزایشیِ خشک)",
+      "status": "نیاز به تأیید"
+    },
+    {
+      "id": "L-901",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "ردیفِ افزایشیِ خشک (dry-run) — دوم",
+      "objective": "فقط برای آزمودنِ زنجیرهٔ اتصال؛ بدون ادعای محتوای کتاب.",
+      "vocab": "—",
+      "activity": "—",
+      "figure": "—",
+      "potential": "کم",
+      "engine": "بانک تمرین",
+      "anchor": "—",
+      "note": "dry-run افزایشیِ *فقط لوله‌کشی* بر پایهٔ رسمی v0.5 (f1f339…): بدون ادعای صفحه، بدون شکل، بدون سؤالِ ساختگی؛ هدف آزمودنِ قفلِ سرِ رسمی، یکتاییِ شناسه‌ها، عدمِ جابه‌جاییِ ردیفِ رسمی و گزارشِ پوششِ شاهد است. این ردیف‌ها زرد می‌مانند و هرگز خودکار سبز نمی‌شوند.",
+      "source": "پیشنهاد AI — موتور تألیف v۲.۴ (افزایشیِ خشک)",
+      "status": "نیاز به تأیید"
+    }
+  ],
+  "atlas_rows": [],
+  "question_rows": []
+}

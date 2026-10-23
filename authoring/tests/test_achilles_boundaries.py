@@ -158,10 +158,96 @@ def test_bit_for_bit_reconstruction_contract_and_semantic_equality(tmp_path: Pat
         assert sha == expected_sha
 
 
+G2_V04_SHA = "a2f610585b4f915f3fe01201b2361d5aa607dd015d6c4d57947556245af52d34"
+G2_V05_SHA = "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+G3_V07_SHA = "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb"
+
+
+def _isolated_official_root(tmp_path: Path, g2_head_version: str = "v0.5") -> Path:
+    """ساختِ ریشهٔ رسمیِ ایزوله و هرمتیک (بدون وابستگی به `/tmp/v103_ref`).
+
+    چیدمان دقیقاً مثل `v10.3-beta` است:
+      `public/math-game/authoring/OFFICIAL-HEADS.json` + خشاب‌های رسمی،
+    و `authoring/` به‌صورت symlink به فیکسچرهای واقعیِ خودِ مخزن.
+    """
+    import shutil
+
+    root = tmp_path / f"official_root_{g2_head_version}"
+    off_dir = root / "public/math-game/authoring"
+    off_dir.mkdir(parents=True)
+    if not (root / "authoring").exists():
+        (root / "authoring").symlink_to(REPO_ROOT / "authoring", target_is_directory=True)
+
+    src_v04 = REPO_ROOT / "authoring/khshab-G2-MATH_v0.4_official.xlsx"
+    src_v05 = REPO_ROOT / "authoring/khshab-G2-MATH_v0.5.xlsx"
+    src_g3 = REPO_ROOT / "authoring/khshab-G3-MATH_v0.7.xlsx"
+    shutil.copyfile(src_v04, off_dir / "khshab-G2-MATH_v0.4.xlsx")
+    shutil.copyfile(src_v05, off_dir / "khshab-G2-MATH_v0.5.xlsx")
+    shutil.copyfile(src_g3, off_dir / "khshab-G3-MATH_v0.7.xlsx")
+
+    g2_sha = G2_V05_SHA if g2_head_version == "v0.5" else G2_V04_SHA
+    heads = {
+        "formatVersion": 1,
+        "updatedAt": "2026-10-22",
+        "updatedBy": "isolated-test-fixture (هرمتیک — نه سرِ واقعی Z.ai)",
+        "rules": {"next_wave_base_must_match_sha256": True, "stale_violation_code": "STALE_OFFICIAL_BASE_INCIDENT_07"},
+        "heads": {
+            "KH-G2-MATH": {
+                "version": g2_head_version,
+                "file": f"public/math-game/authoring/khshab-G2-MATH_{g2_head_version}.xlsx",
+                "sha256": g2_sha,
+                "status": "official — fixture هرمتیکِ آزمون",
+            },
+            "KH-G3-MATH": {
+                "version": "v0.7",
+                "file": "public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx",
+                "sha256": G3_V07_SHA,
+                "status": "official — fixture هرمتیکِ آزمون",
+            },
+        },
+    }
+    (off_dir / "OFFICIAL-HEADS.json").write_text(json.dumps(heads, ensure_ascii=False, indent=2), encoding="utf-8")
+    return root
+
+
+def test_stale_official_base_is_rejected_and_gate_is_precise(tmp_path: Path):
+    """بند ۱: گیتِ توقفِ مبنای کهنه حذف/سست نشده — و *دقیق* است (نه ردِ کور).
+
+    سناریوی واقعیِ بازبینی: سرِ رسمیِ G2 اکنون `v0.5` (`f1f339…`) است، پس نمونهٔ
+    موجِ مبتنی بر `v0.4` (`a2f61…`) باید صریحاً با `STALE_OFFICIAL_BASE_INCIDENT_07` رد شود.
+    کنترل: اگر همان مانیفست سرِ `v0.4` را اعلام کند، همان نمونه باید ساخته شود
+    (اثبات می‌کند گیت بر پایهٔ سرِ اعلامی است، نه یک FAIL همیشه‌گی).
+    """
+    stale_spec = REPO_ROOT / "authoring/agent/fixtures/wave_spec_G2_ch4_v05.json"
+
+    root_v05 = _isolated_official_root(tmp_path, "v0.5")
+    gate, sha, _ = export_wave_cartridge(
+        stale_spec,
+        repo_root=root_v05,
+        out_xlsx_path=tmp_path / "stale_out.xlsx",
+        out_registry_path=tmp_path / "stale_reg.json",
+        enforce_official_heads=True,
+    )
+    assert gate.status == "FAIL", f"مبنای کهنه باید رد شود، اما: {gate.status} / {gate.reason_code}"
+    assert gate.reason_code == "STALE_OFFICIAL_BASE_INCIDENT_07"
+    assert sha == "" and not (tmp_path / "stale_out.xlsx").exists(), "هیچ خشابی از مبنای کهنه نباید ساخته شود"
+
+    root_v04 = _isolated_official_root(tmp_path, "v0.4")
+    gate2, sha2, _ = export_wave_cartridge(
+        stale_spec,
+        repo_root=root_v04,
+        out_xlsx_path=tmp_path / "ok_out.xlsx",
+        out_registry_path=tmp_path / "ok_reg.json",
+        enforce_official_heads=True,
+    )
+    assert gate2.status == "PASS", f"با سرِ اعلامیِ v0.4 همان نمونه باید ساخته شود: {gate2.status} {gate2.reason_code} {gate2.issues[:2]}"
+    assert sha2 == G2_V05_SHA, "بازتولیدِ بایت‌به‌بایتِ v0.5 از مبنای رسمی v0.4"
+
+
 def test_persistent_queue_and_crash_recovery(tmp_path: Path):
     """نقطهٔ پایانی: برای «کارِ شبانه» یک batch کافی نیست — صفِ ماندگار، پایش و بازیابیِ آزموده‌شده."""
-    # Simulate two waves, crash after first, then resume
-    spec_a = WaveSpecV2.from_json_file(REPO_ROOT / "authoring/agent/fixtures/wave_spec_G2_ch4_v05.json").to_dict()
+    # Use fresh G2 v1.2 incremental (based on v0.5 f1f33...) for true queue recovery — old G2 ch4 v05 is stale and would block
+    spec_a = WaveSpecV2.from_json_file(REPO_ROOT / "authoring/agent/fixtures/wave_spec_G2_v12_incremental.json").to_dict()
     spec_a["wave_id"] = "wave-crash-a"
     spec_b = WaveSpecV2.from_json_file(REPO_ROOT / "authoring/agent/fixtures/wave_spec_G3_test_v08.json").to_dict()
     spec_b["wave_id"] = "wave-crash-b"
@@ -170,19 +256,29 @@ def test_persistent_queue_and_crash_recovery(tmp_path: Path):
     pa.write_text(json.dumps(spec_a, ensure_ascii=False, indent=2), encoding="utf-8")
     pb.write_text(json.dumps(spec_b, ensure_ascii=False, indent=2), encoding="utf-8")
 
+    # ریشهٔ رسمیِ هرمتیک با سرِ G2=v0.5 و G3=v0.7 تا هر دو موج *واقعاً* ساخته شوند
+    official_root = _isolated_official_root(tmp_path, "v0.5")
+
     state_dir = tmp_path / "state"
     work_dir = tmp_path / "work"
-    sup = AutopilotSupervisor(REPO_ROOT, official_ref_root=REPO_ROOT, state_dir=state_dir, work_dir=work_dir)
+    sup = AutopilotSupervisor(REPO_ROOT, official_ref_root=official_root, state_dir=state_dir, work_dir=work_dir)
     res1 = sup.run_waves([pa], approve_once=True)
-    # At least one wave completed
-    assert len(res1["completed_wave_ids"]) >= 1 or res1["status"] in ("PARTIAL_WITH_HELD", "HELD_AWAITING_HEAD", "PASS")
+    # موج اول باید واقعاً تکمیل شود (نه HELD و نه BLOCKED) — وگرنه بازیابیِ صف آزموده نشده
+    assert "wave-crash-a" in res1["completed_wave_ids"], f"موج G2 v1.2 باید روی سرِ رسمی v0.5 ساخته شود: {res1['status']} {res1.get('blocked_wave_ids')} {res1.get('held_wave_ids')}"
 
     # Simulate crash: new supervisor instance with same state_dir must resume
-    sup2 = AutopilotSupervisor(REPO_ROOT, official_ref_root=REPO_ROOT, state_dir=state_dir, work_dir=work_dir)
+    sup2 = AutopilotSupervisor(REPO_ROOT, official_ref_root=official_root, state_dir=state_dir, work_dir=work_dir)
     res2 = sup2.run_waves([pa, pb], approve_once=True)
     # After resume, both waves should be accounted for (completed or held), and state file must exist
     assert (state_dir / "autopilot_state.json").exists()
     assert (state_dir / "autopilot_events.jsonl").exists()
-    # No wave should be lost
+    # موجِ تکمیل‌شدهٔ پیشین نباید دوباره ساخته شود (checkpoint ماندگار)
+    assert "wave-crash-a" in res2["completed_wave_ids"]
     all_ids = set(res2["completed_wave_ids"]) | set(res2["held_wave_ids"]) | set(res2["blocked_wave_ids"])
-    assert "wave-crash-a" in all_ids
+    assert "wave-crash-a" in all_ids and "wave-crash-b" in all_ids, f"هیچ موجی نباید گم شود: {all_ids}"
+    # PASS فنی هرگز به معنای رأی معلم یا اجازهٔ انتشار نیست (بند ۵)
+    for wid in res2["completed_wave_ids"]:
+        info = json.loads((state_dir / "autopilot_state.json").read_text(encoding="utf-8"))["completed_waves"][wid]
+        assert info.get("technical_pass_only") is True
+        assert info.get("teacher_verdict_required") is True
+        assert info.get("release_authorization") == "NOT_GRANTED"

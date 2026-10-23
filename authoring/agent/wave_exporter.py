@@ -388,6 +388,10 @@ def export_wave_cartridge(
         "keyed_diff_summary": kd["summary"],
         "allocator": allocator,
         "achilles_gate": achilles_gate.to_dict(),
+        # --- v2.4: شناسه‌های *همین* موج تا بازرسان به‌جای حدس از دیف، قطعی دامنه‌بندی شوند ---
+        "allocated_lids": [s.id for s in spec.s1_rows],
+        "allocated_qids": [q.qid for q in spec.question_rows if q.qid],
+        "allocated_eids": [e.code_raw for e in spec.atlas_rows],
     }
     gate = GateResult(
         gate_id="G3_WAVE_EXPORT",

@@ -196,6 +196,9 @@ class TeacherVerdict:
     notes: str = ""
     invalidated: bool = False
     invalidation_reason: Optional[str] = None
+    # --- v2.4-hardening (بند ۵): هویتِ احرازشدهٔ سمتِ سرور، نه رشتهٔ نقشِ اعلامیِ فراخواننده ---
+    authenticated: bool = False
+    auth_method: str = ""
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)

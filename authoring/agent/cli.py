@@ -33,9 +33,12 @@ from .automation_suite import (
 from .git_guard import audit_git_copyright_safety, check_ownership_boundary
 from .governance import (
     GovernanceLedger,
+    authenticate_teacher,
     build_and_save_wave_manifest,
     evaluate_release_readiness,
 )
+from .achilles_gate import verify_evidence_coverage_gate
+from .handoff import write_handoff_index
 from .models import GateResult, file_sha256
 from .paths import resolve_confidential_pdf, resolve_fixture, resolve_official_cartridge
 from .autopilot import AutopilotSupervisor
@@ -104,17 +107,41 @@ def run_generic_wave_check(
         g_st = verify_official_stamps(candidate_xlsx, official_xlsx)
         gates["official_stamps"] = {"status": g_st.status, "issues": g_st.issues, "metrics": g_st.metrics}
 
-    # ─── دروازه پاشنه آشیل ───
+    # ─── دروازه پاشنه آشیل (هلوسه) + گیتِ مستقلِ پوششِ شاهد (v2.4 بند ۲/۴) ───
+    from .achilles_gate import _infer_book_code_from_workbook
+
+    book_code = (_infer_book_code_from_workbook(Path(candidate_xlsx)) or "C205").upper()
+    obs_cand = repo_root / f"authoring/audit/observation_{book_code}.json"
+    if not obs_cand.exists():
+        obs_cand = resolve_fixture(repo_root, f"observation_{book_code}.json", f"authoring/agent/fixtures/observation_{book_code}.json")
+    manifest_cand = resolve_fixture(repo_root, f"book_manifest_{book_code}.json", f"authoring/data/book_manifest_{book_code}.json")
     try:
         from .achilles_gate import verify_achilles_evidence_gate as _ach
 
-        obs_cand = repo_root / "authoring/audit/observation_C205.json"
-        if not obs_cand.exists():
-            obs_cand = repo_root / "authoring/agent/fixtures/observation_C205.json"
         g_ach = _ach(candidate_xlsx, observation_json_path=obs_cand if obs_cand.exists() else None, repo_root=repo_root)
         gates["achilles_evidence"] = {"status": g_ach.status, "reason_code": g_ach.reason_code, "issues": g_ach.issues, "metrics": g_ach.metrics}
     except Exception as exc:  # pragma: no cover
         gates["achilles_evidence"] = {"status": "FAIL", "reason_code": "ACHILLES_EXCEPTION", "issues": [{"error": str(exc)}]}
+
+    # گیتِ پوشش: هرگز با گیتِ هلوسه ادغام نمی‌شود و هرگز «آمادگی انتشار» گزارش نمی‌دهد
+    g_cov = None
+    try:
+        g_cov = verify_evidence_coverage_gate(
+            candidate_xlsx,
+            observation_json_path=obs_cand if obs_cand.exists() else None,
+            book_manifest_path=manifest_cand if manifest_cand.exists() else None,
+            repo_root=repo_root,
+            expected_book_code=book_code,
+        )
+        gates["achilles_coverage"] = {
+            "status": g_cov.status,
+            "reason_code": g_cov.reason_code,
+            "summary": g_cov.summary,
+            "issues": g_cov.issues,
+            "metrics": g_cov.metrics,
+        }
+    except Exception as exc:  # pragma: no cover
+        gates["achilles_coverage"] = {"status": "FAIL", "reason_code": "COVERAGE_EXCEPTION", "issues": [{"error": str(exc)}]}
 
     if delivery_md is not None and base_xlsx is not None and base_xlsx.exists():
         checks = [
@@ -335,7 +362,12 @@ def run_full_audit(repo_root: Path, write_manifest: bool = True) -> dict:
     }
 
 
-def main(argv: list[str] | None = None) -> int:
+def build_parser() -> argparse.ArgumentParser:
+    """ساختِ پارسرِ CLI — نقطهٔ حقیقتِ فرمان‌ها.
+
+    v2.4 (بند ۳): این تابع عمومی است تا آزمون/CI بتواند *نمونه‌فرمان‌های
+    مستندات* را بدون اجرای واقعی اعتبارسنجی کند (هیچ فرمانِ خیالی در راهنما نماند).
+    """
     parser = argparse.ArgumentParser(description="khshab-agent — ایجنت عمومی اتوماسیون خط تولید محتوا (مستقل از پایه و کتاب)")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
@@ -375,6 +407,12 @@ def main(argv: list[str] | None = None) -> int:
     p_verdict.add_argument("--target-ids", nargs="+", required=True)
     p_verdict.add_argument("--target-file", required=True)
     p_verdict.add_argument("--notes", default="")
+    # --- v2.4-hardening (بند ۵): احراز هویتِ اجباریِ سمتِ سرور برای رأی انسانی ---
+    p_verdict.add_argument(
+        "--teacher-token-file",
+        default=None,
+        help="مسیر فایلِ توکنِ معلم (خارج از Git). بدون احراز هویت، هیچ حکم تأییدی ثبت نمی‌شود.",
+    )
 
     p_heads = sub.add_parser("heads", help="Task 66: راستی‌آزمایی مانیفست OFFICIAL-HEADS.json")
     p_heads.add_argument("--repo-root", default=".")
@@ -392,6 +430,18 @@ def main(argv: list[str] | None = None) -> int:
     p_rchunk.add_argument("--chunks-dir", required=True)
     p_rchunk.add_argument("--output", default=None)
 
+    p_cov = sub.add_parser(
+        "coverage",
+        help="گیتِ پوششِ شاهد (بند ۲/۴): شمارِ روشنِ ردیف‌های دارای/فاقد شاهد + اتصال به SHA واقعی PDF و manifest همان چاپ",
+    )
+    p_cov.add_argument("--repo-root", default=".")
+    p_cov.add_argument("--cartridge", required=True, help="فایل اکسل خشاب (نامزد)")
+    p_cov.add_argument("--observation", default=None, help="فایل observation_{book_code}.json (دفتر شاهد)")
+    p_cov.add_argument("--book-manifest", default=None, help="manifest همان چاپ (book_manifest_{book_code}.json)")
+    p_cov.add_argument("--pdf", default=None, help="مسیر PDF واقعیِ ورودی (خارج از Git) برای سنجش SHA-256")
+    p_cov.add_argument("--pagemap", default=None, help="نقشهٔ مادرِ تأییدشده برای آفست اثبات‌شده")
+    p_cov.add_argument("--expected-book-code", default=None, help="کد کتابِ مورد انتظار (مثلاً C205)")
+
     p_view = sub.add_parser("serve-viewer", help="میز کار چندپایه با ذره‌بین پیکسلی 8x و امضای معلم (W6)")
     p_view.add_argument("--repo-root", default=".")
     p_view.add_argument("--pdf", default="/tmp/khshab_secure_vault/C205.pdf")
@@ -399,8 +449,16 @@ def main(argv: list[str] | None = None) -> int:
     p_view.add_argument("--pagemap", default=None)
     p_view.add_argument("--cartridge", default=None)
     p_view.add_argument("--verdicts-path", default=None)
-    p_view.add_argument("--host", default="0.0.0.0")
+    p_view.add_argument("--host", default="127.0.0.1", help="Bind host (default 127.0.0.1 secure local-only)")
     p_view.add_argument("--port", type=int, default=8765)
+
+    p_ho = sub.add_parser(
+        "handoff-index",
+        help="بستهٔ دسترسیِ ماشین‌خوان برای مدلِ مادر: فهرستِ ماژول‌ها/CLI/گیت‌ها/مرزهای مجوز با SHA-256 (بدون مادهٔ محرمانه)",
+    )
+    p_ho.add_argument("--repo-root", default=".")
+    p_ho.add_argument("--output", default="authoring/MOTHER-AI-INDEX.json")
+    p_ho.add_argument("--official-ref-root", default=None, help="ریشهٔ فقط‌خواندنیِ رسمی (مثلاً worktree شاخهٔ v10.3-beta)")
 
     p_auto = sub.add_parser("autopilot", help="ناظر خودمختار شبانه با خودترمیمی ریشه‌ای و همگام‌سازی GitHub")
     p_auto.add_argument("--repo-root", default=".")
@@ -414,6 +472,11 @@ def main(argv: list[str] | None = None) -> int:
     p_auto.add_argument("--pr-number", type=int, default=None)
     p_auto.add_argument("--morning-report", default=None)
 
+    return parser
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_parser()
     args = parser.parse_args(argv)
     root = Path(getattr(args, "repo_root", ".")).resolve()
 
@@ -461,20 +524,53 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if args.cmd == "record-verdict":
+        # --- v2.4-hardening (بند ۵): رشتهٔ `--actor-role` به‌تنهایی رأیِ انسانیِ معتبر نمی‌سازد ---
+        ok, auth_method, failure = authenticate_teacher(root, None, token_file=args.teacher_token_file)
+        if not ok:
+            print(json.dumps({"recorded": None, "error": failure, "auth_method": ""}, ensure_ascii=False))
+            return 2
+        from .governance import APPROVAL_SCOPES
+
+        actor_role = args.actor_role
+        if args.scope in APPROVAL_SCOPES:
+            # هویتِ احرازشده → نقشِ انسانیِ سمتِ سرور؛ نقشِ اعلامیِ فراخواننده پذیرفته نمی‌شود
+            actor_role = "human_teacher"
         ledger = GovernanceLedger(root / "authoring/audit/verdicts_C205.json")
         target_sha = file_sha256(str((root / args.target_file).resolve()))
         v = ledger.record_verdict(
             verdict_id=args.verdict_id,
             scope=args.scope,
             actor=args.actor,
-            actor_role=args.actor_role,
+            actor_role=actor_role,
             target_ids=args.target_ids,
             target_sha256=target_sha,
             notes=args.notes,
+            authenticated=True,
+            auth_method=auth_method,
         )
         ledger.save()
-        print(json.dumps({"recorded": v.verdict_id, "target_sha256": target_sha}, ensure_ascii=False))
+        print(json.dumps({
+            "recorded": v.verdict_id,
+            "target_sha256": target_sha,
+            "authenticated": v.authenticated,
+            "auth_method": v.auth_method,
+            "actor_role": v.actor_role,
+            "note": "ثبتِ فنیِ حکم؛ این حکم به‌تنهایی مجوزِ انتشار نیست و هیچ ردیفی را خودکار سبز نمی‌کند.",
+        }, ensure_ascii=False))
         return 0
+
+    if args.cmd == "coverage":
+        g_cov = verify_evidence_coverage_gate(
+            Path(args.cartridge).resolve(),
+            observation_json_path=Path(args.observation).resolve() if args.observation else None,
+            book_manifest_path=Path(args.book_manifest).resolve() if args.book_manifest else None,
+            pdf_path=Path(args.pdf).resolve() if args.pdf else None,
+            pagemap_xlsx_path=Path(args.pagemap).resolve() if args.pagemap else None,
+            repo_root=root,
+            expected_book_code=args.expected_book_code,
+        )
+        print(json.dumps(g_cov.to_dict(), ensure_ascii=False, indent=2))
+        return 0 if g_cov.status == "PASS" else 1
     if args.cmd == "build-wave":
         g_exp, out_sha, details = export_wave_cartridge(
             args.wave_spec,
@@ -483,7 +579,17 @@ def main(argv: list[str] | None = None) -> int:
             out_registry_path=args.registry,
             base_xlsx_override=args.base_xlsx,
         )
-        print(json.dumps({"gate": g_exp.to_dict(), "output_sha256": out_sha, "details": details}, ensure_ascii=False, indent=2))
+        # `details["allocator"]` یک شیءِ زنده است؛ برای خروجیِ JSON به خلاصهٔ شمارشی تبدیل می‌شود
+        safe_details = {k: v for k, v in (details or {}).items() if k != "allocator"}
+        alloc = (details or {}).get("allocator")
+        if alloc is not None:
+            allocated = getattr(alloc, "allocated", {}) or {}
+            retired = getattr(alloc, "retired", {}) or {}
+            safe_details["allocator_summary"] = {
+                "allocated": {ns: len(allocated.get(ns, {})) for ns in ("L", "Q", "E")},
+                "retired": {ns: len(retired.get(ns, {})) for ns in ("L", "Q", "E")},
+            }
+        print(json.dumps({"gate": g_exp.to_dict(), "output_sha256": out_sha, "details": safe_details}, ensure_ascii=False, indent=2, default=str))
         return 0 if g_exp.status == "PASS" else 1
 
     if args.cmd == "reconcile-chunks":
@@ -504,6 +610,27 @@ def main(argv: list[str] | None = None) -> int:
             cartridge_path=Path(args.cartridge) if args.cartridge else None,
             verdicts_path=Path(args.verdicts_path) if args.verdicts_path else None,
         )
+        return 0
+
+    if args.cmd == "handoff-index":
+        res = write_handoff_index(
+            root,
+            Path(args.output).resolve(),
+            official_ref_root=Path(args.official_ref_root).resolve() if args.official_ref_root else None,
+        )
+        bundle = json.loads(Path(res["path"]).read_text(encoding="utf-8"))
+        print(json.dumps({
+            "path": res["path"],
+            "bundle_sha256": res["sha256"],
+            "bytes": res["bytes"],
+            "engine_modules": len(bundle["engine"]["modules"]),
+            "cli_subcommands": [s["name"] for s in bundle["cli"]["subcommands"]],
+            "hard_invariants": len(bundle["hard_invariants"]),
+            "not_granted": bundle["not_granted"],
+            "official_heads_available": bundle["official_heads"].get("available"),
+            "fixtures_listed": len(bundle.get("fixtures_non_confidential", [])),
+            "tests_listed": len(bundle.get("tests", [])),
+        }, ensure_ascii=False, indent=2))
         return 0
 
     if args.cmd == "autopilot":

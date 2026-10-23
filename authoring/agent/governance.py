@@ -80,12 +80,20 @@ class GovernanceLedger:
         target_sha256: str,
         notes: str = "",
         timestamp_utc: Optional[str] = None,
+        authenticated: bool = False,
+        auth_method: str = "",
     ) -> TeacherVerdict:
         if scope not in VALID_SCOPES:
             raise ValueError(f"Unknown governance verdict scope: {scope!r}")
         if scope in APPROVAL_SCOPES and actor_role != "human_teacher":
             raise GovernanceViolationError(
                 f"AI_ACTOR_FORBIDDEN_FROM_APPROVAL: actor={actor!r} role={actor_role!r} cannot emit {scope}"
+            )
+        # --- v2.4-hardening (بند ۵): رشتهٔ نقشِ ارائه‌شده توسط فراخواننده به‌تنهایی رأیِ انسانیِ معتبر نمی‌سازد ---
+        if scope in APPROVAL_SCOPES and not authenticated:
+            raise GovernanceViolationError(
+                "TEACHER_IDENTITY_NOT_AUTHENTICATED: حکمِ تأییدی فقط با احراز هویتِ سمتِ سرور "
+                "(توکن معلم خارج از Git) ثبت می‌شود؛ `actor_role=human_teacher` اعلامیِ فراخواننده کافی نیست."
             )
         if not target_ids:
             raise ValueError("target_ids must be explicit and non-empty (no silent wildcard approval).")
@@ -101,6 +109,8 @@ class GovernanceLedger:
             target_sha256=target_sha256,
             timestamp_utc=timestamp_utc or utc_now_iso(),
             notes=notes,
+            authenticated=authenticated,
+            auth_method=auth_method,
         )
         self.verdicts.append(verdict)
         return verdict
@@ -300,3 +310,58 @@ def build_and_save_wave_manifest(
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(wm.to_dict(), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return wm
+
+
+# =============================================================================
+# v2.4-hardening (بند ۵ و ۶): احراز هویتِ سمتِ سرورِ معلم — یک نقطهٔ حقیقت
+# هیچ مسیری (HTTP viewer یا CLI) نباید با رشتهٔ نقشِ اعلامیِ فراخواننده
+# رأیِ انسانیِ معتبر بسازد؛ توکن باید خارج از Git و صریح تنظیم شود.
+# =============================================================================
+def expected_teacher_token(repo_root: str | Path) -> Optional[str]:
+    """توکنِ مورد انتظارِ سمتِ سرور؛ `None` یعنی هیچ توکنی پیکربندی نشده (fail-closed).
+
+    منابعِ مجاز (به‌ترتیب):
+      1. متغیر محیطی `KHSHAB_TEACHER_TOKEN`
+      2. فایلِ خارج از Git: `authoring/audit/teacher_token.txt`
+    هیچ مقدارِ پیش‌فرضِ قابلِ حدسی وجود ندارد.
+    """
+    import os
+
+    env_tok = (os.environ.get("KHSHAB_TEACHER_TOKEN") or "").strip()
+    if env_tok:
+        return env_tok
+    tok_file = Path(repo_root) / "authoring/audit/teacher_token.txt"
+    if tok_file.exists():
+        val = tok_file.read_text(encoding="utf-8").strip()
+        if val:
+            return val
+    return None
+
+
+def authenticate_teacher(
+    repo_root: str | Path,
+    provided_token: Optional[str],
+    token_file: Optional[str | Path] = None,
+) -> Tuple[bool, str, Optional[str]]:
+    """احراز هویتِ معلم.
+
+    خروجی: `(authenticated, auth_method, failure_reason)`.
+    `token_file` مسیرِ جایگزینِ ارائه‌شده توسط فراخواننده برای خواندنِ توکن است
+    (مثلاً در CLI) و محتوای آن با توکنِ پیکربندی‌شدهٔ سرور مقایسه می‌شود.
+    """
+    expected = expected_teacher_token(repo_root)
+    if expected is None:
+        return False, "", "TEACHER_TOKEN_NOT_CONFIGURED: هیچ توکنِ سمتِ سروری تنظیم نشده است (KHSHAB_TEACHER_TOKEN یا authoring/audit/teacher_token.txt خارج از Git)."
+    supplied = (provided_token or "").strip()
+    if not supplied and token_file is not None:
+        tf = Path(token_file)
+        if tf.exists():
+            supplied = tf.read_text(encoding="utf-8").strip()
+        else:
+            return False, "", f"TEACHER_TOKEN_FILE_MISSING: فایل توکن یافت نشد: {tf}"
+    if not supplied:
+        return False, "", "TEACHER_TOKEN_MISSING: توکن ارائه نشد."
+    if supplied != expected:
+        return False, "", "TEACHER_TOKEN_INVALID: توکنِ ارائه‌شده با توکنِ سمتِ سرور مطابقت ندارد."
+    method = "KHSHAB_TEACHER_TOKEN_FILE" if (token_file is not None and not (provided_token or "").strip()) else "X-Teacher-Token"
+    return True, method, None

@@ -35,17 +35,16 @@ from .paths import resolve_fixture
 import os
 
 # --- Server-side teacher identity (never trust client-declared role) ---
-def _expected_teacher_token(repo_root: Path) -> str:
-    # 1) env var (production)
-    env_tok = os.environ.get("KHSHAB_TEACHER_TOKEN")
-    if env_tok:
-        return env_tok.strip()
-    # 2) explicit token file (outside git)
-    tok_file = Path(repo_root) / "authoring/audit/teacher_token.txt"
-    if tok_file.exists():
-        return tok_file.read_text(encoding="utf-8").strip()
-    # 3) fallback for local dev / CI (still requires header, but predictable)
-    return "dev-teacher-token-2026"
+def _expected_teacher_token(repo_root: Path) -> str | None:
+    """نقطهٔ حقیقتِ مشترک با `governance.expected_teacher_token` (بند ۶).
+
+    هیچ مقدارِ پیش‌فرضِ قابلِ حدسی وجود ندارد: اگر `KHSHAB_TEACHER_TOKEN`
+    یا فایلِ خارج از Git تنظیم نشده باشد، `None` برمی‌گردد و همهٔ
+    حکم‌های تأییدی با `403` رد می‌شوند (fail-closed).
+    """
+    from .governance import expected_teacher_token
+
+    return expected_teacher_token(repo_root)
 
 HTML_INDEX = """<!doctype html>
 <html lang="fa" dir="rtl">
@@ -434,16 +433,17 @@ def create_viewer_handler(
                 # Approval scopes (MAP/ROW/ERROR/RELEASE) require valid teacher token
                 from .governance import APPROVAL_SCOPES
 
-                if scope in APPROVAL_SCOPES and provided_tok != expected_tok:
+                # Fail-closed if no token configured on server
+                if scope in APPROVAL_SCOPES and (expected_tok is None or provided_tok != expected_tok):
                     self._send_json(
                         403,
                         {"ok": False, "error": "TEACHER_TOKEN_INVALID_OR_MISSING: server-side teacher authentication required (X-Teacher-Token header)"},
                     )
                     return
                 actor = str(body["actor"])
-                # Force server-side role: authenticated teacher is always human_teacher; ignore client claim
+                # Force server-side role: only valid token yields human_teacher; otherwise keep client claim but it was already rejected for approval scopes
                 client_role = str(body.get("actor_role", "human_teacher"))
-                actor_role = "human_teacher" if provided_tok == expected_tok else client_role
+                actor_role = "human_teacher" if (expected_tok is not None and provided_tok == expected_tok) else client_role
                 target_ids = list(body["target_ids"])
                 notes = str(body.get("notes", ""))
                 ledger = GovernanceLedger(vd_file)
@@ -461,6 +461,8 @@ def create_viewer_handler(
                     target_ids=target_ids,
                     target_sha256=target_sha,
                     notes=notes,
+                    authenticated=bool(expected_tok is not None and provided_tok == expected_tok),
+                    auth_method="X-Teacher-Token" if (expected_tok is not None and provided_tok == expected_tok) else "",
                 )
                 ledger_sha = ledger.save()
                 self._send_json(
@@ -487,7 +489,7 @@ def create_viewer_handler(
 def serve_viewer(
     repo_root: Path,
     pdf_path: Path,
-    host: str = "0.0.0.0",
+    host: str = "127.0.0.1",
     port: int = 8765,
     *,
     book_manifest_path: Optional[Path] = None,
@@ -516,7 +518,7 @@ def main() -> None:
     parser.add_argument("--pagemap", default=None, help="Verified PAGE-MAP xlsx path")
     parser.add_argument("--cartridge", default=None, help="Target cartridge xlsx path")
     parser.add_argument("--verdicts-path", default=None, help="Governance ledger JSON path")
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8765)
     args = parser.parse_args()
     serve_viewer(

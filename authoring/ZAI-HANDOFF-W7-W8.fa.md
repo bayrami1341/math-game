@@ -53,3 +53,52 @@
 - **تست نهایی آرنا:** `50 passed, 4 skipped` روی `211ee45` (۱۲ تست W1-W6 + ۵ تست مرزی Achilles + ۶ تست حل‌گر چندپایه + ۲ تست خودترمیم)
 - **پایلوت کور:** `evidence→skill→question→cartridge` با `observation_C205.json` (۱۵۲ page) + `wave_spec_G3_test_v08.json` → `PASS` (`SHA b0b32bea... red 0 yellow 7`) و `achilles_gate` ایزوله `PASS`
 - **گزارش صبحگاهی نهایی:** `authoring/MORNING-REPORT.fa.md` @ `2026-10-22T21:07:25Z` — `1 completed KH-G3-MATH PASS`، `G0 PASS`، `approval_proof SHA 576e6f89...`
+
+---
+
+## ۴. سخت‌سازی `v2.4` برای اتصالِ امنِ نامزدِ `G2 v1.2` (بازبینی مستقل ۲۰۲۶-۱۰-۲۲)
+
+**دامنهٔ تغییر فقط سمتِ آرنا است؛ هیچ فایلِ نرم‌افزاریِ `Z.ai` و هیچ قراردادِ API/موتوری تغییر نکرده است.**
+
+- **گیتِ مستقلِ پوششِ شاهد** (`authoring/agent/achilles_gate.py: verify_evidence_coverage_gate` +
+  زیرفرمانِ تازهٔ `coverage`): شمارِ روشنِ `rows_with_evidence` / `rows_without_evidence` /
+  `rows_mismatch` / `coverage_ratio`. روی `khshab-G2-MATH_v0.5.xlsx`: `51` با شاهد، `3` بدون شاهد
+  (`L-101`, `L-201`, `L-401`)، `0` ناسازگاری، آفستِ اثبات‌شده `+6`.
+  `PASS` گیتِ هلوسه (`ACHILLES_NO_LEDGER_BUT_NO_GREEN_RISK`) دیگر هرگز «تکمیلِ مشاهده» یا
+  «آمادگیِ انتشار» خوانده نمی‌شود.
+- **اتصالِ شاهد به منبعِ واقعی** (`bind_evidence_to_source`): SHA-256 واقعیِ فایل PDF ورودی +
+  `book_code` + manifest همان چاپ + آفستِ اثبات‌شده. کدهای `fail-closed`:
+  `EXPECTED_BOOK_CODE_MISMATCH`، `MANIFEST_PRINT_SHA_MISMATCH`، `PDF_SHA_MISMATCH`،
+  `SOURCE_PDF_UNAVAILABLE`، `LEDGER_SOURCE_BINDING_MISMATCH`، `PROVEN_OFFSET_CONFLICT`،
+  `PAGE_OFFSET_MISMATCH_HALLUCINATION`، `GREEN_ROWS_WITHOUT_EVIDENCE`.
+- **مرزِ مجوزها**: `--approve-once` اکنون صریحاً `permission_scope=TECHNICAL_EXECUTION_ONLY`،
+  `teacher_verdict_granted=false`، `release_authorization=NOT_GRANTED` و
+  `not_a_consent_document=true` ثبت می‌کند و همین مرز در گزارشِ صبحگاهی می‌آید.
+  `GovernanceLedger.record_verdict` برای هر حکمِ تأییدی `authenticated=True` می‌خواهد؛
+  رشتهٔ `actor_role=human_teacher` به‌تنهایی با
+  `TEACHER_IDENTITY_NOT_AUTHENTICATED` رد می‌شود (هم در CLI و هم در HTTP).
+- **میز کارِ معلم امن**: توکنِ پیش‌فرضِ قابلِ حدس (`dev-teacher-token-2026`) حذف شد؛
+  توکن فقط از `KHSHAB_TEACHER_TOKEN` یا `authoring/audit/teacher_token.txt` (خارج از Git،
+  اکنون در `.gitignore`) خوانده می‌شود و پیش‌فرضِ `--host` به `127.0.0.1` تغییر کرد.
+- **راهنمایِ هم‌تراز با CLI**: `authoring/USAGE-KHSHAB-AGENT-v24.fa.md` (بدون `observe`؛
+  `reconcile-chunks --chunks-dir`؛ `build-wave --wave-spec/--output`؛ بدون جفتِ
+  manifest `C205` و PDF `C305`) که نمونه‌فرمان‌هایش توسط
+  `authoring/tests/test_docs_cli_alignment.py` هم تجزیه و هم **واقعاً اجرا** می‌شوند.
+  ضمن این کار یک نقصِ واقعیِ CLI رفع شد: `build-wave` به‌دلیل
+  `Object of type IDAllocator is not JSON serializable` با exit=1 می‌شکست.
+- **موجِ افزایشیِ G2 v1.2**: `authoring/agent/fixtures/wave_spec_G2_v12_incremental.json`
+  بر پایهٔ رسمیِ `v0.5` (`f1f339a09a8c…`)، فقط لوله‌کشی (۲ ردیفِ زردِ بدون ادعای صفحه،
+  صفر سؤالِ ساختگی، صفر پچ). خروجیِ dry-run: `6afd3a5741712df9…`، `added=2 / removed=0 /
+  changed_cells=0`، مبدلِ رسمی `Z.ai` قرمز `0` زرد `2`.
+- **گیتِ توقفِ مبنای کهنه دست‌نخورده باقی ماند** و اکنون آزمونِ مستقل و هرمتیک دارد:
+  `test_stale_official_base_is_rejected_and_gate_is_precise` (رد با
+  `STALE_OFFICIAL_BASE_INCIDENT_07` وقتی سرِ اعلامی `v0.5` است، و کنترلِ `PASS` وقتی
+  سرِ اعلامی `v0.4` است) + `test_persistent_queue_and_crash_recovery` که اکنون واقعاً
+  یک موجِ G2 را می‌سازد و بازیابیِ صف را می‌آزماید.
+- **نتیجهٔ تست:** `python -m pytest -q` → **`69 passed, 4 skipped`** روی شاخهٔ
+  `arena/0eb22280-math-game` (مرجعِ رسمیِ فقط‌خواندنی: `v10.3-beta` @ `24e61dd` (سرِ پیشین `0849aae`)).
+  `4 skipped` = نبودِ دو PDF محرمانه و نبودِ مبدلِ SSOT در شاخهٔ محتواییِ آرنا.
+- **موانعِ سمتِ `Z.ai`/مالک (بدون تغییر):** `Wave 5 Hold` تا اعلامِ رسمیِ ادغام و مُهر معلم،
+  حلِ `CONFLICTING` بودنِ `PR #2` با `squash`/`rebase` (نه ادغامِ `v10.3-beta` در `arena/**`)،
+  و مالکیتِ `W7`/`W8`.
+- گزارشِ کاملِ dry-run: `authoring/G2-V12-CONNECTION-DRYRUN.fa.md`.

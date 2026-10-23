@@ -418,6 +418,19 @@ def test_p6_ai_cannot_forge_teacher_approval_and_sha_mutation_invalidates_verdic
             actor_role="ai_agent",
             target_ids=["Q-1069"],
             target_sha256="a" * 64,
+            authenticated=True,
+            auth_method="X-Teacher-Token",
+        )
+
+    # v2.4 (بند ۵): رشتهٔ نقشِ اعلامیِ فراخواننده به‌تنهایی رأیِ انسانیِ معتبر نمی‌سازد
+    with pytest.raises(GovernanceViolationError, match="TEACHER_IDENTITY_NOT_AUTHENTICATED"):
+        ledger.record_verdict(
+            verdict_id="TV-FAKE-UNAUTH",
+            scope="ROW_APPROVED",
+            actor="هر فراخوانندهٔ CLI/HTTP",
+            actor_role="human_teacher",
+            target_ids=["Q-1069"],
+            target_sha256="a" * 64,
         )
 
     old_pm_sha = "b" * 64
@@ -429,6 +442,8 @@ def test_p6_ai_cannot_forge_teacher_approval_and_sha_mutation_invalidates_verdic
         actor_role="human_teacher",
         target_ids=["CH4-P55-P72"],
         target_sha256=old_pm_sha,
+        authenticated=True,
+        auth_method="unit-test-token",
     )
     ledger.record_verdict(
         verdict_id="TV-002",
@@ -437,6 +452,8 @@ def test_p6_ai_cannot_forge_teacher_approval_and_sha_mutation_invalidates_verdic
         actor_role="human_teacher",
         target_ids=["L-401", "Q-1069"],
         target_sha256=old_wb_sha,
+        authenticated=True,
+        auth_method="unit-test-token",
     )
 
     mutated_wb_sha = "d" * 64

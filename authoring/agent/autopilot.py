@@ -52,10 +52,10 @@ from .models import (
     file_sha256,
 )
 from .observation import normalize_digits_to_persian, purge_quarantine_vault
-from .paths import resolve_fixture, resolve_official_cartridge
+from .paths import resolve_confidential_pdf, resolve_fixture, resolve_official_cartridge
 from .reconcile import GeminiVisionReaderAdapter, OpenAICompatibleReaderAdapter
 from .solvers import solve_with_plugins
-from .achilles_gate import verify_achilles_evidence_gate
+from .achilles_gate import verify_achilles_evidence_gate, verify_evidence_coverage_gate
 from .validators import inspect_cartridge_workbook, resolve_pagemap_for_workbook
 from .wave_exporter import export_wave_cartridge
 
@@ -116,6 +116,11 @@ def _roadmap_approval_proof(repo_root: Path) -> Optional[Dict[str, Any]]:
         "roadmap_sha256": sha,
         "allowed_families": families,
         "proof_timestamp_utc": _utc_now(),
+        # --- بند ۵: این سند «رضایت احرازشدهٔ مالک» یا «اختیار صدور رأی معلم» نیست ---
+        "permission_scope": "TECHNICAL_EXECUTION_ONLY",
+        "teacher_verdict_granted": False,
+        "release_authorization": "NOT_GRANTED",
+        "not_a_consent_document": True,
     }
 
 
@@ -745,6 +750,8 @@ class AutopilotSupervisor:
                     f"observation_{current_spec.book_code}.json",
                     f"authoring/audit/observation_{current_spec.book_code}.json",
                 )
+                # PDF واقعیِ ورودی (خارج از Git) فقط برای سنجشِ SHA در گیتِ پوشش؛ هرگز commit نمی‌شود
+                pdf_for_binding = resolve_confidential_pdf(self.repo_root, current_spec.book_code)
                 wave_qids = set(details.get("allocated_qids", [])) if isinstance(details, dict) else None
                 p4 = inspect_cartridge_workbook(
                     out_xlsx,
@@ -759,6 +766,21 @@ class AutopilotSupervisor:
                     observation_json_path=obs_candidate if obs_candidate.exists() else None,
                     pagemap_xlsx_path=pm,
                     repo_root=self.repo_root,
+                )
+                # ─── گیتِ مستقلِ پوششِ شاهد (v2.4 بند ۲/۴) — PASS هلوسه هرگز پوشش نیست ───
+                manifest_candidate = resolve_fixture(
+                    self.repo_root,
+                    f"book_manifest_{current_spec.book_code}.json",
+                    f"authoring/data/book_manifest_{current_spec.book_code}.json",
+                )
+                coverage_gate = verify_evidence_coverage_gate(
+                    out_xlsx,
+                    observation_json_path=obs_candidate if obs_candidate.exists() else None,
+                    book_manifest_path=manifest_candidate if manifest_candidate.exists() else None,
+                    pdf_path=pdf_for_binding if pdf_for_binding is not None else None,
+                    pagemap_xlsx_path=pm,
+                    repo_root=self.repo_root,
+                    expected_book_code=current_spec.book_code,
                 )
                 from openpyxl.utils import column_index_from_string
 
@@ -806,18 +828,38 @@ class AutopilotSupervisor:
                 _conv_ok = (conv["status"] == "PASS" and conv.get("red", 0) == 0) or (
                     conv["status"] == "SKIPPED_NO_CONVERTER" and _os2.environ.get("PYTEST_CURRENT_TEST")
                 )
+                # پوششِ شاهد: `FAIL` (ناسازگاری منبع/صفحه یا سبزِ بی‌شاهد) مسدودکننده است؛
+                # `WARN` (ردیفِ بی‌شاهد که زرد می‌ماند) فنی است و فقط گزارش می‌شود.
+                _coverage_ok = coverage_gate.status != "FAIL"
                 all_green = (
                     all(gr.status == "PASS" for gr in p4.values())
                     and achilles_gate.status == "PASS"
+                    and _coverage_ok
                     and u10.status == "PASS"
                     and _conv_ok
                 )
+                coverage_report = {
+                    "status": coverage_gate.status,
+                    "reason_code": coverage_gate.reason_code,
+                    "rows_with_evidence": coverage_gate.metrics.get("rows_with_evidence", 0),
+                    "rows_without_evidence": coverage_gate.metrics.get("rows_without_evidence", 0),
+                    "rows_mismatch": coverage_gate.metrics.get("rows_mismatch", 0),
+                    "coverage_ratio": coverage_gate.metrics.get("coverage_ratio"),
+                    "without_evidence_ids": coverage_gate.metrics.get("without_evidence_ids", []),
+                    "proven_offset": coverage_gate.metrics.get("proven_offset"),
+                    "observation_pdf_sha256": coverage_gate.metrics.get("observation_pdf_sha256"),
+                    "book_code": coverage_gate.metrics.get("observation_book_code"),
+                }
                 if all_green:
                     if all_heal_actions:
                         current_spec.save_json(spec_path)
                     self.state_store.log_event(
                         "WAVE_GREEN",
                         {"wave_id": current_spec.wave_id, "sha256": out_sha, "heals": len(all_heal_actions)},
+                    )
+                    self.state_store.log_event(
+                        "EVIDENCE_COVERAGE_REPORTED",
+                        {"wave_id": current_spec.wave_id, **coverage_report},
                     )
                     return {
                         "status": "PASS",
@@ -829,12 +871,21 @@ class AutopilotSupervisor:
                         "heal_actions": all_heal_actions,
                         "converter_red": conv.get("red", 0),
                         "converter_yellow": conv.get("yellow", 0),
+                        # PASS فنیِ موج — نه تأیید محتوایی، نه مُهر معلم، نه اجازهٔ انتشار
+                        "technical_pass_only": True,
+                        "teacher_verdict_required": True,
+                        "release_authorization": "NOT_GRANTED",
+                        "evidence_coverage": coverage_report,
                     }
 
                 last_failures = {
                     "p4": {k: v.issues for k, v in p4.items() if v.status != "PASS"},
                     "achilles": achilles_gate.issues,
                     "achilles_status": achilles_gate.status,
+                    "coverage": coverage_gate.issues,
+                    "coverage_status": coverage_gate.status,
+                    "coverage_reason": coverage_gate.reason_code,
+                    "coverage_metrics": coverage_report,
                     "u10": u10.issues,
                     "converter_status": conv["status"],
                     "converter_red": conv.get("red", -1),
@@ -889,10 +940,22 @@ class AutopilotSupervisor:
             "## جزئیات امواج تکمیل‌شده",
         ]
         for wid, info in state.get("completed_waves", {}).items():
-            lines.append(
-                f"- **`{wid}` (`{info['family_id']}`):** `PASS` | `SHA-256={info['output_sha256'][:16]}…` | "
-                f"دورهای خودترمیمی: `{info['heal_rounds_used']}` | خطای قرمز مبدل: `{info['converter_red']}`"
+            cov = info.get("evidence_coverage") or {}
+            cov_txt = (
+                f"پوششِ شاهد: `{cov.get('rows_with_evidence', '?')}` با شاهد / `{cov.get('rows_without_evidence', '?')}` بدون شاهد "
+                f"(`{cov.get('status', '?')}` — `{cov.get('reason_code', '?')}`)"
+                if cov
+                else "پوششِ شاهد: گزارش‌نشده"
             )
+            lines.append(
+                f"- **`{wid}` (`{info['family_id']}`):** `PASS فنی` | `SHA-256={info['output_sha256'][:16]}…` | "
+                f"دورهای خودترمیمی: `{info['heal_rounds_used']}` | خطای قرمز مبدل: `{info['converter_red']}` | {cov_txt}"
+            )
+            if cov.get("without_evidence_ids"):
+                lines.append(
+                    f"  - ردیف‌های بدون شاهد (زرد می‌مانند، هیچ ارتقای خودکار به سبز): "
+                    f"`{', '.join(str(x) for x in cov['without_evidence_ids'][:12])}`"
+                )
         if state.get("held_waves"):
             lines.append("\n## امواج منتظر ادغام پایهٔ رسمی (`OFFICIAL-HEADS.json`)")
             for wid, h in state["held_waves"].items():
@@ -901,4 +964,16 @@ class AutopilotSupervisor:
             lines.append("\n## موارد پارک‌شده برای بررسی صبحگاهی معلم")
             for wid, b in state["blocked_waves"].items():
                 lines.append(f"- **`{wid}`:** `{json.dumps(b['diagnostics'], ensure_ascii=False)[:300]}`")
+
+        # --- مرزِ روشنِ مجوزها (بند ۵): اجازهٔ فنی ≠ رأی معلم ≠ اجازهٔ انتشار ---
+        proof = state.get("approval_proof") or {}
+        lines += [
+            "\n## مرزِ مجوزها (قابلِ ممیزی)",
+            f"- **`--approve-once`** فقط «اجازهٔ اجرای فنیِ محدود» است: `{proof.get('permission_scope', 'TECHNICAL_EXECUTION_ONLY')}`",
+            f"- **دامنهٔ مجازِ خانواده‌ها:** `{', '.join(proof.get('allowed_families', [])) or '—'}`",
+            f"- **SHA-256 نقشهٔ فنیِ مالک:** `{proof.get('roadmap_sha256', '—')}`",
+            "- **رأی معلم:** ثبت‌نشده توسط این اجرا (`TEACHER_VERDICT_REQUIRED`) — هیچ ردیفی خودکار سبز نشده است.",
+            "- **اجازهٔ انتشار:** `NOT_GRANTED` — فقط با حکمِ احرازشدهٔ معلم و گیتِ `G7`.",
+            "- **پوششِ شاهد:** PASS گیتِ هلوسه به معنای «تکمیل مشاهدهٔ صفحه‌ها» یا «آمادگی انتشار» نیست.",
+        ]
         return "\n".join(lines) + "\n"

@@ -30,3 +30,7 @@ download/
 __pycache__/
 *.py[cod]
 .pytest_cache/
+
+# Teacher authentication token (v2.4 بند ۶) — هرگز در Git؛ فقط خارج از مخزن
+authoring/audit/teacher_token.txt
+authoring/audit/teacher_token*.txt
