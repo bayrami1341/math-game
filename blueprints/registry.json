@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 37,
-  "updated_at": "2026-10-23T04:41:55.615Z",
+  "version": 39,
+  "updated_at": "2026-10-23T04:55:24.765Z",
   "updated_by": "agent:z",
   "blueprints": [
     {
@@ -804,12 +804,12 @@
       "title": "موتور سؤال چند-قالبی در بازی — فاز الف (عدد/کسر/گزینه‌ای)، فاز ب (محور/زوج‌سازی)، فاز ج (شکل/نمودار)",
       "lane": "dev",
       "assignee": "z.ai",
-      "status": "awaiting_approval",
+      "status": "executing",
       "priority": 18,
       "created_by": "z.ai — فرمان مالک «تعیین تکلیف خشاب‌ها» (Task 24/25)",
       "created_at": "2026-10-23T04:36:27.151Z",
-      "approved_by": null,
-      "approved_at": null,
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a1671c94a3e8149)",
+      "approved_at": "2026-10-23T04:55:24.743Z",
       "dispatched_at": null,
       "delivered_at": null,
       "verified_at": null,
@@ -850,7 +850,7 @@
         "public/math-game/src/v10/station/*",
         "public/math-game/tests/*"
       ],
-      "notes": "وابسته به BP-015 (schema دامنه‌دار). فازبندی‌شده اجرا می‌شود؛ هر فاز مستقلاً قابل بستن است.",
+      "notes": "وابسته به BP-015 (schema دامنه‌دار). فازبندی‌شده اجرا می‌شود؛ هر فاز مستقلاً قابل بستن است.\n[2026-10-23T04:55:24.765Z] فاز الف (عدد/کسر/گزینه‌ای) این شیفت — فاز ب/ج بنا به فازبندی نقشه",
       "links": {
         "pr": null,
         "issue": "issue #4",
