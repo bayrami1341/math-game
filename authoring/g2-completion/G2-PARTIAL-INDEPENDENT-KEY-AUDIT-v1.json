@@ -1,0 +1,1065 @@
+{
+  "schema": "G2_PARTIAL_INDEPENDENT_KEY_AUDIT_v1",
+  "not_checkable_reasons": {
+    "APPROXIMATE_OR_CONTEXTUAL": 4,
+    "NOT_AN_EXPLICIT_RESULT_PROMPT": 79,
+    "NO_UNIQUE_SELF_CONTAINED_EXPRESSION": 2
+  },
+  "status": "PROVISIONAL_PARTIAL_ARITHMETIC_CHECK_NOT_BOOK_VERIFIED",
+  "q_count": 104,
+  "option_integrity_checked": 104,
+  "exact_arithmetic_checked": 19,
+  "not_checkable_count": 85,
+  "failures": [],
+  "source_visual_verified": false,
+  "book_correctness_claimed": false,
+  "teacher_approvals": 0,
+  "rows": [
+    {
+      "q_id": "Q-1001",
+      "anchor": "L-105",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1002",
+      "anchor": "L-105",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1003",
+      "anchor": "L-105",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1004",
+      "anchor": "L-105",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1005",
+      "anchor": "L-106",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1006",
+      "anchor": "L-106",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1007",
+      "anchor": "L-106",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1008",
+      "anchor": "L-106",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1009",
+      "anchor": "L-108",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1010",
+      "anchor": "L-108",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1011",
+      "anchor": "L-108",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1012",
+      "anchor": "L-108",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1013",
+      "anchor": "L-109",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1014",
+      "anchor": "L-109",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1015",
+      "anchor": "L-109",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1016",
+      "anchor": "L-109",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1017",
+      "anchor": "L-110",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1018",
+      "anchor": "L-110",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1019",
+      "anchor": "L-110",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1020",
+      "anchor": "L-112",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1021",
+      "anchor": "L-111",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1022",
+      "anchor": "L-111",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1023",
+      "anchor": "L-111",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1024",
+      "anchor": "L-111",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1025",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1026",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1027",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1028",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1029",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1030",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1031",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1032",
+      "anchor": "L-113",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1033",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1034",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1035",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1036",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1037",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1038",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1039",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1040",
+      "anchor": "L-117",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1041",
+      "anchor": "L-202",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1042",
+      "anchor": "L-202",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NO_UNIQUE_SELF_CONTAINED_EXPRESSION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1043",
+      "anchor": "L-202",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1044",
+      "anchor": "L-202",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1045",
+      "anchor": "L-205",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1046",
+      "anchor": "L-205",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1047",
+      "anchor": "L-205",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1048",
+      "anchor": "L-205",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1049",
+      "anchor": "L-210",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1050",
+      "anchor": "L-210",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1051",
+      "anchor": "L-210",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1052",
+      "anchor": "L-210",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NO_UNIQUE_SELF_CONTAINED_EXPRESSION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1053",
+      "anchor": "L-213",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1054",
+      "anchor": "L-213",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1055",
+      "anchor": "L-213",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1056",
+      "anchor": "L-213",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1057",
+      "anchor": "L-214",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1058",
+      "anchor": "L-214",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1059",
+      "anchor": "L-214",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1060",
+      "anchor": "L-214",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1061",
+      "anchor": "L-215",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1062",
+      "anchor": "L-215",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1063",
+      "anchor": "L-215",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1064",
+      "anchor": "L-215",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1065",
+      "anchor": "L-216",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "APPROXIMATE_OR_CONTEXTUAL",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1066",
+      "anchor": "L-216",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "APPROXIMATE_OR_CONTEXTUAL",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1067",
+      "anchor": "L-216",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "APPROXIMATE_OR_CONTEXTUAL",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1068",
+      "anchor": "L-216",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "APPROXIMATE_OR_CONTEXTUAL",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1069",
+      "anchor": "L-403",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1070",
+      "anchor": "L-403",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1071",
+      "anchor": "L-403",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1072",
+      "anchor": "L-403",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1073",
+      "anchor": "L-405",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1074",
+      "anchor": "L-405",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1075",
+      "anchor": "L-405",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1076",
+      "anchor": "L-405",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1077",
+      "anchor": "L-407",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1078",
+      "anchor": "L-407",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1079",
+      "anchor": "L-407",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1080",
+      "anchor": "L-407",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1081",
+      "anchor": "L-410",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1082",
+      "anchor": "L-410",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1083",
+      "anchor": "L-410",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1084",
+      "anchor": "L-410",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1085",
+      "anchor": "L-411",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1086",
+      "anchor": "L-411",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1087",
+      "anchor": "L-411",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1088",
+      "anchor": "L-411",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1089",
+      "anchor": "L-413",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1090",
+      "anchor": "L-413",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1091",
+      "anchor": "L-413",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "CHECKED_EXACT_ARITHMETIC_ONLY",
+      "reason_code": "INDEPENDENT_EXPRESSION_EVALUATION",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1092",
+      "anchor": "L-413",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1093",
+      "anchor": "L-308",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1094",
+      "anchor": "L-308",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1095",
+      "anchor": "L-308",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1096",
+      "anchor": "L-308",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1097",
+      "anchor": "L-309",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1098",
+      "anchor": "L-309",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1099",
+      "anchor": "L-309",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1100",
+      "anchor": "L-309",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1101",
+      "anchor": "L-10080",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1102",
+      "anchor": "L-10080",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1103",
+      "anchor": "L-10080",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    },
+    {
+      "q_id": "Q-1104",
+      "anchor": "L-10080",
+      "option_integrity": "PASS_OPTIONS_UNIQUE",
+      "arithmetic_status": "NOT_CHECKABLE_NO_BOOK_OR_SEMANTIC_WITNESS",
+      "reason_code": "NOT_AN_EXPLICIT_RESULT_PROMPT",
+      "book_evidence": "UNVERIFIED",
+      "runtime_status": "NOT_TESTED",
+      "teacher_verdict": "NOT_GRANTED"
+    }
+  ],
+  "input_sha256": {
+    "candidate": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+    "priority_queue": "f949a58ba7e2852e948170e7bee0a46312b762a7a318e0089fc10053928d3148",
+    "pagemap": "3bfd31b6f3ebfb4f6d8391c7dedd6c25b164b64140c32977fb2f3b2731db70b2",
+    "official": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+  }
+}

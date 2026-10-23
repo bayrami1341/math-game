@@ -40,6 +40,7 @@ def read_questions() -> list[dict]:
     return [{"q_id": str(row[0]).strip(), "anchor": str(row[1]).strip(),
              "domain": str(row[2] or "").strip(), "cpa": str(row[3] or "").strip(),
              "stem": str(row[4] or "").strip(), "structure": str(row[5] or "").strip(),
+             "options": [str(row[i] or "").strip() for i in range(6, 10)],
              "answer": str(row[10] or "").strip(), "difficulty": str(row[12] or "").strip(),
              "stamp": str(row[15] or "").strip()} for row in rows]
 
