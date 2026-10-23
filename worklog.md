@@ -513,3 +513,22 @@ Work Log:
 Stage Summary:
 - همه‌چیز برای اجرای بدون‌توقف آماده است: لحظهٔ دریافت توکن → step0 (گزارش پوشش واقعی به مالک) → ثبت BP-015/16 → شروع گام ۱
 - گزارش گام ۰ جدول واقعی «چه کانورت شده/نشده» را جایگزین هر حدس می‌کند
+
+---
+Task ID: 26
+Agent: Z.ai Code (main)
+Task: 业主提供 PAT → 执行 step0 恢复链 + 注册/执行 BP-015（步骤 1 覆盖基础设施）全链交付
+
+Work Log:
+- 业主发送 PAT（ghp_…N0）；按安全协议：token 仅用于本地 clone remote URL，未写入任何文件/worklog（用后建议 revoke）
+- 运行 scripts/step0-restore.sh：clone bayrami1341/math-game 成功；探明真实存量：G2 v0.5 = 92 题（全部选择题、0 已确认）、G3 v0.7 = 20 题（13 已确认）、G1 = 0；cartridge 无 D1–D8 领域字段；引擎 cartridge-schema.js 硬性要求 4 选项（单格式实锤）
+- C1: registry v33 — BP-015（p17）/BP-016（p18）按法令 §8 以 awaiting_approval 注册；worklog 仓库端登记
+- C2: BP-015 approved（--by 业主-聊天：选方案 A+发 token=预授权执行链）→ executing；BP-016 保持待审
+- BP-015 实现：T1 DOMAIN-MATRIX.json（G3=8域452、G2=6域242，DRAFT 待教师盖章）+ 引擎软校验（向后兼容）；T2 coverage-report.ts（--gate 模式）→ reports/coverage-current.md（真实矩阵：两家族全红 0/452、0/242）；T3 check-domain-claims.sh 反声明门（v1.0/“学段就绪”声明 ⇒ 必须覆盖门绿+教师 approve 印章；自测=虚假声明→必红）+ CI 接线（setup-bun+两步）；T4 domain_matrix.py + 10 pytest + 转换器同遍附加 domain_coverage（非阻塞）
+- 门验证：引擎 134/134、pytest 21/21、registry v37 校验绿、反声明门双模式绿
+- C3 delivered + C4 verified → 推送 main（4 提交：094e710→59c2221）；远端 CI completed/success
+- 沙盒端同步：reports/coverage-current.md 副本 + 本条 worklog
+
+Stage Summary:
+- 「学段就绪」从此可测量、不可声明：真实覆盖 = G2 92/242（0%域覆盖）、G3 20/452（0%域覆盖），112 题全部为无领域代码的单一选择题格式
+- 步骤 1（BP-015）完成并 CI 绿；下一步=步骤 2（BP-016 六题型引擎，待业主批准）+ 与 Arena 的领域批次生产（D4 起步，每批教师盖章）
