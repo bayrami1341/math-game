@@ -4,7 +4,7 @@
   "description": "کارگاه ضرب — نسخهٔ ۱۰.۳ بتا (موج الف): موتور خانوادهٔ ۱/۲/۳ + خط تولید خشاب v0.7 + بانک تمرین تشخیصی",
   "type": "module",
   "scripts": {
-    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js tests/v10.3-cartridge.test.js tests/v10.3-families.test.js tests/v10.3-model-figures.test.js tests/v10.3-w8.test.js",
+    "test": "node --test tests/v10-station.test.js tests/v10.1-station.test.js tests/v10.1-side-missions.test.js tests/v10.2-errors.test.js tests/v10.2-domains.test.js tests/v10.3-cartridge.test.js tests/v10.3-families.test.js tests/v10.3-model-figures.test.js tests/v10.3-w8.test.js tests/v10.3-answer-formats.test.js",
     "start": "npx serve ."
   }
 }

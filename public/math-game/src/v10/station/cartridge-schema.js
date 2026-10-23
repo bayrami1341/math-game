@@ -318,6 +318,38 @@ export function validateCartridge(c, expectedId = null) {
       warn(`${q.id}: قالب پاسخ خارج از واژه‌نامهٔ ۶-قالبی: «${q.answerFormat}» (BP-015)`);
     }
     if (q.renderHint && typeof q.renderHint !== 'string') warn(`${q.id}: renderHint باید رشته باشد (BP-015)`);
+    // BP-016 فاز الف — قالب‌های پاسخ مستقیم (عدد/کسر): بدون گزینه، با answerValue/answerFrac
+    const effFmt = (q.answerFormat && ANSWER_FORMAT_VALUES.includes(q.answerFormat)) ? q.answerFormat : null;
+    const directFmt = effFmt === 'عدد' || effFmt === 'کسر';
+    if (directFmt) {
+      if (Array.isArray(q.options) && q.options.length) {
+        warn(`${q.id}: قالب «${effFmt}» مستقیم بازی می‌شود؛ options نادیده گرفته شد (BP-016)`);
+      }
+      if (effFmt === 'عدد') {
+        const v = Number(q.answerValue);
+        if (!Number.isSafeInteger(v) || v < 0 || v > 9999) {
+          err(`${q.id}: پاسخ عددی خارج از دامنهٔ کتاب (۰..۹۹۹۹ — BP-016)`);
+        }
+      } else {
+        const f = q.answerFrac;
+        if (!f || !Number.isInteger(Number(f.num)) || !Number.isInteger(Number(f.den)) || Number(f.den) <= 0) {
+          err(`${q.id}: کسر پاسخ نامعتبر — answerFrac {num, den} با den>0 الزامی است (BP-016)`);
+        } else if (Number(f.num) < 0 || Number(f.num) > 9999 * Number(f.den)) {
+          err(`${q.id}: کسر خارج از دامنهٔ کتاب (۰..۹۹۹۹ — BP-016)`);
+        }
+      }
+      // ضد J12 برای قالب مستقیم: اگر صورت مسئله a×b خام باشد، پاسخ باید همان حاصل باشد
+      const plainDirect = parsePlainMultiplication(q.prompt);
+      if (plainDirect) {
+        const v = effFmt === 'عدد'
+          ? (Number.isSafeInteger(Number(q.answerValue)) ? Number(q.answerValue) : null)
+          : (q.answerFrac && Number(q.answerFrac.den) > 0 ? Number(q.answerFrac.num) / Number(q.answerFrac.den) : null);
+        if (v !== null && v !== plainDirect.f1 * plainDirect.f2) {
+          err(`${q.id}: پاسخ (${v}) ≠ حاصل ${plainDirect.f1}×${plainDirect.f2}=${plainDirect.f1 * plainDirect.f2} (ضد J12)`);
+        }
+      }
+      continue;
+    }
     if (!Array.isArray(q.options) || q.options.length !== 4) { err(`${q.id}: تعداد گزینه‌ها ≠ ۴`); continue; }
     if (!Number.isInteger(q.answerIndex) || q.answerIndex < 0 || q.answerIndex > 3) err(`${q.id}: پاسخ‌نام خارج از بازه`);
     for (let i = 0; i < 4; i++) {
@@ -332,7 +364,6 @@ export function validateCartridge(c, expectedId = null) {
         err(`${q.id} گ${OPTION_LETTERS[i]}: عدد خارج از دامنهٔ کتاب (۹۹۹۹ — T4)`);
       }
     }
-
     // کلید پاسخ: ابتدا فرم خام (a×b=؟)، سپس رسید ممیزی
     const plain = parsePlainMultiplication(q.prompt);
     if (plain && q.answerIndex >= 0 && q.answerIndex <= 3) {
