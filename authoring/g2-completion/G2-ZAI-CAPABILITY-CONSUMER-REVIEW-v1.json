@@ -1,0 +1,141 @@
+{
+  "schema": "G2_ZAI_CAPABILITY_CONSUMER_REVIEW_v1",
+  "source_main_commit": "8decb334f08cd7cdaddc72f7941c760aa983a1d4",
+  "request_candidate_sha256": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+  "status": "HOLD_PINNED_CONTRACT_RECEIPT",
+  "issues": [
+    "G2-CAP-01:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-01:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-02:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-02:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-03:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-03:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-04:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-04:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-05:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-05:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-06:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-06:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-07:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-07:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-08:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-08:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "G2-CAP-09:CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+    "G2-CAP-09:CASE_SCHEMA_VERSION_MISSING_OR_DRIFT",
+    "TOP_LEVEL_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED"
+  ],
+  "cases": [
+    {
+      "case_id": "G2-CAP-01",
+      "candidate_family": "CH6_ADD_REGROUP",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "ENGINE_PARTIAL_BUT_G2_BOOK_LIMITS_BLOCK_AND_BOOK_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-02",
+      "candidate_family": "CH6_SUB_REGROUP",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "ENGINE_PARTIAL_BUT_G2_BOOK_LIMITS_BLOCK_AND_BOOK_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-03",
+      "candidate_family": "CH7_TENTHS_EQUAL_PARTS",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "ENGINE_PARTIAL_BUT_G2_BOOK_LIMITS_BLOCK_AND_BOOK_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-04",
+      "candidate_family": "CH7_BAG_CHANCE",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "PARTIAL_INTERACTION_ONLY_BOOK_VARIANTS_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-05",
+      "candidate_family": "CH7_SPINNER_CHANCE",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "PARTIAL_INTERACTION_ONLY_BOOK_VARIANTS_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-06",
+      "candidate_family": "CH8_BAR_CHART",
+      "reported_capability": "SUPPORTED",
+      "content_lane_use": "ENGINE_BAR_CHART_PLAYABLE_AUTHORING_AXIS_SCALE_GATE_NOT_PROVEN",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-07",
+      "candidate_family": "CH8_PICTOGRAPH",
+      "reported_capability": "NEEDS_IMPLEMENTATION",
+      "content_lane_use": "ENGINE_MISSING_REQUESTED_INTERACTION",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-08",
+      "candidate_family": "CH8_SELECT_REPRESENTATION",
+      "reported_capability": "SUPPORTED_WITH_LIMITS",
+      "content_lane_use": "PARTIAL_INTERACTION_ONLY_BOOK_VARIANTS_UNVERIFIED",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    },
+    {
+      "case_id": "G2-CAP-09",
+      "candidate_family": "CH8_SYMMETRY_TILING",
+      "reported_capability": "NEEDS_IMPLEMENTATION",
+      "content_lane_use": "ENGINE_MISSING_REQUESTED_INTERACTION",
+      "book_evidence_status": "UNVERIFIED",
+      "teacher_verdict": "NOT_GRANTED",
+      "receipt_issues": [
+        "CASE_ENGINE_COMMIT_NOT_IMMUTABLY_PINNED",
+        "CASE_SCHEMA_VERSION_MISSING_OR_DRIFT"
+      ]
+    }
+  ],
+  "engine_tests_replayed_here": false,
+  "book_evidence_verified": false,
+  "teacher_decisions_requested_now": 0,
+  "note": "A self-resolving @GIT_HEAD@ passes producer CI even outside git ('unknown'); consumer requires an immutable per-case commit/schema receipt."
+}

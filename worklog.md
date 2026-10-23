@@ -1729,3 +1729,15 @@ Work Log:
 - ۳۴/۳۴ تست مجموعهٔ ابزار PASS، drift SHA/anchor/status و تعمیم حکم صفحه رد شد. هیچ PDF/شکل دیده نشده، کلید/خشاب/مهر عوض نشده، کارهای وابسته به تصویر همچنان BLOCKED هستند.
 Stage Summary:
 - مرحلهٔ بعد: رسیدگی مستقل به چهار سؤال تقریب و دو سؤال زمینه‌دار؛ برای نشانه‌های تصویر فقط پس از دسترسی امن به rendering همان چاپ؛ هیچ سؤال ناشناخته بدون شاهد سبز نمی‌شود.
+
+---
+Task ID: G2-ZAI-BP023-consumer-intake-2026-10-23
+Agent: آرنا (content consumer)
+Task: بازبینی محدود پاسخ Z.ai در main@8decb33 به‌جای پذیرش ضمنی CI/پروتکل/شاهد کتاب.
+Work Log:
+- `authoring/tools/review_g2_capability_handoff.py` و ۵ تست: request مصنوعی محلی را در برابر JSON پاسخ و M09 در commit ثابت `8decb334f08cd7cdaddc72f7941c760aa983a1d4` با `git show` تطبیق می‌دهد؛ case/family/status و scope را fail-closed می‌کند. ۹ مورد نگاشت شدند، ۱۹ نقص رسیدِ ساختاری (۱۸ فیلد per-case commit/schema و یک commit سطح فایل). نامزد/کلید/مهر/هسته تغییر نکرد.
+- آزمون نگاشت موتور producer با archive از همین SHA و `node --test public/math-game/tests/v10.5-g2-capability-mapping.test.js` محلی ۱۱/۱۱ PASS؛ اما archive بیرون Git هشدار fatal چاپ می‌کند و producer اجازهٔ `unknown` می‌دهد. بنابراین تست رفتارِ محدود را از پین نسخه و از شاهد کتاب تفکیک کردیم.
+- `authoring/g2-completion/G2-ZAI-CAPABILITY-CONSUMER-REVIEW-v1.json`/`.fa.md`: حکم `HOLD_PINNED_CONTRACT_RECEIPT`؛ حدود ۹ تعامل و چهار تعارض/سه تغییر قرارداد/دو بلوکر اجرا ثبت شد؛ هیچ `[ARENA-ACK]` برای پذیرش BP-023 صادر نشد.
+- ۳۹/۳۹ unittest ابزارهای آرنا با venv موقت PASS. source gate نسخهٔ جدید/مهر token سمت سرور را به نسخهٔ قدیم نسبت ندادیم؛ vault واقعی/هویت/دامنهٔ مهر در محیط آرنا بازآزمایی نشده است.
+Stage Summary:
+- اقدام بعدی فنی Z.ai: SHA ثابت و schema per-case در پاسخ/تست بدون fallback `unknown`؛ سپس بازآزمون مصرف‌کننده. اقدام مالک اکنون لازم نیست؛ بستهٔ انتخاب میزبانی/هزینه اگر طراحی شد، جداگانه مطرح می‌شود. G2 زرد NOT_READY/NOT_DEPLOYED.
