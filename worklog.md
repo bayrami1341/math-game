@@ -1717,3 +1717,20 @@ Work Log:
 Stage Summary:
 - بستر بازگشت؛ موجودی واقعی جای همهٔ برآوردها را گرفت
 - صف: BP-015 منتظر تأیید مالک برای شروع گام ۱ (زیرساخت پوشش)؛ BP-016 در انتظار (گام ۲)
+
+---
+Task ID: BP-015 (گام ۱ نقشهٔ تکمیل — زیرساخت پوشش دامنه‌دار)
+Agent: Z.ai Code (main)
+Task: T1 schema دامنه‌دار + T2 گزارش پوشش + T3 گیت ضد-ادعا + T4 لایهٔ دامنه در مبدل رسمی
+
+Work Log:
+- T1: public/math-game/authoring/DOMAIN-MATRIX.json (khshab.domain-matrix/v1) — ترجمهٔ ماشینی ماتریس قانون (G3: ۸ دامنه/۴۵۲، G2: ۶ دامنه/۲۴۲) با برچسب DRAFT تا مُهر گام صفر معلم؛ فیلدهای افزودنی سؤال (domainCode/qType/chapter/lesson/answerFormat/renderHint) به‌صورت نرم (هشدار) در cartridge-schema.js — سازگاری پسین کامل با ۹۲ سؤال میراثی
+- T2: scripts/coverage-report.ts — گزارش Markdown خانه‌به‌خانه (دامنه×حداقل، سطل میراثی، تأییدشده، قالب‌ها) + --gate خرج‌۱؛ نخستین گزارش واقعی: reports/coverage-current.md — هر دو خانواده قرمز (G2: 92/242 — G3: 20/452 — همهٔ دامنه‌ها صفر چون میراثی‌اند)
+- T3: scripts/check-domain-claims.sh — گیت fail-closed ضد-ادعا: ادعای v1.0/«پایه آماده» ⇒ الزام گیت پوشش سبز + مُهر approve معلم؛ سلف‌تست ادعای کاذب → قرمز قطعی (exit 1)؛ سیم‌کشی به khshab-gate.yml (گیت ۳ + setup-bun)
+- T4: authoring/agent/domain_matrix.py + authoring/tests/test_domain_matrix.py (۱۰ تست) — اعتبارسنجی دامنه/نوع + شمارش پوشش «در همان گذر» مبدل رسمی (run_converter_and_parse_report اکنون domain_coverage برمی‌گرداند؛ غیربلوک‌کننده)
+- گیت محلی: npm test ۱۳۴/۱۳۴ سبز (صفر رگرسیون) + pytest ۲۱/۲۱ + validate رجیستری (۱۷ نقشه) + هر دو حالت گیت ضد-ادعا سبز
+
+Stage Summary:
+- «آمادگی» دیگر قابل ادعا نیست — قابل اندازه‌گیری است؛ نخستین اندازه‌گیری واقعی: هر دو پایه در صفر مطلق پوشش دامنه‌ای (۱۱۲ سؤال میراثی تک-قالبی)
+- مسیر موج بعدی روشن: نخستین بچ دامنه‌دار آرنا باید domainCode/qType/answerFormat داشته باشد؛ مبدل و گیت‌ها آمادهٔ راستی‌آزمایی‌اند
+- BP-016 (موتور ۶-قالبی) همچنان awaiting_approval — گام ۲ پس از فرمان مالک
