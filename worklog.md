@@ -1662,3 +1662,14 @@ Work Log:
 - ۱۸ آزمون محلیِ مجموعهٔ ابزارهای خط محتوا PASS؛ PDF دارای حق نشر، مُهر معلم، Q تازه، workbook و هستهٔ برنامه تغییر نکرد.
 Stage Summary:
 - کار مستقل بعدی: آزمون‌های دقیق‌تر استثنا و تولید بسته‌های فرضیهٔ کم‌حجم. برای اتصال دائمی M13 و منبع M01/M02، پاسخ نسخه‌دار و استقرار Z.ai ضروری است؛ هیچ ACK یا ادعای تحویل او ثبت نشد.
+
+---
+Task ID: G2-microbot-platform-rail-RFC-2026-10-23
+Agent: آرنا (content)
+Task: پاسخ فنی به پرسش مالک دربارهٔ نیاز به ریل/پلتفرم مشترک برای ریزربات‌ها.
+Work Log:
+- `authoring/G2-MICROBOT-RAIL-PLATFORM-RFC-v1.fa.md`: تفکیک control/data/trust plane، هفت جزء لازم، قرارداد bot/job/result، مرز functional role و service-account واقعی، DAG/event/lease/idempotency/ACL، نمونهٔ M14، سناریوی C205 و مراحل MVP/آزمون شکست برای Z.ai. سند RFC است و معماری هسته را یک‌طرفه تغییر نمی‌دهد.
+- با اثبات برابری خواندنی همهٔ ۲۹۷ فایل remote و صفر اختلاف/فقدان، HEAD محلیِ عقب‌مانده روی همان شاخه به remote `7d97968` با reset mixed همگرا شد؛ SHA سه فایل حساس قبل/بعد یکسان بود. منبع کتاب و workbook تغییر نکرد.
+- پایلوت یک‌نوبتی دوباره اجرا شد: ۱۷ گره، ۰ dispatch، منبع `BLOCKED_SOURCE_EVIDENCE`، پنج بررسی `PROVISIONAL_ONLY`؛ ۱۸ تست محلی PASS. worker واقعی/پلتفرم استقراری ادعا نشده است.
+Stage Summary:
+- منتظر پاسخ نسخه‌دار Z.ai برای تطبیق RFC با foreman/schema/queue موجود؛ بدون تصویب مجدد G0–G8 و بدون ACK جعلی.
