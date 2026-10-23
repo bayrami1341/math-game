@@ -1,7 +1,7 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 52,
-  "updated_at": "2026-10-23T07:32:23.869Z",
+  "version": 54,
+  "updated_at": "2026-10-23T09:08:37.376Z",
   "updated_by": "agent:z",
   "blueprints": [
     {
@@ -1088,6 +1088,139 @@
         "issue": "issue #4",
         "notes": "ران‌بوک شیفت شب (ROADMAP-NIGHTSHIFT-v1)"
       }
+    },
+    {
+      "id": "BP-021",
+      "title": "ریل اعتماد Z01–Z15 — گلوگاه‌های شاهد/رأی/ربات/انتشار + نمایش انتهابه‌انتها",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "executing",
+      "priority": 21,
+      "created_by": "z.ai — درخواست دقیق مالک (Z01..Z15)",
+      "created_at": "2026-10-23T12:00:00.000Z",
+      "approved_by": "مالک-چت: درخواست مستقیم و تفصیلی Z01–Z15 (trace 1a167fa5c4a957cd) = دستور اجرای ریل و پاسخ تعهدپذیر",
+      "approved_at": "2026-10-23T12:00:00.000Z",
+      "delivered_at": null,
+      "verified_at": null,
+      "tasks": [
+        {
+          "id": "T1",
+          "z": "Z01",
+          "title": "vault امن بیرون Git + گیت پذیرش منبع fail-closed",
+          "acceptance": "SHA بایت واقعی + اندازه ۱۱۸۳۸۶۴۱ + ۱۵۲ صفحه + حکم گیت؛ غیبت منبع = BLOCKED با مسئول و علت؛ PDF/توکن هرگز در چت نمی‌رود",
+          "status": "delivered",
+          "witness": "scripts/accept-source-gate.py + /home/z/vault/c205/vault-manifest.json + reports/source-acceptance-c205.md — PASS (C205:print-14:1404:a93934b6c418) + دو آزمون ابطال (C305→FAIL، غایب→BLOCKED/SOURCE_ABSENT)"
+        },
+        {
+          "id": "T2",
+          "z": "Z02",
+          "title": "قرارداد نسخه‌دار page/region/claim/evidence + تست ابطال",
+          "acceptance": "PDF اشتباه/offset غلط/عدد مبهم/OCR بی‌شاهد تصویری → رد یا UNOBSERVABLE؛ SHA داخل fixture به‌تنهایی کافی نیست — bind به بایت واقعی",
+          "status": "planned",
+          "witness": "پس از تحویل: authoring/tests تست‌های ابطال + گزارش"
+        },
+        {
+          "id": "T3",
+          "z": "Z03",
+          "title": "امنیت رأی و Viewer — احراز سمت سرور، جدایی مشاهده از رأی",
+          "acceptance": "تست جعل نقش و دسترسی ناشناس رد شود؛ role-string ورودی رأی نسازد؛ ربات هرگز human_teacher نشود؛ ردپای حسابرسی بدون افشای کتاب",
+          "status": "planned",
+          "witness": "پس از تحویل: تست‌های امنیتی + audit trail"
+        },
+        {
+          "id": "T4",
+          "z": "Z04",
+          "title": "ربات مداوم واقعی — صف بادوام/checkpoint/idempotency/lease/retry/dead-letter/سقف هزینه/freeze/heartbeat",
+          "acceptance": "job واقعی بدون چت باز + آزمون قطع/بازگشت بدون گم‌کار یا ID تکراری + drift منبع + توقف خطا؛ CI روی push «۲۴ساعته» نامیده نمی‌شود",
+          "status": "planned",
+          "witness": "پس از تحویل: foreman v3 + گزارش آزمون قطع"
+        },
+        {
+          "id": "T5",
+          "z": "Z05",
+          "title": "هویت و اتصال آشیل — نگاشت نسخه/commit، اعلام CLI/schema واقعی، اصلاح واقعی fixture v0.4→v0.5",
+          "acceptance": "نگاشت نسخه + تست اتصال با پایهٔ رسمی + نتیجهٔ بازیابی صف",
+          "status": "planned",
+          "witness": "پس از تحویل: سند نگاشت + تست"
+        },
+        {
+          "id": "T6",
+          "z": "Z06+Z09",
+          "title": "قرارداد صف محتوا + مبدل SHA-bound (Excel SHA→JSON SHA، دیف سلول، L/Q/E fail-closed)",
+          "acceptance": "بازپخش ورودی یکسان = بدون تکثیر خروجی؛ SHA/schema ناشناخته و ادعای بی‌منبع ⇒ BLOCKED؛ هیچ زردی به سر رسمی نمی‌رود",
+          "status": "planned",
+          "witness": "پس از تحویل: گزارش SHA و تست برخورد ID"
+        },
+        {
+          "id": "T7",
+          "z": "Z07+Z08",
+          "title": "مانیفست قابلیت موتور (SUPPORTED/NEEDS_IMPLEMENTATION/NOT_SUPPORTED) + E2E نسخه‌دار اجرای واقعی",
+          "acceptance": "manifest نسخه‌دار + payload نمونه + تست قرارداد؛ ۲۳ خانواده = همهٔ گونه‌های کتاب فرض نمی‌شود؛ اجرا = از BP-016/017 موجود، با تست تعامل نسخه‌دار",
+          "status": "planned",
+          "witness": "پس از تحویل: ENGINE-CAPABILITIES.json + تست قرارداد"
+        },
+        {
+          "id": "T8",
+          "z": "Z10",
+          "title": "بازرس دوم مستقل (G7) — عدد/کلید/شکل/صفحه‌های پرخطر",
+          "acceptance": "گزارش AGREE/MISMATCH/UNOBSERVABLE با شناسهٔ دقیق؛ خطای عمدی کلید/شمارش/offset را می‌یابد؛ جدا از موفقیت مبدل",
+          "status": "planned",
+          "witness": "پس از تحویل: گزارش بازرسی دوم"
+        },
+        {
+          "id": "T9",
+          "z": "Z11",
+          "title": "CI چهارنتیجه‌ای — سلامت فنی/تکمیل شاهد/پوشش هشت فصل/آمادگی موتور",
+          "acceptance": "نبود PDF = BLOCKED نه «شاهد PASS»؛ تست شکست عمدی SHA/صفحه/جواب/قابلیت روی همان commit؛ artifact بدون PDF و راز",
+          "status": "planned",
+          "witness": "پس از تحویل: workflow جدید + ران شکست عمدی"
+        },
+        {
+          "id": "T10",
+          "z": "Z12",
+          "title": "حل تعارض PR #2/#3 فایل‌به‌فایل و رفتاری",
+          "acceptance": "SHA ترکیب آزموده‌شده + فهرست تعارض حل‌شده/باز + تست روی نتیجه؛ بدون force-push و ادغام بی‌مجوز",
+          "status": "planned",
+          "witness": "پس از تحویل: گزارش تعارض (شاخه‌های arena تاریخی‌اند و ادغام خام آنها main را به عقب برمی‌گرداند — مسیر امن: انتقال انتخابی authoring/ + download/ روی main تازه)"
+        },
+        {
+          "id": "T11",
+          "z": "Z13",
+          "title": "نگهبان انتشار و بازگشت — جدایی preview زرد از سر رسمی + freeze/rollback",
+          "acceptance": "انتشار بدون رأی scope/SHAدار رد شود؛ خودارتقایی ربات و انتقال زرد→رسمی رد شود؛ بازگشت نسخه آزموده",
+          "status": "planned",
+          "witness": "پس از تحویل: تست نگهبان"
+        },
+        {
+          "id": "T12",
+          "z": "Z14",
+          "title": "پایش و هزینه — داشبورد آخرین اجرا/heartbeat/صف بلوکه/شکاف‌ها/خطا/سهمیه + هشدار آزمایشی",
+          "acceptance": "نمونهٔ اجرای واقعی + هشدار آزمایشی بی‌خطر + SLO و مسئول عملیاتی",
+          "status": "planned",
+          "witness": "پس از تحویل: داشبورد + گزارش هشدار"
+        },
+        {
+          "id": "T13",
+          "z": "Z15",
+          "title": "نمایش کوچک انتهابه‌انتها — منبع مجاز → شاهد صفحه → claim → بازی زرد → مبدل → اجرای موتور → گیت → داشبورد؛ بدون انتشار",
+          "acceptance": "هر حلقه با شاهد تست مشخص روی یک SHA؛ گزارش نمایش با مسیر هر حلقه",
+          "status": "planned",
+          "witness": "پس از تحویل: گزارش نمایش E2E"
+        }
+      ],
+      "context": "درخواست دقیق مالک (Z01–Z15): گشودن گلوگاه‌های اعتماد — منبع امن، شاهد واقعی صفحه، رأی امن، ربات مداوم، قرارداد صف محتوا، مانیفست قابلیت موتور، مبدل SHA-bound، بازرس دوم، CI چهارنتیجه‌ای، تعارض PRها، نگهبان انتشار، پایش/هزینه، نمایش انتهابه‌انتها — بدون انتشار عمومی.",
+      "acceptance": [
+        "Z01: گیت پذیرش منبع PASS روی SHA بایت واقعی (۱۱۸۳۸۶۴۱ بایت / ۱۵۲ صفحه) و دو آزمون ابطال (فایل غلط FAIL، غایب BLOCKED با مسئول و علت) — بدون ارسال PDF/توکن در چت",
+        "Z02..Z14: هر قلم وضعیت شفاف (done/partial/planned/blocked) + شاهد تست مشخص + مالک کار + وابستگی؛ هیچ «PASS» جایی که پیش‌نیاز غایب است — BLOCKED صادقانه",
+        "Z15: نمایش انتهابه‌انتها (منبع→شاهد→claim→بازی زرد→مبدل→موتور→گیت→داشبورد) بدون انتشار، روی یک SHA گزارش شود",
+        "هیچ گیت fail-closedای شل نشود؛ ادعای v1.0/«پایه آماده» بدون پوشش سبز و مُهر معلم باز هم با گیت ضد-ادعا رد می‌شود"
+      ],
+      "artifacts": [
+        "scripts/accept-source-gate.py",
+        "reports/source-acceptance-c205.md",
+        "/home/z/vault/c205/vault-manifest.json (بیرون Git — فقط مسیر و SHA ارجاع می‌شود)"
+      ],
+      "notes": "[2026-10-23T09:08:37.376Z] T1 (Z01) تحویل شد — vault + گیت پذیرش سبز + دو آزمون ابطال"
     }
   ]
 }
