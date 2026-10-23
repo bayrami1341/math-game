@@ -71,13 +71,17 @@ def test_official_g2_is_all_legacy_and_gate_red(matrix, g2_cartridge):
     assert "KH-G2-MATH/کل: 92/242" in fails
 
 
-def test_official_g3_is_all_legacy_and_gate_red(matrix, g3_cartridge):
+def test_official_g3_after_first_robot_batch_d4(matrix, g3_cartridge):
+    """واقعیت پس از بچ اول ربات (BP-019/BP-020): ۲۰ میراثی + ۱۰۰ سؤال دامنه‌دار D4.
+    گیت همچنان قرمز است — صفر تأییدشدهٔ دامنه‌ای (مُهر فقط با دست معلم) و سایر دامنه‌ها صفر."""
     cov = compute_domain_coverage(g3_cartridge, matrix)
     assert cov is not None
-    assert cov["total"] == 20
+    assert cov["total"] == 120, "۲۰ میراثی + ۱۰۰ بچ D4-G3-batch01 (seed 1404)"
     assert cov["legacy"] == 20
-    assert cov["totalConfirmed"] == 13, "۱۳ سؤال تأییدشدهٔ موجود G3 نباید گم شود"
-    assert cov["pass"] is False
+    assert cov["totalConfirmed"] == 13, "۱۳ سؤال تأییدشدهٔ میراثی G3 نباید گم شود"
+    assert cov["pass"] is False, "گیت قرمز می‌ماند: ۱۰۰ موجود ≠ تأییدشده؛ سایر دامنه‌ها صفر؛ ۱۲۰ ≠ ۴۵۲"
+    fails = coverage_gate(cov)
+    assert any(f.startswith("KH-G3-MATH") for f in fails)
 
 
 # ── ۳) سؤال دامنه‌دار — شمارش و گیت ─────────────────────────────────────────
