@@ -141,6 +141,11 @@ def main() -> int:
         result = plan(preflight, content)
         if args.run_safe:
             result["safe_batch"] = run_safe_batch(preflight, content, result)
+        from g2_microbot_protocol_gate import assess
+        verdict = assess(result)
+        if verdict["status"] != "PASS_PROTOCOL_LOCAL_PILOT":
+            print(json.dumps(verdict, ensure_ascii=False), file=sys.stderr)
+            return 2
     except (OSError, ValueError, KeyError, TypeError, RuntimeError) as exc:
         print(f"BLOCKED_INTEGRITY: {exc}", file=sys.stderr)
         return 2

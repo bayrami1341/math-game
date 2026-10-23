@@ -1685,3 +1685,14 @@ Work Log:
 - `authoring/G2-ENGINE-CAPABILITY-REQUEST-v1.json` نه سناریوی تعامل مصنوعی از نه خانوادهٔ موجود در backlog (همگی با برچسب UNVERIFIED/NOT_GRANTED و بدون Q-ID) برای Z07 می‌دهد. بررسی JSON: ۹/۹ خانواده در ۲۳ خانوادهٔ backlog هستند؛ ارقام لاتین در صورت‌های فارسی صفر. تغییر خشاب یا هسته: صفر.
 Stage Summary:
 - ادامهٔ فنی مجاز: دریافت contract و تست‌های T2/T7/T9 از Z.ai برای پذیرش مصرف‌کننده. PDF در محیط آرنا هنوز نیست؛ استقرار worker/رأی انسانی/ادغام در اختیار خط محتوا نیست.
+
+---
+Task ID: G2-microbot-binding-protocol-2026-10-23
+Agent: آرنا (content)
+Task: فرمان مالک برای تبدیل روش ریزربات‌ها به پروتکل لازم‌الاجرا.
+Work Log:
+- `authoring/G2-MICROBOT-BINDING-PROTOCOL-v1.fa.md`: قواعد MUST/MUST NOT، نقش‌ها، جریان داده و حقوق، گیت‌های جدا، معیار عبور، استثنا و مرز الزام محلی/سراسری را ثبت کرد. در خط محتوای آرنا از این نوبت الزام عملی دارد؛ الزام فنی `main`/هسته مستلزم ثبت/پیاده‌سازی/آزمون Z.ai است؛ دستور مالک مجوز مُهر/merge/publish نیست.
+- `authoring/tools/g2_microbot_protocol_gate.py`/`test_g2_microbot_protocol_gate.py`: گیت fail-closed پایلوت محلی. `g2_microbot_plan.py` اکنون قبل از نوشتن snapshot آن را اجرا می‌کند؛ ۱۷ نقش/وابستگی/شناسه، صفر dispatch/مهر/ارتقا و NOT_DEPLOYED را مطالبه می‌کند. PASS پروتکل محلی عمداً `readiness=NOT_READY` باقی می‌گذارد و احراز هویت سرویس یا Z.ai نیست.
+- ۲۴/۲۴ unittest محلی PASS؛ اجرای snapshot واقعی `PASS_PROTOCOL_LOCAL_PILOT`/`NOT_READY` و تست دستکاری M12→READY `FAIL_PROTOCOL` با exit=1. گیت قدیمی رسمی ۳۵/۳۵ + مبدل ۰ قرمز/۲ هشدار قدیمی PASS؛ این‌ها شاهد کتاب/اجرای worker/CI سراسری پروتکل نیستند.
+Stage Summary:
+- گام لازم برای الزام ماشین سراسری: Z.ai بندهای پروتکل را با GOV/BP-021 و قرارداد foreman آشتی دهد و server-side ACL/CI/runner/testهای منفی روی نسخهٔ مشخص تحویل دهد؛ هیچ `[ARENA-ACK]` برای تحویل Z.ai داده نشده است.
