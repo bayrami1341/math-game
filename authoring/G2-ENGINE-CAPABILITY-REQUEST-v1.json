@@ -1,0 +1,129 @@
+{
+  "schema": "g2-engine-capability-requests/v1",
+  "scope": "G2_C205_YELLOW_CANDIDATE_NOT_BOOK_VERIFIED",
+  "candidate_sha256": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+  "origin": "SYNTHETIC_INTERACTION_FIXTURES_NOT_PRINTED_EXERCISES",
+  "book_evidence_status": "UNVERIFIED",
+  "teacher_verdict": "NOT_GRANTED",
+  "new_q_ids": 0,
+  "purpose": "Ask Z.ai to map candidate mechanics to versioned playable engine capabilities, not to infer C205 breadth/depth coverage.",
+  "reply_contract": [
+    "case_id",
+    "engine_version_commit",
+    "engine_schema_version",
+    "capability_status: SUPPORTED | NEEDS_IMPLEMENTATION | NOT_SUPPORTED",
+    "actual_payload_or_mapping_to_current_schema",
+    "interaction_test_link_with_right_wrong_edge",
+    "limitations_and_next_action"
+  ],
+  "cases": [
+    {
+      "case_id": "G2-CAP-01",
+      "candidate_family": "CH6_ADD_REGROUP",
+      "provisional_book_pages": "100-102",
+      "mechanic": "base-ten regroup into hundreds/tens/ones and submit result",
+      "stem_fa": "حاصل ۲۷۸ + ۱۵۶ چند است؟",
+      "tech_note_latin": "278+156=434; ones 8+6=14; tens 7+5+1=13",
+      "answer_oracle": "434",
+      "wrong_answer_probe": "424 must be rejected with place-value feedback",
+      "input_modes_requested": ["numeric", "manipulative_place_value"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-02",
+      "candidate_family": "CH6_SUB_REGROUP",
+      "provisional_book_pages": "103-105",
+      "mechanic": "unbundle across zero and submit result",
+      "stem_fa": "حاصل ۴۰۲ − ۱۸۷ چند است؟",
+      "tech_note_latin": "402-187=215; 402=3 hundreds+9 tens+12 ones after unbundling",
+      "answer_oracle": "215",
+      "wrong_answer_probe": "225 must be rejected; do not conflate subtract-without-borrow",
+      "input_modes_requested": ["numeric", "manipulative_place_value"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-03",
+      "candidate_family": "CH7_TENTHS_EQUAL_PARTS",
+      "provisional_book_pages": "110-112",
+      "mechanic": "select one of ten equal cells and distinguish unequal partitions",
+      "stem_fa": "از ۱۰ بخش مساوی، ۱ بخش را رنگ کن.",
+      "tech_note_latin": "1 of 10 equal cells => 1/10; unequal cells must not be scored as tenths",
+      "answer_oracle": "one_equal_cell_of_ten",
+      "wrong_answer_probe": "one of ten unequal-area cells must not count as 1/10",
+      "input_modes_requested": ["fraction_coloring", "equal_area_validation"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-04",
+      "candidate_family": "CH7_BAG_CHANCE",
+      "provisional_book_pages": "118-120",
+      "mechanic": "predict relative likelihood and record repeated draws",
+      "stem_fa": "در کیسه ۳ مهرهٔ قرمز و ۱ مهرهٔ آبی است؛ کدام رنگ محتمل‌تر است؟",
+      "tech_note_latin": "P(red)=3/4 > P(blue)=1/4; an individual draw is not guaranteed red",
+      "answer_oracle": "red_more_likely_not_certain",
+      "wrong_answer_probe": "reject certainty claim that every draw must be red",
+      "input_modes_requested": ["choice", "seeded_simulation_with_replacement", "record_frequency"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-05",
+      "candidate_family": "CH7_SPINNER_CHANCE",
+      "provisional_book_pages": "121-123",
+      "mechanic": "compare equal-sized sectors and record spin results",
+      "stem_fa": "گردونه ۴ قسمت مساوی دارد؛ ۳ قسمت آبی و ۱ قسمت قرمز است. کدام محتمل‌تر است؟",
+      "tech_note_latin": "P(blue)=3/4; seeded spinner records outcomes without claiming certainty",
+      "answer_oracle": "blue_more_likely_not_certain",
+      "wrong_answer_probe": "unequal sectors must not be treated as equal probabilities",
+      "input_modes_requested": ["choice", "seeded_spinner", "record_frequency"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-06",
+      "candidate_family": "CH8_BAR_CHART",
+      "provisional_book_pages": "131-133",
+      "mechanic": "read categories, axis scale and compare bars",
+      "stem_fa": "تعداد کتاب‌های سه گروه ۳، ۵ و ۲ است؛ بیشترین تعداد چند است؟",
+      "tech_note_latin": "max(3,5,2)=5; include zero baseline and one-unit scale",
+      "answer_oracle": "5",
+      "wrong_answer_probe": "missing axis labels or a non-unit scale without declared key must block/flag",
+      "input_modes_requested": ["interactive_bar_chart", "numeric"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-07",
+      "candidate_family": "CH8_PICTOGRAPH",
+      "provisional_book_pages": "136-138",
+      "mechanic": "read a picture key and translate icon count to a total",
+      "stem_fa": "اگر هر نماد نشان‌دهندهٔ ۲ چیز باشد، ۳ نماد چند چیز را نشان می‌دهد؟",
+      "tech_note_latin": "3 icons * 2 per icon = 6; key is mandatory",
+      "answer_oracle": "6",
+      "wrong_answer_probe": "three icons without a declared key must not be interpreted as 3 or 6",
+      "input_modes_requested": ["pictograph_with_key", "numeric"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-08",
+      "candidate_family": "CH8_SELECT_REPRESENTATION",
+      "provisional_book_pages": "139-141",
+      "mechanic": "select an appropriate display and explain choice",
+      "stem_fa": "برای مقایسهٔ تعداد کتاب‌های سه گروه، کدام نمایش کمک می‌کند؟",
+      "tech_note_latin": "synthetic comparison of categorical counts; accepted pedagogical alternatives require human scope, not auto-stamp",
+      "answer_oracle": "reviewable_rationale_not_a_printed_answer",
+      "wrong_answer_probe": "do not hard-code a book-specific answer from this synthetic fixture",
+      "input_modes_requested": ["choice_with_explanation", "teacher_review_queue"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    },
+    {
+      "case_id": "G2-CAP-09",
+      "candidate_family": "CH8_SYMMETRY_TILING",
+      "provisional_book_pages": "144",
+      "mechanic": "reflect a grid shape across a fixed axis without rotation",
+      "stem_fa": "شکل را نسبت به خط تقارن بازتاب بده.",
+      "tech_note_latin": "reflection across vertical x=0 maps point (2,1) to (-2,1); rotation is not reflection",
+      "answer_oracle": "reflect_about_vertical_line_x_0",
+      "wrong_answer_probe": "rotation-only placement must fail reflection check",
+      "input_modes_requested": ["grid_shape_drag", "symmetry_axis_feedback"],
+      "capability_status": "AWAITING_ZAI_MAPPING"
+    }
+  ]
+}

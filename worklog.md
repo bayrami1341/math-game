@@ -1673,3 +1673,15 @@ Work Log:
 - پایلوت یک‌نوبتی دوباره اجرا شد: ۱۷ گره، ۰ dispatch، منبع `BLOCKED_SOURCE_EVIDENCE`، پنج بررسی `PROVISIONAL_ONLY`؛ ۱۸ تست محلی PASS. worker واقعی/پلتفرم استقراری ادعا نشده است.
 Stage Summary:
 - منتظر پاسخ نسخه‌دار Z.ai برای تطبیق RFC با foreman/schema/queue موجود؛ بدون تصویب مجدد G0–G8 و بدون ACK جعلی.
+
+---
+Task ID: BP-021-Z01-Z15-intake-and-G2-capability-fixtures-2026-10-23
+Agent: آرنا (content)
+Task: دریافت پاسخ Z.ai از مالک، وارسی محدود read-only، بازکردن نیاز نمونه برای Z07.
+Work Log:
+- `origin/main` در commit `1de0635` دارای `scripts/accept-source-gate.py`, `reports/source-acceptance-c205.md`, `blueprints/registry.json` است؛ CI commit و worklog بعدی `526636c` موفق. BP-021 executing و T1 delivered؛ بقیه taskها planned. PDF/vault خصوصی Z.ai به محیط آرنا منتقل نشده؛ PASS واقعی بایت و مشاهدهٔ تصویر مستقلاً در این sandbox تکرار نشده است.
+- `authoring/G2-ZAI-BP021-RESPONSE-INTAKE-v1.fa.md` وضعیت هر Z01..Z15 و مرز قبولی را ثبت می‌کند؛ خطر `teacher-review/stamp` از کد route بدون احراز داخل آن تأیید شد. هیچ merge/مهر/انتشار یا ACK به نام Z.ai انجام نشد.
+- آزمون مصنوعی منطق gate Z01 با فایل ساختگی و manifest `size_bytes=0/pages=0`، SHA خود فایل و page_count جعلی ۱، نتیجهٔ `PASS` برای size/pages داد؛ نیاز به required-fields/pin معتبر ثبت شد. این آزمون شاهد واقعی C205 نیست.
+- `authoring/G2-ENGINE-CAPABILITY-REQUEST-v1.json` نه سناریوی تعامل مصنوعی از نه خانوادهٔ موجود در backlog (همگی با برچسب UNVERIFIED/NOT_GRANTED و بدون Q-ID) برای Z07 می‌دهد. بررسی JSON: ۹/۹ خانواده در ۲۳ خانوادهٔ backlog هستند؛ ارقام لاتین در صورت‌های فارسی صفر. تغییر خشاب یا هسته: صفر.
+Stage Summary:
+- ادامهٔ فنی مجاز: دریافت contract و تست‌های T2/T7/T9 از Z.ai برای پذیرش مصرف‌کننده. PDF در محیط آرنا هنوز نیست؛ استقرار worker/رأی انسانی/ادغام در اختیار خط محتوا نیست.
