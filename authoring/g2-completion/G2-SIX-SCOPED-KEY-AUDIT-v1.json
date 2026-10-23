@@ -1,0 +1,121 @@
+{
+  "schema": "G2_SIX_SCOPED_CANDIDATE_KEY_AUDIT_v1",
+  "input_sha256": {
+    "candidate": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+    "priority_queue": "f949a58ba7e2852e948170e7bee0a46312b762a7a318e0089fc10053928d3148",
+    "pagemap": "3bfd31b6f3ebfb4f6d8391c7dedd6c25b164b64140c32977fb2f3b2731db70b2",
+    "official": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+  },
+  "status": "CONVENTION_DISPUTE_WITHOUT_BOOK_WITNESS",
+  "audited_count": 6,
+  "arithmetic_consistent_under_checked_strategies": 5,
+  "rounding_convention_disputes": [
+    "Q-1067"
+  ],
+  "human_decisions_requested_now": 0,
+  "source_visual_verified": false,
+  "book_correctness_claimed": false,
+  "teacher_approvals": 0,
+  "rows": [
+    {
+      "q_id": "Q-1042",
+      "anchor": "L-202",
+      "book_page_candidate": 20,
+      "status": "CANDIDATE_ARITHMETIC_CONSISTENT_ONLY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "explicit_candidate_arithmetic"
+      ],
+      "strategies_diverge": false,
+      "both_strategies_have_distinct_options": false,
+      "selected_key_matches_all_checked_strategies": true,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    },
+    {
+      "q_id": "Q-1052",
+      "anchor": "L-210",
+      "book_page_candidate": 28,
+      "status": "CANDIDATE_ARITHMETIC_CONSISTENT_ONLY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "explicit_candidate_arithmetic"
+      ],
+      "strategies_diverge": false,
+      "both_strategies_have_distinct_options": false,
+      "selected_key_matches_all_checked_strategies": true,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    },
+    {
+      "q_id": "Q-1065",
+      "anchor": "L-216",
+      "book_page_candidate": 34,
+      "status": "CANDIDATE_ARITHMETIC_CONSISTENT_ONLY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "round_operands_then_compute_half_up",
+        "compute_then_round_result_half_up"
+      ],
+      "strategies_diverge": false,
+      "both_strategies_have_distinct_options": false,
+      "selected_key_matches_all_checked_strategies": true,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    },
+    {
+      "q_id": "Q-1066",
+      "anchor": "L-216",
+      "book_page_candidate": 34,
+      "status": "CANDIDATE_ARITHMETIC_CONSISTENT_ONLY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "round_operands_then_compute_half_up",
+        "compute_then_round_result_half_up"
+      ],
+      "strategies_diverge": false,
+      "both_strategies_have_distinct_options": false,
+      "selected_key_matches_all_checked_strategies": true,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    },
+    {
+      "q_id": "Q-1067",
+      "anchor": "L-216",
+      "book_page_candidate": 34,
+      "status": "CONVENTION_DEPENDENT_KEY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "round_operands_then_compute_half_up",
+        "compute_then_round_result_half_up"
+      ],
+      "strategies_diverge": true,
+      "both_strategies_have_distinct_options": true,
+      "selected_key_matches_all_checked_strategies": false,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    },
+    {
+      "q_id": "Q-1068",
+      "anchor": "L-216",
+      "book_page_candidate": 34,
+      "status": "CANDIDATE_ARITHMETIC_CONSISTENT_ONLY_NOT_BOOK_VERIFIED",
+      "strategies_checked": [
+        "round_operands_then_compute_half_up",
+        "compute_then_round_result_half_up"
+      ],
+      "strategies_diverge": false,
+      "both_strategies_have_distinct_options": false,
+      "selected_key_matches_all_checked_strategies": true,
+      "book_evidence": "UNVERIFIED",
+      "visual_independence": "NOT_PROVEN",
+      "teacher_verdict": "NOT_GRANTED",
+      "runtime": "NOT_TESTED"
+    }
+  ]
+}
