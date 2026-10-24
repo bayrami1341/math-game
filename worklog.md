@@ -1970,3 +1970,14 @@ Work Log:
 - `authoring/tools/section2_pipeline_v1.py` orchestration خالص index خصوصی intake→گیت مستقل مفهوم→score شش‌عاملی را ساخت؛ binding خوداظهاری caller را با نتیجهٔ ممیزی بازنویسی می‌کند، انحراف هدف اصلی در هر صفحه/Q امتیاز تمام بسته را نگه می‌دارد، نبود شاهد/صفحه/Q را HOLD می‌گذارد و پوشش/موتور/نشر را NOT_ASSESSED/AWAITING/NOT_GRANTED نگه می‌دارد. ۴ آزمون مصنوعی یکپارچه برای مسیر مثبت، بحرانی، نامعلوم و نسب‌نامه/لنگر فصل اضافه شد؛ کل suite **۹۷/۹۷ PASS**، diff check PASS. هیچ workbook واقعی/راهنمای هم‌چاپ/receipt تازه مصرف نشده و API/مهر/کلید/هستهٔ Z.ai تغییر نکرد.
 Stage Summary:
 - M0 فقط آغاز شده، نه پایان بخش دوم. اقدام فوری مالک لازم نیست؛ تحویل‌های بعدی با SHA و گیت به‌صورت مرحلهٔ فنی ادامه می‌یابند؛ اعلام نهایی و زمان فقط با مالک.
+
+---
+Task ID: github-backed-achilles-arena-zai-content-lineage-2026-10-24
+Agent: آرنا (content)
+Task: ترسیم مسیر فنی GitHubمحور برای ورود محتوای خامِ مجاز از آشیل و برگشت خروجی ارزیابی آرنا به مخزن برای مصرف Z.ai، بنا به تصریح مالک.
+Work Log:
+- `gh repo view` خصوصی‌بودن `bayrami1341/math-game` را تأیید کرد. وضعیت روز: PR آشیل #2 در head `709493c9e469e3511f152123e5de489f0321e01e` باز/متعارض با v10.3-beta است و fixtureهای v0.5/observation دارد؛ PR #1 به شاخهٔ آرنا باز اما ادغام‌نشده، PR #3 آرنا باز/متعارض. نامزد v1.2 آرنا از `git show HEAD:path` با SHA `18e6b4fa...` دوباره سنجیده شد؛ هیچ‌کدام به‌جای workbook تازهٔ تأییدشدهٔ آشیل معرفی نشد.
+- `authoring/GITHUB-THREE-STAGE-CONTENT-FLOW-v1.fa.md` نقشهٔ `producer_commit+raw_sha → read-only exact-byte intake → آرشیو/مفهوم/score/coverage → assessment_commit+manifest → Z.ai consumer_receipt`، چیدمان پیشنهادی content-addressed، رفتار PR/CI، حقوق، تست‌های ابطال و وضعیت‌های HOLD/BLOCKED را مستند کرد. GitHub مخزن مرجع کد و lineage است؛ خزانهٔ بیرون Git فقط پردازش مجاز است. بایت XLSX خام فقط با مجوز ذخیره در repo خصوصی؛ نبود مجوز برای درخواست raw-in-GitHub blocker صریح است، نه دور زدن خاموش. PDF/تصویر و secret به Git نرفت.
+- معماری موجود با الحاق ارجاع به مسیر جدید به‌روزرسانی شد. لینک‌های داخلی و diff check پاس؛ هیچ Excel رسمی/نامزد، مهر، کلید، API، PR یا سر رسمی تغییر/ادغام نشد.
+Stage Summary:
+- مسیر فنی و وضعیت واقعی روشن است، ولی adapter دریافت commit پین‌شده، انتشار sidecar به GitHub و رسید مصرف واقعی Z.ai هنوز پیاده/آزموده نشده‌اند. اقدام فوری مالک برای این نقشه لازم نیست؛ اگر حقِ نگهداری XLSX خام در مخزن احراز نشود، تصمیم حقوقی مشخص پیش از آن upload لازم می‌شود.
