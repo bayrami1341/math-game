@@ -1,0 +1,65 @@
+{
+ "calibrationId": "G2-PRINTED-CALIBRATION-v1",
+ "schema": "khshab.printed-calibration/v1",
+ "book": "KH-G2-MATH (C205) — ریاضی دوم دبستان، چاپ چهاردهم ۱۴۰۴، شابک 978-964-05-2078-9",
+ "status": "OWNER_AUTHORITATIVE",
+ "provenance": {
+  "source": "پیام مالک در چت — کالیبراسیون صفحه‌نگاری چاپی (شمارهٔ چاپ‌شده مرجع از این پس)",
+  "trace": "1a16d9e2c4e3f099",
+  "date": "۱۴۰۵/۰۸/۰۲ (۲۰۲۶-۱۰-۲۴)"
+ },
+ "numberingRule": {
+  "reference": "شمارهٔ چاپ‌شدهٔ کتاب — مرجع رسمی همهٔ گزارش‌ها و ارجاع‌ها از این پس",
+  "relation": "pdfPage = bookPage + 6 (فایل همیشه ۶ صفحه جلوتر)",
+  "bookPageRange": "۱ تا ۱۴۴",
+  "prePages": "pdf ۱–۶ (جلد، شناسنامه، فهرست) — شمارهٔ چاپی ندارند",
+  "postPages": "pdf ۱۵۱–۱۵۲ = کتاب ۱۴۵ و ۱۴۶ — جزو هیچ فصلی نیستند",
+  "posterRule": "پوستر هر فصل همان صفحهٔ آغاز فصل است و جزو فصل حساب می‌شود"
+ },
+ "chapters": [
+  { "no": 1, "title": "عدد و رقم", "poster": 1, "from": 1, "to": 18, "posterConcept": "گله، دسته‌های ده‌تایی، رقم روی پلاک" },
+  { "no": 2, "title": "جمع و تفریق دو رقمی", "poster": 19, "from": 19, "to": 36, "posterConcept": "ماشین جمع، پرنده‌ها، تیم‌ها" },
+  { "no": 3, "title": "شکل‌های هندسی", "poster": 37, "from": 37, "to": 54, "posterConcept": "کاشی مسجد، بادبادک تانگرام" },
+  { "no": 4, "title": "عددهای سه‌رقمی", "poster": 55, "from": 55, "to": 72, "posterConcept": "عدد ۱۰۰، ردیف‌های صدتایی" },
+  { "no": 5, "title": "اندازه‌گیری", "poster": 73, "from": 73, "to": 90, "posterConcept": "قد و وزن" },
+  { "no": 6, "title": "جمع و تفریق سه‌رقمی", "poster": 91, "from": 91, "to": 108, "posterConcept": "ستون‌های رنگی جمع، ارزش مکانی" },
+  { "no": 7, "title": "کسر و احتمال", "poster": 109, "from": 109, "to": 126, "posterConcept": "پیتزا و پرچم، قسمت مساوی" },
+  { "no": 8, "title": "آمار و نمودار", "poster": 127, "from": 127, "to": 144, "posterConcept": "ساعت روز دانش‌آموز، نمودار ستونی" }
+ ],
+ "reviewPages": [
+  { "chapter": 1, "bookPage": 16, "pdfPage": 22 },
+  { "chapter": 2, "bookPage": 34, "pdfPage": 40 },
+  { "chapter": 3, "bookPage": 52, "pdfPage": 58, "note": "فصل ۳ مرور جدا ندارد؛ نوشتن مرور در همین صفحه است" },
+  { "chapter": 4, "bookPage": 70, "pdfPage": 76 },
+  { "chapter": 5, "bookPage": 88, "pdfPage": 94 },
+  { "chapter": 6, "bookPage": 106, "pdfPage": 112 },
+  { "chapter": 7, "bookPage": 124, "pdfPage": 130 },
+  { "chapter": 8, "bookPage": 142, "pdfPage": 148 }
+ ],
+ "specialPages": [
+  { "bookPage": 17, "chapter": 1, "verdict": "هنوز فصل ۱ است" },
+  { "bookPage": 18, "chapter": 1, "verdict": "هنوز فصل ۱ است (رکورد page-map: معما)" },
+  { "bookPage": 53, "chapter": 3, "verdict": "ساعت است؛ داخل فصل ۳ و مرز فصل را جابه‌جا نمی‌کند" },
+  { "bookPage": 145, "chapter": null, "verdict": "شابلون برش‌خوردنی — جزو هیچ فصلی نیست" },
+  { "bookPage": 146, "chapter": null, "verdict": "برگ نظرسنجی — جزو هیچ فصلی نیست" }
+ ],
+ "ownerVerdictsOnPageMapFlags": [
+  { "bookPage": 16, "pageMapRecord": "banner «فرهنگ نوشتن» / pageType تمرین / فلگ دو-بنری (۱۶، ۳۳، ۳۴، ۵۲)", "ownerVerdict": "آغاز مرور فصل ۱ در همین صفحه است", "actionForPageMapV2": "pageType ← مرور فصل (آغاز؛ صفحهٔ ترکیبی فرهنگ نوشتن + تمرین + مرور)" },
+  { "bookPage": 17, "pageMapRecord": "pageType «مرور فصل» بدون بنر", "ownerVerdict": "هنوز فصل ۱ است", "actionForPageMapV2": "یادداشت «ادامهٔ مرور/فعالیت فصل ۱» — دامنهٔ فصل بدون تغییر" },
+  { "bookPage": 33, "pageMapRecord": "banner «تمرین» / فلگ دو-بنری", "ownerVerdict": "در فهرست مرورها نیست", "actionForPageMapV2": "تمرین معمولی فصل ۲ — فلگ دو-بنری بسته می‌شود" },
+  { "bookPage": 53, "pageMapRecord": "pageType «مرور فصل» بدون بنر", "ownerVerdict": "ساعت است؛ مرز فصل را جابه‌جا نمی‌کند", "actionForPageMapV2": "pageType ← ساعت" }
+ ],
+ "crossCheckVsPageMap": {
+  "against": "PAGE-MAP-KH-G2-MATH-v1 (offset=6، ۱۵۲ رکورد، خوانش کور ۱۰ زیرعامل)",
+  "chapterBoundaries": "۸/۸ برابر — شروع‌ها ۱/۱۹/۳۷/۵۵/۷۳/۹۱/۱۰۹/۱۲۷ با فهرست کتاب و ستون پوستر مالک مو‌به‌مو",
+  "offset": "برابر — حکم مالک (کتاب ۱ = فایل ۷) تأیید مستقل offset=6 است؛ کتاب سوم (C305) offset=0 خودش را دارد",
+  "reviewPages": "۸/۸ سازگار — ۷ صفحه دقیقاً برابر رکورد page-map + آغاز مرور ف۱ روی ص۱۶ طبق حکم مالک",
+  "postPages": "برابر — pdf ۱۵۱=شابلون، pdf ۱۵۲=نامهٔ نظرسنجی (رکوردهای kind پس‌صفحه)",
+  "chapterBackbone": "G2 = ۸ فصل × ۱۸ صفحه — تثبیت دو-منبعی (page-map + حکم مالک)"
+ },
+ "impact": {
+  "matrixV02": "ورودی مستقیم BP-027 — ستون فقرات پایهٔ دوم روی ۸ فصل بازسازی می‌شود (ف۷ کسر و احتمال، ف۸ آمار و نمودار اکنون دو-منبعی‌اند)",
+  "gate": "BP-028 — گیت ماشینی ماتریس↔page-map↔کالیبراسیون",
+  "stamping": "مُهر گام صفر همچنان متوقف تا ماتریس v0.2"
+ }
+}
