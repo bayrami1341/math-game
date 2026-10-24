@@ -2027,3 +2027,13 @@ Work Log:
 - `authoring/G2-CH2-ACTIVE-EXECUTION-AND-COLLAB-REQUEST-v1.fa.md` نتیجه و دو پیام دقیق برای آشیل (بستهٔ پین‌شدهٔ فصل ۲ + شاهد ص۱۹/۳۳) و Z.ai (قرارداد نسخه‌دار/تست mismatch/رسید dry-run) را آماده کرد. بدون پاسخ آنان ممیزی مستقل و آزمون ادامه می‌یابد؛ ارسال/ACK زنده ادعا نمی‌شود.
 Stage Summary:
 - صف فصل ۲ عملاً ساخته و به GitHub برای بازبینی تحویل می‌شود؛ پذیرش آموزشی هنوز صفر چون شاهد/هدف معتبر و تحویل واقعی آشیل ندارد. مالک می‌تواند متن دو پیام را به عوامل بدهد؛ هیچ مانع برای ادامهٔ گام‌های مستقل نیست.
+
+---
+Task ID: bp029-consumer-contract-proposed-intake-2026-10-24
+Agent: آرنا (content)
+Task: بررسی اعلان BP-029 Z.ai و تهیهٔ تطبیق فنیِ قابل پاسخ، بدون توقف ممیزی G2.
+Work Log:
+- ابلاغ کاربر دربارهٔ `khshab.consumption-contract/v1.0.0`, dry-run ۱۰تایی و مسیر رسید `reports/consumer-receipts/` خوانده شد. در لحظهٔ بررسی `origin/main=1a8391e0dfcfb63684d2a41da1e57b818dfa4564` بود؛ commit اعلام‌شدهٔ محلی Z.ai `6d96f75` در GitHub با API 422 یافت نشد و فایل `authoring/CONSUMPTION-CONTRACT-v1.json` با API 404 موجود نبود. این وضعیت با گفتهٔ خود Z.ai «هنوز push نشده» سازگار است؛ تست‌ها و قرارداد واقعی در محیط آرنا اجرا/امضا نشدند.
+- `authoring/BP029-ARENA-CONSUMER-CONTRACT-REVIEW-v1.fa.md` جدول سازگاری manifest فعلی آرنا با شش فیلد BP-029 را ثبت کرد: `workbook_sha256`↔`workbook_sha`، commit و هش manifest بیرون فایل خودارجاعی، شناسهٔ محلی `Q-…`↔UID namespaced، تصمیم انسانیِ bind‌شده به UID/assessment/چاپ نه صرف allowlist چهار فرمان کلی. آزمون‌های پیشنهادی lineage/decision-scope/yellow/receipt-persistence و متن واحدِ درخواست بایت قابل fetch از Z.ai نوشته شد؛ هیچ API یا گیت ۷ تغییر نکرد.
+Stage Summary:
+- وضعیت `PROPOSED_ARENA_COUNTERSIGN_PENDING_REVIEW_OF_BYTES` است. ادامهٔ مستقل آرنا روی فصل ۲ G2 پابرجاست. درخواست به مالک فقط رساندن متن کوتاهِ درخواست commit/فایل به Z.ai در صورت امکان؛ فرمان push به main یا تأیید مجدد کلی لازم نیست.
