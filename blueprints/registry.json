@@ -1,6 +1,6 @@
 {
   "schema": "khshab.blueprints/v1",
-  "version": 58,
+  "version": 59,
   "updated_at": "2026-10-24T07:17:28.000Z",
   "updated_by": "z.ai — BP-025 قرارداد ریل اصلی + گزارش مقایسهٔ خارجی",
   "blueprints": [
@@ -1434,6 +1434,111 @@
         "notes": "trace 1a16cc16344429a1"
       },
       "notes": "وضعیت delivered — پذیرش رسمی با مُهر مالک. اصلاح آیندهٔ قرارداد فقط با فرمان مالک و افزایش نسخه (khshab.rail-contract/v1.0.0)."
+    },
+    {
+      "lane": "dev",
+      "assignee": "z.ai",
+      "id": "BP-026",
+      "title": "بودجهٔ رسمی سؤالات G3 مالک — ثبت عیناً، راستی‌آزمایی حسابی و تطبیق (trace 1a16d58b643cc6b5)",
+      "status": "delivered",
+      "priority": 27,
+      "created_by": "مالک-چت: «من کل کتاب ریاضی سوم ابتدایی را برایت بودجه‌بندی تعداد منطقی سوالات کردم» + دو جدول اصلی/فرعی",
+      "created_at": "2026-10-24T00:00:00.000Z",
+      "approved_by": "مالک-چت (trace 1a16d58b643cc6b5)",
+      "approved_at": "2026-10-24T00:00:00.000Z",
+      "dispatched_at": "2026-10-24T00:00:00.000Z",
+      "delivered_at": "2026-10-24T00:00:00.000Z",
+      "verified_at": null,
+      "context": "پاکت کنترل تعداد سؤال در مرز B2 ریل — khshab.question-budget/v1 با status OWNER_AUTHORITATIVE. سه سطح (دانشی/کاربردی/استدلالی) با تعریف مالک، نسبت ۳۳/۴۶/۲۱، جمع ۴۵۶–۶۸۴، قاعدهٔ تاختن موضوعات ارزش-۳ در نزدیک‌ترین موضوع اصلی. هیچ عددی تغییر نکرده است.",
+      "tasks": [
+        "ثبت عیناً دو جدول مالک (۸ فصل + ۳۶ موضوع اصلی) در authoring/QUESTION-BUDGET-G3-v1.json و reports/question-budget-g3-v1.fa.md",
+        "گیت ماشینی fail-closed: scripts/verify-question-budget.py — ۴ آزمون (خودسازگاری ۳۶ ردیف / جمع فرعی=اصلی در ۸ فصل×۴ بعد / جمع‌های کل / نسبت ۳۳-۴۶-۲۱) → همگی سبز، exit 0",
+        "تطبیق سه‌گانه با شواهد: عنوان فصل‌ها = page-map G3 (۸/۸، ف۳=کسر → تأیید مستقل رأی معلم) / قاعدهٔ ارزش-۳ = فهرست ارزش‌های معلم / موضوعات فرعی = فهرست جاافتاده‌های معلم",
+        "تطبیق با ماتریس v1: شکاف ۴۵۲<۴۵۶ فقط از min کسر (۵۶→۶۰)؛ اصلاح ستون فقرات ف۳/ف۵/ف۶ + یک تغییر عددی = انطباق کامل؛ باند max و جدول سطح‌ها ساختار تازه برای v0.2"
+      ],
+      "acceptance": [
+        "هر دو جدول عیناً و بدون تغییر هیچ عددی ثبت شده باشد",
+        "verify-question-budget.py سبز باشد (exit 0)",
+        "تطبیق ۸/۸ عنوان با page-map G3 مستند باشد",
+        "bun scripts/blueprint.ts validate پاس شود و موتور ۲۳۷/۲۳۷ بماند"
+      ],
+      "artifacts": [
+        "authoring/QUESTION-BUDGET-G3-v1.json",
+        "reports/question-budget-g3-v1.fa.md",
+        "scripts/verify-question-budget.py"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "trace 1a16d58b643cc6b5"
+      },
+      "notes": "وضعیت delivered — پذیرش رسمی با مُهر مالک. تغییر اعداد بودجه فقط با نسخهٔ v2 از خود مالک."
+    },
+    {
+      "lane": "dev",
+      "assignee": "z.ai",
+      "id": "BP-027",
+      "title": "ماتریس v0.2 — بازسازی ستون فقرات از page-map + پذیرش پاکت بودجهٔ مالک + جای‌گذاری رأی معلم",
+      "status": "draft",
+      "priority": 28,
+      "created_by": "پیشنهاد z.ai (matrix-chapter-mapping-audit-v1 بند ۱) + ورودی الزامی بودجهٔ رسمی مالک (BP-026)",
+      "created_at": "2026-10-24T00:00:00.000Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "ماتریس v1 (DRAFT) چرخش ف۳/ف۵/ف۶ دارد و ۴۵۲<۴۵۶ است؛ مُهر گام صفر تا v0.2 متوقف است. v0.2 باید: ستون فقرات هر دو کتاب مستقیماً از page-map، پاکت بودجهٔ G3 (min/max + سه سطح)، رأی معلم (حذف تبدیل متر-سانتی‌متر، انتقال مباحث ف۳ به ف۶، همهٔ جاافتاده‌ها) و min کسر ۵۶→۶۰ را اجرا کند.",
+      "tasks": [
+        "بازسازی ستون فقرات G2 و G3 از chapterSummary دو page-map نسخه‌دار",
+        "پذیرش ساختار سطح‌ها (دانشی/کاربردی/استدلالی با باند min–max) از QUESTION-BUDGET-G3-v1.json",
+        "جای‌گذاری رأی معلم G3 در qTypes هر دامنه + اجرای دو حکم صریح",
+        "به‌روزرسانی CONCEPT-PROFILE و pin تازه + اجرای گیت‌های CI"
+      ],
+      "acceptance": [
+        "عنوان و بازهٔ صفحهٔ هر دامنه = chapterSummary page-map همان کتاب",
+        "minTotal G3 = ۴۵۶ و انطباق با باند بودجه",
+        "رأی معلم بدون کم‌وکاست در ماتریس بنشیند",
+        "ماتریس v0.2 آمادهٔ گام صفر (مُهر معلم) باشد"
+      ],
+      "artifacts": [],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "منتظر فرمان مالک برای شروع"
+      },
+      "notes": "پیش‌نویس — شروع فقط با فرمان مالک."
+    },
+    {
+      "lane": "dev",
+      "assignee": "z.ai",
+      "id": "BP-028",
+      "title": "گیت ماشینی CI «ماتریس ↔ page-map ↔ بودجه» — نابرابری = توقف",
+      "status": "draft",
+      "priority": 29,
+      "created_by": "پیشنهاد z.ai (matrix-chapter-mapping-audit-v1 بند ۳ — آنجا با شمارهٔ BP-026 پیشنهاد شده بود؛ به BP-028 شماره‌گذاری مجدد شد چون BP-026 به ثبت بودجه رسید)",
+      "created_at": "2026-10-24T00:00:00.000Z",
+      "approved_by": null,
+      "approved_at": null,
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "ریشهٔ فرایندی خطای ف۳: نبود گیت اتصال ماتریس به page-map. این گیت در CI بررسی می‌کند عنوان و بازهٔ صفحهٔ هر دامنهٔ ماتریس با chapterSummary page-map برابر باشد و اعداد ماتریس داخل پاکت بودجهٔ مالک بماند؛ نابرابری = exit 1.",
+      "tasks": [
+        "اسکریپت مقایسهٔ ماتریس↔page-map↔بودجه برای هر دو کتاب",
+        "افزودن به khshab-gate.yml پس از ساخته‌شدن ماتریس v0.2"
+      ],
+      "acceptance": [
+        "با ماتریس معیوب فعلی گیت قرمز شود (آزمون منفی)",
+        "با ماتریس v0.2 سبز شود"
+      ],
+      "artifacts": [],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "وابسته به BP-027"
+      },
+      "notes": "پیش‌نویس — شروع فقط با فرمان مالک."
     }
   ]
 }
