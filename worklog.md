@@ -1981,3 +1981,14 @@ Work Log:
 - معماری موجود با الحاق ارجاع به مسیر جدید به‌روزرسانی شد. لینک‌های داخلی و diff check پاس؛ هیچ Excel رسمی/نامزد، مهر، کلید، API، PR یا سر رسمی تغییر/ادغام نشد.
 Stage Summary:
 - مسیر فنی و وضعیت واقعی روشن است، ولی adapter دریافت commit پین‌شده، انتشار sidecar به GitHub و رسید مصرف واقعی Z.ai هنوز پیاده/آزموده نشده‌اند. اقدام فوری مالک برای این نقشه لازم نیست؛ اگر حقِ نگهداری XLSX خام در مخزن احراز نشود، تصمیم حقوقی مشخص پیش از آن upload لازم می‌شود.
+
+---
+Task ID: github-exchange-adapter-m0-2026-10-24
+Agent: آرنا (content)
+Task: اجرای مرحلهٔ مستقل M0 از نقشهٔ تازهٔ GitHubمحور، بدون ادعای تحویل واقعی آشیل یا Z.ai.
+Work Log:
+- `authoring/tools/github_content_exchange_v1.py`: `fetch_pinned` با ref کامل، commit چهل‌رقمی پین‌شده، دریافت در bare repo موقت، اثبات ancestor بودن commit نسبت به ref، مسیر content-addressed مجاز، checksum بایت، رسید هم-commit، مقایسهٔ تصمیم حقوقی اعلام‌شدهٔ بیرونی و آرشیو خصوصیِ اکسل استاندارد. CLI فقط remote ثابت مخزن را می‌پذیرد؛ remote تزریقی فقط در API تست. هیچ ref/working tree این شاخه حین fetch تغییر نمی‌کند. هش commit به علت خودارجاعی در خود رسید وارد نمی‌شود و در lineage خروجی ثبت می‌شود.
+- بسته‌ساز `redacted_package`: digest بایت آرشیو/index/assessment را کنترل و فقط خلاصهٔ آماری و manifest زردِ فاقد متن سؤال/کتاب می‌سازد؛ شش‌عامل، محدوده، پوشش، قابلیت موتور و اجازهٔ انتشار را صریحاً NOT_COMPUTED/NOT_RUN/NOT_GRANTED می‌گذارد. CLI خروجی را فقط بیرون repo stage می‌کند؛ commit/push محتوای واقعی و consumer receipt هنوز نداریم.
+- چهار تست remote و XLSX کاملاً مصنوعی: پین commit هنگام جابه‌جایی branch، tamper SHA/رسید، حقوق، ref/path، archive، redaction. کل suite بعد از fetch ref رسمی و commit تاریخی موردنیاز تست‌های legacy: `101 tests OK`. `.gitignore` برای `.venv` و `__pycache__` تکمیل شد؛ نقشهٔ فنی با وضعیت اجرا و هشدار حقوق قبل از git fetch به‌روز شد.
+Stage Summary:
+- هنوز workbook جدید دارای رسید تأیید/مجوز ذخیرهٔ خامِ آشیل، انطباق راهنمای همان چاپ، آزمون E2E واقعی، PR انتشار sidecar و رسید Z.ai موجود/مجاز تلقی نشده‌اند. صرف رشتهٔ حقوق در رسید و CLI امضای تصمیم را ثابت نمی‌کند؛ git fetch ممکن است خام را منتقل کند، پس اجرا روی remote واقعی به احراز مستقل حق دریافت و نگهداری نیاز دارد. PDF/تصویر/مهرها و سر رسمی دست‌نخورده‌اند.
