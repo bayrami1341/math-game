@@ -1,0 +1,621 @@
+{
+  "schema": "arena-g2-ch2-skeleton-queue/v1",
+  "skeleton_commit": "1a8391e0dfcfb63684d2a41da1e57b818dfa4564",
+  "skeleton_path": "handoff/SKELETON-G2-KH-v1.json",
+  "skeleton_sha256": "358c727a2f96c47e339c10153a889628e9c059f3326ea401a96acb9c6dcafa73",
+  "candidate_workbook_sha256": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+  "source_inventory_status": "HISTORICAL_YELLOW_NOT_ACHILLES_VERIFIED",
+  "grade": "G2",
+  "book_code": "C205",
+  "chapter": 2,
+  "printed_pages": [
+    19,
+    36
+  ],
+  "budget": {
+    "min": 60,
+    "max": 90,
+    "levels": {
+      "دانشی": [
+        18,
+        27
+      ],
+      "کاربردی": [
+        30,
+        45
+      ],
+      "استدلالی": [
+        12,
+        18
+      ]
+    },
+    "rows": [
+      {
+        "title": "جمع و تفریق ده‌تایی",
+        "min": 12,
+        "max": 18,
+        "levels": {
+          "دانشی": [
+            4,
+            6
+          ],
+          "کاربردی": [
+            6,
+            9
+          ],
+          "استدلالی": [
+            2,
+            3
+          ]
+        },
+        "allocated_verified_q": 0
+      },
+      {
+        "title": "شکل و محور",
+        "min": 12,
+        "max": 18,
+        "levels": {
+          "دانشی": [
+            3,
+            4
+          ],
+          "کاربردی": [
+            7,
+            11
+          ],
+          "استدلالی": [
+            2,
+            3
+          ]
+        },
+        "allocated_verified_q": 0
+      },
+      {
+        "title": "اضافه کردن یکی و ده‌تایی",
+        "min": 12,
+        "max": 18,
+        "levels": {
+          "دانشی": [
+            4,
+            6
+          ],
+          "کاربردی": [
+            7,
+            10
+          ],
+          "استدلالی": [
+            1,
+            2
+          ]
+        },
+        "allocated_verified_q": 0
+      },
+      {
+        "title": "تقریب حاصل",
+        "min": 12,
+        "max": 18,
+        "levels": {
+          "دانشی": [
+            3,
+            5
+          ],
+          "کاربردی": [
+            5,
+            7
+          ],
+          "استدلالی": [
+            4,
+            6
+          ]
+        },
+        "allocated_verified_q": 0
+      },
+      {
+        "title": "مسئله و ساعت",
+        "min": 12,
+        "max": 18,
+        "levels": {
+          "دانشی": [
+            4,
+            6
+          ],
+          "کاربردی": [
+            5,
+            8
+          ],
+          "استدلالی": [
+            3,
+            4
+          ]
+        },
+        "allocated_verified_q": 0
+      }
+    ]
+  },
+  "topics": [
+    {
+      "kind": "MAIN",
+      "no": 1,
+      "title": "جمع و تفریق ده‌تایی",
+      "pages": [
+        [
+          20,
+          22
+        ]
+      ],
+      "value_from_skeleton": 5,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 2,
+      "title": "جمع با شکل، محور و چوب‌خط",
+      "pages": [
+        [
+          23,
+          24
+        ]
+      ],
+      "value_from_skeleton": 4,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 3,
+      "title": "جمع اساسی و رسیدن به ده",
+      "pages": [
+        [
+          25,
+          25
+        ]
+      ],
+      "value_from_skeleton": 5,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 4,
+      "title": "گسترده و روش فرایندی",
+      "pages": [
+        [
+          28,
+          32
+        ]
+      ],
+      "value_from_skeleton": 5,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 5,
+      "title": "تقریب حاصل",
+      "pages": [
+        [
+          20,
+          20
+        ],
+        [
+          34,
+          35
+        ]
+      ],
+      "value_from_skeleton": 5,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 6,
+      "title": "تفکر نظام‌دار",
+      "pages": [
+        [
+          26,
+          27
+        ]
+      ],
+      "value_from_skeleton": 5,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "MAIN",
+      "no": 7,
+      "title": "شمارش جلو و عقب در جدول",
+      "pages": [
+        [
+          32,
+          32
+        ]
+      ],
+      "value_from_skeleton": 4,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "SUBSIDIARY",
+      "no": 1,
+      "title": "دقیقه، ربع و عقربهٔ بزرگ",
+      "pages": [
+        [
+          27,
+          27
+        ]
+      ],
+      "value_from_skeleton": 3,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    },
+    {
+      "kind": "SUBSIDIARY",
+      "no": 2,
+      "title": "پوشاندن خانه‌های شطرنجی",
+      "pages": [
+        [
+          36,
+          36
+        ]
+      ],
+      "value_from_skeleton": 3,
+      "budget_mapping": "UNMAPPED_AWAITING_PAGE_AND_GUIDE_EVIDENCE"
+    }
+  ],
+  "exact_title_hints_only": [
+    {
+      "topic": "جمع و تفریق ده‌تایی",
+      "budget_row": "جمع و تفریق ده‌تایی",
+      "status": "LEXICAL_HINT_NOT_REVIEWED"
+    },
+    {
+      "topic": "تقریب حاصل",
+      "budget_row": "تقریب حاصل",
+      "status": "LEXICAL_HINT_NOT_REVIEWED"
+    }
+  ],
+  "page_queue": [
+    {
+      "printed_page": 19,
+      "candidate_s1_id": "L-201",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 20,
+      "candidate_s1_id": "L-202",
+      "candidate_question_ids": [
+        "Q-1041",
+        "Q-1042",
+        "Q-1043",
+        "Q-1044"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        },
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 21,
+      "candidate_s1_id": "L-203",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 22,
+      "candidate_s1_id": "L-204",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 23,
+      "candidate_s1_id": "L-205",
+      "candidate_question_ids": [
+        "Q-1045",
+        "Q-1046",
+        "Q-1047",
+        "Q-1048"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 2,
+          "title": "جمع با شکل، محور و چوب‌خط"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 24,
+      "candidate_s1_id": "L-206",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 2,
+          "title": "جمع با شکل، محور و چوب‌خط"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 25,
+      "candidate_s1_id": "L-207",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 3,
+          "title": "جمع اساسی و رسیدن به ده"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 26,
+      "candidate_s1_id": "L-208",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 6,
+          "title": "تفکر نظام‌دار"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 27,
+      "candidate_s1_id": "L-209",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 6,
+          "title": "تفکر نظام‌دار"
+        },
+        {
+          "source_kind": "SUBSIDIARY",
+          "source_no": 1,
+          "title": "دقیقه، ربع و عقربهٔ بزرگ"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 28,
+      "candidate_s1_id": "L-210",
+      "candidate_question_ids": [
+        "Q-1049",
+        "Q-1050",
+        "Q-1051",
+        "Q-1052"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 29,
+      "candidate_s1_id": "L-211",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 30,
+      "candidate_s1_id": "L-212",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 31,
+      "candidate_s1_id": "L-213",
+      "candidate_question_ids": [
+        "Q-1053",
+        "Q-1054",
+        "Q-1055",
+        "Q-1056"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 32,
+      "candidate_s1_id": "L-214",
+      "candidate_question_ids": [
+        "Q-1057",
+        "Q-1058",
+        "Q-1059",
+        "Q-1060"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        },
+        {
+          "source_kind": "MAIN",
+          "source_no": 7,
+          "title": "شمارش جلو و عقب در جدول"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 33,
+      "candidate_s1_id": "L-215",
+      "candidate_question_ids": [
+        "Q-1061",
+        "Q-1062",
+        "Q-1063",
+        "Q-1064"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 34,
+      "candidate_s1_id": "L-216",
+      "candidate_question_ids": [
+        "Q-1065",
+        "Q-1066",
+        "Q-1067",
+        "Q-1068"
+      ],
+      "candidate_q_count": 4,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 35,
+      "candidate_s1_id": "L-217",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    },
+    {
+      "printed_page": 36,
+      "candidate_s1_id": "L-218",
+      "candidate_question_ids": [],
+      "candidate_q_count": 0,
+      "topic_hints": [
+        {
+          "source_kind": "SUBSIDIARY",
+          "source_no": 2,
+          "title": "پوشاندن خانه‌های شطرنجی"
+        }
+      ],
+      "extraction_evidence": "AWAITING_ACHILLES_VERIFIED_SNAPSHOT",
+      "guide_objective": "UNKNOWN_SAME_EDITION_GOAL",
+      "exercise_families": "UNKNOWN_UNTIL_PAGE_EVIDENCE",
+      "educational_acceptance": "NOT_GRANTED"
+    }
+  ],
+  "candidate_q_total_not_accepted": 28,
+  "accepted_q_total": 0,
+  "coverage_status": "NOT_PROVEN",
+  "release_authorization": "NOT_GRANTED",
+  "historical_inventory_sha256": "5c3c73355e971b20e115f9da430fcdcb12418d4ed23ae3d54a07d3c23a41a6cb"
+}
