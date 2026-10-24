@@ -1,0 +1,170 @@
+{
+  "bundle_id": "SYNTH-EXTRACT-1",
+  "offset_proof_sha256": "04de53114725f414365f95e91776c2aa171a93ee83534a28366f9789f5a45f22",
+  "pages": [
+    {
+      "book_page": 1,
+      "elements": [
+        {
+          "concept_candidate_ids": [
+            "whole_number_addition"
+          ],
+          "element_id": "EL-10",
+          "element_kind": "EXAMPLE",
+          "evidence_refs": [
+            "EV-CONTENT-10"
+          ],
+          "number_domain_ids": [
+            "whole_numbers"
+          ],
+          "operation_ids": [
+            "add"
+          ],
+          "short_excerpt": "Add two whole numbers"
+        }
+      ],
+      "evidence_refs": [
+        {
+          "bbox_normalized": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "book_page": 1,
+          "evidence_id": "EV-FULL-10",
+          "kind": "pdf_page_render",
+          "pdf_page": 10,
+          "sha256": "978b507dbdb185a0a12938b5fcca84bc6236b7d5bcc451b31f14714bd3f3e044",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        },
+        {
+          "bbox_normalized": [
+            0.05,
+            0.8,
+            0.25,
+            0.97
+          ],
+          "book_page": 1,
+          "evidence_id": "EV-PAGE-NUM-10",
+          "kind": "pdf_text_bbox",
+          "pdf_page": 10,
+          "purpose": "PRINTED_PAGE_NUMBER",
+          "sha256": "d846edbd579bf2764e3879e4a1c92f477f3f6007aa42f956fb9f33ff7b1d924a",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        },
+        {
+          "bbox_normalized": [
+            0.12,
+            0.12,
+            0.88,
+            0.42
+          ],
+          "book_page": 1,
+          "evidence_id": "EV-CONTENT-10",
+          "kind": "pdf_text_bbox",
+          "pdf_page": 10,
+          "sha256": "13b5bfd14142263843e0624b31fa8bad6d54e313bea663fedecf233e9662145a",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        }
+      ],
+      "page_image_sha256": "978b507dbdb185a0a12938b5fcca84bc6236b7d5bcc451b31f14714bd3f3e044",
+      "page_status": "CURRICULAR_CONTENT",
+      "pdf_page": 10,
+      "printed_page_number": 1,
+      "reading_status": "COMPLETE",
+      "record_id": "PG-10",
+      "visual_scan_status": "NOT_APPLICABLE"
+    },
+    {
+      "book_page": 2,
+      "elements": [
+        {
+          "concept_candidate_ids": [
+            "whole_number_addition"
+          ],
+          "element_id": "EL-11",
+          "element_kind": "TASK",
+          "evidence_refs": [
+            "EV-CONTENT-11"
+          ],
+          "number_domain_ids": [
+            "whole_numbers"
+          ],
+          "operation_ids": [
+            "add"
+          ],
+          "short_excerpt": "Compare whole-number sums"
+        }
+      ],
+      "evidence_refs": [
+        {
+          "bbox_normalized": [
+            0.0,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "book_page": 2,
+          "evidence_id": "EV-FULL-11",
+          "kind": "pdf_page_render",
+          "pdf_page": 11,
+          "sha256": "d3ce8c4f23a904159b2b4329001fcdbd14934f54981bedf0844c3668f5b20301",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        },
+        {
+          "bbox_normalized": [
+            0.05,
+            0.8,
+            0.25,
+            0.97
+          ],
+          "book_page": 2,
+          "evidence_id": "EV-PAGE-NUM-11",
+          "kind": "pdf_text_bbox",
+          "pdf_page": 11,
+          "purpose": "PRINTED_PAGE_NUMBER",
+          "sha256": "d9417088a64009dc79de513be56b29d4ffc9421de7bcdf1af81ef223e57791ee",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        },
+        {
+          "bbox_normalized": [
+            0.12,
+            0.12,
+            0.88,
+            0.42
+          ],
+          "book_page": 2,
+          "evidence_id": "EV-CONTENT-11",
+          "kind": "pdf_text_bbox",
+          "pdf_page": 11,
+          "sha256": "3c352d53a30f86b46456672a99c1706bb2a7d473b96c2fd050a5533aa4dc8636",
+          "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+        }
+      ],
+      "page_image_sha256": "d3ce8c4f23a904159b2b4329001fcdbd14934f54981bedf0844c3668f5b20301",
+      "page_status": "CURRICULAR_CONTENT",
+      "pdf_page": 11,
+      "printed_page_number": 2,
+      "reading_status": "COMPLETE",
+      "record_id": "PG-11",
+      "visual_scan_status": "NOT_APPLICABLE"
+    }
+  ],
+  "schema_version": "khshab.extraction-ledger/v1",
+  "section_scope": {
+    "book_page_end": 2,
+    "book_page_start": 1,
+    "pdf_page_end": 11,
+    "pdf_page_start": 10,
+    "section_id": "SYNTH-SECTION-1"
+  },
+  "source_binding": {
+    "book_code": "SYNTH",
+    "edition_id": "SYNTH-EDITION-1",
+    "manifest_id": "SYNTH-MANIFEST-1",
+    "manifest_sha256": "0c178294dd7ff776b73ad70324e79f46e589e65197a52558253014cdf44452b9",
+    "source_id": "SYNTH-PRINT-1",
+    "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+  }
+}

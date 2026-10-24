@@ -81,6 +81,14 @@ def test_bundle_contains_no_confidential_material(tmp_path: Path) -> None:
 def test_bundle_declares_permission_boundaries_and_mother_ai_actions(tmp_path: Path) -> None:
     bundle = build_handoff_index(REPO_ROOT)
     assert bundle["not_granted"] == NOT_GRANTED
+    envelope_schema = next(
+        schema for schema in bundle["contract_schemas"]
+        if schema["schema_id"] == "khshab.microbot-envelope/v1"
+    )
+    schema_path = REPO_ROOT / envelope_schema["path"]
+    assert file_sha256(str(schema_path)) == envelope_schema["sha256"]
+    schema_payload = json.loads(schema_path.read_text(encoding="utf-8"))
+    assert {"bot_id", "bot_version", "run_id", "source_sha256", "evidence_refs"} <= set(schema_payload["required"])
     for forbidden in ("TEACHER_VERDICT", "RELEASE_AUTHORIZATION", "OFFICIAL_HEAD_CHANGE", "FINALITY_CLAIM", "AUTO_GREEN_PROMOTION"):
         assert forbidden in bundle["not_granted"]
     assert len(bundle["hard_invariants"]) >= 10

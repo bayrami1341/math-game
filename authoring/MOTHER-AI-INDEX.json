@@ -1,22 +1,20 @@
 {
   "schema_version": "1.0.0",
-  "generated_at_utc": "2026-10-23T02:32:00Z",
+  "generated_at_utc": "2026-10-24T07:59:12Z",
   "generated_by": "khshab-agent v2.4 — authoring/agent/handoff.py: build_handoff_index",
   "purpose": "دسترسیِ مستقیمِ مدلِ مادر به موتورِ آشیل بدون واسطه‌گریِ پیام: فهرستِ ماژول‌ها، APIها، گیت‌ها و مرزهای مجوز با SHA-256 برای راستی‌آزمایی.",
   "repository": {
     "remote": "https://github.com/bayrami1341/math-game.git",
     "branch": "arena/0eb22280-math-game",
-    "head_sha_at_generation": "f2d7f2467d786d67ac85b22b1d9d0a529140ef1b",
-    "head_subject": "docs(handoff): به‌روزرسانی نهایی W7/W8 — تگ v2.4-final + PR#2 CONFLICTING یادداشت (unrelated histories §9)",
+    "head_sha_at_generation": "f333be1079ce9c5b3e4fc7d8eb8365c421bd2c08",
+    "head_subject": "docs(audit): record blocked G2 C205 source intake",
     "head_sha_caveat": "این شماره در لحظهٔ تولیدِ بسته ثبت شده است؛ خودِ بسته در commitِ بعدی منتشر می‌شود، پس شمارهٔ شاخه یک شماره جلوتر خواهد بود. معیارِ راستی‌آزماییِ محتوا، SHA-256ِ ماژول‌هاست (engine.modules) نه شمارهٔ commit.",
-    "tags": [
-      "v2.4-final"
-    ],
+    "tags": [],
     "pull_request": {
       "number": 2,
       "head_branch": "arena/0eb22280-math-game",
       "base_branch": "v10.3-beta",
-      "note": "PR از سوی Z.ai باید squash/rebase شود؛ ادغامِ v10.3-beta در arena/** ممنوع است (unrelated histories)."
+      "note": "آخرین وضعیت ثبت‌شده در 2026-10-23: OPEN و CONFLICTING/DIRTY؛ این بسته مجوز merge/push نمی‌دهد و ادغامِ v10.3-beta در arena/** ممنوع است."
     },
     "official_reference_hint": "origin/v10.3-beta (فقط‌خواندنی برای آرنا)"
   },
@@ -151,6 +149,59 @@
           "SNAPSHOT_V2_BUILT_WITH_EVIDENCE_SEPARATION"
         ],
         "docstring_first_line": "Stage P2: Dual Independent Reader Adapters (`JsonPass`, `G.ai Gemini`, `Z.ai/OpenAI`)"
+      },
+      {
+        "path": "authoring/agent/concept_scope.py",
+        "sha256": "e8fb7e83cfc6f7c6734529fb773608dacf0fe119ce20615684cd0cbadcc2f9bc",
+        "bytes": 58496,
+        "lines": 1258,
+        "public_api": [
+          "audit_concept_scope",
+          "build_parser",
+          "compute_crop_image_sha256",
+          "compute_page_image_sha256",
+          "main"
+        ],
+        "fail_closed_reason_codes": [
+          "CONCEPT_SCOPE_MATCHED_TECHNICAL_ONLY",
+          "CONFIRMED_OUT_OF_SCOPE_PRIMARY",
+          "INPUT_FILE_UNAVAILABLE",
+          "INPUT_HASH_FAILED",
+          "INPUT_JSON_INVALID",
+          "PDF_EVIDENCE_VALIDATION_UNAVAILABLE",
+          "PDF_MUST_REMAIN_OUTSIDE_GIT",
+          "PDF_PAGE_COUNT_MISMATCH",
+          "PDF_PAGE_ENUMERATION_UNAVAILABLE",
+          "RAW_TEXT_OR_IMAGE_FIELD_FORBIDDEN",
+          "READER_PASSES_MUST_REMAIN_OUTSIDE_GIT",
+          "SCOPE_SOURCE_VALIDATION_ERROR"
+        ],
+        "docstring_first_line": "M05 technical concept-scope gate."
+      },
+      {
+        "path": "authoring/agent/content_pipeline.py",
+        "sha256": "b6e1524f35ccc1e6ce7f3b47dccbd428ca6ba131d39841c2bc82aca202bfffaa",
+        "bytes": 63568,
+        "lines": 1257,
+        "public_api": [
+          "audit_content_pipeline",
+          "export_extraction_ledger_xlsx"
+        ],
+        "fail_closed_reason_codes": [
+          "OFFSET_PROOF_ARTIFACT_UNAVAILABLE",
+          "OFFSET_PROOF_HASH_FAILED",
+          "OFFSET_PROOF_SHA_MISMATCH",
+          "OFFSET_PROOF_UNREADABLE",
+          "PIPELINE_ARTIFACT_OUTSIDE_REPOSITORY",
+          "PIPELINE_HASH_FAILED",
+          "PIPELINE_INPUT_INVALID",
+          "PIPELINE_INPUT_UNAVAILABLE",
+          "PIPELINE_TRACE_VALID_DRAFT_ONLY",
+          "SOURCE_MANIFEST_ARTIFACT_UNAVAILABLE",
+          "SOURCE_MANIFEST_HASH_FAILED",
+          "SOURCE_MANIFEST_UNREADABLE"
+        ],
+        "docstring_first_line": "Git-versioned, source-bound handoff contracts for the three content stages."
       },
       {
         "path": "authoring/agent/wave_exporter.py",
@@ -384,10 +435,91 @@
         "docstring_first_line": "Persistent Self-Healing Unattended Autopilot (`authoring/agent/autopilot.py`)."
       },
       {
+        "path": "authoring/agent/microbot_engine.py",
+        "sha256": "60c0de12325f2c508f4a4854a1f7e1a26aa028b9dddeb5d47ddbc467d1ce48e9",
+        "bytes": 75417,
+        "lines": 1549,
+        "public_api": [
+          "run_microbot_preflight"
+        ],
+        "fail_closed_reason_codes": [
+          "BOOK_CODE_MISMATCH",
+          "BOOK_MANIFEST_UNREADABLE",
+          "CARTRIDGE_UNAVAILABLE",
+          "COVERAGE_GATE_EXCEPTION",
+          "DAG_NODE_EXCEPTION",
+          "DAG_NODE_TIMEOUT",
+          "DAG_WORKER_START_FAILED",
+          "GIT_GUARDS_UNAVAILABLE",
+          "MANIFEST_EDITION_IDENTITY_MISSING",
+          "MANIFEST_OFFSET_MISSING_OR_INVALID",
+          "MANIFEST_PDF_FILENAME_MISSING",
+          "MANIFEST_PDF_PAGE_COUNT_INVALID",
+          "MANIFEST_PDF_SHA_INVALID",
+          "MANIFEST_PDF_SIZE_MISSING_OR_INVALID",
+          "MANIFEST_SOURCE_PDF_MISSING",
+          "OBSERVATION_BBOX_INVALID",
+          "OBSERVATION_BOOK_CODE_MISMATCH",
+          "OBSERVATION_CLAIMS_INVALID",
+          "OBSERVATION_CLAIM_CONFIDENCE_INVALID",
+          "OBSERVATION_CLAIM_ENTRY_INVALID",
+          "OBSERVATION_CLAIM_ID_MISSING_OR_DUPLICATE",
+          "OBSERVATION_CLAIM_PAGE_INVALID",
+          "OBSERVATION_CLAIM_REFS_INVALID",
+          "OBSERVATION_CLAIM_REF_DANGLING",
+          "OBSERVATION_CLAIM_WITHOUT_EVIDENCE",
+          "OBSERVATION_CROP_SHA_INVALID",
+          "OBSERVATION_EVIDENCE_BOOK_MISMATCH",
+          "OBSERVATION_EVIDENCE_ENTRY_INVALID",
+          "OBSERVATION_EVIDENCE_ID_MISMATCH",
+          "OBSERVATION_EVIDENCE_KIND_INVALID",
+          "OBSERVATION_EVIDENCE_LEDGER_INVALID",
+          "OBSERVATION_EVIDENCE_PAGE_INVALID",
+          "OBSERVATION_EVIDENCE_SOURCE_MISMATCH",
+          "OBSERVATION_FOOTER_MISMATCH",
+          "OBSERVATION_FOOTER_MISSING",
+          "OBSERVATION_FOOTER_STATUS_INVALID",
+          "OBSERVATION_HAS_NO_EVIDENCE_REFS",
+          "OBSERVATION_HAZARDS_INVALID",
+          "OBSERVATION_HIGH_VISUAL_DEPENDENCY",
+          "OBSERVATION_OFFSET_CONFLICT",
+          "OBSERVATION_PACKET_REQUIRED",
+          "OBSERVATION_PACKET_SIZE_LIMIT",
+          "OBSERVATION_PACKET_UNAVAILABLE",
+          "OBSERVATION_PACKET_UNREADABLE",
+          "OBSERVATION_PAGE_COUNT_MISMATCH",
+          "OBSERVATION_PAGE_ENTRY_INVALID",
+          "OBSERVATION_PAGE_SEQUENCE_INCOMPLETE",
+          "OBSERVATION_PDF_PAGE_INVALID",
+          "OBSERVATION_QUALITY_SCORES_MISSING",
+          "OBSERVATION_QUALITY_SCORE_INVALID",
+          "OBSERVATION_SCHEMA_UNSUPPORTED",
+          "OBSERVATION_SOURCE_SHA_MISMATCH",
+          "OBSERVATION_UNOBSERVABLE_CLAIMS",
+          "OBSERVATION_VISUAL_DEPENDENCY_INVALID",
+          "PDF_FILENAME_MISMATCH",
+          "PDF_INSIDE_REPOSITORY",
+          "PDF_MAGIC_INVALID",
+          "PDF_SHA_MISMATCH",
+          "PDF_SIZE_MISMATCH",
+          "QUARANTINE_DIRECTORY_PERMISSIONS_UNSAFE",
+          "QUARANTINE_METADATA_UNAVAILABLE",
+          "QUARANTINE_PARENT_NOT_DIRECTORY",
+          "SECURE_PDF_PATH_REQUIRED",
+          "SOURCE_GATES_NOT_PASSED",
+          "SOURCE_PDF_NOT_READABLE",
+          "SOURCE_PDF_PERMISSIONS_UNSAFE",
+          "SOURCE_PDF_UNAVAILABLE",
+          "SOURCE_PDF_UNREADABLE",
+          "UPSTREAM_DEPENDENCY_NOT_PASS"
+        ],
+        "docstring_first_line": "M13 local, read-only preflight for a limited M00/M01/M02 contract slice."
+      },
+      {
         "path": "authoring/agent/cli.py",
-        "sha256": "3e0ac8cef2a2880bb0e04c84ebf4583e4a65ceff76b62d9034f219fd64d3151e",
-        "bytes": 34904,
-        "lines": 658,
+        "sha256": "828b9dc87a2c4ee55507f3606512578717598f6d0899870e4e87ed917a58b10c",
+        "bytes": 41517,
+        "lines": 770,
         "public_api": [
           "build_parser",
           "main",
@@ -401,9 +533,9 @@
       },
       {
         "path": "authoring/agent/handoff.py",
-        "sha256": "41daa285677524013b80eb1ba6383604f965a8a1d619eddf0df2c97fb9f722b7",
-        "bytes": 21620,
-        "lines": 463,
+        "sha256": "edbba3cc74d0ec90b45716da51ada6b66f6272ed5fb9b2332afa92eb0ac2e7fb",
+        "bytes": 25767,
+        "lines": 516,
         "public_api": [
           "build_handoff_index",
           "write_handoff_index"
@@ -413,6 +545,56 @@
       }
     ]
   },
+  "contract_schemas": [
+    {
+      "schema_id": "khshab.content-pipeline-report/v1",
+      "path": "authoring/agent/schemas/content-pipeline-report-v1.schema.json",
+      "sha256": "2763e1f5963b6367341e1164b847088fb38ba360097bcd41efe51ac8fd1f05e6",
+      "bytes": 1507
+    },
+    {
+      "schema_id": "khshab.content-source/v1",
+      "path": "authoring/agent/schemas/content-source-v1.schema.json",
+      "sha256": "2d89def600d6b7b53f2429699394178a10e4b8b6e69ce8206145c5552a275df3",
+      "bytes": 2806
+    },
+    {
+      "schema_id": "khshab.extraction-ledger/v1",
+      "path": "authoring/agent/schemas/extraction-ledger-v1.schema.json",
+      "sha256": "e72ff57836615cd01039000ad86f49f6aa0603f25bcb8f1c5e545240958bdf11",
+      "bytes": 5210
+    },
+    {
+      "schema_id": "khshab.game-content-pack/v1",
+      "path": "authoring/agent/schemas/game-content-pack-v1.schema.json",
+      "sha256": "702c37a60d7c7fb0efdd8b7918c24cc8ebd2b85f9d7af28568e1971c3e7af13a",
+      "bytes": 2133
+    },
+    {
+      "schema_id": "khshab.microbot-envelope/v1",
+      "path": "authoring/agent/schemas/microbot-envelope-v1.schema.json",
+      "sha256": "42a99c1732287c4299b796f8cd9e89c5fe74e1518562ae2bc8b24f255bdc77dc",
+      "bytes": 2174
+    },
+    {
+      "schema_id": "khshab.offset-proof/v1",
+      "path": "authoring/agent/schemas/offset-proof-v1.schema.json",
+      "sha256": "339315a2022ec8d3c54b7836d61135fa1f1a0d7ce8d35060ffbdd3df85e1b426",
+      "bytes": 2009
+    },
+    {
+      "schema_id": "khshab.valuation-bundle/v1",
+      "path": "authoring/agent/schemas/valuation-bundle-v1.schema.json",
+      "sha256": "645f8a1851a065d8ab3f08017ab1373ebc08afd1c33e4b5a2d502a6285aa918d",
+      "bytes": 3377
+    },
+    {
+      "schema_id": "khshab.verdict-ledger/v1",
+      "path": "authoring/agent/schemas/verdict-ledger-v1.schema.json",
+      "sha256": "128416956d9c0cfeac6da559d0b0f2f88c9f072d5aaa5698047e2fcb5040ad44",
+      "bytes": 1948
+    }
+  ],
   "cli": {
     "console_script": "khshab-agent = authoring.agent.cli:main",
     "module_invocation": "python3 -m authoring.agent.cli <subcommand>",
@@ -472,6 +654,35 @@
         ]
       },
       {
+        "name": "concept-scope-audit",
+        "help": "M05 read-only: تطبیق دو خوانشِ مستقل با پروفایل مفهومیِ همان چاپ؛ بدون تغییر رنگ/خشاب/مهر",
+        "options": [
+          "--book-manifest",
+          "--help",
+          "--pass-a",
+          "--pass-b",
+          "--pdf",
+          "--repo-root",
+          "--scope-profile",
+          "-h"
+        ]
+      },
+      {
+        "name": "content-pipeline-audit",
+        "help": "گیتِ اتصالِ GitHub-محورِ source → extraction → valuation → game draft؛ بدون حکم/انتشار",
+        "options": [
+          "--extraction-ledger",
+          "--game-pack",
+          "--help",
+          "--repo-root",
+          "--source-pdf",
+          "--source-record",
+          "--valuation-bundle",
+          "--verdict-ledger",
+          "-h"
+        ]
+      },
+      {
         "name": "count-items",
         "help": "شمارشگر ماشینی شکل‌ها در ناحیهٔ تصویری هر صفحه از هر کتاب PDF",
         "options": [
@@ -494,6 +705,19 @@
           "--pagemap",
           "--pdf",
           "--repo-root",
+          "-h"
+        ]
+      },
+      {
+        "name": "export-extraction-xlsx",
+        "help": "ساخت Excel از extraction ledger مقید به source/offset-proof داخل مخزن؛ فایل موجود هرگز overwrite نمی‌شود",
+        "options": [
+          "--extraction-ledger",
+          "--help",
+          "--output",
+          "--repo-root",
+          "--source-pdf",
+          "--source-record",
           "-h"
         ]
       },
@@ -539,6 +763,23 @@
           "-h",
           "<new_xlsx>",
           "<old_xlsx>"
+        ]
+      },
+      {
+        "name": "microbot-preflight",
+        "help": "M13 MVP read-only: M00/M01 + اعتبارسنجی observation در M02؛ coverage یک گیت مستقل است",
+        "options": [
+          "--book-manifest",
+          "--cartridge",
+          "--checkpoint",
+          "--expected-book-code",
+          "--help",
+          "--observation",
+          "--pagemap",
+          "--pdf",
+          "--repo-root",
+          "--resume-checkpoint",
+          "-h"
         ]
       },
       {
@@ -646,6 +887,30 @@
       ],
       "semantics": "ردیفِ بی‌شاهد زرد می‌ماند؛ هیچ ارتقای خودکار به سبز."
     },
+    "content_pipeline_trace": {
+      "function": "authoring/agent/content_pipeline.py: audit_content_pipeline",
+      "cli": "khshab-agent content-pipeline-audit",
+      "stages": [
+        "source",
+        "versioned manifest",
+        "external PDF SHA/size/page count",
+        "offset-proof",
+        "extraction",
+        "valuation",
+        "game draft"
+      ],
+      "schemas": [
+        "khshab.content-source/v1",
+        "khshab.offset-proof/v1",
+        "khshab.extraction-ledger/v1",
+        "khshab.valuation-bundle/v1",
+        "khshab.game-content-pack/v1",
+        "khshab.verdict-ledger/v1"
+      ],
+      "semantics": "Draft 2020-12 schemas + manifest-file/PDF-byte/hash/page-anchor lineage fail-closed. AUTHORIZED sources require the exact PDF outside Git; synthetic fixtures may omit it. PASS فقط traceability است؛ verdict نمی‌سازد و release نمی‌دهد. احراز هویت ledger را رمزنگارانه دوباره بررسی نمی‌کند؛ فقط metadata ثبت‌شده را می‌سنجد.",
+      "excel_export_cli": "khshab-agent export-extraction-xlsx",
+      "fixture": "authoring/agent/fixtures/content_pipeline_synthetic/README.fa.md"
+    },
     "source_binding": {
       "function": "authoring/agent/achilles_gate.py: bind_evidence_to_source",
       "anchors": [
@@ -710,6 +975,21 @@
       "id": "INV-10",
       "rule": "PDF، عکسِ کتاب، کراپِ صفحه و نقلِ بیش از ۱۰ واژه از کتاب هرگز در Git نیست.",
       "verify": "authoring/agent/git_guard.py: audit_git_copyright_safety"
+    },
+    {
+      "id": "INV-11",
+      "rule": "M13 MVP در M00/M01/M02 قرارداد منبع/قرنطینه/observation packet را می‌سنجد؛ coverage گیت مستقل است و PASS آن مجوز release نیست.",
+      "verify": "authoring/agent/microbot_engine.py: run_microbot_preflight"
+    },
+    {
+      "id": "INV-12",
+      "rule": "M05 concept-scope فقط دو packet مقید به PDF/manifest/profile را می‌سنجد؛ شمارهٔ چاپیِ هر صفحه باید با شاهدِ source-bound با offset manifest بخواند؛ تعارض/ابهام BLOCKED و انحرافِ اولیهٔ توافق‌شده FAIL است؛ PASS هرگز رأی آموزشی، رنگ یا release نیست.",
+      "verify": "authoring/agent/concept_scope.py: audit_concept_scope + authoring/tests/test_concept_scope.py"
+    },
+    {
+      "id": "INV-13",
+      "rule": "Source، offset-proof، extraction، valuation و game draft فقط به‌شکل artifactهای ساختاریافتهٔ hash-linked در مخزن نسخه‌دار می‌شوند؛ schema/runtime و حقوق ناسازگار fail-closed است؛ PDF/تصویر/raw text وارد Git نمی‌شود؛ PASS فقط traceability است و هیچ حکم/رنگ/release نمی‌سازد.",
+      "verify": "authoring/agent/content_pipeline.py + authoring/tests/test_content_pipeline.py"
     }
   ],
   "zai_owned_paths_do_not_modify": [
@@ -730,27 +1010,27 @@
   "mother_ai_actions": [
     {
       "id": "W7",
-      "action": "افزودنِ خطِ CI به `.github/workflows/khshab-gate.yml` برای اجرای `pytest authoring/tests` با Python 3.12.",
+      "action": "W7 در snapshot رسمی موجود است (Python 3.11 + pytest + openpyxl پین‌شده)؛ حفظ و گزارش اجرای فعلی، نه پیاده‌سازی دوباره.",
       "owner": "Z.ai",
-      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §1"
+      "reference": ".github/workflows/khshab-gate.yml@v10.3-beta"
     },
     {
       "id": "W8",
-      "action": "پورتِ `parseOptionValue` و `classifyAttempt` به `public/math-game/src/v10/workshop/cartridge-schema.js` و `errors.js`.",
-      "owner": "Z.ai",
-      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §2"
+      "action": "Z.ai گزارش کرده و main@4f48947e5e16d66aa6f93115294415c8f50ffcc1 مسیر M10 را به caller واقعی وصل کرده؛ تا وقتی v10.3-beta/PR #2 جداگانه بررسی و تصمیم انسانی ثبت نشده، Arena فقط read-only مصرف می‌کند.",
+      "owner": "Z.ai / مالکِ مخزن",
+      "reference": "https://github.com/bayrami1341/math-game/commit/4f48947e5e16d66aa6f93115294415c8f50ffcc1"
     },
     {
       "id": "PR2",
-      "action": "حلِ `CONFLICTING` بودنِ PR #2 با `squash`/`rebase` (نه ادغامِ `v10.3-beta` در `arena/**`).",
-      "owner": "Z.ai",
-      "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §3"
+      "action": "گزارشِ conflict و پیشنهادِ برنامهٔ ادغام برای PR #2؛ تا مجوز صریح جداگانه merge/push انجام نشود و `v10.3-beta` هرگز با `arena/**` ادغام نشود.",
+      "owner": "Z.ai / مالکِ مخزن",
+      "reference": "https://github.com/bayrami1341/math-game/pull/2"
     },
     {
       "id": "CANDIDATE",
-      "action": "mount کردنِ نامزدِ واقعیِ `KH-G2-MATH v1.2` (SHA `18e6b4fa…`) خارج از Git برای مقایسهٔ کلیدمحور.",
+      "action": "نامزدِ واقعی فقط بیرون Git و پس از تکمیلِ مرزِ شواهد بررسی شود؛ این index هیچ candidate-ready، رأی انسانی یا مجوز انتشار صادر نمی‌کند.",
       "owner": "مالک / Z.ai",
-      "reference": "authoring/G2-V12-CONNECTION-DRYRUN.fa.md §6"
+      "reference": "authoring/USAGE-KHSHAB-AGENT-v24.fa.md §4"
     },
     {
       "id": "STAMP",
@@ -790,54 +1070,8 @@
     ]
   },
   "official_heads": {
-    "available": true,
-    "manifest_path": "/tmp/v103_ref/public/math-game/authoring/OFFICIAL-HEADS.json",
-    "manifest_sha256": "96fd3c8a5dc4ba1f7b397769d841361767eabcc58cb570a991818ec7cc72b0ee",
-    "updated_at": "2026-10-22",
-    "updated_by": "Z.ai — Task 65/66 (ادغام رسمی موج ۴ و بستهٔ تبادل استاندارد)",
-    "rules": {
-      "next_wave_base_must_match_sha256": true,
-      "stale_violation_code": "STALE_OFFICIAL_BASE_INCIDENT_07",
-      "note": "هر موج جدید فقط از فایلِ اعلام‌شدهٔ همین مانیفست شروع می‌شود؛ پس از هر ادغام رسمی، این فایل توسط موتور اصلی به‌روز می‌شود."
-    },
-    "heads": {
-      "KH-G1-MATH": {
-        "version": "v0.1",
-        "sha256": "4c5d5e1877e72a1b24c977b95cb19dfd29e480e5ed9e8d0d4e25bdfc86baf46c",
-        "file": "public/math-game/authoring/khshab-G1-MATH_v0.1.xlsx",
-        "teacher_note": ""
-      },
-      "KH-G2-MATH": {
-        "version": "v0.5",
-        "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
-        "file": "public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx",
-        "teacher_note": "۴۸ سؤال و ۵۴ ردیف صفحه‌ای «پیشنهاد» در انتظار مُهر معلم"
-      },
-      "KH-G3-MATH": {
-        "version": "v0.7",
-        "sha256": "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb",
-        "file": "public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx",
-        "teacher_note": ""
-      },
-      "KH-G4-MATH": {
-        "version": "v0.1",
-        "sha256": "b354f68e4d4cc0372e6abf547c8340083ab335e2e7cf151fd6944422ba1a0ee3",
-        "file": "public/math-game/authoring/khshab-G4-MATH_v0.1.xlsx",
-        "teacher_note": ""
-      },
-      "KH-G5-MATH": {
-        "version": "v0.1",
-        "sha256": "ddd86034dbf40518e1bb589c3baa85cb48734790c612ce6f93f09c7b41ea9871",
-        "file": "public/math-game/authoring/khshab-G5-MATH_v0.1.xlsx",
-        "teacher_note": ""
-      },
-      "KH-G6-MATH": {
-        "version": "v0.1",
-        "sha256": "dd0c62ae543e43a71769e1ec05b3a3cdb7cc9027d418c8b49d302139dc61a5b6",
-        "file": "public/math-game/authoring/khshab-G6-MATH_v0.1.xlsx",
-        "teacher_note": ""
-      }
-    }
+    "available": false,
+    "reason": "NO_OFFICIAL_REF_ROOT_GIVEN"
   },
   "documents": [
     {
@@ -885,6 +1119,41 @@
       "path": "authoring/agent/fixtures/chunk_plan_C205.json",
       "sha256": "6f83cab3981f3369b24bd77dfadb33d28833dcf6d798b32347cd7e42da9877ae",
       "bytes": 3341
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/README.fa.md",
+      "sha256": "9d99b43bf2041ebf53b4af02fd3ba1e099a49c001f40671c0e07e8e2ca55b7dc",
+      "bytes": 1914
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/extraction.json",
+      "sha256": "5bed571a461f547bf0642d9b5e07f8f0616b575665028bf1562ce8b13841275b",
+      "bytes": 5149
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/game-pack.json",
+      "sha256": "7c365484f13160e887c4fe23bb07ab35aa78832899dca9a347be8e68680cff98",
+      "bytes": 551
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/manifest.json",
+      "sha256": "0c178294dd7ff776b73ad70324e79f46e589e65197a52558253014cdf44452b9",
+      "bytes": 440
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/offset-proof.json",
+      "sha256": "04de53114725f414365f95e91776c2aa171a93ee83534a28366f9789f5a45f22",
+      "bytes": 1226
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/source.json",
+      "sha256": "f8be270b90ccfe152a26e3cd535fa3a6d2d4f1ced538d9247318a4c9ced130ac",
+      "bytes": 1114
+    },
+    {
+      "path": "authoring/agent/fixtures/content_pipeline_synthetic/valuation.json",
+      "sha256": "a083b19d7a8aa93cadd9ffe8c1650ad7e97ab1a9b919dac9a0b7fcac0f902222",
+      "bytes": 2197
     },
     {
       "path": "authoring/agent/fixtures/curated_claims_C205.json",
@@ -992,6 +1261,65 @@
       ]
     },
     {
+      "path": "authoring/tests/test_concept_scope.py",
+      "sha256": "4a90f30baf43122798557051ccab2851bf3d88ee14cc979a97a218d7173d58a3",
+      "test_count": 23,
+      "tests": [
+        "test_two_complete_source_bound_passes_allow_scope_only_pass",
+        "test_visual_crop_hash_is_recomputed_from_source_pdf",
+        "test_mixed_claim_requires_both_text_and_source_bound_visual_crop",
+        "test_tampered_visual_crop_hash_blocks",
+        "test_text_bbox_must_intersect_text_in_source_pdf",
+        "test_supporting_repeated_addition_is_allowed_but_not_a_new_primary_target",
+        "test_agreed_decimal_primary_target_is_critical_fail",
+        "test_one_reader_detecting_off_scope_content_blocks_as_potential_crisis",
+        "test_missing_page_in_one_pass_is_not_hidden_by_intersection",
+        "test_printed_page_number_mismatch_blocks_manifest_offset",
+        "test_printed_page_number_witness_must_contain_expected_number",
+        "test_visual_page_number_crop_can_bind_source_offset",
+        "test_evidence_and_page_render_must_bind_to_exact_pdf_print_and_offset",
+        "test_manifest_and_pdf_hash_mismatch_fail_closed",
+        "test_same_model_or_different_profile_cannot_count_as_independent_passes",
+        "test_profile_sha_change_after_reader_passes_blocks",
+        "test_profile_must_declare_primary_operations_and_number_domains",
+        "test_reader_packets_inside_git_are_rejected",
+        "test_unobservable_visual_scan_never_passes",
+        "test_raw_text_or_image_payload_is_blocked_without_echoing_content",
+        "test_long_free_text_in_unknown_field_is_blocked_without_echoing",
+        "test_pdf_inside_repository_is_rejected",
+        "test_cli_dispatch_emits_scope_only_json"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_content_pipeline.py",
+      "sha256": "5d752d7314f2421bfd93146ac45acfe1b881ad21f2c0fda6982d9021082897a6",
+      "test_count": 22,
+      "tests": [
+        "test_committed_synthetic_fixture_is_self_consistent_but_ineligible",
+        "test_synthetic_pipeline_trace_pass_is_not_section3_authorization",
+        "test_authorized_source_without_external_pdf_is_blocked",
+        "test_synthetic_external_pdf_hash_size_and_page_count_are_checked",
+        "test_tampered_external_pdf_hash_is_fail_closed",
+        "test_missing_extraction_page_and_offset_anchor_block",
+        "test_stale_manifest_file_hash_blocks_before_content_handoff",
+        "test_stale_offset_proof_hash_blocks_before_handoff",
+        "test_offset_anchor_page_number_mismatch_is_blocked",
+        "test_offset_proof_status_must_match_source_record",
+        "test_unknown_fields_are_rejected_by_versioned_schema",
+        "test_valuation_must_hash_exact_extraction_bundle",
+        "test_game_item_from_unapproved_valuation_is_blocked",
+        "test_game_ready_status_is_rejected_by_trace_gate",
+        "test_unauthenticated_verdict_record_cannot_approve_game_content",
+        "test_git_artifacts_reject_long_text_and_raw_payload_keys",
+        "test_artifacts_must_be_versioned_inside_repository",
+        "test_excel_snapshot_is_new_hash_linked_and_never_overwrites",
+        "test_excel_export_refuses_stale_offset_proof_before_writing",
+        "test_excel_export_requires_external_pdf_for_authorized_source",
+        "test_extraction_export_cli_dispatch_creates_only_new_snapshot",
+        "test_pipeline_cli_dispatch_reads_synthetic_github_bundle"
+      ]
+    },
+    {
       "path": "authoring/tests/test_docs_cli_alignment.py",
       "sha256": "4ed50251c3e5bed3bc46e595b56fa0507a35f278c10772deadcf3c776816df38",
       "test_count": 8,
@@ -1008,7 +1336,7 @@
     },
     {
       "path": "authoring/tests/test_handoff_index.py",
-      "sha256": "b76b3bbb8c94598940a5b10b08a0040a5b28b614f9e2ca8a7f1501e92547b651",
+      "sha256": "eea73670b7942e241345aacefede236ca72a4fb0a331fafe28238b35c895c10e",
       "test_count": 7,
       "tests": [
         "test_bundle_is_generated_from_real_code_with_verifiable_hashes",
@@ -1018,6 +1346,35 @@
         "test_bundle_official_heads_snapshot_matches_zai_manifest",
         "test_cli_handoff_index_writes_bundle_and_exits_zero",
         "test_committed_index_matches_regenerated_bundle"
+      ]
+    },
+    {
+      "path": "authoring/tests/test_microbot_engine.py",
+      "sha256": "94e7141aa11833830e5f7bf9b5bdda062880c6bde28525e187c56c09498ef8dd",
+      "test_count": 22,
+      "tests": [
+        "test_local_dag_blocks_dependents_on_non_pass_and_records_trace",
+        "test_local_dag_turns_node_exception_into_fail",
+        "test_local_dag_rejects_cycles",
+        "test_local_dag_runs_independent_nodes_in_parallel",
+        "test_local_dag_hard_timeout_stops_worker_and_blocks_dependents",
+        "test_local_dag_resumes_after_interruption_from_last_completed_node",
+        "test_local_dag_checkpoint_resume_is_secure_and_does_not_repeat_completed_nodes",
+        "test_checkpoint_fingerprint_binds_input_path_content_and_security_metadata",
+        "test_local_dag_rejects_checkpoint_inside_repository",
+        "test_m01_preserves_blocked_workspace_guard_status",
+        "test_missing_source_is_blocked_and_never_release_ready",
+        "test_valid_source_without_observation_is_blocked_and_coverage_warns",
+        "test_source_bound_observation_packet_passes_m02_but_not_coverage",
+        "test_observation_source_mismatch_fails_m02_closed",
+        "test_malformed_observation_types_fail_closed_without_traceback",
+        "test_hash_mismatch_fails_closed",
+        "test_manifest_book_code_mismatch_fails_closed",
+        "test_manifest_pdf_filename_mismatch_fails_closed",
+        "test_pdf_inside_git_worktree_is_rejected",
+        "test_m01_rejects_public_quarantine_permissions",
+        "test_cli_microbot_preflight_checkpoint_resume_uses_private_file",
+        "test_cli_microbot_preflight_emits_json_and_blocked_exit"
       ]
     },
     {

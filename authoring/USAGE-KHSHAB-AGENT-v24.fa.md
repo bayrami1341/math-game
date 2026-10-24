@@ -52,6 +52,10 @@ python3 -m pytest -q
 | `build-wave` | ساختِ غیرمخربِ خشاب از `WaveSpec v2` (W1) |
 | `check-wave` | گیتِ کاملِ موج: دیف کلیدمحور + مُهرها + مبدل رسمی + آشیل + پوشش |
 | `coverage` | **گیتِ مستقلِ پوششِ شاهد** (بند ۲/۴): شمارِ ردیفِ با/بی شاهد + اتصال به SHA واقعی PDF و manifest همان چاپ |
+| `microbot-preflight` | M13 MVP فقط‌خواندنی: M00 هویت منبع، M01 PDF امن/workspace، M02 اعتبارسنجی observation؛ `G_ACHILLES_COVERAGE` جدا |
+| `concept-scope-audit` | M05 فنی و فقط‌خواندنی: تطبیق دو packet صفحه‌به‌صفحه با پروفایل مفهومیِ مقید به همان PDF/چاپ |
+| `content-pipeline-audit` | گیتِ اتصال artifactهای نسخه‌دارِ منبع، استخراج، ارزش‌گذاری و game draft در مخزن |
+| `export-extraction-xlsx` | ساخت Excel تازه از دفتر استخراجِ مقید به source/offset-proof؛ بدون overwrite |
 | `reconcile-chunks` | آشتی‌دهیِ اتمیِ چانک‌های هم‌پوشان (W5) |
 | `keyed-diff` | دیفِ سلول‌به‌سلول بر پایهٔ ستون A |
 | `count-items` | شمارشِ ماشینیِ شکل‌ها در ناحیهٔ تصویریِ یک صفحه |
@@ -131,6 +135,103 @@ python3 -m authoring.agent.cli coverage \
 `observation_C305.json` + `C305.pdf` (هر سه از همان چاپ) استفاده شود؛ امروز در مخزن
 فقط manifest/observation مربوط به `C205` وجود دارد، پس اتصالِ `C305` هنوز
 `fail-closed` است.
+
+---
+
+## ۴ب) پیش‌پروازِ ریزربات‌ها (`microbot-preflight`, M13 MVP)
+
+```bash
+python3 -m authoring.agent.cli microbot-preflight \
+  --expected-book-code C305 \
+  --cartridge authoring/khshab-G3-MATH_v0.7.xlsx \
+  --pdf /tmp/khshab_secure_vault/C305.pdf \
+  --book-manifest /tmp/khshab_secure_vault/book_manifest_C305.json \
+  --observation /tmp/khshab_secure_vault/observation_C305.json \
+  --pagemap authoring/PAGE-MAP-KH-G3-MATH-v1_verified.xlsx
+```
+
+- این MVP M00 (هویت/SHA منبع)، M01 (قرنطینهٔ امن + گاردهای workspace) و M02
+  (اعتبارسنجی observation ازپیش‌تولیدشده و source-bound) را اجرا می‌کند.
+  تولید observation، OCR/vision و crop در این runner انجام نمی‌شود؛ M03–M12 و
+  M14–M16 صریحاً `NOT_RUN` می‌مانند.
+- PDF باید بیرون از درخت Git باشد و دایرکتوری قرنطینه و خود PDF نباید مجوز
+  خواندن/نوشتن برای group/other داشته باشند (معمولاً دایرکتوری `0700` و PDF `0600`).
+  runner مجوزها را تغییر نمی‌دهد؛ مورد ناامن را رد می‌کند.
+- `G_ACHILLES_COVERAGE` گیت تکمیلیِ مستقل است، نه M02. بدون PDF/manifest، M00
+  `BLOCKED` می‌شود؛ بدون observation، M02 `BLOCKED` و گیت پوشش `WARN/UNKNOWN` است.
+  هیچ‌کدام به PASS ارتقا داده نمی‌شود.
+- هر bot envelope نسخه‌دار دارد: `run_id`, `bot_version`, branch/commit، edition،
+  hash ورودی‌ها، evidence refs، `requires_human` و `skipped`. run-id برای ورودی و کد
+  یکسان پایدار است؛ observation متن/تصویر در گزارش بازنشر نمی‌شود.
+- اجرای عادی فقط JSON را روی stdout می‌دهد و فایل، شبکه، verdict، commit، push،
+  official-head یا candidate نمی‌سازد/تغییر نمی‌دهد. سقف packet مشاهده ۵۰ MiB و سقف
+  رکوردها ۱۰۰٬۰۰۰ است. DAG محدود با حداکثر ۲ worker اجرا می‌شود؛ در POSIX/fork سقف
+  زمان دیواری هر گره ۳۰ ثانیه است. بدون `fork`، fallback thread است و timeout سخت
+  غیرفعال گزارش می‌شود.
+- checkpoint اختیاری است: برای شروع از `--checkpoint /absolute/private/path.json` و
+  برای ادامه از `--resume-checkpoint /absolute/private/path.json` استفاده کن. پوشه باید
+  از قبل وجود داشته و خصوصی (معمولاً `0700`) باشد؛ فایل checkpoint با `0600` نوشته
+  می‌شود، بیرون Git می‌ماند و هیچ مجوزی خودکار تغییر نمی‌کند. این قابلیت فعلاً فقط
+  روی POSIX فعال است. resume فقط با تطبیق hash/مسیر ورودی‌ها، mode و مالک PDF/vault،
+  hash کد/config، runtime (Python و وابستگی‌ها)، branch/commit، وضعیت worktree و DAG
+  پذیرفته می‌شود؛ مورد نامطابق رد می‌شود. `scheduler.checkpoint_resume_enabled` انتخاب
+  این حالت و `side_effects.writes_checkpoint` تغییر واقعی فایل را گزارش می‌کنند؛ resume
+  کاملِ بی‌نیاز از اجرای گره، فایل را دوباره نمی‌نویسد. retry خودکار پیاده نیست و هیچ
+  شکست پنهانی دوباره اجرا نمی‌شود.
+- کد خروج: `0=PASS` فنیِ همین preflight، `1=WARN`، `2=BLOCKED`، `3=FAIL`.
+  حتی `PASS` هم مجوز candidate، مُهر انسانی یا release نیست.
+
+---
+
+## ۴پ) گیتِ محدودهٔ مفهومی (`concept-scope-audit`, M05 فنی)
+
+```bash
+python3 -m authoring.agent.cli concept-scope-audit \
+  --repo-root /home/user/math-game \
+  --pdf /tmp/khshab_secure_vault/BOOK.pdf \
+  --book-manifest /tmp/khshab_secure_vault/book_manifest.json \
+  --scope-profile /tmp/khshab_secure_vault/scope_profile.json \
+  --pass-a /tmp/khshab_secure_vault/concept_pass_a.json \
+  --pass-b /tmp/khshab_secure_vault/concept_pass_b.json
+```
+
+- profile باید با `book_code`، `manifest_id`، SHA باینری PDF و SHA همان manifest مقید باشد؛ محدودهٔ فصل از خود manifest مشتق می‌شود، نه از تعداد صفحهٔ کتاب دیگر. حداقل فهرست‌های هدفِ مجاز شامل objective ID، مفهوم اصلی، عملیات اصلی و دامنهٔ عددی است؛ این کد اختیار یا تأیید انسانیِ profile را احراز نمی‌کند.
+- این فرمان دو packet ازپیش‌ساخته را مقایسه می‌کند؛ هر packet باید `profile_sha256` همان profile، هویتِ جداگانهٔ reader/model، همهٔ صفحه‌های موردانتظار، شمارهٔ چاپیِ مشاهده‌شدهٔ هر صفحه و دفتر شاهدِ متصل به چاپ را داشته باشد. شماره‌ها باید با offset/نگاشت manifest بخوانند؛ metric `offset_pages_matched` این را جدا از scope گزارش می‌کند. **مدل را اجرا نمی‌کند، observation/OCR تولید نمی‌کند و Drive را نمی‌خواند**. PDF را فقط برای شمارش صفحه، hash پیکسلیِ صفحه/ناحیه و تطبیق text bbox با وجود متنِ همان ناحیه، در حافظه باز می‌کند؛ متن، تصویر یا crop روی دیسک نمی‌نویسد.
+- PDF و هر دو packet خوانش باید بیرون Git بمانند؛ profile/pass نیز نباید فیلد متن خام، OCR، نقل‌قول یا payload/مسیر تصویر داشته باشند. کلیدهای شناخته‌شدهٔ حساس و هر رشتهٔ بیش از ۱۰ واژه `BLOCKED` می‌شوند و مقدار محتوا در گزارش بازتاب داده نمی‌شود. `pdf_text_bbox` برای شمارهٔ چاپی با text layer خود PDF سنجیده می‌شود؛ crop تصویری فقط hash ناحیه را به PDF می‌بندد و OCR/خواندن عدد را اثبات نمی‌کند. دو-reader بودن نیز رمزنگارانه اثبات نمی‌شود.
+- صفحهٔ غایب، نگاشت چاپ/PDF ناسازگار، شاهدِ بی‌اتصال، خوانش ناقص، تصویر اسکن‌نشده، confidence ناکافی یا اختلاف دو خواننده ⇒ `BLOCKED`؛ توافق دو خواننده بر مفهوم اصلیِ خارج از محدوده ⇒ `FAIL`.
+- `PASS` فقط می‌گوید دو packetِ ارائه‌شده از نظر فنی با profile سازگارند. این فرمان استقلال واقعی مدل‌ها یا اختیار profile را رمزنگارانه اثبات نمی‌کند و هیچ ردیف/رنگ/مُهر Excel را تغییر نمی‌دهد؛ `candidate_ready=false` و `release_authorized=false` می‌ماند.
+- مفاهیم پشتیبان مانند جمع تکراری می‌توانند با نقش `SUPPORTING` بمانند و به‌تنهایی هدف اصلیِ خارج‌ازمحدوده محسوب نمی‌شوند. این فرمان در وضعیت فعلی به‌تنهایی خوانش دوگانه تولید نمی‌کند.
+
+---
+
+## ۴ت) ثبتِ نسخه‌دارِ زنجیرهٔ محتوا در GitHub
+
+در شروع هر منبع، metadata و artifactهای ساختاریافته در مخزن ثبت می‌شوند؛ PDF اصلی با locator خصوصی و SHA معرفی می‌شود، نه با کپی‌کردن binary آن در Git. برای اجرای آزمایشیِ آفلاین از fixture ساختگی زیر استفاده کن:
+
+```bash
+python3 -m authoring.agent.cli content-pipeline-audit \
+  --repo-root . \
+  --source-record authoring/agent/fixtures/content_pipeline_synthetic/source.json \
+  --extraction-ledger authoring/agent/fixtures/content_pipeline_synthetic/extraction.json \
+  --valuation-bundle authoring/agent/fixtures/content_pipeline_synthetic/valuation.json \
+  --game-pack authoring/agent/fixtures/content_pipeline_synthetic/game-pack.json
+```
+
+دفتر JSON استخراج منبع canonical است؛ برای ساخت snapshot تازهٔ Excel (فقط در مسیر جدید و بدون overwrite):
+
+```bash
+python3 -m authoring.agent.cli export-extraction-xlsx \
+  --repo-root . \
+  --source-record authoring/agent/fixtures/content_pipeline_synthetic/source.json \
+  --extraction-ledger authoring/agent/fixtures/content_pipeline_synthetic/extraction.json \
+  --output authoring/content/extraction_SYNTH.xlsx
+```
+
+- `source`, `manifest`, `offset-proof`, `extraction`, `valuation` و `game-pack` باید فایل‌های نسخه‌دار داخل مخزن باشند و هر مرحله به SHA منبع/مرحلهٔ قبل وصل باشد. برای `rights_status=AUTHORIZED`، `content-pipeline-audit` و exporter علاوه بر آن `--source-pdf` را از قرنطینهٔ خارج Git می‌خواهند و SHA، اندازه و شمار صفحه را با manifest می‌سنجند؛ fixture مصنوعی از این الزامِ باینری مستثناست. در نتیجه PR تاریخچهٔ منبع، استخراج صفحه‌ای، objective map و game draft را کنار هم دارد.
+- دفتر استخراج، شناسه‌ها، صفحات PDF/چاپ، وضعیت خوانش، concept/operation/domain IDs، ارجاع‌ها و hash شاهدها را نگه می‌دارد. فقط excerpt کوتاهِ مجاز (حداکثر ۱۰ واژه) می‌تواند در آن باشد؛ تصویر/crop/PDF و متن خام بلند وارد Git نمی‌شوند.
+- `export-extraction-xlsx` فقط workbook تازه می‌سازد؛ sheet «ردیابی» SHA دفتر JSON/offset-proof/source را نشان می‌دهد و sidecar SHA برای خود workbook نوشته می‌شود. فایل موجود overwrite نمی‌شود؛ workbook رسمی، PAGE-MAP موجود یا رنگ سلولی تغییر نمی‌کند.
+- `content-pipeline-audit` صرفاً trace و اتصال را می‌سنجد. game item بدون رکورد `HUMAN_APPROVED` و referenceِ ledger با metadata سازگار با governance `BLOCKED` می‌شود. audit توکن را نمی‌خواند و هویت را رمزنگارانه دوباره احراز نمی‌کند؛ احراز سمتِ سرور فقط در مسیر ثبت حکم انجام می‌شود. حتی PASS مجوز release نیست؛ حقوق نامشخص/محدود یا offset اثبات‌نشده جلوی انتقال به بخش ۳ را می‌گیرد.
+- passهای خصوصی M05 و منبع PDF/crop همچنان بیرون Git می‌مانند؛ report و رکورد ساختاریافتهٔ مجازِ حاصل می‌توانند در PR نسخه‌دار شوند. این گیت هیچ حکم انسانی تولید نمی‌کند.
 
 ---
 

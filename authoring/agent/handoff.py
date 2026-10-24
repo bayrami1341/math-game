@@ -38,6 +38,8 @@ ENGINE_MODULES: List[str] = [
     "authoring/agent/excel_exporter.py",
     "authoring/agent/observation.py",
     "authoring/agent/reconcile.py",
+    "authoring/agent/concept_scope.py",
+    "authoring/agent/content_pipeline.py",
     "authoring/agent/wave_exporter.py",
     "authoring/agent/validators.py",
     "authoring/agent/achilles_gate.py",
@@ -46,6 +48,7 @@ ENGINE_MODULES: List[str] = [
     "authoring/agent/git_guard.py",
     "authoring/agent/viewer.py",
     "authoring/agent/autopilot.py",
+    "authoring/agent/microbot_engine.py",
     "authoring/agent/cli.py",
     "authoring/agent/handoff.py",
 ]
@@ -125,33 +128,48 @@ HARD_INVARIANTS: List[Dict[str, str]] = [
         "rule": "PDF، عکسِ کتاب، کراپِ صفحه و نقلِ بیش از ۱۰ واژه از کتاب هرگز در Git نیست.",
         "verify": "authoring/agent/git_guard.py: audit_git_copyright_safety",
     },
+    {
+        "id": "INV-11",
+        "rule": "M13 MVP در M00/M01/M02 قرارداد منبع/قرنطینه/observation packet را می‌سنجد؛ coverage گیت مستقل است و PASS آن مجوز release نیست.",
+        "verify": "authoring/agent/microbot_engine.py: run_microbot_preflight",
+    },
+    {
+        "id": "INV-12",
+        "rule": "M05 concept-scope فقط دو packet مقید به PDF/manifest/profile را می‌سنجد؛ شمارهٔ چاپیِ هر صفحه باید با شاهدِ source-bound با offset manifest بخواند؛ تعارض/ابهام BLOCKED و انحرافِ اولیهٔ توافق‌شده FAIL است؛ PASS هرگز رأی آموزشی، رنگ یا release نیست.",
+        "verify": "authoring/agent/concept_scope.py: audit_concept_scope + authoring/tests/test_concept_scope.py",
+    },
+    {
+        "id": "INV-13",
+        "rule": "Source، offset-proof، extraction، valuation و game draft فقط به‌شکل artifactهای ساختاریافتهٔ hash-linked در مخزن نسخه‌دار می‌شوند؛ schema/runtime و حقوق ناسازگار fail-closed است؛ PDF/تصویر/raw text وارد Git نمی‌شود؛ PASS فقط traceability است و هیچ حکم/رنگ/release نمی‌سازد.",
+        "verify": "authoring/agent/content_pipeline.py + authoring/tests/test_content_pipeline.py",
+    },
 ]
 
 #: کارهایی که فقط در مالکیتِ مدلِ مادر / مالکِ انسانی است
 MOTHER_AI_ACTIONS: List[Dict[str, str]] = [
     {
         "id": "W7",
-        "action": "افزودنِ خطِ CI به `.github/workflows/khshab-gate.yml` برای اجرای `pytest authoring/tests` با Python 3.12.",
+        "action": "W7 در snapshot رسمی موجود است (Python 3.11 + pytest + openpyxl پین‌شده)؛ حفظ و گزارش اجرای فعلی، نه پیاده‌سازی دوباره.",
         "owner": "Z.ai",
-        "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §1",
+        "reference": ".github/workflows/khshab-gate.yml@v10.3-beta",
     },
     {
         "id": "W8",
-        "action": "پورتِ `parseOptionValue` و `classifyAttempt` به `public/math-game/src/v10/workshop/cartridge-schema.js` و `errors.js`.",
-        "owner": "Z.ai",
-        "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §2",
+        "action": "Z.ai گزارش کرده و main@4f48947e5e16d66aa6f93115294415c8f50ffcc1 مسیر M10 را به caller واقعی وصل کرده؛ تا وقتی v10.3-beta/PR #2 جداگانه بررسی و تصمیم انسانی ثبت نشده، Arena فقط read-only مصرف می‌کند.",
+        "owner": "Z.ai / مالکِ مخزن",
+        "reference": "https://github.com/bayrami1341/math-game/commit/4f48947e5e16d66aa6f93115294415c8f50ffcc1",
     },
     {
         "id": "PR2",
-        "action": "حلِ `CONFLICTING` بودنِ PR #2 با `squash`/`rebase` (نه ادغامِ `v10.3-beta` در `arena/**`).",
-        "owner": "Z.ai",
-        "reference": "authoring/ZAI-HANDOFF-W7-W8.fa.md §3",
+        "action": "گزارشِ conflict و پیشنهادِ برنامهٔ ادغام برای PR #2؛ تا مجوز صریح جداگانه merge/push انجام نشود و `v10.3-beta` هرگز با `arena/**` ادغام نشود.",
+        "owner": "Z.ai / مالکِ مخزن",
+        "reference": "https://github.com/bayrami1341/math-game/pull/2",
     },
     {
         "id": "CANDIDATE",
-        "action": "mount کردنِ نامزدِ واقعیِ `KH-G2-MATH v1.2` (SHA `18e6b4fa…`) خارج از Git برای مقایسهٔ کلیدمحور.",
+        "action": "نامزدِ واقعی فقط بیرون Git و پس از تکمیلِ مرزِ شواهد بررسی شود؛ این index هیچ candidate-ready، رأی انسانی یا مجوز انتشار صادر نمی‌کند.",
         "owner": "مالک / Z.ai",
-        "reference": "authoring/G2-V12-CONNECTION-DRYRUN.fa.md §6",
+        "reference": "authoring/USAGE-KHSHAB-AGENT-v24.fa.md §4",
     },
     {
         "id": "STAMP",
@@ -339,6 +357,19 @@ def build_handoff_index(
     root = Path(repo_root).resolve()
     engine = [e for e in (_module_entry(root, rel) for rel in ENGINE_MODULES) if e is not None]
     achilles = root / "authoring/agent/achilles_gate.py"
+    schema_dir = root / "authoring/agent/schemas"
+    contract_schemas = []
+    for schema_path in sorted(schema_dir.glob("*.schema.json")):
+        try:
+            schema_payload = json.loads(schema_path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeError, json.JSONDecodeError):
+            schema_payload = {}
+        contract_schemas.append({
+            "schema_id": schema_payload.get("$id"),
+            "path": schema_path.relative_to(root).as_posix(),
+            "sha256": file_sha256(str(schema_path)),
+            "bytes": schema_path.stat().st_size,
+        })
     bundle: Dict[str, Any] = {
         "schema_version": SCHEMA_VERSION,
         "generated_at_utc": _utc_now(),
@@ -362,7 +393,7 @@ def build_handoff_index(
                 "number": 2,
                 "head_branch": _git(root, "rev-parse", "--abbrev-ref", "HEAD"),
                 "base_branch": "v10.3-beta",
-                "note": "PR از سوی Z.ai باید squash/rebase شود؛ ادغامِ v10.3-beta در arena/** ممنوع است (unrelated histories).",
+                "note": "آخرین وضعیت ثبت‌شده در 2026-10-23: OPEN و CONFLICTING/DIRTY؛ این بسته مجوز merge/push نمی‌دهد و ادغامِ v10.3-beta در arena/** ممنوع است.",
             },
             "official_reference_hint": "origin/v10.3-beta (فقط‌خواندنی برای آرنا)",
         },
@@ -374,6 +405,7 @@ def build_handoff_index(
             ],
             "modules": engine,
         },
+        "contract_schemas": contract_schemas,
         "cli": _cli_entry(root),
         "gates": {
             "hallucination_gate": {
@@ -398,6 +430,27 @@ def build_handoff_index(
                     "manifest_edition",
                 ],
                 "semantics": "ردیفِ بی‌شاهد زرد می‌ماند؛ هیچ ارتقای خودکار به سبز.",
+            },
+            "content_pipeline_trace": {
+                "function": "authoring/agent/content_pipeline.py: audit_content_pipeline",
+                "cli": "khshab-agent content-pipeline-audit",
+                "stages": ["source", "versioned manifest", "external PDF SHA/size/page count", "offset-proof", "extraction", "valuation", "game draft"],
+                "schemas": [
+                    "khshab.content-source/v1",
+                    "khshab.offset-proof/v1",
+                    "khshab.extraction-ledger/v1",
+                    "khshab.valuation-bundle/v1",
+                    "khshab.game-content-pack/v1",
+                    "khshab.verdict-ledger/v1",
+                ],
+                "semantics": (
+                    "Draft 2020-12 schemas + manifest-file/PDF-byte/hash/page-anchor lineage fail-closed. "
+                    "AUTHORIZED sources require the exact PDF outside Git; synthetic fixtures may omit it. "
+                    "PASS فقط traceability است؛ verdict نمی‌سازد و release نمی‌دهد. "
+                    "احراز هویت ledger را رمزنگارانه دوباره بررسی نمی‌کند؛ فقط metadata ثبت‌شده را می‌سنجد."
+                ),
+                "excel_export_cli": "khshab-agent export-extraction-xlsx",
+                "fixture": "authoring/agent/fixtures/content_pipeline_synthetic/README.fa.md",
             },
             "source_binding": {
                 "function": "authoring/agent/achilles_gate.py: bind_evidence_to_source",

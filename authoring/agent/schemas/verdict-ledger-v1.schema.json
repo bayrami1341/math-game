@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "khshab.verdict-ledger/v1",
+  "title": "Governance verdict ledger structure v1",
+  "description": "Structural mirror of persisted TeacherVerdict records. Authentication fields are procedural metadata, not a cryptographic signature.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "verdict_count", "verdicts"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "verdict_count": {"type": "integer", "minimum": 0},
+    "verdicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "verdict_id", "scope", "actor", "actor_role", "target_ids", "target_sha256",
+          "timestamp_utc", "notes", "invalidated", "invalidation_reason", "authenticated", "auth_method"
+        ],
+        "properties": {
+          "verdict_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+          "scope": {"enum": ["MAP_APPROVED", "ROW_APPROVED", "ERROR_CODE_APPROVED", "RELEASE_AUTHORIZED", "ROW_REJECTED", "MAP_REVISION_REQUESTED"]},
+          "actor": {"type": "string", "minLength": 1, "maxLength": 256},
+          "actor_role": {"type": "string", "minLength": 1, "maxLength": 64},
+          "target_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"}},
+          "target_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "timestamp_utc": {"type": "string", "format": "date-time"},
+          "notes": {"type": "string", "maxLength": 512},
+          "invalidated": {"type": "boolean"},
+          "invalidation_reason": {"type": ["string", "null"], "maxLength": 512},
+          "authenticated": {"type": "boolean"},
+          "auth_method": {"enum": ["KHSHAB_TEACHER_TOKEN_FILE", "X-Teacher-Token"]}
+        }
+      }
+    }
+  }
+}

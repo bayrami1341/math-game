@@ -46,6 +46,9 @@ from .reconcile import reconcile_chunk_directory
 from .validators import inspect_cartridge_workbook
 from .viewer import serve_viewer
 from .wave_exporter import export_wave_cartridge
+from .microbot_engine import run_microbot_preflight
+from .concept_scope import audit_concept_scope
+from .content_pipeline import audit_content_pipeline, export_extraction_ledger_xlsx
 
 RUNTIME_CODES = {
     "E_ADD_CONFUSION",
@@ -442,6 +445,60 @@ def build_parser() -> argparse.ArgumentParser:
     p_cov.add_argument("--pagemap", default=None, help="نقشهٔ مادرِ تأییدشده برای آفست اثبات‌شده")
     p_cov.add_argument("--expected-book-code", default=None, help="کد کتابِ مورد انتظار (مثلاً C205)")
 
+    p_scope = sub.add_parser(
+        "concept-scope-audit",
+        help="M05 read-only: تطبیق دو خوانشِ مستقل با پروفایل مفهومیِ همان چاپ؛ بدون تغییر رنگ/خشاب/مهر",
+    )
+    p_scope.add_argument("--repo-root", required=True)
+    p_scope.add_argument("--pdf", required=True, help="PDF واقعیِ همان چاپ؛ باید خارج از مخزن باشد")
+    p_scope.add_argument("--book-manifest", required=True, help="manifest همان چاپ")
+    p_scope.add_argument("--scope-profile", required=True, help="پروفایل مفهومیِ نسخه‌دار و مستقل")
+    p_scope.add_argument("--pass-a", required=True, help="خروجیِ مستقلِ مشاهده‌گر A")
+    p_scope.add_argument("--pass-b", required=True, help="خروجیِ مستقلِ مشاهده‌گر B")
+
+    p_pipeline = sub.add_parser(
+        "content-pipeline-audit",
+        help="گیتِ اتصالِ GitHub-محورِ source → extraction → valuation → game draft؛ بدون حکم/انتشار",
+    )
+    p_pipeline.add_argument("--repo-root", required=True)
+    p_pipeline.add_argument("--source-record", required=True, help="source record نسخه‌دار؛ PDF باید فقط locator خصوصی داشته باشد")
+    p_pipeline.add_argument("--extraction-ledger", required=True, help="دفتر استخراج ساختاریافتهٔ نسخه‌دار")
+    p_pipeline.add_argument("--valuation-bundle", required=True, help="بستهٔ ارزش‌گذاری مقید به راهنمای معلم")
+    p_pipeline.add_argument("--game-pack", required=True, help="بستهٔ game/practice؛ آیتم‌ها باید DRAFT بمانند")
+    p_pipeline.add_argument("--source-pdf", default=None, help="PDF دقیقِ source در قرنطینهٔ خارج از repo؛ برای rights_status=AUTHORIZED الزامی است")
+    p_pipeline.add_argument("--verdict-ledger", default=None, help="ledger موجود با auth metadata governance؛ audit توکن را نمی‌خواند و هیچ حکمی نمی‌سازد")
+
+    p_export = sub.add_parser(
+        "export-extraction-xlsx",
+        help="ساخت Excel از extraction ledger مقید به source/offset-proof داخل مخزن؛ فایل موجود هرگز overwrite نمی‌شود",
+    )
+    p_export.add_argument("--repo-root", required=True)
+    p_export.add_argument("--source-record", required=True)
+    p_export.add_argument("--source-pdf", default=None, help="PDF دقیقِ بیرون از repo؛ برای rights_status=AUTHORIZED الزامی است")
+    p_export.add_argument("--extraction-ledger", required=True)
+    p_export.add_argument("--output", required=True)
+
+    p_micro = sub.add_parser(
+        "microbot-preflight",
+        help="M13 MVP read-only: M00/M01 + اعتبارسنجی observation در M02؛ coverage یک گیت مستقل است",
+    )
+    p_micro.add_argument("--repo-root", default=".")
+    p_micro.add_argument("--expected-book-code", required=True)
+    p_micro.add_argument("--cartridge", required=True)
+    p_micro.add_argument("--pdf", default=None, help="PDF واقعی؛ باید خارج از درخت Git باشد")
+    p_micro.add_argument("--book-manifest", default=None, help="manifest همان چاپ")
+    p_micro.add_argument("--observation", default=None, help="دفتر مشاهده/شواهد همان منبع")
+    p_micro.add_argument("--pagemap", default=None, help="نقشهٔ صفحه برای گیت offset/coverage")
+    p_micro_checkpoint = p_micro.add_mutually_exclusive_group()
+    p_micro_checkpoint.add_argument(
+        "--checkpoint", default=None,
+        help="اختیاری: checkpoint خصوصی و بیرون از مخزن؛ پوشهٔ والد باید 0700 باشد",
+    )
+    p_micro_checkpoint.add_argument(
+        "--resume-checkpoint", dest="resume_checkpoint_path", default=None,
+        help="اختیاری: resume از checkpoint قبلی با همان SHAهای ورودی/کد و همان DAG",
+    )
+
     p_view = sub.add_parser("serve-viewer", help="میز کار چندپایه با ذره‌بین پیکسلی 8x و امضای معلم (W6)")
     p_view.add_argument("--repo-root", default=".")
     p_view.add_argument("--pdf", default="/tmp/khshab_secure_vault/C205.pdf")
@@ -558,6 +615,61 @@ def main(argv: list[str] | None = None) -> int:
             "note": "ثبتِ فنیِ حکم؛ این حکم به‌تنهایی مجوزِ انتشار نیست و هیچ ردیفی را خودکار سبز نمی‌کند.",
         }, ensure_ascii=False))
         return 0
+
+    if args.cmd == "concept-scope-audit":
+        report = audit_concept_scope(
+            pdf_path=args.pdf,
+            manifest_path=args.book_manifest,
+            profile_path=args.scope_profile,
+            pass_a_path=args.pass_a,
+            pass_b_path=args.pass_b,
+            repo_root=args.repo_root,
+        )
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return {"PASS": 0, "BLOCKED": 2, "FAIL": 3}.get(report["status"], 3)
+
+    if args.cmd == "content-pipeline-audit":
+        report = audit_content_pipeline(
+            repo_root=args.repo_root,
+            source_path=args.source_record,
+            extraction_path=args.extraction_ledger,
+            valuation_path=args.valuation_bundle,
+            game_pack_path=args.game_pack,
+            verdict_ledger_path=args.verdict_ledger,
+            source_pdf_path=args.source_pdf,
+        )
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return {"PASS": 0, "BLOCKED": 2, "FAIL": 3}.get(report["status"], 3)
+
+    if args.cmd == "export-extraction-xlsx":
+        try:
+            result = export_extraction_ledger_xlsx(
+                repo_root=args.repo_root,
+                source_path=args.source_record,
+                extraction_path=args.extraction_ledger,
+                output_path=args.output,
+                source_pdf_path=args.source_pdf,
+            )
+        except (OSError, ValueError, FileExistsError, RuntimeError) as exc:
+            print(json.dumps({"status": "BLOCKED", "reason_code": str(exc).split(":", 1)[0]}, ensure_ascii=False))
+            return 2
+        print(json.dumps({"status": "PASS", **result}, ensure_ascii=False, indent=2))
+        return 0
+
+    if args.cmd == "microbot-preflight":
+        report = run_microbot_preflight(
+            repo_root=root,
+            expected_book_code=args.expected_book_code,
+            cartridge_path=args.cartridge,
+            pdf_path=args.pdf,
+            manifest_path=args.book_manifest,
+            observation_path=args.observation,
+            pagemap_path=args.pagemap,
+            checkpoint_path=args.checkpoint or args.resume_checkpoint_path,
+            resume_checkpoint=args.resume_checkpoint_path is not None,
+        )
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return {"PASS": 0, "WARN": 1, "BLOCKED": 2, "FAIL": 3}.get(report["overall_status"], 3)
 
     if args.cmd == "coverage":
         g_cov = verify_evidence_coverage_gate(

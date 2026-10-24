@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "khshab.content-source/v1",
+  "title": "Versioned textbook source registration v1",
+  "description": "Git-safe source identity and provenance; the original PDF remains in private external storage.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "source_id", "book_code", "grade", "subject_id", "edition_id",
+    "manifest_id", "manifest_path", "manifest_sha256", "source_pdf_sha256", "source_pdf_size_bytes",
+    "pdf_page_count", "pagination", "source_asset", "rights_status"
+  ],
+  "properties": {
+    "schema_version": {"const": "khshab.content-source/v1"},
+    "source_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "book_code": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "grade": {"type": "integer", "minimum": 1, "maximum": 12},
+    "subject_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "edition_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "manifest_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{0,127}$"},
+    "manifest_path": {"type": "string", "minLength": 1, "maxLength": 256},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_pdf_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_pdf_size_bytes": {"type": "integer", "minimum": 1},
+    "pdf_page_count": {"type": "integer", "minimum": 1},
+    "pagination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "body_pdf_page_start", "body_pdf_page_end", "book_page_start", "book_page_end",
+        "pdf_minus_book_offset", "offset_proof_status", "offset_proof_sha256", "offset_proof_path"
+      ],
+      "properties": {
+        "body_pdf_page_start": {"type": "integer", "minimum": 1},
+        "body_pdf_page_end": {"type": "integer", "minimum": 1},
+        "book_page_start": {"type": "integer", "minimum": 1},
+        "book_page_end": {"type": "integer", "minimum": 1},
+        "pdf_minus_book_offset": {"type": "integer"},
+        "offset_proof_status": {"enum": ["TWO_READER_MATCHED", "SYNTHETIC_TEST_ONLY", "UNVERIFIED"]},
+        "offset_proof_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "offset_proof_path": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    },
+    "source_asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["storage", "locator_ref"],
+      "properties": {
+        "storage": {"const": "PRIVATE_EXTERNAL"},
+        "locator_ref": {"type": "string", "minLength": 1, "maxLength": 256}
+      }
+    },
+    "rights_status": {"enum": ["AUTHORIZED", "RESTRICTED", "UNVERIFIED", "SYNTHETIC_TEST_ONLY"]}
+  }
+}

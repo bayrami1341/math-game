@@ -1,0 +1,18 @@
+{
+  "book_code": "SYNTH",
+  "manifest_id": "SYNTH-MANIFEST-1",
+  "pagination": {
+    "body_pdf_page_end": 11,
+    "body_pdf_page_start": 10,
+    "book_page_end": 2,
+    "book_page_start": 1,
+    "pdf_minus_book_offset": 9
+  },
+  "schema_version": "1.0.0",
+  "source_pdf": {
+    "filename": "SYNTH.pdf",
+    "pdf_page_count": 12,
+    "sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56",
+    "size_bytes": 8123
+  }
+}
