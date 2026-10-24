@@ -6,3 +6,33 @@ __pycache__/
 .env.*
 !.env.example
 firebase-debug.log*
+test-results/
+playwright-report/
+.DS_Store
+
+# Copyrighted textbook assets, upload dropzone & local caches (NEVER commit to Git — §9)
+upload/
+*.pdf
+*.PDF
+*.png
+*.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+*.webp
+*.WEBP
+!assets/*.png
+google_drive/
+.vault/
+authoring/local_viewer_cache/
+authoring/build_preview/
+authoring/.cache/
+download/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Teacher authentication token (v2.4 بند ۶) — هرگز در Git؛ فقط خارج از مخزن
+authoring/audit/teacher_token.txt
+authoring/audit/teacher_token*.txt

@@ -1,0 +1,670 @@
+{
+  "schema_version": "1.0.0",
+  "book_code": "C205",
+  "pages": {
+    "2": {
+      "primary_banner": null,
+      "all_tabs": [],
+      "page_type": "شناسنامه",
+      "regions": [
+        {
+          "bbox": [
+            0.1,
+            0.08,
+            0.9,
+            0.92
+          ],
+          "field": "colophon_edition",
+          "raw": "ریاضی ـ دوم دبستان ـ ۲۰۵ | چاپ چهاردهم ۱۴۰۴ | شابک 978-964-05-2078-9",
+          "value": {
+            "book_code": "205",
+            "edition": 14,
+            "year": 1404,
+            "isbn": "978-964-05-2078-9"
+          },
+          "role": "edition_identity"
+        }
+      ]
+    },
+    "6": {
+      "primary_banner": "فهرست",
+      "all_tabs": [
+        "فهرست"
+      ],
+      "page_type": "فهرست",
+      "regions": [
+        {
+          "bbox": [
+            0.06,
+            0.05,
+            0.94,
+            0.94
+          ],
+          "field": "chapter_toc",
+          "raw": "فصل ۱ ص ۱ عدد و رقم | فصل ۲ ص ۱۹ جمع و تفریق اعداد دو رقمی | فصل ۳ ص ۳۷ اشکال هندسی | فصل ۴ ص ۵۵ عددهای سه رقمی | فصل ۵ ص ۷۳ اندازه‌گیری | فصل ۶ ص ۹۱ جمع و تفریق اعداد سه رقمی | فصل ۷ ص ۱۰۹ کسر و احتمال | فصل ۸ ص ۱۲۷ آمار و نمودار",
+          "value": [
+            {
+              "ch": 1,
+              "start": 1,
+              "title": "عدد و رقم"
+            },
+            {
+              "ch": 2,
+              "start": 19,
+              "title": "جمع و تفریق اعداد دو رقمی"
+            },
+            {
+              "ch": 3,
+              "start": 37,
+              "title": "اشکال هندسی"
+            },
+            {
+              "ch": 4,
+              "start": 55,
+              "title": "عددهای سه رقمی"
+            },
+            {
+              "ch": 5,
+              "start": 73,
+              "title": "اندازه‌گیری"
+            },
+            {
+              "ch": 6,
+              "start": 91,
+              "title": "جمع و تفریق اعداد سه رقمی"
+            },
+            {
+              "ch": 7,
+              "start": 109,
+              "title": "کسر و احتمال"
+            },
+            {
+              "ch": 8,
+              "start": 127,
+              "title": "آمار و نمودار"
+            }
+          ],
+          "role": "table_of_contents"
+        }
+      ]
+    },
+    "9": {
+      "primary_banner": "فعّالیت",
+      "all_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.1,
+            0.09,
+            0.92,
+            0.5
+          ],
+          "field": "flower_tally_table",
+          "raw": "جدول شمارش چوب‌خط ۵ ستونی (۵ نوع گل؛ ستون اول //// = ۴)",
+          "value": {
+            "columns": 5,
+            "sample_tally": 4
+          },
+          "role": "tally_table"
+        },
+        {
+          "bbox": [
+            0.06,
+            0.52,
+            0.91,
+            0.9
+          ],
+          "field": "elephant_wonder_grid",
+          "raw": "جدول شگفت‌انگیز داخل فیل آبی: شبکهٔ ۹×۹ سودوکو با نواحی ۳×۳ نارنجی و ارقام یک‌رقمی ۱ تا ۹",
+          "value": {
+            "grid": "9x9",
+            "digits": "1..9"
+          },
+          "role": "logic_grid"
+        }
+      ]
+    },
+    "22": {
+      "primary_banner": "مرور فصل",
+      "all_tabs": [
+        "مرور فصل",
+        "فرهنگ نوشتن",
+        "تمرین"
+      ],
+      "page_type": "مرور فصل",
+      "regions": [
+        {
+          "bbox": [
+            0.36,
+            0.0,
+            0.61,
+            0.13
+          ],
+          "field": "primary_banner",
+          "raw": "مرور فصل",
+          "value": "مرور فصل",
+          "role": "top_ribbon_banner"
+        },
+        {
+          "bbox": [
+            0.08,
+            0.42,
+            0.94,
+            0.92
+          ],
+          "field": "review_exercises",
+          "raw": "تمرین موارد ۱ تا ۴: ساخت عدد با ۷ و ۸؛ با ۶ و ۰ و ۱؛ ۸+۹ و ۱۷−۸؛ ۶ کادر جمع برابر ۵",
+          "value": {
+            "exercise_count": 4,
+            "sum_boxes": 6,
+            "sum_target": 5
+          },
+          "role": "exercise_block"
+        }
+      ]
+    },
+    "26": {
+      "primary_banner": "جمع و تفریق ده‌تایی",
+      "all_tabs": [
+        "جمع و تفریق ده‌تایی",
+        "فعّالیت",
+        "تقریب بزن"
+      ],
+      "page_type": "فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.5,
+            0.07,
+            0.92,
+            0.3
+          ],
+          "field": "top_lesson_and_tab",
+          "raw": "عنوان درس: جمع و تفریق ده‌تایی + تاب فعّالیت",
+          "value": {
+            "lesson_title": "جمع و تفریق ده‌تایی",
+            "first_tab": "فعّالیت"
+          },
+          "role": "header_sequence"
+        },
+        {
+          "bbox": [
+            0.07,
+            0.65,
+            0.93,
+            0.9
+          ],
+          "field": "bottom_red_box",
+          "raw": "جعبهٔ قرمز پایین صفحه: تقریب بزن (سه محور ۰ تا ۴۰ با پرش ده‌تایی)",
+          "value": "تقریب بزن",
+          "role": "red_box"
+        }
+      ]
+    },
+    "27": {
+      "primary_banner": "کار در کلاس",
+      "all_tabs": [
+        "کار در کلاس",
+        "فعّالیت"
+      ],
+      "page_type": "کار در کلاس + فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.06,
+            0.08,
+            0.94,
+            0.56
+          ],
+          "field": "top_section",
+          "raw": "کار در کلاس (موارد ۱ و ۲: حساب یکی‌ها و ده‌تایی‌ها + دسته‌بندی مربع‌ها)",
+          "value": {
+            "tab": "کار در کلاس",
+            "items": [
+              1,
+              2
+            ]
+          },
+          "role": "section_block"
+        },
+        {
+          "bbox": [
+            0.06,
+            0.57,
+            0.94,
+            0.92
+          ],
+          "field": "bottom_section",
+          "raw": "فعّالیت (موارد ۱ و ۲: نوشتن جمع برای دسته‌های ده‌تایی + نمایش روی محور ۰ تا ۱۰۰)",
+          "value": {
+            "tab": "فعّالیت",
+            "items": [
+              1,
+              2
+            ]
+          },
+          "role": "section_block"
+        }
+      ]
+    },
+    "30": {
+      "primary_banner": "کار در کلاس",
+      "all_tabs": [
+        "کار در کلاس",
+        "فعّالیت"
+      ],
+      "page_type": "کار در کلاس + فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.07,
+            0.13,
+            0.92,
+            0.44
+          ],
+          "field": "kar_dar_kelas_box",
+          "raw": "کار در کلاس: ۱۴−۶، ۱۲−۹، ۷+۵، ۸+۹ و ۱۹−۹، ۱۷−۸، ۷+۶، ۶+۹",
+          "value": [
+            "۱۴−۶",
+            "۱۲−۹",
+            "۷+۵",
+            "۸+۹",
+            "۱۹−۹",
+            "۱۷−۸",
+            "۷+۶",
+            "۶+۹"
+          ],
+          "role": "expression_set"
+        },
+        {
+          "bbox": [
+            0.07,
+            0.44,
+            0.92,
+            0.86
+          ],
+          "field": "faaliyat_items",
+          "raw": "فعّالیت شامل مورد ۱ (۷+۹، ۱۸−۹، ۱۷−۹ با مربع‌ها) و مورد ۲ (جدول‌های جمع و تفریق پایین صفحه)",
+          "value": {
+            "owner_tab": "فعّالیت",
+            "items": [
+              1,
+              2
+            ]
+          },
+          "role": "section_ownership"
+        }
+      ]
+    },
+    "31": {
+      "primary_banner": "کار در کلاس",
+      "all_tabs": [
+        "کار در کلاس",
+        "تمرین",
+        "خلاق باش"
+      ],
+      "page_type": "کار در کلاس + تمرین",
+      "regions": [
+        {
+          "bbox": [
+            0.09,
+            0.5,
+            0.8,
+            0.62
+          ],
+          "field": "story_problems_p25",
+          "raw": "مورد ۲: امین ۹ صفحه خوانده و ۸ صفحهٔ دیگر خواند (۹+۸)؛ مورد ۳: ریحانه ۱۴ تخم‌مرغ، ۶ مصرف شد (۱۴−۶)",
+          "value": {
+            "amin": "9+8",
+            "reyhaneh": "14-6"
+          },
+          "role": "word_problems"
+        }
+      ]
+    },
+    "32": {
+      "primary_banner": "حلّ مسئله",
+      "all_tabs": [
+        "حلّ مسئله",
+        "الگویابی کن"
+      ],
+      "page_type": "حلّ مسئله",
+      "regions": [
+        {
+          "bbox": [
+            0.08,
+            0.13,
+            0.91,
+            0.3
+          ],
+          "field": "combinatorial_digits_p26",
+          "raw": "مورد ۱ حلّ مسئله: رقم‌های یکان ۳ و ۴ و رقم دهگان ۵ و ۷ → ۵۳، ۵۴، ۷۳، ۷۴ (۴ عدد)",
+          "value": {
+            "ones": [
+              3,
+              4
+            ],
+            "tens": [
+              5,
+              7
+            ],
+            "numbers": [
+              53,
+              54,
+              73,
+              74
+            ]
+          },
+          "role": "combinatorics"
+        },
+        {
+          "bbox": [
+            0.07,
+            0.6,
+            0.93,
+            0.87
+          ],
+          "field": "pattern_box_p26",
+          "raw": "الگویابی کن: ۷۱،۷۲،۷۳ (چپ به راست +۱)؛ ۲،۴،۶،۸ (+۲)؛ ۳،۶،۹،۱۲ (+۳)",
+          "value": [
+            "71,72,73",
+            "2,4,6,8",
+            "3,6,9,12"
+          ],
+          "role": "number_patterns"
+        }
+      ]
+    },
+    "33": {
+      "primary_banner": "الگوسازی",
+      "all_tabs": [
+        "الگوسازی",
+        "کامل کن"
+      ],
+      "page_type": "الگوسازی + کامل کن",
+      "regions": [
+        {
+          "bbox": [
+            0.09,
+            0.06,
+            0.92,
+            0.42
+          ],
+          "field": "coloring_combinatorics_p27",
+          "raw": "الگوسازی: مثلث با ۲ رنگ (آبی یا قرمز) و مربع با ۳ رنگ (قهوه‌ای، سبز و زرد) → ۶ حالت",
+          "value": {
+            "triangle_colors": 2,
+            "square_colors": 3,
+            "total_states": 6
+          },
+          "role": "combinatorics"
+        },
+        {
+          "bbox": [
+            0.07,
+            0.44,
+            0.93,
+            0.86
+          ],
+          "field": "clock_magnifier_p27",
+          "raw": "کامل کن: ۳ ساعت آبی با ذره‌بین روی دقیقه‌ها؛ هر قسمت کوچک یک دقیقه است",
+          "value": {
+            "clock_count": 3,
+            "unit_rule": "1 small tick = 1 minute"
+          },
+          "role": "clock_reading"
+        }
+      ]
+    },
+    "37": {
+      "primary_banner": "جمع و تفریق دو عدد (ادامه)",
+      "all_tabs": [
+        "جمع و تفریق دو عدد (ادامه)",
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.08,
+            0.5,
+            0.9,
+            0.9
+          ],
+          "field": "step_subtraction_p31",
+          "raw": "مورد ۲ فعّالیت: تفریق نمونه ۳۵−۱۷ (۳۵−۱۰=۲۵، ۲۵−۷=۱۸) و دو تمرین ۵۲−۱۴ و ۴۳−۲۷",
+          "value": {
+            "worked": "35-17=18",
+            "practice": [
+              "52-14",
+              "43-27"
+            ]
+          },
+          "role": "step_subtraction"
+        }
+      ]
+    },
+    "39": {
+      "primary_banner": "تمرین",
+      "all_tabs": [
+        "تمرین",
+        "تقریب بزن"
+      ],
+      "page_type": "تمرین",
+      "regions": [
+        {
+          "bbox": [
+            0.11,
+            0.13,
+            0.68,
+            0.21
+          ],
+          "field": "vertical_expressions_p33",
+          "raw": "مورد ۱ تمرین ص ۳۳ (راست به چپ): ۵۹+۲۷، ۵۴−۲۱، ۶۰−۱۴، ۲۳+۵۷",
+          "value": [
+            "59+27",
+            "54-21",
+            "60-14",
+            "23+57"
+          ],
+          "role": "vertical_arithmetic"
+        },
+        {
+          "bbox": [
+            0.67,
+            0.901,
+            0.903,
+            0.942
+          ],
+          "field": "tie_rule_footnote_p33",
+          "raw": "عدد ۲۵ را به صورت تقریبی ۳۰ بنویسید.",
+          "value": {
+            "input": 25,
+            "approx_ten": 30,
+            "rule": "half_up_explicit_footnote"
+          },
+          "role": "pedagogical_rule"
+        }
+      ]
+    },
+    "40": {
+      "primary_banner": "مرور فصل",
+      "all_tabs": [
+        "مرور فصل",
+        "فرهنگ نوشتن",
+        "تمرین"
+      ],
+      "page_type": "مرور فصل",
+      "regions": [
+        {
+          "bbox": [
+            0.07,
+            0.55,
+            0.29,
+            0.67
+          ],
+          "field": "flower_color_table_p34",
+          "raw": "جدول رنگ گل‌ها: سبز ۱۰ تا ۲۰ | آبی ۲۱ تا ۳۰ | قرمز ۳۱ تا ۴۰ | زرد ۴۱ تا ۵۰",
+          "value": {
+            "سبز": [
+              10,
+              20
+            ],
+            "آبی": [
+              21,
+              30
+            ],
+            "قرمز": [
+              31,
+              40
+            ],
+            "زرد": [
+              41,
+              50
+            ]
+          },
+          "role": "lookup_table"
+        }
+      ]
+    },
+    "63": {
+      "primary_banner": "فعّالیت",
+      "all_tabs": [
+        "فعّالیت",
+        "الگویابی کن"
+      ],
+      "page_type": "فعالیت",
+      "regions": [
+        {
+          "bbox": [
+            0.06,
+            0.26,
+            0.9,
+            0.42
+          ],
+          "field": "coin_equivalences_p57",
+          "raw": "مورد ۱: ۲۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۲: ۸۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۳: ۱۰۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی",
+          "value": [
+            {
+              "item": 1,
+              "quantity": 20,
+              "unit_denomination_rial": 1,
+              "target_denomination_rial": 10
+            },
+            {
+              "item": 2,
+              "quantity": 80,
+              "unit_denomination_rial": 1,
+              "target_denomination_rial": 10
+            },
+            {
+              "item": 3,
+              "quantity": 100,
+              "unit_denomination_rial": 1,
+              "target_denomination_rial": 10
+            }
+          ],
+          "role": "quantity_with_denomination"
+        },
+        {
+          "bbox": [
+            0.07,
+            0.61,
+            0.93,
+            0.89
+          ],
+          "field": "skip_patterns_p57",
+          "raw": "الگویابی کن: ۴، ۸، ۱۲ (+۴) | ۳، ۶، ۹ (+۳) | ۷، ۱۴، ۲۱ (+۷)",
+          "value": [
+            "4,8,12",
+            "3,6,9",
+            "7,14,21"
+          ],
+          "role": "number_patterns"
+        }
+      ]
+    },
+    "71": {
+      "primary_banner": "کار در کلاس",
+      "all_tabs": [
+        "کار در کلاس",
+        "تقریب بزن"
+      ],
+      "page_type": "کار در کلاس",
+      "regions": [
+        {
+          "bbox": [
+            0.07,
+            0.63,
+            0.93,
+            0.91
+          ],
+          "field": "truncation_rounding_rule_p65",
+          "raw": "تقریب بزن ص ۶۵: با حذف رقم یکان و قرار دادن صفر به‌جای آن (۷۳۱→۷۳۰، ۶۳۵، ۵۹۶) و با حذف رقم یکان و دهگان (۱۲۴→۱۰۰، ۲۳۵، ۴۱۷)",
+          "value": {
+            "ones_truncation_sample": "731->730",
+            "tens_ones_truncation_sample": "124->100"
+          },
+          "role": "pedagogical_rule"
+        }
+      ]
+    },
+    "144": {
+      "primary_banner": "تمرین",
+      "all_tabs": [
+        "تمرین",
+        "کامل کن"
+      ],
+      "page_type": "تمرین",
+      "regions": [
+        {
+          "bbox": [
+            0.06,
+            0.08,
+            0.94,
+            0.95
+          ],
+          "field": "sarvestan_trees_and_library_p138",
+          "raw": "ص چاپی ۱۳۸: تمرین ۱ درخت‌های سرو شهر سروستان (سعدی ۵۰، حافظ ۴۰، مولوی ۶۵؛ هر ۱۰ درخت ۱ نماد) + تمرین ۲ کتابخانهٔ شهید فهمیده (هر ۱۰۰ کتاب ۱ نماد) + کامل کن",
+          "value": {
+            "printed_book_page": 138,
+            "streets": {
+              "سعدی": 50,
+              "حافظ": 40,
+              "مولوی": 65
+            }
+          },
+          "role": "page_identity_and_table"
+        }
+      ]
+    },
+    "145": {
+      "primary_banner": "انتخاب نمودار",
+      "all_tabs": [
+        "انتخاب نمودار",
+        "فعّالیت"
+      ],
+      "page_type": "درس",
+      "regions": [
+        {
+          "bbox": [
+            0.05,
+            0.07,
+            0.94,
+            0.95
+          ],
+          "field": "saeed_schedule_chart_p139",
+          "raw": "ص چاپی ۱۳۹: انتخاب نمودار + فعّالیت — کارهای روز تعطیل سعید از ۸ صبح تا ۸ بعدازظهر (نوار ساعتی و نمودار ستونی)",
+          "value": {
+            "printed_book_page": 139,
+            "lesson_title": "انتخاب نمودار"
+          },
+          "role": "page_identity_and_chart"
+        }
+      ]
+    }
+  }
+}

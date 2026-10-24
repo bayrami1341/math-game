@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "khshab.microbot-envelope/v1",
+  "title": "Khshab Microbot Common Envelope v1",
+  "description": "Common auditable result contract for M00-M16 microbots. A PASS is technical only and never grants human approval or release authorization.",
+  "type": "object",
+  "required": [
+    "envelope_version",
+    "run_id",
+    "bot_id",
+    "bot_version",
+    "repo_branch",
+    "repo_commit",
+    "book_code",
+    "edition_id",
+    "source_sha256",
+    "input_artifact_hashes",
+    "status",
+    "reason_code",
+    "summary",
+    "metrics",
+    "evidence_refs",
+    "issues",
+    "artifacts",
+    "requires_human",
+    "skipped"
+  ],
+  "properties": {
+    "envelope_version": {"const": "khshab.microbot-envelope/v1"},
+    "run_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+    "bot_id": {"type": "string", "pattern": "^M(0[0-9]|1[0-6])$"},
+    "bot_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "repo_branch": {"type": ["string", "null"]},
+    "repo_commit": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "book_code": {"type": ["string", "null"]},
+    "edition_id": {"type": ["string", "null"]},
+    "source_sha256": {
+      "anyOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "input_artifact_hashes": {
+      "type": "object",
+      "additionalProperties": {
+        "anyOf": [
+          {"type": "null"},
+          {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        ]
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PASS", "WARN", "BLOCKED", "FAIL", "ERROR", "DRAFT_YELLOW"]
+    },
+    "reason_code": {"type": "string", "minLength": 1},
+    "summary": {"type": "string"},
+    "metrics": {"type": "object"},
+    "evidence_refs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "issues": {"type": "array", "items": {"type": "object"}},
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "requires_human": {"type": "boolean"},
+    "skipped": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

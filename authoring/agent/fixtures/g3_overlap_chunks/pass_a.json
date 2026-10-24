@@ -1,0 +1,452 @@
+{
+  "pages": [
+    {
+      "pdfPage": 11,
+      "bookPage": 11,
+      "source_tag": "chunk-a1.json",
+      "banner": "H:913226be84a677a0",
+      "pageType": "H:913226be84a677a0",
+      "exerciseCount": 2,
+      "keyNumbers": [],
+      "manipulatives": [
+        "H:7ae2372952d8ea1d",
+        "H:17aebb0c01b4ae1f"
+      ],
+      "chapter": 1,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 12,
+      "bookPage": 12,
+      "source_tag": "chunk-a1.json",
+      "banner": "H:8117155331065bb5",
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 3,
+      "keyNumbers": [
+        "H:9400f1b21cb527d7",
+        "H:f5ca38f748a1d6ea",
+        "H:b7a56873cd771f2c",
+        "H:624b60c58c9d8bfb",
+        "H:4e07408562bedb8b",
+        "H:4b227777d4dd1fc6",
+        "H:ef2d127de37b942b",
+        "H:7902699be42c8a8e",
+        "H:d4735e3a265e16ee",
+        "H:2c624232cdd22177",
+        "H:ad57366865126e55",
+        "H:27badc983df1780b",
+        "H:983bd614bb5afece",
+        "H:83151157c10d85af",
+        "H:f89f8d0e735a91c5",
+        "H:2099a9b5f777e242",
+        "H:ad57366865126e55",
+        "H:7902699be42c8a8e",
+        "H:8527a891e2241369",
+        "H:6f4b6612125fb3a0",
+        "H:3fdba35f04dc8c46",
+        "H:5f9c4ab08cac7457",
+        "H:0b918943df0962bc",
+        "H:19581e27de7ced00",
+        "H:4ec9599fc203d176",
+        "H:670671cd97404156",
+        "H:4fc82b26aecb47d2",
+        "H:6b51d431df5d7f14",
+        "H:535fa30d7e25dd8a",
+        "H:86e5014965866131"
+      ],
+      "manipulatives": [
+        "H:7ae2372952d8ea1d"
+      ],
+      "chapter": 1,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 39,
+      "bookPage": 39,
+      "source_tag": "chunk-b2.json",
+      "banner": "H:8117155331065bb5",
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 16,
+      "keyNumbers": [
+        "H:9e11c362bc3d3572",
+        "H:db55da3fc3098e9c",
+        "H:670671cd97404156",
+        "H:ad57366865126e55",
+        "H:b090147020e03353",
+        "H:19581e27de7ced00",
+        "H:27badc983df1780b",
+        "H:40510175845988f1",
+        "H:0f8eb4b72b6e0c9e",
+        "H:47640e5f52b61369",
+        "H:0604cd3138feed20",
+        "H:1e472b39b105d349"
+      ],
+      "manipulatives": [
+        "H:aa35a1e08d6b63ba",
+        "H:678bfd7c3016b76b"
+      ],
+      "chapter": 2,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 40,
+      "bookPage": 40,
+      "source_tag": "chunk-b2.json",
+      "banner": "H:3a204f034161a844",
+      "pageType": "H:3a204f034161a844",
+      "exerciseCount": 7,
+      "keyNumbers": [
+        "H:670671cd97404156",
+        "H:2abaca4911e68fa9",
+        "H:dd6103b473273ecd",
+        "H:6cf713e83ca48f8a",
+        "H:b698d86c67a2cff8",
+        "H:1a1cf797fabe7f95",
+        "H:cba28b89eb859497"
+      ],
+      "manipulatives": [
+        "H:a5cc8c1e69be8ffd"
+      ],
+      "chapter": 2,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 49,
+      "bookPage": 49,
+      "source_tag": "chunk-c1.json",
+      "banner": "H:9e4a6c1b567062a2",
+      "pageType": "H:8c471f14ee5a8850",
+      "exerciseCount": 4,
+      "keyNumbers": [
+        "H:d10a4bc9e0c1fa4e",
+        "H:536549599ec6c3b8",
+        "H:cc11310c456c3690",
+        "H:a4aab3f1f08004e9"
+      ],
+      "manipulatives": [
+        "H:3023056351fbfd1f",
+        "H:e0a669ccabb70d2d"
+      ],
+      "chapter": 3,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 50,
+      "bookPage": 50,
+      "source_tag": "chunk-c1.json",
+      "banner": "H:913226be84a677a0",
+      "pageType": "H:913226be84a677a0",
+      "exerciseCount": 4,
+      "keyNumbers": [
+        "H:cc11310c456c3690",
+        "H:a4aab3f1f08004e9",
+        "H:f20e4586c63ba3b2",
+        "H:391552c099c101b1"
+      ],
+      "manipulatives": [
+        "H:3eef8762e31b87e8",
+        "H:d8d837bf5dcaa893",
+        "H:e1e6df738ad6aff6"
+      ],
+      "chapter": 3,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 59,
+      "bookPage": 59,
+      "source_tag": "chunk-c2.json",
+      "banner": null,
+      "pageType": "H:3a204f034161a844",
+      "exerciseCount": 6,
+      "keyNumbers": [
+        "H:a1850670a2d2738d",
+        "H:feb512dda3dfcde1",
+        "H:713a23ad16e51faf",
+        "H:b86eb1805bf1f095",
+        "H:b0cf2567483e704a"
+      ],
+      "manipulatives": [
+        "H:3eef8762e31b87e8",
+        "H:9af44be04a479b9b"
+      ],
+      "chapter": 3,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 60,
+      "bookPage": 60,
+      "source_tag": "chunk-c2.json",
+      "banner": "H:7a35a412bf395b50",
+      "pageType": "H:0e6c8224d1514a0b",
+      "exerciseCount": 4,
+      "keyNumbers": [
+        "H:ea7a091ab28aeb67",
+        "H:00c9c767a86abe6d",
+        "H:c0401ad55fff701f",
+        "H:976a35f823217abe",
+        "H:fd8c934eeb77b0b4",
+        "H:7494296d0f962f96"
+      ],
+      "manipulatives": [
+        "H:698727287f0cad07"
+      ],
+      "chapter": 3,
+      "lessonNo": null,
+      "isGame": true
+    },
+    {
+      "pdfPage": 69,
+      "bookPage": 69,
+      "source_tag": "chunk-d1.json",
+      "banner": null,
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 8,
+      "keyNumbers": [
+        "H:6aae699e20ca5d3a",
+        "H:6bf7b9f6da9049ba",
+        "H:bd9a5003d5f1932f",
+        "H:dcef6fe429f0b5e3",
+        "H:4e120653616d1330",
+        "H:92e9e7e5922d26e1",
+        "H:f9cacf3cb91a12e0"
+      ],
+      "manipulatives": [
+        "H:459ec56a6f2a55b6",
+        "H:c1f57f157e70198d"
+      ],
+      "chapter": 4,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 70,
+      "bookPage": 70,
+      "source_tag": "chunk-d1.json",
+      "banner": null,
+      "pageType": "H:8c471f14ee5a8850",
+      "exerciseCount": 5,
+      "keyNumbers": [
+        "H:9c15e4295e514fea",
+        "H:2991eefd9ff642f5",
+        "H:cf2b1d85560af690",
+        "H:27c135a0ff040d97",
+        "H:f149e700abe8d546",
+        "H:6aae699e20ca5d3a",
+        "H:08b7a5f82efbfa6d",
+        "H:20720a7166203d45",
+        "H:c063de344945456b"
+      ],
+      "manipulatives": [
+        "H:d426c09b9654062e",
+        "H:9a8b4fd9e234a707"
+      ],
+      "chapter": 4,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 79,
+      "bookPage": 79,
+      "source_tag": "chunk-d2.json",
+      "banner": "H:9dbba7111614720a",
+      "pageType": "H:e11f826c24c1ceb2",
+      "exerciseCount": 0,
+      "keyNumbers": [],
+      "manipulatives": [],
+      "chapter": 5,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 80,
+      "bookPage": 80,
+      "source_tag": "chunk-d2.json",
+      "banner": null,
+      "pageType": "H:a4bf1c8194071ce4",
+      "exerciseCount": 3,
+      "keyNumbers": [
+        "H:b4cc81b34bf95df3",
+        "H:853849ec3cd135dc",
+        "H:9594deec7b46c88a",
+        "H:84e4a2ba86ee8ac9"
+      ],
+      "manipulatives": [],
+      "chapter": 5,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 89,
+      "bookPage": 89,
+      "source_tag": "chunk-e1.json",
+      "banner": null,
+      "pageType": "H:913226be84a677a0",
+      "exerciseCount": 2,
+      "keyNumbers": [
+        "H:4e07408562bedb8b"
+      ],
+      "manipulatives": [
+        "H:9e3e6e3d0a8d0e21"
+      ],
+      "chapter": 5,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 90,
+      "bookPage": 90,
+      "source_tag": "chunk-e1.json",
+      "banner": null,
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 3,
+      "keyNumbers": [
+        "H:7902699be42c8a8e"
+      ],
+      "manipulatives": [
+        "H:ecb7be56c054a8bd",
+        "H:c1691d68a78e4458"
+      ],
+      "chapter": 5,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 99,
+      "bookPage": 99,
+      "source_tag": "chunk-e2.json",
+      "banner": null,
+      "pageType": "H:d6f1f9ffa5ca0052",
+      "exerciseCount": 2,
+      "keyNumbers": [
+        "H:f5ca38f748a1d6ea",
+        "H:9400f1b21cb527d7",
+        "H:59e19706d51d39f6",
+        "H:6b86b273ff34fce1",
+        "H:d4735e3a265e16ee",
+        "H:4e07408562bedb8b",
+        "H:4b227777d4dd1fc6"
+      ],
+      "manipulatives": [
+        "H:698727287f0cad07"
+      ],
+      "chapter": 6,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 100,
+      "bookPage": 100,
+      "source_tag": "chunk-e2.json",
+      "banner": null,
+      "pageType": "H:a8c3d8e3525255fe",
+      "exerciseCount": 3,
+      "keyNumbers": [
+        "H:0ab847ee0dd9fd88",
+        "H:06071662e6313f87",
+        "H:374313d96f3fe2b5",
+        "H:5c97197b404962d4"
+      ],
+      "manipulatives": [],
+      "chapter": 6,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 119,
+      "bookPage": 119,
+      "source_tag": "chunk-f2s.json",
+      "banner": null,
+      "pageType": "H:913226be84a677a0",
+      "exerciseCount": 4,
+      "keyNumbers": [
+        "H:9400f1b21cb527d7",
+        "H:5feceb66ffc86f38",
+        "H:2c624232cdd22177",
+        "H:4b227777d4dd1fc6",
+        "H:6b51d431df5d7f14",
+        "H:b17ef6d19c7a5b1e",
+        "H:4a44dc15364204a8",
+        "H:ef2d127de37b942b",
+        "H:4ec9599fc203d176",
+        "H:4523540f1504cd17",
+        "H:e629fa6598d73276",
+        "H:8527a891e2241369"
+      ],
+      "manipulatives": [],
+      "chapter": 7,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 120,
+      "bookPage": 120,
+      "source_tag": "chunk-f2s.json",
+      "banner": null,
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 5,
+      "keyNumbers": [
+        "H:8527a891e2241369",
+        "H:6b51d431df5d7f14",
+        "H:2c624232cdd22177",
+        "H:4a44dc15364204a8",
+        "H:ad57366865126e55",
+        "H:0f8ef3377b30fc47",
+        "H:9ae2bdd7beedc2e7",
+        "H:83151157c10d85af",
+        "H:0604cd3138feed20",
+        "H:1a6562590ef19d10"
+      ],
+      "manipulatives": [
+        "H:e4820a1eed83a2f4",
+        "H:d89bb103b8f72d28"
+      ],
+      "chapter": 7,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 129,
+      "bookPage": 129,
+      "source_tag": "chunk-g1.json",
+      "banner": "H:8117155331065bb5",
+      "pageType": "H:8117155331065bb5",
+      "exerciseCount": 1,
+      "keyNumbers": [
+        "H:624b60c58c9d8bfb",
+        "H:d59eced1ded07f84",
+        "H:f5ca38f748a1d6ea",
+        "H:4a44dc15364204a8"
+      ],
+      "manipulatives": [],
+      "chapter": 7,
+      "lessonNo": null,
+      "isGame": false
+    },
+    {
+      "pdfPage": 130,
+      "bookPage": 130,
+      "source_tag": "chunk-g1.json",
+      "banner": "H:3a204f034161a844",
+      "pageType": "H:3a204f034161a844",
+      "exerciseCount": 3,
+      "keyNumbers": [
+        "H:624b60c58c9d8bfb",
+        "H:b7a56873cd771f2c",
+        "H:9f14025af0065b30",
+        "H:e629fa6598d73276",
+        "H:d59eced1ded07f84"
+      ],
+      "manipulatives": [],
+      "chapter": 7,
+      "lessonNo": null,
+      "isGame": false
+    }
+  ]
+}

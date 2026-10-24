@@ -1,0 +1,77 @@
+{
+  "extraction_bundle_sha256": "5bed571a461f547bf0642d9b5e07f8f0616b575665028bf1562ce8b13841275b",
+  "objectives": [
+    {
+      "level": "GENERAL",
+      "objective_id": "OBJ-GENERAL",
+      "parent_objective_id": null
+    },
+    {
+      "level": "SPECIFIC",
+      "objective_id": "OBJ-SPECIFIC",
+      "parent_objective_id": "OBJ-GENERAL"
+    },
+    {
+      "level": "BEHAVIORAL",
+      "objective_id": "OBJ-BEHAVIORAL",
+      "parent_objective_id": "OBJ-SPECIFIC"
+    }
+  ],
+  "records": [
+    {
+      "assessment_status": "IN_SCOPE",
+      "concept_id": "whole_number_addition",
+      "confidence": "HIGH",
+      "element_id": "EL-10",
+      "extraction_record_id": "PG-10",
+      "human_verdict_id": null,
+      "number_domain_id": "whole_numbers",
+      "objective_ids": [
+        "OBJ-GENERAL",
+        "OBJ-SPECIFIC",
+        "OBJ-BEHAVIORAL"
+      ],
+      "operation_id": "add",
+      "prerequisite_ids": [],
+      "review_status": "DRAFT",
+      "role": "PRIMARY",
+      "valuation_id": "VAL-10"
+    },
+    {
+      "assessment_status": "IN_SCOPE",
+      "concept_id": "whole_number_addition",
+      "confidence": "HIGH",
+      "element_id": "EL-11",
+      "extraction_record_id": "PG-11",
+      "human_verdict_id": null,
+      "number_domain_id": "whole_numbers",
+      "objective_ids": [
+        "OBJ-GENERAL",
+        "OBJ-SPECIFIC",
+        "OBJ-BEHAVIORAL"
+      ],
+      "operation_id": "add",
+      "prerequisite_ids": [],
+      "review_status": "DRAFT",
+      "role": "PRIMARY",
+      "valuation_id": "VAL-11"
+    }
+  ],
+  "schema_version": "khshab.valuation-bundle/v1",
+  "source_binding": {
+    "book_code": "SYNTH",
+    "edition_id": "SYNTH-EDITION-1",
+    "manifest_id": "SYNTH-MANIFEST-1",
+    "manifest_sha256": "0c178294dd7ff776b73ad70324e79f46e589e65197a52558253014cdf44452b9",
+    "source_id": "SYNTH-PRINT-1",
+    "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+  },
+  "teacher_guide": {
+    "book_code": "SYNTH",
+    "grade": 2,
+    "guide_id": "SYNTH-GUIDE-1",
+    "guide_sha256": "51522353093e9abb23f3df88ef13799ebe290bf74aa4e8d3dc475f492b181c27",
+    "subject_id": "math"
+  },
+  "valuation_bundle_id": "SYNTH-VALUATION-1"
+}

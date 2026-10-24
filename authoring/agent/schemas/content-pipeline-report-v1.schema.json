@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "khshab.content-pipeline-report/v1",
+  "title": "Content pipeline traceability audit report v1",
+  "description": "Technical traceability only. It never creates a verdict, approval, workbook color, or release authorization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "gate_id", "status", "reason_code", "traceability_only", "source_binding", "artifact_hashes", "metrics", "issues", "safeguards"],
+  "properties": {
+    "schema_version": {"const": "khshab.content-pipeline-report/v1"},
+    "gate_id": {"const": "CONTENT_PIPELINE_TRACE"},
+    "status": {"enum": ["PASS", "BLOCKED", "FAIL"]},
+    "reason_code": {"type": "string", "minLength": 1},
+    "traceability_only": {"const": true},
+    "source_binding": {"type": "object"},
+    "artifact_hashes": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "metrics": {"type": "object"},
+    "issues": {"type": "array", "items": {"type": "object"}},
+    "safeguards": {
+      "type": "object", "additionalProperties": false,
+      "required": ["human_verdict_created", "workbook_modified", "color_change_authorized", "section3_release_authorized"],
+      "properties": {
+        "human_verdict_created": {"const": false},
+        "workbook_modified": {"const": false},
+        "color_change_authorized": {"const": false},
+        "section3_release_authorized": {"const": false}
+      }
+    }
+  }
+}

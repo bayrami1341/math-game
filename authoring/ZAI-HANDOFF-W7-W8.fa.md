@@ -1,0 +1,104 @@
+# بستهٔ تحویل فنی بسته‌های `W7` و `W8` به تیم مهندسی `Z.ai`
+
+طبق قانون اساسی مخزن و ماتریس مالکیت در `authoring/ROADMAP-KHSHAB-AGENT-v2.fa.md` (`بخش ۹`)، بسته‌های **`W1` تا `W6`** به‌طور ۱۰۰٪ در فضای مالکیت `authoring/agent/**` پیاده‌سازی، تست و قفل شدند و **هیچ فایلی از قلمرو `Z.ai` لمس نشده است**. این سند مشخصات دقیق قراردادی دو بستهٔ متعلق به `Z.ai` (`W7` و `W8`) را برای اجرا در شاخهٔ رسمی `v10.3-beta` ارائه می‌دهد.
+
+---
+
+## ۱. بستهٔ `W7`: اتصال لایهٔ اعتبارسنجی پایتون در `.github/workflows/khshab-gate.yml`
+
+### وضعیت فعلی در `origin/v10.3-beta` (`b66bc63`)
+فایل `.github/workflows/khshab-gate.yml` تمام ۶ خشاب ذکرشده در `public/math-game/authoring/OFFICIAL-HEADS.json` را از `convert.mjs` عبور می‌دهد. اکنون پکیج `authoring/agent` در پایتون آماده است تا به عنوان گام تکمیلی همان job اجرا شود:
+
+### گام پیشنهادی برای افزودن به `.github/workflows/khshab-gate.yml`
+```yaml
+      - name: Set up Python 3.12 & Run Multi-Grade khshab-agent v2.0 Gates
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python verification dependencies
+        run: pip install openpyxl pymupdf pillow pytest
+      - name: Verify all 6 official heads against Universal-10 & Multi-Grade Solvers
+        run: pytest -v authoring/tests
+```
+
+### خروجی تضمین‌شده روی هر ۶ خشاب فعلی `OFFICIAL-HEADS.json` (`b66bc63`)
+- `KH-G1-MATH` (`v0.1`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON`, `is_empty_skeleton=True`)
+- `KH-G2-MATH` (`v0.4` و `v0.5`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN`, `is_empty_skeleton=False`)
+- `KH-G3-MATH` (`v0.7` و موج آزمایشی `v0.8`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN`, `is_empty_skeleton=False`)
+- `KH-G4-MATH` (`v0.1`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON`, `is_empty_skeleton=True`)
+- `KH-G5-MATH` (`v0.1`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON`, `is_empty_skeleton=True`)
+- `KH-G6-MATH` (`v0.1`): `PASS` (`ALL_10_UNIVERSAL_INVARIANTS_CLEAN_SKELETON`, `is_empty_skeleton=True`)
+
+---
+
+## ۲. بستهٔ `W8`: دو نکتهٔ کلیدی کشف‌شده در اسکیمای مبدل (`cartridge-schema.js` / `errors.js`)
+
+در جریان اجرای واقعی موج آزمایشی `KH-G3-MATH v0.8` و ساخت حل‌گرهای پایه‌های چهارم تا ششم، دو محدودیت دقیق در کد فعلی `public/math-game/src/v10/workshop/cartridge-schema.js` شناسایی شد که برای امواج عددنویسی چندرقمی، کسری و اعداد صحیح پایهٔ ششم حیاتی‌اند:
+
+1. **سقف عددی `parseOptionValue` (`خطای T4` برای اعداد صحیح منفی یا بزرگ‌تر از `9999`):**
+   - در حال حاضر در `cartridge-schema.js`، تابع `parseOptionValue` رشته‌های عددی صرف با مقدار `< 0` (دماسنج پایهٔ پنجم/ششم، مثل `-۵`) یا `> 9999` (عددنویسی ۵ تا ۹ رقمی پایه‌های چهارم تا ششم، مثل `۲۰۴۷۰` یا `۱۲۵۰۰۰`) را در `T4` رد می‌کند، مگر این‌که دارای پسوند واحد یا جداکنندهٔ هزارگان باشند.
+   - **پیشنهاد اصلاح در `W8`:** بازهٔ مجاز اعداد صحیح در `parseOptionValue` به `-1000000000 <= n <= 1000000000` گسترش یابد و فرم متناظر کسری `'a/b'` و عدد مخلوط `'k و a/b'` به‌عنوان نوع دادهٔ رسمی پشتیبانی شود.
+2. **تعمیم `classifyAttempt` در `errors.js` برای الگوهای غیرضرب:**
+   - هم‌اکنون در `cartridge-schema.js` فقط صورت‌سؤال‌های منطبق با الگوی ضرب ساده (`/([0-9۰-۹]+)\s*[×x]\s*([0-9۰-۹]+)/`) به `classifyAttempt` متصل‌اند و سایر کدهای جدید با وضعیت `«نیاز به تأیید»` در `اطلس خطا` پذیرفته می‌شوند.
+   - در `authoring/agent/solvers/{number_ops,mult_div,fractions,geometry_measure,data_prob}.py` تمام توابع شبیه‌ساز علّی این ۵ خانواده با امضای استاندارد پیاده‌سازی و تست شده‌اند و منطق ریاضی آن‌ها مستقیماً قابل پورت یک‌به‌یک به `errors.js` است.
+
+---
+
+## ۳. وضعیت تحویل نهایی `v2.4` (اوت ۱۴۰۴)
+
+- **شاخهٔ تحویل آرنا:** `arena/0eb22280-math-game` @ `211ee45` (`final v2.4`) — پوش شده به `origin/arena/0eb22280-math-game`
+- **تگ نهایی:** `v2.4-final` روی `211ee45` (پیام: `v2.4-final: نسخه نهایی آرنا — W1-W6 100% + autopilot PASS (50 passed) + Achilles v2.3`)
+- **PR #2:** `arena/0eb22280-math-game → v10.3-beta` — `OPEN`، چک `Validate official-base reconciliation and candidate` = **SUCCESS** (`2026-10-22T21:07:54Z`)
+  - **یادداشت ادغام:** به‌دلیل ریشه‌های نامرتبط (`arena` از `ab15597` و `v10.3-beta` از `697a452`)، گیت‌هاب `CONFLICTING` گزارش می‌دهد. طبق قانون `§9` آرنا مجاز به `git merge origin/v10.3-beta --allow-unrelated-histories` نیست؛ ادغام باید در سمت `Z.ai` با `squash` یا `rebase --allow-unrelated-histories` انجام شود (یا PR باز بماند تا هندآف W7/W8 کامل شود).
+- **تست نهایی آرنا:** `50 passed, 4 skipped` روی `211ee45` (۱۲ تست W1-W6 + ۵ تست مرزی Achilles + ۶ تست حل‌گر چندپایه + ۲ تست خودترمیم)
+- **پایلوت کور:** `evidence→skill→question→cartridge` با `observation_C205.json` (۱۵۲ page) + `wave_spec_G3_test_v08.json` → `PASS` (`SHA b0b32bea... red 0 yellow 7`) و `achilles_gate` ایزوله `PASS`
+- **گزارش صبحگاهی نهایی:** `authoring/MORNING-REPORT.fa.md` @ `2026-10-22T21:07:25Z` — `1 completed KH-G3-MATH PASS`، `G0 PASS`، `approval_proof SHA 576e6f89...`
+
+---
+
+## ۴. سخت‌سازی `v2.4` برای اتصالِ امنِ نامزدِ `G2 v1.2` (بازبینی مستقل ۲۰۲۶-۱۰-۲۲)
+
+**دامنهٔ تغییر فقط سمتِ آرنا است؛ هیچ فایلِ نرم‌افزاریِ `Z.ai` و هیچ قراردادِ API/موتوری تغییر نکرده است.**
+
+- **گیتِ مستقلِ پوششِ شاهد** (`authoring/agent/achilles_gate.py: verify_evidence_coverage_gate` +
+  زیرفرمانِ تازهٔ `coverage`): شمارِ روشنِ `rows_with_evidence` / `rows_without_evidence` /
+  `rows_mismatch` / `coverage_ratio`. روی `khshab-G2-MATH_v0.5.xlsx`: `51` با شاهد، `3` بدون شاهد
+  (`L-101`, `L-201`, `L-401`)، `0` ناسازگاری، آفستِ اثبات‌شده `+6`.
+  `PASS` گیتِ هلوسه (`ACHILLES_NO_LEDGER_BUT_NO_GREEN_RISK`) دیگر هرگز «تکمیلِ مشاهده» یا
+  «آمادگیِ انتشار» خوانده نمی‌شود.
+- **اتصالِ شاهد به منبعِ واقعی** (`bind_evidence_to_source`): SHA-256 واقعیِ فایل PDF ورودی +
+  `book_code` + manifest همان چاپ + آفستِ اثبات‌شده. کدهای `fail-closed`:
+  `EXPECTED_BOOK_CODE_MISMATCH`، `MANIFEST_PRINT_SHA_MISMATCH`، `PDF_SHA_MISMATCH`،
+  `SOURCE_PDF_UNAVAILABLE`، `LEDGER_SOURCE_BINDING_MISMATCH`، `PROVEN_OFFSET_CONFLICT`،
+  `PAGE_OFFSET_MISMATCH_HALLUCINATION`، `GREEN_ROWS_WITHOUT_EVIDENCE`.
+- **مرزِ مجوزها**: `--approve-once` اکنون صریحاً `permission_scope=TECHNICAL_EXECUTION_ONLY`،
+  `teacher_verdict_granted=false`، `release_authorization=NOT_GRANTED` و
+  `not_a_consent_document=true` ثبت می‌کند و همین مرز در گزارشِ صبحگاهی می‌آید.
+  `GovernanceLedger.record_verdict` برای هر حکمِ تأییدی `authenticated=True` می‌خواهد؛
+  رشتهٔ `actor_role=human_teacher` به‌تنهایی با
+  `TEACHER_IDENTITY_NOT_AUTHENTICATED` رد می‌شود (هم در CLI و هم در HTTP).
+- **میز کارِ معلم امن**: توکنِ پیش‌فرضِ قابلِ حدس (`dev-teacher-token-2026`) حذف شد؛
+  توکن فقط از `KHSHAB_TEACHER_TOKEN` یا `authoring/audit/teacher_token.txt` (خارج از Git،
+  اکنون در `.gitignore`) خوانده می‌شود و پیش‌فرضِ `--host` به `127.0.0.1` تغییر کرد.
+- **راهنمایِ هم‌تراز با CLI**: `authoring/USAGE-KHSHAB-AGENT-v24.fa.md` (بدون `observe`؛
+  `reconcile-chunks --chunks-dir`؛ `build-wave --wave-spec/--output`؛ بدون جفتِ
+  manifest `C205` و PDF `C305`) که نمونه‌فرمان‌هایش توسط
+  `authoring/tests/test_docs_cli_alignment.py` هم تجزیه و هم **واقعاً اجرا** می‌شوند.
+  ضمن این کار یک نقصِ واقعیِ CLI رفع شد: `build-wave` به‌دلیل
+  `Object of type IDAllocator is not JSON serializable` با exit=1 می‌شکست.
+- **موجِ افزایشیِ G2 v1.2**: `authoring/agent/fixtures/wave_spec_G2_v12_incremental.json`
+  بر پایهٔ رسمیِ `v0.5` (`f1f339a09a8c…`)، فقط لوله‌کشی (۲ ردیفِ زردِ بدون ادعای صفحه،
+  صفر سؤالِ ساختگی، صفر پچ). خروجیِ dry-run: `6afd3a5741712df9…`، `added=2 / removed=0 /
+  changed_cells=0`، مبدلِ رسمی `Z.ai` قرمز `0` زرد `2`.
+- **گیتِ توقفِ مبنای کهنه دست‌نخورده باقی ماند** و اکنون آزمونِ مستقل و هرمتیک دارد:
+  `test_stale_official_base_is_rejected_and_gate_is_precise` (رد با
+  `STALE_OFFICIAL_BASE_INCIDENT_07` وقتی سرِ اعلامی `v0.5` است، و کنترلِ `PASS` وقتی
+  سرِ اعلامی `v0.4` است) + `test_persistent_queue_and_crash_recovery` که اکنون واقعاً
+  یک موجِ G2 را می‌سازد و بازیابیِ صف را می‌آزماید.
+- **نتیجهٔ تست:** `python -m pytest -q` → **`69 passed, 4 skipped`** روی شاخهٔ
+  `arena/0eb22280-math-game` (مرجعِ رسمیِ فقط‌خواندنی: `v10.3-beta` @ `24e61dd` (سرِ پیشین `0849aae`)).
+  `4 skipped` = نبودِ دو PDF محرمانه و نبودِ مبدلِ SSOT در شاخهٔ محتواییِ آرنا.
+- **موانعِ سمتِ `Z.ai`/مالک (بدون تغییر):** `Wave 5 Hold` تا اعلامِ رسمیِ ادغام و مُهر معلم،
+  حلِ `CONFLICTING` بودنِ `PR #2` با `squash`/`rebase` (نه ادغامِ `v10.3-beta` در `arena/**`)،
+  و مالکیتِ `W7`/`W8`.
+- گزارشِ کاملِ dry-run: `authoring/G2-V12-CONNECTION-DRYRUN.fa.md`.

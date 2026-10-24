@@ -1,0 +1,173 @@
+{
+  "schema_version": "g2-intake-receipt/v1",
+  "receipt_id": "G2-C205-1404-INTAKE-2026-10-24",
+  "created_date": "2026-10-24",
+  "repository_branch": "arena/0eb22280-math-game",
+  "receipt_type": "metadata-only-blocker-record",
+  "decision": "BLOCKED/UNKNOWN",
+  "scope": {
+    "grade": 2,
+    "subject": "math",
+    "book_code": "C205",
+    "official_numeric_code": "205",
+    "edition_from_existing_manifest": {
+      "print_number": 14,
+      "year_shamsi": 1404,
+      "isbn": "978-964-05-2078-9"
+    },
+    "page_range_extracted": [],
+    "page_count_extracted": 0,
+    "claims_or_rows_extracted": 0,
+    "page_by_page_audit": "NOT_RUN_BLOCKED",
+    "EXTRACTION_VERIFIED": false,
+    "educational_acceptance": "NOT_ASSESSED"
+  },
+  "student_book": {
+    "drive_file": {
+      "id": "1OE1Y2Q3_bYk6x_OntaP817HLL-ogqxWB",
+      "name": "C205.pdf",
+      "url": "https://drive.google.com/file/d/1OE1Y2Q3_bYk6x_OntaP817HLL-ogqxWB/view",
+      "sha256_drive_metadata": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+      "md5_drive_metadata": "5896b4db0a36c43f3736a0f9194e0119",
+      "size_bytes": 11838641,
+      "modified_time": "2025-09-08T06:59:10.023Z",
+      "local_byte_rehash_performed": false
+    },
+    "manifest": {
+      "path": "authoring/data/book_manifest_C205.json",
+      "sha256": "356e6f160739d3a4cd43e39dd5d484ee2f71a399e6140d6a8fc05ef6afb1a0ff",
+      "manifest_source_sha256_matches_drive_metadata": true,
+      "page_count_asserted_by_manifest": 152,
+      "pagination_asserted_by_manifest": {
+        "pdf_body_pages": [7, 150],
+        "book_pages": [1, 144],
+        "pdf_minus_book_offset": 6
+      },
+      "pagination_revalidated_this_turn": false
+    },
+    "identity_status": "IDENTIFIED_METADATA_ONLY_NOT_LOCALLY_REHASHED"
+  },
+  "teacher_guide": {
+    "same_print_match": "NOT_FOUND",
+    "status": "BLOCKED_DIFFERENT_PRINT",
+    "candidate": {
+      "book_code": "C55",
+      "grade": 2,
+      "subject": "math",
+      "year_shamsi_from_cover_text": 1391,
+      "isbn_from_cover_text": "978-964-05-2070-3",
+      "edition_number": null,
+      "parent_folder_id": "15LynD3alklNAfFEtUFXj0WbQOu18Qw-d",
+      "grade_folder_id": "17TyFtel_l6QqVGqCzWufSDZ6kWUOlDVZ",
+      "assembled_pdf_sha256": null,
+      "local_bytes_rehashed": false
+    },
+    "drive_parts": [
+      {
+        "name": "000-C55.pdf",
+        "id": "1kTeY2ZzwTxJc8kulB4ZH_9sXUsdm5F6g",
+        "sha256_drive_metadata": "ba53f378d896109ca465e3ada4872c2fc778f2dfa148d10028e1177850e65074",
+        "size_bytes": 44135
+      },
+      {
+        "name": "001-010-C55.pdf",
+        "id": "1nTqAT221R4cAvXvYPtVO57Z_HnZypoiU",
+        "sha256_drive_metadata": "18c39f1005233f0d805ba7ae933a9a318a8c82538a6979af96460faa4d3ef1ea",
+        "size_bytes": 267109
+      },
+      {
+        "name": "011-025-C55.pdf",
+        "id": "1uUxWiPju7qFKtDvs76Ph5ZTM421lrhKS",
+        "sha256_drive_metadata": "de5664f025125dde2ef7d4dfd2984189ed44d60842a83c1db6509329ad1f8f62",
+        "size_bytes": 456617
+      },
+      {
+        "name": "026-045-C55.pdf",
+        "id": "1F9ehbU066IxlSBmULBCAPkuYkj4LxO72",
+        "sha256_drive_metadata": "c495e0cbb819fc2b28272b5b5fc39732a896fd4bea4a4bbd222a8c3740727451",
+        "size_bytes": 429873
+      },
+      {
+        "name": "046-082-C55.pdf",
+        "id": "1ydrYBRNaN68fle6RBIvHAIHE0sOriFQk",
+        "sha256_drive_metadata": "928f2e5d6cdb60c9e898f1dc0db99345d4735cba61bdd1339996757e14dd6ec1",
+        "size_bytes": 977359
+      }
+    ],
+    "matching_guide_status": "NO_C55_1391_CANNOT_BIND_TO_C205_1404",
+    "search_scope_limitation": "Drive name searches and the identified G2 teacher-guide folder only; absence from all Drive locations is not proven"
+  },
+  "workbook": {
+    "drive_candidate": {
+      "id": "19eJ2YiQFzCyHVSYRZCUZTPTICZTwvEDm",
+      "name": "khshab-G2-MATH_v0.1.xlsx",
+      "sha256_drive_metadata": "77b4c48c157af481d4bec3ce7a0255f8975a50b455ff615a49e12e9ac443e41f",
+      "size_bytes": 24113,
+      "owner_display_name": "Majid Bayrami",
+      "owner_email": "bayrami1341@gmail.com",
+      "drive_permissions": ["owner", "anyoneWithLink:reader"],
+      "drive_capabilities_include_download": true,
+      "github_distribution_license_found": false
+    },
+    "seven_sheet_reference": {
+      "path": "authoring/khshab-G2-MATH_v0.5.xlsx",
+      "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62e5c7e4c236eba871f97d2656",
+      "sheet_names": [
+        "راهنما",
+        "شناسنامهٔ خشاب",
+        "نقشهٔ کتاب (S1)",
+        "اطلس خطا",
+        "بانک سؤال",
+        "واژه‌نامهٔ ستون‌ها",
+        "پروتکل ممیزی"
+      ],
+      "modified": false
+    },
+    "snapshot": {
+      "status": "NOT_CREATED_BLOCKED",
+      "path": null,
+      "reason": "GitHub retention/distribution rights for a content-derived XLSX are not documented"
+    }
+  },
+  "rights": {
+    "derived_xlsx_github": {
+      "status": "BLOCKED/UNKNOWN",
+      "reason": "Drive ownership/access does not establish GitHub redistribution rights; no explicit grant/license was identified"
+    },
+    "page_evidence_bytes_github": {
+      "status": "BLOCKED/UNKNOWN",
+      "reason": "No explicit storage grant identified; project constraints prohibit source PDFs, page images/crops and full guide text in Git"
+    },
+    "source_pdf_notice": "A restrictive rights notice was observed in Drive-extracted source text; paraphrased here, not reproduced"
+  },
+  "searches": {
+    "drive_name_queries": [
+      "name contains 'G2'",
+      "name contains 'G2' and mimeType = 'application/pdf'",
+      "name contains 'Teacher'",
+      "name contains 'معلم'",
+      "name contains 'C205'",
+      "name contains '205' and mimeType = 'application/pdf'",
+      "name contains '1404'",
+      "name contains 'مجوز'",
+      "name contains 'حقوق'",
+      "name contains 'license'",
+      "name contains 'rights'"
+    ],
+    "license_name_searches_returned_no_results": true,
+    "limitation": "Name-based search is not a proof that no license or matching guide exists elsewhere"
+  },
+  "artifact_boundary": {
+    "pdfs_images_crops_source_text_committed": false,
+    "source_derived_rows_committed": false,
+    "page_level_witness_ledger_created": false,
+    "human_verdict_or_release_created": false,
+    "this_receipt_contains_source_text_or_images": false
+  },
+  "unblock_requirements": [
+    "Provide the matching G2 mathematics teacher guide for C205 print 14 / 1404 with identifying metadata and SHA-256, or explicitly redefine the audit scope",
+    "Provide documented rights-holder permission/license for keeping the derived XLSX in GitHub",
+    "Provide a separate documented grant for any page evidence bytes intended for GitHub; otherwise keep those bytes out of Git",
+    "Use secure external source bytes for independent SHA-256 rehash and the bounded page-by-page audit"
+  ]
+}

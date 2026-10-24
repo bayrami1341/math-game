@@ -1,0 +1,37 @@
+{
+  "expected_page_count": 2,
+  "matched_page_count": 2,
+  "page_anchors": [
+    {
+      "book_page": 1,
+      "evidence_id": "EV-PAGE-NUM-10",
+      "evidence_sha256": "d846edbd579bf2764e3879e4a1c92f477f3f6007aa42f956fb9f33ff7b1d924a",
+      "pdf_page": 10,
+      "printed_page_number": 1
+    },
+    {
+      "book_page": 2,
+      "evidence_id": "EV-PAGE-NUM-11",
+      "evidence_sha256": "d9417088a64009dc79de513be56b29d4ffc9421de7bcdf1af81ef223e57791ee",
+      "pdf_page": 11,
+      "printed_page_number": 2
+    }
+  ],
+  "pdf_minus_book_offset": 9,
+  "proof_id": "SYNTH-OFFSET-PROOF-1",
+  "reader_pass_sha256": [
+    "38786b2ee3fc3048d0bc6272e9101de281334ff33ec1c13e0201f68dab23c931",
+    "6fc60218c98dc2574c01004444d41d82939c59820f117ed546cb91f6ba5305fb"
+  ],
+  "schema_version": "khshab.offset-proof/v1",
+  "section_id": "SYNTH-SECTION-1",
+  "source_binding": {
+    "book_code": "SYNTH",
+    "edition_id": "SYNTH-EDITION-1",
+    "manifest_id": "SYNTH-MANIFEST-1",
+    "manifest_sha256": "0c178294dd7ff776b73ad70324e79f46e589e65197a52558253014cdf44452b9",
+    "source_id": "SYNTH-PRINT-1",
+    "source_pdf_sha256": "b49bc5ae360c4f501f264c37b73f5d6b3772b09491b1a67ea9376e0b360f9f56"
+  },
+  "status": "SYNTHETIC_TEST_ONLY"
+}

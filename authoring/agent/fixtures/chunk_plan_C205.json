@@ -1,0 +1,158 @@
+{
+  "status": "PASS",
+  "total_pdf_pages": 152,
+  "proven_offset": 6,
+  "footer_verified_pages": 131,
+  "review_palindrome_anchors": [
+    {
+      "pdf_page": 22,
+      "printed_book_page": 16,
+      "implied_offset": 6
+    },
+    {
+      "pdf_page": 40,
+      "printed_book_page": 34,
+      "implied_offset": 6
+    },
+    {
+      "pdf_page": 94,
+      "printed_book_page": 88,
+      "implied_offset": 6
+    },
+    {
+      "pdf_page": 130,
+      "printed_book_page": 124,
+      "implied_offset": 6
+    },
+    {
+      "pdf_page": 148,
+      "printed_book_page": 142,
+      "implied_offset": 6
+    }
+  ],
+  "max_chunk_pages": 12,
+  "overlap_pages": 2,
+  "parallel_lanes": 4,
+  "chunks": [
+    {
+      "chunk_id": "CHUNK-01",
+      "parallel_lane": 1,
+      "pdf_page_start": 1,
+      "pdf_page_end": 12,
+      "page_count": 12,
+      "overlap_with_prev": 0
+    },
+    {
+      "chunk_id": "CHUNK-02",
+      "parallel_lane": 2,
+      "pdf_page_start": 11,
+      "pdf_page_end": 22,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-03",
+      "parallel_lane": 3,
+      "pdf_page_start": 21,
+      "pdf_page_end": 32,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-04",
+      "parallel_lane": 4,
+      "pdf_page_start": 31,
+      "pdf_page_end": 42,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-05",
+      "parallel_lane": 1,
+      "pdf_page_start": 41,
+      "pdf_page_end": 52,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-06",
+      "parallel_lane": 2,
+      "pdf_page_start": 51,
+      "pdf_page_end": 62,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-07",
+      "parallel_lane": 3,
+      "pdf_page_start": 61,
+      "pdf_page_end": 72,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-08",
+      "parallel_lane": 4,
+      "pdf_page_start": 71,
+      "pdf_page_end": 82,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-09",
+      "parallel_lane": 1,
+      "pdf_page_start": 81,
+      "pdf_page_end": 92,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-10",
+      "parallel_lane": 2,
+      "pdf_page_start": 91,
+      "pdf_page_end": 102,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-11",
+      "parallel_lane": 3,
+      "pdf_page_start": 101,
+      "pdf_page_end": 112,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-12",
+      "parallel_lane": 4,
+      "pdf_page_start": 111,
+      "pdf_page_end": 122,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-13",
+      "parallel_lane": 1,
+      "pdf_page_start": 121,
+      "pdf_page_end": 132,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-14",
+      "parallel_lane": 2,
+      "pdf_page_start": 131,
+      "pdf_page_end": 142,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    },
+    {
+      "chunk_id": "CHUNK-15",
+      "parallel_lane": 3,
+      "pdf_page_start": 141,
+      "pdf_page_end": 152,
+      "page_count": 12,
+      "overlap_with_prev": 2
+    }
+  ]
+}

@@ -1,0 +1,592 @@
+{
+  "manifest_id": "WAVE-KH-G2-MATH-v0.5-CH4-PILOT",
+  "wave_id": "wave-4-pilot-chapter-4",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "snapshot_id": "master-map-C205-v2.0",
+  "snapshot_sha256": "ceaaf18bd11201a140fd519e54808e8fc7b07d57a7dde7ffc5f58b8521c21a77",
+  "pagemap_xlsx_sha256": "f0b6851986cebe211de841ca85aafb07753ab17287be1d9daafdedcec63a4822",
+  "base_cartridge_xlsx_sha256": "ad4761ba6c6720749cd2c51ddf82bee6cc78cfdb8a3399ae731bb3284640b798",
+  "output_cartridge_xlsx_sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656",
+  "converted_json_sha256": "fa5f0669e677bfef2aa24021efc9761b2c2cb3ca9f7cfb6197d29365c5702b38",
+  "generated_at_utc": "2026-10-22T12:30:08Z",
+  "gates": [
+    {
+      "gate_id": "G0_COPYRIGHT_GUARD",
+      "stage": "P0",
+      "status": "PASS",
+      "reason_code": "CLEAN_WORKSPACE",
+      "summary": "هیچ فایل PDF، تصویر رندرشده، کراپ یا فایل پوشهٔ upload/ در مخزن Git وجود ندارد.",
+      "metrics": {
+        "checked_git_paths": 256,
+        "violation_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G0B_OWNERSHIP_BOUNDARY",
+      "stage": "P0",
+      "status": "PASS",
+      "reason_code": "OWNERSHIP_BOUNDARY_CLEAN",
+      "summary": "تمامی فایل‌های نرم‌افزار Z.ai صددرصد دست‌نخورده باقی مانده‌اند (۰ تغییر خارج از قلمرو محتوا/اتوماسیون).",
+      "metrics": {
+        "checked_changed_paths": 2,
+        "violation_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G6_WORKBOOK_STRUCTURE",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "WORKBOOK_STRUCTURE_VALID",
+      "summary": "ساختار ۷ شیت، ردیف‌های نگهبان، ادغام‌ها، لنگرهای S1 و کدهای اطلس بررسی شد (0 خطا).",
+      "metrics": {
+        "s1_count": 62,
+        "atlas_code_count": 20,
+        "question_count": 92
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G3_ANTI_J12",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "ANTI_J12_CLEAN",
+      "summary": "کنترل ضد J12 روی 92 سؤال اجرا شد (0 خطا).",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G4_INDEPENDENT_SOLVER",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "INDEPENDENT_SOLVER_VERIFIED",
+      "summary": "بازمحاسبهٔ مستقل صورت سؤال و ردپای لاتین روی 92 سؤال اجرا شد (0 خطا).",
+      "metrics": {
+        "checked_questions": 92,
+        "issue_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G5_DISTRACTOR_CAUSALITY",
+      "stage": "P4",
+      "status": "PASS",
+      "reason_code": "CAUSAL_DISTRACTORS_VERIFIED",
+      "summary": "شبیه‌سازی علّی گزینه‌های انحرافی اجرا شد: 0 خطای مسدودکننده در موج جدید، 192 هشدار تشخیصی در سؤالات میراثی v0.4.",
+      "metrics": {
+        "blocking_failures": 0,
+        "legacy_diagnostic_warnings": 192
+      },
+      "issues": [
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "ب",
+          "option_value": 23,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "ج",
+          "option_value": 34,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "option": "د",
+          "option_value": 14,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1001",
+          "row": 4,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "option": "الف",
+          "option_value": 38,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "option": "ج",
+          "option_value": 49,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1002",
+          "row": 5,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "الف",
+          "option_value": 21,
+          "claimed_code": "E_DOUBLE_OFF",
+          "competing_codes": [
+            "E_DOUBLE_OFF",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "ب",
+          "option_value": 16,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1003",
+          "row": 6,
+          "option": "د",
+          "option_value": 10,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_CARRY_MISS",
+            "E_TABLE_NEIGHBOUR"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "option": "ب",
+          "option_value": 51,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "option": "ج",
+          "option_value": 62,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION",
+            "E_TABLE_NEIGHBOUR",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1004",
+          "row": 7,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "error": "COLLAPSED_IDENTICAL_ERROR_CODES_ALL_OPTIONS"
+        },
+        {
+          "qid": "Q-1005",
+          "row": 8,
+          "option": "ج",
+          "option_value": 47,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1006",
+          "row": 9,
+          "option": "ج",
+          "option_value": 83,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1007",
+          "row": 10,
+          "option": "ب",
+          "option_value": 8,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "الف",
+          "option_value": 81,
+          "claimed_code": "E_PLACE_SWAP",
+          "competing_codes": [
+            "E_PLACE_SWAP",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "ب",
+          "option_value": 91,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1008",
+          "row": 11,
+          "option": "ج",
+          "option_value": 82,
+          "claimed_code": "E_TABLE_NEIGHBOUR",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "ب",
+          "option_value": 35,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_UNIT_VALUE_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "ج",
+          "option_value": 12,
+          "claimed_code": "E_GROUPS",
+          "plausible_codes": [
+            "E_DOUBLE_OFF",
+            "E_PLACE_SWAP"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1009",
+          "row": 12,
+          "option": "د",
+          "option_value": 10,
+          "claimed_code": "E_DOUBLE_OFF",
+          "competing_codes": [
+            "E_DOUBLE_OFF",
+            "E_ZERO_PLACE_MISS"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1010",
+          "row": 13,
+          "option": "الف",
+          "option_value": 60,
+          "claimed_code": "E_ADD_CONFUSION",
+          "competing_codes": [
+            "E_ADD_CONFUSION",
+            "E_SUB_CONFUSION"
+          ],
+          "error": "COMPETING_ERROR_AMBIGUITY"
+        },
+        {
+          "qid": "Q-1010",
+          "row": 13,
+          "option": "ج",
+          "option_value": 23,
+          "claimed_code": "E_SUB_CONFUSION",
+          "plausible_codes": [
+            "E_PLACE_SWAP"
+          ],
+          "error": "MECHANISM_MISMATCH"
+        },
+        {
+          "qid": "Q-1011",
+          "row": 14,
+          "option": "الف",
+          "option_value": 14,
+          "claimed_code": "E_DOUBLE_OFF",
+          "plausible_codes": [],
+          "error": "MECHANISM_MISMATCH"
+        }
+      ]
+    },
+    {
+      "gate_id": "G_AUTO_03_OFFICIAL_STAMPS",
+      "stage": "AUTO",
+      "status": "PASS",
+      "reason_code": "ALL_OFFICIAL_STAMPS_INTACT",
+      "summary": "automation-gate",
+      "metrics": {
+        "verified_skeleton_green_rows": 8,
+        "verified_atlas_green_rows": 2,
+        "forged_green_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G_AUTO_04_BIDIRECTIONAL_ANCHORS",
+      "stage": "AUTO",
+      "status": "PASS",
+      "reason_code": "BIDIRECTIONAL_ANCHORS_SYNCED",
+      "summary": "automation-gate",
+      "metrics": {
+        "checked_lessons": 62,
+        "mismatch_count": 0
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G_AUTO_05_CPA_AND_ANSWER_BALANCE",
+      "stage": "AUTO",
+      "status": "PASS",
+      "reason_code": "CPA_AND_ANSWER_BALANCE_CLEAN",
+      "summary": "automation-gate",
+      "metrics": {
+        "cpa_distribution": {
+          "علامتی": 58,
+          "تصویری": 22,
+          "مجسم": 12
+        },
+        "all_answer_distribution": {
+          "الف": 23,
+          "ب": 23,
+          "ج": 23,
+          "د": 23
+        },
+        "wave_answer_distribution": {
+          "الف": 6,
+          "ب": 6,
+          "ج": 6,
+          "د": 6
+        }
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G_AUTO_07_ZAI_CONVERTER",
+      "stage": "P5",
+      "status": "PASS",
+      "reason_code": "ZAI_CONVERTER_GREEN",
+      "summary": "مبدل رسمی Z.ai: حکم=مجاز — JSON منتشر شد (قرمز=0، زرد=2)",
+      "metrics": {
+        "v05_red": 0,
+        "v05_yellow": 2,
+        "v05_verdict": "مجاز — JSON منتشر شد",
+        "v05_report": "/home/user/math-game/download/convert-report-KH-G2-MATH-v0.5.md",
+        "v04_red": 2,
+        "v04_verdict": "مردود — انتشار JSON ممنوع",
+        "preview_json_sha256": "fa5f0669e677bfef2aa24021efc9761b2c2cb3ca9f7cfb6197d29365c5702b38"
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G_AUTO_10_HISTORICAL_INCIDENTS_16",
+      "stage": "AUTO",
+      "status": "PASS",
+      "reason_code": "ALL_16_HISTORICAL_INCIDENTS_CLEAN",
+      "summary": "automation-gate",
+      "metrics": {
+        "checked_incidents": 16,
+        "passed_incidents": 16,
+        "failed_incidents": 0,
+        "matrix": [
+          {
+            "incident_id": "INC-01",
+            "title": "ضد J12 — محاسبهٔ مستقل لاتین در یادداشت",
+            "status": "PASS",
+            "evidence": "bad_questions=[]"
+          },
+          {
+            "incident_id": "INC-02",
+            "title": "منع جعل شمارهٔ صفحه خارج از کتاب C205",
+            "status": "PASS",
+            "evidence": "bad_page_rows=[]"
+          },
+          {
+            "incident_id": "INC-03",
+            "title": "منع واژگان ساختگی خارج از کتاب",
+            "status": "PASS",
+            "evidence": "hits=[]"
+          },
+          {
+            "incident_id": "INC-04",
+            "title": "منع کد E_ بی‌صاحب خارج از اطلس همان ورک‌بوک (T5)",
+            "status": "PASS",
+            "evidence": "orphan_codes=[]"
+          },
+          {
+            "incident_id": "INC-05",
+            "title": "منع سبز دروغین بدون حکم معلم",
+            "status": "PASS",
+            "evidence": "forged_greens=[]"
+          },
+          {
+            "incident_id": "INC-06",
+            "title": "تطابق مالکیت S1 و بانک سؤال (T7)",
+            "status": "PASS",
+            "evidence": "issues=[]"
+          },
+          {
+            "incident_id": "INC-07",
+            "title": "سلامت کامل مُهرهای رسمی ادغام v0.3.1",
+            "status": "PASS",
+            "evidence": "issues_count=0"
+          },
+          {
+            "incident_id": "INC-08",
+            "title": "اعمال واقعی اصلاحیه در سلول اکسل (L-114)",
+            "status": "PASS",
+            "evidence": "L-114='شمارش ۴تا۴تا'"
+          },
+          {
+            "incident_id": "INC-09",
+            "title": "شمارش ماشینی عناصر تصویری (Q-1011: ۱۳ مثلث → ۱۸)",
+            "status": "PASS",
+            "evidence": "stem='شکل زیر ۱۳ مثلث دارد. پنجمین عدد بعد از آن چند است؟', opt_c='۱۸'"
+          },
+          {
+            "incident_id": "INC-10",
+            "title": "هم‌گام‌سازی بازهٔ K در جابه‌جایی لنگر (L-110 / L-112)",
+            "status": "PASS",
+            "evidence": "Q-1017..1019 on L-110, Q-1020 on L-112"
+          },
+          {
+            "incident_id": "INC-11",
+            "title": "دیف کلیدمحور بر اساس ستون A بدون خطای جابه‌جایی سطر",
+            "status": "PASS",
+            "evidence": "unique_L_keys=62, unique_Q_keys=92"
+          },
+          {
+            "incident_id": "INC-12",
+            "title": "رعایت سه‌گانهٔ CPA طبق AUD-06",
+            "status": "PASS",
+            "evidence": "cpa_dist={'علامتی': 58, 'تصویری': 22, 'مجسم': 12}"
+          },
+          {
+            "incident_id": "INC-13",
+            "title": "وفاداری دقیق به املای بنر کتاب («خلّق باش» در L-112)",
+            "status": "PASS",
+            "evidence": "L-118='معمّا و فرهنگ خواندن'"
+          },
+          {
+            "incident_id": "INC-14",
+            "title": "منع عناوین حدسی («عدد صد» / «ترتیب عددی» در ص ۸–۱۲)",
+            "status": "PASS",
+            "evidence": "hallucinated=[]"
+          },
+          {
+            "incident_id": "INC-15",
+            "title": "خوانش چانکی <=۱۲ صفحه با هم‌پوشانی ۲ صفحه و ۴ مسیر موازی",
+            "status": "PASS",
+            "evidence": "chunk_plan=/home/user/math-game/authoring/audit/chunk_plan_C205.json"
+          },
+          {
+            "incident_id": "INC-16",
+            "title": "اثبات خودکار offset=+6 از پالیندروم مرور فصل و پاصفحه",
+            "status": "PASS",
+            "evidence": "C205 proven_offset=+6"
+          }
+        ]
+      },
+      "issues": []
+    },
+    {
+      "gate_id": "G7_TEACHER_GOVERNANCE_AND_RELEASE",
+      "stage": "P6",
+      "status": "BLOCKED",
+      "reason_code": "AWAITING_HUMAN_TEACHER_VERDICT",
+      "summary": "انتشار نهایی مسدود است (6 مانع فعال): 62 ردیف S1 زرد، 92 سؤال زرد، 13 کد خطای پیشنهادی و 29 تعارض باز در انتظار حکم معلّم.",
+      "metrics": {
+        "releasable": false,
+        "active_verdict_count": 0,
+        "invalidated_verdict_count": 0,
+        "unapproved_s1_count": 62,
+        "unapproved_question_count": 92,
+        "unapproved_error_code_count": 13,
+        "open_issue_count": 29,
+        "blocker_reasons": [
+          "OPEN_PAGE_MAP_ISSUES:29",
+          "MISSING_TEACHER_MAP_APPROVED_VERDICT",
+          "UNAPPROVED_ERROR_CODES:13",
+          "UNAPPROVED_S1_ROWS:62",
+          "UNAPPROVED_QUESTION_ROWS:92",
+          "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+        ]
+      },
+      "issues": [
+        {
+          "blocker": "OPEN_PAGE_MAP_ISSUES:29"
+        },
+        {
+          "blocker": "MISSING_TEACHER_MAP_APPROVED_VERDICT"
+        },
+        {
+          "blocker": "UNAPPROVED_ERROR_CODES:13"
+        },
+        {
+          "blocker": "UNAPPROVED_S1_ROWS:62"
+        },
+        {
+          "blocker": "UNAPPROVED_QUESTION_ROWS:92"
+        },
+        {
+          "blocker": "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+        }
+      ]
+    }
+  ],
+  "teacher_verdicts": [],
+  "releasable": false,
+  "release_blocker_reasons": [
+    "OPEN_PAGE_MAP_ISSUES:29",
+    "MISSING_TEACHER_MAP_APPROVED_VERDICT",
+    "UNAPPROVED_ERROR_CODES:13",
+    "UNAPPROVED_S1_ROWS:62",
+    "UNAPPROVED_QUESTION_ROWS:92",
+    "MISSING_TEACHER_RELEASE_AUTHORIZED_VERDICT"
+  ]
+}

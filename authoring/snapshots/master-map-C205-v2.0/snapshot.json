@@ -1,0 +1,3476 @@
+{
+  "schema_version": "2.0.0",
+  "snapshot_id": "MASTER-MAP-KH-G2-MATH-v2.0",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "upstream_verified_map_sha256": "7310680cfe62f4cad8e4222de6f3d32edc2c54bb24a9f586a610ef7e2ac192b8",
+  "generated_at_utc": "2026-10-22T00:00:00Z",
+  "status_counts": {
+    "VERIFIED_EVIDENCE": 16,
+    "AGREED_UNVERIFIED": 122,
+    "CONFLICT_NEEDS_REVIEW": 14,
+    "UNOBSERVABLE_NEEDS_HUMAN": 0,
+    "TEACHER_APPROVED": 0
+  },
+  "pages": [
+    {
+      "row_number": 3,
+      "book_page": null,
+      "pdf_page": 1,
+      "chapter": "پیش",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "فقط لایهٔ متنی خوانده شد؛ طرح تصویری جلد دیده نشد."
+    },
+    {
+      "row_number": 4,
+      "book_page": null,
+      "pdf_page": 2,
+      "chapter": "پیش",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "شناسنامه",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "۱۴۰۴، ۱۴",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P002-01"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "متن کامل شناسنامه در لایهٔ متنی موجود بود."
+    },
+    {
+      "row_number": 5,
+      "book_page": null,
+      "pdf_page": 3,
+      "chapter": "پیش",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان بخش خارج از مقادیر شِمای مرجع (جلد/شناسنامه/فهرست/فصل) است."
+    },
+    {
+      "row_number": 6,
+      "book_page": null,
+      "pdf_page": 4,
+      "chapter": "پیش",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "متن کامل در لایهٔ متنی موجود بود؛ خلاصهٔ توصیفی شد (حق نشر)."
+    },
+    {
+      "row_number": 7,
+      "book_page": null,
+      "pdf_page": 5,
+      "chapter": "پیش",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "۸، ۴، ۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان بخش خارج از مقادیر شِمای مرجع است."
+    },
+    {
+      "row_number": 8,
+      "book_page": null,
+      "pdf_page": 6,
+      "chapter": "پیش",
+      "primary_banner": "فهرست",
+      "all_section_tabs": [
+        "فهرست"
+      ],
+      "page_type": "فهرست",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "۱، ۱۹، ۳۷، ۵۵، ۷۳، ۹۱، ۱۰۹، ۱۲۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "پایین",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P006-01"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "عناوین فصل‌ها تصویری (رستری) هستند و فقط اعداد صفحات ۱، ۱۹، ۳۷، ۵۵، ۷۳، ۹۱، ۱۰۹، ۱۲۷ در لایهٔ متنی است؛ اعداد دقیقاً با مرزهای مرجع منطبق‌اند. عنوان‌ها از نسخهٔ مرسوم ریاضی دوم بازسازی شده و فقط عنوان فصل ۱ با متن صفحهٔ ۷ PDF تأیید مستقیم دارد."
+    },
+    {
+      "row_number": 9,
+      "book_page": 1,
+      "pdf_page": 7,
+      "chapter": "۱",
+      "primary_banner": "فصل ۱ — عدد و رقم",
+      "all_section_tabs": [
+        "فصل ۱ — عدد و رقم"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۳، ۴، ۵، ۶، ۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر = روبان شمارهٔ فصل + عنوان فصل. تصویر شروع فصل برای زیرعامل نمایان نبود."
+    },
+    {
+      "row_number": 10,
+      "book_page": 2,
+      "pdf_page": 8,
+      "chapter": "۱",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": "توپ",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P008"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "تعداد توپ‌ها و شکل‌های تصویری قابل شمارش نبود (تصویرها در دسترس زیرعامل نیستند)؛ ترتیب بلوک‌ها بر پایهٔ لایهٔ متنی."
+    },
+    {
+      "row_number": 11,
+      "book_page": 3,
+      "pdf_page": 9,
+      "chapter": "۱",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱، ۲، ۳، ۴، ۵، ۶، ۷، ۸، ۹",
+      "manipulatives": "چوب‌خط",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-CROP150-P009-01",
+        "EV-CROP150-P009-02",
+        "EV-TEXT-FOOTER-P009"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "فعالیت دو نفره (گروهی). نگاشت عددهای استخراج‌شده به خانه‌های جدول بدون دیدن تصویر ممکن نیست."
+    },
+    {
+      "row_number": 12,
+      "book_page": 4,
+      "pdf_page": 10,
+      "chapter": "۱",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱، ۲، ۳، ۴، ۵، ۶، ۷، ۹، ۱۰، ۱۲",
+      "manipulatives": "خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P010"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "بازسازی دقیق عبارت‌های جمع و جای‌های خالی بدون دیدن تصویر ممکن نیست."
+    },
+    {
+      "row_number": 13,
+      "book_page": 5,
+      "pdf_page": 11,
+      "chapter": "۱",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۲۵، ۱۰، ۲۰، ۳۰، ۶۰، ۸۰، ۹۰",
+      "manipulatives": "کارت عدد، دستهٔ ده‌تایی",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P011"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "فعالیت دو نفرهٔ ساخت و خواندن عدد (گروهی)."
+    },
+    {
+      "row_number": 14,
+      "book_page": 6,
+      "pdf_page": 12,
+      "chapter": "۱",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۲۳، ۴۷، ۸۳، ۵۹، ۲، ۴، ۵، ۷",
+      "manipulatives": "دستهٔ ده‌تایی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P012"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "چیدمان دقیق جدول‌های رقم یکان/دهگان بدون دیدن تصویر نامشخص است."
+    },
+    {
+      "row_number": 15,
+      "book_page": 7,
+      "pdf_page": 13,
+      "chapter": "۱",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۳، ۷، ۴۹، ۵۳، ۷۳، ۷۴، ۷۷، ۸۰، ۵۸، ۶۱، ۶۲، ۳۸، ۳۹، ۴۲",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P013"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "نسبت یکان/دهگان در تمرین‌های ۳ تا ۵ بر اساس استخراج layout بازسازی شده؛ احتمال جابه‌جایی جزئی (مثلاً ۴۷ به‌جای ۷۴). «الگویابی کن» روبان جعبهٔ تمرین ۱ است، نه بنر اصلی."
+    },
+    {
+      "row_number": 16,
+      "book_page": 8,
+      "pdf_page": 14,
+      "chapter": "۱",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۲۳، ۱۲، ۳۷، ۲۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P014"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "هر سه مسئله جای خالی پاسخ دارند (حل‌شدهٔ کامل نیستند)."
+    },
+    {
+      "row_number": 17,
+      "book_page": 9,
+      "pdf_page": 15,
+      "chapter": "۱",
+      "primary_banner": "کامل کن",
+      "all_section_tabs": [
+        "کامل کن"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۷، ۸، ۱۲، ۵، ۰–۱۶",
+      "manipulatives": "خط‌کش، شابلون، چوب‌خط",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P015"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "صفحه ادامهٔ بخش «حلّ مسئله» (راهبرد رسم شکل) است؛ بنر «کامل کن» متعلق به فعالیت تقارن میانهٔ صفحه."
+    },
+    {
+      "row_number": 18,
+      "book_page": 10,
+      "pdf_page": 16,
+      "chapter": "۱",
+      "primary_banner": "جمع و تفریق",
+      "all_section_tabs": [
+        "جمع و تفریق"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۴+۳، ۳+۴، ۸−۴، ۷−۵، ۷+۸، ۶+۶، ۱۲−۷، ۱۴−۸، ۴+۶+۷، ۳+۴+۵+۶، ۱۵−۷، ۱۳−۹، ۶+۷، ۸+۹، ۱۱−۵، ۰–۱۶",
+      "manipulatives": "انگشتان، چوب‌خط، مداد رنگی، محور",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P016"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عبارت «۱۴−۸» دو بار دیده می‌شود (یک‌بار در فعالیت ۳ و یک‌بار در کار در کلاس) — مطابق استخراج layout."
+    },
+    {
+      "row_number": 19,
+      "book_page": 11,
+      "pdf_page": 17,
+      "chapter": "۱",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۷، ۸، ۹، ۱۰، ۵، ۱۰، ۱۵، ۲۰، ۱۰، ۲۰، ۳۰، ۱۰+۲۰+۵، ۵+۵+۲۰+۳۰، ۴۰+۵+۱۰+۵+۵",
+      "manipulatives": "مهره، ساعت",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P017"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بازی مهره با ۷ مهره شروع و برای ۸، ۹، ۱۰ تکرار می‌شود؛ تنها آیتم‌های شماره‌دار صفحه همین دو فعالیت‌اند و ۷ عبارت جمع بدون شماره است."
+    },
+    {
+      "row_number": 20,
+      "book_page": 12,
+      "pdf_page": 18,
+      "chapter": "۱",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۵+۲=۷، ۷، ۱۰، ۵+۸، ۷+۸، ۱۳−۸، ۰–۱۶",
+      "manipulatives": "مداد رنگی، شابلون، محور",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P018"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عبارت‌های تمرین ۳ در استخراج متنی مبهم است («۱۳− ۸+۷»)؛ تعداد کادرهای تمرین ۱ (۷ کادر) از استخراج layout خوانده شده."
+    },
+    {
+      "row_number": 21,
+      "book_page": 13,
+      "pdf_page": 19,
+      "chapter": "۱",
+      "primary_banner": "شمارش چند تا چند تا",
+      "all_section_tabs": [
+        "شمارش چند تا چند تا"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 6,
+      "key_numbers": "۴، ۲، ۳، ۵، ۴، ۸، ۶، ۱۲، ۷، ۱۴، ۳، ۶، ۸، ۱۶، ۹، ۱۲، ۰–۱۲",
+      "manipulatives": "چینه، چوب‌خط، مربّع (رسم شکل)، محور",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P019"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "با استخراج layout روشن شد: هر طبقه با ۴ چینه (نه ۲) و تمرین ۲ با ۶ چینه. دو روبان کناری: «فعّالیت» برای بلوک چینه و «كار در كالس» برای بلوک شمارش با رسم شکل/چوب‌خط/محور؛ آیتم‌های شماره‌دار ۳+۳=۶."
+    },
+    {
+      "row_number": 22,
+      "book_page": 14,
+      "pdf_page": 20,
+      "chapter": "۱",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۴تا۴تا: ۴، ۸، ۱۲، ...، دسته‌های ۵تایی",
+      "manipulatives": "مداد رنگی، شابلون",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P020"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تمرین‌های صفحه بدون شماره‌اند؛ جزئیات تصویری (تعداد مربّع‌ها و خانه‌ها) و یک عدد پرت «۲۱» در استخراج متنی قابل اتکا نیست."
+    },
+    {
+      "row_number": 23,
+      "book_page": 15,
+      "pdf_page": 21,
+      "chapter": "۱",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۴+۷+۴، ۶+۶+۶، ۷+۷+۷، ۸، ۱۶، ۲۴، ۲۴، ۴۰",
+      "manipulatives": "چوب‌خط، مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P021"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عبارت اوّل مطابق استخراج layout «۴+۷+۴» است."
+    },
+    {
+      "row_number": 24,
+      "book_page": 16,
+      "pdf_page": 22,
+      "chapter": "۱",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل",
+        "فرهنگ نوشتن",
+        "تمرین"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۷ و ۸ (اعداد دورقمی)، ۶، ۰، ۱، ۸+۹، ۱۷−۸، حاصل ۵",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P022-01",
+        "EV-CROP150-P022-02",
+        "EV-TEXT-FOOTER-P022"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "سه بنر در صفحه: فرهنگ نوشتن، تمرین، مرور فصل؛ ابهام در شش عبارت «…=۵»؛ تصویر در دسترس نبود. | [آشتی‌دهی] خوانش دو بازرس متفاوت (صفحهٔ چندبنری): [a2]: {\"banner\": \"مرور فصل\", \"pageType\": \"مرور فصل\"} در برابر [b]: {\"banner\": \"فرهنگ نوشتن\", \"pageType\": \"تمرین\"} → نیازمند تأیید بنر اصلی با کتاب کاغذی/آرنا."
+    },
+    {
+      "row_number": 25,
+      "book_page": 17,
+      "pdf_page": 23,
+      "chapter": "۱",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۲۴+۷=۳۱، ۲۴، ۲۰، …، ۲۸، ۲۱، …، ۸+۸+۸، ۹+۹+۹، ۸+۶−۳",
+      "manipulatives": "دستهٔ ده‌تایی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P023"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ مرور فصل ۱ (بنر در ص ۱۶)؛ جزئیات بلوک پایین صفحه (−۷، −۴) از متن کامل نیست."
+    },
+    {
+      "row_number": 26,
+      "book_page": 18,
+      "pdf_page": 24,
+      "chapter": "۱",
+      "primary_banner": "معمّا",
+      "all_section_tabs": [
+        "معمّا"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P024"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "دو بنر: معمّا و فرهنگ خواندن؛ پایان فصل ۱ — هم‌خوان با مرز مرجع (فصل ۱ تا ص ۱۸)."
+    },
+    {
+      "row_number": 27,
+      "book_page": 19,
+      "pdf_page": 25,
+      "chapter": "۲",
+      "primary_banner": "فصل ۲: جمع و تفریق اعداد دو رقمی",
+      "all_section_tabs": [
+        "فصل ۲: جمع و تفریق اعداد دو رقمی"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱۱، ۷، ۱۱+۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۲ در کتاب ص ۱۹ = PDF ۲۵ — هم‌خوان با مرز مرجع. بنر دو بخشی است: برچسب «فصل ۲» + عنوان «جمع و تفریق اعداد دو رقمی»."
+    },
+    {
+      "row_number": 28,
+      "book_page": 20,
+      "pdf_page": 26,
+      "chapter": "۲",
+      "primary_banner": "جمع و تفریق ده‌تایی",
+      "all_section_tabs": [
+        "جمع و تفریق ده‌تایی",
+        "فعّالیت",
+        "تقریب بزن"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۴۰+۲۰، ۸۰−۳۰، ۹۰−۶۰، ۶ دستهٔ ده‌تایی = ۶۰",
+      "manipulatives": "دستهٔ ده‌تایی، محور",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P026-01",
+        "EV-CROP150-P026-02",
+        "EV-TEXT-FOOTER-P026"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "«تقریب بزن» بالاترین متن استخراج‌شدهٔ صفحه است و بنر «فعّالیت» با عنوان «جمع و تفریق ده‌تایی‌ها» پس از آن آمده؛ ترتیب بصری دقیق نیازمند تصویر."
+    },
+    {
+      "row_number": 29,
+      "book_page": 21,
+      "pdf_page": 27,
+      "chapter": "۲",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس",
+        "فعّالیت"
+      ],
+      "page_type": "کار در کلاس + فعالیت",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۳+۵=۸، ۳۰+۵۰=۸۰، ۴−۳، ۶−۵، ۴۰−۳۰، ۶۰−۵۰، ۲۰+۴۰، ۷۰−۲۰، ۳+۴",
+      "manipulatives": "دستهٔ ده‌تایی، محور، مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P027-01",
+        "EV-CROP150-P027-02",
+        "EV-TEXT-FOOTER-P027"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "دو بنر: «تمرین» (بالای صفحه) و «فعّالیت» + «کار در کلاس» (پایین)؛ شماره‌گذاری هر بخش جداگانه از ۱ است."
+    },
+    {
+      "row_number": 30,
+      "book_page": 22,
+      "pdf_page": 28,
+      "chapter": "۲",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۴۰+۲۰، ۹۰−۵۰، ۸۰−۳۰، ۳۰+۵۰، ۲۰+۱۰، ۷۰−۲۰، ۸۰−۵۰، ۲۰+۳۰=۵۰، ۷۰−۴۰، ۲۰+۴۰، ۸۰−۲۰، ۳۲، ۱۷، ۲۵، ۳۲",
+      "manipulatives": "دستهٔ ده‌تایی، محور، مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P028"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "دو بنر: تمرین و کامل کن؛ بلوک محور ۳۲ شمارهٔ جداگانه در متن ندارد (احتمالاً مورد ۴ یا فعالیت پایانی)."
+    },
+    {
+      "row_number": 31,
+      "book_page": 23,
+      "pdf_page": 29,
+      "chapter": "۲",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۴+۷، ۵+۶، ۷+۶، ۸+۸، ۷+۷، ۶+۶، ۹+۹، ۷+۸، ۱۶−۸، ۱۲−۸، ۱۵−۷، ۱۴−۷",
+      "manipulatives": "محور، چوب‌خط، رسم شکل",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P029"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ترتیب بنر «جمع و تفریق» و «فعّالیت» از متن دقیق نیست؛ خود محتوا و اعداد واضح‌اند."
+    },
+    {
+      "row_number": 32,
+      "book_page": 24,
+      "pdf_page": 30,
+      "chapter": "۲",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس",
+        "فعّالیت"
+      ],
+      "page_type": "کار در کلاس + فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۸+۹، ۷+۹، ۱۸−۹، ۱۷−۹، ۷+۵، ۷+۶، ۱۲−۹، ۱۷−۸، ۱۴−۶، ۱۹−۹",
+      "manipulatives": "مربّع‌های رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P030-01",
+        "EV-CROP150-P030-02",
+        "EV-TEXT-FOOTER-P030"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "بنر دوم «فعّالیت» در پایین صفحه؛ ساختار جدول جای‌خالی به‌دلیل نبود تصویر تقریبی ثبت شده است."
+    },
+    {
+      "row_number": 33,
+      "book_page": 25,
+      "pdf_page": 31,
+      "chapter": "۲",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس",
+        "تمرین",
+        "خلاق باش"
+      ],
+      "page_type": "کار در کلاس + تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۷+۶=۱۳، ۶+۶=۱۲، ۹+۵، ۱۴−۶، ۵+۵=۱۰، جدول ۵–۹: ۱۵ تا ۱۹",
+      "manipulatives": "انگشتان دست، دستهٔ ده‌تایی، جدول عددها",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P031-01",
+        "EV-TEXT-FOOTER-P031"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "سه بنر: تمرین، کار در کلاس، خلّق باش؛ متن کار در کلاس کامل و روشن استخراج شده است."
+    },
+    {
+      "row_number": 34,
+      "book_page": 26,
+      "pdf_page": 32,
+      "chapter": "۲",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله",
+        "الگویابی کن"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۷۱، ۷۲، ۷۳، ۲، ۴، ۶، ۸، ۳، ۶، ۹، ۱۲، ۰+۶=۶، ۲+۴=۶، ۵۳، ۵۴، ۷۳، ۷۴",
+      "manipulatives": "جدول ارزش مکانی (یکان/دهگان)",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P032-01",
+        "EV-CROP150-P032-02",
+        "EV-TEXT-FOOTER-P032"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "جای بنر «الگویابی کن» نسبت به «حلّ مسئله» از استخراج متن دقیق نیست؛ محور کوچک ۰–۶ هم مبهم است."
+    },
+    {
+      "row_number": 35,
+      "book_page": 27,
+      "pdf_page": 33,
+      "chapter": "۲",
+      "primary_banner": "الگوسازی",
+      "all_section_tabs": [
+        "الگوسازی",
+        "کامل کن"
+      ],
+      "page_type": "الگوسازی + کامل کن",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "هر قسمت کوچک = ۱ دقیقه",
+      "manipulatives": "ساعت، مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P033-01",
+        "EV-CROP150-P033-02",
+        "EV-TEXT-FOOTER-P033"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "بنر «کامل کن» در متن پس از بلوک ساعت‌ها استخراج شده و «الگو سازی» بنر مستقل دارد؛ چینش بصری نیازمند تصویر است."
+    },
+    {
+      "row_number": 36,
+      "book_page": 28,
+      "pdf_page": 34,
+      "chapter": "۲",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱۴+۲۳، ۴۷−۲۲، ۴۳−□",
+      "manipulatives": "دستهٔ ده‌تایی، یکه‌ها",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P034"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان بخش: «جمع و تفریق دو عدد دو رقمی»."
+    },
+    {
+      "row_number": 37,
+      "book_page": 29,
+      "pdf_page": 35,
+      "chapter": "۲",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۳۴+۲۳=۵۷، ۳۴+۲۰=۵۴، ۵۴+۳=۵۷، ۴۷−۲۲=۲۵، ۴۷−۲۰=۲۷، ۲۷−۲=۲۵، ۳۵+۲۳، ۷۶−۲۳، ۴۱+۳۷، ۹۵−۸۴، ۵۰+۲۹، ۴۹−۲۰",
+      "manipulatives": "ساعت، جدول جای‌خالی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P035"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "سه بنر: فعّالیت، کار در کلاس، الگویابی کن."
+    },
+    {
+      "row_number": 38,
+      "book_page": 30,
+      "pdf_page": 36,
+      "chapter": "۲",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۴۷−۲۲، ۲۳+۱۴، ۵۶−۳۶، ۳۱+۱۰، ۳۴−۲۰، ۲۴+۳۳، ۴۹−۲۷، ۴۶−۱۶، ۲۰+۲۹، ۶۷−۳۰، ۲۴+۲۴، ۲۹−۷، ۳۳+۴، ۲۰+۳۰، ۷۰−۴۰، ۲۳→۲۰/۳۰، ۳۷→۳۰/۴۰",
+      "manipulatives": "محور، رسم شکل",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P036"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "در استخراج، عدد تنها «۲۲» نیز دیده می‌شود (احتمالاً جزء یکی از عبارت‌ها)؛ گزینه‌های مقایسهٔ تقریب ۴۱ و ۵۸ ناقص است؛ دو بنر: تمرین و تقریب بزن."
+    },
+    {
+      "row_number": 39,
+      "book_page": 31,
+      "pdf_page": 37,
+      "chapter": "۲",
+      "primary_banner": "جمع و تفریق دو عدد (ادامه)",
+      "all_section_tabs": [
+        "جمع و تفریق دو عدد (ادامه)",
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۲۴+۳۷=۶۱، ۲۴+۳۰=۵۴، ۵۴+۷، ۳۵−۱۷، ۲۹+۱۴، ۳۷+۲۵، ۴۳−۲۷، ۵۲−۱۴، ۲۵−۷، ۳۹+۴، ۲۳−۷",
+      "manipulatives": "دستهٔ ده‌تایی، یکه‌ها، جدول جای‌خالی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P037-01",
+        "EV-TEXT-FOOTER-P037"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "گام‌های میانی (۳۹+۴، ۲۳−۷ و…) پراکنده در متن استخراج شده و انتساب دقیق آن‌ها به هر عبارت نیازمند تصویر است."
+    },
+    {
+      "row_number": 40,
+      "book_page": 32,
+      "pdf_page": 38,
+      "chapter": "۲",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۲۴+۳۲، ۴۷−۳۴، ۲۵+۳۵، ۶۲−۳۸، ۴۷−۲۵، ۲۹+۴۶، ۱۷+۱۹، ۲۷+۹، ۷۴−۱۷، ۶۴−۷، ۸۰−۱۴، ۴ و ۱۵ دقیقه",
+      "manipulatives": "جدول عددها (۱–۹۹)، ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P038"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "دو بنر: کار در کلاس و کامل کن؛ جدول ۱–۹۹ کامل در متن استخراج شده است."
+    },
+    {
+      "row_number": 41,
+      "book_page": 33,
+      "pdf_page": 39,
+      "chapter": "۲",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین",
+        "تقریب بزن"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 6,
+      "key_numbers": "۲۶+۱۷، ۵۵−۲۹، ۴۷→۴۰/۵۰، ۲۱→۲۰/۳۰، ۴۷+۲۱، ۸۱−۲۸، ۷۱+۲۴، ۸۹−۵۱، ۳۹+۲۵، ۵۲−۲۵، ۵۰+۲۰، ۲۳+۵۷، ۶۰−۱۴، ۵۴−۲۱، ۵۹+۲۷، ۸۰−۳۰، ۲۵→۳۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P039-01",
+        "EV-CROP150-P039-02",
+        "EV-TEXT-FOOTER-P039"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "دو بنر «تمرین» + بنر «تقریب بزن» در صفحه؛ عبارت‌های مورد ۱ بلوک اول در متن نیست (احتمالاً شکل‌دار). | [آشتی‌دهی] خوانش دو بازرس متفاوت (صفحهٔ چندبنری): [b]: {\"banner\": \"تمرین\"} در برابر [c1]: {\"banner\": null} → نیازمند تأیید بنر اصلی با کتاب کاغذی/آرنا."
+    },
+    {
+      "row_number": 42,
+      "book_page": 34,
+      "pdf_page": 40,
+      "chapter": "۲",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل",
+        "فرهنگ نوشتن",
+        "تمرین"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۱۰، ۲۰، ۳۰، ۴۰، ۵۰، ۷۶، ۲۹، ۱۷، ۱۴، ۲۵، ۵۴، ۲۶، ۱۹، ۸، ۷۵، ۵۳، ۳۷، ۸۵، ۴۵، ۲۷، ۱۸",
+      "manipulatives": "مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P040-01",
+        "EV-TEXT-FOOTER-P040"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "آغاز رسمی «مرور فصل ۲»؛ شماره‌گذاری تمرین‌ها (۱ تا ۵) از این صفحه تا صفحهٔ ۳۵ ادامه دارد. | [آشتی‌دهی] خوانش دو بازرس متفاوت (صفحهٔ چندبنری): [b]: {\"banner\": \"فرهنگ نوشتن\", \"pageType\": \"تمرین\"} در برابر [c1]: {\"banner\": \"مرور فصل\", \"pageType\": \"مرور فصل\"} → نیازمند تأیید بنر اصلی با کتاب کاغذی/آرنا."
+    },
+    {
+      "row_number": 43,
+      "book_page": 35,
+      "pdf_page": 41,
+      "chapter": "۲",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۵۳، ۲۹، ۵۵، ۳۲، ۶۸، ۴۱، ۸۱، ۳۷، ۴۹، ۴۷، ۲۰، ۴، ۵، ۶، ۷، ۸، ۲۴، ۴۵",
+      "manipulatives": "مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P041"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ مرور فصل (بنر تکرار نشده اما شماره‌گذاری از آیتم ۲ پیوسته است). آیتم ۳ فاقد پاسخ عددی متنی است و به تصویر وابسته."
+    },
+    {
+      "row_number": 44,
+      "book_page": 36,
+      "pdf_page": 42,
+      "chapter": "۲",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۰، ۹، ۷۳، ۲۲، ۲، ۲۰",
+      "manipulatives": "مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P042"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "آخرین صفحهٔ فصل ۲ (مرور). معمّا بلوکی پازلی است نه بازی گروهی."
+    },
+    {
+      "row_number": 45,
+      "book_page": 37,
+      "pdf_page": 43,
+      "chapter": "۳",
+      "primary_banner": "فصل ۳ — اشكال هندسی",
+      "all_section_tabs": [
+        "فصل ۳ — اشكال هندسی"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۳",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۳ «اشكال هندسی» (کتاب ۳۷ = PDF 43). متن بنر دو سطر: «فصل ۳» و «اشكال هندسی»."
+    },
+    {
+      "row_number": 46,
+      "book_page": 38,
+      "pdf_page": 44,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۳، ۴، ۶",
+      "manipulatives": "شابلون",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P044"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "عنوان درس «یادآوری شكل‌های هندسی» (احتمالاً درس ۱ فصل ۳ اما عبارت «درس ۱» در استخراج دیده نشد). شمارهٔ آیتم آخر در متن استخراج نیامده؛ رقم «۶» یافت‌شده احتمالاً جزو «۶ضلعی» است نه شمارهٔ آیتم؛ اگر شمارهٔ مستقل ۶ باشد، تمرین‌ها ۶ عددند."
+    },
+    {
+      "row_number": 47,
+      "book_page": 39,
+      "pdf_page": 45,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "",
+      "manipulatives": "شابلون، کاغذ",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P045"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "برچسب عمودی «كار در كالس» کنار آیتم‌های ۱ و ۲ است و بلوک «کامل کن» مستقل است."
+    },
+    {
+      "row_number": 48,
+      "book_page": 40,
+      "pdf_page": 46,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "",
+      "manipulatives": "مداد رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P046"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "محتوای جدول رنگ و تعداد شکل‌ها/ساعت‌ها تصویری است و در متن استخراجی نیست."
+    },
+    {
+      "row_number": 49,
+      "book_page": 41,
+      "pdf_page": 47,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۷، ۲",
+      "manipulatives": "قیچی، مقوا، شابلون",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P047"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تنجرام ۷تکه از مربّع صفحهٔ انتهای کتاب. کلمهٔ نا‌مرتبط «نه» در انتهای استخراج = نویز استخراج."
+    },
+    {
+      "row_number": 50,
+      "book_page": 42,
+      "pdf_page": 48,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱۰، ۳",
+      "manipulatives": "کاغذ، فوم، مقوّا، قیچی",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P048"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "مرز بلوک «خلّق باش» نامطمئن: برچسب کنار پاراگراف کاشی‌کاری ظاهر شده و ممکن است فقط معمای کلمات را پوشش دهد؛ محتوای شکل‌های سمت چپ و شبکهٔ شطرنجی تصویری است."
+    },
+    {
+      "row_number": 51,
+      "book_page": 43,
+      "pdf_page": 49,
+      "chapter": "۳",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 6,
+      "key_numbers": "۴، ۲، ۶، ۳",
+      "manipulatives": "خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P049"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «تمرین» در استخراج متن پس از دو بند نخست دیده شد؛ احتمال دارد دو بند اول ادامهٔ صفحهٔ قبل و بنر تمرین در میانهٔ صفحه باشد. شمارش ۶ = ۲ بند شماره‌دار + ۴ توصیف شکل (توصیف‌ها ممکن است شماره نداشته باشند). تصویر صفحه در دسترس زیرعامل نبود."
+    },
+    {
+      "row_number": 52,
+      "book_page": 44,
+      "pdf_page": 50,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۵، ۰ تا ۹، ۲، ۴، ۶، ۸، ۱۰، ۱۵، ۲۰، ۲۵",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P050"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "صفحه چندبخشی است: نوار «کامل کن» و عنوان «حلّ مسئله» در میانه/پایین صفحه؛ بنر واحد ندارد. جای دقیق بلوک‌ها از ترتیب متن استخراجی برآورد شده است."
+    },
+    {
+      "row_number": 53,
+      "book_page": 45,
+      "pdf_page": 51,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۱،۵،۹،۱۳،۱۷، ۱،۲،۴،۷،۱۱، ۳،۸،۱۳،۱۸، ۴، ۵",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P051"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "جای دقیق عنوان «الگویابی» (بنر پایین صفحه یا آغاز درس جدید) روشن نیست؛ تعداد ساعت‌های تصویری از متن معلوم نمی‌شود."
+    },
+    {
+      "row_number": 54,
+      "book_page": 46,
+      "pdf_page": 52,
+      "chapter": "۳",
+      "primary_banner": "تقارن",
+      "all_section_tabs": [
+        "تقارن"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۲، ۱۰ و نیم",
+      "manipulatives": "کاغذ",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P052"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "آغاز بخش «تقارن» با سربرگ فعّالیت؛ شمارهٔ درس در متن نیامده (lessonNo=null). تصویر صفحه دیده نشد."
+    },
+    {
+      "row_number": 55,
+      "book_page": 47,
+      "pdf_page": 53,
+      "chapter": "۳",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۳، ۲، ۴ و نیم، ۳ ساعت",
+      "manipulatives": "کاغذ، قیچی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P053"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "سه بند شماره‌دار به‌وضوح در متن استخراجی دیده می‌شود."
+    },
+    {
+      "row_number": 56,
+      "book_page": 48,
+      "pdf_page": 54,
+      "chapter": "۳",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۳، ۲",
+      "manipulatives": "شابلون، خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P054"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "متن سه بند تمرین کامل و خوانا است."
+    },
+    {
+      "row_number": 57,
+      "book_page": 49,
+      "pdf_page": 55,
+      "chapter": "۳",
+      "primary_banner": "تقارن (ادامه)",
+      "all_section_tabs": [
+        "تقارن (ادامه)"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴، ۵ و ربع",
+      "manipulatives": "کاغذ",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P055"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ درس تقارن («تقارن (ادامه)» عین سربرگ)؛ متن بند ۱ در استخراج جابه‌جاست اما مضمون روشن است."
+    },
+    {
+      "row_number": 58,
+      "book_page": 50,
+      "pdf_page": 56,
+      "chapter": "۳",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۳، ۲، ۴، ۹",
+      "manipulatives": "کاغذ، قیچی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P056"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "استنتاج ۹ تکه از متن: «۳ مربع» و «۲ تا از مربع‌ها را به ۴ قسمت» و «با این ۹ تکه»؛ ترتیب بندها از متن برآورد شد."
+    },
+    {
+      "row_number": 59,
+      "book_page": 51,
+      "pdf_page": 57,
+      "chapter": "۳",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۴",
+      "manipulatives": "خط‌کش، شابلون",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P057"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "در متن استخراجی فقط یک بند شماره‌دار دیده شد؛ ممکن است تمرین‌های تصویری دیگری هم در صفحه باشد که متنی برایش استخراج نشده."
+    },
+    {
+      "row_number": 60,
+      "book_page": 52,
+      "pdf_page": 58,
+      "chapter": "۳",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۲، ۳",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P058"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "صفحهٔ چندبنری: «مرور فصل» + «فرهنگ نوشتن» + «تمرین». شروع مرور فصل فصل ۳ هم‌خوان با مرز مرجع است. | [آشتی‌دهی] خوانش دو بازرس متفاوت (صفحهٔ چندبنری): [c2]: {\"banner\": \"فرهنگ نوشتن\", \"pageType\": \"غیره\"} در برابر [d]: {\"banner\": \"مرور فصل\", \"pageType\": \"مرور فصل\"} → نیازمند تأیید بنر اصلی با کتاب کاغذی/آرنا."
+    },
+    {
+      "row_number": 61,
+      "book_page": 53,
+      "pdf_page": 59,
+      "chapter": "۳",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۸:۱۵، ۳:۳۰، ۹، ۷، ۴، ۱۰",
+      "manipulatives": "ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P059"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ مرور فصل؛ بنر مستقل ندارد (تمرین‌های ۳ تا ۶)."
+    },
+    {
+      "row_number": 62,
+      "book_page": 54,
+      "pdf_page": 60,
+      "chapter": "۳",
+      "primary_banner": "معمّا",
+      "all_section_tabs": [
+        "معمّا"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۷، ۳، ۲، ۴، ۶، ۸",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P060"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "پایان فصل ۳ (هم‌خوان با مرز مرجع ۳۷–۵۴). بنر «معمّا» در بالا و بلوک «فرهنگ خواندن» در پایین صفحه."
+    },
+    {
+      "row_number": 63,
+      "book_page": 55,
+      "pdf_page": 61,
+      "chapter": "۴",
+      "primary_banner": "عددهای سه رقمی",
+      "all_section_tabs": [
+        "عددهای سه رقمی"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱۰۰",
+      "manipulatives": "پول (تصویر بانک)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۴ در کتاب ۵۵ دقیقاً با مرز مرجع هم‌خوان است؛ بنر «فصل ۴» + عنوان بزرگ «عددهای سه رقمی»."
+    },
+    {
+      "row_number": 64,
+      "book_page": 56,
+      "pdf_page": 62,
+      "chapter": "۴",
+      "primary_banner": "معرّفی پول",
+      "all_section_tabs": [
+        "معرّفی پول"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۹، ۱۰، ۲۰، ۹۰، ۹۱، ۹۹، ۱۰۰",
+      "manipulatives": "پول بازی (دسته‌های ده‌تایی)",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P062"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "سه برچسب در صفحه: «معرّفی پول» (عنوان بالا)، «فعّالیت» و «کار در کلاس»؛ فعّالیت ۱ گروهی است (isGame=true)."
+    },
+    {
+      "row_number": 65,
+      "book_page": 57,
+      "pdf_page": 63,
+      "chapter": "۴",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت",
+        "الگویابی کن"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱۰، ۲۰، ۵۰، ۱۰۰، ۴، ۸، ۱۲، ۳، ۶، ۹، ۷، ۱۴، ۲۱",
+      "manipulatives": "پول بازی (سکه)",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P063-01",
+        "EV-CROP150-P063-02",
+        "EV-TEXT-FOOTER-P063"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "لایهٔ متنِ سکهٔ تمرین ۲ را «۸۰ ریالی» می‌خواند؛ با منطق کتاب (تساوی با ۱۰۰) به‌احتمال قوی «۵۰ ریالی» است. جملهٔ گفت‌وگوی پایین صفحه تا حدی مخدوش استخراج شده."
+    },
+    {
+      "row_number": 66,
+      "book_page": 58,
+      "pdf_page": 64,
+      "chapter": "۴",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 6,
+      "key_numbers": "۱۰۰، ۸۰، ۲۰، ۶۰، ۱۰، ۵۰، ۱۲:۰۰، ۶:۰۰، ۲:۲۰، ۳۰، ۱۵",
+      "manipulatives": "محور، پول بازی (سکه)، ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P064"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تمرین‌های شماره‌دار: ۳ تمرین + ۳ سؤال «کامل کن» = ۶."
+    },
+    {
+      "row_number": 67,
+      "book_page": 59,
+      "pdf_page": 65,
+      "chapter": "۴",
+      "primary_banner": "معرّفی عددهای سه رقمی",
+      "all_section_tabs": [
+        "معرّفی عددهای سه رقمی"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۲۳۱، ۱۰۰، ۲۰۰، ۳۰۰، ۳، ۴، ۷، ۵",
+      "manipulatives": "پول بازی (سکه)، چرتکه، مهره، جدول ارزش مکانی",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P065"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر بالای صفحه «معرّفی عددهای سه رقمی» است و بلوک اصلی «فعّالیت»؛ تمرین ۳ گروهی است (isGame=true)."
+    },
+    {
+      "row_number": 68,
+      "book_page": 60,
+      "pdf_page": 66,
+      "chapter": "۴",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": "جدول ارزش مکانی، شکل‌های بلوکی (صدتایی/ده‌تایی/یکتایی)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P066"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "اعداد این صفحه فقط در شکل‌های تصویری است؛ لایهٔ متن عددی ندارد (keyNumbers خالی)."
+    },
+    {
+      "row_number": 69,
+      "book_page": 61,
+      "pdf_page": 67,
+      "chapter": "۴",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۳۴۹، ۵۰۸، ۴۲۰، ۳۰۰، ۸۷۵، ۴۰۹، ۶۰۰، ۲۵۰، ۵۶۴، ۶۰، ۱۰۰، ۱۰، ۴",
+      "manipulatives": "پول بازی (سکه)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P067"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "«خلّق باش» برچسب کوچک (۱۶pt) داخل صفحه است، نه بنر."
+    },
+    {
+      "row_number": 70,
+      "book_page": 62,
+      "pdf_page": 68,
+      "chapter": "۴",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۲، ۳، ۵، ۲۳۵، ۷، ۰، ۹، ۱، ۴، ۶",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P068"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "نقش علّام «+۱، +۱» اضافی در الگویابی کن ۱ از لایهٔ متن قطعی نیست. عنوان راهبرد «حذف حالت‌های نامطلوب» بالای ص ۶۳ است."
+    },
+    {
+      "row_number": 71,
+      "book_page": 63,
+      "pdf_page": 69,
+      "chapter": "۴",
+      "primary_banner": "حذف حالت‌های نامطلوب",
+      "all_section_tabs": [
+        "حذف حالت‌های نامطلوب"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 7,
+      "key_numbers": "۴، ۳، ۹، ۲، ۶، ۲:۲۵، ۱۰:۰۵، ۷:۴۵، ۳:۳۰، ۴:۱۵، ۵، ۱۰، ۱۵",
+      "manipulatives": "ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P069"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «حذف حالت‌های نامطلوب» ادامهٔ بخش حلّ مسئلهٔ ص ۶۲ است (به‌عنوان pageType حلّ مسئله ثبت شد). شمارهٔ سؤال‌های ۴ و ۵ «کامل کن» در لایهٔ متن دیده نمی‌شود؛ در شمارش احتساب شده‌اند."
+    },
+    {
+      "row_number": 72,
+      "book_page": 64,
+      "pdf_page": 70,
+      "chapter": "۴",
+      "primary_banner": "تقریب اعداد سه رقمی",
+      "all_section_tabs": [
+        "تقریب اعداد سه رقمی"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱۳۰، ۱۴۰، ۲۰۰، ۳۰۰، ۷۰۰، ۹۰۰، ۱۰۰",
+      "manipulatives": "جدول ارزش مکانی، چرتکه، مهره، محور",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P070"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تکلیف محور در لایهٔ متن شماره ندارد؛ احتمالاً تمرین ۳ (در exerciseCount احتساب شده)."
+    },
+    {
+      "row_number": 73,
+      "book_page": 65,
+      "pdf_page": 71,
+      "chapter": "۴",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس",
+        "تقریب بزن"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۱۰۳، ۱۱۴، ۵۳۱، ۵۴۲، ۲۳۰، ۳۳۰، ۲۰۰، ۹۰۰، ۵۰۰، ۷۳۱، ۷۳۰، ۶۳۵، ۵۹۶، ۱۲۴، ۱۰۰، ۲۳۵، ۴۱۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P071-01",
+        "EV-TEXT-FOOTER-P071"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «کار در کلاس» در میانهٔ راست صفحه است و عددنویسی ۱–۴ را دربر می‌گیرد؛ بالای صفحه ادامهٔ فعّالیت ص ۶۴ است؛ «تقریب بزن» برچسب بلوک پایین صفحه است."
+    },
+    {
+      "row_number": 74,
+      "book_page": 66,
+      "pdf_page": 72,
+      "chapter": "۴",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۰، ۱۰۰، ۱۶۰، ۱۸۰، ۲۰۰، ۲۵۰، ۳۴۰، ۴۷۰، ۵۰۰، ۶۳۰، ۷۴۰، ۸۰۰، ۸۶۰، ۹۱۰، ۹۳۰، ۹۸۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P072"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 75,
+      "book_page": 67,
+      "pdf_page": 73,
+      "chapter": "۴",
+      "primary_banner": "آمادگی برای جمع و تفریق",
+      "all_section_tabs": [
+        "آمادگی برای جمع و تفریق"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۹۸، ۶، ۱۰۵، ۹۴، ۱۰۲، ۹۲، ۲، ۳، ۵، ۲۰، ۳۰، ۵۰، ۷۰، ۲۰۰، ۳۰۰، ۵۰۰، ۷۰۰، ۸۱، ۱۱۰",
+      "manipulatives": "جدول اعداد (۱ تا ۱۱۰)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P073"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «آمادگی برای جمع و تفریق» عنوان بالای صفحه و بلوک اصلی «فعّالیت» است."
+    },
+    {
+      "row_number": 76,
+      "book_page": 68,
+      "pdf_page": 74,
+      "chapter": "۴",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۲۰۰، ۳۰۰، ۹۰۰، ۴۰۰، ۸۰۰، ۵۰۰، ۷۰۰، ۶۰۰، ۹۰، ۱۰۹، ۱۰۷، ۱۰۸، ۱۰۳، ۹۵، ۹۸، ۹۳، ۹۶، ۹۴، ۹۷، ۱۰۵، ۱۰۴، ۹",
+      "manipulatives": "محور، جدول اعداد",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P074"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 77,
+      "book_page": 69,
+      "pdf_page": 75,
+      "chapter": "۴",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۹۷، ۵، ۱۰۴، ۷، ۹۵، ۸، ۹، ۲۳۹، ۳۲۳، ۴۲۳، ۱۲۷، ۵۵۱، ۲۴۹، ۱۲۳، ۱۲۰، ۱۳۰، ۲۷۸، ۲۷۰، ۲۸۰، ۳۵۳، ۳۵۰، ۳۶۰، ۴۳۱، ۴۳۰، ۴۴۰، ۱۰۰، ۵۰، ۳۰۰",
+      "manipulatives": "پول بازی (سکه)",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P075"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تمرین ۵ (مشورت با دوستان) جنبهٔ گروهی دارد (isGame=true)."
+    },
+    {
+      "row_number": 78,
+      "book_page": 70,
+      "pdf_page": 76,
+      "chapter": "۴",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۳ کارت ۲، ۵، ۷، ۱۰۰، ۲۰۰، ۳۰۰، ۴۰۰",
+      "manipulatives": "چرتکه، سکه",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P076"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "هم‌پوشانی با زیرعامل قبلی. زبانه‌های «فرهنگ نوشتن» و «تمرین» نیز در رندر متن دیده می‌شود (کنار بنر «مرور فصل») — جای دقیق این زبانه‌ها نیازمند تأیید با کتاب فیزیکی. جزئیات الگوی عددی (شماره‌های داخل الگو) کامل استخراج نشد."
+    },
+    {
+      "row_number": 79,
+      "book_page": 71,
+      "pdf_page": 77,
+      "chapter": "۴",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "ارقام ۴، ۷، ۲، ارقام ۳، ۰، ۶، ۹۵ + ۸ امتیاز، ۲۳۱ = ۲۰۰ + ۳۰ + ۱، ۲۷۳، ۳۵۱، ۲۷۰، ۲۸۰، ۳۶۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P077"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ تمرین‌های مرور فصل فصل ۴ با شماره‌گذاری پیوسته از ص ۷۰ (تمرین‌های ۴–۸). متن بنر بالای صفحه در رندر نیامده → banner=null."
+    },
+    {
+      "row_number": 80,
+      "book_page": 72,
+      "pdf_page": 78,
+      "chapter": "۴",
+      "primary_banner": "معما",
+      "all_section_tabs": [
+        "معما"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱۲ قطعه، ۵ مربع مساوی، ۸ قطعهٔ دیگر",
+      "manipulatives": "صفحهٔ شطرنجی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P078"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "صفحهٔ ترکیبی: بنر «معما» (بالا) + «فرهنگ خواندن» (پایین). پایان فصل ۴ — با مرجع فصل ۴ (۵۵–۷۲) سازگار است. مقایسهٔ گروهی قطعه‌ها هست ولی بازی گروهیِ مستقل نیست → isGame=false."
+    },
+    {
+      "row_number": 81,
+      "book_page": 73,
+      "pdf_page": 79,
+      "chapter": "۵",
+      "primary_banner": "اندازه‌گیری",
+      "all_section_tabs": [
+        "اندازه‌گیری"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۵ «اندازه‌گیری» = کتاب ص ۷۳ (PDF ۷۹) — دقیقاً با مرجع فصل ۵ (۷۳–۹۰) هم‌خوان است. تصویر صفحه در اختیار بازرس نبود؛ توصیف فقط از متن استخراج‌شده."
+    },
+    {
+      "row_number": 82,
+      "book_page": 74,
+      "pdf_page": 80,
+      "chapter": "۵",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "",
+      "manipulatives": "گیره، پاک‌کن، چینه، تراش، مداد",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P080"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان موضوع بالای صفحه: «اندازه‌گیری طول». اعداد جمله‌ها به‌صورت خانه‌خالی/تصویری‌اند و در رندر متن نیامده‌اند؛ ساختار (بین … و … + از … بیشتر ولی به … نمی‌رسد) کامل استخراج شد."
+    },
+    {
+      "row_number": 83,
+      "book_page": 75,
+      "pdf_page": 81,
+      "chapter": "۵",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۳۰ دقیقه (نیم ساعت)، ۱۵ دقیقه",
+      "manipulatives": "گیره، پاک‌کن، چینه، ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P081"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "زبانهٔ «کامل کن» در پایین صفحه. بلوک ساعت بی‌شماره رندر شده (احتمال تمرین ۴) → شمرده نشد."
+    },
+    {
+      "row_number": 84,
+      "book_page": 76,
+      "pdf_page": 82,
+      "chapter": "۵",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۴ مکعب چینه = ۱ چینه، ۱۵ دقیقه (یک ربع)، ۲۰ دقیقه، ۳ (تنها عدد خوانای بلوک خودکار)",
+      "manipulatives": "مکعب چینه، ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P082"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "زبانهٔ «کامل کن». اعداد جملات اندازه‌گیری در رندر ناقص است (فقط «٣» برای خودکار خواناست) و شمارهٔ بلوک ساعت دیده نشد؛ به همین دلیل confidence=متوسط. بلوک ساعت احتمالاً تمرین ۲ است."
+    },
+    {
+      "row_number": 85,
+      "book_page": 77,
+      "pdf_page": 83,
+      "chapter": "۵",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۲ بار تا کردن → ۴ قسمت",
+      "manipulatives": "نوار کاغذی، مداد، کتاب",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P083"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان موضوع بالای صفحه: «اندازه‌گیری دقیق‌تر». مقایسه با دوستان هست ولی بازی نیست."
+    },
+    {
+      "row_number": 86,
+      "book_page": 78,
+      "pdf_page": 84,
+      "chapter": "۵",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۴ قسمت کوچک‌تر، ۲ بار تا کردن دیگر",
+      "manipulatives": "نوار کاغذی، پاک‌کن، کتاب",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P084"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ فعّالیت «اندازه‌گیری دقیق‌تر» صفحهٔ قبل (نوار کاغذی)."
+    },
+    {
+      "row_number": 87,
+      "book_page": 79,
+      "pdf_page": 85,
+      "chapter": "۵",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۰ قسمت مساوی",
+      "manipulatives": "نوار کاغذی، خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P085"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "پیش‌درآمد مفهوم میلی‌متر (۱۰ قسمت برای هر واحد بزرگ)."
+    },
+    {
+      "row_number": 88,
+      "book_page": 80,
+      "pdf_page": 86,
+      "chapter": "۵",
+      "primary_banner": "جدول شگفت‌انگیز",
+      "all_section_tabs": [
+        "جدول شگفت‌انگیز"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۲۰ + … = ۴۳، … + ۱۷ = ۵۱، ۶۰ − … = ۲۷، … + ۲۹ = ۶۳",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P086"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "صفحهٔ ترکیبی: بنر «جدول شگفت‌انگیز» (بالا) + بنر «حلّ مسئله» (پایین) + زبانهٔ «کامل کن». pageType بر اساس نیمهٔ تمرین‌دار (حلّ مسئله). ابعاد دقیق جدول (~۷ سطر × ۹ ستون در رندر) و قاعدهٔ آن با تصویر تأیید نشد."
+    },
+    {
+      "row_number": 89,
+      "book_page": 81,
+      "pdf_page": 87,
+      "chapter": "۵",
+      "primary_banner": "حدس و آزمایش",
+      "all_section_tabs": [
+        "حدس و آزمایش"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴ حیوان، شترمرغ ۲ پا، گوسفند ۴ پا، ۴+۴+۲+۲، ساعت ۲:۳۰، ساعت ۵",
+      "manipulatives": "ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P087"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ حلّ مسئلهٔ ص ۸۰ (بنر «حدس و آزمایش») + زبانهٔ «کامل کن». شماره‌های تمرین در رندر نیامده — ۲ بلاک تمرینی شمرده شد (احتمالاً تمرین‌های ۴ و ۵)."
+    },
+    {
+      "row_number": 90,
+      "book_page": 82,
+      "pdf_page": 88,
+      "chapter": "۵",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "",
+      "manipulatives": "خط‌کش، متر خیاطی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P088"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان موضوع: «واحد سانتی‌متر». زبانهٔ «خلّق باش» در صفحه دیده می‌شود. وظیفهٔ رسم با خط‌کش بی‌شماره رندر شده (احتمال تمرین ۴)."
+    },
+    {
+      "row_number": 91,
+      "book_page": 83,
+      "pdf_page": 89,
+      "chapter": "۵",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "خط‌کش ۲۰ سانتی‌متری، ۱۳ سانتی‌متر، ۴ و ۷ سانتی‌متر",
+      "manipulatives": "خط‌کش، ساعت روی طلق شفاف",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P089"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "زبانهٔ «خلّق باش» در رندر کنار بلوک ساعت/مستطیل است؛ به احتمال زیاد آن بلوک جعبهٔ خلّق باش است (شمرده در تمرین‌ها نشد)."
+    },
+    {
+      "row_number": 92,
+      "book_page": 84,
+      "pdf_page": 90,
+      "chapter": "۵",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "",
+      "manipulatives": "خط‌کش، متر خیاطی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P090"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تمام اعداد صفحه به‌صورت خانه‌خالی‌اند؛ در keyNumbers عدد قطعی وجود ندارد."
+    },
+    {
+      "row_number": 93,
+      "book_page": 85,
+      "pdf_page": 91,
+      "chapter": "۵",
+      "primary_banner": "فعّالیت",
+      "all_section_tabs": [
+        "فعّالیت"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "هر سانتی‌متر = ۱۰ قسمت (میلی‌متر)",
+      "manipulatives": "خط‌کش، نوار کاغذی",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P091"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "معرفی رسمی واحد میلی‌متر (کتاب ص ۸۵). شماره‌های بلوک‌ها در رندر کامل نیامده (یک عدد «۱» تنها دیده می‌شود)؛ ۲ بلاک تمرینی شمرده شد."
+    },
+    {
+      "row_number": 94,
+      "book_page": 86,
+      "pdf_page": 92,
+      "chapter": "۵",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۱۰ میلی‌متر = ۱ سانتی‌متر، ۱۱، ۱۲، ۱۹ میلی‌متر، ۲۰ میلی‌متر = ۲ سانتی‌متر",
+      "manipulatives": "خط‌کش، پاک‌کن",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P092"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تناظر کامل میلی‌متر/سانتی‌متر با شمردن خانه‌های خط‌کش (۱ تا ۲۰)."
+    },
+    {
+      "row_number": 95,
+      "book_page": 87,
+      "pdf_page": 93,
+      "chapter": "۵",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۵، ۶، ۹، ۱۰ سانتی‌متر",
+      "manipulatives": "متر خیاطی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P093"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تمرین ۱ و ۲ حدسی‌اند (بدون اندازه‌گیری واقعی)؛ تمرین ۳ اندازه‌گیری خانگی با متر خیاطی."
+    },
+    {
+      "row_number": 96,
+      "book_page": 88,
+      "pdf_page": 94,
+      "chapter": "۵",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۶ مداد",
+      "manipulatives": "خط‌کش، پاک‌کن، تراش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P094"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «مرور فصل» پایان فصل ۵؛ هم‌پوشانی با زیرعامل قبلی (کتاب ۸۸)."
+    },
+    {
+      "row_number": 97,
+      "book_page": 89,
+      "pdf_page": 95,
+      "chapter": "۵",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "میلی‌متر، حدس/اندازه ×۴",
+      "manipulatives": "خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P095"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "شماره‌گذاری ۳–۶ ادامهٔ تمرین صفحهٔ قبل؛ شمارش شکل‌های بند ۳ و ۶ فقط از تصویر ممکن است."
+    },
+    {
+      "row_number": 98,
+      "book_page": 90,
+      "pdf_page": 96,
+      "chapter": "۵",
+      "primary_banner": "معمّا | فرهنگ خواندن",
+      "all_section_tabs": [
+        "معمّا | فرهنگ خواندن"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۵ مربّع، ۱۲ شکل",
+      "manipulatives": "کاغذ (برای ساخت قطعه‌ها)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P096"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "دو بنر مستقل روی صفحه (معمّا + فرهنگ خواندن)؛ آخرین صفحهٔ فصل ۵ — مرز فصل ۵|۶ = کتاب ۹۰|۹۱ با مرجع فهرست هم‌خوان است. هم‌پوشانی با زیرعامل قبلی."
+    },
+    {
+      "row_number": 99,
+      "book_page": 91,
+      "pdf_page": 97,
+      "chapter": "۶",
+      "primary_banner": "جمع و تفریق اعداد سه رقمی",
+      "all_section_tabs": [
+        "جمع و تفریق اعداد سه رقمی"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۳ رقمی",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۶ در کتاب ۹۱ (PDF 97) — دقیقاً مطابق مرجع فهرست (فصل ۶: ۹۱–۱۰۸). بنر شامل نشان «فصل ۶» + عنوان فصل."
+    },
+    {
+      "row_number": 100,
+      "book_page": 92,
+      "pdf_page": 98,
+      "chapter": "۶",
+      "primary_banner": "مقایسه‌ی اعداد",
+      "all_section_tabs": [
+        "مقایسه‌ی اعداد"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴۲، ۲۹",
+      "manipulatives": "شکل‌های ده‌دهی (دسته‌های ده‌تایی/یکی)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P098"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "برچسب حاشیهٔ صفحه «فعّالیت» است؛ عنوان درون‌صفحه‌ای «مقایسه‌ی اعداد» در banner آمده."
+    },
+    {
+      "row_number": 101,
+      "book_page": 93,
+      "pdf_page": 99,
+      "chapter": "۶",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "صدگان، دهگان، یکان",
+      "manipulatives": "جدول ارزش مکانی، دسته‌های صدتایی/ده‌تایی",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P099"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "کار در کلاس: فعالیت کلاسی/گروهی با ابزار."
+    },
+    {
+      "row_number": 102,
+      "book_page": 94,
+      "pdf_page": 100,
+      "chapter": "۶",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۲۹۸، ۳۰۱، ۳۵۱، ۳۴۷، ۴۲۰، ۴۱۷، ۹۰۰−۴۰۰، ۱۰۰+۲۰+۱",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P100"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 103,
+      "book_page": 95,
+      "pdf_page": 101,
+      "chapter": "۶",
+      "primary_banner": "جمع و تفریق عددهای سه رقمی",
+      "all_section_tabs": [
+        "جمع و تفریق عددهای سه رقمی"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۲۱۴+۳۴۲=۵۵۶، ۳۴۷−۱۲۵=۲۲۲، ۲۱۴+۳۰۰=۵۱۴، ۵۱۴+۴۰=۵۵۴، ۳۴۷−۱۰۰=۲۴۷، ۲۲۷−۵=۲۲۲",
+      "manipulatives": "دسته‌های صدتایی/ده‌تایی و یکی (ابزار کلاسی)",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P101"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "برچسب حاشیه «فعّالیت»؛ فعالیت کلاسی با ابزار دسته‌ای."
+    },
+    {
+      "row_number": 104,
+      "book_page": 96,
+      "pdf_page": 102,
+      "chapter": "۶",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۳۲۰+۲۴۰=۵۶۰، ۴۲۶+۳۳۳، ۵۰۹−۳۰۵، ۴۷۹−۱۵۰، ۹۰۰−۱۵۰",
+      "manipulatives": "جدول اعداد ده‌دهی (۱۰ تا ۹۹۰)",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P102"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "کار در کلاس: فعالیت کلاسی/گروهی."
+    },
+    {
+      "row_number": 105,
+      "book_page": 97,
+      "pdf_page": 103,
+      "chapter": "۶",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۴۳۰+۲۰۰، ۹۸۰−۶۰۰، ۱۳۶+۱۰، ۲۱۰+۳۴۰، −۵۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P103"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 106,
+      "book_page": 98,
+      "pdf_page": 104,
+      "chapter": "۶",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۳۹۵، ۱۵۰+۱۳۰، ۳۲۵، ۱، ۴، ۹، ۱۶، ۲۵",
+      "manipulatives": "سکه‌های بازی (۱۰۰/۱۰/۱ ریالی)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P104"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "exerciseCount = ۲ مسئلهٔ حلّ مسئله + ۲ بند الگویابی؛ الگوی مربّع‌ها ۵ شکل تصویری با شمارش ۱/۴/۹/۱۶/۲۵ (تأییدشده در متن)."
+    },
+    {
+      "row_number": 107,
+      "book_page": 99,
+      "pdf_page": 105,
+      "chapter": "۶",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۸ سال، ۱۰ سال",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P105"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "exerciseCount=0 چون مسئلهٔ محسن در استخراج متنی شماره ندارد (احتمالاً ادامهٔ شماره‌گذاری = ۳) و الگوی ساعت‌ها بدون شماره است؛ الگوی دقیق عقربه‌ها از تصویر قابل وارسی نیست."
+    },
+    {
+      "row_number": 108,
+      "book_page": 100,
+      "pdf_page": 106,
+      "chapter": "۶",
+      "primary_banner": "جمع در جدول ارزش مكانی",
+      "all_section_tabs": [
+        "جمع در جدول ارزش مكانی"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۵۴+۲۷، ۷۴+۶۳، ۵۹۷+۱۳۰، ۱۲",
+      "manipulatives": "سکه‌های ۱ ریالی و ۱۰ ریالی (بازی)، جدول ارزش مکانی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P106"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "برچسب حاشیه «فعّالیت»؛ بند ۳ دارای ۸ زیرپرسش (الف تا ح) است."
+    },
+    {
+      "row_number": 109,
+      "book_page": 101,
+      "pdf_page": 107,
+      "chapter": "۶",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۳۱۳+۳۲۵، ۲۲۷+۳۴۸، ۱۴۶+۲۷۳، ۲۵۷+۱۶۵، ۲۴۰+۳۸۰",
+      "manipulatives": "دسته‌های صدتایی/ده‌تایی/یکی (رسمی)",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P107"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "کار در کلاس (گروهی)؛ ۳۱۳+۳۲۵ نمونهٔ رسم‌شده است و ۴ تمرین رسمی دارد؛ شمارش دسته‌های رسم‌شده فقط از تصویر ممکن است."
+    },
+    {
+      "row_number": 110,
+      "book_page": 102,
+      "pdf_page": 108,
+      "chapter": "۶",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 5,
+      "key_numbers": "۱۱۹+۲۳۷، ۱۴۵+۲۷۳، ۱۸۰+۵۹، ۵۳۷+۳۸۰، ۴۰۰+۳۰+۷=۴۳۷",
+      "manipulatives": "سکه‌های بازی (شکل‌های ردیفی)",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P108"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تعداد سکه‌های هر ردیف در بند ۵ فقط از تصویر قابل شمارش است."
+    },
+    {
+      "row_number": 111,
+      "book_page": 103,
+      "pdf_page": 109,
+      "chapter": "۶",
+      "primary_banner": "تفریق در جدول ارزش مكانی",
+      "all_section_tabs": [
+        "تفریق در جدول ارزش مكانی"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۵۶−۳۲، ۸۴−۳۷، ۵۲۴−۱۵۰، ۱۲، ۱۰تا ۱۰ ریالی",
+      "manipulatives": "سکه‌های ۱/۱۰/۱۰۰ ریالی (بازی)، جدول ارزش مکانی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P109"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "برچسب حاشیه «فعّالیت»؛ صحنهٔ قرض‌گیری (تبدیل ۱۰۰ ریالی به ۱۰ ده‌تایی) محور آموزش انتقال در تفریق است."
+    },
+    {
+      "row_number": 112,
+      "book_page": 104,
+      "pdf_page": 110,
+      "chapter": "۶",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۴۵۷−۱۲۴، ۵۴۳−۲۱۹، ۶۲۹−۱۵۷، ۹۱۰−۵۳۵، ۸۰۰−۱۲۵",
+      "manipulatives": "دسته‌های صدتایی/ده‌تایی/یکی (رسمی)",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P110"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "کار در کلاس (گروهی)؛ نمونهٔ ۴۵۷−۱۲۴ رسم‌شده و ۴ تمرین رسمی؛ شمارش دسته‌های رسم‌شده فقط از تصویر ممکن است."
+    },
+    {
+      "row_number": 113,
+      "book_page": 105,
+      "pdf_page": 111,
+      "chapter": "۶",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۳۹−۳۸، ۴۶−۲۸، ۱۸۶−۲۹، ۴۳۰−۲۵۰، ۲۷۶−۱۳۹−۵۸",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P111"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 114,
+      "book_page": 106,
+      "pdf_page": 112,
+      "chapter": "۶",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۱۰۸−۹، ۲۹۵+۸، ۷۰۲−۶، ۲۰۵−۷، ۶۹۲+۹، ۸۹۹+۷",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P112"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ترتیب عمودی با استخراج چیدمان‌دار راستی‌آزمایی شد: بنر «مرور فصل» بالاترین عنصر است و جعبهٔ فرهنگ نوشتن زیر آن."
+    },
+    {
+      "row_number": 115,
+      "book_page": 107,
+      "pdf_page": 113,
+      "chapter": "۶",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱۲۱+۳۴۵، ۳۲۰+۱۷۰، ۸۲۰−۱۰۰، ۴۲۰−۲۸۰، ۶۰۰−۱۸۵، ۲۰۰+۴۰۰، ۱۷۵+۲۳۵، ۳۴۷، ۸۲۱، ۴۰۸، ۷۵۰، ۲۰۰، ۵۰۰، ۷۰۰، ۹۰۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P113"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بدون بنر؛ ادامهٔ مرور فصل ۶ (بندهای ۲ تا ۴) پس از صفحهٔ قبل."
+    },
+    {
+      "row_number": 116,
+      "book_page": 108,
+      "pdf_page": 114,
+      "chapter": "۶",
+      "primary_banner": "معمّا",
+      "all_section_tabs": [
+        "معمّا"
+      ],
+      "page_type": "غیره (معمّا + فرهنگ خواندن)",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۱۲ قطعه، ۵ مربّع",
+      "manipulatives": "قطعه‌های پازل",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P114"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "پایان فصل ۶ (مرز فهرست: ۱۰۸ ✓)؛ بنر «معمّا» نوار بالای صفحه و جعبهٔ فرهنگ خواندن بخش اصلی صفحه است."
+    },
+    {
+      "row_number": 117,
+      "book_page": 109,
+      "pdf_page": 115,
+      "chapter": "۷",
+      "primary_banner": "کسر و احتمال",
+      "all_section_tabs": [
+        "کسر و احتمال"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۳ از ۴، ۲ از ۳",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع فصل ۷ در کتاب ص ۱۰۹ (PDF 115) دقیقاً مطابق مرز فهرست ✓؛ روی بنر، واژهٔ «فصل ۷» نیز آمده است."
+    },
+    {
+      "row_number": 118,
+      "book_page": 110,
+      "pdf_page": 116,
+      "chapter": "۷",
+      "primary_banner": "قسمتی از یک واحد",
+      "all_section_tabs": [
+        "قسمتی از یک واحد"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۶ از ۱۰، ۱۰ قسمت مساوی، ۱ سانتی‌متر",
+      "manipulatives": "خط‌کش میلی‌متری",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P116"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان درس «قسمتی از یک واحد» بنر بالای صفحه و زبانهٔ «فعّالیت» در لبهٔ راست است."
+    },
+    {
+      "row_number": 119,
+      "book_page": 111,
+      "pdf_page": 117,
+      "chapter": "۷",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۳، ۲۷، ۴۵، ۹، ۱۰ قسمت",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P117"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "زبانهٔ «کار در کلاس» در لبهٔ راست، هم‌ترازِ آغاز بند ۱."
+    },
+    {
+      "row_number": 120,
+      "book_page": 112,
+      "pdf_page": 118,
+      "chapter": "۷",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۱۰ قسمت، ۶ از ۱۰",
+      "manipulatives": "خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P118"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 121,
+      "book_page": 113,
+      "pdf_page": 119,
+      "chapter": "۷",
+      "primary_banner": "آشنایی با کسر",
+      "all_section_tabs": [
+        "آشنایی با کسر"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۳ از ۸، ۲ از ۷، ۱ از ۹، ۸ تکه",
+      "manipulatives": "کاغذ مربع‌شکل، خط‌کش، نوار کاغذی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P119"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "صفحهٔ آغاز درس «آشنایی با کسر» با فعالیت عملی تاکردن؛ زبانه‌های فعّالیت و خلّق باش در لبهٔ راست."
+    },
+    {
+      "row_number": 122,
+      "book_page": 114,
+      "pdf_page": 120,
+      "chapter": "۷",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۲ قسمت، ۱۰ قسمت، ۰ تا ۴",
+      "manipulatives": "خط‌کش",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P120"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 123,
+      "book_page": 115,
+      "pdf_page": 121,
+      "chapter": "۷",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۲۷، ۴۹، ۷۴، ۱ از ۴، ۲ ده‌تایی",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P121"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 124,
+      "book_page": 116,
+      "pdf_page": 122,
+      "chapter": "۷",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۴۷، ۱۱، ۱۵۰، ۱۰، ۱۵۳، ۱۳، ۳ از ۴، ۷ از ۸",
+      "manipulatives": "نوار کاغذی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P122"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر «حلّ مسئله» بالای صفحه؛ زبانهٔ «خلّق باش» میانی؛ جعبهٔ راهبرد در پایینِ چپ."
+    },
+    {
+      "row_number": 125,
+      "book_page": 117,
+      "pdf_page": 123,
+      "chapter": "۷",
+      "primary_banner": "حلّ مسئلهٔ ساده‌تر",
+      "all_section_tabs": [
+        "حلّ مسئلهٔ ساده‌تر"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۱۰۰، ۹۹، ۱۵ دقیقه، ۳ و ۴ و ۵ ضلعی",
+      "manipulatives": "صفحهٔ ساعت",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P123"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان بنر دقیقاً «حلّ مسئلهٔ ساده‌تر» است (نه «حلّ مسئله»؛ با مختصات کلمات تأیید شد)."
+    },
+    {
+      "row_number": 126,
+      "book_page": 118,
+      "pdf_page": 124,
+      "chapter": "۷",
+      "primary_banner": "مفهوم احتمال",
+      "all_section_tabs": [
+        "مفهوم احتمال"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 4,
+      "key_numbers": "۵ قرمز، ۱ سفید، ۵ دفعه",
+      "manipulatives": "کیسه، مهره",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P124"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "فعالیت عملی گروهی (مقایسهٔ جدول با هم‌کلاسی)؛ زبانهٔ «فعّالیت» در لبهٔ راست."
+    },
+    {
+      "row_number": 127,
+      "book_page": 119,
+      "pdf_page": 125,
+      "chapter": "۷",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴ قرمز، ۲ سفید، ۱ آبی، ۱۵ دفعه، ۵ و ۵",
+      "manipulatives": "کیسه، مهره",
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P125"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "موقعیت مکانی زبانهٔ «خلّق باش» (y≈540) بین بند ۲ (y≈430) و پرسش پرچم‌ها (y≈580) است؛ انتساب بلوک پرچم‌ها به «خلّق باش» بر پایهٔ همسایگی مکانی است و از نظر محتوایی قابل تأمل (پرسش مشاهده‌ای، نه ساختنی)."
+    },
+    {
+      "row_number": 128,
+      "book_page": 120,
+      "pdf_page": 126,
+      "chapter": "۷",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۰ مهره، ۶ قرمز، ۴ سفید",
+      "manipulatives": "جعبه، کیسه، مهره",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P126"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تعداد دقیق جعبه‌های بند ۱ از متن استخراج‌شده تعیین نمی‌شود (تصویری)."
+    },
+    {
+      "row_number": 129,
+      "book_page": 121,
+      "pdf_page": 127,
+      "chapter": "۷",
+      "primary_banner": "احتمال و کسر",
+      "all_section_tabs": [
+        "احتمال و کسر"
+      ],
+      "page_type": "فعالیت",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۱۰ دفعه، ۳ رنگ",
+      "manipulatives": "مقوا، سوزن، صفحهٔ چرخنده",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P127"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بنر درسِ این صفحه «احتمال و کسر» است (ترتیب واژه‌ها با مختصات کلمات راستی‌آزمایی شد: احتمال ← و ← کسر)؛ سومین عنوان درسی فصل ۷ پس از «قسمتی از یک واحد» و «آشنایی با کسر»."
+    },
+    {
+      "row_number": 130,
+      "book_page": 122,
+      "pdf_page": 128,
+      "chapter": "۷",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۲ دستهٔ ۵تایی، ۵تایی",
+      "manipulatives": "صفحهٔ چرخنده",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P128"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "بدون بنر بالایی؛ زبانهٔ «کار در کلاس» در لبهٔ راست (y≈152-168) و «کامل کن» پایین صفحه."
+    },
+    {
+      "row_number": 131,
+      "book_page": 123,
+      "pdf_page": 129,
+      "chapter": "۷",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۵ مهره، ۵۰ مهره، ۵۰۰ مهره، ۱ سیاه",
+      "manipulatives": "کیسه، مهره",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P129"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "تعداد دقیق اهداف تیراندازی تصویری است («شکل‌های زیر» جمع است؛ حداقل ۲ هدف)."
+    },
+    {
+      "row_number": 132,
+      "book_page": 124,
+      "pdf_page": 130,
+      "chapter": "۷",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴ قسمت مساوی (تا کردن کاغذ)، ۱۰ قسمت مساوی متر، ۳ دایره",
+      "manipulatives": "خط‌کش، کاغذ",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P130"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "روی صفحه سه بنر «مرور فصل» (بالای صفحه)، «فرهنگ نوشتن» و «تمرین» دیده می‌شود؛ نوع صفحه بر اساس بلوک اصلی مرور فصل ثبت شد."
+    },
+    {
+      "row_number": 133,
+      "book_page": 125,
+      "pdf_page": 131,
+      "chapter": "۷",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 3,
+      "key_numbers": "۱ قسمت از ۴ قسمت مساوی، ۵ قسمت از ۱۱ قسمت مساوی، ۶ گوی در هر جعبه، ۲ هدف (اوّل و دوم)",
+      "manipulatives": "گوی، جعبه",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P131"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ شماره‌گذاری تمرین مرور فصل از صفحهٔ قبل (۳ تا ۵). بنر «تمرین» در متن استخراج نشد (احتمالاً بصری است). عددهای کسرها و گوی‌ها از متن به‌هم‌ریخته استخراج شده‌اند و باید تصویری تأیید شوند."
+    },
+    {
+      "row_number": 134,
+      "book_page": 126,
+      "pdf_page": 132,
+      "chapter": "۷",
+      "primary_banner": "معمّا + فرهنگ خواندن",
+      "all_section_tabs": [
+        "معمّا + فرهنگ خواندن"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P132"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "آخرین صفحهٔ فصل ۷ (مرز مرجع تأیید می‌شود). معمّا انفرادی است؛ isGame فقط برای بازی/فعالیت گروهی true شده است. شمارش قطعه‌های معمّا به نگاه تصویری نیاز دارد."
+    },
+    {
+      "row_number": 135,
+      "book_page": 127,
+      "pdf_page": 133,
+      "chapter": "۸",
+      "primary_banner": "آمار و نمودار",
+      "all_section_tabs": [
+        "آمار و نمودار"
+      ],
+      "page_type": "شروع فصل",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۶ نوع کتاب، ۷ کار روزانه",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": "مُهر «فصل 8» بالای صفحه و عنوان «آمار و نمودار» زیر آن. مرز شروع فصل ۸ (کتاب ۱۲۷) دقیقاً با مرجع می‌خواند."
+    },
+    {
+      "row_number": 136,
+      "book_page": 128,
+      "pdf_page": 134,
+      "chapter": "۸",
+      "primary_banner": "سرشماری",
+      "all_section_tabs": [
+        "سرشماری"
+      ],
+      "page_type": "درس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴ فصل سال، ۱۰ بار چرخاندن چرخنده",
+      "manipulatives": "چرخنده، چوب خط",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P134"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عنوان درس «سرشماری» بالای صفحه (احتمالاً درس ۱ فصل ۸؛ برچسب «درس ۱» در متن استخراج نشد). هر دو آیتم شماره‌دار، فعالیت‌اند نه تمرین. فعالیت سرشماری گروهی/کلاسی است."
+    },
+    {
+      "row_number": 137,
+      "book_page": 129,
+      "pdf_page": 135,
+      "chapter": "۸",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "نیم‌ساعت (مرز گرد کردن)، ۷ روز هفته، جمع ۱۸ ساعت (طبق استخراج)",
+      "manipulatives": "چوب خط",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P135"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "مقدارهای جدول رضا از ترتیب مکانی ستون‌ها بازسازی شده‌اند؛ جدول ۱ به چوب‌خط‌های تصویری وابسته است و شمارش دقیق آن نیازمند نگاه تصویری است."
+    },
+    {
+      "row_number": 138,
+      "book_page": 130,
+      "pdf_page": 136,
+      "chapter": "۸",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۳۰ رأی (۱۳+۹+۸ طبق استخراج)، ۳ موضوع کتاب",
+      "manipulatives": "چوب خط",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P136"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "شمارش رأی‌ها از متن استخراجی انجام شده و باید با تصویر تأیید شود؛ تعداد کتاب‌های رنگی قفسه از متن قابل استخراج نبود."
+    },
+    {
+      "row_number": 139,
+      "book_page": 131,
+      "pdf_page": 137,
+      "chapter": "۸",
+      "primary_banner": "نمودار ستونی",
+      "all_section_tabs": [
+        "نمودار ستونی"
+      ],
+      "page_type": "درس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۵ سبز + ۴ قرمز + ۳ آبی = ۱۲ مهره، ۱۰ بار آزمایش، ۷ روز هفته، فرد ۱،۳،۵،۷… / زوج ۲،۴،۶،۸…",
+      "manipulatives": "کیسه، مهره",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P137"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع درس «نمودار ستونی» (احتمالاً درس ۲ فصل ۸). وجود جعبهٔ «الگویابی کن» (فرد/زوج) با موقعیت‌یابی مکانی متن تأیید شد؛ پیوند موضوعی آن با فصل آمار کم است اما واقعاً روی همین صفحه است. هر دو آیتم شماره‌دار فعالیت‌اند."
+    },
+    {
+      "row_number": 140,
+      "book_page": 132,
+      "pdf_page": 138,
+      "chapter": "۸",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۹ بازهٔ قد: ۱۱۰–۱۱۴ تا ۱۵۰–۱۵۴، ۵ بازهٔ وزن: ۲۰–۲۹ تا ۶۰–۶۹، مثال: قد ۱۲۳ → ستون ۱۲۰–۱۲۴",
+      "manipulatives": "ابزار اندازه‌گیری قد و وزن",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P138"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "فعالیت جمعی کلاسی (اندازه‌گیری همهٔ دانش‌آموزان)."
+    },
+    {
+      "row_number": 141,
+      "book_page": 133,
+      "pdf_page": 139,
+      "chapter": "۸",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۴ روز آفتابی، ۶ ابری، ۸ بارانی، ۴ هفته = ۲۸ روز → نیمه‌ابری ۱۰، کمک درسی ۶ / داستان ۱۰ / دفاع مقدّس ۸ / علمی ۶",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P139"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "عدد «۶ کتاب علمی» و جمله‌های «…تایی می‌شود» از متن به‌هم‌ریخته استخراج شده‌اند — تأیید تصویری لازم. بلوک گروه‌بندی (شبیه تمرین ضرب) در انتهای صفحهٔ تمرین فصل آمار دیده می‌شود؛ عیناً روی کتاب ۱۳۳ است (با موقعیت‌یابی مکانی تأیید شد)."
+    },
+    {
+      "row_number": 142,
+      "book_page": 134,
+      "pdf_page": 140,
+      "chapter": "۸",
+      "primary_banner": "حلّ مسئله",
+      "all_section_tabs": [
+        "حلّ مسئله"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۲۷ + □ = ۵۳، ۹۵۰ تومان، ۴۰۰ تومان (پاک)، ۲ دفتر + ۱ پاک",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P140"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع واحد «حلّ مسئله» فصل ۸ (ادامه در ص ۱۳۵ با سرصفحهٔ «روش نمادین»)."
+    },
+    {
+      "row_number": 143,
+      "book_page": 135,
+      "pdf_page": 141,
+      "chapter": "۸",
+      "primary_banner": "روش نمادین",
+      "all_section_tabs": [
+        "روش نمادین"
+      ],
+      "page_type": "حلّ مسئله",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "۴ تساوی با جای خالی",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "CONFLICT_NEEDS_REVIEW",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P141"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "ادامهٔ واحد حلّ مسئلهٔ فصل ۸. ساختار دقیق تساوی‌های «کامل کن» نامشخص است و به نگاه تصویری نیاز دارد (تنها نقطهٔ ابهام اصلی این صفحه)."
+    },
+    {
+      "row_number": 144,
+      "book_page": 136,
+      "pdf_page": 142,
+      "chapter": "۸",
+      "primary_banner": "نمودار تصویری",
+      "all_section_tabs": [
+        "نمودار تصویری"
+      ],
+      "page_type": "درس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "۶۱، ۴۸، ۴۴، ۳۹، ۲۸، ۳۱، تقریب به ده: ۳۶، ۴۰، ۵۲، ۲۱، ۱۹، ۲۳→۲۰ / ۴۷→۵۰، هر ۱۰ دانش‌آموز = ۱ نماد",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P142"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "شروع درس «نمودار تصویری» (احتمالاً درس ۳ فصل ۸)."
+    },
+    {
+      "row_number": 145,
+      "book_page": 137,
+      "pdf_page": 143,
+      "chapter": "۸",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "انقلاب ۴۰، آزادی ۶۰، هر ۱۰ = ۱ نماد",
+      "manipulatives": null,
+      "group_activity": "بله",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P143"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "فعالیت ۱ پرسش کلاسی از آموزگار است (گروهی). عددهای دو ردیف جدول خیابان‌ها (استقلال، امام رضا) در متن استخراج نشد — نیازمند نگاه تصویری."
+    },
+    {
+      "row_number": 146,
+      "book_page": 138,
+      "pdf_page": 144,
+      "chapter": "۸",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین",
+        "کامل کن"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "سعدی ۵۰، حافظ ۴۰، مولوی ۶۵، هر ۱۰ درخت = ۱ نماد، هر ۱۰۰ کتاب = ۱ نماد",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P144-01",
+        "EV-TEXT-FOOTER-P144"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "شمارش نمادهای نمودار کتابخانه و ساختار تساوی‌های «کامل کن» از متن برنیامد؛ به نگاه تصویری نیاز دارد."
+    },
+    {
+      "row_number": 147,
+      "book_page": 139,
+      "pdf_page": 145,
+      "chapter": "۸",
+      "primary_banner": "انتخاب نمودار",
+      "all_section_tabs": [
+        "انتخاب نمودار",
+        "فعّالیت"
+      ],
+      "page_type": "درس",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۸ صبح تا ۸ بعدازظهر، درس ۳+۲، تلویزیون ۲، مهمانی ۳، صبحانه/ناهار و جمع‌آوری سفره ۱+۱ (طبق استخراج)، محور ساعت ۱ تا ۱۰",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "VERIFIED_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P145-01",
+        "EV-TEXT-FOOTER-P145"
+      ],
+      "prior_verdict": "✗",
+      "inspector_note": "شروع درس «انتخاب نمودار» (احتمالاً درس ۴ فصل ۸). توزیع دقیق ساعات صبحانه/ناهار از متن به‌هم‌ریخته بازسازی شده (جمع بازسازی‌شده = ۱۲ ساعت) — تأیید تصویری لازم."
+    },
+    {
+      "row_number": 148,
+      "book_page": 140,
+      "pdf_page": 146,
+      "chapter": "۸",
+      "primary_banner": "کار در کلاس",
+      "all_section_tabs": [
+        "کار در کلاس"
+      ],
+      "page_type": "کار در کلاس",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۱۲ بار چرخاندن، الگوی زوج ۱۲۴،۱۲۶،۱۲۸…، الگوی فرد ۱۲۱،۱۲۳،۱۲۵…",
+      "manipulatives": "چرخنده",
+      "group_activity": "بله",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P146"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "آزمایش چرخنده فردی/کلاسی با ثبت نتیجه‌ها؛ به‌عنوان فعالیت بازی‌گونه ثبت شد."
+    },
+    {
+      "row_number": 149,
+      "book_page": 141,
+      "pdf_page": 147,
+      "chapter": "۸",
+      "primary_banner": "تمرین",
+      "all_section_tabs": [
+        "تمرین"
+      ],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "ریاضی ۵، علوم ۳، قرآن ۲، ورزش ۳ (ساعت)",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P147"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "مقدارهای نمودار فاطمه/علی تصویری است و از متن استخراج نمی‌شود؛ سؤال‌ها و گروه‌ها کامل استخراج شد."
+    },
+    {
+      "row_number": 150,
+      "book_page": 142,
+      "pdf_page": 148,
+      "chapter": "۸",
+      "primary_banner": "مرور فصل",
+      "all_section_tabs": [
+        "مرور فصل"
+      ],
+      "page_type": "مرور فصل",
+      "lesson": null,
+      "exercise_count": 1,
+      "key_numbers": "۲۶ پاسخ، آبی ۹، قرمز ۸، سبز ۵، زرد ۴ (شمارش استخراجی)",
+      "manipulatives": "چوب خط",
+      "group_activity": "—",
+      "reader_a_confidence": "متوسط",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P148"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "آغاز مرور فصل ۸ (سه بنر «مرور فصل»، «فرهنگ نوشتن»، «تمرین»). شمارش ۲۶ پاسخ از متن استخراجی است — تأیید تصویری لازم."
+    },
+    {
+      "row_number": 151,
+      "book_page": 143,
+      "pdf_page": 149,
+      "chapter": "۸",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "تمرین",
+      "lesson": null,
+      "exercise_count": 2,
+      "key_numbers": "محمود ۵۲، حسن ۴۷، علی ۳۱، محسن ۱۹، احمد ۱۲، هر ۱۰ گوسفند = ۱ نماد، از ۷ صبح تا ۷ شب، پاسخ تمرین ۱: ۲۶ دانش‌آموز",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P149"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "ادامهٔ مرور فصل بدون بنر جدید (بنر = null). آیتم‌های شماره‌دار این صفحه: ۲ و ۳؛ تمرین ۱ ادامهٔ صفحهٔ قبل است."
+    },
+    {
+      "row_number": 152,
+      "book_page": 144,
+      "pdf_page": 150,
+      "chapter": "۸",
+      "primary_banner": "معمّا + خلّق باش",
+      "all_section_tabs": [
+        "معمّا + خلّق باش"
+      ],
+      "page_type": "معما",
+      "lesson": null,
+      "exercise_count": 0,
+      "key_numbers": "",
+      "manipulatives": "قطعه‌های معمّا، کاشی رنگی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P150"
+      ],
+      "prior_verdict": "✓",
+      "inspector_note": "پایان متن کتاب (ص ۱۴۴). املأ بنر دوم مطابق متن و سابقهٔ پروژه: «خلّق باش». معمّا انفرادی است؛ isGame فقط برای بازی/فعالیت گروهی true است."
+    },
+    {
+      "row_number": 153,
+      "book_page": null,
+      "pdf_page": 151,
+      "chapter": "پس",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره (پس‌صفحه — شابلون)",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "",
+      "manipulatives": "شابلون بریدنی",
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    },
+    {
+      "row_number": 154,
+      "book_page": null,
+      "pdf_page": 152,
+      "chapter": "پس",
+      "primary_banner": null,
+      "all_section_tabs": [],
+      "page_type": "غیره (پس‌صفحه — نامهٔ نظرسنجی)",
+      "lesson": null,
+      "exercise_count": null,
+      "key_numbers": "صندوق پستی ۱۵۸۷۵–۴۸۷۴",
+      "manipulatives": null,
+      "group_activity": "—",
+      "reader_a_confidence": "بالا",
+      "reconciliation_status": "AGREED_UNVERIFIED",
+      "evidence_refs": [],
+      "prior_verdict": "✓",
+      "inspector_note": ""
+    }
+  ],
+  "snapshot_sha256": "8a81140c5085fe2195d143eb3fbcd94c25a54950e7eb66db2b7f581d8b51b8a7"
+}

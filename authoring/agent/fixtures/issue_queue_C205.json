@@ -1,0 +1,846 @@
+{
+  "schema_version": "1.0.0",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "total_issues": 29,
+  "issues": [
+    {
+      "issue_id": "ISS-P006-RECONCILE",
+      "pdf_page": 6,
+      "book_page": null,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "غیره",
+        "key_numbers": "۱، ۱۹، ۳۷، ۵۵، ۷۳، ۹۱، ۱۰۹، ۱۲۷"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "عنوان فصل‌های ۲ تا ۸ بازسازی از نسخهٔ مرسوم و اشتباه است. عناوین واقعی فهرست: ۱ عدد و رقم؛ ۲ جمع و تفریق اعداد دو رقمی؛ ۳ اشکال هندسی؛ ۴ عددهای سه رقمی؛ ۵ اندازه‌گیری؛ ۶ جمع و تفریق اعداد سه رقمی؛ ۷ کسر و احتمال؛ ۸ آمار و نمودار. شمارهٔ صفحات ۱/۱۹/۳۷/۵۵/۷۳/۹۱/۱۰۹/۱۲۷ صحیح است."
+      },
+      "direct_observation_value": {
+        "primary_banner": "فهرست",
+        "all_tabs": [
+          "فهرست"
+        ],
+        "claims": [
+          "فصل ۱ ص ۱ عدد و رقم | فصل ۲ ص ۱۹ جمع و تفریق اعداد دو رقمی | فصل ۳ ص ۳۷ اشکال هندسی | فصل ۴ ص ۵۵ عددهای سه رقمی | فصل ۵ ص ۷۳ اندازه‌گیری | فصل ۶ ص ۹۱ جمع و تفریق اعداد سه رقمی | فصل ۷ ص ۱۰۹ کسر و احتمال | فصل ۸ ص ۱۲۷ آمار و نمودار"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی None (PDF 6) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-CROP150-P006-01"
+      ]
+    },
+    {
+      "issue_id": "ISS-P008-RECONCILE",
+      "pdf_page": 8,
+      "book_page": 2,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "کار در کلاس",
+        "key_numbers": ""
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر/عنوان بالای صفحه «عدد و شمارش» ثبت نشده. (۲) تاب بلوک شمارش توپ‌ها «فعّالیت» است نه «کار در کلاس». (۳) تاب بلوک شکل‌های پایین (جعبهٔ قرمز) «کار در کلاس» است، نه «فعّالیت». (۴) نوع صفحه: فعالیت + کار در کلاس (هر دو تاب)."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 2 (PDF 8) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P008"
+      ]
+    },
+    {
+      "issue_id": "ISS-P009-RECONCILE",
+      "pdf_page": 9,
+      "book_page": 3,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "فعالیت",
+        "key_numbers": "۱، ۲، ۳، ۴، ۵، ۶، ۷، ۸، ۹"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "ساختار طبق حکم کتاب کاغذی تأیید شد: فعّالیت دو نفرهٔ شمارش چوب‌خط (بالای صفحه) + «جدول شگفت‌انگیز» (زیر آن). دو مقدار اصلاح می‌شود: (۱) جدول شمارش ۵ ستون دارد (۵ نوع گل: نیلوفر، گل لیوانی، لاله، غنچه، گل سفید) — نه «۸ شکل». (۲) جدول شگفت‌انگیز فیل شبکهٔ ۸×۸ از عددهای یک‌رقمی و دو رقمی (تا ۸۵) با خانه‌های خالی است — توصیف «عددهای ۱ تا ۹» دقیق نیست."
+      },
+      "direct_observation_value": {
+        "primary_banner": "فعّالیت",
+        "all_tabs": [
+          "فعّالیت"
+        ],
+        "claims": [
+          "3",
+          "جدول شمارش چوب‌خط ۵ ستونی (۵ نوع گل؛ ستون اول //// = ۴)",
+          "جدول شگفت‌انگیز داخل فیل آبی: شبکهٔ ۹×۹ سودوکو با نواحی ۳×۳ نارنجی و ارقام یک‌رقمی ۱ تا ۹"
+        ]
+      },
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 3 (PDF 9) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P009-01",
+        "EV-CROP150-P009-02",
+        "EV-TEXT-FOOTER-P009"
+      ]
+    },
+    {
+      "issue_id": "ISS-P010-RECONCILE",
+      "pdf_page": 10,
+      "book_page": 4,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "تمرین",
+        "key_numbers": "۱، ۲، ۳، ۴، ۵، ۶، ۷، ۹، ۱۰، ۱۲"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر «تمرین» (تاب بالای صفحه) در فیلد بنر خالی است. (۲) بلوک «سه محور عددی ۱ تا ۱۲» و عبارت‌های «۶+۲، ۹+۴، ۷+۵، ۵+۱، ۴+۷» در صفحه وجود ندارد (واژهٔ «محور» در لایهٔ متن صفر بار) — احتمالاً برداشت اشتباه از ارقام ۱ تا ۱۲ صفحهٔ ساعت‌ها. محتوای واقعی پایان صفحه: «حدس بزن» (مقایسهٔ دو دسته گل بدون شمردن) + نوشتن یک عبارت جمع از روی دو دسته و خواندن از دو طرف با دکمهٔ <. عددهای صفحه: حلقه‌های عدد ۰ تا ۹ و ارقام صفحهٔ ساعت‌ها (تا ۱۲)."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 4 (PDF 10) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P010"
+      ]
+    },
+    {
+      "issue_id": "ISS-P011-RECONCILE",
+      "pdf_page": 11,
+      "book_page": 5,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "فعالیت",
+        "key_numbers": "۲۵، ۱۰، ۲۰، ۳۰، ۶۰، ۸۰، ۹۰"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) عنوان بالای صفحه «دسته‌های ده‌تایی و یکی» ثبت نشده (فیلد بنر خالی). (۲) تاب «کار در کلاس» متعلق به بلوک «نوشتن عددها را ادامه دهید» (الگوهای عددی/اعداد به حروف) است، نه ساختن عدد با کارت. (۳) بلوک کارت‌های عدد تاب «فعّالیت» دارد و طبق متن «۲ نفره» است («همین کار را به صورت ۲ نفره انجام دهید» — نسخهٔ دو نفره تأیید شد). (۴) بلوک ۲ فهرست عناصر («دسته‌های ده‌تایی و یکی») توصیف دوبارهٔ همان بلوک اول است."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 5 (PDF 11) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P011"
+      ]
+    },
+    {
+      "issue_id": "ISS-P022-RECONCILE",
+      "pdf_page": 22,
+      "book_page": 16,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "فرهنگ نوشتن",
+        "page_type": "تمرین",
+        "key_numbers": "۷ و ۸ (اعداد دورقمی)، ۶، ۰، ۱، ۸+۹، ۱۷−۸، حاصل ۵"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "[حکم بنر] بنر اصلی «مرور فصل» است (روبان زرد بالای صفحه)، نه «فرهنگ نوشتن». تاب «فرهنگ نوشتن» و تاب «تمرین» (۴ مورد) در میانهٔ صفحه‌اند. نوع صفحه: مرور فصل. تأیید می‌شود: ۴ مورد تمرین، عبارت‌های ۸+۹ و ۱۷−۸، و شش جعبهٔ «…+…=۵» (۳+۳) — ابهام یادداشت برطرف شد."
+      },
+      "direct_observation_value": {
+        "primary_banner": "مرور فصل",
+        "all_tabs": [
+          "مرور فصل",
+          "فرهنگ نوشتن",
+          "تمرین"
+        ],
+        "claims": [
+          "16",
+          "مرور فصل",
+          "تمرین موارد ۱ تا ۴: ساخت عدد با ۷ و ۸؛ با ۶ و ۰ و ۱؛ ۸+۹ و ۱۷−۸؛ ۶ کادر جمع برابر ۵"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 16 (PDF 22) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-CROP150-P022-01",
+        "EV-CROP150-P022-02",
+        "EV-TEXT-FOOTER-P022"
+      ]
+    },
+    {
+      "issue_id": "ISS-P026-RECONCILE",
+      "pdf_page": 26,
+      "book_page": 20,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "تقریب بزن",
+        "page_type": "فعالیت",
+        "key_numbers": "۴۰+۲۰، ۸۰−۳۰، ۹۰−۶۰، ۶ دستهٔ ده‌تایی = ۶۰"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "بنر فیلد «تقریب بزن» اشتباه است (اثر ترتیب استخراج RTL): «تقریب بزن» جعبهٔ قرمز پایین صفحه است. بنر/نخستین تاب صفحه «فعّالیت» است (بالا-راست)؛ عنوان درس بالای صفحه «جمع و تفریق ده‌تایی». ترتیب واقعی: عنوان ← فعّالیت (الف/ب/ج + عبارت‌ها) ← نکتهٔ قرمز (۴ دسته + ۲ دسته = ۶ دسته = ۶۰) ← جعبهٔ «تقریب بزن» با سه محور ۰ تا ۴۰."
+      },
+      "direct_observation_value": {
+        "primary_banner": "جمع و تفریق ده‌تایی",
+        "all_tabs": [
+          "جمع و تفریق ده‌تایی",
+          "فعّالیت",
+          "تقریب بزن"
+        ],
+        "claims": [
+          "20",
+          "عنوان درس: جمع و تفریق ده‌تایی + تاب فعّالیت",
+          "جعبهٔ قرمز پایین صفحه: تقریب بزن (سه محور ۰ تا ۴۰ با پرش ده‌تایی)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 20 (PDF 26) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-CROP150-P026-01",
+        "EV-CROP150-P026-02",
+        "EV-TEXT-FOOTER-P026"
+      ]
+    },
+    {
+      "issue_id": "ISS-P027-RECONCILE",
+      "pdf_page": 27,
+      "book_page": 21,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "تمرین",
+        "page_type": "تمرین",
+        "key_numbers": "۳+۵=۸، ۳۰+۵۰=۸۰، ۴−۳، ۶−۵، ۴۰−۳۰، ۶۰−۵۰، ۲۰+۴۰، ۷۰−۲۰، ۳+۴"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "بنر «تمرین» در صفحه وجود ندارد (نه در تصویر، نه در لایهٔ متن). تاب‌های واقعی: «کار در کلاس» (بالای صفحه، موارد ۱-۲: حساب مانند نمونه + تبدیل شکل به دسته‌های ده‌تایی) و «فعّالیت» (پایین، موارد ۱-۲: نوشتن جمع برای هر شکل + نشان‌دادن روی محور ۰ تا ۱۰۰). نوع صفحه: کار در کلاس + فعالیت. شماره‌گذاری هر بخش جداگانه از ۱ ✓."
+      },
+      "direct_observation_value": {
+        "primary_banner": "کار در کلاس",
+        "all_tabs": [
+          "کار در کلاس",
+          "فعّالیت"
+        ],
+        "claims": [
+          "21",
+          "کار در کلاس (موارد ۱ و ۲: حساب یکی‌ها و ده‌تایی‌ها + دسته‌بندی مربع‌ها)",
+          "فعّالیت (موارد ۱ و ۲: نوشتن جمع برای دسته‌های ده‌تایی + نمایش روی محور ۰ تا ۱۰۰)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 21 (PDF 27) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-CROP150-P027-01",
+        "EV-CROP150-P027-02",
+        "EV-TEXT-FOOTER-P027"
+      ]
+    },
+    {
+      "issue_id": "ISS-P030-RECONCILE",
+      "pdf_page": 30,
+      "book_page": 24,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "کار در کلاس",
+        "page_type": "کار در کلاس",
+        "key_numbers": "۸+۹، ۷+۹، ۱۸−۹، ۱۷−۹، ۷+۵، ۷+۶، ۱۲−۹، ۱۷−۸، ۱۴−۶، ۱۹−۹"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بلوک «رنگ‌کردن/خط‌زدن مربع‌ها» با برچسب «تمرین» ثبت شده ولی تاب آن در صفحه «فعّالیت» است (پایین صفحه). (۲) ترتیب صفحه: «کار در کلاس» (متن + مورد ۲: جدول‌های مانند نمونه) سپس «فعّالیت» (مورد ۱: رنگ‌آمیزی مربع‌ها) — در نقشه جای این دو وارونه است. بنر دوم «فعّالیت» ✓ در یادداشت درست ثبت شده."
+      },
+      "direct_observation_value": {
+        "primary_banner": "کار در کلاس",
+        "all_tabs": [
+          "کار در کلاس",
+          "فعّالیت"
+        ],
+        "claims": [
+          "24",
+          "کار در کلاس: ۱۴−۶، ۱۲−۹، ۷+۵، ۸+۹ و ۱۹−۹، ۱۷−۸، ۷+۶، ۶+۹",
+          "فعّالیت شامل مورد ۱ (۷+۹، ۱۸−۹، ۱۷−۹ با مربع‌ها) و مورد ۲ (جدول‌های جمع و تفریق پایین صفحه)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 24 (PDF 30) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P030-01",
+        "EV-CROP150-P030-02",
+        "EV-TEXT-FOOTER-P030"
+      ]
+    },
+    {
+      "issue_id": "ISS-P031-RECONCILE",
+      "pdf_page": 31,
+      "book_page": 25,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "تمرین",
+        "page_type": "تمرین",
+        "key_numbers": "۷+۶=۱۳، ۶+۶=۱۲، ۹+۵، ۱۴−۶، ۵+۵=۱۰، جدول ۵–۹: ۱۵ تا ۱۹"
+      },
+      "reader_b_value": {
+        "verdict": "✓",
+        "correction": "—"
+      },
+      "direct_observation_value": {
+        "primary_banner": "کار در کلاس",
+        "all_tabs": [
+          "کار در کلاس",
+          "تمرین",
+          "خلاق باش"
+        ],
+        "claims": [
+          "25",
+          "مورد ۲: امین ۹ صفحه خوانده و ۸ صفحهٔ دیگر خواند (۹+۸)؛ مورد ۳: ریحانه ۱۴ تخم‌مرغ، ۶ مصرف شد (۱۴−۶)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 25 (PDF 31) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P031-01",
+        "EV-TEXT-FOOTER-P031"
+      ]
+    },
+    {
+      "issue_id": "ISS-P032-RECONCILE",
+      "pdf_page": 32,
+      "book_page": 26,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "حلّ مسئله",
+        "page_type": "حلّ مسئله",
+        "key_numbers": "۷۱، ۷۲، ۷۳، ۲، ۴، ۶، ۸، ۳، ۶، ۹، ۱۲، ۰+۶=۶، ۲+۴=۶، ۵۳، ۵۴، ۷۳، ۷۴"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) ترتیب بلوک‌ها وارونه ثبت شده: «حلّ مسئله» (موارد ۱ تا ۳) بالای صفحه است و «الگویابی کن» (سه الگو) جعبهٔ پایین. (۲) مورد ۱ حلّ مسئله (نوشتن همهٔ عددهای دورقمی با رقم یکان ۳ و رقم دهگان ۵ و ۷ → ۵۳ و ۷۳ با نمودار درختی) در فهرست عناصر نیامده. (۳) «محور/نمونهٔ کوچک ۰-۶» در واقع جدول دو ردیفی ۰ تا ۵ / ۵ تا ۰ برای جمع‌های برابر ۶ (مورد ۳) است. (۴) الگوها: «۷۱، ۷۲، ۷۳، …» / «۸، ۶، ۴، ۲، …» (کم‌کردن ۲تایی) / «۱۲، ۹، ۶، ۳، …» (کم‌کردن ۳تایی)."
+      },
+      "direct_observation_value": {
+        "primary_banner": "حلّ مسئله",
+        "all_tabs": [
+          "حلّ مسئله",
+          "الگویابی کن"
+        ],
+        "claims": [
+          "26",
+          "مورد ۱ حلّ مسئله: رقم‌های یکان ۳ و ۴ و رقم دهگان ۵ و ۷ → ۵۳، ۵۴، ۷۳، ۷۴ (۴ عدد)",
+          "الگویابی کن: ۷۱،۷۲،۷۳ (چپ به راست +۱)؛ ۲،۴،۶،۸ (+۲)؛ ۳،۶،۹،۱۲ (+۳)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 26 (PDF 32) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P032-01",
+        "EV-CROP150-P032-02",
+        "EV-TEXT-FOOTER-P032"
+      ]
+    },
+    {
+      "issue_id": "ISS-P033-RECONCILE",
+      "pdf_page": 33,
+      "book_page": 27,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "کامل کن",
+        "page_type": "غیره (کامل کن + الگوسازی)",
+        "key_numbers": "هر قسمت کوچک = ۱ دقیقه"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "بنر اصلی/بالای صفحه «الگوسازی» است (رنگ‌آمیزی خانه‌ها، روش اول/دوم)؛ «کامل کن» بنر جعبهٔ قرمز میانی (ساعت‌ها) است — در نقشه برعکس ثبت شده. تأیید: ۳ ساعت بزرگ در جعبه + بزرگ‌نمایی عقربه؛ «هر قسمت کوچک یک دقیقه است» (به‌صورت واژهٔ «یک»). پایین صفحه: نکتهٔ نظم."
+      },
+      "direct_observation_value": {
+        "primary_banner": "الگوسازی",
+        "all_tabs": [
+          "الگوسازی",
+          "کامل کن"
+        ],
+        "claims": [
+          "27",
+          "الگوسازی: مثلث با ۲ رنگ (آبی یا قرمز) و مربع با ۳ رنگ (قهوه‌ای، سبز و زرد) → ۶ حالت",
+          "کامل کن: ۳ ساعت آبی با ذره‌بین روی دقیقه‌ها؛ هر قسمت کوچک یک دقیقه است"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 27 (PDF 33) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-CROP150-P033-01",
+        "EV-CROP150-P033-02",
+        "EV-TEXT-FOOTER-P033"
+      ]
+    },
+    {
+      "issue_id": "ISS-P037-RECONCILE",
+      "pdf_page": 37,
+      "book_page": 31,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "فعّالیت (ادامهٔ جمع و تفریق دو عدد)",
+        "page_type": "فعالیت",
+        "key_numbers": "۲۴+۳۷=۶۱، ۲۴+۳۰=۵۴، ۵۴+۷، ۳۵−۱۷، ۲۹+۱۴، ۳۷+۲۵، ۴۳−۲۷، ۵۲−۱۴، ۲۵−۷، ۳۹+۴، ۲۳−۷"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر عیناً این‌گونه نیست: عنوان بالای صفحه «جمع و تفریق دو عدد (ادامه)» است + تاب «فعّالیت»؛ عبارت «فعّالیت (ادامهٔ جمع و تفریق دو عدد)» بازنویسی است. (۲) مورد ۲ تفریق «۵۷−۱۴» است (با گام‌های کم‌کردن ۱۰ و سپس ۴ تا حاصل ۴۳)، نه «۳۵−۱۷»؛ مقدار «۴۳» در گام‌ها آمده. (۳) گام‌های میانی مورد ۱ دقیقاً: ۳۷=۳۰+۷، ۲۴+۳۰=۵۴، ۵۴+۷=۶۱ ← ۲۴+۳۷=۶۱ (تأیید شد)."
+      },
+      "direct_observation_value": {
+        "primary_banner": "جمع و تفریق دو عدد (ادامه)",
+        "all_tabs": [
+          "جمع و تفریق دو عدد (ادامه)",
+          "فعّالیت"
+        ],
+        "claims": [
+          "31",
+          "مورد ۲ فعّالیت: تفریق نمونه ۳۵−۱۷ (۳۵−۱۰=۲۵، ۲۵−۷=۱۸) و دو تمرین ۵۲−۱۴ و ۴۳−۲۷"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 31 (PDF 37) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P037-01",
+        "EV-TEXT-FOOTER-P037"
+      ]
+    },
+    {
+      "issue_id": "ISS-P039-CHECKMARK-CONFLICT",
+      "pdf_page": 39,
+      "book_page": 33,
+      "field_name": "اصلاح آرنا در ردیف ✓",
+      "severity": "HIGH",
+      "category": "CHECKMARK_WITH_HIDDEN_EDIT",
+      "reader_a_value": "• تمرین؛ حاصل جمع و تفریق: ۱: به دست آوردن حاصل جمع و تفریق‌ها (عبارت‌های این مورد در متن استخراج نیامده — احتمالاً تصویری/شکل‌دار).\n• تمرین؛ مسئلهٔ مهدی (قرآن): ۲: مهدی ۲۶ دقیقه ب",
+      "reader_b_value": "[حکم بنر] بنر اصلی «تمرین» (نخستین تاب بالای صفحه، کنار تصویر بچه‌ها) — تأیید شد؛ دو تاب «تمرین» + جعبهٔ قرمز «تقریب بزن» در صفحه. تکمیل: عبارت‌های عمودی مورد ۱ بلوک اول = ۴۹+۲۷، ۵۰−۲۴، ۳۴−۲۱، ۲۵+۳۸.",
+      "direct_observation_value": [
+        [
+          "59+27",
+          "54-21",
+          "60-14",
+          "23+57"
+        ],
+        {
+          "input": 25,
+          "approx_ten": 30,
+          "rule": "half_up_explicit_footnote"
+        }
+      ],
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "ردیف با حکم «✓» در ستون اصلاح آرنا دارای تغییر/تناقض است و در C205.pdf مقادیر واقعی با کراپ بررسی شد.",
+      "evidence_refs": [
+        "EV-CROP150-P039-01",
+        "EV-CROP150-P039-02",
+        "EV-TEXT-FOOTER-P039"
+      ]
+    },
+    {
+      "issue_id": "ISS-P040-CHECKMARK-CONFLICT",
+      "pdf_page": 40,
+      "book_page": 34,
+      "field_name": "اصلاح آرنا در ردیف ✓",
+      "severity": "CRITICAL",
+      "category": "OVERLAPPING_TABLE_CORRUPTION",
+      "reader_a_value": "• غیره؛ فرهنگ نوشتن: روش پیدا کردن جواب جمع و تفریق تقریبی را توضیح دهید و برای آن یک مثال بزنید (پرسش باز بدون شماره).\n• جدول؛ جدول رنگ: ۴ ردیف: سبز = عددهای بین ۱۰ تا ۲۰، آبی = ۲",
+      "reader_b_value": "[حکم بنر] بنر اصلی «مرور فصل» (روبان زرد بالای صفحه) — تأیید شد؛ تاب «فرهنگ نوشتن» و تاب «تمرین» زیر آن. تکمیل: جدول رنگ (سبز: ۱۰ تا ۲۰، آبی: ۱۰۰ تا ۱۱۰، قرمز: ۲۰ تا ۳۰، زرد: ۱۰۰ تا ۱۰۵) و ۱۰ گل با عبارت‌های جمع/تفریق.",
+      "direct_observation_value": [
+        {
+          "سبز": [
+            10,
+            20
+          ],
+          "آبی": [
+            21,
+            30
+          ],
+          "قرمز": [
+            31,
+            40
+          ],
+          "زرد": [
+            41,
+            50
+          ]
+        }
+      ],
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "ردیف با حکم «✓» در ستون اصلاح آرنا دارای تغییر/تناقض است و بازه‌های عددی هم‌پوشان (۱۰۰–۱۱۰ / ۱۰۰–۱۰۵) ایجاد کرده که در C205.pdf اصلاً وجود ندارد!",
+      "evidence_refs": [
+        "EV-CROP150-P040-01",
+        "EV-TEXT-FOOTER-P040"
+      ]
+    },
+    {
+      "issue_id": "ISS-P044-RECONCILE",
+      "pdf_page": 44,
+      "book_page": 38,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "فعالیت",
+        "key_numbers": "۳، ۴، ۶"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) تعداد آیتم‌های شماره‌دار ۴ است (۱ رسم با شابلون، ۲ ترکیب شکل‌ها مانند نمونه، ۳ نوشتن تعداد ضلع/گوشهٔ ۵ شکل، ۴ آزمایش «تعداد گوشه‌ها = تعداد ضلع‌ها»)، نه ۵؛ رقم «۶» اثر استخراج است (شکل ۶ضلعی در این صفحه نیست). (۲) بنر: عنوان «یادآوری شکل‌های هندسی» (راست-بالا) + تاب «فعّالیت» — فیلد بنر خالی است. (۳) برچسب‌های مورد ۱ دقیقاً: مثلث، مربع، مستطیل، دایره (۴ عدد) ✓."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 38 (PDF 44) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P044"
+      ]
+    },
+    {
+      "issue_id": "ISS-P046-RECONCILE",
+      "pdf_page": 46,
+      "book_page": 40,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "تمرین",
+        "key_numbers": ""
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر «تمرین» (تاب بالای صفحه) ثبت نشده — فیلد بنر خالی. (۲) نوع دو شکل مورد ۱: دو شش‌ضلعی (یک منتظم، یک نامنظم) — در استخراج نامشخص مانده بود. (۳) جدول رنگ: ۳ رنگ (زرد-مثلث، قرمز-مربع، آبی-دایره) به‌عنوان کلید رنگ‌آمیزی پنجره. (۴) جعبهٔ «کامل کن»: ۴ تصویر ساعت."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 40 (PDF 46) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P046"
+      ]
+    },
+    {
+      "issue_id": "ISS-P048-RECONCILE",
+      "pdf_page": 48,
+      "book_page": 42,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "کار در کلاس",
+        "key_numbers": "۱۰، ۳"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر «کار در کلاس» (تاب بالای صفحه) ثبت نشده — فیلد بنر خالی. (۲) مرز بلوک «خلّق باش» روشن شد: فقط جعبهٔ قرمز پایین (معمای کلمات + تصویر کاشی + شبکهٔ شطرنجی)؛ پاراگراف «کاشی‌کاری» بیرون از آن و در بخش کار در کلاس است. (۳) تأیید: ۳ شکل سمت چپ = مثلث، مربع، شش‌ضلعی (با شبکه‌های متناظر) و «۱۰ تا ببرید»."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 42 (PDF 48) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P048"
+      ]
+    },
+    {
+      "issue_id": "ISS-P050-RECONCILE",
+      "pdf_page": 50,
+      "book_page": 44,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "حلّ مسئله",
+        "key_numbers": "۵، ۰ تا ۹، ۲، ۴، ۶، ۸، ۱۰، ۱۵، ۲۰، ۲۵"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر «حلّ مسئله» بالای صفحه (راست-بالا) است، نه «میانه/پایین»؛ فیلد بنر خالی است. (۲) ترتیب: «حلّ مسئله» (۱ الگوی دایره‌ها با برچسب شکل ۱ تا ۵، ۲ ادامهٔ الگوها: رنگ‌ها + ۲،۴،۶،۸ و ۱۰،۱۵،۲۰،۲۵) ← جعبهٔ «کامل کن» (ساعت جواد + تشخیص ارقام ۰ تا ۹) ← نکتهٔ پایانی. (۳) تعداد تمرین شماره‌دار ۲ است («۱ـ» و «۲ـ»)، نه ۴."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 44 (PDF 50) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P050"
+      ]
+    },
+    {
+      "issue_id": "ISS-P051-RECONCILE",
+      "pdf_page": 51,
+      "book_page": 45,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": null,
+        "page_type": "تمرین",
+        "key_numbers": "۱،۵،۹،۱۳،۱۷، ۱،۲،۴،۷،۱۱، ۳،۸،۱۳،۱۸، ۴، ۵"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر «الگویابی» (تاب بالای صفحه، راست-بالا) ثبت نشده — فیلد بنر خالی؛ جای بنر روشن شد: بالای همین صفحه. (۲) تعداد تمرین شماره‌دار این صفحه ۱ است: «۳ـ عدد بعدی را بنویسید» (ادامه از صفحهٔ قبل؛ موارد ۱-۲ در صفحهٔ قبل) + جعبهٔ بی‌شمارهٔ «کامل کن» (۳ ساعت با نمونهٔ ۰۲:۲۵). (۳) ترتیب دنباله‌ها در صفحه: ۱،۵،۹،۱۳،۱۷ سپس ۳،۸،۱۳،۱۸ سپس ۱،۲،۴،۷،۱۱ — ردیف‌های ۲ و ۳ نقشه جابه‌جا ثبت شده‌اند."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 45 (PDF 51) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P051"
+      ]
+    },
+    {
+      "issue_id": "ISS-P052-RECONCILE",
+      "pdf_page": 52,
+      "book_page": 46,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "تقارن",
+        "page_type": "فعالیت",
+        "key_numbers": "۲، ۱۰ و نیم"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) بنر عیناً «تقارن (ادامه)» است (راست-بالا) + تاب «فعّالیت» — نوشتن «تقارن» ناقص است. (۲) تعداد موارد شماره‌دار ۳ است (۱ تقسیم با ۳ خط به ۳ قسمت، ۲ رسم خطّ تقارن روی شکل‌ها، ۳ کامل‌کردن و رنگ‌آمیزی با ۳ قسمت) + جعبهٔ بی‌شمارهٔ «کامل کن» (ساعت ۱۰ و نیم). (۳) تأیید: «۱۰ و نیم» دقیقاً در متن جعبه هست."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 46 (PDF 52) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P052"
+      ]
+    },
+    {
+      "issue_id": "ISS-P058-CHECKMARK-CONFLICT",
+      "pdf_page": 58,
+      "book_page": 52,
+      "field_name": "اصلاح آرنا در ردیف ✓",
+      "severity": "HIGH",
+      "category": "CHECKMARK_WITH_HIDDEN_EDIT",
+      "reader_a_value": "• غیره؛ فرهنگ نوشتن (تقارن): دو نیمهٔ شکل روبه‌رو کاملاً مثل هم‌اند؛ دانش‌آموز دربارهٔ مثل‌هم‌بودن شکل‌ها و رنگ‌ها توضیح می‌دهد (معرفی مفهوم تقارن پیش از تمرین).\n• تمرین؛ کامل‌کردن",
+      "reader_b_value": "[حکم بنر] بنر اصلی «مرور فصل» (روبان زرد بالای صفحه) — تأیید شد؛ تاب «فرهنگ نوشتن» (تقارن) و تاب «تمرین» (۲ مورد: ۳ شکل + ۳ جدول) زیر آن. عدد ۳ در عبارت «سه قسمت» به‌صورت واژه آمده است.",
+      "direct_observation_value": [],
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "ردیف با حکم «✓» در ستون اصلاح آرنا دارای تغییر/تناقض است و در C205.pdf مقادیر واقعی با کراپ بررسی شد.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P058"
+      ]
+    },
+    {
+      "issue_id": "ISS-P063-RECONCILE",
+      "pdf_page": 63,
+      "book_page": 57,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "فعّالیت",
+        "page_type": "فعالیت",
+        "key_numbers": "۱۰، ۲۰، ۵۰، ۱۰۰، ۴، ۸، ۱۲، ۳، ۶، ۹، ۷، ۱۴، ۲۱"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "برداشت «سکهٔ ۸۰ ریالی / احتمالاً ۵۰ ریالی» نادرست است. متن دقیق مورد ۲: «ارزش ۸۰ سکهٔ ۱۰ ریالی با ارزش چند سکهٔ ۱۰۰ ریالی برابر است؟» — «۸۰» تعداد سکه است نه ارزش آن؛ جواب: ۸ سکهٔ ۱۰۰ ریالی. مورد ۳: «ارزش ۲۰۰ سکهٔ ۱۰ ریالی با ارزش چند سکهٔ ۱۰۰۰ ریالی؟» (جواب: ۲ سکه). جمله‌های میانی: ۱۰۰ سکهٔ ۱۰ ریالی = ۱ سکهٔ ۱۰۰۰ ریالی؛ ۱۰۰۰ سکهٔ ۱۰ ریالی یا ۱۰۰ سکهٔ ۱۰۰ ریالی = ۱ اسکناس ۱۰۰۰۰ ریالی. اصلاح کلید اعداد: به‌جای «۵۰» → «۸۰» و «۲۰۰»؛ الگوهای جعبهٔ پایین: ۴،۸،۱۲ / ۳،۶،۹ / ۷،۱۴،۲۱ ✓."
+      },
+      "direct_observation_value": {
+        "primary_banner": "فعّالیت",
+        "all_tabs": [
+          "فعّالیت",
+          "الگویابی کن"
+        ],
+        "claims": [
+          "57",
+          "مورد ۱: ۲۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۲: ۸۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی | مورد ۳: ۱۰۰ سکّه ۱ ریالی = ؟ سکّه ۱۰ ریالی",
+          "الگویابی کن: ۴، ۸، ۱۲ (+۴) | ۳، ۶، ۹ (+۳) | ۷، ۱۴، ۲۱ (+۷)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 57 (PDF 63) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P063-01",
+        "EV-CROP150-P063-02",
+        "EV-TEXT-FOOTER-P063"
+      ]
+    },
+    {
+      "issue_id": "ISS-P086-RECONCILE",
+      "pdf_page": 86,
+      "book_page": 80,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "جدول شگفت‌انگیز",
+        "page_type": "حلّ مسئله",
+        "key_numbers": "۲۰ + … = ۴۳، … + ۱۷ = ۵۱، ۶۰ − … = ۲۷، … + ۲۹ = ۶۳"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "جابه‌جایی بنرها: بنر اصلی/بالای صفحه «حلّ مسئله» (تاب) است، نه «جدول شگفت‌انگیز». «جدول شگفت‌انگیز» عنوان داخل جعبهٔ قرمز «کامل کن» (پایین صفحه) است و جدول بزرگ اعداد تک‌رقمی (۸×۸ حدود ۶۴ خانه) در همان جعبه. ترتیب واقعی: حلّ مسئله (موارد ۱-۳: جای خالی‌های جمع/تفریق، حدس‌زدن، مانند نمونه) ← جعبهٔ «کامل کن» (جدول شگفت‌انگیز) ← نکتهٔ پایین. معادله‌های کلید اعداد ✓ تأیید شد."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 80 (PDF 86) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P086"
+      ]
+    },
+    {
+      "issue_id": "ISS-P095-RECONCILE",
+      "pdf_page": 95,
+      "book_page": 89,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "تمرین",
+        "page_type": "تمرین",
+        "key_numbers": "میلی‌متر، حدس/اندازه ×۴"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "(۱) این صفحه بنر/تاب ندارد (ادامهٔ تمرین صفحهٔ قبل)؛ فیلد بنر «تمرین» نادرست است — بنر «تمرین» مال صفحهٔ قبل است. (۲) شماره‌های موارد این صفحه ۴ تا ۷ است (۴ اندازه‌گیری ضلع شکل‌ها، ۵ اندازه‌گیری و نصف خط‌ها، ۶ حدس/اندازه‌گیری ذوزنقه با ۴ جفت حدس/اندازه، ۷ اندازه‌گیری مستطیل‌ها و نتیجه‌گیری)، نه ۳ تا ۶. تعداد موارد (۴) درست است."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 89 (PDF 95) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P095"
+      ]
+    },
+    {
+      "issue_id": "ISS-P105-RECONCILE",
+      "pdf_page": 105,
+      "book_page": 99,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "حلّ مسئله",
+        "page_type": "حلّ مسئله",
+        "key_numbers": "۸ سال، ۱۰ سال"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "بنر عیناً «زیر مسئله» است (تاب بالای صفحه)، نه «حلّ مسئله». تأیید می‌شود: مسئلهٔ محسن (۸ سال / ۱۰ سال گذشته) با سه پرسش الف/ب/ج و جعبهٔ «الگویابی کن» (۸ ساعت: ۴ نمونه با عقربه + ۴ خالی برای رسم + «الگو را توضیح دهید»)."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 99 (PDF 105) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P105"
+      ]
+    },
+    {
+      "issue_id": "ISS-P141-RECONCILE",
+      "pdf_page": 141,
+      "book_page": 135,
+      "field_name": "page_content_and_structure",
+      "severity": "MEDIUM",
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "reader_a_value": {
+        "banner": "روش نمادین",
+        "page_type": "حلّ مسئله",
+        "key_numbers": "۴ تساوی با جای خالی"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "«۴ تساوی با جای خالی» نادرست است: جعبهٔ «کامل کن» دو ستون ۴تایی دارد — چپ: عددهای ۱ تا ۴ با عمل «+۲» (۴ تساوی: ۱+۲ تا ۴+۲)؛ راست: عددهای ۷، ۶، ۵، ۸ با عمل «−۳» (۴ تساوی: ۷−۳ تا ۸−۳). جمعاً ۸ جای خالی. تأیید: بنر «روش نمادین» ✓، مسئلهٔ پل‌های دریاچه با نقطه/خط ✓، excount 0 ✓."
+      },
+      "direct_observation_value": null,
+      "status": "NEEDS_TEACHER_VERDICT",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 135 (PDF 141) — نیازمند ثبت شواهد ناحیه‌ای.",
+      "evidence_refs": [
+        "EV-TEXT-FOOTER-P141"
+      ]
+    },
+    {
+      "issue_id": "ISS-P144-RECONCILE",
+      "pdf_page": 144,
+      "book_page": 138,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "تمرین",
+        "page_type": "تمرین",
+        "key_numbers": "سعدی ۵۰، حافظ ۴۰، مولوی ۶۵، هر ۱۰ درخت = ۱ نماد، هر ۱۰۰ کتاب = ۱ نماد"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "جابه‌جایی کامل محتوا با صفحهٔ ۱۳۹: این صفحه (کتاب ۱۳۸) در واقع «انتخاب نمودار» است — بنر «انتخاب نمودار» (راست-بالا) + تاب «فعّالیت» + «کارهای سعید» (۸ صبح تا ۸ بعدازظهر = ۱۲ ساعت، نوار ۱۲ خانه‌ای + نمودار ستونی با ۴ ستون: مهمانی و جمع‌آوری سفره، درس، تلویزیون، پارک؟) + دو پرسش تفاوت شکل/نمودار. محتوای ثبت‌شده در این ردیف (درختان سرو سروستان، جدول خیابان‌ها، کتابخانه، جعبهٔ کامل کن) مال صفحهٔ ۱۳۹ است."
+      },
+      "direct_observation_value": {
+        "primary_banner": "تمرین",
+        "all_tabs": [
+          "تمرین",
+          "کامل کن"
+        ],
+        "claims": [
+          "138",
+          "ص چاپی ۱۳۸: تمرین ۱ درخت‌های سرو شهر سروستان (سعدی ۵۰، حافظ ۴۰، مولوی ۶۵؛ هر ۱۰ درخت ۱ نماد) + تمرین ۲ کتابخانهٔ شهید فهمیده (هر ۱۰۰ کتاب ۱ نماد) + کامل کن"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 138 (PDF 144) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P144-01",
+        "EV-TEXT-FOOTER-P144"
+      ]
+    },
+    {
+      "issue_id": "ISS-P145-RECONCILE",
+      "pdf_page": 145,
+      "book_page": 139,
+      "field_name": "page_content_and_structure",
+      "severity": "HIGH",
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "reader_a_value": {
+        "banner": "انتخاب نمودار",
+        "page_type": "درس",
+        "key_numbers": "۸ صبح تا ۸ بعدازظهر، درس ۳+۲، تلویزیون ۲، مهمانی ۳، صبحانه/ناهار و جمع‌آوری سفره ۱+۱ (طبق استخراج)، محور ساعت ۱ تا ۱۰"
+      },
+      "reader_b_value": {
+        "verdict": "✗",
+        "correction": "جابه‌جایی کامل محتوا با صفحهٔ ۱۳۸: این صفحه (کتاب ۱۳۹) در واقع «تمرین» (تاب بالای صفحه) است — مورد ۱: درخت‌های سرو سروستان (سعدی ۵۰، حافظ ۴۰، مولوی ۶۵؛ هر ۱۰ درخت = ۱ نماد) + مورد ۲: کتاب‌های کتابخانه (داستانی، علمی، آموزشی، درسی، دانشگاهی، سرگرمی، شعر؛ نمودار تصویری با هر ۱۰ کتاب = ۱ نماد) + جعبهٔ «کامل کن» (ماشین اعداد با +۳۸ و −۳). محتوای ثبت‌شده در این ردیف (کارهای سعید) مال صفحهٔ ۱۳۸ است."
+      },
+      "direct_observation_value": {
+        "primary_banner": "انتخاب نمودار",
+        "all_tabs": [
+          "انتخاب نمودار",
+          "فعّالیت"
+        ],
+        "claims": [
+          "139",
+          "ص چاپی ۱۳۹: انتخاب نمودار + فعّالیت — کارهای روز تعطیل سعید از ۸ صبح تا ۸ بعدازظهر (نوار ساعتی و نمودار ستونی)"
+        ]
+      },
+      "status": "RESOLVED_BY_CROP_EVIDENCE",
+      "summary_fa": "اختلاف میان خوانش اولیه و اصلاح آرنا در ص چاپی 139 (PDF 145) — مشاهدهٔ مستقیم C205.pdf نشان داد خودِ ستون اصلاح آرنا نیز خطا دارد!",
+      "evidence_refs": [
+        "EV-CROP150-P145-01",
+        "EV-TEXT-FOOTER-P145"
+      ]
+    }
+  ]
+}

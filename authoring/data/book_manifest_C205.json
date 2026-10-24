@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "manifest_id": "BOOK-IR-C205-1404-ED14",
+  "book_code": "C205",
+  "official_numeric_code": "205",
+  "grade": 2,
+  "subject": "math",
+  "title_fa": "ریاضی — پایهٔ دوم دورهٔ ابتدایی",
+  "publisher_fa": "سازمان پژوهش و برنامه‌ریزی آموزشی — دفتر تألیف کتاب‌های درسی عمومی و متوسطه نظری",
+  "authors_fa": [
+    "خسرو داودی",
+    "آرش رستگار",
+    "وحید عالمیان"
+  ],
+  "print_house_fa": "شرکت افست",
+  "edition_number": 14,
+  "edition_year_shamsi": 1404,
+  "edition_label_fa": "چاپ چهاردهم ۱۴۰۴",
+  "isbn": "978-964-05-2078-9",
+  "source_pdf": {
+    "filename": "C205.pdf",
+    "sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+    "size_bytes": 11838641,
+    "pdf_page_count": 152,
+    "page_width_pt": 581.1,
+    "page_height_pt": 793.7,
+    "producer": "Adobe PDF Library 10.0.1 / Adobe InDesign CS6 (Windows)",
+    "quarantine_default_path": "/tmp/c205_secure_vault/C205.pdf",
+    "git_commit_forbidden": true
+  },
+  "pagination": {
+    "front_matter_pdf_pages": [1, 2, 3, 4, 5, 6],
+    "body_pdf_page_start": 7,
+    "body_pdf_page_end": 150,
+    "book_page_start": 1,
+    "book_page_end": 144,
+    "pdf_minus_book_offset": 6,
+    "back_matter_pdf_pages": [151, 152]
+  },
+  "chapters": [
+    {"chapter": 1, "anchor_id": "L-100", "title_fa": "عدد و رقم", "book_start": 1, "book_end": 18, "pdf_start": 7, "pdf_end": 24},
+    {"chapter": 2, "anchor_id": "L-200", "title_fa": "جمع و تفریق اعداد دو رقمی", "book_start": 19, "book_end": 36, "pdf_start": 25, "pdf_end": 42},
+    {"chapter": 3, "anchor_id": "L-300", "title_fa": "اشکال هندسی", "book_start": 37, "book_end": 54, "pdf_start": 43, "pdf_end": 60},
+    {"chapter": 4, "anchor_id": "L-400", "title_fa": "عددهای سه رقمی", "book_start": 55, "book_end": 72, "pdf_start": 61, "pdf_end": 78},
+    {"chapter": 5, "anchor_id": "L-500", "title_fa": "اندازه‌گیری", "book_start": 73, "book_end": 90, "pdf_start": 79, "pdf_end": 96},
+    {"chapter": 6, "anchor_id": "L-600", "title_fa": "جمع و تفریق اعداد سه رقمی", "book_start": 91, "book_end": 108, "pdf_start": 97, "pdf_end": 114},
+    {"chapter": 7, "anchor_id": "L-700", "title_fa": "کسر و احتمال", "book_start": 109, "book_end": 126, "pdf_start": 115, "pdf_end": 132},
+    {"chapter": 8, "anchor_id": "L-800", "title_fa": "آمار و نمودار", "book_start": 127, "book_end": 144, "pdf_start": 133, "pdf_end": 150}
+  ],
+  "copyright_policy": {
+    "allow_pdf_in_git": false,
+    "allow_page_images_in_git": false,
+    "max_verbatim_quote_words": 15,
+    "require_self_authored_questions": true
+  }
+}

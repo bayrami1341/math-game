@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "book_code": "C205",
+  "source_pdf_sha256": "a93934b6c418d4c6efe5ebb109bbcfe4f5fb6024fa1f3b1b309a4ff6da2746de",
+  "description": "15 golden benchmark pages spanning colophon, visual TOC, RTL multi-banner pages, mixed Arabic/ASCII digit encodings, vertical math stacks, clock faces, coin unit/value separation, tie-rounding footnotes, truncation rounding, and adjacent page-swap hazards.",
+  "pages": [
+    {
+      "golden_id": "GP-01",
+      "pdf_page": 2,
+      "book_page": null,
+      "chapter": 0,
+      "trap_category": "COLOPHON_EDITION_IDENTITY",
+      "expected_primary_banner": null,
+      "expected_page_type": "شناسنامه",
+      "expected_visual_dependency": "LOW",
+      "ground_truth_assertions": {
+        "isbn": "978-964-05-2078-9",
+        "edition_number": 14,
+        "edition_year_shamsi": 1404,
+        "book_code": "205"
+      }
+    },
+    {
+      "golden_id": "GP-02",
+      "pdf_page": 6,
+      "book_page": null,
+      "chapter": 0,
+      "trap_category": "RASTER_TOC_HALLUCINATION_TRAP",
+      "expected_primary_banner": "فهرست",
+      "expected_page_type": "فهرست",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "chapter_start_pages": [1, 19, 37, 55, 73, 91, 109, 127],
+        "chapter_titles_fa": [
+          "عدد و رقم",
+          "جمع و تفریق اعداد دو رقمی",
+          "اشکال هندسی",
+          "عددهای سه رقمی",
+          "اندازه‌گیری",
+          "جمع و تفریق اعداد سه رقمی",
+          "کسر و احتمال",
+          "آمار و نمودار"
+        ],
+        "text_layer_titles_present": false
+      }
+    },
+    {
+      "golden_id": "GP-03",
+      "pdf_page": 9,
+      "book_page": 3,
+      "chapter": 1,
+      "trap_category": "VISUAL_TABLE_AND_GRID_DIMENSION_TRAP",
+      "expected_primary_banner": "فعّالیت",
+      "expected_page_type": "فعالیت",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "flower_tally_columns": 5,
+        "elephant_puzzle_title": "جدول شگفت‌انگیز",
+        "elephant_grid_dimensions": "9x9",
+        "elephant_digit_domain": "1..9",
+        "prior_map_conflict_note": "Prior map claimed 8 shapes (Pass A) and 8x8 up to 85 (Pass B); PDF render shows 5 flowers + 9x9 Sudoku 1..9"
+      }
+    },
+    {
+      "golden_id": "GP-04",
+      "pdf_page": 22,
+      "book_page": 16,
+      "chapter": 1,
+      "trap_category": "MULTI_BANNER_CHAPTER_REVIEW_HEADER",
+      "expected_primary_banner": "مرور فصل",
+      "expected_all_tabs": ["مرور فصل", "فرهنگ نوشتن", "تمرین"],
+      "expected_page_type": "مرور فصل",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 16,
+        "exercise_count": 4,
+        "sum_target_boxes": "…+…=۵ (۶ کادر)"
+      }
+    },
+    {
+      "golden_id": "GP-05",
+      "pdf_page": 26,
+      "book_page": 20,
+      "chapter": 2,
+      "trap_category": "RTL_BOTTOM_BOX_EXTRACTED_FIRST",
+      "expected_primary_banner": "جمع و تفریق ده‌تایی",
+      "expected_all_tabs": ["جمع و تفریق ده‌تایی", "فعّالیت", "تقریب بزن"],
+      "expected_page_type": "فعالیت",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 20,
+        "top_lesson_title": "جمع و تفریق ده‌تایی",
+        "bottom_red_box": "تقریب بزن"
+      }
+    },
+    {
+      "golden_id": "GP-06",
+      "pdf_page": 27,
+      "book_page": 21,
+      "chapter": 2,
+      "trap_category": "PHANTOM_EXERCISE_BANNER_AND_DUAL_NUMBERING",
+      "expected_primary_banner": "کار در کلاس",
+      "expected_all_tabs": ["کار در کلاس", "فعّالیت"],
+      "expected_page_type": "کار در کلاس + فعالیت",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "printed_footer_number": 21,
+        "has_tamrin_banner": false,
+        "section_item_counts": [2, 2]
+      }
+    },
+    {
+      "golden_id": "GP-07",
+      "pdf_page": 30,
+      "book_page": 24,
+      "chapter": 2,
+      "trap_category": "SUB_BLOCK_OWNERSHIP_ACROSS_MARGIN_TABS",
+      "expected_primary_banner": "کار در کلاس",
+      "expected_all_tabs": ["کار در کلاس", "فعّالیت"],
+      "expected_page_type": "کار در کلاس + فعالیت",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "printed_footer_number": 24,
+        "kar_dar_kelas_expressions": ["۱۴−۶", "۱۲−۹", "۷+۵", "۸+۹", "۱۹−۹", "۱۷−۸", "۷+۶", "۶+۹"],
+        "faaliyat_owns_items": [1, 2]
+      }
+    },
+    {
+      "golden_id": "GP-08",
+      "pdf_page": 31,
+      "book_page": 25,
+      "chapter": 2,
+      "trap_category": "FALSE_CHECKMARK_HIDDEN_THREE_TAB_ERROR",
+      "expected_primary_banner": "کار در کلاس",
+      "expected_all_tabs": ["کار در کلاس", "تمرین", "خلاق باش"],
+      "expected_page_type": "کار در کلاس + تمرین",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 25,
+        "amin_story_expression": "9+8",
+        "reyhaneh_story_expression": "14-6",
+        "bottom_red_box": "خلاق باش"
+      }
+    },
+    {
+      "golden_id": "GP-09",
+      "pdf_page": 32,
+      "book_page": 26,
+      "chapter": 2,
+      "trap_category": "COMBINATORIAL_DIGITS_AND_ARROW_DIRECTION",
+      "expected_primary_banner": "حلّ مسئله",
+      "expected_all_tabs": ["حلّ مسئله", "الگویابی کن"],
+      "expected_page_type": "حلّ مسئله",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "printed_footer_number": 26,
+        "item1_ones_digits": [3, 4],
+        "item1_tens_digits": [5, 7],
+        "item1_expected_numbers": [53, 54, 73, 74],
+        "patterns_ascending": ["71,72,73", "2,4,6,8", "3,6,9,12"]
+      }
+    },
+    {
+      "golden_id": "GP-10",
+      "pdf_page": 33,
+      "book_page": 27,
+      "chapter": 2,
+      "trap_category": "SHAPE_COLOR_ROLE_INVERSION_AND_MAGNIFIER_CLOCK",
+      "expected_primary_banner": "الگوسازی",
+      "expected_all_tabs": ["الگوسازی", "کامل کن"],
+      "expected_page_type": "الگوسازی + کامل کن",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "printed_footer_number": 27,
+        "triangle_color_count": 2,
+        "square_color_count": 3,
+        "clock_count": 3
+      }
+    },
+    {
+      "golden_id": "GP-11",
+      "pdf_page": 37,
+      "book_page": 31,
+      "chapter": 2,
+      "trap_category": "STEP_SUBTRACTION_EXPRESSION_HALLUCINATION",
+      "expected_primary_banner": "جمع و تفریق دو عدد (ادامه)",
+      "expected_all_tabs": ["جمع و تفریق دو عدد (ادامه)", "فعّالیت"],
+      "expected_page_type": "فعالیت",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "printed_footer_number": 31,
+        "item1_worked_addition": "24+37=61",
+        "item2_worked_subtraction": "35-17=18",
+        "item2_practice_subtractions": ["52-14", "43-27"]
+      }
+    },
+    {
+      "golden_id": "GP-12",
+      "pdf_page": 39,
+      "book_page": 33,
+      "chapter": 2,
+      "trap_category": "VERTICAL_STACK_AND_ROUNDING_TIE_FOOTNOTE",
+      "expected_primary_banner": "تمرین",
+      "expected_all_tabs": ["تمرین", "تقریب بزن"],
+      "expected_page_type": "تمرین",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 33,
+        "item1_vertical_expressions": ["59+27", "54-21", "60-14", "23+57"],
+        "tie_rule_footnote": "25->30",
+        "tie_rule_bbox": [0.67, 0.901, 0.902, 0.94]
+      }
+    },
+    {
+      "golden_id": "GP-13",
+      "pdf_page": 40,
+      "book_page": 34,
+      "chapter": 2,
+      "trap_category": "MIXED_ARABIC_ASCII_DIGIT_TABLE_CORRUPTION",
+      "expected_primary_banner": "مرور فصل",
+      "expected_all_tabs": ["مرور فصل", "فرهنگ نوشتن", "تمرین"],
+      "expected_page_type": "مرور فصل",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 34,
+        "flower_color_ranges": {
+          "سبز": [10, 20],
+          "آبی": [21, 30],
+          "قرمز": [31, 40],
+          "زرد": [41, 50]
+        },
+        "ranges_disjoint": true
+      }
+    },
+    {
+      "golden_id": "GP-14",
+      "pdf_page": 63,
+      "book_page": 57,
+      "chapter": 4,
+      "trap_category": "COIN_QUANTITY_VS_DENOMINATION_UNIT_SEPARATION",
+      "expected_primary_banner": "فعّالیت",
+      "expected_all_tabs": ["فعّالیت", "الگویابی کن"],
+      "expected_page_type": "فعالیت",
+      "expected_visual_dependency": "MEDIUM",
+      "ground_truth_assertions": {
+        "printed_footer_number": 57,
+        "coin_items": [
+          {"item": 1, "quantity": 20, "source_denomination_rial": 1, "target_denomination_rial": 10},
+          {"item": 2, "quantity": 80, "source_denomination_rial": 1, "target_denomination_rial": 10},
+          {"item": 3, "quantity": 100, "source_denomination_rial": 1, "target_denomination_rial": 10}
+        ],
+        "skip_patterns": ["4,8,12", "3,6,9", "7,14,21"]
+      }
+    },
+    {
+      "golden_id": "GP-15",
+      "pdf_page": 144,
+      "paired_pdf_page": 145,
+      "book_page": 138,
+      "paired_book_page": 139,
+      "chapter": 8,
+      "trap_category": "ADJACENT_PAGE_SWAP_VERIFICATION",
+      "expected_primary_banner": "تمرین",
+      "expected_all_tabs": ["تمرین", "کامل کن"],
+      "expected_page_type": "تمرین",
+      "expected_visual_dependency": "HIGH",
+      "ground_truth_assertions": {
+        "pdf_144_printed_footer": 138,
+        "pdf_144_topic": "درخت‌های سرو خیابان‌های شهر سروستان (سعدی ۵۰، حافظ ۴۰، مولوی ۶۵) + کتابخانهٔ شهید فهمیده + کامل کن",
+        "pdf_145_printed_footer": 139,
+        "pdf_145_topic": "انتخاب نمودار — کارهای روز تعطیل سعید (۸ صبح تا ۸ بعدازظهر)"
+      }
+    }
+  ]
+}
