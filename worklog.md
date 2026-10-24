@@ -2037,3 +2037,14 @@ Work Log:
 - `authoring/BP029-ARENA-CONSUMER-CONTRACT-REVIEW-v1.fa.md` جدول سازگاری manifest فعلی آرنا با شش فیلد BP-029 را ثبت کرد: `workbook_sha256`↔`workbook_sha`، commit و هش manifest بیرون فایل خودارجاعی، شناسهٔ محلی `Q-…`↔UID namespaced، تصمیم انسانیِ bind‌شده به UID/assessment/چاپ نه صرف allowlist چهار فرمان کلی. آزمون‌های پیشنهادی lineage/decision-scope/yellow/receipt-persistence و متن واحدِ درخواست بایت قابل fetch از Z.ai نوشته شد؛ هیچ API یا گیت ۷ تغییر نکرد.
 Stage Summary:
 - وضعیت `PROPOSED_ARENA_COUNTERSIGN_PENDING_REVIEW_OF_BYTES` است. ادامهٔ مستقل آرنا روی فصل ۲ G2 پابرجاست. درخواست به مالک فقط رساندن متن کوتاهِ درخواست commit/فایل به Z.ai در صورت امکان؛ فرمان push به main یا تأیید مجدد کلی لازم نیست.
+
+---
+Task ID: g2-ch2-achilles-reply-evidence-join-2026-10-24
+Agent: آرنا (content)
+Task: استفادهٔ فوری از پاسخ آشیل برای پیوند metadata صفحه‌ای موجود به صف ۱۸ صفحه‌ای فصل ۲، بدون انتظار برای snapshot سؤالِ هنوز آماده‌نشده.
+Work Log:
+- GitHub PR #2 head `49344cf7bacd8ce897b8cc78ab746dbf71673382` باز/متعارض است. `snapshot.json` و `observation_C205.json` از GitHub API در همان commit فقط به‌شکل metadata خوانده و SHA بایت مستقل با `ceaaf18b...` و `3c8c4297...` تطبیق شد؛ workbook/PDF/crop دریافت یا منتشر نشد. ۱۸ رکورد چاپی ۱۹–۳۶: ۹ `VERIFIED_EVIDENCE` و ۹ `AGREED_UNVERIFIED`. ص۱۹ ↔ PDF۲۵ بی‌claim/ref و exercise_count=0 در snapshot؛ ص۳۳ ↔ PDF۳۹ با سه ref P039 و شش تمرین گزارش‌شده؛ ۳۲ claim در کل بازه. دفتر observation فاقد Q-ID است.
+- `authoring/tools/build_g2_ch2_achilles_reconciliation.py` پین بایتِ فقط دو JSON، کنترل source_pdf_sha/offset/refs، join با صف نامزد آرنا و خروجی status نامعلوم Q-ID را پیاده کرد. `authoring/g2-completion/G2-CH2-ACHILLES-PAGE-EVIDENCE-RECONCILIATION-v1.json` نتیجهٔ ۱۸ صفحه‌ای را بدون متن سؤال/کتاب ثبت کرد. Qهای زرد آرنا در ص۳۳ = Q-1061..Q-1064، اما این‌ها از نامزد v1.2 و نه خشاب رسمی v0.5 آشیل هستند؛ هیچ match خودکار با سه شاهد صفحه صورت نگرفت. سه تست synthetic مثبت/منفی اضافه شد؛ کل suite `106 tests OK`.
+- `authoring/G2-CH2-ACHILLES-REPLY-INTEGRATION-v1.fa.md` نقش ص۱۹/۳۳، تفکیک page-evidence از Q-ledger و پیام موردی آماده برای آشیل را ثبت کرد. اقدام فوری مالک فقط در صورت تمایل ارسال همان پیام کوتاه است؛ بقیهٔ نگاشت آموزشی و بودجهٔ فصل ۲ مستقل ادامه دارد.
+Stage Summary:
+- پاسخ آشیل به اطلاعات عملیِ صفحه‌ای تبدیل شد؛ نه صفحه‌های ۹گانه به سؤال پذیرفته تبدیل شدند و نه snapshotِ سوال‌محور/مجوز/هدف راهنما جعل شد. هیچ PDF/تصویر یا XLSXِ حق‌نامعلوم به مخزن آرنا افزوده نشد.

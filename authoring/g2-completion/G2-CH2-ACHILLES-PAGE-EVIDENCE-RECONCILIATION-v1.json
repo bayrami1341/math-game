@@ -1,0 +1,499 @@
+{
+  "schema": "arena-g2-ch2-achilles-metadata-reconciliation/v1",
+  "producer_commit": "49344cf7bacd8ce897b8cc78ab746dbf71673382",
+  "source_snapshot_path": "authoring/snapshots/master-map-C205-v2.0/snapshot.json",
+  "source_snapshot_sha256": "ceaaf18bd11201a140fd519e54808e8fc7b07d57a7dde7ffc5f58b8521c21a77",
+  "source_observation_path": "authoring/audit/observation_C205.json",
+  "source_observation_sha256": "3c8c4297604630c53828b3db79b86ce96d8a9dbdd38a64cb155946b7d7a46003",
+  "candidate_workbook_sha256": "18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618",
+  "source_review_level": "ACHILLES_METADATA_ONLY_NOT_ARENA_VISUAL_VERIFIED",
+  "official_workbook_version": "NOT_USED_AS_CANDIDATE",
+  "page_status_counts": {
+    "VERIFIED_EVIDENCE": 9,
+    "AGREED_UNVERIFIED": 9
+  },
+  "page_queue": [
+    {
+      "printed_page": 19,
+      "pdf_page_reported": 25,
+      "candidate_s1_id": "L-201",
+      "candidate_question_ids": [],
+      "topic_hints": [],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 0,
+      "page_evidence_refs": [],
+      "page_claim_ids": [],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 20,
+      "pdf_page_reported": 26,
+      "candidate_s1_id": "L-202",
+      "candidate_question_ids": [
+        "Q-1041",
+        "Q-1042",
+        "Q-1043",
+        "Q-1044"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        },
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 0,
+      "page_evidence_refs": [
+        "EV-CROP150-P026-01",
+        "EV-CROP150-P026-02",
+        "EV-TEXT-FOOTER-P026"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P026",
+        "CLM-VIS-P026-01",
+        "CLM-VIS-P026-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 21,
+      "pdf_page_reported": 27,
+      "candidate_s1_id": "L-203",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 4,
+      "page_evidence_refs": [
+        "EV-CROP150-P027-01",
+        "EV-CROP150-P027-02",
+        "EV-TEXT-FOOTER-P027"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P027",
+        "CLM-VIS-P027-01",
+        "CLM-VIS-P027-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 22,
+      "pdf_page_reported": 28,
+      "candidate_s1_id": "L-204",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 1,
+          "title": "جمع و تفریق ده‌تایی"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P028"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P028"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 23,
+      "pdf_page_reported": 29,
+      "candidate_s1_id": "L-205",
+      "candidate_question_ids": [
+        "Q-1045",
+        "Q-1046",
+        "Q-1047",
+        "Q-1048"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 2,
+          "title": "جمع با شکل، محور و چوب‌خط"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P029"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P029"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 24,
+      "pdf_page_reported": 30,
+      "candidate_s1_id": "L-206",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 2,
+          "title": "جمع با شکل، محور و چوب‌خط"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 2,
+      "page_evidence_refs": [
+        "EV-CROP150-P030-01",
+        "EV-CROP150-P030-02",
+        "EV-TEXT-FOOTER-P030"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P030",
+        "CLM-VIS-P030-01",
+        "CLM-VIS-P030-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 25,
+      "pdf_page_reported": 31,
+      "candidate_s1_id": "L-207",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 3,
+          "title": "جمع اساسی و رسیدن به ده"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-CROP150-P031-01",
+        "EV-TEXT-FOOTER-P031"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P031",
+        "CLM-VIS-P031-01"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 26,
+      "pdf_page_reported": 32,
+      "candidate_s1_id": "L-208",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 6,
+          "title": "تفکر نظام‌دار"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-CROP150-P032-01",
+        "EV-CROP150-P032-02",
+        "EV-TEXT-FOOTER-P032"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P032",
+        "CLM-VIS-P032-01",
+        "CLM-VIS-P032-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 27,
+      "pdf_page_reported": 33,
+      "candidate_s1_id": "L-209",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 6,
+          "title": "تفکر نظام‌دار"
+        },
+        {
+          "source_kind": "SUBSIDIARY",
+          "source_no": 1,
+          "title": "دقیقه، ربع و عقربهٔ بزرگ"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 0,
+      "page_evidence_refs": [
+        "EV-CROP150-P033-01",
+        "EV-CROP150-P033-02",
+        "EV-TEXT-FOOTER-P033"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P033",
+        "CLM-VIS-P033-01",
+        "CLM-VIS-P033-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 28,
+      "pdf_page_reported": 34,
+      "candidate_s1_id": "L-210",
+      "candidate_question_ids": [
+        "Q-1049",
+        "Q-1050",
+        "Q-1051",
+        "Q-1052"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P034"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P034"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 29,
+      "pdf_page_reported": 35,
+      "candidate_s1_id": "L-211",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 2,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P035"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P035"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 30,
+      "pdf_page_reported": 36,
+      "candidate_s1_id": "L-212",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 3,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P036"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P036"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 31,
+      "pdf_page_reported": 37,
+      "candidate_s1_id": "L-213",
+      "candidate_question_ids": [
+        "Q-1053",
+        "Q-1054",
+        "Q-1055",
+        "Q-1056"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 2,
+      "page_evidence_refs": [
+        "EV-CROP150-P037-01",
+        "EV-TEXT-FOOTER-P037"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P037",
+        "CLM-VIS-P037-01"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 32,
+      "pdf_page_reported": 38,
+      "candidate_s1_id": "L-214",
+      "candidate_question_ids": [
+        "Q-1057",
+        "Q-1058",
+        "Q-1059",
+        "Q-1060"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 4,
+          "title": "گسترده و روش فرایندی"
+        },
+        {
+          "source_kind": "MAIN",
+          "source_no": 7,
+          "title": "شمارش جلو و عقب در جدول"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 2,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P038"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P038"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 33,
+      "pdf_page_reported": 39,
+      "candidate_s1_id": "L-215",
+      "candidate_question_ids": [
+        "Q-1061",
+        "Q-1062",
+        "Q-1063",
+        "Q-1064"
+      ],
+      "topic_hints": [],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 6,
+      "page_evidence_refs": [
+        "EV-CROP150-P039-01",
+        "EV-CROP150-P039-02",
+        "EV-TEXT-FOOTER-P039"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P039",
+        "CLM-VIS-P039-01",
+        "CLM-VIS-P039-02"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 34,
+      "pdf_page_reported": 40,
+      "candidate_s1_id": "L-216",
+      "candidate_question_ids": [
+        "Q-1065",
+        "Q-1066",
+        "Q-1067",
+        "Q-1068"
+      ],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "achilles_page_status": "VERIFIED_EVIDENCE",
+      "reported_exercise_count": 1,
+      "page_evidence_refs": [
+        "EV-CROP150-P040-01",
+        "EV-TEXT-FOOTER-P040"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P040",
+        "CLM-VIS-P040-01"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 35,
+      "pdf_page_reported": 41,
+      "candidate_s1_id": "L-217",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "MAIN",
+          "source_no": 5,
+          "title": "تقریب حاصل"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 4,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P041"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P041"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    },
+    {
+      "printed_page": 36,
+      "pdf_page_reported": 42,
+      "candidate_s1_id": "L-218",
+      "candidate_question_ids": [],
+      "topic_hints": [
+        {
+          "source_kind": "SUBSIDIARY",
+          "source_no": 2,
+          "title": "پوشاندن خانه‌های شطرنجی"
+        }
+      ],
+      "achilles_page_status": "AGREED_UNVERIFIED",
+      "reported_exercise_count": 0,
+      "page_evidence_refs": [
+        "EV-TEXT-FOOTER-P042"
+      ],
+      "page_claim_ids": [
+        "CLM-FOOTER-P042"
+      ],
+      "question_evidence_link": "MISSING_Q_ID_TO_REGION_JOIN",
+      "educational_status": "NOT_ASSESSED"
+    }
+  ],
+  "question_evidence_status": "NONE_BOUND_BY_Q_ID",
+  "educational_acceptance": "NOT_GRANTED",
+  "release": "NOT_GRANTED",
+  "arena_queue_sha256": "7975bda6028997438f2470c32c7cc6179d980908f51af7f30a55c6e1a2513223"
+}
