@@ -1,0 +1,535 @@
+{
+  "schema": "khshab.concept-scope-audit/v1",
+  "profileVersion": "1.0.0",
+  "matrixPin": "a44d856110d91253500e6294fb280c78ef4b6a7c508fcbb804bd394b9d4b9115",
+  "inspector": "concept-scope/v1.0.0",
+  "generatedAtTehran": "۱۴۰۵ آبان ۲, شنبه ساعت ۹:۲۲",
+  "results": {
+    "KH-G3-MATH": {
+      "cartridge": "KH-G3-MATH",
+      "generatedAt": "2026-10-23T07:26:21.225Z",
+      "total": 120,
+      "IN_SCOPE": 100,
+      "PREREQ_ONLY": 0,
+      "SIDE_REF": 0,
+      "UNKNOWN_REVIEW": 20,
+      "COSMETIC_ONLY": 0,
+      "CRITICAL_DRIFT": 0,
+      "familyId": "KH-G3-MATH",
+      "profileVersion": "1.0.0",
+      "matrixPin": "a44d856110d91253500e6294fb280c78ef4b6a7c508fcbb804bd394b9d4b9115",
+      "inspector": "concept-scope/v1.0.0",
+      "blocked": false,
+      "critical": [],
+      "review": [
+        {
+          "id": "Q-101",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-102",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-103",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-104",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-105",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-106",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-107",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-108",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-109",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-110",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-111",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-112",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-113",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-114",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-201",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-202",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-203",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-204",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-205",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-206",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        }
+      ]
+    },
+    "KH-G2-MATH": {
+      "cartridge": "KH-G2-MATH",
+      "generatedAt": "2026-10-22T22:22:32.847Z",
+      "total": 92,
+      "IN_SCOPE": 0,
+      "PREREQ_ONLY": 0,
+      "SIDE_REF": 0,
+      "UNKNOWN_REVIEW": 92,
+      "COSMETIC_ONLY": 0,
+      "CRITICAL_DRIFT": 0,
+      "familyId": "KH-G2-MATH",
+      "profileVersion": "1.0.0",
+      "matrixPin": "a44d856110d91253500e6294fb280c78ef4b6a7c508fcbb804bd394b9d4b9115",
+      "inspector": "concept-scope/v1.0.0",
+      "blocked": false,
+      "critical": [],
+      "review": [
+        {
+          "id": "Q-1001",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1002",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1003",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1004",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1005",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1006",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1007",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1008",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1009",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1010",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1011",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1012",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1013",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1014",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1015",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1016",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1017",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1018",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1019",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1020",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1021",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1022",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1023",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1024",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1025",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1026",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1027",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1028",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1029",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1030",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1031",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1032",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1033",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1034",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1035",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1036",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1037",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1038",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1039",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1040",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1041",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1042",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1043",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1044",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1045",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1046",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1047",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1048",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1049",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1050",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1051",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1052",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1053",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1054",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1055",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1056",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1057",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1058",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1059",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1060",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1061",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1062",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1063",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1064",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1065",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1066",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1067",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1068",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1069",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1070",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1071",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1072",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1073",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1074",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1075",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1076",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1077",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1078",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1079",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1080",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1081",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1082",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1083",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1084",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1085",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1086",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1087",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1088",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1089",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1090",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1091",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        },
+        {
+          "id": "Q-1092",
+          "reason": "LEGACY_NO_DOMAIN: سؤال فاقد domainCode است — برچسب‌گذاری دامنه کار انسانی/خط تولید است"
+        }
+      ]
+    },
+    "KH-G3-MATH-PAGES": {
+      "mapId": "PAGE-MAP-KH-G3-MATH-v1",
+      "totalPdfPages": 152,
+      "auditedContentPages": 144,
+      "skippedNonContent": 8,
+      "total": 144,
+      "IN_SCOPE": 0,
+      "PREREQ_ONLY": 0,
+      "SIDE_REF": 0,
+      "UNKNOWN_REVIEW": 144,
+      "COSMETIC_ONLY": 0,
+      "CRITICAL_DRIFT": 0,
+      "familyId": "KH-G3-MATH",
+      "profileVersion": "1.0.0",
+      "matrixPin": "a44d856110d91253500e6294fb280c78ef4b6a7c508fcbb804bd394b9d4b9115",
+      "inspector": "concept-scope/v1.0.0",
+      "blocked": false,
+      "critical": [],
+      "reviewCount": 144
+    },
+    "KH-G2-MATH-PAGES": {
+      "mapId": "PAGE-MAP-KH-G2-MATH-v1",
+      "totalPdfPages": 152,
+      "auditedContentPages": 146,
+      "skippedNonContent": 6,
+      "total": 146,
+      "IN_SCOPE": 0,
+      "PREREQ_ONLY": 0,
+      "SIDE_REF": 0,
+      "UNKNOWN_REVIEW": 146,
+      "COSMETIC_ONLY": 0,
+      "CRITICAL_DRIFT": 0,
+      "familyId": "KH-G2-MATH",
+      "profileVersion": "1.0.0",
+      "matrixPin": "a44d856110d91253500e6294fb280c78ef4b6a7c508fcbb804bd394b9d4b9115",
+      "inspector": "concept-scope/v1.0.0",
+      "blocked": false,
+      "critical": [],
+      "reviewCount": 146
+    }
+  }
+}

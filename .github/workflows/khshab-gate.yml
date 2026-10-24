@@ -116,3 +116,11 @@ jobs:
       # ── گیت ۵ (BP-023/T3): امنیت ثبت مهر — دسترسی ناشناس و جعل نقش رد می‌شود ──
       - name: امنیت ثبت مُهر — ناشناس/جعل نقش/توکن غلط/بدون‌توکن رد (T3/BP-023)
         run: bun scripts/test-stamp-auth.ts
+
+      # ── گیت ۶ (BP-024): آزمون مستقل محدودهٔ مفهومی — انحراف هدف اصلی = توقف ──
+      # (۴۳ آزمون رفتار بازرس + اجرا روی محتوای واقعی کارتریج/صفحه‌ها؛
+      #  CRITICAL_DRIFT → exit 1؛ پیش‌نیاز/ظاهری جدا طبقه‌بندی؛ ابهام = REVIEW بدون حدس)
+      - name: بازرس مفهومی — خودآزمون + ممیزی محتوای واقعی (BP-024)
+        run: |
+          node --test public/math-game/tests/v10.6-concept-scope.test.js
+          node public/math-game/scripts/audit-concept-scope.mjs
