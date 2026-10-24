@@ -1,0 +1,65 @@
+{
+  "schema": "khshab.skeleton-handoff-manifest/v1",
+  "id": "HANDOFF-MANIFEST-G2G3-v1",
+  "status": "DELIVERED",
+  "orderTrace": "1a16dd37ae2509d9",
+  "deliveryTrace": "1a16df9ac88719f9",
+  "issuedAtTehran": "2026-10-24T16:34",
+  "issuedBy": "هماهنگ‌کنندهٔ ریل (z.ai)",
+  "ownerRule": "اسکلت ساخت (بودجهٔ خشاب G2 — خصوصاً موضوعات هر فصل و آمارهای مرتبط — و خشاب G3) قبل از هر کاری، در شروع تحلیل کتاب‌ها، جداگانه به دو بخش قبلی ریل (آرنا و ربات اشیل) ارسال شود.",
+  "recipients": [
+    {
+      "id": "ACHILLES-BOT",
+      "fa": "ربات اشیل — بخش ۱ ریل (تحلیل کتاب)",
+      "brief": "handoff/ACHILLES-BRIEF-SKELETON-G2G3-v1.fa.md",
+      "packages": [
+        "handoff/SKELETON-G2-KH-v1.fa.md",
+        "handoff/SKELETON-G2-KH-v1.json",
+        "handoff/SKELETON-G3-KH-v1.fa.md",
+        "handoff/SKELETON-G3-KH-v1.json"
+      ],
+      "firstTask": "جدول نگاشت فایل↔چاپی C305 (هشدار شیفت اسکن) — سپس تحلیل فصل‌به‌فصل از روی ستون فقرات"
+    },
+    {
+      "id": "ARENA",
+      "fa": "آرنا — تولید محتوا (تدوین‌گر خشاب‌ها)",
+      "brief": "handoff/ARENA-BRIEF-SKELETON-G2G3-v1.fa.md",
+      "packages": [
+        "handoff/SKELETON-G2-KH-v1.fa.md",
+        "handoff/SKELETON-G2-KH-v1.json",
+        "handoff/SKELETON-G3-KH-v1.fa.md",
+        "handoff/SKELETON-G3-KH-v1.json"
+      ],
+      "firstTask": "سنجش بچ D4 داخل پاکت ف۴ G3 + برنامهٔ موج‌های بعدی G2 از نقشهٔ ۶۳ مبحثی و بودجهٔ ۳۲ ردیفی"
+    }
+  ],
+  "deliveryChannel": {
+    "gitRepo": "bayrami1341/math-game (origin)",
+    "path": "handoff/",
+    "deliveryCommit": "cf61491",
+    "evidenceCommits": ["df5b40e", "662063f", "aab37dd"],
+    "chatCopyBriefs": ["ARENA", "ACHILLES-BOT"]
+  },
+  "files": [
+    { "path": "handoff/SKELETON-G2-KH-v1.fa.md", "sha256": "a13dd074b9024ede934ccdbbdb93cf2aee0cf15c6299f9230ef067e29a9e095b" },
+    { "path": "handoff/SKELETON-G2-KH-v1.json", "sha256": "358c727a2f96c47e339c10153a889628e9c059f3326ea401a96acb9c6dcafa73" },
+    { "path": "handoff/SKELETON-G3-KH-v1.fa.md", "sha256": "d56ac2ef38c23b84e436e7e2606da77c29e6ee319e4109a3992f09eec187fb7a" },
+    { "path": "handoff/SKELETON-G3-KH-v1.json", "sha256": "9eb835f62772ee7e351bf78d03024ba479aeadc709a5118d2a3767806f18cf7d" },
+    { "path": "handoff/HANDOFF-COVER-v1.fa.md", "sha256": "38458cf41ed08cc491d0f6bc1bdc8ecf9d3c4b8c8f6abf0e1fca56ca636e4eb4" },
+    { "path": "handoff/ARENA-BRIEF-SKELETON-G2G3-v1.fa.md", "sha256": "ceeb765663a0c152dbb3285e99284857f0f75fb76dfd69ae50e15d1d82a46aa8" },
+    { "path": "handoff/ACHILLES-BRIEF-SKELETON-G2G3-v1.fa.md", "sha256": "f05b3245be71fd11eefb69cc79ec63b10ef9e02504139dc3edb388c8f4521c6b" },
+    { "path": "scripts/verify-skeleton-handoff.py", "sha256": "1ab22e70e724bc3bb46f8c66df19b80696a788c3043a67c09ce5687553206594" }
+  ],
+  "gate": {
+    "script": "scripts/verify-skeleton-handoff.py",
+    "tests": 43,
+    "result": "ALL-GREEN",
+    "note": "fail-closed — ۴۳/۴۳ سبز در مخزن بازی، پیش و پس از کامیت"
+  },
+  "acceptanceRules": [
+    "اسکلت حاکم است — هیچ تحلیلی (اشیل) و هیچ محتوایی (آرنا) از ستون فقرات و پاکت بودجه بیرون نمی‌زند",
+    "برچسب منشأ روی هر داده — تغییر «مالک-عیناً» فقط با نسخهٔ تازه از مالک",
+    "حدس ممنوع — ابهام فقط با گزارش/سؤال",
+    "گیت ماشینی سبز شرط اعتبار هر نسخه"
+  ]
+}
