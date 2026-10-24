@@ -1,8 +1,9 @@
-"""Private, read-only intake of an Achilles-approved STANDARD workbook.
+"""Private, read-only intake of an Achilles-attested STANDARD workbook.
 
 This archives the exact XLSX bytes outside Git and writes a sidecar index. It does
-NOT verify textbook scans, authenticate the approval receipt, change the Excel
-schema, stamp anything green, or make a Z.ai API/capability claim.
+NOT verify textbook scans, authenticate the extraction/legacy approval receipt,
+accept educational content, change the Excel schema, stamp anything green, or
+make a Z.ai API/capability claim.
 
 python authoring/tools/content_library_intake.py --workbook /secure/approved.xlsx \
   --receipt /secure/achilles-receipt.json --out-dir /secure/library
@@ -174,11 +175,16 @@ def ingest(workbook: Path, receipt: dict, out_dir: Path, *, objectives: dict | N
            links: list[dict] | None = None) -> dict:
     if out_dir.resolve() == ROOT.resolve() or ROOT.resolve() in out_dir.resolve().parents:
         raise ValueError("PRIVATE_ARCHIVE_MUST_BE_OUTSIDE_REPOSITORY")
-    if (receipt.get("schema") != "achilles-approved-workbook/v1" or receipt.get("producer") != "ACHILLES"
-            or receipt.get("approval_status") != "APPROVED"):
+    # Achilles certifies extraction/edition here; educational acceptance happens
+    # only AFTER Arena's assessment and a separately authenticated human decision.
+    accepted_receipts = {("achilles-approved-workbook/v1", "APPROVED"),
+                         ("achilles-extraction-bundle/v1", "EXTRACTION_VERIFIED")}
+    if ((receipt.get("schema"), receipt.get("approval_status")) not in accepted_receipts
+            or receipt.get("producer") != "ACHILLES"):
         raise ValueError("ACHILLES_APPROVAL_RECEIPT_REQUIRED")
-    for key in ("book_id", "edition_id", "receipt_id", "approved_by", "workbook_sha256"):
+    for key in ("book_id", "edition_id", "receipt_id", "workbook_sha256"):
         _required(receipt, key)
+    _required(receipt, "verified_by" if receipt["schema"] == "achilles-extraction-bundle/v1" else "approved_by")
     if any(not re.fullmatch(r"[A-Za-z0-9_-]+", receipt[k]) for k in ("book_id", "edition_id")):
         raise ValueError("UNSAFE_ARCHIVE_NAMESPACE")
     if not re.fullmatch(r"[0-9a-f]{64}", receipt["workbook_sha256"]):

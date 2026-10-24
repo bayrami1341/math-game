@@ -45,20 +45,20 @@ class GithubExchangeTests(unittest.TestCase):
         wb.close()
         self.sha = hashlib.sha256(source.read_bytes()).hexdigest()
         prefix = f'authoring/content-exchange/incoming/G2/C205/fixture-edition/{self.sha}'
-        self.workbook_path = prefix + '/approved-workbook.xlsx'
-        self.receipt_path = prefix + '/achilles-receipt.json'
+        self.workbook_path = prefix + '/extraction-snapshot.xlsx'
+        self.receipt_path = prefix + '/extraction-receipt.json'
         self.wb = self.repo / self.workbook_path
         self.rec = self.repo / self.receipt_path
         self.wb.parent.mkdir(parents=True)
         self.wb.write_bytes(source.read_bytes())
-        self.receipt = {'schema': 'achilles-approved-workbook/v1', 'producer': 'ACHILLES',
-                        'approval_status': 'APPROVED', 'book_id': 'C205', 'edition_id': 'fixture-edition',
+        self.receipt = {'schema': 'achilles-extraction-bundle/v1', 'producer': 'ACHILLES',
+                        'approval_status': 'EXTRACTION_VERIFIED', 'book_id': 'C205', 'edition_id': 'fixture-edition',
                         'workbook_sha256': self.sha, 'repo_path': self.workbook_path,
                         'storage_rights_status': 'REVIEWED_FOR_PRIVATE_REPO',
                         'rights_decision_ref': 'synthetic-rights-review', 'book_source_sha256': 'a'*64,
-                        'evidence_manifest_sha': 'b'*64, 'approval_scope': 'synthetic-only',
+                        'evidence_manifest_sha': 'b'*64, 'extraction_scope': 'synthetic-only',
                         'decision_ref': 'synthetic-decision', 'receipt_id': 'test-only',
-                        'approved_by': 'test-only'}
+                        'verified_by': 'test-only'}
         self.save()
         self.archive = self.home / 'private-library'
         self.args = {'producer_ref': 'refs/heads/test-producer', 'producer_commit': self.commit,
@@ -77,7 +77,9 @@ class GithubExchangeTests(unittest.TestCase):
         self.assertEqual(result['producer_commit'], self.commit)
         self.assertEqual(result['workbook_sha256'], self.sha)
         self.assertEqual(result['release_authorization'], 'NOT_GRANTED')
+        self.assertEqual(result['content_acceptance'], 'PENDING_ARENA_ASSESSMENT_AND_HUMAN_DECISION')
         manifest, summary = redacted_package(result, self.archive)
+        self.assertEqual(manifest['content_acceptance'], 'PENDING_ARENA_ASSESSMENT_AND_HUMAN_DECISION')
         self.assertEqual(manifest['assessment_summary_sha256'], hashlib.sha256(
             (json.dumps(summary, sort_keys=True, ensure_ascii=False, indent=2)+'\n').encode()).hexdigest())
         self.assertEqual(summary['six_factor_status'], 'NOT_COMPUTED')

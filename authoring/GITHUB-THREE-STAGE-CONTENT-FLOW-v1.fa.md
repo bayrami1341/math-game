@@ -2,6 +2,8 @@
 
 **نسخه ۱، ۲۰۲۶-۱۰-۲۴ | وضعیت: نقشهٔ فنی/قرارداد پیشنهادی، نه ادعای اینکه تحویل تولیدی یا ادغام انجام شده است.** مرجع کد و ردپای تحویل، مخزن خصوصی `bayrami1341/math-game` است؛ وضعیت خصوصی مخزن با `gh repo view ... --json isPrivate` در همین نوبت بررسی شد. GitHub باید **کنترل‌پلین و رجیستری نسخه‌های محتوا** باشد؛ خزانهٔ موقتِ اجرای ابزار برای محاسبه/نگهداری مجاز است اما خروجیِ مورد استفادهٔ برنامه نباید فقط آنجا بماند. PDF و تصویر کتابِ دارای حق‌نشر همچنان نباید وارد Git شوند. خصوصی‌بودن مخزن به‌تنهایی مجوز حقوقی یا تضمین امنیتِ داده نیست.
 
+**ترتیب حاکم به اصلاح مالک:** منبع کتاب و راهنمای معلم → رجیستری چاپ/حقوق/hash در GitHub → استخراج و دفتر شاهد و snapshot آشیل → ممیزی اهداف راهنما و ثبت assessment آرنا → **تصمیم انسانی محدوده‌دار دربارهٔ محتوای پذیرفته‌شده** → ساخت بستهٔ بازی/تمرین و ابزار معلم در Z.ai → آزمون و انتشارِ دارای مجوز مستقل. تأیید استخراجِ آشیل (`EXTRACTION_VERIFIED`) با پذیرش آموزشی مالک و با اجازهٔ انتشار یکی نیست. [متن قابل ارسال برای دو عامل](THREE-STAGE-HANDOFF-PROMPTS-v1.fa.md) جدا آماده است.
+
 ## ۱. وضعیت واقعی همین لحظه، پیش از ترسیم مسیر
 
 - رسمیِ فعلی G2 v0.5 در `origin/v10.3-beta:public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx` با SHA `f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656` است. نامزد آرنا `authoring/khshab-G2-MATH_v1.2_page-goals-draft.xlsx` با SHA `18e6b4fa4957e968eca2b3b8066387858a627a99d7d52340064a1e8d8880c618` **روی همین شاخه و در GitHub موجود** است، ولی نامزد زرد/ناقص است، نه خروجیِ تأییدشدهٔ تازهٔ آشیل.
@@ -12,7 +14,7 @@
 
 ```text
 GitHub/شاخه و PR آشیل (نه fixture و نه فایل موقت)
-   ورودی مجاز: approved-workbook.xlsx + receipt/manifest نسخه‌دار + SHA بایت
+   ورودی مجاز: extraction-snapshot.xlsx + extraction-receipt.json + دفتر شاهد/manifest نسخه‌دار + SHA بایت
    منشأ PDF/تصویر خصوصی: فقط شناسه/هش/نشانی مجاز، نه خود رسانه در Git
       │  producer_commit + path + workbook_sha + edition + scope حکم
       ▼
@@ -25,10 +27,13 @@ GitHub/شاخه و PR آشیل (نه fixture و نه فایل موقت)
       ▼
 GitHub/PR آرنا: manifest + رجیستری هدف/پیوند + scope/score/coverage + candidate
    وضعیت: PROPOSED_YELLOW | HOLD | BLOCKED؛ نه مُهر، نه خروجی runtime
-      │  assessment_commit + manifest_sha + انتخاب مورد مصرف
+      │  assessment_commit + manifest_sha + UIDهای محدود، درخواست رأی موردی
       ▼
-Z.ai: fetch فقط-خواندنیِ commit پین‌شدهٔ آرنا + ورودی خام مجاز و هم‌هش
-   check schema/version/hash/approval scope, converter, capability, render/feedback/tests
+مالک/بازبین صاحب‌اختیار: پذیرش محدوده‌دار محتوا با رسیدِ معتبر، نه سکوت و نه تأیید کلی نقشه
+      │  decision_ref + scope + assessment_commit/hash + گزینش پذیرفته‌شده
+      ▼
+Z.ai: fetch فقط-خواندنیِ commit پین‌شدهٔ آرنا + رسیدِ پذیرش محدوده‌دار و خامِ مجازِ هم‌هش
+   تولید بستهٔ بازی/تمرین و ابزار معلم؛ check schema/version/hash/approval scope, converter, capability, render/feedback/tests
       │  consumer_receipt: consumer_commit+engine_version+input_commit/hash+PASS/BLOCKED
       ▼
 GitHub/PR یا مسیر رسید نسخه‌دار Z.ai → بازبینی آرنا/مالک؛ نشر فقط پس از گیت مستقل
@@ -42,9 +47,10 @@ GitHub/PR یا مسیر رسید نسخه‌دار Z.ai → بازبینی آر�
 
 ```text
 authoring/content-exchange/
+  source-registry/G2/C205/<edition-id>/source-manifest.json # منبع کتاب/راهنما، چاپ، hash، وضعیت و مرجع حقوق؛ نه PDF/تصویر
   incoming/G2/C205/<edition-id>/<workbook-sha256>/
-    approved-workbook.xlsx              # فقط اگر حق ذخیرهٔ بایتِ XLSX در همین repo احراز شود
-    achilles-receipt.json               # source_commit, book_sha, edition, workbook_sha, scope, schema
+    extraction-snapshot.xlsx            # فقط اگر حق ذخیرهٔ بایتِ XLSX در همین repo احراز شود
+    extraction-receipt.json             # book_sha, edition, workbook_sha, extraction_scope, schema؛ نه رأی آموزشی
     evidence-summary.json               # ارجاع صفحه/شاهد، بدون PDF/crop/تصویر/توکن
   assessed/G2/C205/<edition-id>/<workbook-sha256>/<assessment-sha256>/
     manifest.json                       # raw git commit/path/hash + all input/output hashes + states
@@ -55,6 +61,8 @@ authoring/content-exchange/
     breadth-depth.json                  # هدف×گونه×بازنمایی، خلأ و دلیل
     experience-candidates.json          # UID/مکانیک/وضعیت قابلیت، نه کپیِ لازم‌نبودنیِ کتاب
     review-queue.json                   # اختلاف‌های محدود، بدون رأیِ خودکار مالک
+  content-decisions/G2/C205/<edition-id>/<assessment-sha256>/
+    decision-receipt.json               # فقط پس از رأی قابل احراز، UID/scope/decision_ref و hash ثابت؛ نه تأیید خودکار
   consumer-receipts/G2/C205/<edition-id>/<assessment-sha256>/
     zai-contract-result.json            # اگر Z.ai در مجرای مجاز همین repo تحویل دهد
 ```
@@ -63,7 +71,7 @@ authoring/content-exchange/
 
 ## ۴. تحویل از آشیل به آرنا: پین منبع، نه اعتماد به نام فایل
 
-۱. آشیل در شاخه/PR خودش، workbook واقعاً مصوب با شیت‌های موجود و رسید محدوده‌دار را قرار می‌دهد؛ fixture و نامزد زرد جدا بمانند. قرارداد **آزمایشی adapter v1** در رسیدِ هم-commit: `schema=achilles-approved-workbook/v1`, `producer=ACHILLES`, `book_id`, `edition_id`, `book_source_sha256`, `workbook_sha256`, `repo_path`, `approval_scope`, `approval_status`, `approved_by`, `decision_ref`, `evidence_manifest_sha`, `storage_rights_status=REVIEWED_FOR_PRIVATE_REPO`, `rights_decision_ref` و `receipt_id`. `git_commit` **نباید داخل رسیدی بیاید که خودش در همان commit است** (هش خودارجاعی ناممکن)؛ commit کامل را بیرون از بایت رسید به adapter می‌دهیم و در lineage/manifest آرنا ثبت می‌کنیم. این فیلدهای ادعایی به‌تنهایی امضای رمزنگارانه/حکم معلم/تأیید مستقل حقوق نیستند؛ GitHub review/امضای معتبر یا کانال تأییدِ حاکمیتی باید جدا تعریف شود.
+۱. آشیل در شاخه/PR خودش، snapshot اکسل استاندارد با ممیزی استخراج و رسیدِ محدوده‌دار را قرار می‌دهد؛ fixture و نامزد زرد جدا بمانند. این رسید **تأیید استخراج مطابق کتاب** است نه پذیرش آموزشیِ سؤال/بازی به‌جای مالک. قرارداد **آزمایشی adapter v1** در رسیدِ هم-commit: `schema=achilles-extraction-bundle/v1`, `producer=ACHILLES`, `book_id`, `edition_id`, `book_source_sha256`, `workbook_sha256`, `repo_path`, `extraction_scope`, `approval_status=EXTRACTION_VERIFIED`, `verified_by`, `decision_ref`, `evidence_manifest_sha`, `storage_rights_status=REVIEWED_FOR_PRIVATE_REPO`, `rights_decision_ref` و `receipt_id`. `git_commit` **نباید داخل رسیدی بیاید که خودش در همان commit است** (هش خودارجاعی ناممکن)؛ commit کامل را بیرون از بایت رسید به adapter می‌دهیم و در lineage/manifest آرنا ثبت می‌کنیم. این فیلدهای ادعایی به‌تنهایی امضای رمزنگارانه/حکم معلم/تأیید مستقل حقوق نیستند؛ GitHub review/امضای معتبر یا کانال تأییدِ حاکمیتی باید جدا تعریف شود.
 ۲. آرنا **بدون تغییر شاخهٔ این نشست**، از GitHub commit SHA را با `gh`/`git fetch` پیدا و بایت را از `git show <pinned-commit>:<path>` به محیط مجازِ بیرون repo منتقل می‌کند؛ نه `git pull`/merge خودکار PR آشیل و نه مصرف `HEAD` متغیر. پیش از ingest، SHA واقعی بایت، رسید، چاپ/شناسه، ۷ شیت/سرستون، شناسه‌های یکتا و Q→L بررسی می‌شود. `MISSING/DRIFT/CONFLICT` یعنی `HOLD_ACHILLES_INPUT` و درخواست اصلاح موردی از آشیل، نه حدس یا ارتقای زرد.
 ۳. archive محلیِ فعلی برای پردازش و کنترل exact-byte همچنان مجاز است، **اما** index/lineage/گزارش نهایی باید به `producer_commit+workbook_sha` برگردد و پس از گیت در GitHubِ شاخهٔ آرنا ثبت شود. تغییر یک سلول یا رسید = SHA و assessment تازه، نه overwrite همان مسیر.
 
@@ -71,7 +79,7 @@ authoring/content-exchange/
 
 - آرنا محاسبه را از خامِ پین‌شده و منبعِ راهنمای هم‌چاپ/هم‌ارزی مرورشده انجام می‌دهد؛ چنانچه هدف نامعلوم یا انحراف بحرانی باشد، sidecar **`UNKNOWN_REVIEW/BLOCK_CRITICAL_SCOPE_DRIFT`** همراه علت را در PR نگه می‌دارد، نه کاندید آمادهٔ اجرا. امتیاز v1 دو‌عاملی intake نمرهٔ نهایی نیست؛ v2 فقط با شاهد و گیت محدوده. مفاهیم C55 چاپ ۱۳۹۱ بدون crosswalk برای C205 چاپ ۱۴۰۴ قطعی نیستند.
 - خروجی در **شاخهٔ ثابت آرنا** commit/push و به‌عنوان PR/بستهٔ versioned review می‌شود؛ هیچ `git push` به شاخهٔ آشیل/Z.ai یا سر رسمی، تغییر مُهر، انتقال غیرمجاز workbook/PDF، یا merge خودکار انجام نمی‌شود. `manifest.json` باید به `producer_commit`, `workbook_sha`, `guide_sha`, `profile_sha/revision`, `claims_sha`, `links_sha`, `rubric_version`, `coverage_sha`, `assessment_sha`, `pipeline_commit/version`, `content_status`, `release=NOT_GRANTED` وصل باشد. اگر مواد خام در شاخهٔ آشیل هنوز فقط PR بازند، وضعیت ارزیابی `UPSTREAM_UNMERGED_CANDIDATE` است تا مبنای پذیرفته‌شدهٔ مصرف روشن شود.
-- Z.ai بسته را با **assessment_commit ثابت**، manifest و raw همان SHA می‌خواند؛ کنترل checksum/نسخه و قابلیت موتور، تست درست/غلط/مرزی، فارسی/RTL، شناسه/کلید/مبدل و حقوق/احراز رأی با اوست. نتیجهٔ مصرف `SUPPORTED[_WITH_LIMITS]/NEEDS_IMPLEMENTATION/NOT_SUPPORTED` و PASS/BLOCKED با engine/schema/commit و SHAهای ورودی در GitHub برمی‌گردد؛ تا receipt واقعی و تست مصرف/گیت انتشار نباشد، «به بازی رفت» گفته نمی‌شود. پاسخ در چت/متن آزاد بدون artifactِ نسخه‌دار برای ACK کافی نیست؛ `[ARENA-ACK]` فقط پس از بررسی واقعی در worklog.
+- Z.ai **پس از تصمیم انسانی معتبر برای UIDهای همان assessment SHA** بسته را با **assessment_commit ثابت**، manifest و raw همان SHA می‌خواند؛ کنترل checksum/نسخه و قابلیت موتور، تست درست/غلط/مرزی، فارسی/RTL، شناسه/کلید/مبدل و حقوق/احراز رأی با اوست. نتیجهٔ مصرف `SUPPORTED[_WITH_LIMITS]/NEEDS_IMPLEMENTATION/NOT_SUPPORTED` و PASS/BLOCKED با engine/schema/commit و SHAهای ورودی در GitHub برمی‌گردد؛ تا receipt واقعی و تست مصرف/گیت انتشار نباشد، «به بازی رفت» گفته نمی‌شود. پاسخ در چت/متن آزاد بدون artifactِ نسخه‌دار برای ACK کافی نیست؛ `[ARENA-ACK]` فقط پس از بررسی واقعی در worklog.
 
 ## ۶. CI/بازبینی PR: گیت‌ها و تست‌های منفیِ لازم
 
@@ -87,8 +95,8 @@ CI عمومی روی PR فقط می‌تواند قالب/هشِ مواد مجا
 
 ## ۷. اولویت اجرا بدون انتظار بی‌دلیل
 
-**M0 اکنون انجام‌شده در حد fixture:** adapter فقط‌خواندنیِ `producer_commit:path→private exact-byte intake` و آزمون SHA/ref drift/حقوق/رسید و بستهٔ `manifest.json + assessment-summary.json` بدون متن خام. `--rights-decision-ref` باید از تصمیم حقوقی *بیرون از ادعای خود رسید* گرفته شود؛ رشتهٔ برابر، جعل/امضای تصمیم را مستقلاً بررسی نمی‌کند. از آنجا که `git fetch` ممکن است بایت XLSX را **پیش از خواندن رسید** منتقل کند، بدون احراز مستقل حق دریافت/نگهداری در GitHub نباید حتی ابزار را روی remote واقعی اجرا کرد. CLI فقط remote ثابت GitHub برنامه را می‌گیرد؛ injection remote محلی صرفاً برای تست است. بستهٔ ابزار در staging بیرون repo می‌ماند تا پس از ممیزی redaction و وضعیت upstream، دستی در PR شاخهٔ آرنا ثبت شود؛ **انتشار خودکار هنوز وجود ندارد** و خلاصهٔ فعلی scope/six-factor را `NOT_RUN/NOT_COMPUTED` می‌گذارد. آزمون fixture synthetic اثبات پذیرش آشیل نیست.
+**M0 اکنون انجام‌شده در حد fixture:** adapter فقط‌خواندنیِ `producer_commit:path→private exact-byte intake` با رسید `EXTRACTION_VERIFIED` نه پذیرش آموزشی و آزمون SHA/ref drift/حقوق/رسید و بستهٔ `manifest.json + assessment-summary.json` بدون متن خام. `--rights-decision-ref` باید از تصمیم حقوقی *بیرون از ادعای خود رسید* گرفته شود؛ رشتهٔ برابر، جعل/امضای تصمیم را مستقلاً بررسی نمی‌کند. از آنجا که `git fetch` ممکن است بایت XLSX را **پیش از خواندن رسید** منتقل کند، بدون احراز مستقل حق دریافت/نگهداری در GitHub نباید حتی ابزار را روی remote واقعی اجرا کرد. CLI فقط remote ثابت GitHub برنامه را می‌گیرد؛ injection remote محلی صرفاً برای تست است. بستهٔ ابزار در staging بیرون repo می‌ماند تا پس از ممیزی redaction و وضعیت upstream، دستی در PR شاخهٔ آرنا ثبت شود؛ **انتشار خودکار هنوز وجود ندارد** و خلاصهٔ فعلی scope/six-factor را `NOT_RUN/NOT_COMPUTED` می‌گذارد. آزمون fixture synthetic اثبات پذیرش آشیل نیست.
 
-**گام بعد آرنا:** گیت PR برای ممنوعیت PDF/تصویر/secret، ممیزی schema/حقوق و انتشار sidecar بازبینی‌شده بر شاخهٔ ثابت؛ تکمیل خروجی‌های واقعی concept/score/breadth×depth فقط با ورودی معتبر. **گام وابستهٔ آشیل:** معرفی بایت خامِ واقعاً تأییدشده در GitHub با receipt/حقوق/چاپ، جدا از fixture و نامزد v1.2. **گام وابستهٔ Z.ai:** پذیرش قرارداد مصرف و manifest قابلیت با نسخه و آزمون E2E. هیچ‌کدام از این گام‌ها به «همهٔ فایل‌ها را مالک دستی دوباره آپلود کند» یا سکوت مالک به‌عنوان رأی وابسته نیست.
+**گام بعد آرنا:** گیت PR برای ممنوعیت PDF/تصویر/secret، ممیزی schema/حقوق و انتشار sidecar بازبینی‌شده بر شاخهٔ ثابت؛ تکمیل خروجی‌های واقعی concept/score/breadth×depth فقط با ورودی معتبر. **گام وابستهٔ آشیل:** معرفی snapshot استخراجِ راستی‌آزمایی‌شده در GitHub با receipt/حقوق/چاپ، جدا از fixture و نامزد v1.2. **گام وابستهٔ Z.ai:** پذیرش قرارداد مصرف پس از رأی محدوده‌دار مالک، بستهٔ بازی/تمرین و ابزار معلم، manifest قابلیت با نسخه و آزمون E2E. هیچ‌کدام از این گام‌ها به «همهٔ فایل‌ها را مالک دستی دوباره آپلود کند» یا سکوت مالک به‌عنوان رأی وابسته نیست.
 
 **معیار پایان مسیر GitHubمحور:** بتوان برای یک UID از بازی/تمرین پیشنهادی به assessment commit آرنا، raw commit و SHA آشیل، منبع هدف/چاپ، وضعیت گیت و سپس رسید مصرف Z.ai برگشت؛ با حذف یا تعویض هر منبع، گیت شکست قابل مشاهده بدهد. حتی پس از این آزمون، نشر/نهایی‌بودن تنها با تصمیم صاحب‌اختیار است. این نسخه صرفاً نقشهٔ پیاده‌سازی است؛ تا رسیدِ واقعی و تستِ همان SHA نیاید، ادعای استقرار نمی‌کند.

@@ -80,8 +80,8 @@ def fetch_pinned(*, producer_ref: str, producer_commit: str, workbook_path: str,
     if not isinstance(producer_commit, str) or not COMMIT.fullmatch(producer_commit):
         raise ValueError("PINNED_FULL_COMMIT_REQUIRED")
     _sha(expected_sha256, "EXPECTED_SHA256")
-    workbook_path = _path(workbook_path, "/approved-workbook.xlsx")
-    receipt_path = _path(receipt_path, "/achilles-receipt.json")
+    workbook_path = _path(workbook_path, "/extraction-snapshot.xlsx")
+    receipt_path = _path(receipt_path, "/extraction-receipt.json")
     if PurePosixPath(workbook_path).parent != PurePosixPath(receipt_path).parent:
         raise ValueError("RECEIPT_WORKBOOK_DIRECTORY_MISMATCH")
     out_dir = out_dir.resolve()
@@ -111,14 +111,14 @@ def fetch_pinned(*, producer_ref: str, producer_commit: str, workbook_path: str,
         if not isinstance(receipt, dict):
             raise ValueError("INVALID_ACHILLES_RECEIPT_JSON")
         # Matching text is not cryptographic proof of reviewer identity/rights.
-        expected = {"schema": "achilles-approved-workbook/v1", "producer": "ACHILLES",
-                    "approval_status": "APPROVED", "repo_path": workbook_path,
+        expected = {"schema": "achilles-extraction-bundle/v1", "producer": "ACHILLES",
+                    "approval_status": "EXTRACTION_VERIFIED", "repo_path": workbook_path,
                     "workbook_sha256": expected_sha256,
                     "storage_rights_status": "REVIEWED_FOR_PRIVATE_REPO"}
         if any(receipt.get(k) != v for k, v in expected.items()) or receipt.get("rights_decision_ref") != rights_decision_ref:
             raise ValueError("ACHILLES_RECEIPT_OR_RIGHTS_MISMATCH")
-        for key in ("approval_scope", "decision_ref", "rights_decision_ref", "evidence_manifest_sha",
-                    "book_source_sha256", "approved_by"):
+        for key in ("extraction_scope", "decision_ref", "rights_decision_ref", "evidence_manifest_sha",
+                    "book_source_sha256", "verified_by"):
             if not isinstance(receipt.get(key), str) or not receipt[key].strip():
                 raise ValueError("MISSING_ACHILLES_RECEIPT_FIELD:" + key)
         _sha(receipt["evidence_manifest_sha"], "EVIDENCE_SHA")
@@ -147,6 +147,7 @@ def fetch_pinned(*, producer_ref: str, producer_commit: str, workbook_path: str,
             "workbook_sha256": sha, "archive_status": result["status"],
             "approval_trust": "RECEIPT_ATTESTED_NOT_CRYPTOGRAPHICALLY_AUTHENTICATED",
             "rights_trust": "RECEIPT_ATTESTED_NOT_INDEPENDENTLY_VERIFIED",
+            "content_acceptance": "PENDING_ARENA_ASSESSMENT_AND_HUMAN_DECISION",
             "release_authorization": "NOT_GRANTED", "book_id": result["book_id"],
             "edition_id": result["edition_id"], "achilles_receipt_id": result["achilles_receipt_id"],
             "assessment_file": result["assessment_file"]}
@@ -202,8 +203,9 @@ def redacted_package(lineage: dict, archive_dir: Path) -> tuple[dict, dict]:
                 "assessment_summary_sha256": hashlib.sha256(summary_bytes).hexdigest(),
                 "assessment_summary_path": "assessment-summary.json", "content_status": "PROPOSED_YELLOW",
                 "upstream_merge_status": "NOT_VERIFIED", "rights_trust": lineage["rights_trust"],
-                "approval_trust": lineage["approval_trust"], "release": "NOT_GRANTED",
-                "zai_consumer_receipt": "NOT_RECEIVED"}
+                "approval_trust": lineage["approval_trust"],
+                "content_acceptance": "PENDING_ARENA_ASSESSMENT_AND_HUMAN_DECISION",
+                "release": "NOT_GRANTED", "zai_consumer_receipt": "NOT_RECEIVED"}
     return manifest, summary
 
 
