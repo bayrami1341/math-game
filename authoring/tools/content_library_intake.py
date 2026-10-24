@@ -223,7 +223,8 @@ def ingest(workbook: Path, receipt: dict, out_dir: Path, *, objectives: dict | N
                       "teacher_guide_sha256": objectives.get("source_sha256") if objectives else None,
                       "goal_catalog_sha256": hashlib.sha256(json.dumps(objectives, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest() if objectives else None,
                       "reviewed_links_sha256": hashlib.sha256(json.dumps(links, ensure_ascii=False, sort_keys=True).encode("utf-8")).hexdigest() if links else None,
-                      "rubric": "ARENA_PRIORITY_POLICY_v1_NOT_OFFICIAL_GUIDE_NUMBERS",
+                      "rubric": "ARENA_PRIORITY_POLICY_v1_OBJECTIVE_ROLE_ONLY_EXPERIMENTAL",
+                      "final_selection_score_status": "NOT_COMPUTED_SIX_FACTOR_RUBRIC_NOT_IMPLEMENTED",
                       "assessments": assessments, "grouped_review_queue": review_groups,
                       "unmapped_objective_ids": sorted({g["id"] for g in objectives.get("objectives", [])}
                                                       - {link["objective_id"] for link in links or []}) if objectives else [],
