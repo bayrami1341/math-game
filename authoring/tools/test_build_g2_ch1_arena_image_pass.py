@@ -9,6 +9,8 @@ class ArenaImagePassTests(unittest.TestCase):
     def test_twelve_observed_and_six_explicit_missing_in_standard_workbook(self):
         images = image_manifest()
         self.assertEqual([r['book_page_candidate'] for r in images], list(range(1, 13)))
+        self.assertEqual([r['source_filename_private'] for r in images],
+                         [f'Math-book2-{p+6:03d}.png' for p in range(1, 13)])
         self.assertFalse(any(r['source_pdf_sha256_verified'] for r in images))
         wb = make_book(images)
         try:
@@ -37,8 +39,8 @@ class ArenaImagePassTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             with self.assertRaises(FileNotFoundError):
                 image_manifest(Path(temp))
-            path = Path(temp) / 'Math-book2-010.png'
-            path.write_bytes((UPLOADS / 'Math-book2-010.png').read_bytes() + b'changed')
+            path = Path(temp) / 'Math-book2-007.png'
+            path.write_bytes((UPLOADS / 'Math-book2-007.png').read_bytes() + b'changed')
             with self.assertRaisesRegex(ValueError, 'PAGE_IMAGE_CHANGED_OR_NOT_PNG:1'):
                 image_manifest(Path(temp))
 
