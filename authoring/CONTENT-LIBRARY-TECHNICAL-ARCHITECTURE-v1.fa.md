@@ -37,7 +37,7 @@ Z.ai: capability + schema/version + contract tests + بازرسی مصرف‌ک�
 
 ## ۳. الگوریتم آموزشی و گیت‌های توقف
 
-`score_content_priority_v2.py` هستهٔ خالصِ شش‌عاملی را با دادهٔ **از پیش مرورشده** پیاده می‌کند. `content_library_intake.py` فعلاً فقط آرشیو و امتیاز آزمایشی دو‌عاملی v1 می‌سازد و `final_selection_score_status=NOT_COMPUTED_SIX_FACTOR_RUBRIC_NOT_IMPLEMENTED` می‌دهد؛ **هنوز اتصال این دو ابزار به خشاب واقعی و راهنمای همان چاپ انجام نشده است**.
+`score_content_priority_v2.py` هستهٔ خالصِ شش‌عاملی را با دادهٔ **از پیش مرورشده** پیاده می‌کند. به‌روزرسانی ۲۰۲۶-۱۰-۲۴: گیت مستقلِ محدودهٔ مفهومی در `CONCEPT-SCOPE-INDEPENDENT-GATE-v1.fa.md` و `tools/audit_concept_scope_v1.py` افزوده شد؛ هستهٔ شش‌عاملی اکنون بدون `concept_scope_binding` منطبق و بدون رفع انحراف بحرانی امتیاز نمی‌دهد. این فقط اتصال فنیِ sidecar با fixture ساختگی است، نه اجرای G2 واقعی. `content_library_intake.py` فعلاً فقط آرشیو و امتیاز آزمایشی دو‌عاملی v1 می‌سازد و `final_selection_score_status=NOT_COMPUTED_SIX_FACTOR_RUBRIC_NOT_IMPLEMENTED` می‌دهد؛ **هنوز اتصال این ابزارها به خشاب واقعی و راهنمای همان چاپ انجام نشده است**.
 
 - ابتدا S0/S1: انطباق هش و قالب خشاب، ثبت تأیید آشیل؛ برای راهنما، شناسهٔ چاپ/هم‌ارزی با شاهد مستقل. اگر هدف یا هم‌ارزی راهنما نامشخص است، هیچ امتیاز نهایی. حکم محتوای خام آشیل را با نمرهٔ آموزشی خلط نکنیم.
 - هر عامل ۰..۴ فقط همراه `kind/source_sha256/locator/reviewed_by/status=REVIEWED/rationale`. عامل `future_foundation` علاوه بر شاهد رسمی/حکم انسانی، `target_objective_id` و دامنهٔ آینده را می‌خواهد؛ گمان «ضرب در آینده مهم است» شاهد نیست. عامل `coverage_gap` از snapshot نسخه‌دارِ ماتریس هدف×گونه می‌آید. تناسب چالش تابع مرحلهٔ تدریس است، نه افزایش یکنواخت با سختی.

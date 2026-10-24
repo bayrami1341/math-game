@@ -86,6 +86,18 @@ def assess(record: dict) -> dict:
     _reference(goal.get("evidence"), allowed=GOAL_SOURCES)
     if goal["edition_alignment"] != "SAME_EDITION":
         _reference(goal.get("equivalence_evidence"), allowed=GOAL_SOURCES)
+    # Independent conceptual-scope gate: never score a known main-goal drift.
+    scope = record.get("concept_scope_binding") or {}
+    if scope.get("decision") == "BLOCK_CRITICAL_SCOPE_DRIFT":
+        return {**result, "status": "HOLD_CRITICAL_CONCEPT_DRIFT"}
+    if (scope.get("schema") != "arena-concept-scope/v1" or scope.get("decision") != "ALIGNED"
+            or scope.get("content_uid") != uid or scope.get("workbook_sha256") != record["workbook_sha256"]
+            or not isinstance(scope.get("profile_id"), str) or not scope["profile_id"].strip()
+            or type(scope.get("profile_revision")) is not int or scope["profile_revision"] < 1
+            or not isinstance(scope.get("profile_source_sha256"), str)
+            or len(scope["profile_source_sha256"]) != 64
+            or any(c not in "0123456789abcdef" for c in scope["profile_source_sha256"])):
+        return {**result, "status": "HOLD_CONCEPT_SCOPE_REVIEW"}
     factors = record.get("factors")
     if not isinstance(factors, dict) or set(factors) != set(WEIGHTS):
         raise ValueError("MISSING_OR_EXTRA_SCORING_FACTORS")

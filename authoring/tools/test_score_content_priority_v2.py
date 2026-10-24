@@ -16,6 +16,10 @@ def fixture(rating=4):
             'achilles_status': 'APPROVED_INPUT_ASSUMED',
             'goal_binding': {'status': 'VERIFIED', 'edition_alignment': 'SAME_EDITION',
                              'objective_id': 'synthetic-objective', 'evidence': reference()},
+            'concept_scope_binding': {'schema': 'arena-concept-scope/v1', 'decision': 'ALIGNED',
+                                      'content_uid': 'test:edition:Q:Q-1', 'workbook_sha256': 'b' * 64,
+                                      'profile_id': 'synthetic-scope', 'profile_revision': 1,
+                                      'profile_source_sha256': 'a' * 64},
             'factors': {key: {'rating': rating,
                               'rationale': 'synthetic reviewed reason',
                               'target_objective_id': 'synthetic-later-goal',
@@ -73,6 +77,20 @@ class SixFactorPriorityTests(unittest.TestCase):
         sample = fixture()
         sample['achilles_status'] = 'DRAFT'
         self.assertEqual(assess(sample)['status'], 'HOLD_ACHILLES_INPUT')
+
+    def test_scope_gate_blocks_drift_unknown_or_mismatched_binding(self):
+        sample = fixture()
+        sample.pop('concept_scope_binding')
+        self.assertEqual(assess(sample)['status'], 'HOLD_CONCEPT_SCOPE_REVIEW')
+        sample = fixture()
+        sample['concept_scope_binding']['decision'] = 'BLOCK_CRITICAL_SCOPE_DRIFT'
+        self.assertEqual(assess(sample)['status'], 'HOLD_CRITICAL_CONCEPT_DRIFT')
+        sample = fixture()
+        sample['concept_scope_binding']['decision'] = 'UNKNOWN_REVIEW'
+        self.assertEqual(assess(sample)['status'], 'HOLD_CONCEPT_SCOPE_REVIEW')
+        sample = fixture()
+        sample['concept_scope_binding']['workbook_sha256'] = 'c' * 64
+        self.assertEqual(assess(sample)['status'], 'HOLD_CONCEPT_SCOPE_REVIEW')
 
     def test_reject_missing_evidence_wrong_future_source_and_fabricated_zero(self):
         sample = fixture()
