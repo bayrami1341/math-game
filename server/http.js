@@ -10,6 +10,10 @@ const statusFor = { UNAUTHENTICATED: 401, FORBIDDEN: 403, INVALID_PAYLOAD: 400, 
 const rootFiles = new Set(['v9.html', 'v9-config.js', 'index.html', 'home.html', 'join.html', 'leaderboard.html', 'firebase-config.js', 'workshop-core.js', 'storage.js', 'errors.js', 'profile-manager.js', 'social-core.js', 'heroes-core.js', 'live-board.js']);
 const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.woff2': 'font/woff2', '.mp3': 'audio/mpeg' };
 
+// در حالت لوکال مرورگر همیشه همین کانفیگ same-origin را می‌گیرد؛
+// نسخهٔ عمومی v9-config.js ریشه (production) دست‌نخورده می‌ماند و هرگز محلی سرو نمی‌شود.
+const localConfigSource = "window.MathGameV9Config = { localMode: true, apiBase: '' };";
+
 function localAccounts() {
   return [['teacher', 'معلم آزمایشی', true], ['student-a', 'دانش‌آموز اول', false], ['student-b', 'دانش‌آموز دوم', false]]
     .map(([uid, name, teacher]) => ({ uid, name, teacher, token: randomBytes(32).toString('hex') }));
@@ -78,6 +82,7 @@ function createServer({ service, authenticate, mode, root, allowedOrigins = [], 
       let file = decodeURIComponent(url.pathname).replace(/^\/+/, '') || 'v9.html';
       if (!rootFiles.has(file) && !/^(src|styles|assets)\/[A-Za-z0-9_./-]+$/.test(file)) return send(404, { ok: false });
       if (file.split('/').some(part => part.startsWith('.'))) return send(404, { ok: false });
+      if (mode === 'local' && file === 'v9-config.js') { res.writeHead(200, { 'Content-Type': mime['.js'] }); return res.end(localConfigSource); }
       const absolute = path.resolve(root, file);
       if (!absolute.startsWith(path.resolve(root) + path.sep)) return send(404, { ok: false });
       const ext = path.extname(file);
