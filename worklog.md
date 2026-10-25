@@ -724,3 +724,21 @@ Stage Summary:
 - دستور ۱ (push): آماده ولی مسدود بر مجوز نوشتن توکن — سه کامیت + بستهٔ پشتیبان آمادهٔ یک‌گام
 - دستور ۲ (PR #5): وضعیت جدید بهتر از پیش — base=v6 و mergeable؛ پس از push، PR به ۵ کامیت/۳ فایل به‌روز و مرجش گیت v6 را فعال می‌کند؛ سپس مالک «v6-pr-gate / gate» را required کند
 - دستور ۳: در انتظار دیف v9-config.js — دریافت = اعمال+کامیت+push یک‌گامی (به‌محض مجوز نوشتن)
+
+---
+Task ID: trace-1a171c2ddb8bb095
+Agent: Z.ai Code (main)
+Task: فرمان مالک — «توکن به‌روزرسانی شد (Contents+PR = Read and write)؛ سه کامیت را پوش کن»
+
+Work Log:
+- پیش از پوش، وضعیت راستی‌آزمایی شد: شاخهٔ wave1-local-migration پاک، دقیقاً ۳ کامیت جلوتر از origin (3ea2dc3 → 6482527 → 6acb825 → c0c3a5b)؛ ls-remote زنده: main=4d4727b، wave1=3ea2dc3 — fast-forward بدون تداخل
+- push اجرا شد → fail: «could not read Username for 'https://github.com'» — گیت هیچ منبع اعتبارنامه‌ای نیافت
+- ممیزی جامع اعتبارنامه (همه خالی): env (exported و shell-internal)، credential helper در هر ۳ سطح config، ~/.git-credentials، ~/.netrc، ~/.config/git/credentials، /etc/gitconfig، GIT_ASKPASS، ~/.ssh، gh CLI (نصب نیست)، /run/secrets، bash/zsh history، توابع شل
+- منبع حقیقت یافت شد: ledger محیطی — نشست trace-1a171a58831b6469 push را با توکن مالک تلاش کرد → 403 (Contents read-only)؛ «توکن فقط در نشست شل استفاده شد؛ در هیچ فایلی نوشته نشد» — با فشرده‌شدن کانتکست چت، رشتهٔ توکن از دسترس هماهنگ‌کننده خارج شد
+- هر دو بستهٔ پشتیبان verify شد و سالم است: /home/z/my-project/wave1-reconstruction-1a171a58831b6469.bundle + کپی /tmp (نوک c0c3a5b، پیش‌نیاز 3ea2dc3) — ضدریست سندباکس
+- هیچ تغییری به مخزن کامیت نشد (بخش ۸-د COORDINATION همچنان دقیق است: ۳ کامیت آمادهٔ پوش)؛ هیچ بایتی به سرور transmit نشد
+
+Stage Summary:
+- پوش ناموفق — علت: مجوز توکن درست شده اما خودِ رشتهٔ توکن در نشست فعلی موجود نیست (طبق پروتکل امنیتی هرگز در فایل ذخیره نمی‌شد؛ فقط در کانتکست چت/شل نشست قبل بود)
+- فقط یک حلقه مانده: مالک رشتهٔ توکن را در چت بفرستد → پوش یک‌گامیِ سه کامیت با استفاده مقطعی (بدون نوشتن در فایل) بلافاصله اجرا می‌شود
+- سه کامیت + دو bundle پشتیبان سالم و آماده؛ origin دست‌نخورده روی 3ea2dc3
