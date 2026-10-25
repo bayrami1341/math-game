@@ -742,3 +742,21 @@ Stage Summary:
 - پوش ناموفق — علت: مجوز توکن درست شده اما خودِ رشتهٔ توکن در نشست فعلی موجود نیست (طبق پروتکل امنیتی هرگز در فایل ذخیره نمی‌شد؛ فقط در کانتکست چت/شل نشست قبل بود)
 - فقط یک حلقه مانده: مالک رشتهٔ توکن را در چت بفرستد → پوش یک‌گامیِ سه کامیت با استفاده مقطعی (بدون نوشتن در فایل) بلافاصله اجرا می‌شود
 - سه کامیت + دو bundle پشتیبان سالم و آماده؛ origin دست‌نخورده روی 3ea2dc3
+
+---
+Task ID: trace-1a171cdfa8f455c5
+Agent: Z.ai Code (main)
+Task: فرمان مالک — ارسال رشتهٔ توکن (Read and write برای Contents+PR) و پوش فوری سه کامیت
+
+Work Log:
+- پیش‌پرواز: شاخه پاک، دقیقاً ۳ کامیت جلوتر، سرور روی 3ea2dc3 (عین رکورد ۸-د)
+- push کامل سه کامیت با توکن مقطعی → رد شد با خطای جدید و روشن: «refusing to allow a Personal Access Token to create or update workflow .github/workflows/v6-pr-gate.yml without workflow scope» — یعنی 403 قبلی رفع شده (توکن احراز و Contents نوشتنی است) اما مجوز «Workflows» جداگانه لازم است چون 6acb825 فایل ورک‌فلو می‌سازد
+- پوش جزئی اجرا شد: 6482527 (اصلاح دو پایگاه‌آزمون — بدون فایل ورک‌فلو) → موفق: 3ea2dc3..6482527؛ سرور با ls-remote تأیید: wave1=6482527
+- fetch برای همگام‌سازی tracking ref؛ وضعیت: ahead 2 (مانده: 6acb825 گیت + c0c3a5b هماهنگی)
+- بررسی نشت توکن: grep در .git/config و worklog = صفر؛ remote.origin.url دست‌نخورده (URL ساده)؛ توکن فقط در دو دستور push استفاده شد، خروجی هم sed-redact شد
+
+Stage Summary:
+- ۱ از ۳ کامیت روی سرور نشست (اولین push موفق سندباکس پس از ریست‌ها) — مسیر توکن+مجوز Contents اثبات شد
+- ماندهٔ پوش (6acb825 + c0c3a5b) فقط یک پیش‌نیاز دارد: مجوز «Workflows: Read and write» روی همان توکن (تنظیمات → Developer settings → Fine-grained tokens → Permissions → Repository permissions → Workflows)
+- جایگزین بدون آن مجوز: مالک فایل v6-pr-gate.yml را خودش از UI بسازد → بازسازی دو کامیت بدون فایل ورک‌فلو (SHAهای تازه، مستندسازی لازم) — گران‌تر؛ توصیه: مجوز Workflows
+- پس از پوش نهایی: PR #5 (wave1→v6) به ۵ کامیت/۳ فایل می‌رسد؛ سپس مالک چک v6-pr-gate/gate را Required کند
