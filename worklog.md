@@ -668,3 +668,22 @@ Stage Summary:
 - دو تصحیح حقیقتی مهم: (۱) re-root=آرتیفکت سنجش، (۲) رجیستری=v59؛ هر دو با اثبات ماشینی
 - دو پایگاه‌آزمون کهنه v6 اصلاح و سوییت کامل سبز شد — گیت جدید از روز نخست معنادار است
 - مصنوع‌ها: wave1@280e9aa (محلی)، /home/z/my-project/trace-1a171130bb01db65/{pr2-ready-comment,pr3-close-note,issue4-sync-comment}.fa.md
+
+---
+Task ID: trace-1a171351db2100a5
+Agent: Z.ai Code (main)
+Task: پاسخ به ۷ سؤال مدیریتی/فنی مالک دربارهٔ کل خط لوله (وظایف، نقشهٔ راه، فرمت خشاب‌ها، آداپتور، اعتبارسنجی اشیل، ۴ پایهٔ باقی‌مانده، قرارداد داده)
+
+Work Log:
+- همهٔ پاسخ‌ها از دادهٔ زندهٔ origin (کلون کامل ناشناس) + worklog + COORDINATION.md، نه حافظه
+- فرمت خشاب مستند شد: Excel ورودی (SHA قفل) → tools/cartridge-converter/convert.mjs v1.1 (راستی‌آزمایی با cartridge-schema.js) → public/math-game/cartridges/KH-*.json → station/cartridge.js (fetch + اعتبارسنجی مجدد در بارگذاری) — همگی فقط روی v10.3-beta؛ v6 هنوز بدون cartridge-schema/cartridge.js است (station = ۱۱ فایل، محتوا هاردکد در src/core/graph-data.js/bottleneck.js/pedagogy.js)
+- سه خشاب موجود: KH-G3-MATH (v0.7 رسمی پایلوت)، KH-G2-MATH (مبنای v0.5 رسمی؛ اسکلت سبز + موج ۲ زرد)، KH-G1-MATH (v0.1 پوستهٔ خالی: ۰ درس/۰ سؤال/۰ قرمز)؛ G4/G5/G6: هیچ آرتیفکتی در هیچ شاخه
+- لایه‌های اعتبارسنجی محتوا فهرست شد: قفل SHA sourceAnchors + OFFICIAL-HEADS، g2-cartridge-gate.yml (ممیز read-only نسبت به سر رسمی)، khshab-gate ~۱۷ گام fail-closed (گیت منبع v2، امنیت مُهر، بازرس مفهومی BP-024)، رسیدهای پاسخ AUD-01، قاعدهٔ ۸، بازرسی دوم Z.ai؛ حفرهٔ صادقانه: گیت پوشش شاهد صفحه‌ای هنوز ماتریس ناتمام
+- قرارداد داده: GOVERNANCE v1.0.0 + اسکیماهای نسخه‌دار (khshab.blueprints/v1، khshab.skeleton-handoff/v1، cartridge 1.0، contracts/v9-*.schema.json، M09 v1.1.0 با پیوست قابلیت، concept-profile v1.0.0 DRAFT)؛ «قرارداد نسخه‌دار مصرف محتوا» با golden/BLOCKED هنوز درخواست باز آرنا است
+- تأیید زندهٔ ls-remote: origin/wave1=3ea2dc3، محلی=280e9aa (۳ کامیت منتشرنشده)؛ سر PR #5 = 3ea2dc3 (wave1→main، مالک)؛ refs/pull/*/merge فقط برای #1 وجود دارد (#2/#3/#5 بدون merge ref)
+- نقشهٔ راه ۲-۴ هفته به‌صورت پیشنهاد مرحله‌بندی‌شده تنظیم و صریحاً مشروط به حکم مالک شد
+
+Stage Summary:
+- پاسخ ۷گانه با شاهد فایل/کامیت/SHA تحویل شد؛ هیچ ادعای بدون شاهدی نماند
+- سه مسدودکنندهٔ عملیاتی برای مالک صریح شد: توکن push، دیف v9-config.js (ارسال مجدد)، حکم PR#3 و نقشهٔ راه
+- مصنوع: این رکورد + پاسخ کامل در چت مالک
