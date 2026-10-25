@@ -2048,3 +2048,14 @@ Work Log:
 - `authoring/G2-CH2-ACHILLES-REPLY-INTEGRATION-v1.fa.md` نقش ص۱۹/۳۳، تفکیک page-evidence از Q-ledger و پیام موردی آماده برای آشیل را ثبت کرد. اقدام فوری مالک فقط در صورت تمایل ارسال همان پیام کوتاه است؛ بقیهٔ نگاشت آموزشی و بودجهٔ فصل ۲ مستقل ادامه دارد.
 Stage Summary:
 - پاسخ آشیل به اطلاعات عملیِ صفحه‌ای تبدیل شد؛ نه صفحه‌های ۹گانه به سؤال پذیرفته تبدیل شدند و نه snapshotِ سوال‌محور/مجوز/هدف راهنما جعل شد. هیچ PDF/تصویر یا XLSXِ حق‌نامعلوم به مخزن آرنا افزوده نشد.
+
+---
+Task ID: achilles-c205-audit-and-inventory-reconciliation-2026-10-24
+Agent: آرنا (content)
+Task: مصرف گزارش تکمیلی آشیل دربارهٔ چاپ/مدل/issue/confidence و شمارخشاب‌ها، با تمایز official و candidate.
+Work Log:
+- `origin/main@4d4727b2e5aad80f16d06ea4495cc51a52e49dc1` و PR #2 head `49344cf7bacd8ce897b8cc78ab746dbf71673382` از GitHub بررسی شدند. با خوانش JSON cartridge رسمی، G1=0 Q، G2=92 Q همگی نیاز به تأیید (bookMap=62)، G3=120 Q شامل 13 مهر تاریخی و 107 نیازمند تأیید (bookMap=20). نامزد مستقل G2 v1.2=104 Q زرد در شاخهٔ آرناست؛ 92 رسمی و 104 نامزد دو نسخه‌اند. هیچ متن Q، PDF، تصویر یا crop در گزارش منتشر نشد.
+- issue queue آشیل C205 از GitHub روی commit پین‌شده با SHA `b23e3e52679c4c5fe930b15baadbdb06a3148c76134abba7147fd8920cd040b2` خوانده شد: 29 رکورد، 14 RESOLVED_BY_CROP_EVIDENCE و 15 NEEDS_TEACHER_VERDICT؛ در 18 صفحهٔ چاپی 19–36، 9 issue و هر 9 resolved-by-crop در سطح صفحه. `authoring/tools/build_g2_ch2_issue_overlay.py` و دو تست synthetic با کنترل SHA/path/offset/evidence آن را به صف صفحه‌ای وصل کردند؛ ص33/PDF39 issue `ISS-P039-CHECKMARK-CONFLICT` دارد، اما هیچ Q-ID در issue و شاهد Q-1061..1064 وصل نشده است. خروجی `authoring/g2-completion/G2-CH2-ACHILLES-ISSUE-OVERLAY-v1.json` هیچ Q را خودکار نمی‌پذیرد.
+- `authoring/G2-ACHILLES-AUDIT-AND-CARTRIDGE-RECONCILIATION-v1.fa.md` رژیم‌های شمارش، تفکیک issue و Q، مرز OCR/vision و پیشنهاد confidence چندمحورهٔ sidecar را ثبت کرد؛ هیچ عددی به‌عنوان خطای چاپ/فصل اصلاح‌شدهٔ آشیل یا آرنا جعل نشد. کل suite ابزارها پس از fetch ref و نصب موقت وابستگی‌ها `108 tests OK`.
+Stage Summary:
+- شمارها و issueها به صف اجرایی فصل 2 تبدیل شدند؛ هدف/پیوند واقعی Q، اعتبار guide، مکانیک و تصمیم انسانی همچنان نیازمند شاهد همان دامنه‌اند. کار مستقل ادامه دارد؛ اقدام فوری مالک لازم نیست.

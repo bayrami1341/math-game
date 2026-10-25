@@ -1,0 +1,170 @@
+{
+  "schema": "arena-g2-ch2-achilles-issue-overlay/v1",
+  "producer_commit": "49344cf7bacd8ce897b8cc78ab746dbf71673382",
+  "source_path": "authoring/audit/issue_queue_C205.json",
+  "source_sha256": "b23e3e52679c4c5fe930b15baadbdb06a3148c76134abba7147fd8920cd040b2",
+  "total_issues_all_C205": 29,
+  "all_C205_status_counts": {
+    "RESOLVED_BY_CROP_EVIDENCE": 14,
+    "NEEDS_TEACHER_VERDICT": 15
+  },
+  "ch2_issue_count": 9,
+  "ch2_issues": [
+    {
+      "issue_id": "ISS-P026-RECONCILE",
+      "printed_page": 20,
+      "pdf_page_reported": 26,
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P026-01",
+        "EV-CROP150-P026-02",
+        "EV-TEXT-FOOTER-P026"
+      ],
+      "candidate_question_ids_on_page": [
+        "Q-1041",
+        "Q-1042",
+        "Q-1043",
+        "Q-1044"
+      ],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P027-RECONCILE",
+      "printed_page": 21,
+      "pdf_page_reported": 27,
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P027-01",
+        "EV-CROP150-P027-02",
+        "EV-TEXT-FOOTER-P027"
+      ],
+      "candidate_question_ids_on_page": [],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P030-RECONCILE",
+      "printed_page": 24,
+      "pdf_page_reported": 30,
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P030-01",
+        "EV-CROP150-P030-02",
+        "EV-TEXT-FOOTER-P030"
+      ],
+      "candidate_question_ids_on_page": [],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P031-RECONCILE",
+      "printed_page": 25,
+      "pdf_page_reported": 31,
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P031-01",
+        "EV-TEXT-FOOTER-P031"
+      ],
+      "candidate_question_ids_on_page": [],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P032-RECONCILE",
+      "printed_page": 26,
+      "pdf_page_reported": 32,
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P032-01",
+        "EV-CROP150-P032-02",
+        "EV-TEXT-FOOTER-P032"
+      ],
+      "candidate_question_ids_on_page": [],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P033-RECONCILE",
+      "printed_page": 27,
+      "pdf_page_reported": 33,
+      "category": "PASS_A_VS_PASS_B_DISCREPANCY",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P033-01",
+        "EV-CROP150-P033-02",
+        "EV-TEXT-FOOTER-P033"
+      ],
+      "candidate_question_ids_on_page": [],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P037-RECONCILE",
+      "printed_page": 31,
+      "pdf_page_reported": 37,
+      "category": "PASS_B_VS_PDF_CONFLICT",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P037-01",
+        "EV-TEXT-FOOTER-P037"
+      ],
+      "candidate_question_ids_on_page": [
+        "Q-1053",
+        "Q-1054",
+        "Q-1055",
+        "Q-1056"
+      ],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P039-CHECKMARK-CONFLICT",
+      "printed_page": 33,
+      "pdf_page_reported": 39,
+      "category": "CHECKMARK_WITH_HIDDEN_EDIT",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P039-01",
+        "EV-CROP150-P039-02",
+        "EV-TEXT-FOOTER-P039"
+      ],
+      "candidate_question_ids_on_page": [
+        "Q-1061",
+        "Q-1062",
+        "Q-1063",
+        "Q-1064"
+      ],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    },
+    {
+      "issue_id": "ISS-P040-CHECKMARK-CONFLICT",
+      "printed_page": 34,
+      "pdf_page_reported": 40,
+      "category": "OVERLAPPING_TABLE_CORRUPTION",
+      "issue_status": "RESOLVED_BY_CROP_EVIDENCE",
+      "evidence_refs": [
+        "EV-CROP150-P040-01",
+        "EV-TEXT-FOOTER-P040"
+      ],
+      "candidate_question_ids_on_page": [
+        "Q-1065",
+        "Q-1066",
+        "Q-1067",
+        "Q-1068"
+      ],
+      "question_issue_relation": "UNDETERMINED_NO_Q_ID_IN_ISSUE",
+      "human_educational_verdict": "NOT_DERIVED_FROM_ISSUE_STATUS"
+    }
+  ],
+  "automatically_accepted_question_count": 0,
+  "chapter_or_edition_errors_corrected_by_arena": "NOT_INFERABLE_FROM_THIS_LEDGER",
+  "release": "NOT_GRANTED",
+  "page_reconciliation_sha256": "a690e5e3c6f7fd6e152269730f0f8920c6333a22a6eabef7e5621bdd800e2b0b"
+}
