@@ -760,3 +760,22 @@ Stage Summary:
 - ماندهٔ پوش (6acb825 + c0c3a5b) فقط یک پیش‌نیاز دارد: مجوز «Workflows: Read and write» روی همان توکن (تنظیمات → Developer settings → Fine-grained tokens → Permissions → Repository permissions → Workflows)
 - جایگزین بدون آن مجوز: مالک فایل v6-pr-gate.yml را خودش از UI بسازد → بازسازی دو کامیت بدون فایل ورک‌فلو (SHAهای تازه، مستندسازی لازم) — گران‌تر؛ توصیه: مجوز Workflows
 - پس از پوش نهایی: PR #5 (wave1→v6) به ۵ کامیت/۳ فایل می‌رسد؛ سپس مالک چک v6-pr-gate/gate را Required کند
+
+---
+Task ID: trace-1a171d3be40c957d
+Agent: Z.ai Code (main)
+Task: فرمان مالک — «مجوز Workflows هم Read and write شد؛ دو کامیت باقی‌مانده را پوش کن»
+
+Work Log:
+- پیش‌پرواز: محلی ahead 2 (6acb825+c0c3a5b)، سرور 6482527 — عین وضعیت ثبت‌شدهٔ trace قبلی
+- push شاخه با همان توکن (مالک مجوز Workflows را روی همان توکن ویرایش کرده بود) → موفق: 6482527..c0c3a5b
+- راستی‌آزمایی سرور: ls-remote = c0c3a5b6168f60b650dd35e330d1b99ba403a580 ✅؛ fetch → همگامی کامل (بدون ahead/behind)
+- نشت توکن: grep .git/config و ledger = صفر؛ remote.origin.url همچنان URL ساده
+- PR #5 زنده با API احرازشده: open، base=v6@52387ba، head=wave1-local-migration@c0c3a5b، commits=5، changed_files=4، mergeable=true، mergeable_state=blocked (در انتظار بررسی/تأیید مالک)
+- وورک‌فلو v6-pr-gate روی head SHA: **completed = success** — نخستین اجرای سروریِ سبزِ گیت در تاریخ مخزن
+- توکن در این trace: ۱ push + ۳ GET؛ هیچ‌گاه در فایل نوشته نشد
+
+Stage Summary:
+- هر ۳ کامیتِ بخش ۸-د اکنون روی origin است با همان SHAهای ثبت‌شده — بدون بازسازی، بدون بازنویسی تاریخچه؛ زنجیرهٔ ممیزی سالم
+- مأموریت push (فرمان‌های trace 1a171130bb01db65/1a171cdfa8f455c5/1a171d3be40c957d) کامل بسته شد
+- گام‌های بعدی مالک: ① Required status check کردن v6-pr-gate/gate در قاعدهٔ v6 ② بازبینی و تأیید PR #5 (اصلاح آزمون‌ها طبق ۸-ج قابل revert در بازبینی) ③ merge → گیت‌شدن خودکار همهٔ PRهای بعدی v6 ④ ارسال دیف v9-config.js (دستور ۳ معلّق — اکنون اعمال+کامیت+push یک‌گامی ممکن) ⑤ چرخاندن/Revoke توکن پس از اتمام
