@@ -1,5 +1,6 @@
 'use strict';
 const fs = require('node:fs/promises');
+const os = require('node:os');
 const path = require('node:path');
 const { randomBytes } = require('node:crypto');
 const { Service } = require('./service');
@@ -64,12 +65,27 @@ async function main() {
     };
   }
 
+  // پرچم ‎--host <آدرس>‎ یا MATH_GAME_HOST — پیش‌فرض: لوکال فقط همین دستگاه، تولید همهٔ کارت‌های شبکه
+  const hostIndex = process.argv.indexOf('--host');
+  const hostArgument = hostIndex > -1 ? process.argv[hostIndex + 1] : undefined;
+  const host = process.env.MATH_GAME_HOST || hostArgument || (local ? '127.0.0.1' : '0.0.0.0');
+  // درگاه LAN فقط در حالت لوکال و فقط با اتصال خارج از loopback فعال می‌شود؛ تولید از مسیر allowedOrigins خودش می‌گذرد.
+  const allowLocalNetwork = local && host !== '127.0.0.1';
+
   const server = createServer({ service: new Service(store, { secret }), authenticate, mode, root, accounts,
-    allowedOrigins });
+    allowedOrigins, allowLocalNetwork });
   server.requestTimeout = 15000; server.headersTimeout = 10000;
 
   const port = Number(process.env.PORT || 9090);
-  server.listen(port, local ? '127.0.0.1' : '0.0.0.0', () => console.log(`Math Workshop v9 ${mode}: http://127.0.0.1:${port}/v9.html`));
+  server.listen(port, host, () => {
+    const urls = [`http://127.0.0.1:${port}/v9.html`];
+    if (allowLocalNetwork) {
+      for (const list of Object.values(os.networkInterfaces()))
+        for (const net of list || []) if (net.family === 'IPv4' && !net.internal) urls.push(`http://${net.address}:${port}/v9.html`);
+      console.log('حالت شبکهٔ محلی فعال است؛ اگر دانش‌آموزان وصل نشدند، در فایروال برای Node.js اجازه بدهید.');
+    }
+    console.log(`Math Workshop v9 ${mode}: ${urls.join('  |  ')}`);
+  });
 }
 
 main().catch(error => { console.error(error.message); process.exitCode = 1; });

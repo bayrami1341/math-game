@@ -44,9 +44,13 @@ test('permanent errors remain in the queue and temporary errors retain retry sta
   await db.block(retry, 'FORBIDDEN');
   assert.equal((await db.pending('student-one'))[0].blocked, 'FORBIDDEN'); db.close();
 });
-test('unavailable IndexedDB fails explicitly instead of pretending an answer was saved', async () => {
+test('unavailable IndexedDB falls back in-memory under the same contract with volatile flag (v10.1.3)', async () => {
   const { openLocal } = await import('../src/v9/local.mjs');
-  await assert.rejects(openLocal(null));
+  const memory = await openLocal(null);
+  assert.equal(memory.volatile, true, 'fallback must be explicit about being volatile, not pretend durability');
+  await memory.put('profile:one', state);
+  assert.deepEqual(await memory.get('profile:one'), state);
+  assert.deepEqual(await memory.pending('student-one'), []);
 });
 
 test('a late acknowledgement stays with its original child after switching profiles', async () => {

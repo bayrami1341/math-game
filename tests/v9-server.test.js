@@ -5,6 +5,7 @@ const path = require('node:path');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const vm = require('node:vm');
+const http = require('node:http');
 const { Service, ApiError } = require('../server/service');
 const { LocalStore, FirebaseStore } = require('../server/store');
 const { createServer, localAccounts } = require('../server/http');
@@ -213,4 +214,47 @@ test('production cannot expose development accounts', async t => {
   const server = createServer({ mode: 'production', root: path.resolve(__dirname, '..'), authenticate: async () => null, service: {} });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
   assert.equal((await fetch(`http://127.0.0.1:${server.address().port}/api/dev/accounts`)).status, 404);
+});
+
+// درخواست خام با Header میزبان دلخواه — undici/fetch ممکن است Host را بازنویسی/حذف کند.
+const ask = (port, hostHeader, pathname = '/api/v9/meta') => new Promise((resolve, reject) => {
+  const req = http.request({ host: '127.0.0.1', port, path: pathname, headers: { host: hostHeader } }, res => {
+    let body = ''; res.setEncoding('utf8'); res.on('data', chunk => body += chunk); res.on('end', () => resolve({ status: res.statusCode, body }));
+  });
+  req.on('error', reject); req.end();
+});
+
+test('local mode serves the same-origin config to browsers and keeps the LAN locked until the teacher opts in', async t => {
+  const accounts = localAccounts();
+  const server = createServer({ service: {}, mode: 'local', root: path.resolve(__dirname, '..'), accounts, authenticate: async token => accounts.find(account => account.token === token) });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const port = server.address().port;
+  const config = await ask(port, `127.0.0.1:${port}`, '/v9-config.js');
+  assert.equal(config.status, 200);
+  assert.ok(config.body.includes("apiBase: ''"), 'local browsers must receive the same-origin apiBase');
+  assert.ok(config.body.includes('localMode: true'));
+  assert.equal((await ask(port, `192.168.1.20:${port}`)).status, 403, 'classroom LAN host stays FORBIDDEN without opt-in');
+  assert.equal((await ask(port, `evil.example:${port}`)).status, 403, 'public hostnames stay FORBIDDEN without opt-in');
+});
+
+test('explicit LAN opt-in admits only private classroom ranges, never public names', async t => {
+  const accounts = localAccounts();
+  const server = createServer({ service: {}, mode: 'local', root: path.resolve(__dirname, '..'), accounts, allowLocalNetwork: true, authenticate: async token => accounts.find(account => account.token === token) });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  t.after(() => new Promise(resolve => server.close(resolve)));
+  const port = server.address().port;
+  for (const lan of ['192.168.1.20', '10.0.0.5', '172.16.9.9', '172.31.255.255']) assert.equal((await ask(port, `${lan}:${port}`)).status, 200, lan);
+  const config = await ask(port, '192.168.1.20:' + port, '/v9-config.js');
+  assert.equal(config.status, 200); assert.ok(config.body.includes("apiBase: ''"), 'LAN students must get the working same-origin config too');
+  for (const outside of ['evil.example', '172.32.0.1', '8.8.8.8']) assert.equal((await ask(port, `${outside}:${port}`)).status, 403, outside);
+});
+
+test('production never receives the local config override and is not host-gated (reverse proxy owns that)', async t => {
+  const server = createServer({ mode: 'production', root: path.resolve(__dirname, '..'), authenticate: async () => null, service: {} });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); t.after(() => new Promise(resolve => server.close(resolve)));
+  const port = server.address().port;
+  const config = await ask(port, `127.0.0.1:${port}`, '/v9-config.js');
+  assert.equal(config.status, 200); assert.ok(!config.body.includes('localMode'), 'public config must stay the untouched public file');
+  assert.equal((await ask(port, `192.168.1.20:${port}`)).status, 200);
 });

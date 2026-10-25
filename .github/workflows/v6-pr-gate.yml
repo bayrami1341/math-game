@@ -1,0 +1,44 @@
+# v6-pr-gate — گیت سبک PRهای v6 (فرمان مالک trace 1a171130bb01db65)
+# هدف: روی هر PR به v6 دو دستور رسمی مخزن اجرا شود؛ اگر قرمز شد merge قفل می‌شود
+#       (برای «قفل»، مالک باید نام چکِ «v6-pr-gate / gate» را در
+#        Settings ← Branches ← قاعدهٔ v6 ← Required status checks اضافه کند؛
+#        تا رفع bypass توکن سندباکس، قفل در برابر همان توکن فنی نمی‌شود — بخش ۱الف COORDINATION.md)
+# نکته: این فایل عمداً روی شاخهٔ wave1-local-migration کامیت شده، نه مستقیم روی v6.
+#       با اولین PR که این فایل را به v6 برساند، از آن پس «همهٔ» PRهای v6 گیت‌دار می‌شوند.
+name: v6-pr-gate
+
+on:
+  pull_request:
+    branches: [v6]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: v6-pr-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies (npm ci — بیت‌به‌بیت با package-lock)
+        run: npm ci
+
+      - name: run-mastery (T1–T17)
+        run: node tests/run-mastery.js
+
+      - name: node --test suite
+        run: node --test tests/*.test.js

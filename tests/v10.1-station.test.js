@@ -51,21 +51,21 @@ test('2. Depth layers: exactly 9 layers (3 per building) with v10.2 pass marks 7
     const depths = getDepthsForSector(s);
     assert.equal(depths.length, 3);
 
-    // Depth 1: Basic, 8 questions
+    // Depth 1: Basic, 6 questions — v10.2 (52387ba) DEPTH_LAYERS را صعودی ۶/۸/۱۰ کرد
     assert.equal(depths[0].depth, 1);
     assert.equal(depths[0].difficulty, 'basic');
-    assert.equal(depths[0].questionCount, 8);
+    assert.equal(depths[0].questionCount, 6);
 
-    // Depth 2: Stable, 10 questions, unlock: 70% of depth 1
+    // Depth 2: Stable, 8 questions, unlock: 70% of depth 1
     assert.equal(depths[1].depth, 2);
     assert.equal(depths[1].difficulty, 'stable');
-    assert.equal(depths[1].questionCount, 10);
+    assert.equal(depths[1].questionCount, 8);
     assert.equal(depths[1].unlock.minPercent, LAYER_PASS_MARK[1]);
 
-    // Depth 3: Conceptual, 6 questions, unlock: 75% of depth 2
+    // Depth 3: Conceptual, 10 questions, unlock: 75% of depth 2
     assert.equal(depths[2].depth, 3);
     assert.equal(depths[2].difficulty, 'conceptual');
-    assert.equal(depths[2].questionCount, 6);
+    assert.equal(depths[2].questionCount, 10);
     assert.equal(depths[2].unlock.minPercent, LAYER_PASS_MARK[2]);
   }
 });
