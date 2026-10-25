@@ -1,0 +1,6 @@
+// Local-only configuration. No Firebase credentials or production endpoints.
+// Keep the local API bound to loopback; change the port only to match your local server.
+window.MathGameV9Config = {
+  localMode: true,
+  apiBase: 'http://127.0.0.1:3000'
+};
