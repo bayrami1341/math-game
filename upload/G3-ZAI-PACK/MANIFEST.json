@@ -1,0 +1,35 @@
+{
+  "pack": "G3-ZAI-PACK",
+  "trace_id": "7c701461f9fd273e",
+  "book": "ریاضی سوم دبستان — کد ۳۰۵، چاپ دوازدهم، ۱۴۰۳",
+  "files": {
+    "prompt": {
+      "name": "G3-ZAI-PROMPT.md",
+      "sha256": "bb5fc82a7c23f97ebda2eab5e18eacf617837eee24b5888c1c2442c755ee1639",
+      "size": 5201
+    },
+    "excel": {
+      "name": "G3-1403-RUNTIME.xlsx",
+      "sha256": "d66354fe53c5a307d9d5fdc8d7c1b173e8f6329248ee896fe42d3a03251be85f",
+      "size": 59963
+    },
+    "report": {
+      "name": "G3-ZAI-VERIFY-REPORT.md",
+      "sha256": "ca417b93b3ee28d9610e4d3a0b2084d4badf66af87f5da915ac318c11db80155",
+      "size": 8916
+    }
+  },
+  "verdict": {
+    "tasks": 287,
+    "cards": 45,
+    "sessions": 287,
+    "status_all": "نوشته‌شد",
+    "session_breakdown": {
+      "یادداشت": 226,
+      "دست نخورد": 7,
+      "ریاضی‌نیست": 54
+    },
+    "checks_passed": 22,
+    "numeric_contradictions": 0
+  }
+}
