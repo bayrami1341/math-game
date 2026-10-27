@@ -1,0 +1,111 @@
+{
+  "schema": "khshab.frozen-baseline/v1",
+  "version": "baseline-v1",
+  "frozenAt": "2026-10-27T16:50:44+03:30",
+  "timezone": "Asia/Tehran",
+  "authority": {
+    "command": "ثبت و بایگانی و فریز داده‌های پایهٔ اول در کنار داده‌های پایهٔ دوم و سوم",
+    "issuedBy": "مالک — مجید بایرامی (bayrami1341)",
+    "trace": "1a17d80557fc1d91",
+    "justification": "راستی‌آزمایی با دو شاهد بیرونی؛ معتبر و قابل‌استفاده در بازی"
+  },
+  "freezeRules": [
+    "فایل‌های این بسته تغییرناپذیرند (chmod 444)؛ هر اصلاح = نسخهٔ جدید baseline-v1.1 با فرمان مالک، نه ویرایش درجا",
+    "هیچ فایل زندهٔ خط تولید (cartridges/، authoring/، DOMAIN-MATRIX) در این فریز دست نخورده است",
+    "بازکردن فریز (unfreeze) فقط با فرمان صریح مالک ثبت‌شده در worklog"
+  ],
+  "grades": {
+    "G1": {
+      "what": "نقشهٔ موضوعی کتاب اول دبستان (۳۷ ردیف درس، ۲۵ فصل، ۶ دامنه، ۱۸۸ حداقل سؤال)",
+      "seal": "معتبر برای خوراک بازی — مُهر مالک (trace 1a17d80557fc1d91)",
+      "questionCount": 0,
+      "nextStep": "تصمیم D9 → تبدیل به KH-G1-MATH.json (حداقل ۱۸۸ سؤال، ۴۰/۴۰/۲۰) → گیت خشاب → مُهر گام صفر"
+    },
+    "G2": {
+      "what": "اسنپ‌شات کارتریج زنده (۹۲ سؤال) + برش ماتریس دامنه (D1–D6، minTotal 242) + خشاب رسمی v0.5",
+      "seal": "فریز مطابق وضعیت ثبت‌شدهٔ قبلی (بدون مُهر جدید) — سوابق: RUNBOOK-G2، GATE2-FIX v0.3.1",
+      "questionCount": 92
+    },
+    "G3": {
+      "what": "اسنپ‌شات کارتریج زنده (۱۲۰ سؤال) + برش ماتریس دامنه (D1–D8، minTotal 452) + خشاب رسمی v0.7 + منبع خوانش گراک",
+      "seal": "فریز مطابق وضعیت ثبت‌شدهٔ قبلی (بدون مُهر جدید) — سوابق: بازآزمایی تصادفی seed 1404، پوشش D4=100/100",
+      "questionCount": 120
+    }
+  },
+  "evidenceAnchors": {
+    "note": "کتاب‌های شاهد برای سبک‌ماندن بستهٔ عمومی، به‌صورت بایت کپی نشده‌اند؛ هش و مسیر بازیابی ثبت شده است.",
+    "witnesses": [
+      {
+        "title": "ریاضی اول دبستان — کتاب دانش‌آموزی (رسمی)",
+        "scope": "چاپ ۱ تا ۱۷۵؛ فایل ۱۸۴ صفحه‌ای",
+        "localPath": "upload/G1-MATH-BOOK-OFFICIAL.pdf",
+        "sha256": "13643265bf64b39300bc7981ab0923cce507e5ee9747aab9f30f5c1fa9256ecc"
+      },
+      {
+        "title": "کتاب معلم (راهنمای تدریس) ریاضی اول دبستان — منبع مستقل، خارج از دسترس تولیدکننده",
+        "scope": "۲۰۷ صفحه",
+        "driveLink": "https://drive.google.com/file/d/1Aw0n-mmL3_GnjHSNfhWorolaToPbhOTc/view?usp=drive_link",
+        "localPath": "upload/G1-BOOK-DRIVE-NEW.pdf",
+        "sha256": "199c5d5f9e7130b84d041abf0fcb71343ecd83fcbcfe60eae7c07242ff8dfd3e",
+        "caveat": "سال تألیف متفاوت با چاپ فعلی → فقط به‌عنوان سنجهٔ مفهوم و فهرست استفاده شد (حکم مالک: «فقط مفهوم و فهرست مطالب، نه ارجاع صفحه»)"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "G1/CURRICULUM-MAP-G1-v1.xlsx",
+      "bytes": 21425,
+      "sha256": "4415870989b55984b3d01bf2c015b0debb76b9022cc72046342eca4a9b2f4aca"
+    },
+    {
+      "path": "G1/curriculum-map-g1.json",
+      "bytes": 46998,
+      "sha256": "a9bef392f5e3cadfd44e9af59161bcfc67d39d9b1af76eef33f2f3ffd3275172"
+    },
+    {
+      "path": "G1/verification-evidence-g1.md",
+      "bytes": 2311,
+      "sha256": "c9f54496098f98f937910df7634a20ede4b0759a3f9780101e66a10d1f5a3425"
+    },
+    {
+      "path": "G2/KH-G2-MATH.snapshot.json",
+      "bytes": 225506,
+      "sha256": "b13da82eacb59ff97f44a187ddbc37cd806c262d117c76b388303e409786d254"
+    },
+    {
+      "path": "G2/domain-matrix-g2.json",
+      "bytes": 2444,
+      "sha256": "61b7e0573751bac627744d2a28e7482923e824baa655d710594e19d29719e71c"
+    },
+    {
+      "path": "G2/khshab-G2-MATH_v0.5.xlsx",
+      "bytes": 55750,
+      "sha256": "f1f339a09a8cba3363c8c526e088063c2d733c62c5e7e4c236eba871f97d2656"
+    },
+    {
+      "path": "G2/khshab-G2-MATH_v0.5.xlsx.sha256.copy",
+      "bytes": 91,
+      "sha256": "6100dccaf2843bd599ca2cd63f9b02f37d7a26e0b43246336f2b6d84fbe71bae"
+    },
+    {
+      "path": "G3/KH-G3-MATH.snapshot.json",
+      "bytes": 154763,
+      "sha256": "dce58c708c90e728edb3435a525854caf90b0e16244be057b3db3f62ce063b4f"
+    },
+    {
+      "path": "G3/domain-matrix-g3.json",
+      "bytes": 4069,
+      "sha256": "142740dc6de1372081be0acfe3a44c4cd24e95bbb0472ac46bbfa2bc4869c709"
+    },
+    {
+      "path": "G3/khshab-G3-MATH_v0.7.xlsx",
+      "bytes": 33830,
+      "sha256": "0e678e54ade7efdf6e4408c31e5cd6568461ed6bc60222afd6a9da4812bfa2eb"
+    },
+    {
+      "path": "G3/source-math-grade3-comprehensive-grok.xlsx",
+      "bytes": 30868,
+      "sha256": "b3d99524df61e53554ef4020fed70fc3af884cdc53fdad0bc8374806b43e25c7"
+    }
+  ]
+}

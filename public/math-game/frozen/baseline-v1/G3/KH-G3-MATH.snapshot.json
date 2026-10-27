@@ -1,0 +1,3878 @@
+{
+  "formatVersion": "1.0",
+  "cartridgeId": "KH-G3-MATH",
+  "generatedAt": "2026-10-23T07:26:21.225Z",
+  "source": {
+    "file": "khshab-G3-MATH_v0.7.xlsx",
+    "tool": "cartridge-converter v1.1 (چندخشابی)",
+    "robotBatches": [
+      {
+        "batchId": "G3-D4-batch01",
+        "target": "G3-D4",
+        "seed": 1404,
+        "count": 100,
+        "mergedAt": "2026-10-23T07:26:21.225Z",
+        "status": "نیاز به تأیید — منتظر مُهر معلم",
+        "generator": "rule-based بدون LLM (BP-020)"
+      }
+    ]
+  },
+  "identity": [
+    {
+      "field": "شناسهٔ خشاب",
+      "value": "KH-G3-MATH",
+      "status": "تأییدشده",
+      "source": "قاعدهٔ نام‌گذاری قالب استاندارد — تصویب مالک"
+    },
+    {
+      "field": "عنوان فارسی خشاب",
+      "value": "کارگاه ضرب → دستیار ریاضی پایهٔ سوم",
+      "status": "نیاز به تأیید",
+      "source": "پیشنهاد — تأیید عنوان با مالک"
+    },
+    {
+      "field": "درس",
+      "value": "ریاضی",
+      "status": "تأییدشده",
+      "source": "—"
+    },
+    {
+      "field": "پایه",
+      "value": "سوم",
+      "status": "تأییدشده",
+      "source": "—"
+    },
+    {
+      "field": "بستهٔ تجاری",
+      "value": "بستهٔ پایهٔ سوم (فنی: ۳ خشاب جدا، تجاری: ۱ بسته)",
+      "status": "نیاز به تأیید",
+      "source": "تصمیم راهبردی پیشنهادی — شناسنامهٔ ۱۸ خشاب"
+    },
+    {
+      "field": "کد کتاب درسی",
+      "value": "۳۰۵",
+      "status": "تأییدشده",
+      "source": "تنها کد تأییدشدهٔ کل برنامه"
+    },
+    {
+      "field": "عنوان دقیق کتاب + چاپ + سال",
+      "value": "ریاضی سوم دبستان، چاپ دوازدهم، ۱۴۰۳",
+      "status": "تأییدشده",
+      "source": "تطبیق سند پداگوژیک با کد ۳۰۵"
+    },
+    {
+      "field": "خانوادهٔ موتور",
+      "value": "گروه‌های برابر (ضرب/تقسیم) — نیروگاه/برج/سکو",
+      "status": "تأییدشده",
+      "source": "موجود در v10.2"
+    },
+    {
+      "field": "نیاز به توسعهٔ موتور",
+      "value": "متوسط — برای تقسیم (ص۷۳)، باقیمانده‌دار (ص۱۴۵) و ستونی کامل",
+      "status": "نیاز به تأیید",
+      "source": "پیش‌شرط خشاب v1 کامل؛ قبل از تألیف نهایی تصمیم بگیر"
+    },
+    {
+      "field": "وضعیت خشاب",
+      "value": "درجریان — v0.6 (۵ قرمز ممیزی AUD-01 + دو یافتهٔ ممیزی مجدد اعمال شد)؛ موتور v10.2؛ مسیر v10.3: کل کتاب، دو لایه (موج الف تعاملی + موج ب بانک تمرین)",
+      "status": "تأییدشده",
+      "source": "هم‌گام با شناسنامهٔ ۱۸ خشاب"
+    },
+    {
+      "field": "معلم هم‌ساز / اعتبارسنج",
+      "value": "باز — گلوگاه انسانی",
+      "status": "نیاز به تأیید",
+      "source": "پیشنهاد: ۲-۳ معلم پایهٔ سوم؛ لایسنس مادام‌العمر + ذکر نام"
+    },
+    {
+      "field": "تاریخ آخرین تأیید",
+      "value": "۲۷ مهر ۱۴۰۴ (۲۰ اکتبر ۲۰۲۵) — تأیید ضرب: ص۶۴-۷۲، ۱۳۶-۱۴۵",
+      "status": "تأییدشده",
+      "source": "سند پداگوژیک v1.1.0"
+    },
+    {
+      "field": "یادداشت حق نشر",
+      "value": "لنگرِ صفحه و هدف آزاد؛ کپی متن/تصویر/تمرین کتاب ممنوع — همهٔ مثال و سؤال‌ها خودساخته",
+      "status": "تأییدشده",
+      "source": "خط قرمز تجاری"
+    },
+    {
+      "field": "یادداشت آزاد",
+      "value": "سقف حاصل ۹۹۹ در موتور فعلی در تنش با دامنهٔ ۹۹۹۹ کتاب — تصمیم v10.3",
+      "status": "نیاز به تأیید",
+      "source": "به توسعهٔ موتور گره خورده"
+    }
+  ],
+  "bookMap": [
+    {
+      "id": "L-PRE",
+      "page": "۱۰",
+      "chapter": "۱",
+      "title": "الگوها و شمارش چندتاچندتا",
+      "objective": "با گام‌های ۳، ۴، ۷ و ۱۰۰ می‌شمارد (نه فقط ۲ و ۵ و ۱۰)",
+      "vocabulary": "گام، پرش، الگو",
+      "activityType": "پیش‌درس نیروگاه — شمارش جهشی",
+      "visual": "خط اعداد با پرش‌های علامت‌دار",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-106؛ E_SKIP_OVERCOUNT",
+      "source": "سند پداگوژیک §۲.۱ + کد ۳۰۵",
+      "status": "تأییدشده",
+      "note": "پیش‌نیاز جهش ضربی؛ ستون‌های واژگان/شکل/پتانسیل: پیش‌پُر AI"
+    },
+    {
+      "id": "L-41",
+      "page": "۶۴",
+      "chapter": "۴",
+      "title": "دسته‌های مساوی و آرایه",
+      "objective": "دستهٔ مساوی می‌سازد و کل را دو شیوه می‌شمارد",
+      "vocabulary": "بسته، دستهٔ مساوی، آرایه",
+      "activityType": "فعالیت مذاکره‌ای + تمرین",
+      "visual": "آرایهٔ نقاط ۳×۴؛ صندوقچه‌ها",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "E_GROUP_VS_COUNT",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "تغییر واحد شمارش از «یکی» به «بسته»"
+    },
+    {
+      "id": "L-42",
+      "page": "۶۴",
+      "chapter": "۴",
+      "title": "جمع تکراری و نماد ضرب",
+      "objective": "چهار نمایش را به هم پیوند می‌دهد: کلام/شکل/جمع تکراری/نماد",
+      "vocabulary": "برابر، بار، ضرب",
+      "activityType": "تمرین + بازی نمایش‌ها",
+      "visual": "۳ بستهٔ ۴تایی",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-101، Q-102، Q-111؛ E_ADD_CONFUSION",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "ریشهٔ خطای «جمع به‌جای ضرب»"
+    },
+    {
+      "id": "L-43",
+      "page": "۶۴ تا ۶۹",
+      "chapter": "۴",
+      "title": "جدول ضرب یک‌رقم در یک‌رقم",
+      "objective": "جدول را از جمع می‌سازد؛ تسلط تا ۹×۹",
+      "vocabulary": "جدول، عامل، حاصل",
+      "activityType": "تمرین فاصله‌دار",
+      "visual": "جدول ۹×۹ و الگوهای آن",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-113، Q-114",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "بدون ×۱۱ و ×۱۲؛ آستانهٔ ۷۰٪ نیروگاه؛ وصلهٔ پوشش v0.6: Q-113/Q-114 افزوده شد"
+    },
+    {
+      "id": "L-44",
+      "page": "۷۰ تا ۷۲",
+      "chapter": "۴",
+      "title": "جابه‌جایی و شکستن یک عامل",
+      "objective": "۷×۵ را از ۵×۵ و ۲×۵ می‌سازد؛ چرخش ۴×۷ را می‌پذیرد",
+      "vocabulary": "جابه‌جایی، لنگر، شکستن",
+      "activityType": "درس مشترک برج",
+      "visual": "آرایهٔ چرخیدهٔ ۹۰ درجه",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-107، Q-109؛ E_ANCHOR_DRIFT، E_COMMUTATIVE_FAIL",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "id": "L-81",
+      "page": "۱۳۶ تا ۱۳۸",
+      "chapter": "۸",
+      "title": "ضرب در صفر، یک و ۱۰",
+      "objective": "قاعدهٔ صفر و یک را با دلیل می‌گوید؛ ×۱۰ دورقمی و سه‌رقمی (۱۴×۱۰، ۴۲×۱۰)",
+      "vocabulary": "بستهٔ خالی، ده‌تایی",
+      "activityType": "تمرین + بازی سرعتی",
+      "visual": "بسته‌های خالی و تکی",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-103، Q-104، Q-105؛ E_ZERO_PROPERTY، E_PLACE_SHIFT",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "id": "L-82",
+      "page": "۱۳۹ تا ۱۴۴",
+      "chapter": "۸",
+      "title": "یک‌رقم در دورقمی و سه‌رقمی",
+      "objective": "تجزیه/توزیع را اجرا می‌کند؛ الگوریتم ستونی با گره می‌نویسد",
+      "vocabulary": "تجزیه، گره، ده‌ها/یک‌ها",
+      "activityType": "تمرین ستونی مرحله‌ای",
+      "visual": "نمودار دورنگ تجزیه و گره",
+      "practicePotential": "بالا",
+      "engineCompat": "تعاملی-عمیق",
+      "anchorsRaw": "Q-108، Q-110، Q-112؛ E_DISTRIBUTIVE_LEAK، E_CARRY_MISS",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "سقف حاصل ۹۹۹ در اپ — تنش با دامنهٔ کتاب (تصمیم v10.3)"
+    },
+    {
+      "id": "L-83",
+      "page": "۱۴۴",
+      "chapter": "۸",
+      "title": "تقریب برای وارسی",
+      "objective": "حاصل دو عدد بزرگ را فقط تقریب می‌زند (نه دقیق)",
+      "vocabulary": "تقریب، حدود",
+      "activityType": "تمرین ذهنی",
+      "visual": "—",
+      "practicePotential": "متوسط",
+      "engineCompat": "تعلیق‌شده → v10.3",
+      "anchorsRaw": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "id": "L-D1",
+      "page": "۷۳ به بعد",
+      "chapter": "۴",
+      "title": "تقسیم بدون باقیمانده",
+      "objective": "تقسیم را به‌عنوان معکوس ضرب و دسته‌کردن می‌فهمد",
+      "vocabulary": "تقسیم، به‌طور مساوی، هرکدام",
+      "activityType": "تمرین + بازی گروه‌بندی",
+      "visual": "توزیع شیءها در بشقاب‌ها",
+      "practicePotential": "بالا",
+      "engineCompat": "خارج از v10.2 → خشاب «ضرب و تقسیم»",
+      "anchorsRaw": "Q-201، Q-202، Q-203 (زرد)",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "حفرهٔ ۲ اکسل gapgpt اینجا پوشیده شد"
+    },
+    {
+      "id": "L-D2",
+      "page": "۱۴۵ به بعد",
+      "chapter": "۸",
+      "title": "تقسیم با باقیمانده",
+      "objective": "باقیمانده را از حاصل جدا می‌کند",
+      "vocabulary": "باقیمانده، جعبهٔ کامل",
+      "activityType": "تمرین",
+      "visual": "جعبه‌ها و مهره‌های اضافه",
+      "practicePotential": "بالا",
+      "engineCompat": "خارج از v10.2",
+      "anchorsRaw": "Q-204 (زرد)؛ E_REMAINDER_DROP",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "id": "L-A1",
+      "page": "؟ (پیشنهاد: ۲-۳۵)",
+      "chapter": "؟",
+      "title": "عددهای چهاررقمی",
+      "objective": "می‌خواند، می‌نویسد و مقایسه می‌کند تا ۹۹۹۹",
+      "vocabulary": "هزار، ارزش مکانی",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "بالا",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "Q-205 (زرد)",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "ایراد ۱ gapgpt (۹۹۹) اینجا اصلاح شد — دامنهٔ کتاب تا ۹۹۹۹"
+    },
+    {
+      "id": "L-A2",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "جمع و تفریق عددهای چهاررقمی",
+      "objective": "ذهنی و ستونی؛ گره و قرض — پایهٔ الگوریتم ضرب ستونی",
+      "vocabulary": "گره، قرض",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "بالا",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "Q-206 (زرد)؛ E_CARRY_MISS",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "—"
+    },
+    {
+      "id": "L-B1",
+      "page": "؟ (≈۳۶ تا ۵۵)",
+      "chapter": "؟",
+      "title": "محور و کسر",
+      "objective": "نصف/ثلث/ربع را می‌سازد و مقایسه می‌کند",
+      "vocabulary": "نصف، ثلث، ربع، محور",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI + ترتیب سند بازار",
+      "status": "نیاز به تأیید",
+      "note": "—"
+    },
+    {
+      "id": "L-C1",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "هندسه: شکل‌ها/محیط/تقارن",
+      "objective": "؟",
+      "vocabulary": "؟",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "متوسط",
+      "engineCompat": "خارج از موتور فعلی (خانوادهٔ ۵)",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "محیط پیوند توزیع دارد"
+    },
+    {
+      "id": "L-E1",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "اندازه‌گیری (عددهای مرکب)",
+      "objective": "؟",
+      "vocabulary": "؟",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "طول/جرم/زمان/پول/ظرفیت"
+    },
+    {
+      "id": "L-F1",
+      "page": "؟",
+      "chapter": "؟",
+      "title": "آمار و احتمال",
+      "objective": "؟",
+      "vocabulary": "؟",
+      "activityType": "؟",
+      "visual": "؟",
+      "practicePotential": "متوسط",
+      "engineCompat": "بانک تمرین",
+      "anchorsRaw": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "جمع داده، نمودار ستونی"
+    },
+    {
+      "id": "L-RB-D4-01",
+      "title": "دسته‌های مساوی و محور پرشی — بچ ربات (BP-019)",
+      "chapter": "۴",
+      "objective": "تمرین قاعده‌محور دامنهٔ D4 (ضرب و تقسیم) — مکمل موج دامنه‌دار BP-019",
+      "anchorsRaw": "Q-4001، Q-4002، Q-4003، Q-4004، Q-4005، Q-4006، Q-4007، Q-4008، Q-4009، Q-4010، Q-4011، Q-4012، Q-4013، Q-4014، Q-4015، Q-4016، Q-4017، Q-4018، Q-4019، Q-4020",
+      "source": "ریزربات ۲ (BP-019/BP-020) — بچ G3-D4-batch01، seed 1404",
+      "status": "نیاز به تأیید",
+      "note": "درس تولیدی ربات — ساختار و لنگرها مطابق ماتریس قانون؛ مُهر با دست معلم"
+    },
+    {
+      "id": "L-RB-D4-02",
+      "title": "جدول ضرب، جابه‌جایی، لنگرها و ویژگی‌های صفر و یک — بچ ربات (BP-019)",
+      "chapter": "۴",
+      "objective": "تمرین قاعده‌محور دامنهٔ D4 (ضرب و تقسیم) — مکمل موج دامنه‌دار BP-019",
+      "anchorsRaw": "Q-4021، Q-4022، Q-4023، Q-4024، Q-4025، Q-4026، Q-4027، Q-4028، Q-4029، Q-4030، Q-4031، Q-4032، Q-4033، Q-4034، Q-4035، Q-4036، Q-4037، Q-4038، Q-4039، Q-4040، Q-4041، Q-4042، Q-4043، Q-4044، Q-4045، Q-4046، Q-4047، Q-4048، Q-4049، Q-4050، Q-4051، Q-4052، Q-4053، Q-4054، Q-4055، Q-4056، Q-4057، Q-4058، Q-4059، Q-4060، Q-4061، Q-4062، Q-4063، Q-4064، Q-4065، Q-4066، Q-4067، Q-4068، Q-4069، Q-4070",
+      "source": "ریزربات ۲ (BP-019/BP-020) — بچ G3-D4-batch01، seed 1404",
+      "status": "نیاز به تأیید",
+      "note": "درس تولیدی ربات — ساختار و لنگرها مطابق ماتریس قانون؛ مُهر با دست معلم"
+    },
+    {
+      "id": "L-RB-D4-03",
+      "title": "تقسیم مفهومی و خانوادهٔ ضرب-تقسیم — بچ ربات (BP-019)",
+      "chapter": "۴",
+      "objective": "تمرین قاعده‌محور دامنهٔ D4 (ضرب و تقسیم) — مکمل موج دامنه‌دار BP-019",
+      "anchorsRaw": "Q-4071، Q-4072، Q-4073، Q-4074، Q-4075، Q-4076، Q-4077، Q-4078، Q-4079، Q-4080، Q-4081، Q-4082، Q-4083، Q-4084، Q-4085، Q-4086، Q-4087، Q-4088، Q-4089، Q-4090",
+      "source": "ریزربات ۲ (BP-019/BP-020) — بچ G3-D4-batch01، seed 1404",
+      "status": "نیاز به تأیید",
+      "note": "درس تولیدی ربات — ساختار و لنگرها مطابق ماتریس قانون؛ مُهر با دست معلم"
+    },
+    {
+      "id": "L-RB-D4-04",
+      "title": "مسئله‌های متنی ضرب و تقسیم — بچ ربات (BP-019)",
+      "chapter": "۴",
+      "objective": "تمرین قاعده‌محور دامنهٔ D4 (ضرب و تقسیم) — مکمل موج دامنه‌دار BP-019",
+      "anchorsRaw": "Q-4091، Q-4092، Q-4093، Q-4094، Q-4095، Q-4096، Q-4097، Q-4098، Q-4099، Q-4100",
+      "source": "ریزربات ۲ (BP-019/BP-020) — بچ G3-D4-batch01، seed 1404",
+      "status": "نیاز به تأیید",
+      "note": "درس تولیدی ربات — ساختار و لنگرها مطابق ماتریس قانون؛ مُهر با دست معلم"
+    }
+  ],
+  "errorAtlas": [
+    {
+      "code": "E_ZERO_PROPERTY",
+      "nameFa": "ضرب در صفر",
+      "category": "مفهومی",
+      "description": "ضرب در صفر را نگه نمی‌دارد؛ صفر را عددی عادی می‌ضرب",
+      "behavioralSignal": "۷×۰ را ۷ یا ۱ می‌نویسد",
+      "questionPattern": "۷×۰=؟ (۷/۱/۰/۷۰)",
+      "intervention": "بازنمایی مجسم: «۷ بستهٔ خالی»",
+      "priority": "بالا",
+      "source": "errors.js v10.2.0",
+      "status": "تأییدشده",
+      "note": "فصل ۸ ص۱۳۶ — اول زنجیره"
+    },
+    {
+      "code": "E_IDENTITY_CONFUSION",
+      "nameFa": "ضرب در یک",
+      "category": "مفهومی",
+      "description": "ضرب در یک را تغییر عدد می‌داند",
+      "behavioralSignal": "۹×۱ را ۱ می‌نویسد",
+      "questionPattern": "۹×۱=؟",
+      "intervention": "«۹ بستهٔ ۱تایی»",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۱۳۶"
+    },
+    {
+      "code": "E_ADD_CONFUSION",
+      "nameFa": "جمع به جای ضرب",
+      "category": "مفهومی",
+      "description": "عمل ضرب را با جمع اشتباه می‌گیرد",
+      "behavioralSignal": "۳×۳ را ۶ می‌نویسد",
+      "questionPattern": "۳×۳=؟ (۶ در گزینه‌ها)",
+      "intervention": "آرایهٔ نقاط؛ تمایز «دو تا سه‌تا»",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "فصل ۴ ص۶۴ به بعد"
+    },
+    {
+      "code": "E_PLACE_SHIFT",
+      "nameFa": "لغزش صفر (ارزش مکانی)",
+      "category": "مفهومی/محاسباتی",
+      "description": "حاصل ×۱۰ را ۱۰ برابر یا یک‌دهم اشتباه می‌گیرد",
+      "behavioralSignal": "۶×۱۰ را ۶۰۰ یا ۶ می‌نویسد (۱۰ برابر یا یک‌دهمِ حاصل)",
+      "questionPattern": "۶×۱۰=؟",
+      "intervention": "جدول ارزش مکانی؛ «صفر نگهبان جایگاه»",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۱۳۶-۱۴۴؛ خانوادهٔ گسترده در دامنهٔ چهاررقمی (Q-205)"
+    },
+    {
+      "code": "E_COMMUTATIVE_FAIL",
+      "nameFa": "شکست جابه‌جایی",
+      "category": "رفتاری",
+      "description": "جابه‌جایِ پذیرفته‌شده را مسئلهٔ تازه می‌بیند",
+      "behavioralSignal": "بعد از پذیرش ۴×۷، ۷×۴ غلط",
+      "questionPattern": "زوج سؤال a×b سپس b×a",
+      "intervention": "چرخش ۹۰ درجهٔ آرایه",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۷۰-۷۲ — تشخیص در سطح تعامل"
+    },
+    {
+      "code": "E_DISTRIBUTIVE_LEAK",
+      "nameFa": "جا ماندن جزء چندرقمی",
+      "category": "راهبردی",
+      "description": "در توزیع، یکی از جزءها گم می‌شود",
+      "behavioralSignal": "۳×۲۴ را ۱۲ می‌نویسد (فقط یک‌ها)",
+      "questionPattern": "۳×۲۴=؟ (۱۲)",
+      "intervention": "نمودار تجزیهٔ دورنگ ده‌ها/یک‌ها",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۱۳۹-۱۴۴"
+    },
+    {
+      "code": "E_ANCHOR_DRIFT",
+      "nameFa": "جا ماندن جزء دوم شکستن",
+      "category": "راهبردی",
+      "description": "بعد از لنگر ۵، جزء دوم را فراموش می‌کند",
+      "behavioralSignal": "۶×۸ را ۳۰ می‌نویسد (فقط ۶×۵)",
+      "questionPattern": "۸=۵+۳؛ ۶×۸=۶×۵+☐",
+      "intervention": "کارت لنگر؛ «یک دستهٔ بیشتر»",
+      "priority": "بالا",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۷۰-۷۲"
+    },
+    {
+      "code": "E_SKIP_OVERCOUNT",
+      "nameFa": "بیش‌شماری جهش",
+      "category": "راهبردی",
+      "description": "یک پرش اضافه برمی‌دارد",
+      "behavioralSignal": "۶×۴ را ۲۸ می‌گوید",
+      "questionPattern": "پرش‌های ۴تایی روی خط اعداد",
+      "intervention": "شمارش ریتمیک همراه",
+      "priority": "متوسط",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "ص۱۰ + جدول ضرب"
+    },
+    {
+      "code": "E_SKIP_UNDERCOUNT",
+      "nameFa": "کم‌شماری جهش",
+      "category": "راهبردی",
+      "description": "زودتر توقف می‌کند",
+      "behavioralSignal": "۶×۴ را ۲۰ می‌گوید",
+      "questionPattern": "همان",
+      "intervention": "توقف‌نگار پرش‌ها",
+      "priority": "متوسط",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "همان؛ در تقسیم هم ظاهر می‌شود (Q-204)"
+    },
+    {
+      "code": "E_PERSISTENT_GUESSING",
+      "nameFa": "پاسخ‌های بی‌ربط",
+      "category": "توجهی",
+      "description": "سه پاسخ بی‌الگوی پیاپی در یک جلسه",
+      "behavioralSignal": "—",
+      "questionPattern": "رفتاری — سؤال ثابت ندارد",
+      "intervention": "توقف بازی توسط معلم؛ بازگشت به CPA",
+      "priority": "متوسط",
+      "source": "errors.js + تعریف عملیاتی نقد ۱۰",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "code": "E_FATIGUE_SLIP",
+      "nameFa": "لغزش بعد از تسلط",
+      "category": "توجهی",
+      "description": "عبارتِ پذیرفته‌شدهٔ همان جلسه دوباره غلط",
+      "behavioralSignal": "—",
+      "questionPattern": "رفتاری",
+      "intervention": "استراحت؛ تکرار فاصله‌دار",
+      "priority": "متوسط",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "—"
+    },
+    {
+      "code": "E_DOUBLING_HALVING",
+      "nameFa": "دوبرابر کردن",
+      "category": "راهبردی اختیاری",
+      "description": "در تمرین اختیاری معلم لغزش دارد",
+      "behavioralSignal": "—",
+      "questionPattern": "فقط تمرین معلم",
+      "intervention": "معاف از قفل و نمره",
+      "priority": "پایین",
+      "source": "errors.js",
+      "status": "تأییدشده",
+      "note": "درس رسمی کتاب نیست (سند §۲.۱-۸)"
+    },
+    {
+      "code": "E_CARRY_MISS",
+      "nameFa": "فراموشی گره در ستونی",
+      "category": "محاسباتی",
+      "description": "انتقال را می‌بیند ولی نمی‌نویسد",
+      "behavioralSignal": "۲۶×۳ ستونی: ۶۱۸",
+      "questionPattern": "«گره چند است و کجا می‌رود؟» — Q-112، Q-206",
+      "intervention": "نمودار دورنگ گره؛ تمرین مرحله‌ای",
+      "priority": "متوسط",
+      "source": "اکسل gapgpt (گلوگاه‌ها) + Q-206",
+      "status": "نیاز به تأیید",
+      "note": "ص۱۳۹-۱۴۴؛ تصمیم با S2؛ وابسته به v10.3.x"
+    },
+    {
+      "code": "E_GROUP_VS_COUNT",
+      "nameFa": "خلط تعداد دسته و تعداد در هر دسته",
+      "category": "مفهومی",
+      "description": "«۳ بستهٔ ۴تایی» را ۳×۳ می‌نویسد",
+      "behavioralSignal": "شکل→ضرب و ضرب→شکل",
+      "questionPattern": "Q-201، Q-202، Q-203",
+      "intervention": "برچسب‌گذاری «بسته/درون بسته»",
+      "priority": "متوسط",
+      "source": "اکسل gapgpt + Q-201..203",
+      "status": "نیاز به تأیید",
+      "note": "تصمیم S2: کد مستقل یا زیرمجموعهٔ E_COMMUTATIVE_FAIL"
+    },
+    {
+      "code": "E_UNEQUAL_GROUP",
+      "nameFa": "جمع ناهمسان را ضرب گرفتن",
+      "category": "مفهومی",
+      "description": "۴+۴+۵ را ضرب می‌گیرد",
+      "behavioralSignal": "«کدام جمع تکراری ضرب می‌شود؟»",
+      "questionPattern": "Q-101 گزینهٔ ج",
+      "intervention": "کارت دستهٔ مساوی/نامساوی",
+      "priority": "پایین",
+      "source": "اکسل gapgpt",
+      "status": "نیاز به تأیید",
+      "note": "احتمالاً زیرمجموعهٔ E_ADD_CONFUSION"
+    },
+    {
+      "code": "E_OP_REVERSE",
+      "nameFa": "ضرب/جمع به‌جای تقسیم",
+      "category": "مفهومی",
+      "description": "عمل اصلی را با عمل هم‌خانوادهٔ دیگر عوض می‌کند",
+      "behavioralSignal": "۱۸÷۶ را ۱۰۸ می‌نویسد",
+      "questionPattern": "گزینه‌های عملی Q-201، Q-202، Q-203",
+      "intervention": "مقایسهٔ چهار عمل روی یک مسئله",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI — پوشش حفرهٔ تقسیم gapgpt",
+      "status": "نیاز به تأیید",
+      "note": "کد جدید — فقط با تصمیم S2 به errors.js می‌رود"
+    },
+    {
+      "code": "E_FACT_CONFUSION",
+      "nameFa": "بازیابی غلط جدول ضرب",
+      "category": "بازیابی",
+      "description": "یک واقعیت جدول را با واقعیت هم‌ریخت عوض می‌کند",
+      "behavioralSignal": "۵×۲۰ را ۲۵ می‌گوید (۵×۵)",
+      "questionPattern": "گزینهٔ دِ Q-102، گزینهٔ بِ Q-110، گزینهٔ دِ Q-111",
+      "intervention": "تمرین فاصله‌دار روی جفت‌های هم‌ریخت",
+      "priority": "متوسط",
+      "source": "یادداشت Q-110/Q-111 سند v1",
+      "status": "نیاز به تأیید",
+      "note": "ردهٔ «بازیابی» جدید است — S2 تصمیم می‌گیرد"
+    },
+    {
+      "code": "E_REMAINDER_DROP",
+      "nameFa": "نادیده‌گرفتن باقیمانده",
+      "category": "مفهومی",
+      "description": "باقیمانده را در جواب می‌گنجاند یا دور می‌ریزد",
+      "behavioralSignal": "۱۹÷۴ را ۵ جعبهٔ کامل می‌گوید",
+      "questionPattern": "گزینهٔ جِ Q-204",
+      "intervention": "جدا کردن «جعبهٔ کامل» و «مهرهٔ اضافه»",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "ص۱۴۵ به بعد — خارج از v10.2"
+    },
+    {
+      "code": "E_BORROW_MISS",
+      "nameFa": "جاافتادن قرض",
+      "category": "محاسباتی",
+      "description": "تفریق ستونی را رقم‌به‌رقم و بدون قرض‌گرفتن از ده‌گان انجام می‌دهد (در هر ستون کوچک را از بزرگ تفریق می‌کند)",
+      "behavioralSignal": "۵۲−۲۷ را ۳۵ می‌نویسد (رقم‌به‌رقم بدون قرض)",
+      "questionPattern": "تفریق ستونی دورقمی با نیاز به قرض (نمونه: ۵۲−۲۷)",
+      "intervention": "بازنمایی مجسم با مکعب‌های ده‌تایی — «از ده‌گان قرض بگیر»",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI — موج الف v10.3 (موتور errors-v103.js)",
+      "status": "نیاز به تأیید",
+      "note": "کاندید خانوادهٔ ۲ — سبز شدن با تأیید معلم هم‌ساز (برگهٔ انسانی الف)"
+    },
+    {
+      "code": "E_ZERO_PLACE_MISS",
+      "nameFa": "حذف صفر جایگاه",
+      "category": "مفهومی",
+      "description": "در خواندن/نوشتن اعداد چهاررقمی، صفرِ یک جایگاه حذف می‌شود و عدد با جایگاه‌های جابه‌جا نوشته/خوانده می‌شود",
+      "behavioralSignal": "۴۰۷۰ را ۴۷۰ می‌نویسد/می‌خواند",
+      "questionPattern": "نوشتن/خواندن چهاررقمی با صفرِ میانی یا پایانی (نمونه: چهار هزار و هفتاد)",
+      "intervention": "کارت جایگاه‌ها با خانهٔ خالی صفر — «صفر نگهبان جایگاه است»",
+      "priority": "متوسط",
+      "source": "پیشنهاد AI — موج الف v10.3 (موتور errors-v103.js)",
+      "status": "نیاز به تأیید",
+      "note": "کاندید خانوادهٔ ۳ — سبز شدن با تأیید معلم هم‌ساز (برگهٔ انسانی الف)"
+    }
+  ],
+  "questionBank": [
+    {
+      "id": "Q-101",
+      "anchorId": "L-42",
+      "domain": "CORE",
+      "cpa": "تصویری",
+      "prompt": "۳×۴ کدام جمع تکراری است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳+۴",
+        "۴+۴+۴",
+        "۳+۳+۴",
+        "۴+۴"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_ADD_CONFUSION؛ ج→E_UNEQUAL_GROUP (پیشنهادی)؛ د→E_SKIP_UNDERCOUNT (یک پرش کم)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_UNEQUAL_GROUP (پیشنهادی)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SKIP_UNDERCOUNT (یک پرش کم)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": null,
+      "answerValue": 12
+    },
+    {
+      "id": "Q-102",
+      "anchorId": "L-42",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۵+۵+۵+۵+۵ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵×۵",
+        "۴×۵",
+        "۵×۴",
+        "۵×۶"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب/ج→خلط تعداد دسته و تعداد در هر دسته (پیوند E_GROUP_VS_COUNT)؛ د→E_FACT_CONFUSION (پیشنهادی)",
+      "claims": [
+        {
+          "letter": "ج",
+          "claim": "خلط تعداد دسته و تعداد در هر دسته (پیوند E_GROUP_VS_COUNT)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_FACT_CONFUSION (پیشنهادی)"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱ + بازبینی ریاضی",
+      "status": "تأییدشده",
+      "note": "نسخهٔ اصلاح‌شدهٔ J12: پاسخ‌نام gapgpt «۵×۴=۲۰» بود (درست: ۲۵) و گزینهٔ «۲۵» دو پاسخ درست می‌ساخت؛ گزینهٔ «۲۵» حذف و «۵×۶» نشست. حالا فقط یک پاسخ درست: ۵×۵=۲۵",
+      "math": null,
+      "answerValue": 25
+    },
+    {
+      "id": "Q-103",
+      "anchorId": "L-81",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "۷×۰ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷",
+        "۱",
+        "۰",
+        "۷۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→E_ZERO_PROPERTY؛ ب→هم‌پوشانی E_IDENTITY_CONFUSION؛ د→چسباندن ۷ و ۰ (بی‌الگو — شاخص توجه)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_ZERO_PROPERTY"
+        },
+        {
+          "letter": "ب",
+          "claim": "هم‌پوشانی E_IDENTITY_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "چسباندن ۷ و ۰ (بی‌الگو — شاخص توجه)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": {
+        "f1": 7,
+        "f2": 0,
+        "product": 0
+      },
+      "answerValue": 0
+    },
+    {
+      "id": "Q-104",
+      "anchorId": "L-81",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۹×۱ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۹",
+        "۱",
+        "۱۰",
+        "۹۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_IDENTITY_CONFUSION؛ ج→جمع به‌جای ضرب (بی‌الگوی نگاشت خودکار موتور — شاخص توجه)؛ د→چسباندن رقم (بی‌الگو — شاخص توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_IDENTITY_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "جمع به‌جای ضرب (بی‌الگوی نگاشت خودکار موتور — شاخص توجه)"
+        },
+        {
+          "letter": "د",
+          "claim": "چسباندن رقم (بی‌الگو — شاخص توجه)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": {
+        "f1": 9,
+        "f2": 1,
+        "product": 9
+      },
+      "answerValue": 9
+    },
+    {
+      "id": "Q-105",
+      "anchorId": "L-81",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۶×۱۰ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶۰",
+        "۱۶",
+        "۶۰۰",
+        "۶۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ADD_CONFUSION؛ ج→E_PLACE_SHIFT (یک ×۱۰ اضافه)؛ د→چسباندن رقم (بی‌الگو — شاخص توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_PLACE_SHIFT (یک ×۱۰ اضافه)"
+        },
+        {
+          "letter": "د",
+          "claim": "چسباندن رقم (بی‌الگو — شاخص توجه)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": {
+        "f1": 6,
+        "f2": 10,
+        "product": 60
+      },
+      "answerValue": 60
+    },
+    {
+      "id": "Q-106",
+      "anchorId": "L-PRE",
+      "domain": "CORE",
+      "cpa": "تصویری",
+      "prompt": "پرش‌های ۴تایی: ۴، ۸، ۱۲، ☐",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۶",
+        "۱۵",
+        "۲۰",
+        "۱۲"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ج→E_SKIP_OVERCOUNT (یک پرش اضافه)؛ د→E_SKIP_UNDERCOUNT (توقف زود)؛ ب→بی‌الگو (توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "بی‌الگو (توجه)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SKIP_OVERCOUNT (یک پرش اضافه)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SKIP_UNDERCOUNT (توقف زود)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": null,
+      "answerValue": 16
+    },
+    {
+      "id": "Q-107",
+      "anchorId": "L-44",
+      "domain": "DEPTH",
+      "cpa": "علامتی",
+      "prompt": "با شکستن ۸=۵+۳: ۶×۸ = ۶×۵ + ☐",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶×۳",
+        "۶×۵",
+        "۶",
+        "۳"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ANCHOR_DRIFT (جزء دوم جا افتاده)؛ ج→E_ADD_CONFUSION؛ د→جا ماندن ضریب (بی‌الگو)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ANCHOR_DRIFT (جزء دوم جا افتاده)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "جا ماندن ضریب (بی‌الگو)"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": null,
+      "answerValue": 18
+    },
+    {
+      "id": "Q-108",
+      "anchorId": "L-82",
+      "domain": "DEPTH",
+      "cpa": "علامتی",
+      "prompt": "۳×۲۴ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۷۲",
+        "۱۲",
+        "۲۷",
+        "۶۱۲"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_DISTRIBUTIVE_LEAK (فقط یک‌ها: ۳×۴)؛ ج→E_ADD_CONFUSION؛ د→چسباندن جزئی‌ها (۶۰ و ۱۲ کنار هم) — پیوند به E_CARRY_MISS",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_DISTRIBUTIVE_LEAK (فقط یک‌ها: ۳×۴)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "د",
+          "claim": "چسباندن جزئی‌ها (۶۰ و ۱۲ کنار هم) — پیوند به E_CARRY_MISS"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": {
+        "f1": 3,
+        "f2": 24,
+        "product": 72
+      },
+      "answerValue": 72
+    },
+    {
+      "id": "Q-109",
+      "anchorId": "L-44",
+      "domain": "DEPTH",
+      "cpa": "تصویری",
+      "prompt": "آرایهٔ ۴×۷ را ۹۰ درجه می‌چرخانیم؛ چه می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "همان ۲۸",
+        "۷۴",
+        "۲۱",
+        "۱۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ج→E_COMMUTATIVE_FAIL (ترتیب تازه = مسئلهٔ تازه)؛ د→E_ADD_CONFUSION؛ ب→چسباندن رقم (توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "چسباندن رقم (توجه)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_COMMUTATIVE_FAIL (ترتیب تازه = مسئلهٔ تازه)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_ADD_CONFUSION"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": null,
+      "answerValue": 28
+    },
+    {
+      "id": "Q-110",
+      "anchorId": "L-82",
+      "domain": "DEPTH",
+      "cpa": "علامتی",
+      "prompt": "۵×۲۰ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱۰۰",
+        "۲۵",
+        "۱۰",
+        "۱۰۰۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_FACT_CONFUSION (بازیابی ۵×۵)؛ ج→E_PLACE_SHIFT (کم)؛ د→E_PLACE_SHIFT (بیش)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_FACT_CONFUSION (بازیابی ۵×۵)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_PLACE_SHIFT (کم)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_PLACE_SHIFT (بیش)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۲",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": {
+        "f1": 5,
+        "f2": 20,
+        "product": 100
+      },
+      "answerValue": 100
+    },
+    {
+      "id": "Q-111",
+      "anchorId": "L-42",
+      "domain": "CORE",
+      "cpa": "مجسم/مسئله",
+      "prompt": "۵ بستهٔ ۶تایی مداد؛ همه با هم چند مداد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳۰",
+        "۱۱",
+        "۵۶",
+        "۳۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_ADD_CONFUSION؛ ج→چسباندن ۵ و ۶ (توجه)؛ د→E_FACT_CONFUSION (۵×۷)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_ADD_CONFUSION"
+        },
+        {
+          "letter": "ج",
+          "claim": "چسباندن ۵ و ۶ (توجه)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_FACT_CONFUSION (۵×۷)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۱",
+      "status": "تأییدشده",
+      "note": "—",
+      "math": null,
+      "answerValue": 30
+    },
+    {
+      "id": "Q-112",
+      "anchorId": "L-82",
+      "domain": "DEPTH",
+      "cpa": "علامتی",
+      "prompt": "در ضرب ستونی ۲۶×۳، یک‌ها: ۳×۶=۱۸. گره چند است و کجا می‌رود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۱؛ به ستون ده‌ها",
+        "۸؛ همان‌جا می‌ماند",
+        "۱۸؛ به ده‌ها",
+        "گره ندارد"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→E_CARRY_MISS (پیشنهادی)؛ د→E_CARRY_MISS؛ ج→نوشتن کل حاصل در یک ستون (بی‌الگو/جایگاه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "E_CARRY_MISS (پیشنهادی)"
+        },
+        {
+          "letter": "ج",
+          "claim": "نوشتن کل حاصل در یک ستون (بی‌الگو/جایگاه)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_CARRY_MISS"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "سند پداگوژیک §۲.۲ + پیشنهاد",
+      "status": "نیاز به تأیید",
+      "note": "وابسته به ورود الگوریتم ستونی به اپ (v10.3.x)",
+      "math": null,
+      "answerValue": null
+    },
+    {
+      "id": "Q-113",
+      "anchorId": "L-43",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۷×۸ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۶",
+        "۷۸",
+        "۱۵",
+        "۶۳"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ج→E_ADD_CONFUSION (۷+۸)؛ د→E_SKIP_OVERCOUNT (یک گروه ۷تایی بیشتر — ۷×۹)؛ ب→چسباندن ۷ و ۸ (بی‌الگو — شاخص توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "چسباندن ۷ و ۸ (بی‌الگو — شاخص توجه)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_ADD_CONFUSION (۷+۸)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SKIP_OVERCOUNT (یک گروه ۷تایی بیشتر — ۷×۹)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "تألیف v0.6 — بازحساب مستقل ۷×۸=۵۶ + تطبیق classifyAttempt (errors.js v10.2.0)",
+      "status": "تأییدشده",
+      "note": "وصلهٔ حفرهٔ پوشش L-43 (AUD-04)؛ همهٔ انحرافی‌ها با کدهای واقعی موتور",
+      "math": {
+        "f1": 7,
+        "f2": 8,
+        "product": 56
+      },
+      "answerValue": 56
+    },
+    {
+      "id": "Q-114",
+      "anchorId": "L-43",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۶×۹ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۴",
+        "۶۹",
+        "۴۸",
+        "۶۳"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ج→E_SKIP_UNDERCOUNT (یک گروه ۶تایی کمتر — ۶×۸)؛ د→E_SKIP_OVERCOUNT (یک گروه ۹تایی بیشتر)؛ ب→چسباندن ۶ و ۹ (بی‌الگو — شاخص توجه)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "چسباندن ۶ و ۹ (بی‌الگو — شاخص توجه)"
+        },
+        {
+          "letter": "ج",
+          "claim": "E_SKIP_UNDERCOUNT (یک گروه ۶تایی کمتر — ۶×۸)"
+        },
+        {
+          "letter": "د",
+          "claim": "E_SKIP_OVERCOUNT (یک گروه ۹تایی بیشتر)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "تألیف v0.6 — بازحساب مستقل ۶×۹=۵۴ + تطبیق classifyAttempt (errors.js v10.2.0)",
+      "status": "تأییدشده",
+      "note": "جفت زیر/بالای حاصل (۴۸/۶۳) — دو سمتِ پرش؛ نسخهٔ اول گزینهٔ ج «۴۵» بود که ممیزی مجدد ماشینی رد کرد (۴۵=۹×۵ در زنجیرهٔ موتور ANCHOR_DRIFT می‌خورد) و به ۴۸ اصلاح شد",
+      "math": {
+        "f1": 6,
+        "f2": 9,
+        "product": 54
+      },
+      "answerValue": 54
+    },
+    {
+      "id": "Q-201",
+      "anchorId": "L-D1",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "۱۲ شیرینی را به‌طور مساوی بین ۳ بشقاب می‌گذاریم؛ هر بشقاب چند شیرینی دارد؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳",
+        "۴",
+        "۹",
+        "۱۵"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_GROUP_VS_COUNT (پیشنهادی)؛ ج→تفریق به‌جای تقسیم (۱۲-۳؛ کاندید E_OP_REVERSE)؛ د→جمع به‌جای تقسیم (۱۲+۳)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_GROUP_VS_COUNT (پیشنهادی)"
+        },
+        {
+          "letter": "ج",
+          "claim": "تفریق به‌جای تقسیم (۱۲-۳"
+        },
+        {
+          "letter": "د",
+          "claim": "جمع به‌جای تقسیم (۱۲+۳)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "پیشنهاد AI — پوشش حفرهٔ تقسیم gapgpt",
+      "status": "نیاز به تأیید",
+      "note": "خارج از موتور فعلی — خشاب «ضرب و تقسیم» فاز ۲",
+      "math": null,
+      "answerValue": 4
+    },
+    {
+      "id": "Q-202",
+      "anchorId": "L-D1",
+      "domain": "CORE",
+      "cpa": "مجسم",
+      "prompt": "۱۸ مداد را در جعبه‌های ۶تایی می‌گذاریم؛ چند جعبه لازم است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۶",
+        "۳",
+        "۲۴",
+        "۱۰۸"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_GROUP_VS_COUNT (جوابش «در هر جعبه» است نه تعداد جعبه)؛ ج→جمع به‌جای تقسیم (۱۸+۶)؛ د→ضرب به‌جای تقسیم (۱۸×۶؛ کاندید E_OP_REVERSE)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_GROUP_VS_COUNT (جوابش «در هر جعبه» است نه تعداد جعبه)"
+        },
+        {
+          "letter": "ج",
+          "claim": "جمع به‌جای تقسیم (۱۸+۶)"
+        },
+        {
+          "letter": "د",
+          "claim": "ضرب به‌جای تقسیم (۱۸×۶"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "همان",
+      "math": null,
+      "answerValue": 3
+    },
+    {
+      "id": "Q-203",
+      "anchorId": "L-D1",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۳×۵=۱۵؛ پس ۱۵÷۳=؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵",
+        "۳",
+        "۱۲",
+        "۴۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خلط نقش مقسوم/مقسوم‌علیه (پیوند E_GROUP_VS_COUNT)؛ ج→تفریق به‌جای تقسیم (۱۵-۳)؛ د→ضرب به‌جای تقسیم (۱۵×۳)",
+      "claims": [
+        {
+          "letter": "ب",
+          "claim": "خلط نقش مقسوم/مقسوم‌علیه (پیوند E_GROUP_VS_COUNT)"
+        },
+        {
+          "letter": "ج",
+          "claim": "تفریق به‌جای تقسیم (۱۵-۳)"
+        },
+        {
+          "letter": "د",
+          "claim": "ضرب به‌جای تقسیم (۱۵×۳)"
+        }
+      ],
+      "level": "آسان",
+      "criteria": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "رابطهٔ خانوادهٔ ضرب/تقسیم",
+      "math": null,
+      "answerValue": 5
+    },
+    {
+      "id": "Q-204",
+      "anchorId": "L-D2",
+      "domain": "CORE",
+      "cpa": "مجسم/مسئله",
+      "prompt": "۱۹ مهره را در جعبه‌های ۴تایی می‌گذاریم؛ چند جعبهٔ کامل پر می‌شود؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۳",
+        "۴",
+        "۵",
+        "۷"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_SKIP_UNDERCOUNT (توقف زود در پرش‌های ۴تایی)؛ ج→نادیده‌گرفتن باقیمانده (کاندید E_REMAINDER_DROP)؛ د→خلط حاصل و باقیمانده (۴+۳)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_SKIP_UNDERCOUNT (توقف زود در پرش‌های ۴تایی)"
+        },
+        {
+          "letter": "ج",
+          "claim": "نادیده‌گرفتن باقیمانده (کاندید E_REMAINDER_DROP)"
+        },
+        {
+          "letter": "د",
+          "claim": "خلط حاصل و باقیمانده (۴+۳)"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "۱۹ = ۴×۴ + ۳",
+      "math": null,
+      "answerValue": 4
+    },
+    {
+      "id": "Q-205",
+      "anchorId": "L-A1",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "کدام خواندن برای عدد ۴۰۷۰ درست است؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "چهار هزار و هفت",
+        "چهار هزار و هفتاد",
+        "چهارصد و هفتاد",
+        "چهار هزار و هفتصد"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→حذف صفرِ ده‌ها (خانوادهٔ E_PLACE_SHIFT)؛ ج→حذف جایگاه هزار؛ د→جابه‌جایی هفتاد/هفتصد (خانوادهٔ E_PLACE_SHIFT)",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "حذف صفرِ ده‌ها (خانوادهٔ E_PLACE_SHIFT)"
+        },
+        {
+          "letter": "ج",
+          "claim": "حذف جایگاه هزار"
+        },
+        {
+          "letter": "د",
+          "claim": "جابه‌جایی هفتاد/هفتصد (خانوادهٔ E_PLACE_SHIFT)"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "پیشنهاد AI — پوشش دامنهٔ چهاررقمی",
+      "status": "نیاز به تأیید",
+      "note": "خشاب «عددها»",
+      "math": null,
+      "answerValue": null
+    },
+    {
+      "id": "Q-206",
+      "anchorId": "L-A2",
+      "domain": "CORE",
+      "cpa": "علامتی",
+      "prompt": "۳۵۸ + ۲۴۶ = ؟",
+      "format": "چهارگزینه‌ای",
+      "options": [
+        "۵۹۴",
+        "۶۰۴",
+        "۶۱۴",
+        "۵۸۴"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→E_CARRY_MISS (بدون گره: ۵۹۴)؛ ج→گره دو بار اضافه شد؛ د→گره جا + خطای جایگاه",
+      "claims": [
+        {
+          "letter": "الف",
+          "claim": "E_CARRY_MISS (بدون گره: ۵۹۴)"
+        },
+        {
+          "letter": "ج",
+          "claim": "گره دو بار اضافه شد"
+        },
+        {
+          "letter": "د",
+          "claim": "گره جا + خطای جایگاه"
+        }
+      ],
+      "level": "متوسط",
+      "criteria": "—",
+      "source": "پیشنهاد AI",
+      "status": "نیاز به تأیید",
+      "note": "حاصل درست ۶۰۴؛ بدون گره ۵۹۴",
+      "math": null,
+      "answerValue": 604
+    },
+    {
+      "id": "Q-4001",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "روی میز ۲۷ بشقاب است و در هر بشقاب ۳ تا سنجاق گذاشته‌اند. روی هم چند تا سنجاق روی میز است؟",
+      "options": [
+        "۸۱",
+        "۱۰۸",
+        "۳۰",
+        "۷۸"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→در هر دسته یکی زیاد شمرده شد؛ ج→جمع به‌جای ضرب؛ د→یک دسته کم شمرده شد",
+      "answerValue": 81,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-01؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4002",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "در آرایش مستطیلیِ کاشی‌ها ۵ ردیف هست و در هر ردیف ۴ کاشی. چند کاشی در این آرایش به کار رفته است؟",
+      "renderHint": "آرایش ۵ در ۴",
+      "options": [
+        "۱۶",
+        "۲۵",
+        "۲۰",
+        "۹"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→یک دسته کم شمرده شد؛ ب→در هر دسته یکی زیاد شمرده شد؛ د→جمع به‌جای ضرب",
+      "answerValue": 20,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-02؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4003",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "پارسا ۵ بستهٔ گل خریده است؛ در هر بسته ۶ تا گل هست. روی هم چند تا گل خریده است؟",
+      "renderHint": "آرایش ۵ در ۶",
+      "answerValue": 30,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-03؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4004",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "بهنام ۴ بستهٔ خودکار خریده است؛ در هر بسته ۳ تا خودکار هست. روی هم چند تا خودکار خریده است؟",
+      "renderHint": "آرایش ۴ در ۳",
+      "options": [
+        "۱۲",
+        "۱۶",
+        "۷",
+        "۹"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→در هر دسته یکی زیاد شمرده شد؛ ج→جمع به‌جای ضرب؛ د→یک دسته کم شمرده شد",
+      "answerValue": 12,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-04؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4005",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "روی میز ۴ بشقاب است و در هر بشقاب ۷ تا فنجان گذاشته‌اند. روی هم چند تا فنجان روی میز است؟",
+      "renderHint": "آرایش ۴ در ۷",
+      "answerValue": 28,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-05؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4006",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "روی میز ۱۶ بشقاب است و در هر بشقاب ۵ تا گل گذاشته‌اند. روی هم چند تا گل روی میز است؟",
+      "options": [
+        "۷۵",
+        "۸۰",
+        "۲۱",
+        "۹۶"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک دسته کم شمرده شد؛ ج→جمع به‌جای ضرب؛ د→در هر دسته یکی زیاد شمرده شد",
+      "answerValue": 80,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-06؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4007",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "بهنام ۴ بستهٔ توپ خریده است؛ در هر بسته ۲ تا توپ هست. روی هم چند تا توپ خریده است؟",
+      "renderHint": "آرایش ۴ در ۲",
+      "answerValue": 8,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-07؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4008",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۵ × ۶ با کدام جمع تکراری برابر است؟",
+      "options": [
+        "۶ را ۵ بار با هم جمع می‌کنیم",
+        "۵ را ۵ بار با هم جمع می‌کنیم",
+        "۶ را ۶ بار با هم جمع می‌کنیم",
+        "۵ و ۶ را با هم جمع می‌کنیم"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 30,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-08؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4009",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲ × ۵ با کدام جمع تکراری برابر است؟",
+      "options": [
+        "۵ را ۲ بار با هم جمع می‌کنیم",
+        "۲ را ۲ بار با هم جمع می‌کنیم",
+        "۵ را ۵ بار با هم جمع می‌کنیم",
+        "۲ و ۵ را با هم جمع می‌کنیم"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 10,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-09؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4010",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "مفهوم: دسته‌های مساوی→ضرب",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "یاسمن برای جشن ۵ ردیف صندلی چیده است؛ در هر ردیف ۹ صندلی. چند صندلی برای جشن آماده است؟",
+      "renderHint": "آرایش ۵ در ۹",
+      "options": [
+        "۴۵",
+        "۵۰",
+        "۳۶",
+        "۱۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→در هر دسته یکی زیاد شمرده شد؛ ج→یک دسته کم شمرده شد؛ د→جمع به‌جای ضرب",
+      "answerValue": 45,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-10؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4011",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "الهه روی خط اعداد از صفر شروع می‌کند و با پرش‌های ۸تایی جلو می‌رود. بعد از ۷ پرش روی کدام عدد است؟",
+      "renderHint": "محور اعداد ۰ تا ۶۴",
+      "answerValue": 56,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-11؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4012",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "بهنام روی خط اعداد از صفر شروع می‌کند و با پرش‌های ۶تایی جلو می‌رود. بعد از ۶ پرش روی کدام عدد است؟",
+      "renderHint": "محور اعداد ۰ تا ۴۲",
+      "answerValue": 36,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-12؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4013",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "با شمارش پرشی ۴تا۴تا روی محور اعداد: ۴، ۸، ۱۲، … ؛ عدد نهمم این الگو کدام است؟",
+      "renderHint": "محور اعداد با کمانک‌های پرش ۴تایی",
+      "answerValue": 36,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-13؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4014",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "پارسا روی خط اعداد از صفر شروع می‌کند و با پرش‌های ۱۰تایی جلو می‌رود. بعد از ۹ پرش روی کدام عدد است؟",
+      "renderHint": "محور اعداد ۰ تا ۱۰۰",
+      "options": [
+        "۱۰۰",
+        "۸۰",
+        "۹۰",
+        "۱۹"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→یک پرش اضافه؛ ب→یک پرش کم؛ د→جمع به‌جای پرش",
+      "answerValue": 90,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-14؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4015",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "علی با پرش‌های ۵تایی از صفر روی محور اعداد به عدد ۲۰ رسیده است. او چند پرش برداشته است؟",
+      "renderHint": "محور اعداد ۰ تا ۲۰ با پرش ۵تایی",
+      "options": [
+        "۹",
+        "۳",
+        "۴",
+        "۵"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→جمع اندازه و تعداد پرش؛ ب→یک پرش کم شمرده شد؛ د→یک پرش زیاد شمرده شد",
+      "answerValue": 4,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-15؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4016",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "یاسمن روی خط اعداد از صفر شروع می‌کند و با پرش‌های ۸تایی جلو می‌رود. بعد از ۹ پرش روی کدام عدد است؟",
+      "renderHint": "محور اعداد ۰ تا ۸۰",
+      "options": [
+        "۱۷",
+        "۶۴",
+        "۷۲",
+        "۸۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→جمع به‌جای پرش؛ ب→یک پرش کم؛ د→یک پرش اضافه",
+      "answerValue": 72,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-16؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4017",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "یاسمن روی خط اعداد از صفر شروع می‌کند و با پرش‌های ۴تایی جلو می‌رود. بعد از ۷ پرش روی کدام عدد است؟",
+      "renderHint": "محور اعداد ۰ تا ۳۲",
+      "options": [
+        "۲۴",
+        "۲۸",
+        "۱۱",
+        "۳۲"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک پرش کم؛ ج→جمع به‌جای پرش؛ د→یک پرش اضافه",
+      "answerValue": 28,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-17؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4018",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "با شمارش پرشی ۱۰تا۱۰تا روی محور اعداد: ۱۰، ۲۰، ۳۰، … ؛ عدد هشتمم این الگو کدام است؟",
+      "renderHint": "محور اعداد با کمانک‌های پرش ۱۰تایی",
+      "options": [
+        "۱۸",
+        "۷۰",
+        "۸۰",
+        "۹۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→جمع به‌جای پرش؛ ب→یک پرش کم رفته است؛ د→یک پرش زیاد رفته است",
+      "answerValue": 80,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-18؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4019",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "با شمارش پرشی ۷تا۷تا روی محور اعداد: ۷، ۱۴، ۲۱، … ؛ عدد سومم این الگو کدام است؟",
+      "renderHint": "محور اعداد با کمانک‌های پرش ۷تایی",
+      "options": [
+        "۱۰",
+        "۲۱",
+        "۱۴",
+        "۲۸"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→جمع به‌جای پرش؛ ج→یک پرش کم رفته است؛ د→یک پرش زیاد رفته است",
+      "answerValue": 21,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-19؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4020",
+      "anchorId": "L-RB-D4-01",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "محور پرشی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-01",
+      "answerFormat": "عدد",
+      "prompt": "پارسا با پرش‌های ۴تایی از صفر روی محور اعداد به عدد ۱۶ رسیده است. او چند پرش برداشته است؟",
+      "renderHint": "محور اعداد ۰ تا ۱۶ با پرش ۴تایی",
+      "answerValue": 4,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-20؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4021",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲ × ۵ = ؟",
+      "options": [
+        "۱۰",
+        "۵",
+        "۱۲",
+        "۷"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای مرز جدول (یک ردیف کم)؛ ج→خطای مرز جدول (یک ستون زیاد)؛ د→جمع به‌جای ضرب",
+      "answerValue": 10,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-21؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4022",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "حاصل ضرب ۵ در ۴ چند است؟",
+      "answerValue": 20,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-22؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4023",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۹ × ۶ = ؟",
+      "options": [
+        "۶۳",
+        "۴۸",
+        "۱۵",
+        "۵۴"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→خطای مرز جدول (یک ستون زیاد)؛ ب→خطای مرز جدول (یک ردیف کم)؛ ج→جمع به‌جای ضرب",
+      "answerValue": 54,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-23؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4024",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "حاصل ضرب ۴ در ۷ چند است؟",
+      "answerValue": 28,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-24؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4025",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "در جدول ضرب، ۴ در ۵ چند می‌شود؟",
+      "answerValue": 20,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-25؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4026",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲ × ۸ = ؟",
+      "options": [
+        "۸",
+        "۱۸",
+        "۱۰",
+        "۱۶"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→خطای مرز جدول (یک ردیف کم)؛ ب→خطای مرز جدول (یک ستون زیاد)؛ ج→جمع به‌جای ضرب",
+      "answerValue": 16,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-26؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4027",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۳ × ۷ = ؟",
+      "options": [
+        "۲۱",
+        "۲۴",
+        "۱۰",
+        "۱۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای مرز جدول (یک ستون زیاد)؛ ج→جمع به‌جای ضرب؛ د→خطای مرز جدول (یک ردیف کم)",
+      "answerValue": 21,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-27؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4028",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۸ × ۶ = ؟",
+      "options": [
+        "۴۸",
+        "۴۲",
+        "۵۶",
+        "۱۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای مرز جدول (یک ردیف کم)؛ ج→خطای مرز جدول (یک ستون زیاد)؛ د→جمع به‌جای ضرب",
+      "answerValue": 48,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-28؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4029",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۳ × ۳ = ؟",
+      "options": [
+        "۹",
+        "۶",
+        "۱۰",
+        "۱۲"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای مرز جدول (یک ردیف کم)؛ ج→خطای حساب ±۱؛ د→خطای مرز جدول (یک ستون زیاد)",
+      "answerValue": 9,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-29؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4030",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جدول ۲..۱۰ درجهت",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۲ تکهٔ شکلات در هر دسته هست و ۹ دسته داریم؛ چند تکه شکلات می‌شود؟ (کمک بگیر: ضرب ۲ در ۹)",
+      "answerValue": 18,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-30؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4031",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۵ × ۶ و ۶ × ۵ هم‌حاصل‌اند. این حاصل چند است؟",
+      "answerValue": 30,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-31؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4032",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "آرایشی با ۵ ردیف ۲تاییِ شیرینی را می‌چرخانیم تا ۲ ردیف ۵تایی شود. تعداد شیرینیها چند تا می‌ماند؟",
+      "renderHint": "آرایش چرخیدهٔ ۵×۲",
+      "options": [
+        "۱۱",
+        "۱۳",
+        "۱۰",
+        "۱۲"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ب→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 10,
+      "level": "آسان",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-32؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4033",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کدام عبارت هم‌حاصلِ ۵ × ۸ است؟",
+      "options": [
+        "۸ × ۵",
+        "۵ + ۸",
+        "۵ × ۹",
+        "۶ × ۸"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 40,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-33؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4034",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲ × ۴ و ۴ × ۲ هم‌حاصل‌اند. این حاصل چند است؟",
+      "options": [
+        "۱۱",
+        "۸",
+        "۱۰",
+        "۹"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ج→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 8,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-34؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4035",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کدام عبارت هم‌حاصلِ ۴ × ۷ است؟",
+      "options": [
+        "۷ × ۴",
+        "۴ + ۷",
+        "۴ × ۸",
+        "۵ × ۷"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 28,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-35؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4036",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۲ × ۵ و ۵ × ۲ هم‌حاصل‌اند. این حاصل چند است؟",
+      "answerValue": 10,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-36؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4037",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کدام عبارت هم‌حاصلِ ۵ × ۴ است؟",
+      "options": [
+        "۴ × ۵",
+        "۵ + ۴",
+        "۵ × ۵",
+        "۶ × ۴"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 20,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-37؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4038",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "آرایشی با ۲ ردیف ۹تاییِ فنجان را می‌چرخانیم تا ۹ ردیف ۲تایی شود. تعداد فنجانها چند تا می‌ماند؟",
+      "renderHint": "آرایش چرخیدهٔ ۲×۹",
+      "options": [
+        "۱۹",
+        "۲۰",
+        "۱۸",
+        "۲۱"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ب→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 18,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-38؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4039",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۱۳ × ۷ و ۷ × ۱۳ هم‌حاصل‌اند. این حاصل چند است؟",
+      "answerValue": 91,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-39؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4040",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "جابه‌جایی (زوج a×b/b×a)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۴۰ × ۵ و ۵ × ۴۰ هم‌حاصل‌اند. این حاصل چند است؟",
+      "answerValue": 200,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-40؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4041",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "یاسمن ۲۰ سبد دارد؛ در هر سبد دقیقاً ۱ توپ هست. روی هم چند توپ در سبدهاست؟",
+      "answerValue": 20,
+      "level": "سخت",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-41؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4042",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "حاصل ضرب ۵ در ۱ چند است؟",
+      "answerValue": 5,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-42؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4043",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "هر یک از ۹ قفسه‌های کتابخانه ۱ گلدان گل دارد. روی هم چند گلدان روی قفسه‌هاست؟",
+      "options": [
+        "۸",
+        "۹۰",
+        "۱۰",
+        "۹"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→یک قفسه کم شمرده شد؛ ب→یک در هر قفسه به ده برابر تبدیل شد؛ ج→یک قفسه زیاد شمرده شد",
+      "answerValue": 9,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-43؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4044",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "هر یک از ۴ قفسه‌های کتابخانه ۱ گلدان گل دارد. روی هم چند گلدان روی قفسه‌هاست؟",
+      "options": [
+        "۴",
+        "۳",
+        "۴۰",
+        "۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→یک قفسه کم شمرده شد؛ ج→یک در هر قفسه به ده برابر تبدیل شد؛ د→یک قفسه زیاد شمرده شد",
+      "answerValue": 4,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-44؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4045",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "نرگس ۵ جعبهٔ کاملاً خالی دارد. جمع برچسبهای داخل جعبه‌ها چند تا است؟",
+      "answerValue": 0,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-45؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4046",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "علی ۲۷ سبد دارد؛ در هر سبد دقیقاً ۱ توپ هست. روی هم چند توپ در سبدهاست؟",
+      "answerValue": 27,
+      "level": "سخت",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-46؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4047",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "هر یک از ۸ قفسه‌های کتابخانه ۱ گلدان گل دارد. روی هم چند گلدان روی قفسه‌هاست؟",
+      "options": [
+        "۸",
+        "۷",
+        "۹",
+        "۸۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→یک قفسه کم شمرده شد؛ ج→یک قفسه زیاد شمرده شد؛ د→یک در هر قفسه به ده برابر تبدیل شد",
+      "answerValue": 8,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-47؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4048",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "سارا ۸ جعبه دارد که در هر جعبه ۰ تا توپ است. روی هم چند تا توپ در جعبه‌ها هست؟",
+      "options": [
+        "۰",
+        "۱۶",
+        "۸",
+        "۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→دوبرابرِ تعداد جعبه‌ها؛ ج→ضرب در صفر نادیده گرفته شد؛ د→یک به‌جای حاصل صفر",
+      "answerValue": 0,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-48؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4049",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "شادی ۹ جعبه دارد که در هر جعبه ۰ تا سنجاق است. روی هم چند تا سنجاق در جعبه‌ها هست؟",
+      "options": [
+        "۹",
+        "۱۸",
+        "۱",
+        "۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→ضرب در صفر نادیده گرفته شد؛ ب→دوبرابرِ تعداد جعبه‌ها؛ ج→یک به‌جای حاصل صفر",
+      "answerValue": 0,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-49؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4050",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "×۰ و ×۱",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کیان ۳ جعبه دارد که در هر جعبه ۰ تا ماشین‌بازی است. روی هم چند تا ماشین‌بازی در جعبه‌ها هست؟",
+      "options": [
+        "۱",
+        "۰",
+        "۶",
+        "۳"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک به‌جای حاصل صفر؛ ج→دوبرابرِ تعداد جعبه‌ها؛ د→ضرب در صفر نادیده گرفته شد",
+      "answerValue": 0,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-50؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4051",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "امیر ۱۸ تا فنجان دارد؛ الهه دوبرابر امیر دارد. الهه چند تا فنجان دارد؟",
+      "options": [
+        "۳۴",
+        "۳۶",
+        "۳۷",
+        "۱۹"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→دوبرابر با خطای کم‌کردن؛ ج→دوبرابر با خطای ±۱؛ د→یکی بیشتر به‌جای دوبرابر",
+      "answerValue": 36,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-51؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4052",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "الهه ۷ تا فنجان دارد؛ علی دوبرابر الهه دارد. علی چند تا فنجان دارد؟",
+      "options": [
+        "۱۵",
+        "۱۴",
+        "۸",
+        "۱۲"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→دوبرابر با خطای ±۱؛ ج→یکی بیشتر به‌جای دوبرابر؛ د→دوبرابر با خطای کم‌کردن",
+      "answerValue": 14,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-52؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4053",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "عدد ۱۶ دو برابرش چند می‌شود؟",
+      "answerValue": 32,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-53؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4054",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "بهنام ۱۶ تا برچسب دارد؛ پارسا دوبرابر بهنام دارد. پارسا چند تا برچسب دارد؟",
+      "options": [
+        "۳۲",
+        "۳۳",
+        "۱۷",
+        "۳۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→دوبرابر با خطای ±۱؛ ج→یکی بیشتر به‌جای دوبرابر؛ د→دوبرابر با خطای کم‌کردن",
+      "answerValue": 32,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-54؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4055",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "عدد ۱۱ دو برابرش چند می‌شود؟",
+      "answerValue": 22,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-55؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4056",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "عدد ۳۶ نصفش چند می‌شود؟",
+      "answerValue": 18,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-56؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4057",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "یاسمن ۱۴ تا سنجاق دارد؛ بهنام دوبرابر یاسمن دارد. بهنام چند تا سنجاق دارد؟",
+      "options": [
+        "۱۵",
+        "۲۹",
+        "۲۸",
+        "۲۶"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→یکی بیشتر به‌جای دوبرابر؛ ب→دوبرابر با خطای ±۱؛ د→دوبرابر با خطای کم‌کردن",
+      "answerValue": 28,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-57؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4058",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کیان ۱۷ تا گل دارد؛ نرگس دوبرابر کیان دارد. نرگس چند تا گل دارد؟",
+      "options": [
+        "۱۸",
+        "۳۲",
+        "۳۴",
+        "۳۵"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→یکی بیشتر به‌جای دوبرابر؛ ب→دوبرابر با خطای کم‌کردن؛ د→دوبرابر با خطای ±۱",
+      "answerValue": 34,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-58؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4059",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "دوبرابرِ ۶ چند است؟",
+      "answerValue": 12,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-59؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4060",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "دوبرابر/نصف",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "الهه ۲۹ تا گل دارد؛ یاسمن دوبرابر الهه دارد. یاسمن چند تا گل دارد؟",
+      "options": [
+        "۵۶",
+        "۵۸",
+        "۳۰",
+        "۵۹"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→دوبرابر با خطای کم‌کردن؛ ج→یکی بیشتر به‌جای دوبرابر؛ د→دوبرابر با خطای ±۱",
+      "answerValue": 58,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-60؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4061",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "حاصل ۴ × ۹ را با لنگرِ ۴ × ۱۰ = ۴۰ پیدا کن: ۴ × ۹ چند می‌شود؟",
+      "answerValue": 36,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-61؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4062",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۴ × ۱۰ = ۴۰ است. با کمک این لنگر، حاصل ۴ × ۹ چند می‌شود؟",
+      "answerValue": 36,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-62؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4063",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "۳ × ۱۰ = ۳۰ است. با کمک این لنگر، حاصل ۳ × ۸ چند می‌شود؟",
+      "answerValue": 24,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-63؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4064",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "علی برای حل ۱۳ × ۹ از لنگر ۱۳ × ۱۰ = ۱۳۰ کمک گرفت. حاصل ۱۳ × ۹ چند است؟",
+      "options": [
+        "۱۱۷",
+        "۱۰۴",
+        "۱۴۳",
+        "۱۳۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→یک گروه زیاد کم شد؛ ج→یک گروه اضافه شد؛ د→لنگر جابه‌جا نشد",
+      "answerValue": 117,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-64؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4065",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "حاصل ۳ × ۵ نصفِ حاصل ۳ × ۱۰ است. ۳ × ۵ چند می‌شود؟",
+      "options": [
+        "۲۰",
+        "۱۵",
+        "۳۰",
+        "۲۷"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک گروه ۵تایی زیاد؛ ج→نصف‌کردن فراموش شد؛ د→لنگر ۹ به‌جای ۵",
+      "answerValue": 15,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-65؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4066",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "حاصل ۸ × ۵ نصفِ حاصل ۸ × ۱۰ است. ۸ × ۵ چند می‌شود؟",
+      "options": [
+        "۷۲",
+        "۴۰",
+        "۸۰",
+        "۴۵"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→لنگر ۹ به‌جای ۵؛ ج→نصف‌کردن فراموش شد؛ د→یک گروه ۵تایی زیاد",
+      "answerValue": 40,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-66؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4067",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "پارسا برای حل ۳ × ۹ از لنگر ۳ × ۱۰ = ۳۰ کمک گرفت. حاصل ۳ × ۹ چند است؟",
+      "options": [
+        "۳۰",
+        "۲۴",
+        "۲۷",
+        "۳۳"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→لنگر جابه‌جا نشد؛ ب→یک گروه زیاد کم شد؛ د→یک گروه اضافه شد",
+      "answerValue": 27,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-67؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4068",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "برای حل ۱۶ × ۶ اول می‌دانیم ۱۶ × ۵ = ۸۰؛ حالا یک ۱۶ دیگر به آن اضافه کنیم، حاصل ۱۶ × ۶ چند می‌شود؟",
+      "options": [
+        "۱۱۲",
+        "۹۶",
+        "۸۰",
+        "۹۰"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک گروه اضافه شد؛ ج→گروه آخر اضافه نشد؛ د→دو تا گروه زیاد اضافه شد",
+      "answerValue": 96,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-68؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4069",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "الهه برای حل ۹ × ۹ از لنگر ۹ × ۱۰ = ۹۰ کمک گرفت. حاصل ۹ × ۹ چند است؟",
+      "options": [
+        "۹۰",
+        "۷۲",
+        "۹۹",
+        "۸۱"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→لنگر جابه‌جا نشد؛ ب→یک گروه زیاد کم شد؛ ج→یک گروه اضافه شد",
+      "answerValue": 81,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-69؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4070",
+      "anchorId": "L-RB-D4-02",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "لنگر ۵/۱۰",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-02",
+      "answerFormat": "عدد",
+      "prompt": "حاصل ۸ × ۹ را با لنگرِ ۸ × ۱۰ = ۸۰ پیدا کن: ۸ × ۹ چند می‌شود؟",
+      "answerValue": 72,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-70؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4071",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "۲۰ ÷ ۵ = ؟",
+      "answerValue": 4,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-71؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4072",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۱۶ تا خودکار را به‌طور مساوی بین ۴ نفر تقسیم می‌کنیم. سهم هر نفر چند تا است؟",
+      "options": [
+        "۱۲",
+        "۴",
+        "۵",
+        "۲۰"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→تفریق به‌جای تقسیم؛ ج→یک گروه زیاد؛ د→جمع به‌جای تقسیم",
+      "answerValue": 4,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-72؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4073",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "نرگس ۱۲ تا خودکار دارد و می‌خواهد آن‌ها در بشقاب‌های مساویِ ۲تایی بچیند. چند بشقاب کامل لازم دارد؟",
+      "options": [
+        "۱۰",
+        "۶",
+        "۷",
+        "۱۴"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→تفریق به‌جای تقسیم؛ ج→یک گروه زیاد؛ د→جمع به‌جای تقسیم",
+      "answerValue": 6,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-73؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4074",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۸ ÷ ۲ = ؟",
+      "options": [
+        "۴",
+        "۵",
+        "۶",
+        "۳"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→یک گروه زیاد؛ ج→تفریق به‌جای تقسیم؛ د→یک گروه کم",
+      "answerValue": 4,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-74؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4075",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲۴ شیرینی در ۶ بشقاب به‌طور مساوی ریخته شده است. در هر بشقاب چند شیرینی است؟",
+      "options": [
+        "۱۸",
+        "۵",
+        "۴",
+        "۳۰"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→تفریق به‌جای تقسیم؛ ب→یک گروه زیاد؛ د→جمع به‌جای تقسیم",
+      "answerValue": 4,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-75؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4076",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "۳۲ تا فنجان را به‌طور مساوی بین ۴ نفر تقسیم می‌کنیم؛ سهم هر نفر چند تا می‌شود؟",
+      "answerValue": 8,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-76؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4077",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲۰ تا شیرینی را به‌طور مساوی بین ۲ نفر تقسیم می‌کنیم. سهم هر نفر چند تا است؟",
+      "options": [
+        "۲۲",
+        "۱۸",
+        "۱۱",
+        "۱۰"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→جمع به‌جای تقسیم؛ ب→تفریق به‌جای تقسیم؛ ج→یک گروه زیاد",
+      "answerValue": 10,
+      "level": "آسان",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-77؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4078",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "۲۵ تا مهره را به‌طور مساوی بین ۵ نفر تقسیم می‌کنیم. سهم هر نفر چند تا است؟",
+      "options": [
+        "۶",
+        "۳۰",
+        "۲۰",
+        "۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→یک گروه زیاد؛ ب→جمع به‌جای تقسیم؛ ج→تفریق به‌جای تقسیم",
+      "answerValue": 5,
+      "level": "متوسط",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-78؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4079",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "۶۶ تا کتاب را به‌طور مساوی بین ۳ نفر تقسیم می‌کنیم؛ سهم هر نفر چند تا می‌شود؟",
+      "answerValue": 22,
+      "level": "سخت",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-79؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4080",
+      "anchorId": "L-RB-D4-03",
+      "domain": "CORE",
+      "domainCode": "D4",
+      "qType": "تقسیم مفهومی (بخش‌کردن)",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "نرگس ۶۹ تا گل را در جعبه‌های مساویِ ۳تایی می‌چیند؛ چند جعبهٔ کامل لازم دارد؟",
+      "answerValue": 23,
+      "level": "سخت",
+      "cpa": "مجسم",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-80؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4081",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "سه عدد ۲، ۹ و ۱۸ با هم خانوادهٔ ضرب و تقسیم‌اند. ۱۸ ÷ ۹ چند می‌شود؟",
+      "answerValue": 2,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-81؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4082",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "اگر ۴ × ۵ = ۲۰ باشد، آنگاه ۲۰ ÷ ۴ چند است؟",
+      "options": [
+        "۶",
+        "۸",
+        "۷",
+        "۵"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ب→خطای حساب ±۱؛ ج→خطای حساب ±۱",
+      "answerValue": 5,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-82؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4083",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "اگر ۴۰ × ۸ = ۳۲۰ باشد، آنگاه ۳۲۰ ÷ ۴۰ چند است؟",
+      "answerValue": 8,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-83؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4084",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "سه عدد ۴، ۸ و ۳۲ با هم خانوادهٔ ضرب و تقسیم‌اند. ۳۲ ÷ ۸ چند می‌شود؟",
+      "options": [
+        "۶",
+        "۷",
+        "۵",
+        "۴"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ب→خطای حساب ±۱؛ ج→خطای حساب ±۱",
+      "answerValue": 4,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-84؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4085",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "کدام جمله از خانوادهٔ ضرب و تقسیمِ ۲ × ۳ = ۶ درست است؟",
+      "options": [
+        "۶ ÷ ۲ = ۳",
+        "۶ ÷ ۳ = ۳",
+        "۶ ÷ ۲ = ۵",
+        "۲ × ۳ = ۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "—",
+      "answerValue": 3,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-85؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4086",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "اگر ۵ × ۳ = ۱۵ باشد، آنگاه ۱۵ ÷ ۵ چند است؟",
+      "options": [
+        "۳",
+        "۶",
+        "۴",
+        "۵"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای حساب ±۱؛ ج→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 3,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-86؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4087",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "اگر ۲۹ × ۲ = ۵۸ باشد، آنگاه ۵۸ ÷ ۲۹ چند است؟",
+      "answerValue": 2,
+      "level": "سخت",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-87؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4088",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "اگر ۳ × ۹ = ۲۷ باشد، آنگاه ۲۷ ÷ ۳ چند است؟",
+      "options": [
+        "۹",
+        "۱۱",
+        "۱۲",
+        "۱۰"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→خطای حساب ±۱؛ ج→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 9,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-88؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4089",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "عدد",
+      "prompt": "سه عدد ۴، ۶ و ۲۴ با هم خانوادهٔ ضرب و تقسیم‌اند. ۲۴ ÷ ۶ چند می‌شود؟",
+      "answerValue": 4,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-89؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4090",
+      "anchorId": "L-RB-D4-03",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "خانوادهٔ ضرب-تقسیم",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-03",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "سه عدد ۳، ۵ و ۱۵ با هم خانوادهٔ ضرب و تقسیم‌اند. ۱۵ ÷ ۵ چند می‌شود؟",
+      "options": [
+        "۶",
+        "۴",
+        "۳",
+        "۵"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→خطای حساب ±۱؛ ب→خطای حساب ±۱؛ د→خطای حساب ±۱",
+      "answerValue": 3,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-90؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4091",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "مدیر مدرسه ۱۶ تا برچسب خریده و می‌خواهد بین ۲ کلاس به‌طور مساوی تقسیم کند. سهم هر کلاس چند تا است؟",
+      "options": [
+        "۱۴",
+        "۷",
+        "۸",
+        "۹"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→تفریق به‌جای تقسیم؛ ب→یک گروه کم؛ د→یک گروه زیاد",
+      "answerValue": 8,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-91؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4092",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "مدیر مدرسه ۸ تا مداد خریده و می‌خواهد بین ۴ کلاس به‌طور مساوی تقسیم کند. سهم هر کلاس چند تا است؟",
+      "options": [
+        "۲",
+        "۴",
+        "۳",
+        "۱"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→تفریق به‌جای تقسیم؛ ج→یک گروه زیاد؛ د→یک گروه کم",
+      "answerValue": 2,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-92؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4093",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "عدد",
+      "prompt": "آقای کاوه برای مغازه‌اش ۳ قفسه خریده است؛ روی هر قفسه ۹ جعبه و در هر جعبه ۸ فنجان جا می‌شود. در همهٔ قفسه‌ها چند فنجان جا می‌شود؟",
+      "answerValue": 216,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-93؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4094",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "مدیر مدرسه ۲۱ تا کتاب خریده و می‌خواهد بین ۳ کلاس به‌طور مساوی تقسیم کند. سهم هر کلاس چند تا است؟",
+      "options": [
+        "۷",
+        "۱۸",
+        "۸",
+        "۶"
+      ],
+      "answerIndex": 0,
+      "optionErrorMap": "ب→تفریق به‌جای تقسیم؛ ج→یک گروه زیاد؛ د→یک گروه کم",
+      "answerValue": 7,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-94؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4095",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "عدد",
+      "prompt": "مدیر مدرسه ۳۰ تا کتاب خریده و می‌خواهد بین ۶ کلاس به‌طور مساوی تقسیم کند. سهم هر کلاس چند تا است؟",
+      "answerValue": 5,
+      "level": "متوسط",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-95؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4096",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "عدد",
+      "prompt": "آقای کاوه برای مغازه‌اش ۲ قفسه خریده است؛ روی هر قفسه ۳ جعبه و در هر جعبه ۴ فنجان جا می‌شود. در همهٔ قفسه‌ها چند فنجان جا می‌شود؟",
+      "answerValue": 24,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-96؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4097",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "هر جعبهٔ مداد ۷ بسته دارد و در هر بسته ۸ مداد هست؛ علی ۳ جعبه مداد خریده است. روی هم چند مداد خریده است؟",
+      "options": [
+        "۱۷۵",
+        "۱۶۸",
+        "۲۹",
+        "۵۶"
+      ],
+      "answerIndex": 1,
+      "optionErrorMap": "الف→یک بسته زیاد شمرده شد؛ ج→گام دوم فراموش شد؛ د→گام اول به‌جای کل",
+      "answerValue": 168,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-97؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4098",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "برای جشن پایان سال هر میز ۴ تا کاشی لازم است؛ پارسا ۳ میز چیده است. روی هم چند تا کاشی لازم دارد؟",
+      "options": [
+        "۷",
+        "۱۵",
+        "۸",
+        "۱۲"
+      ],
+      "answerIndex": 3,
+      "optionErrorMap": "الف→جمع به‌جای ضرب؛ ب→در هر میز یکی زیاد؛ ج→یک میز کم شمرده شد",
+      "answerValue": 12,
+      "level": "آسان",
+      "cpa": "علامتی",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-98؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4099",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "عدد",
+      "prompt": "هر جعبهٔ مداد ۶ بسته دارد و در هر بسته ۳ مداد هست؛ بهنام ۳ جعبه مداد خریده است. روی هم چند مداد خریده است؟",
+      "answerValue": 54,
+      "level": "متوسط",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-99؛ منتظر مُهر معلم"
+    },
+    {
+      "id": "Q-4100",
+      "anchorId": "L-RB-D4-04",
+      "domain": "DEPTH",
+      "domainCode": "D4",
+      "qType": "مسئلهٔ متنی",
+      "chapter": "ف۴",
+      "lesson": "L-RB-D4-04",
+      "answerFormat": "گزینه‌ای",
+      "prompt": "آقای کاوه برای مغازه‌اش ۴ قفسه خریده است؛ روی هر قفسه ۴ جعبه و در هر جعبه ۸ فنجان جا می‌شود. در همهٔ قفسه‌ها چند فنجان جا می‌شود؟",
+      "options": [
+        "۱۳۲",
+        "۳۲",
+        "۱۲۸",
+        "۲۴"
+      ],
+      "answerIndex": 2,
+      "optionErrorMap": "الف→یک بسته زیاد شمرده شد؛ ب→گام اول به‌جای کل؛ د→گام دوم فراموش شد",
+      "answerValue": 128,
+      "level": "سخت",
+      "cpa": "تصویری",
+      "source": "ریزربات ۲ (BP-019/BP-020) — تولید قاعده‌محور، seed 1404 — بدون LLM",
+      "status": "نیاز به تأیید",
+      "note": "برچسب بچ: G3-D4-100؛ منتظر مُهر معلم"
+    }
+  ],
+  "glossary": [
+    {
+      "sheet": "همهٔ شیت‌ها",
+      "column": "رنگ اعتبار",
+      "rule": "سبز=تأیید با منبع اول؛ زرد=پیشنهاد نیازمند تأیید؛ قرمز=ایراد مستند.",
+      "allowed": "تأییدشده | نیاز به تأیید | ایراد"
+    },
+    {
+      "sheet": "همهٔ شیت‌ها",
+      "column": "منبع",
+      "rule": "هر ردیف باید بگوید از کجا آمده؛ بدون منبع = زرد ابدی.",
+      "allowed": "سند پداگوژیک v1.1.0 | کتاب فیزیکی (چاپ ۱۲) | errors.js | پیشنهاد AI"
+    },
+    {
+      "sheet": "شناسنامهٔ خشاب",
+      "column": "همهٔ فیلدها",
+      "rule": "یک ردیف = یک فیلد شناسنامه؛ مقدار خالی نگذار.",
+      "allowed": "—"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "column": "شناسه (L-)",
+      "rule": "کلید پایدار ردیف؛ کلید تبدیل به JSON؛ هرگز بازیافت نمی‌شود.",
+      "allowed": "L-001، L-002، …"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "column": "صفحه/گستره",
+      "rule": "شمارهٔ صفحه مطابق چاپ ۱۲ کد ۳۰۵؛ نامطمئن = «؟».",
+      "allowed": "«۶۴» یا «۶۴-۶۹» یا «؟»"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "column": "اهداف رفتاری",
+      "rule": "قابل سنجش و یک‌خطی؛ هدف کلیِ شعاری ممنوع.",
+      "allowed": "فعل رفتاری + موضوع + شرط"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "column": "پتانسیل تمرین",
+      "rule": "این صفحه چقدر برای تولید تمرین می‌ارزد.",
+      "allowed": "بالا | متوسط | کم"
+    },
+    {
+      "sheet": "نقشهٔ کتاب (S1)",
+      "column": "سازگاری موتور",
+      "rule": "مسیر تولید محتوا را تعیین می‌کند.",
+      "allowed": "تعاملی-عمیق | بانک تمرین | خارج از موتور"
+    },
+    {
+      "sheet": "اطلس خطا",
+      "column": "کد (E-)",
+      "rule": "شناسهٔ انگلیسی پایدار، هم‌خانواده با errors.js.",
+      "allowed": "E_NAME_PATTERN (حروف بزرگ و زیرخط)"
+    },
+    {
+      "sheet": "اطلس خطا",
+      "column": "رده",
+      "rule": "جنس خطا؛ تعیین‌کنندهٔ نوع مداخله.",
+      "allowed": "مفهومی | راهبردی | محاسباتی | بازیابی | رفتاری | توجهی"
+    },
+    {
+      "sheet": "اطلس خطا",
+      "column": "اولویت",
+      "rule": "ترتیب برچسب‌گذاری وقتی چند خطا هم‌زمان رخ می‌دهند.",
+      "allowed": "بالا | متوسط | پایین"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "شناسه (Q-)",
+      "rule": "کلید پایدار سؤال؛ لنگرش به L- وصل است.",
+      "allowed": "Q-101، Q-102، …"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "لنگر (L-)",
+      "rule": "این سؤال برای کدام صفحه/درس نقشهٔ کتاب است.",
+      "allowed": "شناسهٔ معتبر از شیت نقشهٔ کتاب"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "دامنه",
+      "rule": "جای سؤال در معماری آستانه‌ها؛ خارج از موتور = با یادداشت.",
+      "allowed": "CORE | DEPTH | SIDE"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "لایهٔ CPA",
+      "rule": "نمایش مفهومی سؤال.",
+      "allowed": "مجسم | تصویری | علامتی"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "نقشهٔ گزینه→خطا",
+      "rule": "هر گزینهٔ انحرافی → کد خطا؛ گزینهٔ بی‌دلیل ممنوع.",
+      "allowed": "«الف→E_ADD_CONFUSION؛ …»"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "سطح",
+      "rule": "به آستانه‌های قفل ۷۰/۷۵/۸۰ حساس است.",
+      "allowed": "آسان | متوسط | سخت"
+    },
+    {
+      "sheet": "بانک سؤال",
+      "column": "معیار تصحیح",
+      "rule": "فقط برای سؤال تشریحی — پایهٔ ارزشیابی توصیفی.",
+      "allowed": "معیار ۳-۵ بندی"
+    }
+  ],
+  "auditTrail": {
+    "entries": [
+      {
+        "finding": "AUD-01",
+        "place": "اطلس E7 + بانک L8",
+        "verdict": "قرمز — نشانهٔ «61» و برچسب Q-105د ناسازگار با classifyAttempt (فقط ۶۰۰/۶ برچسب می‌خورند)",
+        "fix": "نشانهٔ اطلس → «۶۰۰ یا ۶»؛ نقشهٔ Q-105د → «چسباندن رقم (بی‌الگو — شاخص توجه)»",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "AUD-02",
+        "place": "بانک L6",
+        "verdict": "قرمز — Q-103د (۷۰) با شاخهٔ صفر موتور ناسازگار (۷۰ → بی‌الگو)",
+        "fix": "نقشهٔ Q-103د → «چسباندن ۷ و ۰ (بی‌الگو — شاخص توجه)» هم‌قرارداد با Q-104",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "AUD-03",
+        "place": "بانک J13",
+        "verdict": "قرمز — Q-110د (۲۰۰۰) بی‌الگو؛ الگوی «صفرِ اضافه» کد ندارد",
+        "fix": "گزینهٔ د → ۱۰۰۰ (= p×۱۰ برای ۵×۲۰) تا E_PLACE_SHIFT دقیق شود",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "AUD-04",
+        "place": "نقشه K6",
+        "verdict": "قرمز — لنگرهای ادعایی L-43 متعلق به L-81/L-PRE؛ جدول ضرب بی‌سؤال",
+        "fix": "دو سؤال واقعی جدید Q-113/Q-114 (۷×۸ و ۶×۹) برای L-43؛ لنگر اصلاح شد؛ عنوان بانک به‌روز شد",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "AUD-05",
+        "place": "نقشه K4",
+        "verdict": "قرمز — دو مالکی Q-101 (L-41 و L-42)",
+        "fix": "لنگر L-41 → «E_GROUP_VS_COUNT» فقط؛ مالکیت Q-101 نزد L-42 ماند",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "موج AUD-03",
+        "place": "اطلس F20",
+        "verdict": "هم‌خوانی — پس از تغییر Q-110، ارجاع اطلس به «گزینهٔ دِ Q-110» گمراه‌کننده می‌شد",
+        "fix": "ارجاع اطلس E_FACT_CONFUSION → «گزینهٔ بِ Q-110»",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "موج-۱ v0.6",
+        "place": "بانک L7",
+        "verdict": "یافتهٔ ممیزی مجدد ماشینی — Q-104ج (۹×۱=۱۰) با برچسب E_ADD_CONFUSION ناسازگار بود: موتور برای ضرب در یک، جمع را نگاشت نمی‌کند (گارد f1,f2≥2)",
+        "fix": "برچسب صادق شد: «جمع به‌جای ضرب (بی‌الگوی نگاشت خودکار موتور — شاخص توجه)»",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "موج-۲ v0.6",
+        "place": "بانک I17",
+        "verdict": "یافتهٔ ممیزی مجدد ماشینی — ۴۵=۹×۵ در زنجیرهٔ اولویت موتور E_ANCHOR_DRIFT می‌خورد نه SKIP_UNDERCOUNT",
+        "fix": "گزینهٔ جِ Q-114 → ۴۸ (۶×۸ — یک گروه ۶تایی کمتر) که دقیقاً E_SKIP_UNDERCOUNT می‌خورد",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "موج-۳ v0.6",
+        "place": "نقشه K5",
+        "verdict": "یافتهٔ مبدل Excel→JSON (T7) — بانک مالک Q-111 را L-42 اعلام می‌کند ولی سلول لنگر L-42 فقط Q-101 و Q-102 داشت؛ نقشه با بانک ناهم‌خوان بود",
+        "fix": "سلول لنگر L-42 → «Q-101، Q-102، Q-111؛ E_ADD_CONFUSION» (بانک مرجع مالکیت است — قرارداد بستن AUD-05)",
+        "status": "رفع شد"
+      },
+      {
+        "finding": "—",
+        "place": "بانک ردیف ۱۶-۱۷",
+        "verdict": "پیش‌شرط بستن AUD-04",
+        "fix": "Q-113/Q-114: پاسخ‌ها با بازحساب مستقل، برچسب‌ها با اجرای مستقیم errors.js (bun) تأیید شد — همه کد واقعی یا «بی‌الگو»",
+        "status": "افزوده شد"
+      },
+      {
+        "finding": "AUD-W1",
+        "place": "اطلس خطا — دو ردیف جدید",
+        "verdict": "زرد — کدهای پیشنهادی خانوادهٔ ۲ و ۳ موج الف (E_BORROW_MISS، E_ZERO_PLACE_MISS) با موتور errors-v103.js پیاده شد",
+        "fix": "افزوده شد به‌عنوان پیشنهاد؛ سبز شدن با برگهٔ انسانی الف",
+        "status": "افزوده شد"
+      },
+      {
+        "finding": "AUD-W2",
+        "place": "بانک سؤال Q-201..Q-206",
+        "verdict": "زرد — برچسب‌های موج الف با موتور جدید بازخوانی می‌شوند؛ بدون تغییر متن",
+        "fix": "بدون تغییر — صادق‌ماند",
+        "status": "ثبت شد"
+      },
+      {
+        "finding": "AUD-W3",
+        "place": "نسخهٔ خشاب",
+        "verdict": "v0.6 → v0.7 (موج الف)",
+        "fix": "دو کد اطلس + سجل",
+        "status": "اعمال شد"
+      },
+      {
+        "finding": "BP-019/BP-020",
+        "place": "بانک سؤال — بچ G3-D4-batch01",
+        "verdict": "ادغام 100 سؤال دامنه‌دار G3-D4 (همه «نیاز به تأیید»؛ صفر مُهر — تأیید فقط با دست معلم)",
+        "fix": "—",
+        "status": "منتظر مُهر معلم"
+      }
+    ],
+    "note": "قاعدهٔ اصلاح: فایل v0.5 دست‌نخورده حفظ شد (سابقهٔ ممیزی)؛ همهٔ اصلاحات در همین نسخهٔ v0.6 اعمال شد. حکم گیت AUD-01 «مجاز ورود به مبدل پس از رفع ۵ قرمز» — پنج مورد رفع شد؛ ممیزی مجدد ماشینی با اجرای واقعی errors.js هم انجام شد. برگهٔ تأیید انسانی (قطعهٔ ۲ گزارش AUD-01) همچنان معلق است — تصدیق صفحه‌ها فقط با کتاب فیزیکی.",
+    "sheet": "سجل ممیزی"
+  },
+  "validation": {
+    "ok": true,
+    "warnings": [
+      "نقشهٔ کتاب L-83: مقدار «سازگاری موتور» خارج از واژه‌نامه: «تعلیق‌شده → v10.3» (زرد AUD-07)",
+      "نقشهٔ کتاب L-D1: مقدار «سازگاری موتور» خارج از واژه‌نامه: «خارج از v10.2 → خشاب «ضرب و تقسیم»» (زرد AUD-07)",
+      "نقشهٔ کتاب L-D2: مقدار «سازگاری موتور» خارج از واژه‌نامه: «خارج از v10.2» (زرد AUD-07)",
+      "نقشهٔ کتاب L-C1: مقدار «سازگاری موتور» خارج از واژه‌نامه: «خارج از موتور فعلی (خانوادهٔ ۵)» (زرد AUD-07)",
+      "Q-109 گج: نقشهٔ نیمه‌تزئینی — زرد مستند AUD-12 (Q-109 گج)",
+      "Q-111: لایهٔ CPA خارج از واژه‌نامه: «مجسم/مسئله» (زرد AUD-06)",
+      "Q-204: لایهٔ CPA خارج از واژه‌نامه: «مجسم/مسئله» (زرد AUD-06)"
+    ],
+    "stats": {
+      "lessons": 20,
+      "lessonsConfirmed": 10,
+      "atlasReal": 12,
+      "atlasProposed": 8,
+      "questions": 120,
+      "questionsConfirmed": 13,
+      "questionsProposed": 107
+    },
+    "gate": {
+      "red": 0,
+      "yellow": 7,
+      "verdict": "مجاز"
+    }
+  }
+}
