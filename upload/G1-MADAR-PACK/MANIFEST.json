@@ -1,0 +1,18 @@
+{
+  "package": "G1-MADAR-PACK",
+  "trace": "TRACE-ced443a973bf2603",
+  "files": {
+    "G1-MADAR-PROMPT.md": {
+      "sha256": "11b5470cb612a80067959f79e432334834a2f41e7b70fecb33e55bb009880921",
+      "bytes": 4135
+    },
+    "G1-1404-RUNTIME.xlsx": {
+      "sha256": "53715beb5bddd7e4958d87de370704291b29fb4719c3eea1804ec1948b2b2894",
+      "bytes": 87298
+    },
+    "G1-MADAR-VERIFY-REPORT.md": {
+      "sha256": "1ccaee779372e7fc213438b333f58e0da14375bced6d4477059a33ba5843a80b",
+      "bytes": 8249
+    }
+  }
+}
