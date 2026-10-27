@@ -1,0 +1,33 @@
+{
+  "pack": "G2-ZAI-PACK",
+  "created_at": "2026-10-27 22:16:18",
+  "contents": [
+    {
+      "file": "G2-ZAI-PROMPT.md",
+      "size": 4707,
+      "sha256": "212b5fbc075f0620dfbd13af87ce7388c31469d169cb6d144f55e37017ce254e"
+    },
+    {
+      "file": "G2-1404-RUNTIME.xlsx",
+      "size": 58346,
+      "sha256": "460eda98e89cb8f30ff10bfb18f9f75f1be6eb8ad92208c318fcc42945ffac4e"
+    },
+    {
+      "file": "G2-ZAI-VERIFY-REPORT.md",
+      "size": 9365,
+      "sha256": "0ac0875d3909a0af7b8202d7ecef6d5759b6e24410ff8490e9a704dff1a1ca02"
+    }
+  ],
+  "verdict": "PASS — ساختار ۱۰۰٪ پذیرفته؛ ۳ یافتهٔ غیرمسدودکننده ثبت شد؛ فایل برندهٔ هر تعارض است",
+  "metrics": {
+    "checklist_rows": 253,
+    "cards": 91,
+    "sessions": 253,
+    "pages": "1..143",
+    "session_status": {
+      "یادداشت": 187,
+      "دست نخورد": 25,
+      "ریاضی‌نیست": 41
+    }
+  }
+}
