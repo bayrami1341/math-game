@@ -1,0 +1,12 @@
+[project]
+name = "math-game-authoring-pipeline"
+version = "0.5.0"
+description = "Evidence-based, anti-J12 textbook cartridge authoring & governance pipeline"
+requires-python = ">=3.10"
+
+[project.scripts]
+khshab-agent = "authoring.agent.cli:main"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

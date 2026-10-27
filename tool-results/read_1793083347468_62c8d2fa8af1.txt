@@ -1,0 +1,601 @@
+     1→import { openLocal } from './local.mjs';
+     2→import { connectApi } from './connection.mjs';
+     3→import { loadFirebaseLogin, googleLogin, loginError } from './firebase-login.mjs';
+     4→import { studentKey, selectProfile, membershipContext } from './entry.mjs';
+     5→import { missionChoices } from './mission.mjs';
+     6→import { missions, flightProgress, keepStationRecord, stationPower, createSoundPlayer, stationSystems, nextDestination, multiplicationModel, companionLine } from './experience.mjs';
+     7→
+     8→const $ = id => document.getElementById(id);
+     9→const config = window.MathGameV9Config;
+    10→const base = (config.apiBase || '').replace(/\/$/, '');
+    11→const fa = number => String(number).replace(/\d/g, digit => '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]);
+    12→const number = value => value.replace(/[۰-۹]/g, d => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d))).replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)));
+    13→const request = () => ({ schemaVersion: 1, requestId: 'req_' + crypto.randomUUID() });
+    14→let local, actor, tokenProvider, auth, authSdk, state = {}, serial = Promise.resolve(), shownQuestionKey, questionShownAt;
+    15→let profiles = [], selectedId = null, storyStep = null, replaying = false, pendingCreation = null;
+    16→let screen = 'home', collection = null, motionPaused = false, choiceKey = null;
+    17→let soundEnabled = false;
+    18→let teacherClass = null;
+    19→let showingFlight = false;
+    20→let helpLevel = 0;
+    21→const playSound = createSoundPlayer(() => new (window.AudioContext || window.webkitAudioContext)());
+    22→const sound = kind => { if (soundEnabled) void playSound(kind).then(played => {
+    23→  if (!played) { soundEnabled = false; $('toggle-sound').textContent = 'صدا در دسترس نیست'; $('toggle-sound').setAttribute('aria-pressed', 'false'); }
+    24→}); };
+    25→const scenes = [
+    26→  ['پیام از ایستگاه', 'چراغ‌های ایستگاه فضایی کم‌نور شده‌اند. برای روشن‌کردنشان به کسی نیاز داریم که فکر کند، یاد بگیرد و دوباره تلاش کند.'],
+    27→  ['هر تلاش، یک قدم', 'قرار نیست از اول همهٔ جواب‌ها را بدانی. با تمرین، راه ساختن و پیش‌رفتن را پیدا می‌کنی.'],
+    28→  ['قهرمان داستان تویی', 'این سفر به یک قهرمان نیاز دارد؛ قهرمانی که با نام خودش وارد داستان شود.']
+    29→];
+    30→const notice = (message, error = false) => { $('notice').textContent = message; $('notice').dataset.error = String(error); };
+    31→const accountKey = () => 'profile:' + actor.uid;
+    32→const key = () => actor.teacher || !selectedId ? accountKey() : studentKey(actor.uid, selectedId);
+    33→const operationKey = name => 'entry-operation:' + actor.uid + ':' + name;
+    34→function run(task) {
+    35→  serial = serial.then(async () => {
+    36→    const buttons = [...document.querySelectorAll('button')]; buttons.forEach(button => { button.disabled = true; });
+    37→    try { await task(); } catch (error) { notice(error.message || 'عملیات انجام نشد.', true); }
+    38→    finally { document.querySelectorAll('button').forEach(button => { button.disabled = false; }); }
+    39→  });
+    40→  return serial;
+    41→}
+    42→async function api(operation, input) {
+    43→  const response = await fetch(base + '/api/v9/' + operation, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + await tokenProvider() }, body: JSON.stringify(input), signal: AbortSignal.timeout(10000) });
+    44→  const data = await response.json();
+    45→  if (!response.ok || !data.ok) { const error = new Error(data.error?.message || 'درخواست انجام نشد.'); error.code = data.error?.code; throw error; }
+    46→  return data;
+    47→}
+    48→async function save(next) { await local.put(key(), next); state = next; }
+    49→function render() {
+    50→  $('landing-intro').hidden = true;
+    51→  $('login').hidden = true; $('workspace').hidden = false;
+    52→  const profile = profiles.find(profile => profile.studentId === selectedId);
+    53→  $('identity').textContent = actor.teacher ? 'پنل معلم' : profile ? profile.displayName : 'سفر قهرمان';
+    54→  $('teacher').hidden = !actor.teacher;
+    55→  if (actor.teacher && teacherClass?.classId !== state.classId) {
+    56→    teacherClass = null; $('teacher-policy').hidden = true;
+    57→    $('invite-token').value = ''; $('invite-link').value = '';
+    58→  }
+    59→  $('student').hidden = actor.teacher || !profile || storyStep !== null;
+    60→  $('profile-picker').hidden = actor.teacher || !!profile || storyStep !== null;
+    61→  $('hero-story').hidden = actor.teacher || storyStep === null;
+    62→  if (!actor.teacher) {
+    63→    if (storyStep !== null) renderStory();
+    64→    $('profile-buttons').replaceChildren();
+    65→    profiles.forEach(item => {
+    66→      const button = document.createElement('button'); button.type = 'button';
+    67→      button.textContent = item.displayName + ' — ' + ({ astronaut: 'فضانورد', pilot: 'خلبان', scientist: 'دانشمند' }[item.avatar] || 'قهرمان') + ' · ' + item.studentId.slice(-4);
+    68→      button.onclick = () => run(() => activateProfile(item)); $('profile-buttons').append(button);
+    69→    });
+    70→    if (!profile) return;
+    71→    renderStation();
+    72→    $('back-station').hidden = screen === 'home';
+    73→    $('hero-greeting').textContent = ({ astronaut: '🧑‍🚀 ', pilot: '🚀 ', scientist: '🔬 ' }[profile.avatar] || '') + profile.displayName + '، به ایستگاه خودت خوش آمدی';
+    74→    $('join-card').hidden = screen !== 'classes';
+    75→    $('activity-settings').hidden = !['practice', 'missions'].includes(screen);
+    76→    $('collection').hidden = screen !== 'collection';
+    77→    const unfinished = state.session && state.session.status !== 'FINALIZED';
+    78→    $('resume-activity').hidden = !unfinished;
+    79→    $('resume-status').textContent = unfinished ? 'یک فعالیت نیمه‌تمام داری؛ پاسخ‌ها در پروندهٔ خودت نگهداری شده‌اند.' : 'امروز می‌خواهی کدام مسیر را ادامه بدهی؟';
+    80→    document.querySelectorAll('[data-screen]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.screen === screen)));
+    81→    $('student-classes').replaceChildren();
+    82→    for (const membership of profile.memberships || []) {
+    83→      const button = document.createElement('button'); button.type = 'button'; button.className = 'secondary';
+    84→      button.textContent = membership.name + (membership.classId === state.classId ? ' ✓' : '');
+    85→      button.setAttribute('aria-pressed', String(membership.classId === state.classId));
+    86→      button.onclick = () => run(() => chooseClass(membership)); $('student-classes').append(button);
+    87→    }
+    88→    $('join-class').hidden = !!state.classId && !$('student-invite').value;
+    89→  }
+    90→  $('class-id').textContent = state.classId || '';
+    91→  $('open-class-id').value = state.classId || '';
+    92→  $('student-class-name').textContent = state.className || 'تمرین من';
+    93→  const status = state.membershipStatus;
+    94→  $('membership-status').textContent = { active: 'عضویت تأیید شد؛ آمادهٔ تمرین هستی.', pending: 'منتظر تأیید معلم هستی.', revoked: 'عضویت غیرفعال شده؛ از معلم کمک بگیر.' }[status] || 'اول به کلاس بپیوند.';
+    95→  $('check-membership').hidden = !state.classId;
+    96→  $('class-practice').hidden = status !== 'active';
+    97→  $('class-mission').hidden = status !== 'active';
+    98→  $('student-show-board').hidden = status !== 'active';
+    99→  $('class-context-option').disabled = status !== 'active';
+   100→  if (status !== 'active') $('activity-context').value = 'personal';
+   101→  const mission = screen === 'missions';
+   102→  const destination = missions[Number($('sector').value)] || missions[1];
+   103→  $('activity-eyebrow').textContent = mission ? 'مرکز فرماندهی / مقصد سفرت را انتخاب کن' : 'آزمایشگاه / فرصت کشف و مرور';
+   104→  $('mission-map').hidden = !mission;
+   105→  $('mission-objective').hidden = !mission;
+   106→  $('mission-objective').textContent = destination.objective;
+   107→  document.querySelectorAll('[data-sector]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.sector === $('sector').value)));
+   108→  $('student-class-name').textContent = mission ? 'مأموریت نجات ایستگاه' : 'تمرین من';
+   109→  $('start-activity').textContent = mission ? 'شروع مأموریت' : 'شروع تمرین';
+   110→  $('activity-rules').textContent = mission ? 'قانون این مأموریت: هر سؤال یک پاسخ، هر پاسخ درست یک امتیاز. سرعت امتیاز اضافه ندارد و حرکت کارت‌ها قابل توقف است. نتیجه پس از تأیید سرور ثبت می‌شود؛ نتایج کلاس فقط با اجازهٔ معلم در تابلوی همان کلاس نمایش داده می‌شود.' : 'با آرامش پاسخ بده. پاسخ نادرست را با جواب درست مرور می‌کنی. این نتیجه سابقهٔ آموزشی است و وارد رکورد مأموریت نمی‌شود.';
+   111→  $('class-context-option').textContent = state.className ? 'کلاس: ' + state.className : 'کلاس انتخاب‌شده';
+   112→  $('practice').hidden = !showingFlight || !state.session || !['practice', 'missions'].includes(screen) || (state.session.activity === 'mission') !== mission;
+   113→  $('student').dataset.playing = String(!$('practice').hidden);
+   114→  if (!$('practice').hidden) $('activity-settings').hidden = true;
+   115→  if (!state.session) return;
+   116→  const session = state.session;
+   117→  const answered = session.answers || {};
+   118→  const question = session.questions.find(question => !answered[question.questionId]);
+   119→  $('progress').textContent = fa(Object.keys(answered).length) + ' از ' + fa(session.questions.length) + ' پاسخ روی این دستگاه';
+   120→  $('question').textContent = question ? `${fa(question.f1)} × ${fa(question.f2)} = ؟` : 'آفرین! تمرینت تمام شد.';
+   121→  $('session-context').textContent = (session.activity === 'mission' ? 'مأموریت' : 'تمرین') + ' — ' + (session.classId ? 'فعالیت کلاس' : 'پروندهٔ شخصی');
+   122→  $('answer-form').hidden = !question || session.status === 'FINALIZED' || session.activity === 'mission';
+   123→  $('finalize').hidden = !!question || session.status === 'FINALIZED';
+   124→  $('mission-controls').hidden = !question || session.status === 'FINALIZED' || session.activity !== 'mission';
+   125→  if (question && session.activity === 'mission' && choiceKey !== session.sessionId + ':' + question.questionId) {
+   126→    choiceKey = session.sessionId + ':' + question.questionId; $('mission-choices').replaceChildren();
+   127→    for (const value of missionChoices(question)) {
+   128→      const button = document.createElement('button'); button.type = 'button'; button.textContent = fa(value);
+   129→      button.onclick = () => run(() => submitAnswer(value, question.questionId)); $('mission-choices').append(button);
+   130→    }
+   131→  }
+   132→  if (question && shownQuestionKey !== session.sessionId + ':' + question.questionId) {
+   133→    helpLevel = 0;
+   134→    shownQuestionKey = session.sessionId + ':' + question.questionId; questionShownAt = performance.now();
+   135→  }
+   136→  const confirmed = Object.keys(session.receipts || {}).length;
+   137→  $('queue-status').textContent = fa(confirmed) + ' پاسخ در پروندهٔ سرور تأیید شده است.';
+   138→  if (session.status === 'FINALIZED') $('feedback').textContent = `نتیجهٔ نهایی: ${fa(session.score)} پاسخ درست از ${fa(session.questions.length)}`;
+   139→  renderFlight(session);
+   140→  renderHelp(question);
+   141→}
+   142→function renderStation() {
+   143→  const power = stationPower(state.stationRecords || []);
+   144→  $('station-power').textContent = fa(power) + '٪'; $('station-meter').value = power;
+   145→  $('station-home').hidden = screen !== 'home';
+   146→  $('station-report').hidden = screen !== 'home';
+   147→  $('station-home').dataset.phase = power === 0 ? 'dark' : power === 100 ? 'restored' : 'repairing';
+   148→  const systems = stationSystems(state.stationRecords || []);
+   149→  $('station-story').textContent = power === 100 ? 'نور، ارتباط و سکوی پرواز آماده‌اند. می‌توانی دوباره سفر کنی یا در آزمایشگاه کشف تازه‌ای داشته باشی.' : power ? 'نور دارد به ایستگاه برمی‌گردد؛ هر مسیر داستان خودش را دارد. بهترین سفرهایت اینجا می‌مانند.' : 'سه بخش ایستگاه منتظر کمک تو هستند. از هر مسیری که دوست داری شروع کن.';
+   150→  $('station-systems').replaceChildren();
+   151→  for (const system of systems) {
+   152→    const button = document.createElement('button'); button.type = 'button'; button.className = 'system-card secondary';
+   153→    button.dataset.complete = String(system.complete);
+   154→    button.textContent = system.icon + ' ' + system.destination + ' — ' + (system.complete ? 'روشن و آماده ✓' : system.started ? fa(system.percent) + '٪ روشن شده' : 'آمادهٔ اولین سفر');
+   155→    button.onclick = () => chooseDestination(system.sectorId);
+   156→    $('station-systems').append(button);
+   157→  }
+   158→}
+   159→function chooseDestination(sectorId) {
+   160→  screen = 'missions'; showingFlight = false; $('sector').value = String(sectorId); render(); $('activity-settings').scrollIntoView({ block: 'start' });
+   161→}
+   162→function renderHelp(question) {
+   163→  const model = multiplicationModel(question);
+   164→  const available = state.session?.activity === 'practice' && state.session.status !== 'FINALIZED' && !!model;
+   165→  $('practice-help').hidden = !available;
+   166→  $('help-picture').hidden = !available || !helpLevel;
+   167→  $('show-help').setAttribute('aria-expanded', String(available && helpLevel > 0));
+   168→  $('show-help').textContent = helpLevel === 0 ? '💡 با هم بسازیم' : helpLevel === 1 ? 'حالا جمع و جواب را ببینیم' : 'بستن راهنما';
+   169→  $('help-groups').replaceChildren();
+   170→  if (!available || !helpLevel) return;
+   171→  $('help-description').textContent = fa(model.groups) + ' گروه داریم؛ در هر گروه ' + fa(model.each) + ' ستاره است.';
+   172→  for (let group = 0; group < model.groups; group++) {
+   173→    const frame = document.createElement('div'); frame.className = 'star-group';
+   174→    for (let star = 0; star < model.each; star++) { const dot = document.createElement('span'); dot.textContent = '✦'; frame.append(dot); }
+   175→    $('help-groups').append(frame);
+   176→  }
+   177→  $('help-equation').textContent = helpLevel >= 2 ? model.addends.map(fa).join(' + ') + ' = ' + fa(model.total) : '';
+   178→}
+   179→function renderFlight(session) {
+   180→  const progress = flightProgress(session), mission = session.activity === 'mission';
+   181→  const destination = missions[session.sectorId] || missions[1];
+   182→  $('flight-scene').dataset.sector = mission ? String(session.sectorId) : 'practice';
+   183→  $('flight-destination-note').textContent = mission ? destination.objective : 'در آزمایشگاه می‌توانی جواب‌ها را با گروه‌های ستاره بسازی؛ راهنما فقط برای همین تمرین است.';
+   184→  $('companion-message').textContent = companionLine(session).replace(/\d/g, digit => '۰۱۲۳۴۵۶۷۸۹'[Number(digit)]);
+   185→  $('flight-title').textContent = mission ? destination.icon + ' ' + destination.title : '🌱 آزمایشگاه کشف جواب‌ها';
+   186→  $('flight-chapter').textContent = 'قدم ' + fa(progress.answered) + ' از ' + fa(progress.total);
+   187→  const chapters = mission ? [destination.destination + ' در انتظار توست', 'از زمین فاصله گرفتیم!', 'مقصد نزدیک است…', 'رسیدیم؛ حالا پایان سفر را ثبت کن'] : ['آزمایشگاه آمادهٔ کشف توست', 'داریم راه جواب‌ها را پیدا می‌کنیم', 'چند کشف دیگر تا پایان تمرین', 'مرور تمام شد؛ پایان تمرین را ثبت کن'];
+   188→  $('flight-message').textContent = progress.finalized ? 'این سفر در داستان تو ماند' : chapters[progress.stage];
+   189→  $('flight-energy').textContent = fa(progress.lit) + ' سلول روشن' + (progress.pending ? ' — ' + fa(progress.pending) + ' پاسخ هنوز منتظر تأیید است' : progress.answered ? ' — پاسخ‌ها تأیید شده‌اند' : ' — آمادهٔ اولین قدم');
+   190→  $('flight-meter').value = progress.percent;
+   191→  $('flight-ship').style.left = (14 + progress.percent * 0.57) + '%';
+   192→  $('flight-ship').style.top = (65 - progress.percent * 0.55) + '%';
+   193→  $('energy-cells').replaceChildren();
+   194→  for (let index = 0; index < progress.total; index++) {
+   195→    const cell = document.createElement('span'); cell.dataset.lit = String(index < progress.lit); $('energy-cells').append(cell);
+   196→  }
+   197→  $('question-prompt').textContent = mission ? 'کدام سلول، جواب درست را دارد؟' : 'جواب را کشف کن؛ اینجا فرصت تمرین توست.';
+   198→  $('answer-deck').hidden = progress.finalized;
+   199→  $('flight-result').hidden = !progress.finalized;
+   200→  if (progress.finalized) {
+   201→    const perfect = session.score === progress.total;
+   202→    $('flight-result').dataset.perfect = String(perfect);
+   203→    $('result-title').textContent = perfect ? 'همهٔ چراغ‌های این مسیر روشن شد!' : 'یک قدم دیگر در مسیر یادگیری!';
+   204→    $('result-description').textContent = fa(session.score) + ' پاسخ درست از ' + fa(progress.total) + '؛ ' + (mission ? 'نتیجه ثبت شد. بهترین نتیجهٔ هر مسیر به روشنایی ایستگاه کمک می‌کند.' : 'این سفر در سابقهٔ تمرینت ماند؛ می‌توانی برای مأموریت بعدی آماده شوی.');
+   205→    $('companion-message').textContent = perfect ? 'چه سفر روشنی! حالا برویم یادگاری‌اش را ببینیم.' : 'تلاشت را دیدم! جواب‌هایی که سخت بودند را در تمرین دوباره پیدا می‌کنیم.';
+   206→  }
+   207→}
+   208→function renderStory() {
+   209→  $('story-art').dataset.scene = String(storyStep);
+   210→  const final = storyStep >= scenes.length;
+   211→  const profile = profiles.find(profile => profile.studentId === selectedId);
+   212→  $('story-step').textContent = 'داستان ایستگاه — ' + fa(Math.min(storyStep + 1, scenes.length + 1)) + ' از ' + fa(scenes.length + 1);
+   213→  $('story-title').textContent = final ? replaying ? 'قهرمان این داستان: ' + profile.displayName : 'ایستگاه منتظر قهرمانش است' : scenes[storyStep][0];
+   214→  $('story-text').textContent = final ? replaying ? 'این سفر با همان نام و پروندهٔ تو ادامه پیدا می‌کند.' : 'نامت را اینجا بنویس؛ در بازی و کلاس با همین نام شناخته می‌شوی.' : scenes[storyStep][1];
+   215→  $('story-navigation').hidden = final;
+   216→  $('hero-introduction').hidden = !final || replaying;
+   217→  $('story-return').hidden = !final || !replaying;
+   218→  if (pendingCreation) {
+   219→    $('hero-name').value = pendingCreation.displayName; $('hero-avatar').value = pendingCreation.avatar;
+   220→  }
+   221→  $('hero-name').readOnly = !!pendingCreation; $('hero-avatar').disabled = !!pendingCreation;
+   222→}
+   223→async function activateProfile(profile) {
+   224→  $('class-board').hidden = true; $('board-entries').replaceChildren();
+   225→  showingFlight = false;
+   226→  selectedId = profile.studentId; storyStep = null; replaying = false; shownQuestionKey = null; choiceKey = null; collection = null; screen = 'home';
+   227→  $('achievements').replaceChildren(); $('personal-records').replaceChildren(); $('activity-history').replaceChildren();
+   228→  state = await local.get(key()) || { studentId: selectedId };
+   229→  const membership = membershipContext(profile, state.classId);
+   230→  await save({ ...state, studentId: selectedId, classId: membership?.classId || null, className: membership?.name || '', membershipStatus: membership?.status || null });
+   231→  await local.put(accountKey(), { ...(await local.get(accountKey()) || {}), activeStudentId: selectedId });
+   232→  $('feedback').textContent = ''; render();
+   233→  if (state.classId) await refreshMembership();
+   234→}
+   235→async function chooseClass(membership) {
+   236→  if (state.session && state.session.status !== 'FINALIZED' && state.session.classId !== membership.classId) throw new Error('ابتدا تمرین فعلی را تمام کن؛ پاسخ‌ها به کلاس همان تمرین تعلق دارند.');
+   237→  $('class-board').hidden = true; $('board-entries').replaceChildren();
+   238→  await save({ ...state, classId: membership.classId, className: membership.name, membershipStatus: membership.status });
+   239→  render(); await refreshMembership();
+   240→}
+   241→async function refreshCollection() {
+   242→  collection = await api('getCollection', { schemaVersion: 1, studentId: selectedId });
+   243→  await save({ ...state, stationRecords: collection.best }); renderStation();
+   244→  const fill = (id, entries, empty) => {
+   245→    $(id).replaceChildren();
+   246→    for (const text of entries.length ? entries : [empty]) { const paragraph = document.createElement('p'); paragraph.className = 'result'; paragraph.textContent = text; $(id).append(paragraph); }
+   247→  };
+   248→  fill('achievements', collection.achievements.map(item => item.title + ' — ' + item.condition), 'با پایان اولین فعالیت، نخستین نشان تو اینجا می‌آید.');
+   249→  fill('personal-records', collection.best.map(item => 'بخش ' + fa(item.sectorId) + ': ' + fa(item.score) + ' پاسخ درست از ' + fa(item.total)), 'هنوز مأموریت تأییدشده‌ای نداری.');
+   250→  fill('activity-history', collection.sessions.map(item => (item.activity === 'mission' ? 'مأموریت' : 'تمرین') + ' — ' + fa(item.score) + ' درست از ' + fa(item.answered) + ' پاسخ ثبت‌شده' + (item.status === 'FINALIZED' ? ' — پایان‌یافته' : ' — نیمه‌تمام')), 'هنوز فعالیتی ثبت نشده است.');
+   251→  if (collection.historyTruncated) { const note = document.createElement('p'); note.textContent = 'فقط ۲۰ فعالیت اخیر نمایش داده می‌شود؛ رکوردها و نشان‌های قدیمی حفظ می‌شوند.'; $('activity-history').append(note); }
+   252→}
+   253→async function loadEntry() {
+   254→  const previous = await local.get(accountKey()) || {};
+   255→  const input = { schemaVersion: 1 };
+   256→  if (previous.studentId && previous.classId && !previous.entryMigrated) input.legacyMembership = { studentId: previous.studentId, classId: previous.classId };
+   257→  const result = await api('getEntry', input); profiles = result.profiles;
+   258→  if (input.legacyMembership) {
+   259→    await local.migrateProfile(accountKey(), studentKey(actor.uid, previous.studentId), actor.uid);
+   260→    await local.put(accountKey(), { ...previous, activeStudentId: previous.studentId, entryMigrated: true });
+   261→  }
+   262→  pendingCreation = await local.get(operationKey('create'));
+   263→  const profile = selectProfile(profiles, previous.activeStudentId || previous.studentId);
+   264→  if (pendingCreation) { selectedId = null; state = {}; storyStep = scenes.length; render(); }
+   265→  else if (profile) await activateProfile(profile);
+   266→  else { selectedId = null; state = {}; storyStep = profiles.length ? null : 0; render(); }
+   267→  if (result.profilesTruncated || profiles.some(profile => profile.membershipsTruncated)) notice('فهرست پرونده‌ها یا کلاس‌ها کامل نیست؛ برای ادامه از مدیر سامانه کمک بگیر.', true);
+   268→}
+   269→async function signIn(provider) {
+   270→  selectedId = null; profiles = []; storyStep = null; pendingCreation = null;
+   271→  tokenProvider = provider;
+   272→  actor = await api('getIdentity', { schemaVersion: 1 });
+   273→  notice(actor.teacher ? 'کلاس خود را بسازید یا ادامه دهید.' : 'سفر تو با همین پرونده ادامه پیدا می‌کند.');
+   274→  state = await local.get(key()) || {};
+   275→  $('members').replaceChildren(); $('results').replaceChildren(); $('invite-token').value = ''; $('feedback').textContent = '';
+   276→  $('class-board').hidden = true;
+   277→  if (actor.teacher) { render(); await refreshTeacherClasses(); await refreshClass(); }
+   278→  else {
+   279→    await loadEntry();
+   280→    const invite = new URL(location.href).searchParams.get('invite');
+   281→    if (invite) {
+   282→      await local.put('entry-invite:' + actor.uid, invite);
+   283→      const url = new URL(location.href); url.searchParams.delete('invite'); history.replaceState(null, '', url.pathname + url.search + url.hash);
+   284→    }
+   285→    $('student-invite').value = await local.get('entry-invite:' + actor.uid) || '';
+   286→    render(); await flush();
+   287→  }
+   288→}
+   289→async function refreshMembership() {
+   290→  if (!state.classId) return;
+   291→  if (actor.teacher) return refreshClass();
+   292→  const data = await api('getClass', { schemaVersion: 1, classId: state.classId, studentId: state.studentId });
+   293→  const membership = profiles.find(profile => profile.studentId === selectedId)?.memberships.find(member => member.classId === state.classId);
+   294→  if (membership) { membership.status = data.membershipStatus; membership.name = data.name; }
+   295→  await save({ ...state, className: data.name, membershipStatus: data.membershipStatus }); render();
+   296→}
+   297→async function refreshClass() {
+   298→  if (!state.classId) return;
+   299→  const classroom = await api('getClass', { schemaVersion: 1, classId: state.classId });
+   300→  teacherClass = classroom;
+   301→  $('teacher-policy').hidden = false;
+   302→  $('toggle-leaderboard').textContent = classroom.policy.leaderboard === 'on' ? 'خاموش‌کردن تابلو' : 'روشن‌کردن تابلو';
+   303→  $('teacher-summary').textContent = fa(classroom.members.filter(m => m.status === 'active').length) + ' عضو فعال، ' + fa(classroom.members.filter(m => m.status === 'pending').length) + ' منتظر تأیید؛ ' + fa(classroom.sessions.filter(s => s.status === 'FINALIZED').length) + ' فعالیت پایان‌یافته در گزارش اخیر.';
+   304→  $('members').replaceChildren(); $('results').replaceChildren();
+   305→  for (const member of classroom.members) {
+   306→    const row = document.createElement('div'); row.className = 'member';
+   307→    const label = document.createElement('p'); label.textContent = member.displayName + ' — ' + ({ active: 'فعال', pending: 'منتظر تأیید', revoked: 'غیرفعال' }[member.status]); row.append(label);
+   308→    const button = document.createElement('button'); button.className = 'secondary'; button.textContent = member.status === 'active' ? 'لغو عضویت' : 'تأیید عضویت';
+   309→    button.onclick = () => run(async () => { await api('setMembership', { ...request(), classId: state.classId, studentId: member.studentId, status: member.status === 'active' ? 'revoked' : 'active' }); await refreshClass(); if (!$('class-board').hidden) await refreshBoard(); });
+   310→    row.append(button); $('members').append(row);
+   311→  }
+   312→  if (!classroom.members.length) $('members').textContent = 'هنوز دانش‌آموزی نپیوسته است.';
+   313→  if (classroom.membersTruncated) { const note = document.createElement('p'); note.textContent = 'نمایش اعضا در این پیش‌نمایش به ۱۰۰ نفر محدود است.'; $('members').append(note); }
+   314→  for (const session of classroom.sessions) {
+   315→    const line = document.createElement('p'); line.className = 'result';
+   316→    const name = classroom.members.find(member => member.studentId === session.studentId)?.displayName || 'دانش‌آموز';
+   317→    line.textContent = `${name} — ${session.activity === 'mission' ? 'مأموریت' : 'تمرین'}: ${fa(session.score)} درست از ${fa(session.total)} سؤال؛ ${fa(session.answered)} پاسخ ثبت‌شده — ${session.status === 'FINALIZED' ? 'پایان‌یافته' : 'در حال انجام'}`;
+   318→    $('results').append(line);
+   319→    const review = session.mastery.filter(item => item.wrongAnswers?.length);
+   320→    if (review.length) {
+   321→      const note = document.createElement('p'); note.className = 'review-note';
+   322→      note.textContent = 'پیشنهاد مرور همین نوبت: ' + review.map(item => fa(item.f1) + ' × ' + fa(item.f2)).join('، ') + '؛ نتیجهٔ یک نوبت، تشخیص قطعی تسلط نیست.';
+   323→      $('results').append(note);
+   324→    }
+   325→  }
+   326→  if (!classroom.sessions.length) $('results').textContent = 'هنوز فعالیتی برای این کلاس ثبت نشده است.';
+   327→  if (classroom.historyTruncated) { const note = document.createElement('p'); note.textContent = 'فقط ۲۰ جلسهٔ آخر نمایش داده می‌شود.'; $('results').append(note); }
+   328→}
+   329→async function refreshTeacherClasses() {
+   330→  const data = await api('getTeacherClasses', { schemaVersion: 1 });
+   331→  $('teacher-classes').replaceChildren();
+   332→  for (const classroom of data.classes) {
+   333→    const button = document.createElement('button'); button.type = 'button'; button.className = 'secondary'; button.textContent = classroom.name;
+   334→    button.onclick = () => run(async () => { $('class-board').hidden = true; await save({ ...state, classId: classroom.classId, className: classroom.name }); render(); await refreshClass(); });
+   335→    $('teacher-classes').append(button);
+   336→  }
+   337→  if (!data.classes.length) $('teacher-classes').textContent = 'هنوز کلاسی نساخته‌اید. کلاس قدیمی را یک‌بار با شناسه باز کنید تا اینجا اضافه شود.';
+   338→  if (data.truncated) notice('فقط ۱۰۰ کلاس نمایش داده می‌شود.', true);
+   339→}
+   340→async function refreshBoard() {
+   341→  $('board-entries').replaceChildren(); $('board-status').textContent = 'در حال دریافت نتیجه…';
+   342→  if (!state.classId) throw new Error('ابتدا کلاس را انتخاب کنید.');
+   343→  let data;
+   344→  try { data = await api('getLeaderboard', { schemaVersion: 1, classId: state.classId, sectorId: Number($('board-sector').value), ...(actor.teacher ? {} : { studentId: selectedId }) }); }
+   345→  catch (error) { $('board-status').textContent = 'تابلو دریافت نشد؛ اتصال یا وضعیت عضویت را بررسی و دوباره تلاش کنید.'; throw error; }
+   346→  $('board-title').textContent = 'تابلوی نتایج — ' + data.name;
+   347→  $('board-status').textContent = !data.enabled ? 'معلم هنوز نمایش نتایج کلاس را روشن نکرده است.' : !data.entries.length ? 'هنوز مأموریت پایان‌یافته‌ای در این مسیر ثبت نشده است.' : data.truncated ? 'نمایش محدود است؛ این رتبه‌بندی شامل همهٔ اعضا نیست.' : 'نتیجه‌های تأییدشدهٔ اعضای فعال همین کلاس';
+   348→  for (const entry of data.entries) {
+   349→    const row = document.createElement('li'); row.className = 'board-row'; row.dataset.me = String(entry.isMe);
+   350→    row.textContent = 'رتبهٔ ' + fa(entry.rank) + ' · ' + entry.displayName + (entry.isMe ? ' (تو)' : '') + ' — ' + fa(entry.score) + ' از ' + fa(entry.total); $('board-entries').append(row);
+   351→  }
+   352→}
+   353→async function openBoard() { $('class-board').hidden = false; await refreshBoard(); $('class-board').scrollIntoView({ block: 'start' }); }
+   354→async function flush(force = false) {
+   355→  if (!actor || actor.teacher) return;
+   356→  if (!navigator.onLine) { notice('اینترنت قطع است؛ پاسخ‌ها روی این دستگاه نگهداری می‌شوند.'); return; }
+   357→  const commands = await local.pending(actor.uid);
+   358→  for (const command of commands) {
+   359→    if (command.blocked) { notice('بعضی پاسخ‌ها نیاز به بررسی معلم دارند: ' + command.blocked, true); continue; }
+   360→    if (!force && command.retryAt > Date.now()) break;
+   361→    try {
+   362→      const result = await api('submitAttempts', command.input);
+   363→      await local.acknowledge(command, result, key());
+   364→      const last = result.receipts.at(-1);
+   365→      if (state.session?.sessionId === result.sessionId && (!command.stateKey || command.stateKey === key())) {
+   366→        const attempt = command.input.attempts.find(attempt => attempt.eventId === last.eventId);
+   367→        const question = state.session.questions.find(question => question.questionId === attempt?.questionId);
+   368→        $('feedback').textContent = last.correct ? 'پاسخ قبلی درست بود و در پرونده تأیید شد؛ آفرین!' : 'پاسخ قبلی نیاز به مرور داشت؛ جواب درست ' + fa(question.f1 * question.f2) + ' بود. پاسخ تو در پرونده تأیید شد.';
+   369→      }
+   370→    } catch (error) {
+   371→      if (['FORBIDDEN', 'EVENT_CONFLICT', 'STALE_WRITER', 'INVALID_PAYLOAD'].includes(error.code)) await local.block(command, error.code);
+   372→      else await local.retry(command);
+   373→      notice(error.code ? error.message : 'پاسخ روی این دستگاه ذخیره است؛ ارسال با برگشت ارتباط ادامه می‌یابد.', true);
+   374→      break;
+   375→    }
+   376→  }
+   377→  state = await local.get(key()) || {}; render();
+   378→}
+   379→
+   380→const form = (id, task) => $(id).addEventListener('submit', event => { event.preventDefault(); run(task); });
+   381→const focusStory = () => { render(); $('story-title').focus(); };
+   382→document.querySelectorAll('[data-screen]').forEach(button => { button.onclick = () => run(async () => {
+   383→  screen = button.dataset.screen; showingFlight = false; $('class-board').hidden = true; render();
+   384→  if (screen === 'collection') await refreshCollection();
+   385→}); });
+   386→$('resume-activity').onclick = () => { showingFlight = true; screen = state.session.activity === 'mission' ? 'missions' : 'practice'; render(); $('practice').scrollIntoView({ block: 'start' }); };
+   387→$('refresh-teacher-classes').onclick = () => run(refreshTeacherClasses);
+   388→$('toggle-leaderboard').onclick = () => run(async () => {
+   389→  if (!teacherClass || teacherClass.classId !== state.classId) throw new Error('کلاس را تازه‌سازی کنید.');
+   390→  await api('setClassPolicy', { ...request(), classId: state.classId, revision: teacherClass.revision, leaderboard: teacherClass.policy.leaderboard === 'on' ? 'off' : 'on' });
+   391→  await refreshClass(); if (!$('class-board').hidden) await refreshBoard();
+   392→});
+   393→$('teacher-show-board').onclick = $('student-show-board').onclick = () => run(openBoard);
+   394→$('refresh-board').onclick = () => run(refreshBoard);
+   395→$('board-sector').addEventListener('change', () => run(refreshBoard));
+   396→$('close-board').onclick = () => { $('class-board').hidden = true; };
+   397→$('class-mission').onclick = () => { screen = 'missions'; showingFlight = false; $('activity-context').value = 'class'; render(); };
+   398→$('class-practice').onclick = () => { screen = 'practice'; $('activity-context').value = 'class'; render(); };
+   399→$('refresh-collection').onclick = () => run(refreshCollection);
+   400→$('next-destination').onclick = () => chooseDestination(nextDestination(state.stationRecords || []));
+   401→$('show-help').onclick = () => {
+   402→  if (state.session?.activity !== 'practice' || state.session.status === 'FINALIZED') return;
+   403→  helpLevel = (helpLevel + 1) % 3;
+   404→  renderHelp(state.session.questions.find(question => !state.session.answers[question.questionId]));
+   405→};
+   406→$('back-station').onclick = () => { screen = 'home'; render(); };
+   407→$('launch-mission').onclick = () => { screen = 'missions'; showingFlight = false; render(); $('activity-settings').scrollIntoView({ block: 'start' }); };
+   408→$('result-home').onclick = () => { screen = 'home'; render(); $('station-home').scrollIntoView({ block: 'start' }); };
+   409→$('result-collection').onclick = () => run(async () => { screen = 'collection'; render(); await refreshCollection(); $('collection').scrollIntoView({ block: 'start' }); });
+   410→document.querySelectorAll('[data-sector]').forEach(button => { button.onclick = () => { $('sector').value = button.dataset.sector; render(); }; });
+   411→$('sector').addEventListener('change', render);
+   412→$('toggle-sound').onclick = () => {
+   413→  soundEnabled = !soundEnabled;
+   414→  $('toggle-sound').textContent = soundEnabled ? 'صدا: روشن' : 'صدا: خاموش';
+   415→  $('toggle-sound').setAttribute('aria-pressed', String(soundEnabled)); sound('correct');
+   416→};
+   417→$('toggle-motion').onclick = () => {
+   418→  motionPaused = !motionPaused; $('mission-choices').dataset.paused = String(motionPaused);
+   419→  $('student').dataset.motionPaused = String(motionPaused);
+   420→  $('toggle-motion').setAttribute('aria-pressed', String(motionPaused)); $('toggle-motion').textContent = motionPaused ? 'ادامهٔ حرکت کارت‌ها' : 'توقف حرکت کارت‌ها';
+   421→};
+   422→$('story-next').onclick = () => { storyStep++; focusStory(); };
+   423→$('story-skip').onclick = () => { storyStep = scenes.length; focusStory(); };
+   424→$('story-return').onclick = () => { storyStep = null; replaying = false; render(); };
+   425→$('replay-story').onclick = () => { replaying = true; storyStep = 0; focusStory(); };
+   426→$('change-hero').onclick = () => run(async () => {
+   427→  $('class-board').hidden = true; selectedId = null; state = {}; storyStep = null; $('feedback').textContent = ''; render();
+   428→});
+   429→$('new-hero').onclick = () => { replaying = false; storyStep = 0; $('hero-name').value = ''; focusStory(); };
+   430→$('show-invite').onclick = () => { $('join-class').hidden = false; $('student-invite').focus(); };
+   431→form('hero-introduction', async () => {
+   432→  const name = $('hero-name').value.trim();
+   433→  if (!name) throw new Error('نام قهرمانت را بنویس.');
+   434→  pendingCreation = await local.prepareOperation(operationKey('create'), { ...request(), displayName: name, avatar: $('hero-avatar').value });
+   435→  renderStory();
+   436→  const created = await api('createStudent', pendingCreation);
+   437→  const result = await api('getEntry', { schemaVersion: 1 }); profiles = result.profiles;
+   438→  const profile = profiles.find(profile => profile.studentId === created.studentId);
+   439→  if (!profile) throw new Error('پرونده ثبت شد؛ برای بازیابی فهرست دوباره تلاش کن.');
+   440→  await activateProfile(profile);
+   441→  await local.put(operationKey('create'), null); pendingCreation = null;
+   442→  notice(profile.displayName + '، از اینجا به بعد قهرمان داستان خودت هستی.');
+   443→});
+   444→form('create-class', async () => {
+   445→  const result = await api('createClass', { ...request(), name: $('class-name').value.trim(), policy: { leaderboard: 'off', membership: $('membership').value } });
+   446→  await save({ classId: result.classId, className: result.name }); render(); await refreshClass(); await refreshTeacherClasses(); notice('کلاس ساخته شد. اکنون دعوت دانش‌آموز را بسازید.');
+   447→});
+   448→form('open-class', async () => {
+   449→  const classId = $('open-class-id').value.trim(); await api('getClass', { schemaVersion: 1, classId }); await save({ ...state, classId }); render(); await refreshClass(); await refreshTeacherClasses();
+   450→});
+   451→$('issue-invite').onclick = () => run(async () => {
+   452→  if (!state.classId) throw new Error('ابتدا کلاس را بسازید یا باز کنید.');
+   453→  const result = await api('issueInvite', { ...request(), classId: state.classId, expiresInSeconds: 86400, maxUses: 40 });
+   454→  $('invite-token').value = result.token;
+   455→  const link = new URL(location.origin + location.pathname); link.searchParams.set('invite', result.token); $('invite-link').value = link.href;
+   456→  notice('دعوت برای ۲۴ ساعت و حداکثر ۴۰ عضویت آماده است؛ فقط برای دانش‌آموزان همین کلاس بفرستید.');
+   457→});
+   458→$('copy-invite').onclick = () => run(async () => { await navigator.clipboard.writeText($('invite-token').value); notice('دعوت کپی شد.'); });
+   459→$('copy-invite-link').onclick = () => run(async () => { if (!$('invite-link').value) throw new Error('ابتدا دعوت را بسازید.'); await navigator.clipboard.writeText($('invite-link').value); notice('پیوند ورود به کلاس کپی شد.'); });
+   460→form('join-class', async () => {
+   461→  if (state.session && state.session.status !== 'FINALIZED') throw new Error('ابتدا تمرین فعلی را تمام کن؛ دعوتت را بعد از آن وارد کن.');
+   462→  const operation = operationKey('join:' + selectedId);
+   463→  const input = await local.prepareOperation(operation, { ...request(), token: $('student-invite').value.trim(), studentId: selectedId });
+   464→  $('student-invite').value = input.token;
+   465→  let result;
+   466→  try { result = await api('joinStudentClass', input); }
+   467→  catch (error) {
+   468→    if (['INVITE_EXPIRED', 'INVALID_PAYLOAD', 'FORBIDDEN'].includes(error.code)) await local.put(operation, null);
+   469→    throw error;
+   470→  }
+   471→  const entry = await api('getEntry', { schemaVersion: 1 }); profiles = entry.profiles;
+   472→  await save({ ...state, classId: result.classId, membershipStatus: result.status });
+   473→  await local.put(operation, null); await local.put('entry-invite:' + actor.uid, null);
+   474→  $('student-invite').value = ''; render(); await refreshMembership();
+   475→});
+   476→$('check-membership').onclick = () => run(refreshMembership);
+   477→form('start-session', async () => {
+   478→  if ((await local.pending(actor.uid)).some(command => command.stateKey === key())) throw new Error('پاسخ‌های منتظر این پرونده را پیش از فعالیت تازه ارسال کن.');
+   479→  if (state.session && state.session.status !== 'FINALIZED') throw new Error('ابتدا تمرین فعلی را تمام کن.');
+   480→  const operation = operationKey('start:' + selectedId);
+   481→  const input = await local.prepareOperation(operation, { ...request(), studentId: selectedId, activity: screen === 'missions' ? 'mission' : 'practice', sectorId: Number($('sector').value), ...($('activity-context').value === 'class' ? { classId: state.classId } : {}) });
+   482→  let result;
+   483→  try { result = await api('startActivity', input); }
+   484→  catch (error) { if (['INVALID_PAYLOAD', 'FORBIDDEN'].includes(error.code)) await local.put(operation, null); throw error; }
+   485→  await save({ ...state, session: { ...result, answers: {}, receipts: {} } }); showingFlight = true; render(); if (result.activity !== 'mission') $('answer').focus();
+   486→  $('answer-deck').dataset.reaction = '';
+   487→  screen = result.activity === 'mission' ? 'missions' : 'practice'; choiceKey = null;
+   488→  await local.put(operation, null); render(); notice(result.activity === 'mission' ? 'مأموریت شروع شد؛ از میان کارت‌ها پاسخ را انتخاب کن.' : 'تمرین شروع شد؛ با آرامش فکر کن.');
+   489→  $('practice').scrollIntoView({ block: 'start' });
+   490→});
+   491→form('answer-form', async () => {
+   492→  const text = number($('answer').value.trim());
+   493→  if (!/^-?\d{1,5}$/.test(text) || Math.abs(Number(text)) > 10000) throw new Error('پاسخ را با عدد تا ۱۰۰۰۰ وارد کن.');
+   494→  await submitAnswer(Number(text));
+   495→});
+   496→async function submitAnswer(value, expectedQuestionId) {
+   497→  const session = state.session;
+   498→  const question = session.questions.find(question => !session.answers[question.questionId]);
+   499→  if (!question || session.status === 'FINALIZED' || (expectedQuestionId && question.questionId !== expectedQuestionId)) return;
+   500→  const attempt = { eventId: 'evt_' + crypto.randomUUID(), questionId: question.questionId, answer: value, responseMs: Math.min(3600000, Math.max(0, Math.round(performance.now() - questionShownAt))), clientOccurredAt: new Date().toISOString() };
+   501→  const input = { ...request(), sessionId: session.sessionId, writerEpoch: session.writerEpoch, attempts: [attempt] };
+   502→  const next = structuredClone(state); next.session.answers[question.questionId] = attempt;
+   503→  await local.enqueue(key(), next, { uid: actor.uid, studentId: selectedId, input }); state = next;
+   504→  const correct = value === question.f1 * question.f2;
+   505→  $('answer-deck').dataset.reaction = correct ? 'correct' : 'review';
+   506→  sound(correct ? 'correct' : 'review');
+   507→  $('answer').value = ''; $('feedback').textContent = value === question.f1 * question.f2 ? 'آفرین! پاسخ روی این دستگاه ذخیره شد؛ در انتظار تأیید.' : 'پاسخ درست ' + fa(question.f1 * question.f2) + ' بود. این سؤال را دوباره مرور کن؛ پاسخ تو برای ارسال ذخیره شد.';
+   508→  render(); if (session.activity !== 'mission') $('answer').focus(); await flush();
+   509→}
+   510→$('sync').onclick = () => run(() => flush(true));
+   511→$('finalize').onclick = () => run(async () => {
+   512→  await flush();
+   513→  if ((await local.pending(actor.uid)).some(command => command.input.sessionId === state.session.sessionId)) throw new Error('همهٔ پاسخ‌های این نوبت هنوز تأیید نشده‌اند؛ دوباره ارسال کن.');
+   514→  const operation = operationKey('finish:' + state.session.sessionId);
+   515→  const input = await local.prepareOperation(operation, { ...request(), sessionId: state.session.sessionId, writerEpoch: state.session.writerEpoch });
+   516→  const result = await api('finalizeSession', input);
+   517→  await save({ ...state, stationRecords: keepStationRecord(state.stationRecords || [], state.session, result), session: { ...state.session, status: result.status, score: result.score } }); render(); sound('finish'); notice('تمرینت در پرونده ثبت شد.');
+   518→  await local.put(operation, null);
+   519→  notice(state.session.activity === 'mission' ? 'نتیجهٔ مأموریت تأیید شد؛ رکورد و نشان‌ها را در گنجینه ببین.' : 'تمرینت در سابقهٔ آموزشی ثبت شد.');
+   520→});
+   521→$('logout').onclick = () => run(async () => {
+   522→  if ((await local.pending(actor.uid)).length) throw new Error('پیش از خروج، پاسخ‌های منتظر را همگام کن.');
+   523→  if (auth?.currentUser?.isAnonymous && !window.confirm('ورود دوباره به همین پرونده پس از خروج از حساب ناشناس، هنوز در این پیش‌نمایش فراهم نیست. خارج می‌شوی؟')) return;
+   524→  if (auth) await authSdk.signOut(auth);
+   525→  $('class-board').hidden = true; $('board-entries').replaceChildren(); teacherClass = null;
+   526→  sessionStorage.removeItem('v9-local-token'); actor = null; tokenProvider = null; state = {}; profiles = []; selectedId = null; storyStep = null;
+   527→  $('landing-intro').hidden = false;
+   528→  $('hero-name').value = ''; $('student-invite').value = ''; $('workspace').hidden = true; $('login').hidden = false; notice('از حساب خارج شدی. پاسخ‌های ارسال‌نشده برای همین حساب محفوظ‌اند.');
+   529→});
+   530→window.addEventListener('online', () => run(flush));
+   531→document.addEventListener('visibilitychange', () => { if (!document.hidden) run(flush); });
+   532→setInterval(() => { if (actor && !actor.teacher && !document.hidden) run(flush); }, 15000);
+   533→
+   534→run(async () => {
+   535→  local = await openLocal();
+   536→  let meta;
+   537→  try {
+   538→    notice('در حال اتصال به ایستگاه…');
+   539→    meta = await connectApi(base, { onWaiting: () => notice('ایستگاه در حال بیدارشدن است؛ اتصال دوباره بررسی می‌شود…') });
+   540→  } catch {
+   541→    $('unconfigured').hidden = false; notice('برای این پیش‌نمایش، سرور هنوز در دسترس نیست.'); return;
+   542→  }
+   543→  $('login').hidden = false;
+   544→  if (meta.mode === 'local') {
+   545→    const { accounts } = await (await fetch(base + '/api/dev/accounts')).json();
+   546→    $('local-accounts').hidden = false;
+   547→    for (const account of accounts) {
+   548→      const button = document.createElement('button'); button.textContent = account.name;
+   549→      button.onclick = () => run(async () => { await signIn(async () => account.token); sessionStorage.setItem('v9-local-token', account.token); });
+   550→      $('account-buttons').append(button);
+   551→    }
+   552→    notice('محیط محلی آماده است؛ یک حساب آزمایشی انتخاب کن.');
+   553→    const token = sessionStorage.getItem('v9-local-token');
+   554→    if (accounts.some(account => account.token === token)) await signIn(async () => token);
+   555→    return;
+   556→  }
+   557→  if (!config.firebase) throw new Error('تنظیمات ورود امن این پیش‌نمایش هنوز آماده نیست.');
+   558→  try { ({ auth, sdk: authSdk } = await loadFirebaseLogin(config.firebase)); }
+   559→  catch (error) { notice(loginError(error), true); return; }
+   560→  $('firebase-login').hidden = false;
+   561→  $('google-login').onclick = () => {
+   562→    let pending;
+   563→    try { pending = googleLogin(auth, authSdk); }
+   564→    catch (error) { notice(loginError(error), true); return; }
+   565→    // Attach the rejection handler immediately, even if another task is queued.
+   566→    const outcome = Promise.resolve(pending).then(() => ({ ok: true }), error => ({ error }));
+   567→    run(async () => {
+   568→      const result = await outcome;
+   569→      if (result.error) { notice(loginError(result.error), true); return; }
+   570→      if (!auth.currentUser) { notice('ورود تأیید نشد؛ دوباره تلاش کن.', true); return; }
+   571→      await signIn(() => auth.currentUser.getIdToken());
+   572→    });
+   573→  };
+   574→  form('email-form', async () => {
+   575→    const email = $('email').value.trim();
+   576→    try {
+   577→      if (authSdk.isSignInWithEmailLink(auth, location.href)) {
+   578→        await authSdk.signInWithEmailLink(auth, email, location.href);
+   579→        const clean = new URL(location.href);
+   580→        for (const param of ['apiKey', 'oobCode', 'mode', 'lang']) clean.searchParams.delete(param);
+   581→        history.replaceState(null, '', clean.pathname + clean.search + clean.hash);
+   582→        await signIn(() => auth.currentUser.getIdToken());
+   583→      } else {
+   584→        await authSdk.sendSignInLinkToEmail(auth, email, { url: location.origin + location.pathname, handleCodeInApp: true });
+   585→        notice('پیوند ورود ارسال شد؛ آن را باز کن و ایمیلت را تأیید کن.');
+   586→      }
+   587→    } catch (error) {
+   588→      if (error.code?.startsWith('auth/')) notice(loginError(error), true);
+   589→      else throw error;
+   590→    }
+   591→  });
+   592→  $('anonymous-login').onclick = () => run(async () => {
+   593→    try { await authSdk.signInAnonymously(auth); }
+   594→    catch (error) { notice(loginError(error), true); return; }
+   595→    await signIn(() => auth.currentUser.getIdToken());
+   596→  });
+   597→  await auth.authStateReady();
+   598→  if (auth.currentUser) await signIn(() => auth.currentUser.getIdToken());
+   599→  else notice('با ایمیل معلم یا دعوت دانش‌آموز وارد شوید.');
+   600→});
+   601→

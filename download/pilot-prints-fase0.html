@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بستهٔ چاپی پایلوت فاز ۰ — کارگاه ضرب v10.3.0-beta</title>
+<style>
+  :root{
+    --ink:#1c1917; --muted:#57534e; --line:#d6d3d1;
+    --ok:#047857; --okbg:#ecfdf5; --warn:#b45309; --warnbg:#fffbeb;
+    --head:#f5f5f4;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#e7e5e4; color:var(--ink);
+    font-family:"Vazirmatn","IRANSans",Tahoma,"Segoe UI",sans-serif;
+    font-size:13px; line-height:1.9;
+  }
+  .page{
+    width:210mm; min-height:296mm; margin:10px auto; padding:14mm 13mm;
+    background:#fff; box-shadow:0 2px 10px rgba(0,0,0,.15);
+    page-break-after:always; position:relative;
+  }
+  @media print{
+    body{background:#fff}
+    .page{margin:0; box-shadow:none; width:auto; min-height:auto; padding:10mm 8mm}
+    .no-print{display:none!important}
+  }
+  .phead{border-bottom:3px double var(--ink); padding-bottom:6px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:baseline; gap:8px}
+  .phead h1{font-size:17px; margin:0}
+  .phead .tag{font-size:11px; color:var(--muted)}
+  .foot{position:absolute; bottom:8mm; right:13mm; left:13mm; border-top:1px solid var(--line); padding-top:4px; font-size:10px; color:var(--muted); display:flex; justify-content:space-between}
+  h2{font-size:14px; margin:14px 0 6px; background:var(--head); padding:4px 8px; border-right:4px solid var(--ok); border-radius:3px}
+  h2.amber{border-right-color:var(--warn)}
+  p{margin:4px 0}
+  .hint{font-size:11px; color:var(--muted)}
+  .form-row{display:flex; gap:10px; align-items:baseline; margin:7px 0; flex-wrap:wrap}
+  .blank{flex:1; min-width:90px; border-bottom:1.5px dotted var(--ink); min-height:20px}
+  .blank.small{min-width:50px; flex:0 0 60px}
+  table{width:100%; border-collapse:collapse; margin:8px 0}
+  th,td{border:1px solid var(--line); padding:5px 7px; text-align:right; vertical-align:top}
+  th{background:var(--head); font-size:12px}
+  .okrow td{background:var(--okbg)}
+  .warnrow td{background:var(--warnbg)}
+  .check{display:inline-block; width:14px; height:14px; border:1.5px solid var(--ink); border-radius:2px; vertical-align:middle; margin-left:4px}
+  .mono{font-family:ui-monospace,Consolas,monospace; direction:ltr; display:inline-block; font-size:11.5px}
+  .box{border:1.5px solid var(--ink); border-radius:6px; padding:8px 10px; margin:10px 0}
+  .box.ok{background:var(--okbg); border-color:var(--ok)}
+  .q{border:1px solid var(--line); border-radius:6px; padding:7px 10px; margin:8px 0}
+  .q .stem{font-weight:700}
+  .q .ans{color:var(--ok); font-weight:700}
+  .q .opts{margin:3px 18px 0 0; padding:0; list-style:none; font-size:12px}
+  .q .opts li::before{content:"◻ "; color:var(--muted)}
+  .sig{display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-top:18px; padding-top:8px; border-top:1px solid var(--line); font-size:12px}
+  .sig .line{flex:1; border-bottom:1.5px dotted var(--ink); min-height:22px}
+  .note{font-size:10.5px; color:var(--muted); border-right:2px solid var(--warn); padding-right:8px; margin:6px 0}
+  .twocol{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ صفحهٔ ۱ — فرم پنج سؤال گیت فاز ۰ ═══════════ -->
+<section class="page" id="p1">
+  <div class="phead">
+    <h1>فرم گیت فاز ۰ — پنج سؤال</h1>
+    <span class="tag">کارگاه ضرب · v10.3.0-beta · KH-G3-MATH v0.7</span>
+  </div>
+
+  <p class="hint">منبع سؤال‌ها: شیت «تقویم فازها» — رجیستری ۱۸ خشاب v1.1. هیچ خانه‌ای با هوش مصنوعی پر نمی‌شود؛ فقط از جلسهٔ واقعی.</p>
+
+  <div class="form-row"><span>تاریخ جلسه:</span><span class="blank small"></span><span>کلاس/سال تحصیلی:</span><span class="blank"></span><span>تعداد دانش‌آموز:</span><span class="blank small"></span></div>
+
+  <h2>سؤال ۱ — دستگاه در کلاس؟</h2>
+  <div class="form-row"><span>تعداد دستگاه قابل استفاده:</span><span class="blank small"></span><span>مرورگر:</span><span class="blank"></span></div>
+  <div class="form-row"><span>آفلاین کار کرد؟</span><span><span class="check"></span>بله <span class="check"></span>خیر</span><span>صدا مشکل داشت؟</span><span><span class="check"></span>نداشت <span class="check"></span>داشت</span></div>
+
+  <h2>سؤال ۲ — دقیقهٔ قابل‌استفاده؟</h2>
+  <div class="form-row"><span>طول جلسه:</span><span class="blank small"></span> دقیقه <span>خستگی/سرد شدن در دقیقهٔ:</span><span class="blank small"></span></div>
+  <div class="form-row"><span>مناسب برای:</span><span><span class="check"></span>کلاس <span class="check"></span>تمرین خانگی</span></div>
+
+  <h2>سؤال ۳ — الگوی استفاده؟</h2>
+  <div class="form-row"><span><span class="check"></span>تک‌به‌تک <span class="check"></span>ایستگاه/چرخشی <span class="check"></span>کل کلاس <span class="check"></span>خانگی</span></div>
+  <div class="form-row"><span>دلیل / شرح:</span><span class="blank"></span></div>
+
+  <h2>سؤال ۴ — خطاهای واقعی با کدهای اطلس هم‌خوان؟ <span class="hint">(با برگهٔ مشاهدهٔ خطا — صفحهٔ ۳)</span></h2>
+  <div class="form-row"><span>شمار کل مشاهدهٔ خطا:</span><span class="blank small"></span><span>هم‌خوان با کد اطلس:</span><span class="blank small"></span><span>بدون کد (جدید):</span><span class="blank small"></span></div>
+  <div class="box ok">معیار سبز: حداقل <b>۳</b> خطای واقعی دقیقاً با کد اطلس هم‌خوان شد. <span class="check"></span> برقرار</div>
+
+  <h2>سؤال ۵ — تمایل به پرداخت؟</h2>
+  <div class="form-row"><span><span class="check"></span>رایگان قابل قبول <span class="check"></span>ماهانه:</span><span class="blank small"></span><span><span class="check"></span>یک‌باره:</span><span class="blank small"></span></div>
+  <div class="form-row"><span>شرط پرداخت (چی باید باشد تا پرداخت کنی؟):</span><span class="blank"></span></div>
+
+  <div class="box">
+    <b>حکم گیت فاز ۰:</b>
+    هر ۵ سؤال پاسخ‌داده شد <span class="check"></span> —
+    سؤال ۴ سبز شد <span class="check"></span> —
+    تصمیم: <span class="check"></span> فاز ۱ (S1 با کتاب فیزیکی) باز شود
+    <span class="check"></span> بازنگری محصول
+    <span class="check"></span> توقف
+  </div>
+
+  <div class="sig"><span>معلم (امضا):</span><span class="line"></span><span>تاریخ:</span><span class="line" style="flex:0 0 30mm"></span></div>
+
+  <div class="foot"><span>کیت پایلوت گام ۳ — صفحهٔ ۱ از ۳</span><span>سند مرجع: download/pilot-kit-phase0-gam3.md</span></div>
+</section>
+
+<!-- ═══════════ صفحهٔ ۲ — برگهٔ تأیید انسانی الف ═══════════ -->
+<section class="page" id="p2">
+  <div class="phead">
+    <h1>برگهٔ تأیید انسانی الف — خشاب KH-G3-MATH v0.7</h1>
+    <span class="tag">موج الف · v10.3.0-beta</span>
+  </div>
+
+  <p class="hint">قاعده: هیچ مدل زبانی حق تصدیق صفحه از حافظه را ندارد؛ این برگه فقط با کتاب فیزیکیِ هم‌چاپ پر می‌شود. (پایهٔ سوم ابتدایی — درس ریاضی، کد کتاب ۳۰۵۰۵۵، چاپ ۱۲)</p>
+
+  <h2>الف) هویت چاپ — عیناً از کتاب بنویسید</h2>
+  <div class="form-row"><span>چاپ شماره:</span><span class="blank small"></span><span>سال تحصیلی:</span><span class="blank small"></span><span>تأییدکننده:</span><span class="blank"></span></div>
+
+  <h2 class="amber">ب) صفحه‌های «؟» نقشهٔ کتاب — شمارهٔ صفحهٔ واقعی را بنویسید</h2>
+  <table>
+    <tr><th>درس</th><th>عنوان</th><th>پیشنهاد AI</th><th>صفحهٔ واقعی کتاب</th><th>تأیید</th></tr>
+    <tr><td class="mono">L-A1</td><td>عددهای چهاررقمی</td><td>۲ تا ۳۵</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-A2</td><td>جمع و تفریق عددهای چهاررقمی</td><td>؟</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-B1</td><td>محور و کسر</td><td>≈۳۶ تا ۵۵</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-C1</td><td>هندسه: شکل‌ها/محیط/تقارن</td><td>؟</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-E1</td><td>اندازه‌گیری (عددهای مرکب)</td><td>؟</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-F1</td><td>آمار و احتمال</td><td>؟</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-D1</td><td>تقسیم بدون باقیمانده</td><td>۷۳ به بعد</td><td></td><td><span class="check"></span></td></tr>
+    <tr><td class="mono">L-D2</td><td>تقسیم با باقیمانده</td><td>۱۴۵ به بعد</td><td></td><td><span class="check"></span></td></tr>
+  </table>
+
+  <h2 class="amber">ج) تصمیم روی دو کد پیشنهادی جدید — با یک نشانهٔ واقعی از کلاس/کتاب</h2>
+  <table>
+    <tr><th>کد</th><th>نشانهٔ ادعایی</th><th>در کتاب/کلاس دیدید؟</th><th>پذیرش</th></tr>
+    <tr class="warnrow"><td class="mono">E_BORROW_MISS</td><td>«۵۲−۲۷ را ۳۵ می‌نویسد»</td><td></td><td><span class="check"></span>پذیرش <span class="check"></span>رد<br><span class="check"></span>ویرایش نشانه: ____________</td></tr>
+    <tr class="warnrow"><td class="mono">E_ZERO_PLACE_MISS</td><td>«۴۰۷۰ را ۴۷۰ می‌خواند»</td><td></td><td><span class="check"></span>پذیرش <span class="check"></span>رد<br><span class="check"></span>ویرایش نشانه: ____________</td></tr>
+  </table>
+
+  <h2 class="amber">د) سؤال‌های موج الف — با جلسهٔ پایلوت و کتاب سبز شوند</h2>
+  <div class="form-row">
+    <span>Q-201 <span class="check"></span></span><span>Q-202 <span class="check"></span></span><span>Q-203 <span class="check"></span></span><span>Q-204 <span class="check"></span></span>
+    <span>Q-205 <span class="check"></span></span><span>Q-206 <span class="check"></span></span><span>Q-112 <span class="check"></span></span>
+  </div>
+  <p class="hint">هم‌خوانی با اسکریپت پایلوت: سند pilot-kit-phase0-gam3.md بخش ۳ (۷ سؤال با معنای هر گزینهٔ انحرافی).</p>
+
+  <h2>هـ) امضا</h2>
+  <div class="sig"><span>معلم هم‌ساز (نام و امضا):</span><span class="line"></span><span>تاریخ:</span><span class="line" style="flex:0 0 30mm"></span></div>
+
+  <div class="foot"><span>کیت پایلوت گام ۳ — صفحهٔ ۲ از ۳</span><span>متن مرجع: download/audit-report-waveA-v0.7.md بخش ۳</span></div>
+</section>
+
+<!-- ═══════════ صفحهٔ ۳ — برگهٔ مشاهدهٔ خطا + اسکریپت سؤال‌ها ═══════════ -->
+<section class="page" id="p3">
+  <div class="phead">
+    <h1>برگهٔ مشاهدهٔ خطا + اسکریپت ۷ سؤال</h1>
+    <span class="tag">۲۰ کد اطلس = ۱۲ تأیید + ۸ نیاز به تأیید</span>
+  </div>
+
+  <h2>مشاهدهٔ آزاد (حین بازی) و تشخیص (حین اسکریپت) — هر مشاهده یک خط</h2>
+  <table>
+    <tr><th style="width:31%">کد تأییدشده</th><th>نشانهٔ رفتاری</th><th style="width:12%">شمارش</th><th style="width:31%">کد نیازمند تأیید</th><th>نشانهٔ رفتاری</th><th style="width:12%">شمارش</th></tr>
+    <tr><td>ضرب در صفر</td><td>۷×۰ را ۷ یا ۱ می‌نویسد</td><td></td><td class="warnrow">فراموشی گره</td><td>۳۵۸+۲۴۶ را ۵۹۴ می‌نویسد</td><td></td></tr>
+    <tr><td>ضرب در یک</td><td>۹×۱ را ۱ می‌نویسد</td><td></td><td class="warnrow">خلط دسته/در هر دسته</td><td>شکل→ضرب و ضرب→شکل قاطی</td><td></td></tr>
+    <tr><td>جمع به جای ضرب</td><td>۳×۳ را ۶ می‌نویسد</td><td></td><td class="warnrow">جمع ناهمسان×</td><td>«کدام جمع تکراری ضرب می‌شود؟» گیر</td><td></td></tr>
+    <tr><td>لغزش صفر</td><td>۶×۱۰ را ۶۰۰ یا ۶ می‌نویسد</td><td></td><td class="warnrow">عمل‌جایگزین در تقسیم</td><td>۱۸÷۶ را ۱۰۸ می‌نویسد</td><td></td></tr>
+    <tr><td>شکست جابه‌جایی</td><td>بعد از پذیرش ۴×۷، ۷×۴ غلط</td><td></td><td class="warnrow">بازیابی غلط فکت</td><td>۵×۲۰ را ۲۵ می‌گوید</td><td></td></tr>
+    <tr><td>جا ماندن جزء چندرقمی</td><td>۳×۲۴ را ۱۲ می‌نویسد</td><td></td><td class="warnrow">نادیده‌گرفتن باقیمانده</td><td>۱۹÷۴ را ۵ جعبهٔ کامل می‌گوید</td><td></td></tr>
+    <tr><td>جا ماندن جزء دوم شکستن</td><td>۶×۸ را ۳۰ می‌نویسد</td><td></td><td class="warnrow">جاافتادن قرض</td><td>۵۲−۲۷ را ۳۵ می‌نویسد</td><td></td></tr>
+    <tr><td>بیش‌شماری جهش</td><td>۶×۴ را ۲۸ می‌گوید</td><td></td><td class="warnrow">حذف صفر جایگاه</td><td>۴۰۷۰ را ۴۷۰ می‌خواند/می‌نویسد</td><td></td></tr>
+    <tr><td>کم‌شماری جهش</td><td>۶×۴ را ۲۰ می‌گوید</td><td></td><td class="warnrow" colspan="5" style="text-align:right">خطای جدول‌نوشته: ______________________________</td></tr>
+    <tr><td>پاسخ‌های بی‌ربط</td><td>پاسخ تصادفی بی‌ربط با صورت</td><td></td><td class="warnrow" colspan="5" style="text-align:right">خطای جدول‌نوشته: ______________________________</td></tr>
+    <tr><td>لغزش بعد از تسلط</td><td>بلد است ولی غلط می‌زند</td><td></td><td class="warnrow" colspan="5" style="text-align:right">خطای جدول‌نوشته: ______________________________</td></tr>
+    <tr><td>دوبرابر کردن</td><td>به‌جای ضرب، دوبرابر/نصف</td><td></td><td class="warnrow" colspan="5" style="text-align:right">خطای جدول‌نوشته: ______________________________</td></tr>
+  </table>
+
+  <h2>اسکریپت تشخیصی — گزینهٔ انتخابی بچه را علامت بزن (بدون آموزش حین سؤال)</h2>
+  <div class="twocol">
+    <div class="q"><span class="stem">Q-201.</span> «۱۲ شیرینی را به‌طور مساوی بین ۳ بشقاب می‌گذاریم؛ هر بشقاب چند شیرینی دارد؟»
+      <ul class="opts"><li>۳</li><li class="ans">۴ ✓</li><li>۹</li><li>۱۵</li></ul>
+    </div>
+    <div class="q"><span class="stem">Q-202.</span> «۱۸ مداد را در جعبه‌های ۶تایی می‌گذاریم؛ چند جعبه لازم است؟»
+      <ul class="opts"><li>۶</li><li class="ans">۳ ✓</li><li>۲۴</li><li>۱۰۸</li></ul>
+    </div>
+    <div class="q"><span class="stem">Q-203.</span> «۳×۵=۱۵؛ پس ۱۵÷۳=؟»
+      <ul class="opts"><li class="ans">۵ ✓</li><li>۳</li><li>۱۲</li><li>۴۵</li></ul>
+    </div>
+    <div class="q"><span class="stem">Q-204.</span> «۱۹ مهره را در جعبه‌های ۴تایی می‌گذاریم؛ چند جعبهٔ کامل پر می‌شود؟»
+      <ul class="opts"><li>۳</li><li class="ans">۴ ✓</li><li>۵</li><li>۷</li></ul>
+    </div>
+    <div class="q"><span class="stem">Q-205.</span> «کدام خواندن برای عدد ۴۰۷۰ درست است؟»
+      <ul class="opts"><li>چهار هزار و هفت</li><li class="ans">چهار هزار و هفتاد ✓</li><li>چهارصد و هفتاد</li><li>چهار هزار و هفتصد</li></ul>
+    </div>
+    <div class="q"><span class="stem">Q-206.</span> «۳۵۸ + ۲۴۶ = ؟»
+      <ul class="opts"><li>۵۹۴</li><li class="ans">۶۰۴ ✓</li><li>۶۱۴</li><li>۵۸۴</li></ul>
+    </div>
+    <div class="q" style="grid-column:1/-1"><span class="stem">Q-112.</span> (روی تخته: ۲۶×۳ ستونی، یک‌ها ۳×۶=۱۸) «گره چند است و کجا می‌رود؟»
+      <ul class="opts"><li class="ans">۱؛ به ستون ده‌ها ✓</li><li>۸؛ همان‌جا می‌ماند</li><li>۱۸؛ به ده‌ها</li><li>گره ندارد</li></ul>
+    </div>
+  </div>
+  <p class="note">معنای هر گزینهٔ انحرافی (کد مربوط) در سند pilot-kit-phase0-gam3.md بخش ۳ آمده است. بعد از جلسه: گزینه‌های انتخابی را با چیپ موتور در تب «بانک تمرین خشاب» داشبورد مقایسه کن.</p>
+
+  <div class="sig"><span>ثبت‌کننده:</span><span class="line"></span><span>تاریخ:</span><span class="line" style="flex:0 0 30mm"></span></div>
+
+  <div class="foot"><span>کیت پایلوت گام ۳ — صفحهٔ ۳ از ۳</span><span>کارگاه ضرب · v10.3.0-beta · آفلاین و RTL</span></div>
+</section>
+
+</body>
+</html>

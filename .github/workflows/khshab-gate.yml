@@ -1,0 +1,92 @@
+# دروازهٔ خودکار خط تولید محتوا — Task 61 (گام ۲) + W7/BP-006 (پایتست ایجنت + پین openpyxl)
+# هیچ تحویل محتوایی از شاخه‌های arena/** یا کامیت روی v10.3-beta بدون عبور از گیت‌های
+# ماشینی زیر پذیرفته نمی‌شود. همهٔ مراحل fail-closed هستند: نخستین شکست = توقف.
+name: khshab-gate
+
+on:
+  push:
+    branches:
+      - v10.3-beta
+      - main
+      - 'arena/**'
+  pull_request:
+    branches:
+      - v10.3-beta
+      - main
+
+jobs:
+  gate:
+    name: گیت ماشینی خشاب (حق‌نشر + مانیفست + موتور + مبدل)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: دریافت مخزن
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: نصب Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: نصب Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # پین openpyxl==3.1.5 — قرارداد بیت‌به‌بیت خروجی اکسل (BP-006/W7، هم‌راستا با پین آرنا)
+      - name: وابستگی‌های ایجنت (pytest + openpyxl پین‌شده + pymupdf)
+        run: pip install --quiet pytest 'openpyxl==3.1.5' pymupdf
+
+      # ── گیت ۰: حق‌نشر — هیچ PDF/تصویر کتاب/upload داخل Git (Task 60-Pre) ──
+      - name: گارد حق‌نشر Git (G0)
+        run: |
+          python3 -c "
+          from authoring.agent.git_guard import check_git_safety
+          r = check_git_safety('.')
+          print(r.summary)
+          assert r.status == 'PASS', r.summary
+          "
+
+      # ── گیت ۰-ب: مرز مالکیت نرم‌افزار (§9) ──
+      - name: مرز مالکیت نرم‌افزار (G0B — §9)
+        run: |
+          python3 -c "
+          from authoring.agent.git_guard import check_ownership_boundary
+          r = check_ownership_boundary('.')
+          print(r.summary)
+          assert r.status != 'FAIL', r.summary
+          "
+
+      # ── گیت ۱: خودسازگاری مانیفست OFFICIAL-HEADS (Task 66) ──
+      - name: مانیفست سرهای رسمی (OFFICIAL-HEADS)
+        run: python3 -m authoring.agent.cli heads --verify --repo-root .
+
+      # ── گیت ۱-ج (W7/BP-006): پایتست ایجنت — مانیفست ۶ خانواده + رجیستری موج + smoke رسمی ──
+      - name: پایتست ایجنت (authoring/tests)
+        run: python3 -m pytest authoring/tests -q
+
+      # ── وابستگی‌های اجرایی ──
+      - name: وابستگی‌های مبدل رسمی (xlsx)
+        working-directory: tools/cartridge-converter
+        run: npm ci --no-audit --no-fund
+
+      - name: وابستگی‌ها و تست‌های موتور بازی
+        working-directory: public/math-game
+        run: npm ci --no-audit --no-fund && npm test
+
+      # ── گیت ۲: مبدل رسمی روی سرهای اعلام‌شده (۰ قرمز الزامی) ──
+      - name: check-wave روی سر G2 (self-baseline)
+        run: |
+          python3 -m authoring.agent.cli check-wave \
+            --candidate public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx \
+            --base public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx \
+            --official public/math-game/authoring/khshab-G2-MATH_v0.5.xlsx
+
+      - name: check-wave روی سر G3 (self-baseline)
+        run: |
+          python3 -m authoring.agent.cli check-wave \
+            --candidate public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx \
+            --base public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx \
+            --official public/math-game/authoring/khshab-G3-MATH_v0.7.xlsx

@@ -1,0 +1,749 @@
+{
+  "schema": "khshab.blueprints/v1",
+  "version": 32,
+  "updated_at": "2026-10-22T23:41:21.459Z",
+  "updated_by": "agent:z",
+  "blueprints": [
+    {
+      "id": "BP-000",
+      "title": "ساخت سیستم مرکزی مدیریت (پروتکل + تابلو + کارگاه‌بان v2)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "done",
+      "priority": 1,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک — پیام چت: «هر دو طبق پروتکل‌ها و سیستم مرکزی مدیریت می‌شوید؛ نقشه‌های فنی با یک تایید من توسط ربات‌های درونی جلو بروند»",
+      "approved_at": "2026-10-22T18:30:00Z",
+      "dispatched_at": "2026-10-22T18:31:00Z",
+      "delivered_at": "2026-10-22T18:30:00Z",
+      "verified_at": "2026-10-22T18:35:00Z",
+      "context": "تصویب سیاست: آرنا = محتوا روی arena/**، Z.ai = برنامهٔ اصلی، مدیریت مشترک با پروتکل مرکزی و تأیید واحد مالک.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "نوشتن GOVERNANCE.md — پروتکل مرکزی v1.0.0",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "ساخت blueprints/ با رجیستری و نقشه‌های اولیه (BP-000..BP-005)",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "ارتقای کارگاه‌بان به v2.0.0: تابلوی مرکزی گیت‌هاب + کانال تأیید واحد + موتور دیسپچ",
+          "automated": false
+        },
+        {
+          "id": "T4",
+          "desc": "CLI مالک/عامل‌ها: scripts/blueprint.ts",
+          "automated": false
+        },
+        {
+          "id": "T5",
+          "desc": "راه‌اندازی زنده، تأیید دیسپچ BP-000، پوش و سبز شدن CI",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "GET :3030/status کارگاه‌بان v2.0.0 را نشان دهد",
+        "تابلوی مرکزی (Issue گیت‌هاب) ساخته شده و وضعیت نقشه‌ها را زنده نشان دهد",
+        "تأیید واحد مالک روی تابلو توسط ربات ثبت و دیسپچ شود",
+        "CI (khshab-gate) روی main سبز باشد"
+      ],
+      "artifacts": [
+        "GOVERNANCE.md",
+        "blueprints/registry.json",
+        "scripts/blueprint.ts",
+        "mini-services/foreman/index.ts"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "تأیید نهایی بسته‌شدن با مالک است؛ عملکرد سیستم زنده راستی‌آزمایی شد."
+      },
+      "notes": ""
+    },
+    {
+      "id": "BP-001",
+      "title": "رفع بدهی ۶۰-bis: فیکسچر pytest ایزوله + حذف هاردکد Q-1069 از automation_suite",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 2,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی»",
+      "approved_at": "2026-10-22T18:40:00Z",
+      "dispatched_at": "2026-10-22T18:41:00Z",
+      "delivered_at": "2026-10-22T19:05:00Z",
+      "verified_at": "2026-10-22T19:06:00Z",
+      "context": "یافتهٔ Task 60: تست‌های pytest ایجنت به فضای کاری شاخهٔ آرنا وابسته‌اند و new_wave_start_qid هاردکد است (باگ دامنه برای خانواده‌های غیر G2).",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "فیکسچر pytest مستقل از فضای کاری آرنا (ساخت fixture موقت با دادهٔ کمینه)",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "خواندن new_wave_start_qid از مانیفست/پارامتر خانواده به‌جای هاردکد",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "اجرای کل pytest در محیط سندباکس و ثبت نتیجه در worklog",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "pytest بدون وابستگی به شاخهٔ آرنا سبز شود",
+        "کد هاردکد Q-1069 در سورس نباشد (rg = 0)",
+        "check-wave سرهای رسمی همچنان PASS"
+      ],
+      "artifacts": [
+        "authoring/tests/",
+        "authoring/agent/wave_registry.py",
+        "authoring/agent/wave_registry.json"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "خروجی: ۱۱/۱۱ پایتست ایزوله؛ rg=0 در فایل‌های منطق گیت (استثنای مستند: spec-of-record و قالب گزارش تحویل)؛ G2 self-baseline کامل سبز؛ G3 PASS_READY با cpa FAIL = legacy مستند AUD-06؛ JS 81/81؛ G0/G0B/heads سبز"
+      },
+      "notes": "اجرا در فاز C از چرخهٔ تأیید واحد مالک (چت، ۱۴۰۴/۰۸/۰۱)."
+    },
+    {
+      "id": "BP-002",
+      "title": "گام ۴ — سه آشکارساز خطای پروتکل v10.3 در مبدل/ایجنت رسمی",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 3,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی»",
+      "approved_at": "2026-10-22T18:40:00Z",
+      "dispatched_at": "2026-10-22T18:41:00Z",
+      "delivered_at": "2026-10-22T19:15:00Z",
+      "verified_at": "2026-10-22T19:16:00Z",
+      "context": "دستورکار ۶۰–۶۶ گام ۴ (Task 63): سه کد «پیشنهاد» ثبت‌شده در خشاب‌ها باید آشکارساز عددی Pure بگیرند؛ errors.js منجمد می‌ماند.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "طراحی و پیاده‌سازی سه آشکارساز در errors-v103.js",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "افزودن تست‌های واحد (طلایی/مرزی/اولویت/fuzz) در v10.3-cartridge.test.js",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "npm test سبز و عدم تغییر برچسب کدهای قبلی",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "سه آشکارساز با فیکسچر آزمون شوند",
+        "CI سبز با آشکارسازهای فعال"
+      ],
+      "artifacts": [
+        "public/math-game/src/v10/station/errors-v103.js",
+        "public/math-game/tests/v10.3-cartridge.test.js",
+        "public/math-game/tests/v10.3-families.test.js"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "خروجی: E_ROUND_NEAREST + E_UNIT_VALUE_CONFUSION + E_APPROX_EXACT_CONFUSION؛ زنجیرهٔ ۱۱تایی با حفظ ترتیب ۸ کد قبلی؛ npm test 87/87؛ تفکیک مسئولیت گرد-نزدیک/برش-دور مستند در تست"
+      },
+      "notes": ""
+    },
+    {
+      "id": "BP-003",
+      "title": "گام ۵ — رندرر SVG چهارده‌مدلی برای مدل‌های سؤال",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 4,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی»",
+      "approved_at": "2026-10-22T18:40:00Z",
+      "dispatched_at": "2026-10-22T18:41:00Z",
+      "delivered_at": "2026-10-22T19:30:00Z",
+      "verified_at": "2026-10-22T19:31:00Z",
+      "context": "دستورکار ۶۰–۶۶ گام ۵ (Task 64): پارسر گرامر ۷.۳ + رندرر ۱۴مدل با قفل INC-09 (شمارش المان = پارامتر عددی).",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "پیاده‌سازی parseVisualSpec + renderModelFigureSVG در model-figures.js",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "رندر نمونه‌ای ۱۴ مدل و قفل INC-09 با تست شمارش کلاس‌ها",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "۱۴ مدل بدون خطا رندر شوند",
+        "خروجی SVG در authoring/build_preview (gitignored) قابل بازبینی باشد"
+      ],
+      "artifacts": [
+        "public/math-game/src/v10/station/model-figures.js",
+        "public/math-game/tests/v10.3-model-figures.test.js"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": "خروجی: وایت‌لیست ۱۴مدلی در پارس + renderVisualColumn (فالبک متنی امن) + سیم به station/index.js؛ ۱۹ تست؛ npm test 106/106؛ نمونه‌های SVG در authoring/build_preview/model-figures/"
+      },
+      "notes": ""
+    },
+    {
+      "id": "BP-004",
+      "title": "گام ۳ — داشبورد معلم: صفحهٔ بازرسی محتوا + مُهر رأی معلم",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 5,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی»",
+      "approved_at": "2026-10-22T18:40:00Z",
+      "dispatched_at": "2026-10-22T18:19:00Z",
+      "delivered_at": "2026-10-22T18:55:00Z",
+      "verified_at": "2026-10-22T18:56:00Z",
+      "context": "دستورکار ۶۰–۶۶ گام ۳ (Task 62): معلم بدون گیت نتیجهٔ گیت‌ها و تفاوت نسخهٔ محتوا را می‌بیند و رأی تربیتی‌اش را مهر می‌کند؛ مُهر رسمی ثبت و به تابلو می‌رود.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "صفحهٔ بازرسی: مقایسهٔ نسخهٔ آرنا با سر رسمی + نتیجهٔ گیت‌ها",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "دکمهٔ مُهر معلم (تأیید/رد + توضیح) → ثبت در authoring/teacher-stamps.json",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "دیسپچ خودکار مُهر به تابلوی مرکزی توسط کارگاه‌بان",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "مُهر معلم در فایل ثبت رسمی ذخیره و روی تابلو منعکس شود",
+        "داشبورد موجود دست‌نخورده (رگرسیون صفر)"
+      ],
+      "artifacts": [
+        "src/app/api/teacher-review/",
+        "src/components/dashboard/teacher-review-tab.tsx",
+        "authoring/teacher-stamps.json",
+        "mini-services/foreman/index.ts"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "E2E زنده: مُهر آزمایشی ثبت → فایل رسمی → تابلو (#4) → پاک‌سازی تمیز. قفل SHA سر رسمی در هر رکورد مُهر."
+      },
+      "notes": ""
+    },
+    {
+      "id": "BP-005",
+      "title": "موج محتوایی بعدی آرنا — توسعهٔ محتوای کتاب درسی بر پایهٔ سرهای رسمی",
+      "lane": "content",
+      "assignee": "arena",
+      "status": "executing",
+      "priority": 6,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T18:30:00Z",
+      "approved_by": "مالک-چت: «من تایید می کنم... با چک لیست های سختگیرانه بررسی کنی»",
+      "approved_at": "2026-10-22T18:40:00Z",
+      "dispatched_at": "2026-10-22T18:19:00Z",
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "مأموریت مصوب آرنا: خشاب‌های اکسل و توسعهٔ محتوای کتب درسی. دیسپچ خودکار کارگاه‌بان به تابلو انجام شد (۱۸:۱۹).",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "اعلام دامنهٔ موج: خانواده/نسخهٔ هدف از OFFICIAL-HEADS (یا خانوادهٔ فاقد سر)",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "ساخت خشاب vNext در authoring/ + نقشهٔ صفحهٔ همراه",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "سند تحویل + پوش روی شاخهٔ arena/** (intake خودکار کارگاه‌بان)",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "گیت کارگاه‌بان 🟢 (هم‌گام یا جدیدتر از سر رسمی — بدون INC-07)",
+        "مبدل رسمی: صفر قرمز",
+        "بازرسی دوم (Z.ai) و رأی معلم طبق مادهٔ ۷-ب"
+      ],
+      "artifacts": [
+        "authoring/khshab-G*-MATH_v*.xlsx"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "پایهٔ اجباری: فایل اعلام‌شدهٔ OFFICIAL-HEADS.json (حادثهٔ ۷ تکرارشدنی است). G2 = v0.5 (f1f339a0)، G3 = v0.7 (0e678e54)."
+      },
+      "notes": "در انتظار تحویل آرنا؛ intake خودکار کارگاه‌بان فعال است."
+    },
+    {
+      "id": "BP-006",
+      "title": "W7 آرنا — افزودن گام پایتست ایجنت به CI khshab-gate (در انتظار تأیید مالک)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 7,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T19:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T22:27:41.891Z",
+      "verified_at": "2026-10-22T22:27:41.914Z",
+      "context": "درخواست رسمی آرنا (authoring/ZAI-HANDOFF-W7-W8.fa.md @39ab27e): اجرای pytest authoring/tests روی هر ۶ سر رسمی در CI. بازرسی دوم Z.ai: ادعای «تضمین‌شده PASS» در محیط تمیز بازتولید نشد (۱۳/۱۴؛ تست بازسازی بیت‌به‌بیت v0.5 = f3140306 ≠ f1f339a0 — حساسیت خروجی اکسل به نسخهٔ openpyxl/ریفکتور excel_exporter آرنا). پیش‌نیاز رفع: هم‌گام‌سازی خروجی موج‌ساز آرنا یا سست‌کردن ادعای بیت‌به‌بیت با توافق مالک. پس از سبزشدن در سندباکس، گام CI افزوده می‌شود.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "هم‌راستاسازی تست بازسازی v0.5 با خروجی نسخهٔ فعلی (یا قفل نسخهٔ openpyxl در CI)",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "افزودن گام setup-python + pytest به khshab-gate.yml (پس از سبز شدن محلی)",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "اولین ران سبز CI با گیت پایتست",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "pytest روی شش سر رسمی در CI سبز",
+        "مراحل قبلی CI دست‌نخورده سبز بمانند"
+      ],
+      "artifacts": [
+        ".github/workflows/khshab-gate.yml"
+      ],
+      "links": {
+        "pr": "https://github.com/bayrami1341/math-game/pull/2",
+        "issue": null,
+        "notes": "منبع: authoring/ZAI-HANDOFF-W7-W8.fa.md در arena/0eb22280"
+      },
+      "notes": "تأیید مالک فقط با «تایید BP-006» روی تابلو یا چت.\n[2026-10-22T22:24:59.495Z] W7: پین openpyxl==3.1.5 + گام pytest در khshab-gate — محلی سبز، در انتظار ران CI\n[2026-10-22T22:27:41.891Z] پین openpyxl==3.1.5 + گام pytest authoring/tests در khshab-gate؛ اولین ران سبز: b88b3e8\n[2026-10-22T22:27:41.914Z] CI success شامل گیت پایتست؛ مراحل قبلی دست‌نخورده سبز"
+    },
+    {
+      "id": "BP-007",
+      "title": "W8 آرنا — گسترش اسکیمای مبدل: اعداد بزرگ/منفی/کسری + تعمیم classifyAttempt (در انتظار تأیید مالک)",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 8,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T19:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T23:32:05.329Z",
+      "verified_at": "2026-10-22T23:36:26.458Z",
+      "context": "درخواست رسمی آرنا (W8): (۱) گسترهٔ parseOptionValue به بازهٔ ±۱٬۰۰۰٬۰۰۰٬۰۰۰ و پشتیبانی رسمی 'a/b' و 'k و a/b'؛ (۲) اتصال classifyAttempt برای الگوهای غیرضرب (۵ خانوادهٔ حل‌گر پایتونی آرنا پورت شود). این تغییر هستهٔ موتور است و ریسک رگرسیون روی ۹۲ سؤال رسمی G2 و ۸۱ تست دارد — با نقشهٔ آزمون معکوس اجرا می‌شود.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "گسترش parseOptionValue در cartridge-schema.js (بازه + کسر + عدد مخلوط) با تست مرزی",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "پورت منطق ۵ حل‌گر آرنا به errors.js/errors-v103.js با قرارداد فعلی",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "رگرسیون کامل: ۸۱+ تست JS + مبدل روی سرهای رسمی + بازرسی ثانویه",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "تست‌های مرزی عدد بزرگ/منفی/کسر سبز",
+        "npm test و مبدل روی سرهای رسمی بدون رگرسیون"
+      ],
+      "artifacts": [
+        "public/math-game/src/v10/station/cartridge-schema.js",
+        "public/math-game/src/v10/station/errors.js",
+        "public/math-game/src/v10/station/errors-v103.js"
+      ],
+      "links": {
+        "pr": "https://github.com/bayrami1341/math-game/pull/2",
+        "issue": null,
+        "notes": "منبع: authoring/ZAI-HANDOFF-W7-W8.fa.md §2 — errors.js فعلاً منجمد؛ این نقشه با تأیید مالک، انجمادِ هدفمند بخش مشخص را مجاز می‌کند."
+      },
+      "notes": "تأیید مالک فقط با «تایید BP-007» روی تابلو یا چت.\n[2026-10-22T23:01:46.313Z] رشتهٔ B1 شروع شد — W8: نخست گام صفر رگرسیون (ثبت رفتار فعلی ۹۲ سؤال رسمی به‌عنوان خط پایهٔ آزمون معکوس)، سپس T1 گسترش parseOptionValue با تست مرزی\n[2026-10-22T23:36:26.458Z] وارسی خودکار زنجیرهٔ run-approved (گیت + CI سبز)"
+    },
+    {
+      "id": "BP-008",
+      "title": "بازرسی دوم هدهای معلق آرنا (714338c / 06d7b7d) + ادغام رسمی، به‌روزرسانی مانیفست و انتشار JSON — قالب همیشگی خط دریافت محتوا",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 9,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T22:24:08.166Z",
+      "verified_at": "2026-10-22T22:24:08.188Z",
+      "context": "دو هد معلق arena/0eb22280→714338c و arena/6b8310f7→06d7b7d در نوبت بازرسی‌اند. این نقشه خط لولهٔ استاندارد «دریافت←گیت←حکم←ادغام» را برای هر تحویل آیندهٔ آرنا (خروجی BP-005) هم بنا می‌کند. ترتیب اجرا: A1 از ROADMAP-v10.3.0-beta.1.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "fetch + بازرسی تفاضلی هر دو هد: مرز مالکیت (فقط authoring/**) + تطبیق پایه با OFFICIAL-HEADS (ضد INC-07)",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "اجرای گیت‌های fail-closed روی worktree ایزوله: G0 حق‌نشر، G0B، heads verify، تست موتور، مبدل رسمی (صفر قرمز)",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "حکم مستند در worklog: سبز = ادغام رسمی به v10.3-beta/main؛ قرمز = کامنت اصلاح/rebase برای آرنا",
+          "automated": false
+        },
+        {
+          "id": "T4",
+          "desc": "در صورت ادغام: به‌روزرسانی OFFICIAL-HEADS.json + انتشار cartridges/KH-G*.json + تست ۸۱ و CI سبز",
+          "automated": false
+        }
+      ],
+      "acceptance": [
+        "حکم هر دو هد مستند در worklog با شواهد گیت",
+        "اگر ادغام: مانیفست و کارتریج منتشرشده هم‌SHA با هَد جدید باشند",
+        "CI هر دو شاخهٔ main و v10.3-beta سبز بماند"
+      ],
+      "artifacts": [
+        "public/math-game/authoring/OFFICIAL-HEADS.json",
+        "public/math-game/cartridges/",
+        "worklog.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "هدهای موضوع: 714338c (arena/0eb22280) و 06d7b7d (arena/6b8310f7)"
+      },
+      "notes": "ترتیب A1 — پیش از BP-006. خروجی BP-005 آرنا نیز از همین خط لوله عبور می‌کند.\n[2026-10-22T22:19:41.792Z] رشتهٔ A1 شروع شد — بازرسی دوم هدهای 714338c و 06d7b7d\n[2026-10-22T22:24:08.166Z] حکم: هر دو هد 🟡 قرمزِ ادغام فعلی (G0B: pyproject ریشه در B1، ورک‌فلوی CI در B2) — درفت‌ها ۰قرمز/۲زرد، پایه v0.5 منطبق، ARENA-ACK ثبت؛ کامنت اصلاح روی تابلو #4\n[2026-10-22T22:24:08.188Z] شواهد کامل در worklog؛ خط لوله «دریافت←گیت←حکم» فعلاً فعال شد — ادغام پس از اصلاح آرنا"
+    },
+    {
+      "id": "BP-009",
+      "title": "ماشین انتشار نسخه: ارتقای هستهٔ مرکزی به v10.3.0-beta.1 + یادداشت انتشار + تگ + همگام‌سازی دو شاخه",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 12,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T22:58:41.513Z",
+      "verified_at": "2026-10-22T22:58:41.536Z",
+      "context": "نسخهٔ جاری 10.3.0-beta.0 است. پس از A1..A3، انتشار بتا.۱ ماشین‌اجراست. ترتیب اجرا: A4 (آخر رشتهٔ A).",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "bump نسخه به 10.3.0-beta.1 در public/math-game/package.json + هم‌سازی رشته‌های نسخه در docs/بنرها",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "نگارش RELEASE-NOTES-v10.3.0-beta.1.md (خلاصهٔ رشتهٔ A: ادغام محتوا، W7، گیت انتشار)",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "اجرای release-check (BP-010) و سپس tag v10.3.0-beta.1 + push تگ و هر دو شاخه",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "rg برای نسخه‌های قدیمی ناسازگار = صفر",
+        "تگ v10.3.0-beta.1 روی origin و CI تگ سبز",
+        "main و v10.3-beta هم‌هد یا هم‌محتوا"
+      ],
+      "artifacts": [
+        "public/math-game/package.json",
+        "public/math-game/RELEASE-NOTES-v10.3.0-beta.1.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": null
+      },
+      "notes": "ترتیب A4 — فقط پس از سبزی BP-008، BP-006 و BP-010.\n[2026-10-22T22:58:41.513Z] bump 10.3.0-beta.1 + RELEASE-NOTES + release-check PASS + tag v10.3.0-beta.1 pushed + هر دو شاخه هم‌هد 1c5f3ea\n[2026-10-22T22:58:41.536Z] گزارشنامهٔ /tmp/rc-beta1.log: PASS — در انتظار تأیید نهایی CI ران تگ"
+    },
+    {
+      "id": "BP-010",
+      "title": "گیت سخت انتشار scripts/release-check.sh — fail-closed پیش از هر تگ",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 11,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T22:56:12.762Z",
+      "verified_at": "2026-10-22T22:56:12.784Z",
+      "context": "هدف مالک: انتشار نسخه تکرارپذیر و ربات‌اجراشدنی باشد. این اسکریپت «گزارشنامهٔ انتشار» می‌سازد؛ قرمزی هر گام = ممنوعیت تگ. ترتیب اجرا: A3.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "پیاده‌سازی اسکریپت: سازگاری نسخه در کل مخزن + heads verify + npm test + مبدل self-baseline G2/G3 + تطبیق SHA کارتریج منتشرشده با هَد + (شرطی) pytest پس از BP-006",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "تست منفی: تزریق خطای آزمایشی (SHA دستکاری‌شده) → exit≠۰ و پیام قابل‌فهم",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "ثبت گزارشنامهٔ سبز فعلی در worklog + مستند در blueprints/README",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "اجرای اسکریپت روی وضعیت فعلی = exit 0",
+        "تست منفی exit≠۰ بدهد (fail-closed اثبات‌شده)",
+        "مراحل CI دست‌نخورده بمانند"
+      ],
+      "artifacts": [
+        "scripts/release-check.sh",
+        "worklog.md",
+        "blueprints/README.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": null
+      },
+      "notes": "ترتیب A3 — پیش‌نیاز BP-009.\n[2026-10-22T22:56:12.762Z] release-check.sh: ۶ گام fail-closed؛ مثبت EXIT=0 (گزارشنامه در /tmp/rc-positive.log)؛ منفی: دستکاری SHA → FAIL در گام ۳ + لایهٔ دوم pytest\n[2026-10-22T22:56:12.784Z] هر دو تست مثبت/منفی ثبت شد؛ درخت پس از گیت تمیز ماند (بازگردانی خودکار خروجی مبدل)"
+    },
+    {
+      "id": "BP-011",
+      "title": "موتور زنجیرهٔ اجرا scripts/run-approved.sh — ادامهٔ خودکار نقشه‌های تأییدشده به ترتیب اولویت با گیت بین گام‌ها",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 13,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T23:34:57.544Z",
+      "verified_at": "2026-10-22T23:37:04.923Z",
+      "context": "دستور مالک: «ربات بتواند اتوماتیک کار را ادامه دهد». رانر نقشه‌های approved را به ترتیب priority می‌پیماید؛ بین هر نقشه گیت‌های fail-closed (validate رجیستری + npm test + مبدل)؛ هر گذار وضعیت = کامیت روی main + append worklog؛ توقف کامل روی قرمزی یا فرمان «فریز». ترتیب اجرا: B2.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "پیاده‌سازی رانر: list→order→(بدنهٔ نقشه دست ربات اجراست)→gate→set-status delivered/verified→commit/push→بعدی",
+          "automated": false
+        },
+        {
+          "id": "T2",
+          "desc": "dry-run روی وضعیت فعلی: ترتیب صحیح رشته‌ها بدون تغییر هیچ وضعیتی",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "شبیه‌سازی گیت قرمز → توقف ایمن زنجیره + رکورد block؛ سپس مستند در blueprints/README و MAP کارگاه‌بان",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "dry-run ترتیب A1..A4 سپس B1..B3 را نشان دهد بدون هیچ تغییر وضعیت",
+        "قرمزی گیت = توقف زنجیره با رکورد block (تست‌شده)",
+        "هیچ گذار وضعیتی بدون گیت سبز ممکن نباشد"
+      ],
+      "artifacts": [
+        "scripts/run-approved.sh",
+        "blueprints/README.md",
+        "mini-services/foreman/MAP.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": null,
+        "notes": null
+      },
+      "notes": "ترتیب B2 — پس از BP-007. تا سبزشدن، پیمایش دستی طبق ROADMAP معتبر است.\n[2026-10-22T23:34:57.544Z] رانر سه‌حالته ساخته شد: dry-run (T2 سبز) + run با گیت release-check و گذار verified + self-test سه‌گزاره‌ای (T3 سبز) + ردِ خودکار BP-012 بدون مُهر\n[2026-10-22T23:37:04.923Z] وارسی خودکار زنجیرهٔ run-approved (گیت + CI سبز)"
+    },
+    {
+      "id": "BP-012",
+      "title": "انتشار پایدار v10.3.0 — خروج از بتا پس از سبزی کامل رشته‌ها و مُهرهای واقعی معلم",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "approved",
+      "priority": 14,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T21:05:00Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165b2704425991)",
+      "approved_at": "2026-10-22T22:19:38.008Z",
+      "dispatched_at": null,
+      "delivered_at": null,
+      "verified_at": null,
+      "context": "پیش‌شرط‌های سخت: BP-008/006/010/009 = done (رشتهٔ A) و BP-007/011 = verified (رشتهٔ B) و مُهر معلم روی ۴۸ سؤال + ۵۴ ردیف «پیشنهادی» G2 v0.5 (کار انسانی معلم — ربات فقط گزارش می‌سازد). ترتیب اجرا: B3.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "ساخت گزارش جامع مُهرها و وضعیت گیت‌ها برای تصمیم مالک/معلم",
+          "automated": true
+        },
+        {
+          "id": "T2",
+          "desc": "bump به 10.3.0 + RELEASE-NOTES پایدار + release-check سبز + tag v10.3.0",
+          "automated": false
+        },
+        {
+          "id": "T3",
+          "desc": "اعلام انتشار روی تابلوی مرکزی + به‌روزرسانی MAP و GOVERNANCE در صورت نیاز",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "release-check سبز با نسخهٔ 10.3.0",
+        "تگ v10.3.0 روی origin و CI سبز",
+        "هیچ سؤال «پیشنهادی» بدون مُهر معلم در بانک فعال نباشد"
+      ],
+      "artifacts": [
+        "public/math-game/RELEASE-NOTES-v10.3.0.md",
+        "authoring/teacher-stamps.json",
+        "blueprints/registry.json"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": null
+      },
+      "notes": "ترتیب B3 — شروع فقط با تأیید مالکِ آمادگی؛ مُهر معلم شبیه‌سازی نمی‌شود."
+    },
+    {
+      "id": "BP-013",
+      "title": "آرنا-واچ چراغ خاموش — پایش شبانهٔ شاخه‌های arena/** و اجرای خط دریافت محتوا در صورت پوش جدید",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 15,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T23:40:00.000Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165e609768e74d)",
+      "approved_at": "2026-10-22T23:15:56.489Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T23:39:09.064Z",
+      "verified_at": "2026-10-22T23:40:11.842Z",
+      "context": "حکم BP-008: دو شاخهٔ آرنا (arena/0eb22280 و arena/6b8310f7) قرمزِ ادغام با لیست اصلاح مشخص. آرنا ممکن است در شیفت شب اصلاح پوش کند یا [ARENA-ACK] قرارداد حداقلی را ثبت کند. این نقشه واچ بین‌گامی را ماشین‌اجرا می‌کند: بین هر گام شیفت شب + پس از هر پوش موفق، یک دور پایش.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "پایش دوره‌ای refs شاخه‌های arena/** + سرِ worklog شاخه‌ها + issue #4 (ردیابی پوش جدید و [ARENA-ACK])",
+          "automated": true
+        },
+        {
+          "id": "T2",
+          "desc": "در صورت پوش جدید: اجرای کامل خط دریافت قالب BP-008 (fetch → دیفرانسیل → G0/G0B → مبدل رسمی روی درفت‌ها → حکم)",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "سبز کامل → ادغام + به‌روزرسانی OFFICIAL-HEADS + انتشار cartridges/KH-G*.json؛ قرمز → کامنت حکم دقیق روی issue #4 + رکورد worklog",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "هر تغییر شبانهٔ آرنا حکم مستند داشته باشد (worklog + issue)",
+        "هیچ ادغامی بدون سبزی کامل گیت‌ها انجام نشود",
+        "هیچ تغییری روی شاخه‌های آرنا اعمال نشود (فقط خواندن)"
+      ],
+      "artifacts": [
+        "worklog.md",
+        "blueprints/registry.json"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "مرجع قالب: BP-008 (خط دریافت محتوا — قالب همیشگی)"
+      },
+      "notes": "ممنوع: force-push، تغییر شاخه‌های آرنا، ادغام با گیت قرمز. پایش read-only است.\n[2026-10-22T23:39:09.064Z] واچ فعال شد: چرخهٔ ۱ واقعی (پوش f2d7f24 بازرسی+حکم تابلو) + خط دریافت دومین‌بار سبز؛ واچ باز-اجرا‌پذیر است\n[2026-10-22T23:40:11.842Z] وارسی خودکار زنجیرهٔ run-approved (گیت + CI سبز)"
+    },
+    {
+      "id": "BP-014",
+      "title": "پیش‌بارگذاری صبح — اسکلت مُهر معلم + پیش‌نویس DRAFT یادداشت انتشار پایدار + گزارش شیفت شب",
+      "lane": "dev",
+      "assignee": "z.ai",
+      "status": "verified",
+      "priority": 16,
+      "created_by": "z.ai",
+      "created_at": "2026-10-22T23:40:00.000Z",
+      "approved_by": "مالک-چت: «تایید همه» (trace 1a165e609768e74d)",
+      "approved_at": "2026-10-22T23:15:56.509Z",
+      "dispatched_at": null,
+      "delivered_at": "2026-10-22T23:39:09.093Z",
+      "verified_at": "2026-10-22T23:41:21.459Z",
+      "context": "BP-012 شب اجرا نمی‌شود (پیش‌شرط انسانی: مُهر واقعی معلم). این نقشه فقط زمین صبح را آماده می‌کند: اسکلت خالی بانک مُهر، پیش‌نویس برچسب‌خوردهٔ DRAFT یادداشت انتشار، تست دود جریان مُهر در داشبورد، و گزارش صبح برای تصمیم مالک/معلم.",
+      "tasks": [
+        {
+          "id": "T1",
+          "desc": "ساخت اسکلت خالی authoring/teacher-stamps.json (فقط ساختار + قاعدهٔ اعتبار — بدون هیچ مُهر)",
+          "automated": true
+        },
+        {
+          "id": "T2",
+          "desc": "پیش‌نویس RELEASE-NOTES-v10.3.0.md با برچسب DRAFT و جای‌خالی صریح مُهرها (بدون bump نسخه و بدون تگ)",
+          "automated": true
+        },
+        {
+          "id": "T3",
+          "desc": "تست دود جریان مُهر در داشبورد معلم (صفحهٔ بازرسی) — بدون ثبت هیچ مُهر واقعی",
+          "automated": true
+        },
+        {
+          "id": "T4",
+          "desc": "گزارش صبح: worklog append + کامنت issue #4 + چک‌لیست اقدام انسانی (مُهر معلم، تصمیم BP-012، حکم‌های آرنا)",
+          "automated": true
+        }
+      ],
+      "acceptance": [
+        "هیچ تگ 10.3.0 و هیچ bump نسخهٔ پایدار ساخته نشود",
+        "teacher-stamps.json فقط اسکلت خالی باشد",
+        "گزارش صبح روی worklog و issue #4 منتشر شده باشد"
+      ],
+      "artifacts": [
+        "authoring/teacher-stamps.json",
+        "public/math-game/RELEASE-NOTES-v10.3.0.md",
+        "worklog.md"
+      ],
+      "links": {
+        "pr": null,
+        "issue": "https://github.com/bayrami1341/math-game/issues/4",
+        "notes": "دنبالهٔ منطقی BP-012 — خروجی این نقشه ورودی مستقیم جلسهٔ صبح مالک/معلم است"
+      },
+      "notes": "مرز سخت: این نقشه هرگز جای BP-012 را نمی‌گیرد؛ انتشار پایدار فقط با مُهر واقعی معلم.\n[2026-10-22T23:39:09.093Z] اسکلت+قاعده، DRAFT، تست دود 200/400، گیت با DRAFT سبز ماند\n[2026-10-22T23:41:21.459Z] وارسی خودکار زنجیرهٔ run-approved (گیت + CI سبز)"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schema": "khshab.wave-registry/v1",
+  "updated_at": "2026-10-22T19:30:00Z",
+  "updated_by": "z.ai",
+  "note": "SSOT پروفایل موج‌های محتوایی — BP-001: هیچ خانواده/موجی نباید در کد گیت‌ها هاردکد شود؛ همه از این مانیفست خوانده می‌شود.",
+  "waves": {
+    "KH-G2-MATH@v0.5": {
+      "family": "KH-G2-MATH",
+      "version": "v0.5",
+      "wave": 4,
+      "start_qid": "Q-1069",
+      "chapter": "۴",
+      "question_count": 24,
+      "note": "موج ۴ — ۲۴ سؤال خودتألیف فصل ۴ (Q-1069..Q-1092)، توازن ۶/۶/۶/۶"
+    },
+    "KH-G3-MATH@v0.7": {
+      "family": "KH-G3-MATH",
+      "version": "v0.7",
+      "wave": 1,
+      "start_qid": null,
+      "chapter": null,
+      "question_count": 20,
+      "note": "خشاب پایهٔ G3 — پروفایل legacy (مستند AUD-06: CPA/balance داخلی با مشخصات legacy)؛ بدون تفکیک موج"
+    }
+  }
+}

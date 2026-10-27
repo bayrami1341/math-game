@@ -1,0 +1,16 @@
+{
+  "branches": {},
+  "blueprints": {
+    "lastRegistryVersion": null,
+    "boardIssue": null,
+    "boardUrl": null,
+    "lastCommentId": 0,
+    "dispatched": {},
+    "warnedNonOwner": [],
+    "events": [],
+    "stampedIds": []
+  },
+  "lastScanAt": "2026-10-27T06:53:30.465Z",
+  "lastScanOk": false,
+  "lastError": "توکن گیت‌هاب از remote قابل استخراج نبود"
+}

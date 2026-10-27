@@ -955,3 +955,35 @@ Work Log:
 Stage Summary:
 - موج ۲-الف کامل، تست‌شده، پوش‌شده و سبز — سناریوی «کلاس روی یک وای‌فای بدون اینترنت» اکنون کار می‌کند
 - معلق: تست ۲ مالک (آفلاین)، فرمان ۲-ب/۲-پ، rotate توکن GitHub
+
+---
+Task ID: trace-1a1795bdb1d39e91
+Agent: Claude (reviewer / co-pilot / هماهنگ‌کنندهٔ ریل)
+Task: تدوین سند جامع بازمهندسی «کارگاه ضرب» — تحلیل/الگوریتم/فلسفه/بازار/امنیت + چارتر کامل اشیل و آرنا (فرمان مالک برای مطالعهٔ ۰تا۱۰۰ و بازنویسی)
+
+Work Log:
+- کشف ریست سوم سندباکس؛ ری-کلون و راستی‌آزمایی نوک wave1=35499e3 (پوش قبلی سالم)
+- پیمایش کامل: COORDINATION.md تمام‌خوانی (نقش‌ها §۶، arena/*، PRها/INC-07، بازسازی‌ها §۸-د)، service.js (۱۸ عملیات، Ajv، هش کانونی، HMAC)، store.js (صف+اتمیک)، production-config.js، experience.mjs (ثابت‌ها)، pedagogy.js (نردبان ۶ سطحی)، v6-pr-gate.yml، نقشهٔ فایل‌ها با خط‌شماری
+- سند نوشته شد: /home/z/my-project/MATH-GAME-REBUILD-GUIDE.md (۱۴ بخش: چکیده، بازار، ده چرایی، معماری، سرور سطربه‌سطر، داده/API، کلاینت/outbox، پداگوژی، v10.x، مدل تهدید، آزمون/CI، پروتکل چندعاملی با چارتر کامل اشیل و آرنا، نقشهٔ بازنویسی ۹فازی، واژه‌نامه، پیوست اجرا)
+- تحویل در چت (بلاک markdown برای ذخیرهٔ مالک)؛ کپی فایل در سندباکس
+- صادق‌نگاری: بخش بازار = چارچوب تحلیلی نه دادهٔ میدانی؛ چارتر اشیل/آرنا بر پایهٔ §۶ COORDINATION + شواهد شاخه‌های arena (پرچم‌های ۱۵۲ صفحه C305، کارتریج v0.4/v0.5، تگ v2.4-final)
+
+Stage Summary:
+- هیچ تغییر ریپو/پوشی در این trace (فقط مستندسازی برای مالک)
+- سند در دسترس مالک برای ذخیره؛ در صورت فرمان، کامیت به docs/ روی wave1 ممکن است
+
+---
+Task ID: trace-1a17c15bf472e6f9
+Agent: Claude (reviewer / co-pilot / هماهنگ‌کنندهٔ ریل)
+Task: گزارش جامع مهندسی پروژه math-game شاخهٔ v6 / نسخهٔ v10.2 برای اشتراک با دستیار AI دوم (۴ بخش درخواستی: مأموریت پداگوژیک، معماری/پوشه‌ها، مدل داده/قابلیت‌ها، جریان داده)
+
+Work Log:
+- صحت‌سنجی زنده: git ls-remote → شاخهٔ v6 = 52387ba = تگ v10.2-stable (ادعای مالک تأیید شد)
+- کلون تازه ریپو در /home/z/math-game-repo و checkout v6 (فقط-خواندنی؛ بدون هیچ پوشی)
+- خواندن کامل: README، package.json (10.2.0/CEAP 2.1)، TEACHER_PANEL.md، pedagogy.js، graph-data.js، bottleneck.js، BOTTLENECKS-GUIDE.md، server/{start,http,service,store}.js، contracts (فهرست عملیات)، firebase/{rules,config}، src/v9/{app,local,connection,entry,firebase-login,mission,experience}، src/v10/{app,bridge}+station/{index,cells,ladder,errors,constants}، workshop-core/live-board/storage/errors (نسل v8)، src/ui/{teacher,report-panel,ui-controller} (سرصفحه‌ها)، games config، Dockerfile/render.yaml/.env.example، v9-config، عنوان‌های HTML، tests/v10.2-domains
+- کشف‌های کلیدی برای سند: سه نسل هم‌زیست (v8.1 عمومی / v9 شبکه‌ای / v10.2 ایستگاه مستقل-آفلاین)؛ کاستی openLocal('math_game_v10') در v6 (رفتار فرّار)؛ دو منبع سؤال موازی (سرور graph-v8.1 با FACTS vs ایستگاه graph-v10.2 محلی)؛ لایه‌بندی ۷۰/۷۵/۸۰ + جانبی ۶۰٪ + اطلس ۱۲ خطا + نردبان ۷پله‌ای ضدنشت
+- سند نوشته شد: /home/z/my-project/download/MATH-GAME-V6-V10.2-ENGINEERING-REPORT.fa.md (۶ فصل: صحت‌سنجی، پداگوژی، معماری، مدل داده، جریان داده، محدودیت‌های صادقانه + واژه‌نامه) — متن کامل در چت برای ذخیرهٔ مالک
+
+Stage Summary:
+- هیچ تغییر ریپو/پوشی در این trace (فقط مستندسازی برای مالک)
+- گزارش برای AI دوم خودکفا و ارجاع‌دار به مسیر فایل است؛ ادعاهای تفسیری از شواهد کد جدا شده‌اند

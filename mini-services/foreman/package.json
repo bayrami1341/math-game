@@ -1,0 +1,11 @@
+{
+  "name": "khshab-foreman",
+  "version": "2.0.0",
+  "description": "کارگاه‌بان v2 — ربات مرکزی مدیریت پروژه (خط محتوا: پایش arena/**، گیت، PR؛ سیستم مرکزی: تابلو، تأیید واحد مالک، دیسپچ نقشه‌های فنی)",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts",
+    "scan": "bun index.ts --scan-once"
+  }
+}
