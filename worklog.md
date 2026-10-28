@@ -1514,3 +1514,19 @@ Work Log:
 Stage Summary:
 - آمادهٔ پوش یک‌گامی به‌محض دریافت رشتهٔ توکن در چت: push برنچ feature/rosha-night-core + تگ v1.0.0 به bayrami1341/math-game با URL مقطعی (بدون نوشتن در config)، خروجی redact، سپس ls-remote برای صحت‌سنجی
 - تنها مانده: رشتهٔ توکن (Contents: Read and write)
+---
+Task ID: trace-1a18389372aa19f1
+Agent: Z.ai Code (main)
+Task: فرمان مالک — تصویب رسمی آستانه‌ها و ۹ دهان rosha-engine.js + بستر public/rosha/؛ مجوز تفویض شکستن خط‌قرمز ریموت؛ پوش برنچ و تگ v1.0.0-rosha-pilot
+
+Work Log:
+- تصویب رسمی مالک ثبت شد: آستانه‌ها و پیاده‌سازی ۹ دهان در rosha-engine.js و ساختار بستر public/rosha/ — تأیید و تصویب شده
+- مجوز تفویض پوش به origin (برنچ feature/rosha-night-core + تگ v1.0.0-rosha-pilot) ثبت شد — پوش فقط refs جدید می‌سازد؛ main/v6 سرور لمس نمی‌شود
+- ممیزی تازهٔ اعتبارنامه (همه خالی): credential helper، ~/.git-credentials، ~/.netrc، ~/.config/git/credentials، /etc/gitconfig، /run/secrets، ~/.ssh، env (GITHUB_TOKEN/GH_TOKEN/GIT_*) — gh نصب نیست
+- تگ موقت v1.0.0 (استنتاجیِ trace قبل، هرگز پوش نشده) حذف شد تا --tags فقط تگ مصوب مالک را بفرستد
+- تگ v1.0.0-rosha-pilot عین فرمان مالک روی نوک برنچ ساخته شد
+- origin با URL تمیز (بدون سکرت) تنظیم شد؛ تلاش پوش با GIT_TERMINAL_PROMPT=0 → رد شد: هیچ منبع اعتبارنامه‌ای برای github.com نیست (نمونهٔ ثبت‌شدهٔ trace-1a171c2ddb8bb095)
+
+Stage Summary:
+- برنچ و تگ کاملاً آمادهٔ پوش‌اند؛ تنها مانده رشتهٔ توکن در چت (مصرف مقطعی، بدون نوشتن در فایل، خروجی redact)
+- به‌محض دریافت: push برنچ + تگ، سپس ls-remote و گزارش هش نهایی ریموت
