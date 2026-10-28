@@ -21,6 +21,17 @@ import {
 } from './cartridge-schema.js';
 
 export const FORMAT_MCQ = 'گزینه‌ای';
+
+// ── گیت سروِ آزمون چندگزینه‌ای (درِ بسته) — برنچ feature/rosha-night-core ──
+// چرا: دستور مالک (رلهٔ دستور Gemini-code) — «فایل‌های مربوط به لیدربرد، چالش‌های
+// سرعتی و آزمون‌های چندگزینه‌ای را در پوشهٔ کلاینت غیرفعال کن». آزمون چندگزینه‌ای
+// جای حدس دارد؛ کارِ کتاب از چهار زمینهٔ چیدن/گفتن/نوشتن/جواب عددی می‌آید
+// (MEMARI-FANNI §۴) و «گزینه‌ای» جزو آن نیست.
+// مکانیک: سؤال‌های گزینه‌ای از بانک حذف نمی‌شوند (دادهٔ کارتریج دست‌نخورده می‌ماند)؛
+// فقط در adaptCartridgeQuestions سروشان گیت می‌شود و در skippedMcq شمرده می‌شوند.
+// بازگشایی فقط با فرمان مالک (false کردن ROshaMcqServingDisabled زیر).
+export const ROSHA_MCQ_SERVING_DISABLED = true;
+
 export const FORMAT_NUMBER = 'عدد';
 export const FORMAT_FRACTION = 'کسر';
 export const FORMAT_NUMBER_LINE = 'محور عددی';
@@ -458,16 +469,18 @@ function extractF1F2(prompt) {
  * تبدیل بانک سؤال کارتریج به سؤال‌های قابل بازی نشست (BP-017: هر ۶ قالب).
  * سؤال‌های بدشکل/ناشناخته (دادهٔ ناقص در همان قالب) کنار گذاشته و در
  * skippedInvalid شمرده می‌شوند — دیگر قالبی صرفاً به‌خاطر «فاز ب/ج» رد نمی‌شود.
- * خروجی: { questions: [...], skipped, skippedInvalid, total }
+ * خروجی: { questions: [...], skipped, skippedInvalid, skippedMcq, total }
  */
 export function adaptCartridgeQuestions(cartridge, { limit = 10, shuffle = true } = {}) {
   const bank = Array.isArray(cartridge?.questionBank) ? cartridge.questionBank : [];
   const picked = [];
   let skipped = 0;
   let skippedInvalid = 0;
+  let skippedMcq = 0; // گیت درِ بسته: سؤال گزینه‌ای سرو نمی‌شود ولی داده‌اش سالم می‌ماند
   for (const q of bank) {
     if (!isPlayable(q)) { skipped++; skippedInvalid++; continue; }
     const fmt = effectiveFormat(q);
+    if (ROSHA_MCQ_SERVING_DISABLED && fmt === FORMAT_MCQ) { skipped++; skippedMcq++; continue; }
     const { f1, f2 } = extractF1F2(q.prompt);
     const subkind = fmt === FORMAT_FIGURE ? figureSubkind(q) : null;
     picked.push({
@@ -512,5 +525,8 @@ export function adaptCartridgeQuestions(cartridge, { limit = 10, shuffle = true 
     }
   }
   if (limit && limit > 0) list = list.slice(0, limit);
-  return { questions: list, skipped, skippedInvalid, total: bank.length };
+  if (skippedMcq > 0 && picked.length === 0) {
+    console.warn('🚪 گیت گزینه‌ای: این بانک پس از گیت خالی شد (' + skippedMcq + ' سؤال گزینه‌ای سرونشدنی) — بانک کارتریج را با زمینه‌های چهارگانه بازبینی کن.');
+  }
+  return { questions: list, skipped, skippedInvalid, skippedMcq, total: bank.length };
 }

@@ -3,153 +3,39 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لیدربرد ایستگاه — کارگاه ضرب</title>
+  <title>در بسته است — کارگاه ضرب</title>
   <style>
     * { box-sizing: border-box; }
     body {
       font-family: Tahoma, 'Segoe UI', sans-serif;
-      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-      color: #f1f5f9; margin: 0; padding: 16px; min-height: 100vh;
+      background: #0f172a; color: #e2e8f0; margin: 0; padding: 16px;
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
     }
-    .shell { max-width: 720px; margin: 0 auto; }
-    h1 { text-align: center; font-size: 1.4rem; margin: 12px 0 4px; color: #fbbf24; }
-    .subtitle { text-align: center; color: #94a3b8; font-size: .85rem; margin: 0 0 18px; }
-    .note {
-      background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.35);
-      border-radius: 12px; padding: 10px 14px; font-size: .8rem; color: #fde68a; margin-bottom: 16px; line-height: 1.9;
+    .door {
+      max-width: 560px; background: rgba(30,41,59,.85); border: 1px solid #334155;
+      border-radius: 16px; padding: 28px 24px; text-align: center;
     }
-    .row {
-      display: flex; align-items: center; gap: 12px;
-      background: rgba(30,41,59,.85); border: 1px solid #334155;
-      border-radius: 14px; padding: 12px 14px; margin-bottom: 10px;
+    .door .sign { font-size: 2.6rem; margin-bottom: 8px; }
+    .door h1 { font-size: 1.25rem; margin: 0 0 12px; color: #fbbf24; }
+    .door p { font-size: .9rem; line-height: 2; color: #cbd5e1; margin: 0 0 10px; }
+    .door .why {
+      background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.3);
+      border-radius: 12px; padding: 12px 14px; font-size: .8rem; color: #fde68a;
+      line-height: 2; margin-top: 14px; text-align: right;
     }
-    .row.top1 { border-color: #fbbf24; box-shadow: 0 0 14px rgba(251,191,36,.25); }
-    .row.top2 { border-color: #cbd5e1; }
-    .row.top3 { border-color: #fb923c; }
-    .rank { font-size: 1.3rem; min-width: 2.2rem; text-align: center; }
-    .avatar { font-size: 1.6rem; }
-    .who { flex: 1 1 auto; min-width: 0; }
-    .who .name { font-weight: bold; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .who .sub { color: #94a3b8; font-size: .75rem; margin-top: 2px; }
-    .power { text-align: center; min-width: 4.5rem; }
-    .power .num { font-size: 1.35rem; font-weight: 800; color: #34d399; }
-    .power .lbl { font-size: .65rem; color: #94a3b8; }
-    .bars { display: flex; gap: 6px; }
-    .bar { text-align: center; font-size: .65rem; color: #94a3b8; }
-    .bar .pill {
-      width: 2.6rem; height: .5rem; border-radius: 999px; background: #334155;
-      overflow: hidden; margin-bottom: 3px;
-    }
-    .bar .pill > span { display: block; height: 100%; background: #34d399; }
-    #status { text-align: center; color: #94a3b8; padding: 26px 0; line-height: 2; }
-    .actions { text-align: center; margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-    .btn {
-      display: inline-block; padding: 10px 18px; border-radius: 12px; text-decoration: none;
-      font-size: .9rem; font-weight: bold; border: 1px solid #475569; color: #f1f5f9;
-      background: rgba(51,65,85,.6);
-    }
-    .btn.primary { background: #f59e0b; border-color: #f59e0b; color: #1e293b; }
-    .empty-art { font-size: 2.4rem; text-align: center; margin-bottom: 8px; }
-    .book-link { text-align: center; margin-top: 14px; font-size: .8rem; color: #64748b; }
-    .book-link a { color: #fbbf24; text-decoration: none; }
   </style>
 </head>
 <body>
-  <div class="shell">
-    <h1>🏅 لیدربرد ایستگاه</h1>
-    <p class="subtitle">رتبهٔ فضانوردهای همین دستگاه بر پایهٔ «قدرت ایستگاه»</p>
-    <div class="note">
-      📡 این لیدربرد <strong>آفلاین و روی همین دستگاه</strong> کار می‌کند و پرونده‌های ساخته‌شده روی همین مرورگر را رتبه‌بندی می‌کند.
-      (نسخهٔ زندهٔ بین‌دستگاهی کلاس به اتصال اینترنت و کد کلاس نیاز دارد و جداگانه روشن می‌شود.)
+  <main class="door">
+    <div class="sign" aria-hidden="true">🚪</div>
+    <h1>این در بسته است</h1>
+    <p>لیدربرد کلاس خاموش شده است. اینجا جای رتبه، مقایسه و مسابقه نیست.</p>
+    <div class="why">
+      <strong>چرا؟</strong> قرارداد طراحی «کارگاه ضرب» تابلوی شرم و مقایسهٔ عمومی را ممنوع کرده است.
+      کار شبِ هر کودک فقط همان یک تمرین امروز است؛ وضعیت او مال پروندهٔ خودش است، نه تابلوی کلاس.
+      <br><br>
+      <small>بسته‌شده در برنچ <code>feature/rosha-night-core</code> — بازگشایی فقط با فرمان مالک پروژه. سند مرجع: MEMARI-KOL §۳ و §۸.</small>
     </div>
-    <div id="status" role="status" aria-live="polite">در حال خواندن پرونده‌های دستگاه…</div>
-    <div id="list"></div>
-    <div class="actions">
-      <a class="btn primary" href="v10.html">🚀 ورود به ایستگاه</a>
-      <a class="btn" href="book.html">📚 تمرین کتاب کامل</a>
-      <a class="btn" href="home.html">🏠 خانه</a>
-    </div>
-    <p class="book-link">معلم عزیز: گزارش تحلیلی تک‌تک دانش‌آموزان در «پنل معلم» داخل بازی و داشبورد وب موجود است.</p>
-  </div>
-
-  <script type="module">
-    import { openLocal } from './src/v9/local.mjs';
-    import { studentKey } from './src/v9/entry.mjs';
-    import { stationPower, stationSystems } from './src/v9/experience.mjs';
-
-    const fa = (n) => String(n).replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[d]);
-    const ROLE_ICONS = { astronaut: '🧑‍🚀', pilot: '🧑‍✈️', scientist: '🧑‍🔬' };
-    const BUILDING_LABELS = { 1: 'نیروگاه', 2: 'برج', 3: 'سکو' };
-
-    function stableUid() {
-      try { return localStorage.getItem('station_uid') || ''; } catch { return ''; }
-    }
-
-    async function main() {
-      const status = document.getElementById('status');
-      const list = document.getElementById('list');
-      let local;
-      try {
-        local = await openLocal();
-      } catch {
-        status.textContent = 'حافظهٔ پایدار مرورگر در دسترس نیست — لیدربرد آفلاین در این مرورگر کار نمی‌کند.';
-        return;
-      }
-
-      let profiles = [];
-      try { profiles = (await local.get('station_profiles_index')) || []; } catch { profiles = []; }
-      profiles = Array.isArray(profiles) ? profiles : [];
-
-      const uid = stableUid();
-      if (!profiles.length) {
-        status.innerHTML = '<div class="empty-art">🌌</div>هنوز هیچ پرونده‌ای روی این دستگاه ساخته نشده است.<br>از «ورود به ایستگاه» شروع کنید و پرونده بسازید.';
-        return;
-      }
-
-      const rows = [];
-      for (const p of profiles) {
-        let stored = null;
-        try { stored = await local.get(studentKey(uid, p.studentId)); } catch { stored = null; }
-        const records = stored?.stationRecords || [];
-        const attempts = stored?.attemptLog || [];
-        const power = stationPower(records);
-        const systems = stationSystems(records);
-        const byId = Object.fromEntries(systems.map((s) => [s.sectorId, s.percent || 0]));
-        rows.push({
-          name: p.displayName || 'فضانورد بی‌نام',
-          icon: ROLE_ICONS[p.role] || '🧑‍🚀',
-          power,
-          sessions: attempts.length,
-          bars: [1, 2, 3].map((id) => ({ id, pct: byId[id] ?? 0 })),
-        });
-      }
-
-      rows.sort((a, b) => b.power - a.power || b.sessions - a.sessions);
-
-      status.hidden = true;
-      const medals = ['🥇', '🥈', '🥉'];
-      list.innerHTML = rows.map((r, i) => `
-        <div class="row ${i < 3 ? 'top' + (i + 1) : ''}">
-          <span class="rank" aria-label="رتبهٔ ${fa(i + 1)}">${medals[i] || fa(i + 1)}</span>
-          <span class="avatar" aria-hidden="true">${r.icon}</span>
-          <span class="who">
-            <span class="name">${String(r.name).replace(/[<>&]/g, '')}</span>
-            <span class="sub">${fa(r.sessions)} جلسهٔ ثبت‌شده</span>
-          </span>
-          <span class="bars" aria-hidden="true">
-            ${r.bars.map((b) => `
-              <span class="bar" title="${BUILDING_LABELS[b.id]}: ${fa(b.pct)}٪">
-                <span class="pill"><span style="width:${Math.min(100, b.pct)}%"></span></span>${fa(b.pct)}٪
-              </span>`).join('')}
-          </span>
-          <span class="power">
-            <span class="num">${fa(r.power)}٪</span>
-            <span class="lbl">قدرت ایستگاه</span>
-          </span>
-        </div>`).join('');
-    }
-
-    main();
-  </script>
+  </main>
 </body>
 </html>

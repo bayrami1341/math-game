@@ -1,4 +1,17 @@
-/* bottleneck.js — تشخیص گلوگاه، فاز ۱ نسخهٔ ۷ */
+/* bottleneck.js — تشخیص گلوگاه — حالت تک‌کودک (برنچ feature/rosha-night-core)
+ *
+ * تغییر طبق دستور مالک (رلهٔ دستور Gemini-code): منطق آستانهٔ کلاسی (minStudentsToName،
+ * minFactsPerStudent و تجمیع‌گر diagnoseClass) کنار گذاشته شد — معماری جدید (MEMARI-FANNI
+ * §۵–۶) تک‌کودک است: تشخیص مالِ پروندهٔ هر شاگرد، نه آستانهٔ کلاس؛ جملهٔ معلم از
+ * ستون تشخیص خوانده می‌شود، نه از درصد و نه از شمار شاگردان.
+ *
+ * چه ماند: classify (ده‌بان خطای ضرب نسخهٔ ۷) و diagnoseStudent (مخصوص یک پرونده).
+ * چه رفت: diagnoseClass → استابِ بی‌اثرِ fail-soft برای سازگاری report-panel.js؛
+ * هیچ الگوی کلاسی نام‌گذاری نمی‌شود (noPattern همیشه true).
+ *
+ * جای خالی: پیاده‌سازی موتور تک‌کودکِ rosha-engine.js (رخدادها + تطبیق ۹ دهان) در
+ * public/rosha/rosha-engine.js — این فایل پلِ مهاجرت است و تا ادغام موتور تازه سرِ جای خود می‌ماند.
+ */
 (function () {
   'use strict';
 
@@ -12,8 +25,7 @@
   var CONFIG = {
   minFactsToName: 2,
   minFactsToName_D: 1,
-  minStudentsToName: 3,
-  minFactsPerStudent: 2,
+  // minStudentsToName و minFactsPerStudent حذف شدند — آستانهٔ کلاسی با معماری تک‌کودک ناسازگار است
   priority: ['G', 'P', 'N', 'D', 'A', 'S', 'C']
 };
 
@@ -164,26 +176,16 @@
     };
   }
 
-  function diagnoseClass(studentsDiagnoses) {
-    var rows = Array.isArray(studentsDiagnoses) ? studentsDiagnoses : [];
-    var groups = {};
-    rows.forEach(function (row) {
-      if (!row || !row.primaryBottleneck) return;
-      if (row.primaryBottleneck.facts.length < CONFIG.minFactsPerStudent) return;
-      var id = row.primaryBottleneck.id;
-      if (!groups[id]) groups[id] = [];
-      groups[id].push({ profileId: row.profileId, facts: row.primaryBottleneck.facts.slice() });
-    });
-    var shared = Object.keys(groups).map(function (id) {
-      var meta = GraphData.bottleneckById(id);
-      var members = groups[id];
-      return {
-        id: id, name: meta.name, students: members, count: members.length,
-        tomorrow: meta.tomorrow, named: members.length >= CONFIG.minStudentsToName
-      };
-    }).sort(function (a, b) { return b.count - a.count; });
-    var named = shared.filter(function (item) { return item.named; });
-    return { shared: shared, primaryBottleneck: named.length ? named[0] : null, noPattern: named.length === 0 };
+  // ── تجمیع کلاسی: غیرفعال (درِ بسته) — استاب fail-soft برای مصرف‌کنندگان قدیمی ──
+  // قبلاً: نام‌گذاری گلوگاه کلاسی با آستانهٔ minStudentsToName. طبق معماری تک‌کودک
+  // هرگز الگوی کلاسی نام‌گذاری نمی‌شود؛ مصرف‌کنندهٔ قدیمی (report-panel.js) حالت
+  // noPattern می‌گیرد و میز معلمِ درست، جملهٔ هر کودک را از پروندهٔ خودش می‌خواند.
+  function diagnoseClass() {
+    if (!diagnoseClass._warned) {
+      console.info('🚪 Bottleneck.diagnoseClass غیرفعال است — تشخیص تک‌کودک است؛ الگوی کلاسی طبق قرارداد طراحی ساخته نمی‌شود.');
+      diagnoseClass._warned = true;
+    }
+    return { shared: [], primaryBottleneck: null, noPattern: true };
   }
 
   window.Bottleneck = {
@@ -193,5 +195,5 @@
     diagnoseClass: diagnoseClass
   };
 
-  console.log('✅ Bottleneck بارگذاری شد.');
+  console.log('✅ Bottleneck بارگذاری شد — حالت تک‌کودک (بدون آستانهٔ کلاسی).');
 })();
