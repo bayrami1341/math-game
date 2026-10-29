@@ -163,11 +163,11 @@
       var cls = document.getElementById('classCode').value.trim();
       if (!cls) { toast('کد کلاس را بنویس.'); return; }
       var mode = document.getElementById('mode').value;
-      var url = new URL(new URL('student.html', window.location.href).href + '?', location.href);
+      var url = new URL('student.html', window.location.href);
       url.searchParams.set('class', cls);
       url.searchParams.set('stage', selStage);
       url.searchParams.set('mode', mode);
-      document.getElementById('linkBox').value = url.pathname + url.search;
+      document.getElementById('linkBox').value = url.href;
       document.getElementById('linkRow').hidden = false;
       toast('پیوند ساخته شد — برای گروه شاد کپی کن.');
     });
@@ -252,4 +252,5 @@
   </script>
 </body>
 </html>
+
 
