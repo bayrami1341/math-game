@@ -67,7 +67,7 @@
       direction: rtl;
     }
     .sub-split {
-      font-size: 15px;
+      font-size: 14px;
       color: #38bdf8;
       margin-top: 8px;
       background: rgba(56, 189, 248, 0.1);
@@ -76,7 +76,7 @@
       display: inline-block;
     }
     .fuse-box {
-      min-width: 68px;
+      min-width: 72px;
       height: 52px;
       border: 2px dashed var(--accent);
       border-radius: 10px;
@@ -85,7 +85,7 @@
       align-items: center;
       justify-content: center;
       color: var(--accent-glow);
-      font-size: 32px;
+      font-size: 30px;
       padding: 0 8px;
       transition: all 0.2s;
     }
@@ -203,19 +203,28 @@
     function toEn(str) { return str.replace(/[۰-۹]/g, d => faDigits.indexOf(d)); }
 
     const params = new URLSearchParams(window.location.search);
+    const className = params.get('class') || 'عمومی';
     const stage = params.get('stage') || 'niroogah';
 
     let a = 4, b = 5, partA1 = 0, partA2 = 0;
+    let failCount = 0;
 
     if (stage === 'borj') {
       document.getElementById('stageTitle').innerHTML = '🏗️ کارگاه برج سازه';
       document.getElementById('stageSubtitle').textContent = 'شکستن و جابه‌جایی — یک کارِ امروز';
       document.getElementById('submitBtn').textContent = 'تثبیت ستون و ثبت';
-      // ضرب ۷ در ۶ شکسته شده به (۵ در ۶) + (۲ در ۶)
       a = 7; b = 6; partA1 = 5; partA2 = 2;
       const splitEl = document.getElementById('splitHint');
       splitEl.style.display = 'inline-block';
-      splitEl.innerHTML = 'راهنما: (' + toFa(partA1) + ' دسته ' + toFa(b) + 'تایی) + (' + toFa(partA2) + ' دسته ' + toFa(b) + 'تایی)';
+      splitEl.innerHTML = '(' + toFa(partA1) + ' دسته ' + toFa(b) + 'تایی) + (' + toFa(partA2) + ' دسته ' + toFa(b) + 'تایی)';
+    } else if (stage === 'sakkoo') {
+      document.getElementById('stageTitle').innerHTML = '📦 کارگاه سکو و پایانه';
+      document.getElementById('stageSubtitle').textContent = 'بسته‌های ده‌تایی و ارزش مکانی — یک کارِ امروز';
+      document.getElementById('submitBtn').textContent = 'بارگیری سکو و ثبت';
+      a = 3; b = 20;
+      const splitEl = document.getElementById('splitHint');
+      splitEl.style.display = 'inline-block';
+      splitEl.innerHTML = toFa(a) + ' دستهٔ ' + toFa(2) + ' ده‌تایی';
     }
 
     document.getElementById('factorA').textContent = toFa(a);
@@ -241,15 +250,36 @@
       }
     }
 
+    function recordState(status, diagnosticMsg) {
+      const storageKey = 'rosha_' + encodeURIComponent(className) + '_' + stage;
+      const payload = {
+        student: 'دانش‌آموز',
+        status: status,
+        diagnostic: diagnosticMsg || '',
+        updatedAt: new Date().toISOString()
+      };
+      localStorage.setItem(storageKey, JSON.stringify(payload));
+    }
+
     function submitAnswer() {
       if (!currentInput) return;
       const val = parseInt(toEn(currentInput), 10);
       const expected = a * b;
+
       if (val === expected) {
         document.getElementById('ansBox').style.background = "#065f46";
         document.getElementById('ansBox').style.borderColor = "#10b981";
-        setTimeout(() => alert("پاسخ درست ثبت شد! کار امروز تمام است."), 200);
+        recordState('done', '');
+        setTimeout(() => alert("نیروگاه روشن شد! کار امروز شما با موفقیت ثبت گردید."), 200);
       } else {
+        failCount++;
+        let diag = 'در شمارش دسته‌ها نیاز به بازبینی دارد.';
+        if (val === (a + b)) {
+          diag = 'در دسته‌های مساوی مانده؛ جمع را به‌جای ضرب نوشته است.';
+        }
+        if (failCount >= 2) {
+          recordState('stuck', diag);
+        }
         renderVisualHint();
       }
     }
@@ -258,6 +288,7 @@
       const panel = document.getElementById('hintPanel');
       const grid = document.getElementById('hintGrid');
       grid.innerHTML = '';
+
       if (stage === 'borj') {
         document.getElementById('hintText').textContent = 'برج به دو بخش تقسیم شده است: آبی (' + toFa(partA1) + '×' + toFa(b) + ') و زرد (' + toFa(partA2) + '×' + toFa(b) + ')';
         for (let r = 0; r < a; r++) {
@@ -268,6 +299,23 @@
             const dot = document.createElement('div');
             dot.className = dotClass;
             row.appendChild(dot);
+          }
+          grid.appendChild(row);
+        }
+      } else if (stage === 'sakkoo') {
+        document.getElementById('hintText').textContent = '۳ ردیف از بسته‌های ده‌تایی:';
+        for (let r = 0; r < 3; r++) {
+          const row = document.createElement('div');
+          row.className = 'hint-row';
+          for (let c = 0; c < 2; c++) {
+            const box = document.createElement('div');
+            box.style.padding = '4px 8px';
+            box.style.background = '#0284c7';
+            box.style.borderRadius = '6px';
+            box.style.color = '#fff';
+            box.style.fontSize = '12px';
+            box.textContent = '۱۰تایی';
+            row.appendChild(box);
           }
           grid.appendChild(row);
         }
