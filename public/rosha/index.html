@@ -163,7 +163,7 @@
       var cls = document.getElementById('classCode').value.trim();
       if (!cls) { toast('کد کلاس را بنویس.'); return; }
       var mode = document.getElementById('mode').value;
-      var url = new URL('student.html', location.href);
+      var url = new URL(new URL('student.html', window.location.href).href + '?', location.href);
       url.searchParams.set('class', cls);
       url.searchParams.set('stage', selStage);
       url.searchParams.set('mode', mode);
@@ -252,3 +252,4 @@
   </script>
 </body>
 </html>
+
