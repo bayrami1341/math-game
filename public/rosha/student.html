@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>کارگاه نیروگاه — روشا</title>
+  <title>کارگاه ریاضی روشا — پایه سوم</title>
   <style>
     :root {
       --bg: #1e293b;
@@ -11,7 +11,6 @@
       --accent: #f59e0b;
       --accent-glow: #fbbf24;
       --text: #f8fafc;
-      --danger: #ef4444;
       --success: #10b981;
     }
     * { box-sizing: border-box; font-family: Tahoma, 'Segoe UI', sans-serif; user-select: none; }
@@ -32,14 +31,14 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1);
       border-radius: 20px;
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       padding: 24px;
       text-align: center;
       position: relative;
     }
     .station-title {
       color: var(--accent);
-      font-size: 20px;
+      font-size: 21px;
       font-weight: bold;
       margin-bottom: 4px;
       text-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
@@ -47,28 +46,38 @@
     .station-subtitle {
       color: #94a3b8;
       font-size: 13px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .meter-display {
       background: #090d16;
       border: 2px solid #334155;
       border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
       box-shadow: inset 0 4px 8px rgba(0,0,0,0.6);
     }
     .formula {
-      font-size: 38px;
+      font-size: 34px;
       font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 10px;
       color: #f8fafc;
+      direction: rtl;
+    }
+    .sub-split {
+      font-size: 15px;
+      color: #38bdf8;
+      margin-top: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
     }
     .fuse-box {
-      min-width: 70px;
-      height: 54px;
+      min-width: 68px;
+      height: 52px;
       border: 2px dashed var(--accent);
       border-radius: 10px;
       background: rgba(245, 158, 11, 0.1);
@@ -76,7 +85,7 @@
       align-items: center;
       justify-content: center;
       color: var(--accent-glow);
-      font-size: 34px;
+      font-size: 32px;
       padding: 0 8px;
       transition: all 0.2s;
     }
@@ -89,7 +98,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .btn-key {
       background: #334155;
@@ -99,7 +108,7 @@
       color: #f8fafc;
       font-size: 22px;
       font-weight: bold;
-      padding: 14px 0;
+      padding: 13px 0;
       cursor: pointer;
       transition: all 0.1s;
     }
@@ -118,52 +127,41 @@
       border-bottom: 4px solid #b45309;
       border-radius: 12px;
       color: #78350f;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: bold;
-      padding: 14px;
+      padding: 13px;
       cursor: pointer;
       transition: all 0.1s;
-      margin-top: 6px;
     }
     .btn-submit:active {
       transform: translateY(3px);
       border-bottom-width: 1px;
     }
     .hint-panel {
-      margin-top: 16px;
+      margin-top: 14px;
       background: #0f172a;
       border: 1px solid #334155;
       border-radius: 12px;
-      padding: 14px;
+      padding: 12px;
       display: none;
-      animation: fadeIn 0.3s;
     }
-    .hint-dots {
+    .hint-grid {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 8px;
     }
-    .hint-row {
-      display: flex;
-      gap: 8px;
-    }
-    .dot {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 8px var(--accent-glow);
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .hint-row { display: flex; gap: 6px; }
+    .dot-part1 { width: 14px; height: 14px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 6px #38bdf8; }
+    .dot-part2 { width: 14px; height: 14px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 6px #f59e0b; }
   </style>
 </head>
 <body>
 
   <div class="workshop-card">
-    <div class="station-title">⚡ کارگاه نیروگاه</div>
-    <div class="station-subtitle">حالت خانه — یک کارِ امروز</div>
+    <div class="station-title" id="stageTitle">⚡ کارگاه نیروگاه</div>
+    <div class="station-subtitle" id="stageSubtitle">حالت خانه — یک کارِ امروز</div>
 
     <div class="meter-display">
       <div class="formula">
@@ -173,6 +171,7 @@
         <span>=</span>
         <div class="fuse-box" id="ansBox">؟</div>
       </div>
+      <div id="splitHint" class="sub-split" style="display: none;"></div>
     </div>
 
     <div class="keypad">
@@ -190,41 +189,50 @@
       <button class="btn-key action-del" onclick="delKey()">⌫</button>
     </div>
 
-    <button class="btn-submit" onclick="submitAnswer()">اتصال و ثبت</button>
+    <button class="btn-submit" id="submitBtn" onclick="submitAnswer()">اتصال و ثبت</button>
 
     <div id="hintPanel" class="hint-panel">
-      <div style="font-size: 13px; color: #cbd5e1;">روشن نشد! به دسته‌ها دقت کن:</div>
-      <div id="hintDots" class="hint-dots"></div>
+      <div id="hintText" style="font-size: 13px; color: #cbd5e1;">به دسته‌ها دقت کن:</div>
+      <div id="hintGrid" class="hint-grid"></div>
     </div>
   </div>
 
-  <script src="rosha-engine.js"></script>
   <script>
     const faDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
     function toFa(n) { return String(n).replace(/\d/g, d => faDigits[d]); }
     function toEn(str) { return str.replace(/[۰-۹]/g, d => faDigits.indexOf(d)); }
 
-    let currentInput = "";
-    const a = 4, b = 5;
+    const params = new URLSearchParams(window.location.search);
+    const stage = params.get('stage') || 'niroogah';
+
+    let a = 4, b = 5, partA1 = 0, partA2 = 0;
+
+    if (stage === 'borj') {
+      document.getElementById('stageTitle').innerHTML = '🏗️ کارگاه برج سازه';
+      document.getElementById('stageSubtitle').textContent = 'شکستن و جابه‌جایی — یک کارِ امروز';
+      document.getElementById('submitBtn').textContent = 'تثبیت ستون و ثبت';
+      // ضرب ۷ در ۶ شکسته شده به (۵ در ۶) + (۲ در ۶)
+      a = 7; b = 6; partA1 = 5; partA2 = 2;
+      const splitEl = document.getElementById('splitHint');
+      splitEl.style.display = 'inline-block';
+      splitEl.innerHTML = 'راهنما: (' + toFa(partA1) + ' دسته ' + toFa(b) + 'تایی) + (' + toFa(partA2) + ' دسته ' + toFa(b) + 'تایی)';
+    }
+
     document.getElementById('factorA').textContent = toFa(a);
     document.getElementById('factorB').textContent = toFa(b);
 
+    let currentInput = "";
     function pressKey(num) {
       if (currentInput.length >= 3) return;
       currentInput += num;
       updateBox();
     }
-    function delKey() {
-      currentInput = currentInput.slice(0, -1);
-      updateBox();
-    }
-    function clearKey() {
-      currentInput = "";
-      updateBox();
-    }
+    function delKey() { currentInput = currentInput.slice(0, -1); updateBox(); }
+    function clearKey() { currentInput = ""; updateBox(); }
+
     function updateBox() {
       const box = document.getElementById('ansBox');
-      if (currentInput.length === 0) {
+      if (!currentInput) {
         box.textContent = "؟";
         box.classList.remove('has-val');
       } else {
@@ -235,29 +243,45 @@
 
     function submitAnswer() {
       if (!currentInput) return;
-      const num = parseInt(toEn(currentInput), 10);
-      if (num === (a * b)) {
+      const val = parseInt(toEn(currentInput), 10);
+      const expected = a * b;
+      if (val === expected) {
         document.getElementById('ansBox').style.background = "#065f46";
         document.getElementById('ansBox').style.borderColor = "#10b981";
-        setTimeout(() => alert("نیروگاه روشن شد! کار امروز تمام است."), 200);
+        setTimeout(() => alert("پاسخ درست ثبت شد! کار امروز تمام است."), 200);
       } else {
-        showHint();
+        renderVisualHint();
       }
     }
 
-    function showHint() {
+    function renderVisualHint() {
       const panel = document.getElementById('hintPanel');
-      const dotsContainer = document.getElementById('hintDots');
-      dotsContainer.innerHTML = '';
-      for (let r = 0; r < a; r++) {
-        const row = document.createElement('div');
-        row.className = 'hint-row';
-        for (let c = 0; c < b; c++) {
-          const dot = document.createElement('div');
-          dot.className = 'dot';
-          row.appendChild(dot);
+      const grid = document.getElementById('hintGrid');
+      grid.innerHTML = '';
+      if (stage === 'borj') {
+        document.getElementById('hintText').textContent = 'برج به دو بخش تقسیم شده است: آبی (' + toFa(partA1) + '×' + toFa(b) + ') و زرد (' + toFa(partA2) + '×' + toFa(b) + ')';
+        for (let r = 0; r < a; r++) {
+          const row = document.createElement('div');
+          row.className = 'hint-row';
+          const dotClass = (r < partA1) ? 'dot-part1' : 'dot-part2';
+          for (let c = 0; c < b; c++) {
+            const dot = document.createElement('div');
+            dot.className = dotClass;
+            row.appendChild(dot);
+          }
+          grid.appendChild(row);
         }
-        dotsContainer.appendChild(row);
+      } else {
+        for (let r = 0; r < a; r++) {
+          const row = document.createElement('div');
+          row.className = 'hint-row';
+          for (let c = 0; c < b; c++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot-part2';
+            row.appendChild(dot);
+          }
+          grid.appendChild(row);
+        }
       }
       panel.style.display = 'block';
     }
