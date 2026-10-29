@@ -5,252 +5,279 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>میز صبح معلم — روشا</title>
   <style>
-    /* میز است، نه داشبورد: بدون درصد، بدون نمودار، بدون رتبه */
-    * { box-sizing: border-box; }
+    :root {
+      --bg: #fcfbf7;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --accent: #b45309;
+      --text: #1e293b;
+      --muted: #64748b;
+    }
+    * { box-sizing: border-box; font-family: Tahoma, 'Segoe UI', sans-serif; }
     body {
-      font-family: Tahoma, 'Segoe UI', sans-serif;
-      background: #f6f4ef; color: #292524; margin: 0; padding: 16px;
-      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 24px;
+      line-height: 1.6;
     }
-    .wrap { max-width: 760px; margin: 0 auto; }
-    h1 { font-size: 1.3rem; margin: 8px 0 2px; color: #7c2d12; }
-    .sub { color: #78716c; font-size: .82rem; margin-bottom: 18px; }
-    section {
-      background: #fff; border: 1px solid #e7e5e4; border-radius: 14px;
-      padding: 16px; margin-bottom: 14px;
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
     }
-    h2 { font-size: 1rem; color: #9a3412; margin: 0 0 10px; }
-    .stages { display: grid; gap: 10px; }
-    @media (min-width: 640px) { .stages { grid-template-columns: repeat(3, 1fr); } }
-    .stage {
-      border: 1.5px solid #e7e5e4; border-radius: 12px; padding: 12px; cursor: pointer;
-      background: #fafaf9;
+    .header {
+      text-align: center;
+      margin-bottom: 28px;
     }
-    .stage input { margin-inline-end: 6px; }
-    .stage.sel { border-color: #c2410c; background: #fff7ed; }
-    .stage b { display: block; font-size: .95rem; color: #9a3412; }
-    .stage small { color: #78716c; line-height: 1.9; display: block; margin-top: 4px; }
-    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
-    label.fld { font-size: .8rem; color: #57534e; display: flex; flex-direction: column; gap: 4px; }
-    input[type=text], select {
-      font-family: inherit; font-size: .9rem; padding: 8px 10px;
-      border: 1px solid #d6d3d1; border-radius: 8px; background: #fff; min-height: 44px;
+    .header h1 {
+      margin: 0;
+      color: var(--accent);
+      font-size: 26px;
     }
-    input[type=text].link { flex: 1 1 260px; direction: ltr; text-align: left; font-size: .78rem; color: #57534e; }
-    button {
-      font-family: inherit; font-size: .88rem; padding: 10px 16px; min-height: 44px;
-      border: none; border-radius: 8px; background: #9a3412; color: #fff; cursor: pointer;
+    .header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 14px;
     }
-    button.ghost { background: #f5f5f4; color: #44403c; border: 1px solid #d6d3d1; }
-    button:active { transform: translateY(1px); }
-    .lists { display: grid; gap: 12px; }
-    .listbox { border: 1px solid #e7e5e4; border-radius: 12px; overflow: hidden; }
-    .listbox > h3 {
-      margin: 0; font-size: .85rem; padding: 10px 12px; background: #fafaf9;
-      border-bottom: 1px solid #e7e5e4; color: #57534e;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
     }
-    .item { padding: 12px; border-bottom: 1px solid #f5f5f4; font-size: .88rem; }
-    .item:last-child { border-bottom: none; }
-    .item .who { font-weight: bold; margin-bottom: 4px; }
-    .item .sentence { color: #57534e; line-height: 1.9; }
-    .item .relabel { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-    .item .relabel select, .item .relabel input { font-size: .8rem; padding: 6px 8px; min-height: 40px; }
-    .item .relabel input { flex: 1 1 140px; }
-    .empty { padding: 18px; text-align: center; color: #a8a29e; font-size: .85rem; }
-    .note { font-size: .78rem; color: #a8a29e; line-height: 2; margin-top: 10px; }
-    .toast {
-      position: fixed; inset-inline-start: 50%; transform: translateX(50%);
-      bottom: 20px; background: #1c1917; color: #fff; padding: 10px 18px;
-      border-radius: 999px; font-size: .82rem; opacity: 0; transition: opacity .3s;
-      pointer-events: none;
+    .stage-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
     }
-    .toast.show { opacity: 1; }
+    .stage-box {
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .stage-box.active {
+      border-color: var(--accent);
+      background: #fffbeb;
+    }
+    .stage-box input { display: none; }
+    .stage-box h3 { margin: 0 0 6px; font-size: 16px; color: var(--accent); }
+    .stage-box p { margin: 0; font-size: 12px; color: var(--muted); }
+    .control-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    input[type="text"], select {
+      flex: 1;
+      padding: 10px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .link-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .link-box {
+      flex: 1;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: monospace;
+      font-size: 13px;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .columns-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .column {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      min-height: 240px;
+    }
+    .column h4 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--border);
+    }
+    .col-red h4 { color: #dc2626; border-color: #fca5a5; }
+    .col-amber h4 { color: #d97706; border-color: #fcd34d; }
+    .col-green h4 { color: #16a34a; border-color: #86efac; }
+    .student-item {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .student-item .diag {
+      font-size: 12px;
+      color: #b45309;
+      margin-top: 4px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <h1>میز صبح معلم</h1>
-    <div class="sub">روشا — حلقهٔ ضرب کتاب سوم · سه فهرست و یک جمله، نه نمودار و نه درصد</div>
+  <div class="container">
+    <div class="header">
+      <h1>میز صبح معلم</h1>
+      <p>روشا — حلقهٔ ضرب کتاب سوم • سه فهرست و یک جمله، نه نمودار و نه درصد</p>
+    </div>
 
-    <section aria-labelledby="win-h">
-      <h2 id="win-h">پنجرهٔ این هفته — انتخاب مرحله (از سه بنا)</h2>
-      <div class="stages" id="stages"></div>
-      <div class="row">
-        <label class="fld">کد کلاس
-          <input type="text" id="classCode" placeholder="مثلاً A12">
+    <div class="card">
+      <div class="stage-options">
+        <label class="stage-box active" onclick="selectStage('niroogah', this)">
+          <input type="radio" name="stage" value="niroogah" checked>
+          <h3>⚡ نیروگاه</h3>
+          <p>صفحهٔ ۱۰ و ۶۴ تا ۶۹<br>دسته‌ها، آرایه، جدول پایه‌ای</p>
         </label>
-        <label class="fld">حالت
-          <select id="mode">
-            <option value="home">خانه (عصر)</option>
-            <option value="afterclass">بعد از کلاس</option>
-          </select>
+        <label class="stage-box" onclick="selectStage('borj', this)">
+          <input type="radio" name="stage" value="borj">
+          <h3>🏗️ برج</h3>
+          <p>صفحهٔ ۷۰ تا ۷۲<br>جابه‌جایی و شکستن ضرب</p>
         </label>
-        <button id="makeLink">ساخت پیوند کار امشب</button>
+        <label class="stage-box" onclick="selectStage('sakkoo', this)">
+          <input type="radio" name="stage" value="sakkoo">
+          <h3>📦 سکو</h3>
+          <p>صفحهٔ ۱۳۶ تا ۱۴۴<br>بسته‌های ده‌تایی و ارزش مکانی</p>
+        </label>
       </div>
-      <div class="row" id="linkRow" hidden>
-        <input type="text" class="link" id="linkBox" readonly aria-label="پیوند کار امشب">
-        <button class="ghost" id="copyLink">کپی پیوند</button>
+
+      <div class="control-row">
+        <input type="text" id="className" value="یاسر" placeholder="کد یا نام کلاس">
+        <select id="mode">
+          <option value="home">خانه (عصر)</option>
+          <option value="school">مدرسه (کلاس)</option>
+        </select>
+        <button class="btn" onclick="generateLink()">ساخت پیوند کار امشب</button>
       </div>
-    </section>
 
-    <section aria-labelledby="desk-h">
-      <h2 id="desk-h">سه فهرست صبح</h2>
-      <label class="fld" style="max-width:260px">بازبینی برای مرحله
-        <select id="reviewStage"></select>
-      </label>
-      <div class="lists" id="lists" style="margin-top:12px">
-        <div class="listbox">
-          <h3>۱ — نیامده‌ها</h3>
-          <div id="listNotCome"><div class="empty">—</div></div>
+      <div class="link-row">
+        <div class="link-box" id="linkDisplay">پیوند هنوز ساخته نشده است</div>
+        <button class="btn" style="background: #475569;" onclick="copyLink()">کپی پیوند</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="margin: 0; color: var(--accent);">سه فهرست صبح</h3>
+        <button class="btn" style="padding: 6px 12px; font-size: 13px;" onclick="renderDesk()">بازخوانی کارپوشه</button>
+      </div>
+
+      <div class="columns-grid">
+        <div class="column col-red">
+          <h4>۱ — نیامده‌ها (<span id="countPending">۰</span>)</h4>
+          <div id="listPending"></div>
         </div>
-        <div class="listbox">
-          <h3>۲ — گره مانده‌ها</h3>
-          <div id="listStuck"><div class="empty">—</div></div>
+        <div class="column col-amber">
+          <h4>۲ — مانده‌ها (<span id="countStuck">۰</span>)</h4>
+          <div id="listStuck"></div>
         </div>
-        <div class="listbox">
-          <h3>۳ — تمام‌کرده‌ها</h3>
-          <div id="listDone"><div class="empty">—</div></div>
+        <div class="column col-green">
+          <h4>۳ — تمام (<span id="countDone">۰</span>)</h4>
+          <div id="listDone"></div>
         </div>
       </div>
-      <p class="note">پروندهٔ کودک روی دستگاهِ خودش می‌ماند؛ این میز پرونده‌های همین دستگاه را می‌بیند (داربست — سازوکار انتقال خبر، جای خالی عمدی برای استقرار نهایی است). برچسب‌گذاری مجدد حق معلم است: حرف آخر با کسی است که بچه را دیده.</p>
-    </section>
-  </main>
+    </div>
+  </div>
 
-  <div class="toast" id="toast"></div>
-
-  <script src="rosha-engine.js"></script>
   <script>
-  (function () {
-    'use strict';
-    var R = window.Rosha;
-    var selStage = null;
+    let currentStage = 'niroogah';
 
-    function toast(text) {
-      var t = document.getElementById('toast');
-      t.textContent = text;
-      t.classList.add('show');
-      setTimeout(function () { t.classList.remove('show'); }, 2200);
+    function selectStage(stage, el) {
+      currentStage = stage;
+      document.querySelectorAll('.stage-box').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      generateLink();
+      renderDesk();
     }
 
-    // ── پنجرهٔ سه مرحله‌ای ──
-    var stagesEl = document.getElementById('stages');
-    R.STAGES.forEach(function (s) {
-      var label = document.createElement('label');
-      label.className = 'stage';
-      label.innerHTML = '<input type="radio" name="stage" value="' + s.key + '">'
-        + '<b>' + s.fa + '</b>'
-        + '<small>' + s.pages + '<br>' + s.theme + '</small>';
-      label.querySelector('input').addEventListener('change', function () {
-        selStage = s.key;
-        Array.prototype.forEach.call(stagesEl.children, function (c) { c.classList.remove('sel'); });
-        label.classList.add('sel');
-        renderLists();
-      });
-      stagesEl.appendChild(label);
-    });
-
-    var reviewSel = document.getElementById('reviewStage');
-    R.STAGES.forEach(function (s) {
-      var o = document.createElement('option');
-      o.value = s.key; o.textContent = s.fa + ' — ' + s.pages;
-      reviewSel.appendChild(o);
-    });
-    reviewSel.addEventListener('change', renderLists);
-
-    // ── پیوند کار امشب ──
-    document.getElementById('makeLink').addEventListener('click', function () {
-      if (!selStage) { toast('اول مرحلهٔ این هفته را انتخاب کن.'); return; }
-      var cls = document.getElementById('classCode').value.trim();
-      if (!cls) { toast('کد کلاس را بنویس.'); return; }
-      var mode = document.getElementById('mode').value;
-      var url = new URL('student.html', window.location.href);
+    function generateLink() {
+      const cls = document.getElementById('className').value.trim() || 'یاسر';
+      const mode = document.getElementById('mode').value;
+      const url = new URL('student.html', window.location.href);
       url.searchParams.set('class', cls);
-      url.searchParams.set('stage', selStage);
+      url.searchParams.set('stage', currentStage);
       url.searchParams.set('mode', mode);
-      document.getElementById('linkBox').value = url.href;
-      document.getElementById('linkRow').hidden = false;
-      toast('پیوند ساخته شد — برای گروه شاد کپی کن.');
-    });
-    document.getElementById('copyLink').addEventListener('click', function () {
-      var box = document.getElementById('linkBox');
-      box.select();
-      try { document.execCommand('copy'); } catch (e) { /* جایگزین زیر */ }
-      if (navigator.clipboard) navigator.clipboard.writeText(box.value);
-      toast('پیوند کپی شد.');
-    });
-
-    // ── سه فهرست صبح ──
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, function (c) {
-        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-      });
+      document.getElementById('linkDisplay').textContent = url.href;
     }
 
-    function renderLists() {
-      var key = reviewSel.value;
-      var win = R.buildWindow(key);
-      var profiles = R.listProfiles().filter(function (p) { return p.classCode; });
-      var lists = R.morningLists(profiles, win);
+    function copyLink() {
+      const txt = document.getElementById('linkDisplay').textContent;
+      if (txt.startsWith('http')) {
+        navigator.clipboard.writeText(txt).then(() => alert('پیوند اختصاصی کپی شد'));
+      }
+    }
 
-      function fill(elId, arr, render) {
-        var el = document.getElementById(elId);
-        if (!arr.length) { el.innerHTML = '<div class="empty">امروز کسی در این فهرست نیست.</div>'; return; }
-        el.innerHTML = arr.map(render).join('');
+    function renderDesk() {
+      const cls = document.getElementById('className').value.trim() || 'یاسر';
+      const storageKey = 'rosha_' + encodeURIComponent(cls) + '_' + currentStage;
+      const raw = localStorage.getItem(storageKey);
+
+      const listPending = document.getElementById('listPending');
+      const listStuck = document.getElementById('listStuck');
+      const listDone = document.getElementById('listDone');
+
+      listPending.innerHTML = '';
+      listStuck.innerHTML = '';
+      listDone.innerHTML = '';
+
+      if (!raw) {
+        listPending.innerHTML = '<div class="student-item">هنوز پاسخی در این مرحله ثبت نشده است</div>';
+        document.getElementById('countPending').textContent = '۱';
+        document.getElementById('countStuck').textContent = '۰';
+        document.getElementById('countDone').textContent = '۰';
+        return;
       }
 
-      fill('listNotCome', lists.notCome, function (p) {
-        return '<div class="item"><div class="who">' + escapeHtml(p.childName) + '</div>'
-          + '<div class="sentence">کارِ این پنجره را شروع نکرده.</div></div>';
-      });
-
-      fill('listStuck', lists.stuck, function (p) {
-        var sentence = R.morningSentence(p, win);
-        var mouths = R.mouthList().map(function (m) {
-          return '<option value="' + m.id + '">' + m.fa + '</option>';
-        }).join('');
-        return '<div class="item"><div class="who">' + escapeHtml(p.childName) + '</div>'
-          + '<div class="sentence">' + escapeHtml(sentence) + '</div>'
-          + '<div class="relabel">'
-          + '<select data-relabel-status="' + escapeHtml(p.key) + '">'
-          +   '<option value="یادداشت">لغزش بود — گره نیست</option>'
-          +   '<option value="باز">گره است (باز)</option>'
-          +   '<option value="در صف">در صف</option>'
-          +   '<option value="بسته">بسته</option>'
-          + '</select>'
-          + '<select data-relabel-mouth="' + escapeHtml(p.key) + '">'
-          +   '<option value="">دهان…</option>' + mouths + '</select>'
-          + '<input type="text" placeholder="یادداشت معلم" data-relabel-note="' + escapeHtml(p.key) + '">'
-          + '<button class="ghost" data-relabel-save="' + escapeHtml(p.key) + '">ثبت برچسب</button>'
-          + '</div></div>';
-      });
-
-      fill('listDone', lists.finished, function (p) {
-        return '<div class="item"><div class="who">' + escapeHtml(p.childName) + '</div>'
-          + '<div class="sentence">کار پنجره را تمام کرد.</div></div>';
-      });
+      const data = JSON.parse(raw);
+      if (data.status === 'done') {
+        listDone.innerHTML = '<div class="student-item">⚡ دانش‌آموز (کلاس ' + cls + ')<br><small style="color:#64748b;">تکمیل‌شده در ' + new Date(data.updatedAt).toLocaleTimeString('fa-IR') + '</small></div>';
+        document.getElementById('countDone').textContent = '۱';
+        document.getElementById('countStuck').textContent = '۰';
+        document.getElementById('countPending').textContent = '۰';
+      } else if (data.status === 'stuck') {
+        listStuck.innerHTML = '<div class="student-item">⚠️ دانش‌آموز (کلاس ' + cls + ')<div class="diag">' + data.diagnostic + '</div></div>';
+        document.getElementById('countStuck').textContent = '۱';
+        document.getElementById('countDone').textContent = '۰';
+        document.getElementById('countPending').textContent = '۰';
+      }
     }
 
-    // برچسب‌گذاری معلم ( delegation )
-    document.getElementById('lists').addEventListener('click', function (ev) {
-      var btn = ev.target.closest('[data-relabel-save]');
-      if (!btn) return;
-      var key = btn.getAttribute('data-relabel-save');
-      var profiles = R.listProfiles();
-      var p = profiles.filter(function (x) { return x.key === key; })[0];
-      if (!p) return;
-      var status = document.querySelector('[data-relabel-status="' + key + '"]').value;
-      var mouthSel = document.querySelector('[data-relabel-mouth="' + key + '"]');
-      var note = document.querySelector('[data-relabel-note="' + key + '"]').value;
-      var noteFull = note + (mouthSel && mouthSel.value ? ' (دهان از نظر معلم: ' + mouthSel.value + ')' : '');
-      R.relabel(p, reviewSel.value, status, noteFull);
-      toast('برچسب ثبت شد — فقط پروندهٔ همین کودک تغییر کرد.');
-      renderLists();
-    });
-
-    renderLists();
-  })();
+    window.onload = function() {
+      generateLink();
+      renderDesk();
+    };
   </script>
 </body>
 </html>
-
-
